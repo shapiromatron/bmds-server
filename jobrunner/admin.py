@@ -1,3 +1,15 @@
 from django.contrib import admin
 
-# Register your models here.
+from . import models
+
+
+class JobAdmin(admin.ModelAdmin):
+    list_display = (
+        'id',
+        'created',
+        'started',
+        'ended',
+        'is_finished',
+    )
+
+admin.site.register(models.Job, JobAdmin)

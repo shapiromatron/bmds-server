@@ -31,3 +31,6 @@ class Job(models.Model):
     @property
     def is_finished(self):
         return len(self.outputs) > 0
+
+    def add_to_queue(self):
+        tasks.execute.apply_async(args=(self.id, ))

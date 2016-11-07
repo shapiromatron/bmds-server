@@ -1,3 +1,6 @@
+# ignore virtual environment
+venv/
+
 # ipython/jupyter notebooks
 .ipynb_checkpoints
 
@@ -21,6 +24,9 @@ _build
 
 # ignore db
 *.sqlite3
+
+# ignore logfiles
+*.log
 
 # setting overrides
 bmds_server/settings/local.py

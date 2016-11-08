@@ -1,5 +1,6 @@
 import os
 
+PROJECT_NAME = 'bmds-server'
 BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(os.path.abspath(__file__)), '../..'))
 
 INSTALLED_APPS = [
@@ -9,6 +10,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    # Custom apps
     'jobrunner',
 ]
 
@@ -66,11 +68,67 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 LANGUAGE_CODE = 'en-us'
 TIME_ZONE = 'UTC'
 USE_I18N = True
 USE_L10N = True
 USE_TZ = True
 
+EMAIL_SUBJECT_PREFIX = "[{}] ".format(PROJECT_NAME)
+DEFAULT_FROM_EMAIL = "webmaster@{}.com".format(PROJECT_NAME)
+
 STATIC_URL = '/static/'
+
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'filters': {
+        'require_debug_false': {
+            '()': 'django.utils.log.RequireDebugFalse'
+        }
+    },
+    'formatters': {
+        'basic': {
+            'format': '%(asctime)s %(name)-20s %(levelname)-8s %(message)s',
+        },
+    },
+    'handlers': {
+        'mail_admins': {
+            'level': 'ERROR',
+            'filters': ['require_debug_false'],
+            'class': 'django.utils.log.AdminEmailHandler'
+        },
+        'console': {
+            'level': 'DEBUG',
+            'class': 'logging.StreamHandler',
+            'formatter': 'basic',
+        },
+        'file': {
+            'level': 'DEBUG',
+            'class': 'logging.handlers.RotatingFileHandler',
+            'formatter': 'basic',
+            'filename': os.path.join(BASE_DIR, 'django.log'),
+            'maxBytes': 10 * 1024 * 1024,  # 10 MB
+            'backupCount': 10,
+        },
+        'null': {
+            'class': 'logging.NullHandler',
+        },
+    },
+    'loggers': {
+        'django.security.DisallowedHost': {
+            'handlers': ['null'],
+            'propagate': False,
+        },
+        'django.request': {
+            'handlers': ['mail_admins'],
+            'level': 'ERROR',
+            'propagate': True,
+        },
+        '': {
+            'handlers': ['file'],
+            'level': 'DEBUG',
+        },
+    }
+}

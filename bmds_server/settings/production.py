@@ -3,8 +3,17 @@ from bmds_server.settings.base import *  # noqa
 
 DEBUG = False
 
+ADMINS = []
+_admin_names = os.getenv('DJANGO_ADMIN_NAMES', "")
+_admin_emails = os.getenv('DJANGO_ADMIN_EMAILS', "")
+if (len(_admin_names) > 0 and len(_admin_emails) > 0):
+    ADMINS = list(zip(_admin_names.split("|"), _admin_emails.split("|")))
+    MANAGERS = ADMINS
+else:
+    raise ValueError('Invalid DJANGO_ADMIN_NAMES or DJANGO_ADMIN_EMAILS')
+
 SECRET_KEY = os.environ['DJANGO_SECRET_KEY']
-ALLOWED_HOSTS = os.environ.get('DJANGO_ALLOWED_HOSTS', '').split(';')
+ALLOWED_HOSTS = os.environ.get('DJANGO_ALLOWED_HOSTS', '').split('|')
 if len(ALLOWED_HOSTS) < 1:
     raise ValueError('DJANGO_ALLOWED_HOSTS is required')
 

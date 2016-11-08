@@ -1,31 +1,29 @@
 {% extends "base.html" %}
 
+
 {% block content %}
 <h1>Welcome to the BMDS job-runner.</h1>
-
 <form method="post">
-<p>To create a new job, paste input file here:</p>
-{% csrf_token %}
-{{form}}
-<button type='submit'>Submit</button>
+    <p>To create a new job, paste input file here:</p>
+    {% csrf_token %}
+    {{form}}
+    <button type='submit'>Submit</button>
 </form>
-
 <form id='lookup'>
-<p>To lookup the status of an existing job, use this form:</p>
-{{status_form}}
-<button type='submit'>Submit</button>
+    <p>To lookup the status of an existing job, use this form:</p>
+    {{status_form}}
+    <button type='submit'>Submit</button>
 </form>
-
 {% endblock content %}
 
 
 {% block extra-js %}
 <script type="text/javascript">
 $(document).ready(function(){
-$('#lookup').submit(function(e){
-    e.preventDefault();
-    window.location = '/job/' + $('#id_id').val();
-});
+    $('#lookup').submit(function(e){
+        e.preventDefault();
+        window.location = '/job/' + $('#id_id').val() + '/';
+    });
 });
 </script>
 {% endblock extra-js %}

@@ -26,6 +26,9 @@ BROWSER := python -c "$$BROWSER_PYSCRIPT"
 help:
 	@python -c "$$PRINT_HELP_PYSCRIPT" < $(MAKEFILE_LIST)
 
+dev: ## Start developer environment.
+	./bin/dev.sh
+
 test: ## This runs all of the tests.
 
 	# To run an individual test, use the -k flag to grep for matching:

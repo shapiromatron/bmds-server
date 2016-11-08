@@ -32,3 +32,6 @@ LOGGING['handlers']['file'].update(
     level="INFO",
     filename=os.environ['DJANGO_LOG_FULLPATH']
 )
+
+CELERY_BROKER_URL = os.environ['CELERY_BROKER_URL']
+CELERY_RESULT_BACKEND = os.environ['CELERY_RESULT_BACKEND']

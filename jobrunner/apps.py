@@ -1,5 +1,8 @@
 from django.apps import AppConfig
 
 
-class JobrunnerConfig(AppConfig):
+class Config(AppConfig):
     name = 'jobrunner'
+
+    def ready(self):
+        from . import signals  # noqa

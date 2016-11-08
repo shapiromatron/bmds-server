@@ -1,8 +1,7 @@
 import uuid
 from django.db import models
 from django.core.urlresolvers import reverse
-
-from . import tasks
+from django.utils.timezone import now
 
 
 class Job(models.Model):
@@ -32,5 +31,8 @@ class Job(models.Model):
     def is_finished(self):
         return len(self.outputs) > 0
 
-    def add_to_queue(self):
-        tasks.execute.apply_async(args=(self.id, ))
+    def mark_complete(self):
+        self.outputs = 'complete'
+        self.errors = 'none'
+        self.ended = now()
+        self.save()

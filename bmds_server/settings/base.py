@@ -79,7 +79,6 @@ DEFAULT_FROM_EMAIL = "webmaster@{}.com".format(PROJECT_NAME)
 
 STATIC_URL = '/static/'
 
-
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
@@ -132,3 +131,5 @@ LOGGING = {
         },
     }
 }
+
+CELERY_TIMEZONE = TIME_ZONE

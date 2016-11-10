@@ -1,7 +1,9 @@
-import uuid
+import bmds
+import json
 from django.db import models
 from django.core.urlresolvers import reverse
 from django.utils.timezone import now
+import uuid
 
 
 class Job(models.Model):
@@ -31,8 +33,58 @@ class Job(models.Model):
     def is_finished(self):
         return len(self.outputs) > 0
 
-    def mark_complete(self):
-        self.outputs = 'complete'
-        self.errors = 'none'
+    @staticmethod
+    def build_session(bmds_version, dataset_type, dataset):
+
+        # build dataset
+        if dataset_type == bmds.constants.CONTINUOUS:
+            dataset = bmds.ContinuousDataset(**dataset)
+        else:
+            dataset = bmds.DichotomousDataset(**dataset)
+
+        # build session
+        session = bmds.get_session(bmds_version)(
+            dataset_type,
+            dataset=dataset
+        )
+
+        # add default models
+        for model_name in session.model_options[dataset_type].keys():
+            session.add_model(model_name)
+
+        return session
+
+    def execute(self):
+
+        # build bmds sessions
+        inputs = json.loads(self.inputs)
+        sessions = [
+            self.build_session(
+                bmds_version=inputs['bmds_version'],
+                dataset_type=inputs['dataset_type'],
+                dataset=dataset,
+            ) for dataset in inputs['datasets']
+        ]
+
+        # execute sessions
+        for session in sessions:
+            session.execute()
+
+        # build outputs
+        outputs = []
+        for dataset, session in zip(inputs['datasets'], sessions):
+            outputs.append(dict(
+                dataset=dataset,
+                models=[
+                    dict(
+                        dfile=model.as_dfile(),
+                        outfile=model.outfile,
+                        output=model.output,
+                    ) for model in session._models
+                ]
+            ))
+
+        self.outputs = json.dumps(outputs)
+        self.errors = ''
         self.ended = now()
         self.save()

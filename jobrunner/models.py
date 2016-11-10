@@ -54,6 +54,18 @@ class Job(models.Model):
 
         return session
 
+    @staticmethod
+    def get_model_output(model):
+        output = dict(
+            dfile=model.as_dfile()
+        )
+        if model.output_created:
+            output.update(dict(
+                outfile=model.outfile,
+                output=model.output
+            ))
+        return output
+
     def execute(self):
 
         # build bmds sessions
@@ -76,11 +88,8 @@ class Job(models.Model):
             outputs.append(dict(
                 dataset=dataset,
                 models=[
-                    dict(
-                        dfile=model.as_dfile(),
-                        outfile=model.outfile,
-                        output=model.output,
-                    ) for model in session._models
+                    self.get_model_output(model)
+                    for model in session._models
                 ]
             ))
 

@@ -28,6 +28,14 @@ _build
 # ignore logfiles
 *.log
 
+# keep folders, but not content
+public/*
+!public/.gitkeep
+
+# keep folders, but not content
+logs/*
+!logs/.gitkeep
+
 # setting overrides
 bmds_server/settings/local.py
 web.config

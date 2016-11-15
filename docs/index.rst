@@ -1,8 +1,12 @@
-Welcome to BMDS server's documentation!
-=======================================
+.. include:: ../README.rst
+
+
+Table of contents:
+~~~~~~~~~~~~~~~~~~
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 3
 
-   readme
+   deployment
+   api
    history

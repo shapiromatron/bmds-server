@@ -1,4 +1,4 @@
-BMDS server
+BMDS webserver
 ======================================
 
 Run a webserver that will batch process dose-response data using the US EPA's

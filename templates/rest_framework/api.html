@@ -1,0 +1,9 @@
+{% extends "rest_framework/base.html" %}
+
+{% block title %}{% if name %}{{ name }} – {% endif %}BMDS webserver API{% endblock %}
+
+{% block branding %}
+<a class='navbar-brand' rel="nofollow" href="{% url 'home' %}">
+    BMDS webserver
+</a>
+{% endblock %}

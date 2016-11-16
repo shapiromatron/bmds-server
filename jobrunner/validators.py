@@ -1,4 +1,6 @@
 import bmds
+import json
+import jsonschema
 
 base_schema = {
     'type': 'object',
@@ -100,3 +102,30 @@ dichotomous_dataset_schema = {
     },
     'minItems': 1,
 }
+
+
+def validate_input(data):
+    """Return None if successful, else raise ValueError"""
+
+    # ensure data is valid JSON
+    try:
+        jsoned = json.loads(data)
+    except json.decoder.JSONDecodeError:
+        raise ValueError('Invalid format - must be valid JSON.')
+
+    # first-level check
+    try:
+        jsonschema.validate(jsoned, base_schema)
+    except jsonschema.ValidationError as err:
+        raise ValueError(err.message)
+
+    # check dataset schema
+    try:
+        datasets = jsoned.get('datasets', [])
+        if jsoned['dataset_type'] == bmds.constants.CONTINUOUS:
+            schema = continuous_dataset_schema
+        else:
+            schema = dichotomous_dataset_schema
+        jsonschema.validate(datasets, schema)
+    except jsonschema.ValidationError as err:
+        raise ValueError('Dataset error(s): ' + err.message)

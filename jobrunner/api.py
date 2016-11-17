@@ -1,4 +1,4 @@
-from rest_framework import mixins, viewsets
+from rest_framework import mixins, status, viewsets
 from rest_framework.decorators import detail_route
 from rest_framework.response import Response
 from rest_framework.renderers import BaseRenderer
@@ -33,6 +33,11 @@ class JobViewset(mixins.CreateModelMixin,
     @detail_route(methods=('get',), renderer_classes=(TxtRenderer,))
     def download_outputs(self, request, *args, **kwargs):
         instance = self.get_object()
+
+        if len(instance.outputs) == 0:
+            content = 'Outputs processing; not ready yet.'
+            return Response(content, status=status.HTTP_204_NO_CONTENT)
+
         fn = u'{}-outputs.json'.format(instance.id)
         resp = Response(instance.outputs)
         resp['Content-Disposition'] = u'attachment; filename="{}"'.format(fn)

@@ -7,6 +7,7 @@ Table of contents:
 .. toctree::
    :maxdepth: 3
 
-   deployment
+   quickstart
    api
+   deploying
    history

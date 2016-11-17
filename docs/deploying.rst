@@ -1,5 +1,5 @@
-Deployment
-==========
+Deploying
+=========
 
 While this is a fairly standard Django + celery application, it requires to be deployed on a Windows server due to underlying BMDS software requirements. This is a bit of a nonstandard deployment procedure (for me at least; based on internet research it looks like I'm not alone). Fortunately, recent IIS updates make it easier to deploy using an environment that's more similar to reverse proxying, without having to deal with FastCGI settings.
 
@@ -131,12 +131,33 @@ Then, using Task Scheduler, setup a new task. Using the GUI:
 
 **Note:** Some online said that tasks would sometimes fire multiple instances with previous version of Windows server and task-schedule, but to date I haven't seen this.
 
+To redeploy with updates
+~~~~~~~~~~~~~~~~~~~~~~~~
 
-Wrapping-up:
-~~~~~~~~~~~~
+1. Create a batch file like this, and run as administrator::
 
-The application should load on localhost. To open to the world, edit Windows Firewall settings, opening up port 80 for inbound/outbound TCP traffic. Also check Amazon EC2 firewall settings to ensure they're open in EC2.
+    CALL C:\inetpub\wwwroot\bmds-server\venv\Scripts\activate.bat
+    cd C:\inetpub\wwwroot\bmds-server
 
+    git fetch --all
+    git reset --hard origin/master
+
+    pip install -r .\requirements\production.txt
+    python manage.py migrate --no-input
+    python manage.py collectstatic --no-input
+
+    iisreset.exe
+
+2. Restart the celery worker manually in the Task Scheduler.
+
+Troubleshooting
+~~~~~~~~~~~~~~~
+
+First, ensure application (and static files) load on localhost.
+
+Next, open to the world. In Windows Firewall settings, opening port 80 for inbound/outbound TCP traffic.
+
+If hosting on Amazon EC2, check Amazon firewall settings to ensure they're open for this instance.
 
 Thanks ya'll
 ~~~~~~~~~~~~

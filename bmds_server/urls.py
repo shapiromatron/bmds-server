@@ -16,6 +16,10 @@ urlpatterns = [
         views.Home.as_view(),
         name='home'),
 
+    url(r'^job/q/$',
+        views.JobQuery.as_view(),
+        name='job_query'),
+
     url(r'^job/(?P<pk>[\w]{8}-[\w]{4}-[\w]{4}-[\w]{4}-[\w]{12})/$',
         views.JobDetail.as_view(),
         name='job'),

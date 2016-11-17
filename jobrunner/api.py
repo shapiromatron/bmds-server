@@ -23,7 +23,7 @@ class JobViewset(mixins.CreateModelMixin,
         return serializers.JobSerializer
 
     @detail_route(methods=('get',), renderer_classes=(TxtRenderer,))
-    def download_inputs(self, request, *args, **kwargs):
+    def inputs(self, request, *args, **kwargs):
         instance = self.get_object()
         fn = u'{}-inputs.json'.format(instance.id)
         resp = Response(instance.inputs)
@@ -31,7 +31,7 @@ class JobViewset(mixins.CreateModelMixin,
         return resp
 
     @detail_route(methods=('get',), renderer_classes=(TxtRenderer,))
-    def download_outputs(self, request, *args, **kwargs):
+    def outputs(self, request, *args, **kwargs):
         instance = self.get_object()
 
         if len(instance.outputs) == 0:

@@ -30,10 +30,10 @@ class Job(models.Model):
         return reverse('job', args=(str(self.id), ))
 
     def get_input_url(self):
-        return reverse('api:job-download-inputs', args=(str(self.id), ))
+        return reverse('api:job-inputs', args=(str(self.id), ))
 
     def get_output_url(self):
-        return reverse('api:job-download-outputs', args=(str(self.id), ))
+        return reverse('api:job-outputs', args=(str(self.id), ))
 
     @property
     def is_finished(self):

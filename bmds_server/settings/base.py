@@ -143,3 +143,15 @@ CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'
 CELERY_SEND_TASK_ERROR_EMAILS = True
 CELERY_TIMEZONE = TIME_ZONE
+
+
+REST_FRAMEWORK = {
+    'DEFAULT_THROTTLE_CLASSES': (
+        'rest_framework.throttling.AnonRateThrottle',
+        'rest_framework.throttling.UserRateThrottle'
+    ),
+    'DEFAULT_THROTTLE_RATES': {
+        'anon': '10/minute',
+        'user': '10/minute'
+    }
+}

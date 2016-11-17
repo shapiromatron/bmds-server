@@ -1,11 +1,11 @@
 Quickstart
 ==========
 
-While the BMDS server does have a simple html form for submitting jobs
-and waiting for results, it's designed for automation using to be
-consumed by other pieces of software.
+While BMDS server does have a simple html form for submitting jobs
+and waiting for results, it's designed as a microservice to be used by other
+applications.
 
-Below we present a single example in Python. In addition to the standard
+Below, we present a simple example in Python. In addition to the standard
 library, this uses the excellent
 `requests <http://docs.python-requests.org/en/master/>`__ library for
 handling HTTP requests.
@@ -81,6 +81,10 @@ case waiting 15 seconds between requests) until the job is finished:
     Polling outputs... sleeping for 15 seconds...
     Job complete!
 
+
+.. caution::
+    By default, API requests are throttled to 10/minute; please don't poll for
+    results more quickly than this or you will be throttled.
 
 After completion, the job returns model outputs. There's lots of
 information in the outputs, including the created dfile, output file,

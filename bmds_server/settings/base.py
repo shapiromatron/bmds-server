@@ -80,6 +80,9 @@ EMAIL_SUBJECT_PREFIX = "[{}] ".format(PROJECT_NAME)
 DEFAULT_FROM_EMAIL = "webmaster@{}.com".format(PROJECT_NAME)
 
 STATIC_URL = '/static/'
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'static'),
+]
 
 LOGGING = {
     'version': 1,

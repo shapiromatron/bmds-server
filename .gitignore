@@ -38,4 +38,4 @@ logs/*
 
 # setting overrides
 bmds_server/settings/local.py
-web.config
+/web.config

@@ -68,6 +68,10 @@ class Job(models.Model):
 
     def execute(self):
 
+        # set start time
+        self.started = now()
+        self.save()
+
         # build bmds sessions
         inputs = json.loads(self.inputs)
         sessions = [

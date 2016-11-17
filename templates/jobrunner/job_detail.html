@@ -1,15 +1,40 @@
 {% extends "base.html" %}
 
 {% block content %}
-<h1>Job status</h1>
+
+{% if object.is_finished %}
+<h1>Job complete!</h1>
+<p class='lead'>Job ID: {{object.id}}</p>
 <ul>
-    <li><b>id: </b>{{object.id}}</li>
-    <li><b>inputs: </b>{{object.inputs}}</li>
-    <li><b>outputs: </b>{{object.outputs}}</li>
-    <li><b>errors: </b>{{object.errors}}</li>
-    <li><b>created: </b>{{object.created}}</li>
-    <li><b>started: </b>{{object.started}}</li>
-    <li><b>ended: </b>{{object.ended}}</li>
-    <li><b>is_finished: </b>{{object.is_finished}}</li>
+    <li><b>Creation time: </b>{{object.created}}</li>
+    <li><b>BMDS job start-time: </b>{{object.started}}</li>
+    <li><b>BMDS job end-time: </b>{{object.ended}}</li>
 </ul>
+<a href="{{object.get_input_url}}"
+   class='btn btn-primary'><i class="fa fa-fixed fa-download"></i>&nbsp;Download inputs</a>
+<a href="{{object.get_output_url}}"
+   class='btn btn-primary'><i class="fa fa-fixed fa-download"></i>&nbsp;Download outputs</a>
+{% else %}
+
+<h1>Your job is running...<i class="fa fa-spinner fa-pulse fa-fw"></i>
+</h1>
+<p class='lead'>Job ID: {{object.id}}</p>
+
+<span class="sr-only">Executing...</span>
+<p>Your job has been submitted and has been added to the job queue.</p>
+<p><strong>This page will update automatically until the job is complete.</strong></p>
+<p>Now might be a good time for some ☕.</p>
+{% endif %}
 {% endblock content %}
+
+{% block extra-js %}
+
+<script type="text/javascript">
+var reload = function(){
+    window.location = '.'
+};
+{% if not object.is_finished %}
+setTimeout(reload, 15000);
+{% endif %}
+</script>
+{% endblock %}

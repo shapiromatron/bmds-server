@@ -2,31 +2,80 @@
 
 
 {% block content %}
-<h1>Welcome to the BMDS job-runner.</h1>
-<form method="post">
-    <p>To create a new job, paste input file here:</p>
-    {% csrf_token %}
-    {{form}}
-    <button type='submit'>Submit</button>
-</form>
-<form id='lookup'>
-    <p>To lookup the status of an existing job, use this form:</p>
-    {{status_form}}
-    <button type='submit'>Submit</button>
-</form>
+<h1>Welcome to the BMDS webserver.</h1>
+<div class="row">
 
-<p>Can you wrangle computers? Use the <a href="{% url 'api:api-root' %}">REST API</a> instead!</p>
+    <div class="col-sm-12">
+        <p>
+            This website is designed to batch-run the US EPA's benchmark dose
+            modeling software (<a href="https://www.epa.gov/bmds">BMDS</a>). To use
+            the software, enter datasets in a format specified in the
+            <a href="http://bmds-server.readthedocs.io/en/latest/">documentation</a>.
 
+            This is designed for bulk and automated BMDS execution using a programming
+            language such as Java, Python, or R. To take advantage of automation of
+            please use the <a href="{% url 'api:api-root' %}">API</a> instead of the
+            input form below.
+        </p>
+    </div>
+
+    <div class="col-sm-8">
+        <form method="post">
+            {% csrf_token %}
+            <div class="form-group">
+                <label>Create a new job:</label>
+                <textarea
+                    class="form-control" cols="40"
+                    placeholder="Enter input settings for a new job"
+                    id="id_inputs" name="inputs"
+                    rows="10" required>{{form.inputs.value|default_if_none:""}}</textarea>
+                <p class='text-muted'>Load an <a id="example_input" href="#">example</a> input file. Or, <a href="http://bmds-server.readthedocs.io/en/latest/api.html">read the docs</a> for valid input formats.</p>
+            </div>
+            {% include "jobrunner/_errors.html" with errors=form.inputs.errors %}
+            <button type="submit" class="btn btn-primary btn-block">Submit a new job</button>
+        </form>
+    </div>
+
+    <div class="col-sm-4">
+
+        <form id="lookup">
+            <div class="form-group">
+                <label for="id_id">Lookup an existing run:</label>
+                <input id="id_id" name="id" type="text"
+                       placeholder="Enter an existing job ID"
+                       required="" class="form-control" >
+                <p class='text-muted'>Load an <a id="example_id" href="#">example</a>.</p>
+            </div>
+            <button type="submit" class="btn btn-primary btn-block">Check job status</button>
+        </form>
+    </div>
+
+</div>
 {% endblock content %}
 
 
 {% block extra-js %}
 <script type="text/javascript">
 $(document).ready(function(){
+
+    // redirect to job
     $('#lookup').submit(function(e){
         e.preventDefault();
         window.location = "{% url 'job_query' %}?id=" + $('#id_id').val();
+        });
+
+    // load example input file
+    $('#example_input').click(function(e){
+        e.preventDefault();
+        $('#id_inputs').val('{\n    "dataset_type": "D",\n    "bmds_version": "BMDS2601",\n    "datasets": [\n        {\n            "doses": [0, 1.96, 5.69, 29.75],\n            "ns": [75, 49, 50, 49],\n            "incidences": [5, 1, 3, 14]\n        }\n    ]\n}');
     });
+
+    // load example ID
+    $('#example_id').click(function(e){
+        e.preventDefault();
+        $('#id_id').val('f49900b1-46e7-4ed6-9b1c-80b0f63bfbd1');
+    });
+
 });
 </script>
 {% endblock extra-js %}

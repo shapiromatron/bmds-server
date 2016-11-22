@@ -28,17 +28,29 @@ A simple example for continuous data would look like this:
         "datasets": [ ... ]
     }
 
+**Additional optional fields:**
+
+- ``id`` <int or string>: Can be used as a unique identifier for the BMDS job;
+  returned in the output so results can be mapped externally to BMDS server
+  application.
+
 The complete specification is below:
 
 .. code-block:: javascript
 
     {
+      "$schema": "http://json-schema.org/draft-04/schema#",
+      "description": "BMDS version, dataset and dataset type,
+                      model options, recommendation logic, etc.",
+      "title": "BMDS job overview",
       "type": "object",
       "properties": {
-        "datasets": {
-          "type": "array",
-          "description": "An array of datasets which will be executed",
-          "minItems": 1
+        "id": {
+          "description": "An (optional) unique identifier BMDS job",
+          "type": [
+            "integer",
+            "string"
+          ]
         },
         "bmds_version": {
           "description": "Version of BMDS run analysis with",
@@ -58,7 +70,12 @@ The complete specification is below:
             "DC",       // Dichotomous cancer
             "C"         // Continuous
           ]
-        }
+        },
+        "datasets": {
+          "type": "array",
+          "description": "An array of datasets which will be executed",
+          "minItems": 1
+        },
       },
       "required": [
         "bmds_version",
@@ -93,17 +110,20 @@ observations, and positive observations. Thus, it is count data, as an example:
         "incidences": [5, 1, 3, 14]
     }
 
-Additional optional fields:
+**Additional optional fields:**
 
 - ``id`` <int or string>: Can be used as a unique identifier for each dataset to
-  correspond to existing frameworks external to the BMDS server; passed to the
-  outputs so outputs can be mapped to existing data.
+  correspond to existing frameworks external to the BMDS server; returned in the
+  output so results can be mapped externally to BMDS server application.
 
 The complete specification is below:
 
 .. code-block:: javascript
 
     {
+      "$schema": "http://json-schema.org/draft-04/schema#",
+      "description": "Requirements for an array of dichotomous datasets",
+      "title": "Dichotomous datasets"
       "type": "array",
       "minItems": 1,
       "items": {
@@ -173,17 +193,20 @@ each dose-group, as an example:
         "stdevs": [5.0, 5.1, 6.2, 5.9, 18.1]
     }
 
-Additional optional fields:
+**Additional optional fields:**
 
 - ``id`` <int or string>: Can be used as a unique identifier for each dataset to
-  correspond to existing frameworks external to the BMDS server; passed to the
-  outputs so outputs can be mapped to existing data.
+  correspond to existing frameworks external to the BMDS server; returned in the
+  output so results can be mapped externally to BMDS server application.
 
 The complete specification is below:
 
 .. code-block:: javascript
 
     {
+      "$schema": "http://json-schema.org/draft-04/schema#",
+      "description": "Requirements for an array of continuous datasets",
+      "title": "Continuous  datasets",
       "type": "array",
       "minItems": 1,
       "items": {

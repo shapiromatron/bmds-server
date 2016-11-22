@@ -8,6 +8,10 @@ base_schema = {
     'description': 'BMDS version, dataset and dataset type, model options, recommendation logic, etc.',
     'type': 'object',
     'properties': {
+        'id': {
+            'description': 'An (optional) unique identifier BMDS job',
+            'type': ['integer', 'string'],
+        },
         'bmds_version': {
             'description': 'Version of BMDS run analysis with',
             'enum': list(bmds.VERSIONS.keys())

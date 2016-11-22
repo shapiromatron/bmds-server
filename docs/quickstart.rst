@@ -26,6 +26,7 @@ dichotomous datasets:
 .. code:: python
 
     inputs = {
+        "id": "My first BMDS-server run",
         "dataset_type": "D",
         "bmds_version": "BMDS2601",
         "datasets": [

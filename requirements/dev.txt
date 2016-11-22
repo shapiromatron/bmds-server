@@ -8,3 +8,6 @@ Sphinx==1.4.8
 watchdog==0.8.3
 
 pytest==3.0.3
+
+jupyter==1.0.0
+django-extensions==1.7.4

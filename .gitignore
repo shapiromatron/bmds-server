@@ -39,3 +39,7 @@ logs/*
 # setting overrides
 bmds_server/settings/local.py
 /web.config
+
+# keep folders, but not content
+notebooks/*
+!notebooks/.gitkeep

@@ -23,7 +23,11 @@ class JobQuery(RedirectView):
         try:
             return models.Job.objects.get(id=id_).get_absolute_url()
         except Exception:
-            messages.info(self.request, 'Job not found; please try again.', extra_tags='alert alert-warning')
+            messages.info(
+                self.request,
+                'Job not found; please try again.',
+                extra_tags='alert alert-warning'
+            )
             return reverse('home')
 
 

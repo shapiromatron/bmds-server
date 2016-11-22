@@ -1,7 +1,5 @@
-"""
-Adapted from: https://lincolnloop.com/blog/2008/mar/25/serving-django-cherrypy/.
-Updated and simplified.
-"""
+# Adapted from: https://lincolnloop.com/blog/2008/mar/25/serving-django-cherrypy/.
+
 import os
 from django.core.management.base import BaseCommand
 

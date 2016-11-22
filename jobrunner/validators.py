@@ -108,8 +108,7 @@ dichotomous_dataset_schema = {
 
 
 def validate_input(data):
-    """Return None if successful, else raise ValueError"""
-
+    # Return None if successful, else raise ValueError.
     # ensure data is valid JSON
     try:
         jsoned = json.loads(data)

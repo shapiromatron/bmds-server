@@ -1,6 +1,10 @@
 BMDS webserver
 ======================================
 
+.. image:: https://readthedocs.org/projects/bmds-server/badge/?version=latest
+        :target: https://bmds-server.readthedocs.io/en/latest/?badge=latest
+        :alt: Documentation Status
+
 Run a webserver that will batch process dose-response data using the US EPA's
 benchmark dose modeling software (BMDS_).
 

@@ -3,6 +3,9 @@ import json
 import jsonschema
 
 base_schema = {
+    '$schema': 'http://json-schema.org/draft-04/schema#',
+    'title': 'BMDS job overview',
+    'description': 'BMDS version, dataset and dataset type, model options, recommendation logic, etc.',
     'type': 'object',
     'properties': {
         'bmds_version': {
@@ -23,6 +26,9 @@ base_schema = {
 }
 
 continuous_dataset_schema = {
+    '$schema': 'http://json-schema.org/draft-04/schema#',
+    'title': 'Continuous  datasets',
+    'description': 'Requirements for an array of continuous datasets',
     'type': 'array',
     'items': {
         'type': 'object',
@@ -78,6 +84,9 @@ continuous_dataset_schema = {
 }
 
 dichotomous_dataset_schema = {
+    '$schema': 'http://json-schema.org/draft-04/schema#',
+    'title': 'Dichotomous datasets',
+    'description': 'Requirements for an array of dichotomous datasets',
     'type': 'array',
     'items': {
         'type': 'object',

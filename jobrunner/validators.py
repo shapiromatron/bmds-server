@@ -11,9 +11,12 @@ base_schema = {
         'dataset_type': {
             'enum': list(bmds.constants.DTYPES),
         },
-
+        'datasets': {
+            'minItems': 1,
+            'type': 'array'
+        }
     },
-    'required': ['bmds_version', 'dataset_type']
+    'required': ['bmds_version', 'dataset_type', 'datasets']
 }
 
 continuous_dataset_schema = {

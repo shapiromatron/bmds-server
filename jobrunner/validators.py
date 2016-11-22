@@ -33,6 +33,10 @@ continuous_dataset_schema = {
             'stdevs',
         ],
         'properties': {
+            'id': {
+                'description': 'An (optional) unique identifier for dataset',
+                'type': ['integer', 'string'],
+            },
             'doses': {
                 'description': 'An array of doses (float), one for each dose-group',
                 'type': 'array',
@@ -83,6 +87,10 @@ dichotomous_dataset_schema = {
             'incidences'
         ],
         'properties': {
+            'id': {
+                'description': 'An (optional) unique identifier for dataset',
+                'type': ['integer', 'string'],
+            },
             'doses': {
                 'description': 'An array of doses (float), one for each dose-group',
                 'type': 'array',

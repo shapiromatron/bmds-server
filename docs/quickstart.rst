@@ -30,11 +30,13 @@ dichotomous datasets:
         "bmds_version": "BMDS2601",
         "datasets": [
             {
+                "id": "run #1",
                 "doses": [0, 1.96, 5.69, 29.75],
                 "ns": [75, 49, 50, 49],
                 "incidences": [5, 1, 3, 14]
             },
             {
+                "id": 2,
                 "doses": [0, 1.96, 5.69, 29.75],
                 "ns": [75, 49, 50, 49],
                 "incidences": [0, 0, 11, 27]

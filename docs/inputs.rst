@@ -93,6 +93,12 @@ observations, and positive observations. Thus, it is count data, as an example:
         "incidences": [5, 1, 3, 14]
     }
 
+Additional optional fields:
+
+- ``id`` <int or string>: Can be used as a unique identifier for each dataset to
+  correspond to existing frameworks external to the BMDS server; passed to the
+  outputs so outputs can be mapped to existing data.
+
 The complete specification is below:
 
 .. code-block:: javascript
@@ -108,15 +114,12 @@ The complete specification is below:
           "incidences"
         ],
         "properties": {
-          "incidences": {
-            "type": "array",
-            "description": "An array of positive responses (int),
-                            one for each dose-group",
-            "minItems": 3,
-            "items": {
-              "type": "integer",
-              "minimum": 0
-            }
+          "id": {
+            "type": [
+              "integer",
+              "string"
+            ],
+            "description": "An (optional) unique identifier for dataset"
           },
           "doses": {
             "type": "array",
@@ -137,6 +140,16 @@ The complete specification is below:
               "type": "integer",
               "minimum": 0,
               "exclusiveMinimum": true
+            }
+          },
+          "incidences": {
+            "type": "array",
+            "description": "An array of positive responses (int),
+                            one for each dose-group",
+            "minItems": 3,
+            "items": {
+              "type": "integer",
+              "minimum": 0
             }
           }
         }
@@ -159,6 +172,12 @@ each dose-group, as an example:
         "responses": [33.7, 34.9, 40.9, 56.7, 121.7],
         "stdevs": [5.0, 5.1, 6.2, 5.9, 18.1]
     }
+
+Additional optional fields:
+
+- ``id`` <int or string>: Can be used as a unique identifier for each dataset to
+  correspond to existing frameworks external to the BMDS server; passed to the
+  outputs so outputs can be mapped to existing data.
 
 The complete specification is below:
 

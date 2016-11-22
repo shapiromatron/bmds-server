@@ -98,7 +98,7 @@ snapshot of what's available.
 .. code:: python
 
     outputs = response['outputs']
-    for dataset in outputs:
+    for dataset in outputs['outputs']:
         print('----')
         print('Dataset: {}'.format(json.dumps(dataset['dataset'], indent=2)))
         print('Number of models: {}'.format(len(dataset['models'])))

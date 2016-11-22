@@ -1,3 +1,4 @@
+from copy import deepcopy
 import bmds
 import json
 from django.db import models
@@ -103,7 +104,15 @@ class Job(models.Model):
                 ]
             ))
 
-        self.outputs = json.dumps(outputs)
+        inputs_no_datasets = deepcopy(inputs)
+        inputs_no_datasets.pop('datasets')
+        obj = dict(
+            job_id=str(self.id),
+            inputs=inputs_no_datasets,
+            outputs=outputs,
+        )
+
+        self.outputs = json.dumps(obj)
         self.errors = ''
         self.ended = now()
         self.save()

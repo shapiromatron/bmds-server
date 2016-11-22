@@ -1,17 +1,34 @@
-API
-===
+Input API
+=========
 
-Notation here is described in `JSON schema`_ format.
+The BMDS server is designed to run multiple datasets using the same
+model-settings for multiple BMDS models. The same settings are used for each
+dataset in the list. Thus, to create a new BMDS run, it requires properly
+specifying a single input file.
 
+The input file must be in JSON format. Specifications are described in
+`JSON schema`_ format.
 
 .. _`JSON schema`: http://json-schema.org/
 
-The job object
-~~~~~~~~~~~~~~
+Job
+~~~
 
+The job object is the top-level object in the job-format. A single job object
+is required for a BMDS analysis; and its settings are applied to all datasets
+within the job.
 
+A simple example for continuous data would look like this:
 
-The JSON specification is below:
+.. code-block:: javascript
+
+    {
+        "bmds_version": "BMDS2601",
+        "dataset_type": "C",
+        "datasets": [ ... ]
+    }
+
+The complete specification is below:
 
 .. code-block:: javascript
 
@@ -53,15 +70,30 @@ The JSON specification is below:
 Datasets
 ~~~~~~~~
 
-Datasets.
+Datasets are specified as an array of multiple datasets; while it is possible
+to run the BMDS server for a single dataset (just create an array of 1), the
+server is designed to run dozens or even hundreds of datasets simultaneously.
+
+The datasets field is one of the required field on the Job_ dataset above, and
+is a required array. Each dataset in a dataset array has its own requirements,
+as described below, depending on the dataset type.
 
 
-Dichotomous & Dichotomous Cancer
---------------------------------
+Dichotomous (and Dichotomous Cancer)
+------------------------------------
 
-The input format for dichotomous and dichotomous cancer datasets are the same.
+A dichotomous dataset consists of a collection of dose groups, the total
+observations, and positive observations. Thus, it is count data, as an example:
 
-The complete json schema is below:
+.. code-block:: javascript
+
+    {
+        "doses": [0, 1.96, 5.69, 29.75],
+        "ns": [75, 49, 50, 49],
+        "incidences": [5, 1, 3, 14]
+    }
+
+The complete specification is below:
 
 .. code-block:: javascript
 
@@ -115,9 +147,20 @@ The complete json schema is below:
 Continuous
 ----------
 
-The input format for continuous is slightly different.
+A continuous dataset consists of a collection of dose groups, the total
+observations, and the mean-response and stadard-deviation of response for
+each dose-group, as an example:
 
-The complete json schema is below:
+.. code-block:: javascript
+
+    {
+        "doses": [0, 100, 500, 2500, 12500],
+        "ns": [9, 10, 9, 10, 6],
+        "responses": [33.7, 34.9, 40.9, 56.7, 121.7],
+        "stdevs": [5.0, 5.1, 6.2, 5.9, 18.1]
+    }
+
+The complete specification is below:
 
 .. code-block:: javascript
 

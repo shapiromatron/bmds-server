@@ -51,7 +51,7 @@ We submit the dataset to the job API:
     r = requests.post(url, data)
 
 If submission is successful, we'll get a HTTP 201 response (job
-created), along with a new random unique ideniter for this job:
+created), along with a new random unique identifier for this job:
 
 .. code:: python
 

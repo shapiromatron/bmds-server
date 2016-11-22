@@ -8,6 +8,7 @@ Table of contents:
     :maxdepth: 3
 
     quickstart
-    api
+    inputs
+    outputs
     deploying
     history

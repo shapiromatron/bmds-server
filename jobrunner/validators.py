@@ -6,12 +6,15 @@ base_schema = {
     'type': 'object',
     'properties': {
         'bmds_version': {
+            'description': 'Version of BMDS run analysis with',
             'enum': list(bmds.VERSIONS.keys())
         },
         'dataset_type': {
+            'description': 'Type of data which should be executed (should be same for all datasets)',
             'enum': list(bmds.constants.DTYPES),
         },
         'datasets': {
+            'description': 'An array of datasets which will be executed',
             'minItems': 1,
             'type': 'array'
         }
@@ -31,6 +34,7 @@ continuous_dataset_schema = {
         ],
         'properties': {
             'doses': {
+                'description': 'An array of doses (float), one for each dose-group',
                 'type': 'array',
                 'minItems': 3,
                 'items': {
@@ -39,6 +43,7 @@ continuous_dataset_schema = {
                 },
             },
             'ns': {
+                'description': 'An array of Ns (int), one of each dose-group',
                 'type': 'array',
                 'minItems': 3,
                 'items': {
@@ -48,6 +53,7 @@ continuous_dataset_schema = {
                 },
             },
             'responses': {
+                'description': 'An array of response means (float), one for each dose-group',
                 'type': 'array',
                 'minItems': 3,
                 'items': {
@@ -55,6 +61,7 @@ continuous_dataset_schema = {
                 },
             },
             'stdevs': {
+                'description': 'An array of response standard-deviations (float), one for each dose-group',
                 'type': 'array',
                 'minItems': 3,
                 'items': {
@@ -77,6 +84,7 @@ dichotomous_dataset_schema = {
         ],
         'properties': {
             'doses': {
+                'description': 'An array of doses (float), one for each dose-group',
                 'type': 'array',
                 'minItems': 3,
                 'items': {
@@ -85,6 +93,7 @@ dichotomous_dataset_schema = {
                 },
             },
             'ns': {
+                'description': 'An array of total Ns (int), one for each dose-group',
                 'type': 'array',
                 'minItems': 3,
                 'items': {
@@ -94,6 +103,7 @@ dichotomous_dataset_schema = {
                 },
             },
             'incidences': {
+                'description': 'An array of positive responses (int), one for each dose-group',
                 'type': 'array',
                 'minItems': 3,
                 'items': {

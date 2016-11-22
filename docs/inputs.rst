@@ -16,9 +16,7 @@ Job
 
 The job object is the top-level object in the job-format. A single job object
 is required for a BMDS analysis; and its settings are applied to all datasets
-within the job.
-
-A simple example for continuous data would look like this:
+within the job. A simple example for continuous data would look like this:
 
 .. code-block:: javascript
 
@@ -28,11 +26,20 @@ A simple example for continuous data would look like this:
         "datasets": [ ... ]
     }
 
+The datasets in the example above follow the `Datasets`_ schema, described below.
+
 **Additional optional fields:**
 
 - ``id`` <int or string>: Can be used as a unique identifier for the BMDS job;
   returned in the output so results can be mapped externally to BMDS server
   application.
+- ``models`` <`Models schema`_>: Specify a subset of BMDS models to be executed
+  for each job. If not specified, by default all models which can be used for
+  a particular dataset will be used (dependent on the number of dose-groups in
+  a dataset).
+
+
+.. _`Models schema`: Models_
 
 The complete specification is below:
 
@@ -96,8 +103,8 @@ is a required array. Each dataset in a dataset array has its own requirements,
 as described below, depending on the dataset type.
 
 
-Dichotomous (and Dichotomous Cancer)
-------------------------------------
+Dichotomous
+-----------
 
 A dichotomous dataset consists of a collection of dose groups, the total
 observations, and positive observations. Thus, it is count data, as an example:
@@ -176,6 +183,11 @@ The complete specification is below:
       }
     }
 
+Dichotomous Cancer
+------------------
+
+The input format is identical to Dichotomous_ data. It's a separate dataset-type
+because the model recommendation logic is slightly different.
 
 Continuous
 ----------
@@ -260,3 +272,79 @@ The complete specification is below:
         }
       }
     }
+
+Models
+~~~~~~
+
+If specified, models dictates each of the models that will be executed for all
+datasets in a BMDS job (where possible). Which models can be executed is dataset
+specific, different models require different numbers of dose-groups. As an
+example, to run a dataset with two models:
+
+.. code-block:: javascript
+
+    [
+        {
+            "name": "Logistic",
+        },
+        {
+            "name": "LogLogistic",
+        }
+    ]
+
+If ``models`` is not defined, all models which can be used for a particular
+dataset will be used. The generic specification is below:
+
+.. code-block:: javascript
+
+    {
+      "$schema": "http://json-schema.org/draft-04/schema#",
+      "title": "Model validator",
+      "description": "List of valid models"
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "required": [
+          "name"
+        ],
+        "type": "object",
+        "properties": {
+          "name": {
+            "description": "BMDS model name",
+            "enum": [  MODEL_NAMES ]  // dataset type-specific
+          }
+        }
+      },
+    }
+
+
+The ``MODEL_NAMES`` described above are dataset-type specific:
+
+- Dichotomous data:
+    - Logistic
+    - LogLogistic
+    - Probit
+    - LogProbit
+    - Multistage
+    - Gamma
+    - Weibull
+- Dichotomous-cancer data:
+    - Multistage-Cancer
+- Continuous data:
+    - Linear
+    - Polynomial
+    - Power
+    - Hill
+    - Exponential-M2
+    - Exponential-M3
+    - Exponential-M4
+    - Exponential-M5
+
+
+
+.. admonition:: TODO
+
+  In addition to simply specifying which models to run, also allow users to
+  set parameters for each model. For example, you could set the polynomial
+  model to run with ``n`` polynomial terms, or force datasets to run a
+  constant or non-constant variance model. Or specify BMR settings.

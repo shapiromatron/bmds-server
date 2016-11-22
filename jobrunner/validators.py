@@ -1,4 +1,7 @@
+from copy import deepcopy
 import bmds
+from bmds.bmds import BMDS_v2601
+
 import json
 import jsonschema
 
@@ -23,6 +26,10 @@ base_schema = {
         'datasets': {
             'description': 'An array of datasets which will be executed',
             'minItems': 1,
+            'type': 'array'
+        },
+        'models': {
+            'description': 'An array of models which should be used',
             'type': 'array'
         }
     },
@@ -138,6 +145,71 @@ dichotomous_dataset_schema = {
 }
 
 
+d_model_schema = {
+    '$schema': 'http://json-schema.org/draft-04/schema#',
+    'title': 'Dichotomous model validator',
+    'description': 'Validation of list of valid dichotomous models',
+    'type': 'array',
+    'minItems': 1,
+    'items': {
+        'type': 'object',
+        'required': [
+            'name',
+        ],
+        'properties': {
+            'name': {
+                'description': 'BMDS model name',
+                'enum': list(BMDS_v2601.model_options[bmds.constants.DICHOTOMOUS].keys())
+            },
+        },
+    },
+}
+
+dc_model_schema = deepcopy(d_model_schema)
+dc_model_schema['title'] = 'Dichotomous-cancer model validator'
+dc_model_schema['description'] = 'Validation of list of valid dichotomous-cancer models'
+dc_model_schema['items']['properties']['name']['enum'] = \
+    list(BMDS_v2601.model_options[bmds.constants.DICHOTOMOUS_CANCER].keys())
+
+
+c_model_schema = deepcopy(d_model_schema)
+c_model_schema['title'] = 'Continuous-cancer model validator'
+c_model_schema['description'] = 'Validation of list of valid continuous-cancer models'
+c_model_schema['items']['properties']['name']['enum'] = \
+    list(BMDS_v2601.model_options[bmds.constants.CONTINUOUS].keys())
+
+
+def _validate_base(data):
+    try:
+        jsonschema.validate(data, base_schema)
+    except jsonschema.ValidationError as err:
+        raise ValueError(err.message)
+
+
+def _validate_datasets(dataset_type, datasets):
+    try:
+        if dataset_type == bmds.constants.CONTINUOUS:
+            schema = continuous_dataset_schema
+        else:
+            schema = dichotomous_dataset_schema
+        jsonschema.validate(datasets, schema)
+    except jsonschema.ValidationError as err:
+        raise ValueError('Dataset error(s): ' + err.message)
+
+
+def _validate_models(dataset_type, models):
+    try:
+        if dataset_type == bmds.constants.DICHOTOMOUS:
+            schema = d_model_schema
+        elif dataset_type == bmds.constants.DICHOTOMOUS_CANCER:
+            schema = dc_model_schema
+        else:
+            schema = c_model_schema
+        jsonschema.validate(models, schema)
+    except jsonschema.ValidationError as err:
+        raise ValueError('Model error(s): ' + err.message)
+
+
 def validate_input(data):
     # Return None if successful, else raise ValueError.
     # ensure data is valid JSON
@@ -146,19 +218,15 @@ def validate_input(data):
     except json.decoder.JSONDecodeError:
         raise ValueError('Invalid format - must be valid JSON.')
 
-    # first-level check
-    try:
-        jsonschema.validate(jsoned, base_schema)
-    except jsonschema.ValidationError as err:
-        raise ValueError(err.message)
+    # check base job
+    _validate_base(jsoned)
 
     # check dataset schema
-    try:
-        datasets = jsoned.get('datasets', [])
-        if jsoned['dataset_type'] == bmds.constants.CONTINUOUS:
-            schema = continuous_dataset_schema
-        else:
-            schema = dichotomous_dataset_schema
-        jsonschema.validate(datasets, schema)
-    except jsonschema.ValidationError as err:
-        raise ValueError('Dataset error(s): ' + err.message)
+    datasets = jsoned['datasets']
+    dataset_type = jsoned['dataset_type']
+    _validate_datasets(dataset_type, datasets)
+
+    # check model schema
+    models = jsoned.get('models')
+    if models:
+        _validate_models(dataset_type, models)

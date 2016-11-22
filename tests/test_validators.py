@@ -53,9 +53,9 @@ def test_base_validator(complete_continuous):
         pytest.fail('Should be valid.')
 
     # missing required field check
+    data = deepcopy(complete_continuous)
+    data.pop('bmds_version')
     with pytest.raises(jsonschema.exceptions.ValidationError):
-        data = deepcopy(complete_continuous)
-        data.pop('bmds_version')
         jsonschema.validate(data, validators.base_schema)
 
 
@@ -69,15 +69,15 @@ def test_continuous_validator(complete_continuous):
         pytest.fail('Should be valid.')
 
     # missing required field check
+    data = deepcopy(datasets)
+    data[0].pop('stdevs')
     with pytest.raises(jsonschema.exceptions.ValidationError):
-        data = deepcopy(datasets)
-        data[0].pop('stdevs')
         jsonschema.validate(data, validators.continuous_dataset_schema)
 
     # n>0 check
+    data = deepcopy(datasets)
+    data[0]['ns'][1] = 0
     with pytest.raises(jsonschema.exceptions.ValidationError):
-        data = deepcopy(datasets)
-        data[0]['ns'][1] = 0
         jsonschema.validate(data, validators.dichotomous_dataset_schema)
 
 
@@ -91,15 +91,15 @@ def test_dichotomous_validator(complete_dichotomous):
         pytest.fail('Should be valid.')
 
     # missing required field check
+    data = deepcopy(datasets)
+    data[0].pop('ns')
     with pytest.raises(jsonschema.exceptions.ValidationError):
-        data = deepcopy(datasets)
-        data[0].pop('ns')
         jsonschema.validate(data, validators.dichotomous_dataset_schema)
 
     # n>0 check
+    data = deepcopy(datasets)
+    data[0]['ns'][1] = 0
     with pytest.raises(jsonschema.exceptions.ValidationError):
-        data = deepcopy(datasets)
-        data[0]['ns'][1] = 0
         jsonschema.validate(data, validators.dichotomous_dataset_schema)
 
 
@@ -126,7 +126,51 @@ def test_dataset_ids(complete_continuous, complete_dichotomous):
         jsonschema.validate(data, validator)
 
         # check float id
+        data = deepcopy(datasets)
+        data[0]['id'] = 123.1  # float
         with pytest.raises(jsonschema.exceptions.ValidationError):
-            data = deepcopy(datasets)
-            data[0]['id'] = 123.1  # float
             jsonschema.validate(data, validator)
+
+
+def test_models(complete_continuous):
+    # Check models can be specified
+    cmodels = [
+        {'name': 'Exponential-M2'},
+        {'name': 'Exponential-M3'}
+    ]
+
+    dmodels = [
+        {'name': 'Logistic'},
+        {'name': 'LogLogistic'}
+    ]
+
+    # complete check
+    data = deepcopy(complete_continuous)
+    data['models'] = cmodels
+    try:
+        validators.validate_input(json.dumps(data))
+    except ValueError:
+        pytest.fail('Should be valid.')
+
+    data = deepcopy(complete_continuous)
+    data['models'] = dmodels
+    with pytest.raises(ValueError):
+        validators.validate_input(json.dumps(data))
+
+    # continuous
+    try:
+        jsonschema.validate(cmodels, validators.c_model_schema)
+    except jsonschema.exceptions.ValidationError:
+        pytest.fail('Should be valid.')
+
+    with pytest.raises(jsonschema.exceptions.ValidationError):
+        jsonschema.validate(dmodels, validators.c_model_schema)
+
+    # dichotomous
+    try:
+        jsonschema.validate(dmodels, validators.d_model_schema)
+    except jsonschema.exceptions.ValidationError:
+        pytest.fail('Should be valid.')
+
+    with pytest.raises(jsonschema.exceptions.ValidationError):
+        jsonschema.validate(cmodels, validators.d_model_schema)

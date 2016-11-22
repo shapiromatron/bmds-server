@@ -41,8 +41,7 @@ class Job(models.Model):
         return len(self.outputs) > 0
 
     @staticmethod
-    def build_session(bmds_version, dataset_type, dataset):
-
+    def build_session(bmds_version, dataset_type, dataset, models):
         # build dataset
         if dataset_type == bmds.constants.CONTINUOUS:
             dataset = bmds.ContinuousDataset(**dataset)
@@ -55,8 +54,14 @@ class Job(models.Model):
             dataset=dataset
         )
 
-        # add default models
-        for model_name in session.model_options[dataset_type].keys():
+        # by default, use all available models
+        if models is None:
+            models = session.model_options[dataset_type].keys()
+        else:
+            models = [d['name'] for d in models]
+
+        # add models to session
+        for model_name in models:
             session.add_model(model_name)
 
         return session
@@ -86,6 +91,7 @@ class Job(models.Model):
                 bmds_version=inputs['bmds_version'],
                 dataset_type=inputs['dataset_type'],
                 dataset=dataset,
+                models=inputs.get('models'),
             ) for dataset in inputs['datasets']
         ]
 

@@ -39,6 +39,8 @@ logs/*
 # setting overrides
 bmds_server/settings/local.py
 /web.config
+/run_celery_winservice.py
+/secrets.json
 
 # keep folders, but not content
 notebooks/*

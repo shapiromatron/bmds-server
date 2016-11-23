@@ -22,8 +22,8 @@ Installation requirements
         - Don't install in default location (in a user's home), use custom location, ``C:\Python35``
         - install launcher for  all users, add to PATH
     - Enable python to be used (run terminal as administrator):
-
         ``Set-ExecutionPolicy Unrestricted``
+    - Download the appropriate `pywin32`_ library (we will install later in a virtual environment)
 - Git_
     - v2.10.2 or higher
     - 64-bit version
@@ -43,11 +43,11 @@ Installation requirements
     - Requires IIS configuration as described above before installing
 
 .. _Python: https://www.python.org/downloads/
+.. _pywin32: https://sourceforge.net/projects/pywin32/
 .. _Git: https://git-scm.com/download/win
 .. _Erlang: http://www.erlang.org/downloads
 .. _RabbitMQ: http://www.rabbitmq.com/downloads.html
 .. _HttpPlatformHandler: https://www.iis.net/downloads/microsoft/httpplatformhandler
-
 
 IIS configuration
 ~~~~~~~~~~~~~~~~~
@@ -68,7 +68,6 @@ Django web application, as well as serving static files directly.
              - Alias: ``static``
              - Physical path: ``C:\inetpub\wwwroot\bmds-server\public``
 
-
 Application setup
 ~~~~~~~~~~~~~~~~~
 
@@ -83,72 +82,57 @@ Install the software in a location where IIS will have access. In the example ab
     ./venv/Scripts/activate
     pip install -r ./requirements/production.txt
 
-    # copy web-config
-    cp ./web.config.example ./web.config
+    # install pywin32 into virtualenviroinment
+    easy_install-3.5.exe ~\Downloads\pywin32-220.win32-py3.5.exe
 
-Next, set environment variables. You'll need to set the same variables in the following locations (with respect to ``bmds-server`` root path):
+    # copy secrets.json
+    cp ./secrets.example.json ./secrets.json
 
-- ``./web.config``
-- ``./venv/Scripts/Activate.ps1``
-- ``./venv/Scripts/activate.bat``
+Update the ``secrets.json`` file with actual secrets. These secrets are pulled
+from the environment settings in all areas where the software may be executed
+(in activate.bat and Activate.ps1 for the virtual environment, web.config,
+and the celery background process). To sync secrets, run the command::
 
+    python manage.py sync_secrets
 
-Celery background process
-~~~~~~~~~~~~~~~~~~~~~~~~~
+Then, install the celery service::
 
-This application creates long-running, tasks which runs thousands of curve-fits using BMDS. We do this asynchronously by using celery tasks. To run this service in the background on Windows, based on my research, two approaches can be used:
+    python celery_service.py install
 
-1. Create a service script and start
-2. Use task-scheduler to ensure task is running in background
+You can update and un-install the service using these commands, respectively::
 
-The task scheduler is an easier alternative, that feels more similar to linux deployment using supervisord for example. We'll try to use that approach. To do so, create a batch file (I call it ``start-celery.bat``)::
-
-    :: active virtual environment and set environment variables
-    CALL C:\inetpub\wwwroot\bmds-server\venv\Scripts\activate.bat
-
-    :: set working directory
-    cd C:\inetpub\wwwroot\bmds-server
-
-    :: start celery workers
-    celery worker^
-     --app=bmds_server^
-     --loglevel=info^
-     --events^
-     --logfile="C:\inetpub\wwwroot\bmds-server\celery.log"
-
-Then, using Task Scheduler, setup a new task. Using the GUI:
-
-- General: Run whether user is logged on or not
-- Trigger: at system startup
-- Actions: Start a program, ``C:\path\to\start-celery.bat``
-- Conditions: (no changes)
-- Settings:
-    - If the task fails, restart
-    - Don't stop the task if it runs too long
-    - If the running task doesn't end when request, force stop
-    - If the task is already running, don't start new instance
-- Enable history logging
-
-**Note:** Some online said that tasks would sometimes fire multiple instances with previous version of Windows server and task-schedule, but to date I haven't seen this.
+    python celery_service.py update
+    python celery_service.py remove
 
 To redeploy with updates
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
-1. Create a batch file like this, and run as administrator::
+Create a batch file like this, and run as administrator::
 
-    CALL C:\inetpub\wwwroot\bmds-server\venv\Scripts\activate.bat
-    cd C:\inetpub\wwwroot\bmds-server
-
+    :: get the latest BMDS code
+    cd C:\inetpub\wwwroot\py\bmds
     git fetch --all
     git reset --hard origin/master
 
+    :: Get the latest BMDS server code
+    cd C:\inetpub\wwwroot\bmds-server
+    git fetch --all
+    git reset --hard origin/master
+
+    :: Update python/django
+    CALL C:\inetpub\wwwroot\bmds-server\venv\Scripts\activate.bat
     pip install -r .\requirements\production.txt
-    python manage.py migrate --no-input
+    python manage.py sync_secrets
+    python celery_service.py update
     python manage.py collectstatic --no-input
+    python manage.py migrate --no-input
 
+    :: Restart Celery
+    sc stop bmds_celery
+    sc start bmds_celery
+
+    :: Reset IIS
     iisreset.exe
-
-2. Restart the celery worker manually in the Task Scheduler.
 
 Troubleshooting
 ~~~~~~~~~~~~~~~

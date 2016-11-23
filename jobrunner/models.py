@@ -97,30 +97,26 @@ class Job(models.Model):
         self.started = now()
         self.save()
 
-        # build bmds sessions
         inputs = json.loads(self.inputs)
-        sessions = [
-            self.build_session(
+        outputs = []
+
+        for dataset in inputs['datasets']:
+
+            # build session
+            session = self.build_session(
                 bmds_version=inputs['bmds_version'],
                 dataset_type=inputs['dataset_type'],
                 dataset=dataset,
                 models=inputs.get('models'),
-            ) for dataset in inputs['datasets']
-        ]
+            )
 
-        # execute sessions
-        for session in sessions:
+            # execute
             session.execute()
 
-        # build outputs
-        outputs = []
-        for dataset, session in zip(inputs['datasets'], sessions):
+            # append outputs
             outputs.append(dict(
                 dataset=dataset,
-                models=[
-                    self.get_model_output(model)
-                    for model in session._models
-                ]
+                models=[self.get_model_output(model) for model in session._models]
             ))
 
         inputs_no_datasets = deepcopy(inputs)

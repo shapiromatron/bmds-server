@@ -48,9 +48,18 @@ class Job(models.Model):
     def build_session(bmds_version, dataset_type, dataset, models):
         # build dataset
         if dataset_type == bmds.constants.CONTINUOUS:
-            dataset = bmds.ContinuousDataset(**dataset)
+            dataset = bmds.ContinuousDataset(
+                doses=dataset['doses'],
+                ns=dataset['ns'],
+                resps=dataset['resps'],
+                stdevs=dataset['stdevs']
+            )
         else:
-            dataset = bmds.DichotomousDataset(**dataset)
+            dataset = bmds.DichotomousDataset(
+                doses=dataset['doses'],
+                ns=dataset['ns'],
+                incidences=dataset['incidences'],
+            )
 
         # build session
         session = bmds.get_session(bmds_version)(

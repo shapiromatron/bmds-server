@@ -48,8 +48,8 @@ class Command(BaseCommand):
             f.write(inputs)
 
     def write_activate_bat(self, secrets):
-        txt = '\nset "PATH=%VIRTUAL_ENV%\Scripts;%PATH%"\n'
-        txt = '\n'.join([
+        txt = 'set "PATH=%VIRTUAL_ENV%\Scripts;%PATH%"\n\n'
+        txt += '\n'.join([
             'set "{0}={1}"'.format(k, v)
             for k, v in secrets.items()
         ])
@@ -72,8 +72,8 @@ class Command(BaseCommand):
             f.write(outputs)
 
     def write_activate_ps(self, secrets):
-        txt = '\n$env:PATH = "$env:VIRTUAL_ENV\Scripts;$env:PATH"\n'
-        txt = '\n'.join([
+        txt = '$env:PATH = "$env:VIRTUAL_ENV\Scripts;$env:PATH"\n\n'
+        txt += '\n'.join([
             '$env:{0}="{1}"'.format(k, v)
             for k, v in secrets.items()
         ])

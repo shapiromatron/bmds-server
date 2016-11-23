@@ -122,10 +122,13 @@ Create a batch file like this, and run as administrator::
     :: Update python/django
     CALL C:\inetpub\wwwroot\bmds-server\venv\Scripts\activate.bat
     pip install -r .\requirements\production.txt
-    python manage.py sync_secrets
-    python celery_service.py update
     python manage.py collectstatic --no-input
     python manage.py migrate --no-input
+
+    :: Update services
+    python manage.py sync_secrets
+    :: python run_celery_winservice.py install  :: first-time only
+    python run_celery_winservice.py update
 
     :: Restart Celery
     sc stop bmds_celery
@@ -133,6 +136,9 @@ Create a batch file like this, and run as administrator::
 
     :: Reset IIS
     iisreset.exe
+
+    :: Don't close window
+    pause
 
 Troubleshooting
 ~~~~~~~~~~~~~~~

@@ -10,10 +10,18 @@
     <li><b>BMDS job start-time: </b>{{object.started}}</li>
     <li><b>BMDS job end-time: </b>{{object.ended}}</li>
 </ul>
+
+{% if object.has_errors %}
+<p>Unfortunately, an error occurred and your results are not complete. Here's the error stacktrace:</p>
+<pre>{{object.errors}}</pre>
+<p><i>(You can send this URL to someone who speaks computer)</i></p>
+{% else %}
 <a href="{{object.get_input_url}}"
    class='btn btn-primary'><i class="fa fa-fixed fa-download"></i>&nbsp;Download inputs</a>
 <a href="{{object.get_output_url}}"
    class='btn btn-primary'><i class="fa fa-fixed fa-download"></i>&nbsp;Download outputs</a>
+{% endif %}
+
 {% else %}
 
 <h1>Your job is running...<i class="fa fa-spinner fa-pulse fa-fw"></i>

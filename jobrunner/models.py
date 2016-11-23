@@ -38,7 +38,11 @@ class Job(models.Model):
 
     @property
     def is_finished(self):
-        return len(self.outputs) > 0
+        return len(self.outputs) > 0 or len(self.errors) > 0
+
+    @property
+    def has_errors(self):
+        return len(self.errors) > 0
 
     @staticmethod
     def build_session(bmds_version, dataset_type, dataset, models):
@@ -120,5 +124,10 @@ class Job(models.Model):
 
         self.outputs = json.dumps(obj)
         self.errors = ''
+        self.ended = now()
+        self.save()
+
+    def handle_execution_error(self, err):
+        self.errors = err
         self.ended = now()
         self.save()

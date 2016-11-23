@@ -82,7 +82,9 @@ class Job(models.Model):
     @staticmethod
     def get_model_output(model):
         output = dict(
-            dfile=model.as_dfile()
+            dfile=model.as_dfile(),
+            name=model.model_name,
+            has_output=model.output_created,
         )
         if model.output_created:
             output.update(dict(
@@ -116,7 +118,10 @@ class Job(models.Model):
             # append outputs
             outputs.append(dict(
                 dataset=dataset,
-                models=[self.get_model_output(model) for model in session._models]
+                models=[
+                    self.get_model_output(model)
+                    for model in session._models
+                ]
             ))
 
         inputs_no_datasets = deepcopy(inputs)

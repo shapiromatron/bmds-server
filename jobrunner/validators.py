@@ -224,24 +224,26 @@ def _validate_base(data):
 
 
 def _validate_datasets(dataset_type, datasets):
+    if dataset_type == bmds.constants.CONTINUOUS:
+        schema = continuous_dataset_schema
+    else:
+        schema = dichotomous_dataset_schema
+
     try:
-        if dataset_type == bmds.constants.CONTINUOUS:
-            schema = continuous_dataset_schema
-        else:
-            schema = dichotomous_dataset_schema
         jsonschema.validate(datasets, schema)
     except jsonschema.ValidationError as err:
         raise ValueError('Dataset error(s): ' + err.message)
 
 
 def _validate_models(dataset_type, models):
+    if dataset_type == bmds.constants.DICHOTOMOUS:
+        schema = d_model_schema
+    elif dataset_type == bmds.constants.DICHOTOMOUS_CANCER:
+        schema = dc_model_schema
+    else:
+        schema = c_model_schema
+
     try:
-        if dataset_type == bmds.constants.DICHOTOMOUS:
-            schema = d_model_schema
-        elif dataset_type == bmds.constants.DICHOTOMOUS_CANCER:
-            schema = dc_model_schema
-        else:
-            schema = c_model_schema
         jsonschema.validate(models, schema)
     except jsonschema.ValidationError as err:
         raise ValueError('Model error(s): ' + err.message)

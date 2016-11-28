@@ -143,3 +143,47 @@ def test_models(complete_continuous):
 
     with pytest.raises(jsonschema.exceptions.ValidationError):
         jsonschema.validate(cmodels, validators.d_model_schema)
+
+
+def test_bmr(complete_continuous):
+    # Check models can be specified
+    cbmr = {
+        'type': 'Std. Dev.',
+        'value': 1.0,
+    }
+
+    dbmr = {
+        'type': 'Added',
+        'value': 0.1,
+    }
+
+    # complete check
+    data = deepcopy(complete_continuous)
+    data['bmr'] = cbmr
+    try:
+        validators.validate_input(json.dumps(data))
+    except ValueError:
+        pytest.fail('Should be valid.')
+
+    data = deepcopy(complete_continuous)
+    data['bmr'] = dbmr
+    with pytest.raises(ValueError):
+        validators.validate_input(json.dumps(data))
+
+    # continuous
+    try:
+        jsonschema.validate(cbmr, validators.c_bmr_schema)
+    except jsonschema.exceptions.ValidationError:
+        pytest.fail('Should be valid.')
+
+    with pytest.raises(jsonschema.exceptions.ValidationError):
+        jsonschema.validate(dbmr, validators.c_bmr_schema)
+
+    # dichotomous
+    try:
+        jsonschema.validate(dbmr, validators.d_bmr_schema)
+    except jsonschema.exceptions.ValidationError:
+        pytest.fail('Should be valid.')
+
+    with pytest.raises(jsonschema.exceptions.ValidationError):
+        jsonschema.validate(cbmr, validators.d_bmr_schema)

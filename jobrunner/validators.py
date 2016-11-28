@@ -31,6 +31,10 @@ base_schema = {
         'models': {
             'description': 'An array of models which should be used',
             'type': 'array'
+        },
+        'bmr': {
+            'description': 'A description of the BMR to use',
+            'type': 'object'
         }
     },
     'required': ['bmds_version', 'dataset_type', 'datasets']
@@ -179,6 +183,39 @@ c_model_schema['items']['properties']['name']['enum'] = \
     list(BMDS_v2601.model_options[bmds.constants.CONTINUOUS].keys())
 
 
+d_bmr_schema = {
+    '$schema': 'http://json-schema.org/draft-04/schema#',
+    'title': 'Dichotomous BMR validator',
+    'description': 'BMR specifications validator',
+    'type': 'object',
+    'required': [
+        'type',
+        'value',
+    ],
+    'properties': {
+        'type': {
+            'description': 'BMR type',
+            'enum': list(bmds.constants.BMR_CROSSWALK[bmds.constants.DICHOTOMOUS].keys()),
+        },
+        'value': {
+            'description': 'BMR value',
+            'type': 'number',
+            'minimum': 0,
+        },
+    },
+}
+
+dc_bmr_schema = deepcopy(d_bmr_schema)
+dc_bmr_schema['title'] = 'Dichotomous-cancer BMR validator'
+dc_bmr_schema['properties']['type']['enum'] = \
+    list(bmds.constants.BMR_CROSSWALK[bmds.constants.DICHOTOMOUS_CANCER].keys())
+
+c_bmr_schema = deepcopy(d_bmr_schema)
+c_bmr_schema['title'] = 'Continuous BMR validator'
+c_bmr_schema['properties']['type']['enum'] = \
+    list(bmds.constants.BMR_CROSSWALK[bmds.constants.CONTINUOUS].keys())
+
+
 def _validate_base(data):
     try:
         jsonschema.validate(data, base_schema)
@@ -210,6 +247,20 @@ def _validate_models(dataset_type, models):
         raise ValueError('Model error(s): ' + err.message)
 
 
+def _validate_bmr(dataset_type, bmr):
+    if dataset_type == bmds.constants.DICHOTOMOUS:
+        schema = d_bmr_schema
+    elif dataset_type == bmds.constants.DICHOTOMOUS_CANCER:
+        schema = dc_bmr_schema
+    else:
+        schema = c_bmr_schema
+
+    try:
+        jsonschema.validate(bmr, schema)
+    except jsonschema.ValidationError as err:
+        raise ValueError('BMR error(s): ' + err.message)
+
+
 def validate_input(data):
     # Return None if successful, else raise ValueError.
     # ensure data is valid JSON
@@ -230,3 +281,8 @@ def validate_input(data):
     models = jsoned.get('models')
     if models:
         _validate_models(dataset_type, models)
+
+    # check bmr schema
+    bmr = jsoned.get('bmr')
+    if bmr:
+        _validate_bmr(dataset_type, bmr)

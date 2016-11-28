@@ -33,12 +33,14 @@ The datasets in the example above follow the `Datasets`_ schema, described below
 - ``id`` <int or string>: Can be used as a unique identifier for the BMDS job;
   returned in the output so results can be mapped externally to BMDS server
   application.
+- ``bmr`` <`BMR schema`_>: Specify the BMR definition for all models. If not
+  specified, a default BMR value is used.
 - ``models`` <`Models schema`_>: Specify a subset of BMDS models to be executed
   for each job. If not specified, by default all models which can be used for
   a particular dataset will be used (dependent on the number of dose-groups in
   a dataset).
 
-
+.. _`BMR schema`: BMR_
 .. _`Models schema`: Models_
 
 The complete specification is below:
@@ -273,6 +275,76 @@ The complete specification is below:
       }
     }
 
+BMR
+~~~
+
+If specified, the BMR describes the BMR setting which is applied to all models,
+for all datasets. An example for dichotomous data:
+
+.. code-block:: javascript
+
+    {
+        "type": "Extra",
+        "value": 0.1
+    }
+
+An example for continuous data:
+
+.. code-block:: javascript
+
+    {
+        "type": "Std. Dev.",
+        "value": 1
+    }
+
+.. important::
+
+  If BMR  unspecified, a default will be used, which dataset-type specific:
+
+    - Dichotomous data: 10% extra risk
+    - Dichtomous cancer data: 10% extra risk
+    - Continuous data: 1 standard deviation from control
+
+The generic specification is below:
+
+.. code-block:: javascript
+
+    {
+      "$schema": "http://json-schema.org/draft-04/schema#",
+      "title": "BMR validator",
+      "description": "BMR specifications validator",
+      "type": "object",
+      "properties": {
+        "value": {
+          "minimum": 0,
+          "type": "number",
+          "description": "BMR value"
+        },
+        "type": {
+          "enum": [  BMR_NAMES ]  // dataset type-specific
+          "description": "BMR type"
+        }
+      },
+      "required": [
+        "type",
+        "value"
+      ]
+    }
+
+The ``BMR_NAMES`` options are dataset-type specific:
+
+- Dichotomous data:
+    - Extra
+    - Added
+- Dichotomous-cancer data:
+    - Extra
+- Continuous data:
+    - Rel. Dev.
+    - Std. Dev.
+    - Abs. Dev.
+    - Extra
+    - Point
+
 Models
 ~~~~~~
 
@@ -317,7 +389,6 @@ dataset will be used. The generic specification is below:
       },
     }
 
-
 The ``MODEL_NAMES`` described above are dataset-type specific:
 
 - Dichotomous data:
@@ -339,8 +410,6 @@ The ``MODEL_NAMES`` described above are dataset-type specific:
     - Exponential-M3
     - Exponential-M4
     - Exponential-M5
-
-
 
 .. admonition:: TODO
 

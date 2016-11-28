@@ -37,7 +37,7 @@ test: ## This runs all of the tests.
 	# To show print statements when debugging tests, use the -s flag:
 	# 	$ py.test -k test_monkey_has_tail -s
 	#
-	py.test tests
+	py.test tests --ds=bmds_server.settings.dev
 
 docs: ## generate Sphinx HTML documentation, including API docs
 	$(MAKE) -C docs clean

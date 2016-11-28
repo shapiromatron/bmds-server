@@ -364,6 +364,14 @@ example, to run a dataset with two models:
         }
     ]
 
+**Additional optional fields:**
+
+- ``settings`` <`Model settings schema`_>: Specify any non-default settings to
+  be applied to particular model. Default model-settings are used if this value
+  is unspecified.
+
+.. _`Model settings schema`: `Model settings`_
+
 If ``models`` is not defined, all models which can be used for a particular
 dataset will be used. The generic specification is below:
 
@@ -384,10 +392,17 @@ dataset will be used. The generic specification is below:
           "name": {
             "description": "BMDS model name",
             "enum": [  MODEL_NAMES ]  // dataset type-specific
+          },
+          "settings": {
+            "description": "BMDS model-settings (model-type specific)",
+            "type": "object"
           }
         }
       },
     }
+
+Model names
+-----------
 
 The ``MODEL_NAMES`` described above are dataset-type specific:
 
@@ -417,3 +432,58 @@ The ``MODEL_NAMES`` described above are dataset-type specific:
   set parameters for each model. For example, you could set the polynomial
   model to run with ``n`` polynomial terms, or force datasets to run a
   constant or non-constant variance model. Or specify BMR settings.
+
+Model settings
+--------------
+
+In addition to specifying model-names, the user also has the option to specify
+settings for each model. Model settings are optional, and do not need to be
+applied if the user wishes to use the default settings.
+
+As an example, to run a fourth-order polynomial model with modeled variance,
+this would be an object in the ``models`` array
+
+.. code-block:: javascript
+
+    {
+      "name": "Polynomial",
+      "settings": {
+        "degree_poly": 4,
+        "constant_variance": 0
+      }
+    }
+
+**Frequently-used model-settings:**
+
+- To use constant/modeled variance (all Continuous models)
+    - Use the ``constant_variance`` parameter
+    - Default setting: 1 (0 = modeled variance, 1 = constant variance)
+    - Example: ``{constant_variance: 0}``
+- To set the degree of polynomial (Polynomial, Multistage, or Multistage-Cancer):
+    - Use the ``degree_poly`` parameter
+    - Default setting: 2
+    - Example: ``{degree_poly: 3}``
+- To un-restrict/restrict continuous model parameters
+    - For Hill, use ``restrict_n`` (1=True, 0=False): default is restricted
+    - For Power, use ``restrict_power`` (1=True, 0=False): default is restricted
+    - For Polynomial, use ``restrict_polynomial`` (1=Positive, -1=Negative,
+      0=unrestricted): default is calculated based on if dataset is increasing
+      or decreasing
+- To un-restrict/restrict dichotomous model parameters
+    - For Weibull, use ``restrict_power`` (1=True, 0=False): default is restricted
+    - For Multistage, use ``restrict_beta`` (1=True, 0=False): default is restricted
+    - For Multistage-Cancer, same as Multistage
+    - For Gamma, use ``restrict_power`` (1=True, 0=False): default is restricted
+    - For LogProbit, use ``restrict_slope`` (1=True, 0=False): default is restricted
+    - For LogLogistic, use ``restrict_slope`` (1=True, 0=False): default is restricted
+    - For Probit, use ``restrict_slope`` (1=True, 0=False): default is unrestricted
+    - For Logistic, use ``restrict_slope`` (1=True, 0=False): default is unrestricted
+
+.. warning::
+
+  Due to the complexity of the model-settings and the multiple permutations that
+  are available, there is no schema-validation or checking that the ``settings``
+  are in the correct format or applied to a model.
+
+  **Please check settings to ensure they are applied as intended the outputs, by
+  examining the created dfile and/or outfile` execution.**

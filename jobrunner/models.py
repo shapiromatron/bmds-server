@@ -67,23 +67,29 @@ class Job(models.Model):
             dataset=dataset
         )
 
-        # by default, use all available models
-        if models is None:
-            models = session.model_options[dataset_type].keys()
-        else:
-            models = [d['name'] for d in models]
-
         # get BMR
-        model_overrides = None
+        global_overrides = {}
         if bmr is not None:
-            model_overrides = {
+            global_overrides = {
                 'bmr': bmr['value'],
                 'bmr_type': bmds.constants.BMR_CROSSWALK[dataset_type][bmr['type']],
             }
 
+        # by default, use all available models
+        if models is None:
+            models = [
+                {'name': name} for name in
+                session.model_options[dataset_type].keys()
+            ]
+
         # add models to session
-        for model_name in models:
-            session.add_model(model_name, overrides=model_overrides)
+        for model in models:
+            overrides = global_overrides
+            settings = model.get('settings')
+            if settings:
+                overrides = deepcopy(global_overrides)
+                overrides.update(settings)
+            session.add_model(model['name'], overrides=overrides)
 
         return session
 

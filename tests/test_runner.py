@@ -50,9 +50,9 @@ def test_c_success(complete_continuous):
     # BMDS execution is slow; we overload this test to check lots of things.
     data = deepcopy(complete_continuous)
 
-    # use a single model for speed
+    # use single model for speed; w/ a model override
     data['models'] = [
-        {'name': 'Linear'},
+        {'name': 'Polynomial', 'settings': {'degree_poly': 3}},
     ]
 
     # use alternative BMR definition
@@ -75,10 +75,15 @@ def test_c_success(complete_continuous):
         if resp.json()['is_finished']:
             break
 
+    # grab model of interest
+    model = resp.json()['outputs']['outputs'][0]['models'][0]
+
+    # check that model is a 3rd order polynomial
+    assert model['output']['parameters']['beta_3']['estimate'] == 0.
+
     # check alternative BMR definition
-    outfile = resp.json()['outputs']['outputs'][0]['models'][0]['outfile']
-    assert 'Specified effect =           1.5' in outfile
+    assert 'Specified effect =           1.5' in model['outfile']
 
     # check parsed model output exists
-    bmd = resp.json()['outputs']['outputs'][0]['models'][0]['output']['BMD']
-    assert bmd == 1901.98
+    bmd = model['output']['BMD']
+    assert bmd == 151.291

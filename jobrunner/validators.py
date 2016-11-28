@@ -165,6 +165,10 @@ d_model_schema = {
                 'description': 'BMDS model name',
                 'enum': list(BMDS_v2601.model_options[bmds.constants.DICHOTOMOUS].keys())
             },
+            'settings': {
+                'description': 'BMDS model-settings (model-type specific)',
+                'type': 'object'
+            }
         },
     },
 }

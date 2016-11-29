@@ -38,11 +38,15 @@
 {% block extra-js %}
 
 <script type="text/javascript">
-var reload = function(){
-    window.location = '.'
-};
+var key = 'bmds-timeout-{{object.id}}',
+    timeout = parseInt(localStorage.getItem(key)) || 1,
+    reload = function(){
+        window.location = '.'
+    };
 {% if not object.is_finished %}
-setTimeout(reload, 15000);
+timeout = Math.min(timeout + 1, 15);
+localStorage.setItem(key, timeout);
+setTimeout(reload, timeout * 1000);
 {% endif %}
 </script>
 {% endblock %}

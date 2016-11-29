@@ -5,6 +5,7 @@ from django.http import JsonResponse
 from django.utils.decorators import method_decorator
 from django.views.generic import RedirectView, DetailView, View
 from django.views.generic.edit import CreateView
+from django.views.decorators.csrf import csrf_exempt
 import json
 
 from bmds.drunner import BatchDfileRunner
@@ -41,6 +42,8 @@ class JobDetail(DetailView):
     model = models.Job
 
 
+
+@method_decorator(csrf_exempt, 'dispatch')
 class BatchDFileExecute(View):
     # BLOCKING BMDS execution (for testing only)
 

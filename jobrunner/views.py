@@ -3,9 +3,10 @@ from django.contrib.auth.decorators import permission_required
 from django.core.urlresolvers import reverse
 from django.http import JsonResponse
 from django.utils.decorators import method_decorator
+from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import RedirectView, DetailView, View
 from django.views.generic.edit import CreateView
-from django.views.decorators.csrf import csrf_exempt
+
 import json
 
 from bmds.drunner import BatchDfileRunner
@@ -42,7 +43,7 @@ class JobDetail(DetailView):
     model = models.Job
 
 
-
+@method_decorator(permission_required('is_staff'), 'dispatch')
 @method_decorator(csrf_exempt, 'dispatch')
 class BatchDFileExecute(View):
     # BLOCKING BMDS execution (for testing only)

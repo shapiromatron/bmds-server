@@ -16,6 +16,10 @@ urlpatterns = [
         views.Home.as_view(),
         name='home'),
 
+    url(r'^dfile/$',
+        views.BatchDFileExecute.as_view(),
+        name='dfile'),
+
     url(r'^job/q/$',
         views.JobQuery.as_view(),
         name='job_query'),

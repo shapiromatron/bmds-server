@@ -1,7 +1,13 @@
 from django.contrib import messages
+from django.contrib.auth.decorators import permission_required
 from django.core.urlresolvers import reverse
-from django.views.generic import RedirectView, DetailView
+from django.http import JsonResponse
+from django.utils.decorators import method_decorator
+from django.views.generic import RedirectView, DetailView, View
 from django.views.generic.edit import CreateView
+import json
+
+from bmds.drunner import BatchDfileRunner
 
 from . import forms, models
 
@@ -33,3 +39,13 @@ class JobQuery(RedirectView):
 
 class JobDetail(DetailView):
     model = models.Job
+
+
+class BatchDFileExecute(View):
+    # BLOCKING BMDS execution (for testing only)
+
+    def post(self, request, *args, **kwargs):
+        payload = json.loads(request.POST.get('inputs'))
+        runner = BatchDfileRunner(payload)
+        output = runner.execute()
+        return JsonResponse(output, safe=False)

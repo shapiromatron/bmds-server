@@ -108,7 +108,6 @@ class Job(models.Model):
         return output
 
     def execute(self):
-
         # set start time
         self.started = now()
         self.save()

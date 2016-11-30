@@ -24,6 +24,7 @@ Installation requirements
     - Enable python to be used (run terminal as administrator):
         ``Set-ExecutionPolicy Unrestricted``
     - Download the appropriate `pywin32`_ library (we will install later in a virtual environment)
+    - Download the appropriate `scipy`_ library (we can't pip-install this one directly)
 - Git_
     - v2.10.2 or higher
     - 64-bit version
@@ -44,6 +45,7 @@ Installation requirements
 
 .. _Python: https://www.python.org/downloads/
 .. _pywin32: https://sourceforge.net/projects/pywin32/
+.. _scipy: http://www.lfd.uci.edu/~gohlke/pythonlibs/
 .. _Git: https://git-scm.com/download/win
 .. _Erlang: http://www.erlang.org/downloads
 .. _RabbitMQ: http://www.rabbitmq.com/downloads.html
@@ -80,9 +82,15 @@ Install the software in a location where IIS will have access. In the example ab
     # create/install virtualenv
     python -m venv venv
     ./venv/Scripts/activate
+
+    # install scipy into virtual environment
+    pip install numpy
+    pip install ~\Downloads\scipy‑0.18.1‑cp35‑cp35m‑win32.whl
+
+    # install remaining requirements which can be pip-installed
     pip install -r ./requirements/production.txt
 
-    # install pywin32 into virtualenviroinment
+    # install pywin32 into virtual environment
     easy_install-3.5.exe ~\Downloads\pywin32-220.win32-py3.5.exe
 
     # copy secrets.json

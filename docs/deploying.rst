@@ -23,8 +23,8 @@ Installation requirements
         - install launcher for  all users, add to PATH
     - Enable python to be used (run terminal as administrator):
         ``Set-ExecutionPolicy Unrestricted``
-    - Download the appropriate `pywin32`_ library (we will install later in a virtual environment)
-    - Download the appropriate `scipy`_ library (we can't pip-install this one directly)
+    - Download `pywin32`_ library (we will install later in a virtual environment)
+    - Download `numpy+MKL`_ and `scipy`_ library (we can't pip-install directly)
 - Git_
     - v2.10.2 or higher
     - 64-bit version
@@ -45,6 +45,7 @@ Installation requirements
 
 .. _Python: https://www.python.org/downloads/
 .. _pywin32: https://sourceforge.net/projects/pywin32/
+.. _`numpy+MKL`: http://www.lfd.uci.edu/~gohlke/pythonlibs/
 .. _scipy: http://www.lfd.uci.edu/~gohlke/pythonlibs/
 .. _Git: https://git-scm.com/download/win
 .. _Erlang: http://www.erlang.org/downloads
@@ -84,7 +85,7 @@ Install the software in a location where IIS will have access. In the example ab
     ./venv/Scripts/activate
 
     # install scipy into virtual environment
-    pip install numpy
+    pip install ~\Downloads\numpy‑1.11.2+mkl‑cp35‑cp35m‑win32.whl
     pip install ~\Downloads\scipy‑0.18.1‑cp35‑cp35m‑win32.whl
 
     # install remaining requirements which can be pip-installed

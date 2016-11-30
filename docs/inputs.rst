@@ -457,7 +457,9 @@ this would be an object in the ``models`` array
 
 - To use constant/modeled variance (all Continuous models)
     - Use the ``constant_variance`` parameter
-    - Default setting: 1 (0 = modeled variance, 1 = constant variance)
+    - Default setting: calculated, based on result from ANOVA p-test 2 in BMDS
+        - 0 = modeled variance :math:`Var(i) = \alpha * x(i)^\rho`
+        - 1 = constant variance :math:`Var(i) = \alpha * x(i)`
     - Example: ``{constant_variance: 0}``
 - To set the degree of polynomial (Polynomial, Multistage, or Multistage-Cancer):
     - Use the ``degree_poly`` parameter

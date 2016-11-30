@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-extensions = ['sphinx.ext.viewcode', ]
+extensions = ['sphinx.ext.viewcode', 'sphinx.ext.mathjax']
 templates_path = ['_templates']
 source_suffix = '.rst'
 

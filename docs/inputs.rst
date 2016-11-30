@@ -39,6 +39,8 @@ The datasets in the example above follow the `Datasets`_ schema, described below
   for each job. If not specified, by default all models which can be used for
   a particular dataset will be used (dependent on the number of dose-groups in
   a dataset).
+- ``recommend`` <boolean>: Should the software recommend a best fitting model?
+  By default, set to true. Default model recommendation logic is used.
 
 .. _`BMR schema`: BMR_
 .. _`Models schema`: Models_
@@ -85,6 +87,19 @@ The complete specification is below:
           "description": "An array of datasets which will be executed",
           "minItems": 1
         },
+        "models": {
+            "description": "An array of models which should be used",
+            "type": "array"
+        },
+        "bmr": {
+            "description": "A description of the BMR to use",
+            "type": "object"
+        },
+        "recommend": {
+            "description": "Should best fitting model be recommended?",
+            "type": "boolean",
+            "default": true
+        }
       },
       "required": [
         "bmds_version",

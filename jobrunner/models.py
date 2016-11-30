@@ -105,6 +105,14 @@ class Job(models.Model):
                 outfile=model.outfile,
                 output=model.output
             ))
+        if hasattr(model, 'logic_bin'):
+            output.update(dict(
+                logic_bin=model.logic_bin,
+                logic_notes=model.logic_notes,
+                recommended=model.recommended,
+                recommended_variable=model.recommended_variable
+            ))
+
         return output
 
     def execute(self):
@@ -115,6 +123,7 @@ class Job(models.Model):
         inputs = json.loads(self.inputs)
         outputs = []
 
+        recommend = inputs.get('recommend', True)
         for dataset in inputs['datasets']:
 
             # build session
@@ -129,14 +138,24 @@ class Job(models.Model):
             # execute
             session.execute()
 
-            # append outputs
-            outputs.append(dict(
+            if recommend:
+                recommended_model_index = None
+                session.add_recommender()
+                recommended_model = session.recommend()
+                if recommended_model:
+                    recommended_model_index = session._models.index(recommended_model)
+
+            output = dict(
                 dataset=dataset,
                 models=[
                     self.get_model_output(model)
                     for model in session._models
                 ]
-            ))
+            )
+            if recommend:
+                output['recommended_model_index'] = recommended_model_index
+
+            outputs.append(output)
 
         inputs_no_datasets = deepcopy(inputs)
         inputs_no_datasets.pop('datasets')

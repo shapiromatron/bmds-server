@@ -35,6 +35,11 @@ base_schema = {
         'bmr': {
             'description': 'A description of the BMR to use',
             'type': 'object'
+        },
+        'recommend': {
+            'description': 'Should best fitting model be recommended?',
+            'type': 'boolean',
+            'default': True
         }
     },
     'required': ['bmds_version', 'dataset_type', 'datasets']

@@ -86,4 +86,4 @@ def test_c_success(complete_continuous):
 
     # check parsed model output exists
     bmd = model['output']['BMD']
-    assert bmd == 151.291
+    assert bmd == 149.913

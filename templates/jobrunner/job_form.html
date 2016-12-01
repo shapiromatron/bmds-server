@@ -29,7 +29,7 @@
                     placeholder="Enter input settings for a new job"
                     id="id_inputs" name="inputs"
                     rows="10" required>{{form.inputs.value|default_if_none:""}}</textarea>
-                <p class='text-muted'>Load an <a id="example_input" href="#">example</a> input file. Or, <a href="http://bmds-server.readthedocs.io/en/latest/">read the docs</a> for valid input formats.</p>
+                <p class='text-muted'>Load an example <a id="example_c" href="#">continuous</a> or <a id="example_d" href="#">dichotomous</a> input file. Or, <a href="http://bmds-server.readthedocs.io/en/latest/">read the docs</a> for more info.</p>
             </div>
             {% include "jobrunner/_errors.html" with errors=form.inputs.errors %}
             <button type="submit" class="btn btn-primary btn-block">Submit a new job</button>
@@ -65,9 +65,14 @@ $(document).ready(function(){
         });
 
     // load example input file
-    $('#example_input').click(function(e){
+    $('#example_c').click(function(e){
         e.preventDefault();
-        $('#id_inputs').val('{\n    "dataset_type": "D",\n    "bmds_version": "BMDS2601",\n    "datasets": [\n        {\n            "doses": [0, 1.96, 5.69, 29.75],\n            "ns": [75, 49, 50, 49],\n            "incidences": [5, 1, 3, 14]\n        }\n    ]\n}');
+        $('#id_inputs').val('{\n    "dataset_type": "C",\n    "bmds_version": "BMDS2601",\n    "datasets": [\n        {\n            "doses": [0, 100, 500, 2500, 12500],\n            "ns": [9, 10, 9, 10, 6],\n            "responses": [33.7, 34.9, 40.9, 56.7, 121.7],\n            "stdevs": [5.0, 5.1, 6.2, 5.9, 18.1]\n        }\n    ]\n}');
+    });
+
+    $('#example_d').click(function(e){
+        e.preventDefault();
+        $('#id_inputs').val('{\n    "id": "my dichotomous datasets",\n    "dataset_type": "D",\n    "bmds_version": "BMDS2601",\n    "datasets": [\n        {\n            "id": "liver",\n            "doses": [0, 1.96, 5.69, 29.75],\n            "ns": [75, 49, 50, 49],\n            "incidences": [5, 1, 3, 14]\n        },\n        {\n            "id": "kidney",\n            "doses": [0, 40, 80, 230],\n            "ns": [12, 12, 12, 12],\n            "incidences": [0, 0, 2, 8]\n        }\n    ],\n    "bmr": {\n         "type": "Extra",\n         "value": 0.1\n    }\n}');
     });
 
     // load example ID

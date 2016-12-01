@@ -31,11 +31,12 @@ dev: ## Start developer environment.
 
 test: ## This runs all of the tests.
 
-	# To run an individual test, use the -k flag to grep for matching:
-	# 	$ py.test -k test_monkey_has_tail
+	# To run tests:
 	#
-	# To show print statements when debugging tests, use the -s flag:
-	# 	$ py.test -k test_monkey_has_tail -s
+	#  py.test --ds=bmds_server.settings.dev
+	#
+	#	- Use -k <MATCH> for test matching (e.g. -k test_this_thing)
+	#	- Use -s for displaying print statements (or use pdb)
 	#
 	py.test tests --ds=bmds_server.settings.dev
 

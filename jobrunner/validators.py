@@ -1,10 +1,11 @@
 from copy import deepcopy
 import bmds
-from bmds.bmds import BMDS_v2601
+from bmds.session import BMDS
 
 import json
 import jsonschema
 
+latest_bmds = BMDS.latest_version()
 base_schema = {
     '$schema': 'http://json-schema.org/draft-04/schema#',
     'title': 'BMDS job overview',
@@ -17,7 +18,7 @@ base_schema = {
         },
         'bmds_version': {
             'description': 'Version of BMDS run analysis with',
-            'enum': list(bmds.VERSIONS.keys())
+            'enum': list(BMDS.versions.keys())
         },
         'dataset_type': {
             'description': 'Type of data which should be executed (should be same for all datasets)',
@@ -168,7 +169,7 @@ d_model_schema = {
         'properties': {
             'name': {
                 'description': 'BMDS model name',
-                'enum': list(BMDS_v2601.model_options[bmds.constants.DICHOTOMOUS].keys())
+                'enum': list(latest_bmds.model_options[bmds.constants.DICHOTOMOUS].keys())
             },
             'settings': {
                 'description': 'BMDS model-settings (model-type specific)',
@@ -182,14 +183,14 @@ dc_model_schema = deepcopy(d_model_schema)
 dc_model_schema['title'] = 'Dichotomous-cancer model validator'
 dc_model_schema['description'] = 'Validation of list of valid dichotomous-cancer models'
 dc_model_schema['items']['properties']['name']['enum'] = \
-    list(BMDS_v2601.model_options[bmds.constants.DICHOTOMOUS_CANCER].keys())
+    list(latest_bmds.model_options[bmds.constants.DICHOTOMOUS_CANCER].keys())
 
 
 c_model_schema = deepcopy(d_model_schema)
 c_model_schema['title'] = 'Continuous-cancer model validator'
 c_model_schema['description'] = 'Validation of list of valid continuous-cancer models'
 c_model_schema['items']['properties']['name']['enum'] = \
-    list(BMDS_v2601.model_options[bmds.constants.CONTINUOUS].keys())
+    list(latest_bmds.model_options[bmds.constants.CONTINUOUS].keys())
 
 
 d_bmr_schema = {

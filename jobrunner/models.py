@@ -62,7 +62,7 @@ class Job(models.Model):
             )
 
         # build session
-        session = bmds.get_session(bmds_version)(
+        session = bmds.BMDS.versions[bmds_version](
             dataset_type,
             dataset=dataset
         )
@@ -77,19 +77,15 @@ class Job(models.Model):
 
         # by default, use all available models
         if models is None:
-            models = [
-                {'name': name} for name in
-                session.model_options[dataset_type].keys()
-            ]
-
-        # add models to session
-        for model in models:
-            overrides = global_overrides
-            settings = model.get('settings')
-            if settings:
-                overrides = deepcopy(global_overrides)
-                overrides.update(settings)
-            session.add_model(model['name'], overrides=overrides)
+            session.add_default_models()
+        else:
+            for model in models:
+                overrides = global_overrides
+                settings = model.get('settings')
+                if settings:
+                    overrides = deepcopy(global_overrides)
+                    overrides.update(settings)
+                session.add_model(model['name'], overrides=overrides)
 
         return session
 

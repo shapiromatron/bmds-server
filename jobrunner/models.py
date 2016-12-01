@@ -38,6 +38,9 @@ class Job(models.Model):
     def get_output_url(self):
         return reverse('api:job-outputs', args=(str(self.id), ))
 
+    def get_excel_url(self):
+        return reverse('api:job-excel', args=(str(self.id), ))
+
     @property
     def is_finished(self):
         return len(self.outputs) > 0 or len(self.errors) > 0
@@ -174,5 +177,5 @@ class Job(models.Model):
         self.save()
 
     def get_excel(self):
-        generator = xlsx.XLSXGenerator(self.outputs)
+        generator = xlsx.BMDGenerator(self.outputs)
         return generator.get_xlsx()

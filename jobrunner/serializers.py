@@ -9,17 +9,18 @@ class JobSerializer(serializers.ModelSerializer):
     has_errors = serializers.BooleanField(read_only=True)
     input_url = serializers.URLField(source='get_input_url', read_only=True)
     output_url = serializers.URLField(source='get_output_url', read_only=True)
+    excel_url = serializers.URLField(source='get_excel_url', read_only=True)
 
     class Meta:
         model = models.Job
         fields = (
             'id', 'inputs', 'errors', 'outputs',
-            'is_finished', 'has_errors', 'input_url', 'output_url',
+            'is_finished', 'has_errors', 'input_url', 'output_url', 'excel_url',
             'created', 'started', 'ended',
         )
         read_only_fields = (
             'id', 'errors', 'outputs',
-            'is_finished', 'has_errors', 'input_url', 'output_url',
+            'is_finished', 'has_errors', 'input_url', 'output_url', 'excel_url',
             'created', 'started', 'ended',
         )
 

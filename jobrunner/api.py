@@ -55,7 +55,7 @@ class JobViewset(mixins.CreateModelMixin,
         return resp
 
     @detail_route(methods=('get',), renderer_classes=(XlsxRenderer,))
-    def xlsx(self, request, *args, **kwargs):
+    def excel(self, request, *args, **kwargs):
         instance = self.get_object()
 
         if not instance.is_finished:

@@ -29,7 +29,7 @@
                     placeholder="Enter input settings for a new job"
                     id="id_inputs" name="inputs"
                     rows="10" required>{{form.inputs.value|default_if_none:""}}</textarea>
-                <p class='text-muted'>Load an <a id="example_input" href="#">example</a> input file. Or, <a href="http://bmds-server.readthedocs.io/en/latest/api.html">read the docs</a> for valid input formats.</p>
+                <p class='text-muted'>Load an <a id="example_input" href="#">example</a> input file. Or, <a href="http://bmds-server.readthedocs.io/en/latest/">read the docs</a> for valid input formats.</p>
             </div>
             {% include "jobrunner/_errors.html" with errors=form.inputs.errors %}
             <button type="submit" class="btn btn-primary btn-block">Submit a new job</button>

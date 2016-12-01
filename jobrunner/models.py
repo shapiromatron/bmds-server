@@ -139,13 +139,13 @@ class Job(models.Model):
                 session.add_recommender()
                 recommended_model = session.recommend()
                 if recommended_model:
-                    recommended_model_index = session._models.index(recommended_model)
+                    recommended_model_index = session.models.index(recommended_model)
 
             output = dict(
                 dataset=dataset,
                 models=[
                     self.get_model_output(model)
-                    for model in session._models
+                    for model in session.models
                 ]
             )
             if recommend:

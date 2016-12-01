@@ -5,3 +5,8 @@ body {
 label {
     font-weight: bold;
 }
+
+textarea {
+    height: 20em;
+    font-family: Consolas, monaco, monospace;
+}

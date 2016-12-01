@@ -416,6 +416,8 @@ dataset will be used. The generic specification is below:
       },
     }
 
+.. _model-names:
+
 Model names
 -----------
 

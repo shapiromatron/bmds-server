@@ -7,6 +7,6 @@ label {
 }
 
 textarea {
-    height: 20em;
     font-family: Consolas, monaco, monospace;
+    height: 25em;
 }

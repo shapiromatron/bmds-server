@@ -15,12 +15,24 @@ class TxtRenderer(BaseRenderer):
         return txt
 
 
+class XlsxRenderer(BaseRenderer):
+    media_type = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+    format = 'xlsx'
+
+    def render(self, wb, media_type=None, renderer_context=None):
+        return wb
+
+
 class JobViewset(mixins.CreateModelMixin,
                  mixins.RetrieveModelMixin,
                  viewsets.GenericViewSet):
 
     def get_serializer_class(self):
         return serializers.JobSerializer
+
+    def not_ready_yet(self):
+        content = 'Outputs processing; not ready yet.'
+        return Response(content, status=status.HTTP_204_NO_CONTENT)
 
     @detail_route(methods=('get',), renderer_classes=(TxtRenderer,))
     def inputs(self, request, *args, **kwargs):
@@ -34,12 +46,23 @@ class JobViewset(mixins.CreateModelMixin,
     def outputs(self, request, *args, **kwargs):
         instance = self.get_object()
 
-        if len(instance.outputs) == 0:
-            content = 'Outputs processing; not ready yet.'
-            return Response(content, status=status.HTTP_204_NO_CONTENT)
+        if not instance.is_finished:
+            return self.not_ready_yet()
 
         fn = u'{}-outputs.json'.format(instance.id)
         resp = Response(instance.outputs)
+        resp['Content-Disposition'] = u'attachment; filename="{}"'.format(fn)
+        return resp
+
+    @detail_route(methods=('get',), renderer_classes=(XlsxRenderer,))
+    def xlsx(self, request, *args, **kwargs):
+        instance = self.get_object()
+
+        if not instance.is_finished:
+            return self.not_ready_yet()
+
+        fn, wb = instance.get_excel()
+        resp = Response(wb)
         resp['Content-Disposition'] = u'attachment; filename="{}"'.format(fn)
         return resp
 

@@ -6,6 +6,8 @@ from django.core.urlresolvers import reverse
 from django.utils.timezone import now
 import uuid
 
+from . import xlsx
+
 
 class Job(models.Model):
     id = models.UUIDField(
@@ -170,3 +172,7 @@ class Job(models.Model):
         self.errors = err
         self.ended = now()
         self.save()
+
+    def get_excel(self):
+        generator = xlsx.XLSXGenerator(self.outputs)
+        return generator.get_xlsx()

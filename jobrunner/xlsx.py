@@ -109,7 +109,7 @@ class BMDGenerator(XLSXGeneratorBaseClass):
         ]
         ws.write(2, 0, 'Input settings', self.bolded)
         txt = json.dumps(self.content['inputs'], indent=2)
-        ws.insert_textbox(2, 1, txt, {'width': 800, 'height': 600, 'font': {'name': 'Consolas'}})
+        ws.write(2, 1, txt)
 
     model_header_general = ('dataset_id', 'model_name', 'has_output')
     model_header_logic = (

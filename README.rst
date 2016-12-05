@@ -6,7 +6,10 @@ BMDS webserver
         :alt: Documentation Status
 
 Run a webserver that will batch process dose-response data using the US EPA's
-benchmark dose modeling software (BMDS_).
+benchmark dose modeling software (BMDS_).  Under the hood, this web application
+uses the `BMDS Python interface`_.
+
+.. _`BMDS Python interface`: https://pypi.python.org/pypi/bmds
 
 To use the webserver, specify a new BMDS Job using a input file formatted
 like this.

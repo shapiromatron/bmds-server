@@ -6,6 +6,7 @@ from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import RedirectView, DetailView, View
 from django.views.generic.edit import CreateView
+from django.conf import settings
 
 import json
 
@@ -21,6 +22,7 @@ class Home(CreateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['status_form'] = forms.JobStatusForm()
+        context['days_to_keep_jobs'] = settings.DAYS_TO_KEEP_JOBS
         return context
 
 

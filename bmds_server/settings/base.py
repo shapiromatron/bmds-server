@@ -157,3 +157,5 @@ REST_FRAMEWORK = {
         'user': '10/minute'
     }
 }
+
+DAYS_TO_KEEP_JOBS = 7

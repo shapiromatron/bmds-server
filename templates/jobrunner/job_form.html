@@ -4,32 +4,35 @@
 {% block content %}
 <h1>Welcome to the BMDS webserver.</h1>
 <div class="row">
-
     <div class="col-sm-12">
         <p>
-            This website is designed to batch-run the US EPA's benchmark dose
-            modeling software (<a href="https://www.epa.gov/bmds">BMDS</a>). To use
-            the software, enter datasets in a format specified in the
-            <a href="http://bmds-server.readthedocs.io/en/latest/">documentation</a>.
-
-            This is designed for bulk and automated BMDS execution using a programming
-            language such as Java, Python, or R. To take advantage of automation of
-            please use the <a href="{% url 'api:api-root' %}">API</a> instead of the
-            input form below.
+            This microservice is designed to batch-run the US EPA's
+            benchmark dose modeling software (<a href="https://www.epa.gov/bmds">BMDS</a>).
+        <ul>
+            <li>Load example datasets below to view example input files;
+                for more information, see the <a href="http://bmds-server.readthedocs.io/en/latest/">documentation</a>
+            </li>
+            <li>Software is designed for automated BMDS execution using a
+                programming language such as Python, R, or Java. To take
+                advantage of automation, use the <a href="{% url 'api:api-root' %}">API</a>,
+                and see the <a href="http://bmds-server.readthedocs.io/en/latest/quickstart.html">quickstart</a> section.</li>
+            <li>BMDS jobs (inputs/outputs) are deleted after {{days_to_keep_jobs}} days.</li>
+        </ul>
         </p>
     </div>
-
+</div>
+<div class="row">
     <div class="col-lg-8">
         <form method="post">
             {% csrf_token %}
             <div class="form-group">
-                <label>Create a new job:</label>
+                <label>Create a new BMDS job:</label>
                 <textarea
                     class="form-control" cols="40"
                     placeholder="Enter input settings for a new job"
                     id="id_inputs" name="inputs"
                     rows="10" required>{{form.inputs.value|default_if_none:""}}</textarea>
-                <p class='text-muted'>Load an example <a id="example_c" href="#">continuous</a> or <a id="example_d" href="#">dichotomous</a> input file. Or, <a href="http://bmds-server.readthedocs.io/en/latest/">read the docs</a> for more info.</p>
+                <p class='text-muted'>Load an example <a id="example_c" href="#">continuous</a> or <a id="example_d" href="#">dichotomous</a> input file. Or, <a href="http://bmds-server.readthedocs.io/en/latest/inputs.html">read the docs</a>.</p>
             </div>
             {% include "jobrunner/_errors.html" with errors=form.inputs.errors %}
             <button type="submit" class="btn btn-primary btn-block">Submit a new job</button>
@@ -40,16 +43,14 @@
 
         <form id="lookup">
             <div class="form-group">
-                <label for="id_id">Lookup an existing run:</label>
+                <label for="id_id">Find an BMDS existing job:</label>
                 <input id="id_id" name="id" type="text"
-                       placeholder="Enter an existing job ID"
+                       placeholder="Job ID"
                        required="" class="form-control" >
-                <p class='text-muted'>Load an <a id="example_id" href="#">example</a>.</p>
             </div>
             <button type="submit" class="btn btn-primary btn-block">Check job status</button>
         </form>
     </div>
-
 </div>
 {% endblock content %}
 
@@ -74,13 +75,6 @@ $(document).ready(function(){
         e.preventDefault();
         $('#id_inputs').val('{\n    "id": "my dichotomous datasets",\n    "dataset_type": "D",\n    "bmds_version": "BMDS2601",\n    "datasets": [\n        {\n            "id": "liver",\n            "doses": [0, 1.96, 5.69, 29.75],\n            "ns": [75, 49, 50, 49],\n            "incidences": [5, 1, 3, 14]\n        },\n        {\n            "id": "kidney",\n            "doses": [0, 40, 80, 230],\n            "ns": [12, 12, 12, 12],\n            "incidences": [0, 0, 2, 8]\n        }\n    ],\n    "bmr": {\n         "type": "Extra",\n         "value": 0.1\n    }\n}');
     });
-
-    // load example ID
-    $('#example_id').click(function(e){
-        e.preventDefault();
-        $('#id_id').val('f49900b1-46e7-4ed6-9b1c-80b0f63bfbd1');
-    });
-
 });
 </script>
 {% endblock extra-js %}

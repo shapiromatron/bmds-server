@@ -1,9 +1,11 @@
 from copy import deepcopy
 import bmds
-import json
+from datetime import timedelta
 from django.db import models
+from django.conf import settings
 from django.core.urlresolvers import reverse
 from django.utils.timezone import now
+import json
 import uuid
 
 from . import xlsx
@@ -115,6 +117,10 @@ class Job(models.Model):
             ))
 
         return output
+
+    @property
+    def deletion_date(self):
+        return self.created + timedelta(days=settings.DAYS_TO_KEEP_JOBS)
 
     def execute(self):
         # set start time

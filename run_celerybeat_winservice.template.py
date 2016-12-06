@@ -1,4 +1,4 @@
-"""Celery windows service task installer.
+"""Celerybeat windows service task installer.
 
 To install service, call (from virtualenv):
     python run_celerybeat_winservice.py install
@@ -7,10 +7,10 @@ To un-install service:
     python run_celerybeat_winservice.py remove
 
 To start service (batch):
-    sc start bmds_celery
+    sc start bmds_celerybeat
 
 To stop service (batch):
-    sc stop bmds_celery
+    sc stop bmds_celerybeat
 
 """
 import win32service
@@ -28,11 +28,11 @@ BASEDIR = os.path.abspath(os.path.dirname(os.path.realpath(__file__)))
 LOGDIR = os.path.join(BASEDIR, 'logs')
 PYTHONSCRIPTPATH = os.path.join(BASEDIR, 'venv', 'Scripts')
 PROJECTDIR = 'bmds_server'
-SERVICE_NAME = 'bmds_celery'
-SERVICE_DISPLAY_NAME = 'BMDS Celery Worker Service'
+SERVICE_NAME = 'bmds_celerybeat'
+SERVICE_DISPLAY_NAME = 'BMDS Celerybeat Worker Service'
 
 logging.basicConfig(
-    filename=os.path.join(LOGDIR, 'celery_service.log'),
+    filename=os.path.join(LOGDIR, 'celerybeat_service.log'),
     level=logging.DEBUG,
     format='[%(asctime)-15s: %(levelname)-7.7s] %(message)s'
 )
@@ -60,10 +60,10 @@ class CeleryService(win32serviceutil.ServiceFramework):
 
     def get_command(self):
         exe = os.path.join(PYTHONSCRIPTPATH, 'celery.exe')
-        logfile = os.path.join(LOGDIR, 'celery.log')
-        args = '--app={0} --loglevel=info --events --logfile="{1}"'\
+        logfile = os.path.join(LOGDIR, 'celerybeat.log')
+        args = '--app={0} --loglevel=info --logfile="{1}"'\
             .format(PROJECTDIR, logfile)
-        return '"{0}" worker {1}'.format(exe, args)
+        return '"{0}" beat {1}'.format(exe, args)
 
     def SvcDoRun(self):
         logging.info('Starting {name} service ...'.format(name=self._svc_name_))

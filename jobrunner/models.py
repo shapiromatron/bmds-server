@@ -51,6 +51,12 @@ class Job(models.Model):
     def has_errors(self):
         return len(self.errors) > 0
 
+    @classmethod
+    def delete_old_jobs(cls):
+        oldest_to_keep = now() - timedelta(days=settings.DAYS_TO_KEEP_JOBS)
+        qs = cls.objects.filter(created__lt=oldest_to_keep)
+        qs.delete()
+
     @staticmethod
     def build_session(bmds_version, dataset_type, dataset, models, bmr):
         # build dataset

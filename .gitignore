@@ -28,6 +28,9 @@ _build
 # ignore logfiles
 *.log
 
+# ignore celerybeat
+celerybeat-schedule
+
 # keep folders, but not content
 public/*
 !public/.gitkeep
@@ -40,6 +43,7 @@ logs/*
 bmds_server/settings/local.py
 /web.config
 /run_celery_winservice.py
+/run_celerybeat_winservice.py
 /secrets.json
 
 # keep folders, but not content

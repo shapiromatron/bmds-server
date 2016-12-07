@@ -104,14 +104,18 @@ and the celery background process). To sync secrets, run the command::
 
     python manage.py sync_secrets
 
-Then, install the celery service::
+Then, install the celery services::
 
-    python celery_service.py install
+    python run_celery_winservice.py install
+    python run_celerybeat_winservice.py install
 
 You can update and un-install the service using these commands, respectively::
 
-    python celery_service.py update
-    python celery_service.py remove
+    python run_celery_winservice.py update
+    python run_celerybeat_winservice.py update
+
+    python run_celery_winservice.py remove
+    python run_celerybeat_winservice.py remove
 
 To redeploy with updates
 ~~~~~~~~~~~~~~~~~~~~~~~~
@@ -136,12 +140,22 @@ Create a batch file like this, and run as administrator::
 
     :: Update services
     python manage.py sync_secrets
-    :: python run_celery_winservice.py install  :: first-time only
+
+    :: First-time only
+    :: python run_celery_winservice.py install
+    :: python run_celerybeat_winservice.py install
+
+    :: Then, just update
     python run_celery_winservice.py update
+    python run_celerybeat_winservice.py update
 
     :: Restart Celery
     sc stop bmds_celery
     sc start bmds_celery
+
+    :: Restart Celerybeat
+    sc stop bmds_celerybeat
+    sc start bmds_celerybeat
 
     :: Reset IIS
     iisreset.exe

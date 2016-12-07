@@ -58,7 +58,13 @@ class Job(models.Model):
         qs.delete()
 
     @staticmethod
-    def build_session(bmds_version, dataset_type, dataset, models, bmr):
+    def build_session(inputs, dataset):
+
+        bmds_version = inputs['bmds_version']
+        dataset_type = inputs['dataset_type']
+        models = inputs.get('models')
+        bmr = inputs.get('bmr')
+
         # build dataset
         if dataset_type == bmds.constants.CONTINUOUS:
             dataset = bmds.ContinuousDataset(
@@ -88,16 +94,14 @@ class Job(models.Model):
                 'bmr_type': bmds.constants.BMR_CROSSWALK[dataset_type][bmr['type']],
             }
 
-        # by default, use all available models
+        # Add models to session
         if models is None:
-            session.add_default_models()
+            session.add_default_models(global_overrides=global_overrides)
         else:
             for model in models:
-                overrides = global_overrides
-                settings = model.get('settings')
-                if settings:
-                    overrides = deepcopy(global_overrides)
-                    overrides.update(settings)
+                overrides = deepcopy(global_overrides)
+                if 'settings' in model:
+                    overrides.update(model['settings'])
                 session.add_model(model['name'], overrides=overrides)
 
         return session
@@ -140,13 +144,7 @@ class Job(models.Model):
         for dataset in inputs['datasets']:
 
             # build session
-            session = self.build_session(
-                bmds_version=inputs['bmds_version'],
-                dataset_type=inputs['dataset_type'],
-                dataset=dataset,
-                models=inputs.get('models'),
-                bmr=inputs.get('bmr'),
-            )
+            session = self.build_session(inputs, dataset)
 
             # execute
             session.execute()

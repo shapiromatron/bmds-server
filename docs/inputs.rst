@@ -431,6 +431,7 @@ The ``MODEL_NAMES`` described above are dataset-type specific:
     - Multistage
     - Gamma
     - Weibull
+    - Dichotomous-Hill
 - Dichotomous-cancer data:
     - Multistage-Cancer
 - Continuous data:
@@ -442,13 +443,6 @@ The ``MODEL_NAMES`` described above are dataset-type specific:
     - Exponential-M3
     - Exponential-M4
     - Exponential-M5
-
-.. admonition:: TODO
-
-  In addition to simply specifying which models to run, also allow users to
-  set parameters for each model. For example, you could set the polynomial
-  model to run with ``n`` polynomial terms, or force datasets to run a
-  constant or non-constant variance model. Or specify BMR settings.
 
 Model settings
 --------------

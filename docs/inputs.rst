@@ -210,7 +210,7 @@ Continuous
 ----------
 
 A continuous dataset consists of a collection of dose groups, the total
-observations, and the mean-response and stadard-deviation of response for
+observations, and the mean-response and standard-deviation of response for
 each dose-group, as an example:
 
 .. code-block:: javascript
@@ -218,7 +218,7 @@ each dose-group, as an example:
     {
         "doses": [0, 100, 500, 2500, 12500],
         "ns": [9, 10, 9, 10, 6],
-        "responses": [33.7, 34.9, 40.9, 56.7, 121.7],
+        "means": [33.7, 34.9, 40.9, 56.7, 121.7],
         "stdevs": [5.0, 5.1, 6.2, 5.9, 18.1]
     }
 
@@ -243,28 +243,10 @@ The complete specification is below:
         "required": [
           "doses",
           "ns",
-          "responses",
+          "means",
           "stdevs"
         ],
         "properties": {
-          "responses": {
-            "type": "array",
-            "description": "An array of response means (float),
-                            one for each dose-group",
-            "minItems": 3,
-            "items": {
-              "type": "number"
-            }
-          },
-          "stdevs": {
-            "type": "array",
-            "description": "An array of response standard-deviations (float),
-                            one for each dose-group",
-            "minItems": 3,
-            "items": {
-              "type": "number"
-            }
-          },
           "doses": {
             "type": "array",
             "description": "An array of doses (float),
@@ -284,6 +266,24 @@ The complete specification is below:
               "type": "integer",
               "minimum": 0,
               "exclusiveMinimum": true
+            }
+          },
+          "means": {
+            "type": "array",
+            "description": "An array of response means (float),
+                            one for each dose-group",
+            "minItems": 3,
+            "items": {
+              "type": "number"
+            }
+          },
+          "stdevs": {
+            "type": "array",
+            "description": "An array of response standard-deviations (float),
+                            one for each dose-group",
+            "minItems": 3,
+            "items": {
+              "type": "number"
             }
           }
         }

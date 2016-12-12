@@ -108,8 +108,8 @@ A tabular-summary of observed versus estimated values are also captured:
 - ``fit_size``: An array of ns (should be the same as input file)
 - For continuous datasets:
     - ``fit_stdev``: An array of stdevs (should be the same as input file)
-    - ``fit_observed``: An array of responses (should be the same as input file)
-    - ``fit_estimated``: An array of mean response as estimated by the model
+    - ``fit_observed``: An array of response means (should be the same as input file)
+    - ``fit_estimated``: An array of response means as estimated by the model
     - ``fit_est_stdev``: An array of stdevs as estimated by the model
 - For dichotomous datasets:
     - ``fit_observed``: An array of counts (should be the same as input file)

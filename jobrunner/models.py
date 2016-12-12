@@ -70,7 +70,7 @@ class Job(models.Model):
             dataset = bmds.ContinuousDataset(
                 doses=dataset['doses'],
                 ns=dataset['ns'],
-                responses=dataset['responses'],
+                means=dataset['means'],
                 stdevs=dataset['stdevs']
             )
         else:

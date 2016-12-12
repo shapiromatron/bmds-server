@@ -69,7 +69,7 @@ class BMDGenerator(XLSXGeneratorBaseClass):
         if self.dtype in bmds.constants.DICH_DTYPES:
             headers = ('dataset_id', 'Dose', 'N', 'Incidence')
         else:
-            headers = ('dataset_id', 'Dose', 'N', 'Response', 'Stdev')
+            headers = ('dataset_id', 'Dose', 'N', 'Means', 'Stdevs')
 
         # write header
         for i, txt in enumerate(headers):
@@ -87,7 +87,7 @@ class BMDGenerator(XLSXGeneratorBaseClass):
                 if self.dtype in bmds.constants.DICH_DTYPES:
                     ws.write(r, 3, dataset['incidences'][j])
                 else:
-                    ws.write(r, 3, dataset['responses'][j])
+                    ws.write(r, 3, dataset['means'][j])
                     ws.write(r, 4, dataset['stdevs'][j])
 
         ws.autofilter(0, 0, r, len(headers) - 1)

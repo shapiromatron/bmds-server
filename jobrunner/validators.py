@@ -56,7 +56,7 @@ continuous_dataset_schema = {
         'required': [
             'doses',
             'ns',
-            'responses',
+            'means',
             'stdevs',
         ],
         'properties': {
@@ -83,7 +83,7 @@ continuous_dataset_schema = {
                     'exclusiveMinimum': True,
                 },
             },
-            'responses': {
+            'means': {
                 'description': 'An array of response means (float), one for each dose-group',
                 'type': 'array',
                 'minItems': 3,

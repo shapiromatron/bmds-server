@@ -68,7 +68,7 @@ $(document).ready(function(){
     // load example input file
     $('#example_c').click(function(e){
         e.preventDefault();
-        $('#id_inputs').val('{\n    "dataset_type": "C",\n    "bmds_version": "BMDS2601",\n    "datasets": [\n        {\n            "doses": [0, 100, 500, 2500, 12500],\n            "ns": [9, 10, 9, 10, 6],\n            "responses": [33.7, 34.9, 40.9, 56.7, 121.7],\n            "stdevs": [5.0, 5.1, 6.2, 5.9, 18.1]\n        }\n    ]\n}');
+        $('#id_inputs').val('{\n    "dataset_type": "C",\n    "bmds_version": "BMDS2601",\n    "datasets": [\n        {\n            "doses": [0, 100, 500, 2500, 12500],\n            "ns": [9, 10, 9, 10, 6],\n            "means": [33.7, 34.9, 40.9, 56.7, 121.7],\n            "stdevs": [5.0, 5.1, 6.2, 5.9, 18.1]\n        }\n    ]\n}');
     });
 
     $('#example_d').click(function(e){

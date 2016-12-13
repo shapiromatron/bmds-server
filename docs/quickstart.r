@@ -6,8 +6,6 @@ library(rjson)
 # Set the URL root to the address where BMDS server is currently running
 url_root <- Sys.getenv('BMDS_SERVER_URL', 'http://bmds-server.com')
 
-url_root = 'http://54.87.133.168/'
-
 # Create an example BMDS job. This example uses uses BMDS v2.6.0.1. with two
 # dichotomous datasets:
 inputs <- list(

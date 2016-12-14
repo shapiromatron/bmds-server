@@ -48,7 +48,7 @@ base_schema = {
 
 continuous_dataset_schema = {
     '$schema': 'http://json-schema.org/draft-04/schema#',
-    'title': 'Continuous  datasets',
+    'title': 'Continuous datasets',
     'description': 'Requirements for an array of continuous datasets',
     'type': 'array',
     'items': {
@@ -93,6 +93,44 @@ continuous_dataset_schema = {
             },
             'stdevs': {
                 'description': 'An array of response standard-deviations (float), one for each dose-group',
+                'type': 'array',
+                'minItems': 3,
+                'items': {
+                    'type': 'number',
+                },
+            },
+        }
+    },
+    'minItems': 1,
+}
+
+continuous_individual_dataset_schema = {
+    '$schema': 'http://json-schema.org/draft-04/schema#',
+    'title': 'Continuous individual datasets',
+    'description': 'Requirements for an array of continuous individual datasets',
+    'type': 'array',
+    'items': {
+        'type': 'object',
+        'required': [
+            'doses',
+            'responses',
+        ],
+        'properties': {
+            'id': {
+                'description': 'An (optional) unique identifier for dataset',
+                'type': ['integer', 'string'],
+            },
+            'doses': {
+                'description': 'An array of doses (float), one per assay/organism',
+                'type': 'array',
+                'minItems': 3,
+                'items': {
+                    'type': 'number',
+                    'minimum': 0
+                },
+            },
+            'responses': {
+                'description': 'An array of responses (float), one per assay/organism',
                 'type': 'array',
                 'minItems': 3,
                 'items': {
@@ -236,6 +274,8 @@ def _validate_base(data):
 def _validate_datasets(dataset_type, datasets):
     if dataset_type == bmds.constants.CONTINUOUS:
         schema = continuous_dataset_schema
+    elif dataset_type == bmds.constants.CONTINUOUS_INDIVIDUAL:
+        schema = continuous_individual_dataset_schema
     else:
         schema = dichotomous_dataset_schema
 

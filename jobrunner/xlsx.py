@@ -66,10 +66,12 @@ class BMDGenerator(XLSXGeneratorBaseClass):
         ws = self.wb.add_worksheet('datasets')
         ws.freeze_panes(1, 0)
 
-        if self.dtype in bmds.constants.DICH_DTYPES:
+        if self.dtype in bmds.constants.DICHOTOMOUS_DTYPES:
             headers = ('dataset_id', 'Dose', 'N', 'Incidence')
-        else:
-            headers = ('dataset_id', 'Dose', 'N', 'Means', 'Stdevs')
+        elif self.dtype == bmds.constants.CONTINUOUS:
+            headers = ('dataset_id', 'Dose', 'N', 'Mean', 'Stdev')
+        elif self.dtype == bmds.constants.CONTINUOUS_INDIVIDUAL:
+            headers = ('dataset_id', 'Dose', 'Response')
 
         # write header
         for i, txt in enumerate(headers):
@@ -83,12 +85,16 @@ class BMDGenerator(XLSXGeneratorBaseClass):
                 r += 1
                 ws.write(r, 0, dataset.get('id', i))
                 ws.write(r, 1, dataset['doses'][j])
-                ws.write(r, 2, dataset['ns'][j])
-                if self.dtype in bmds.constants.DICH_DTYPES:
-                    ws.write(r, 3, dataset['incidences'][j])
+
+                if self.dtype == bmds.constants.CONTINUOUS_INDIVIDUAL:
+                    ws.write(r, 2, dataset['responses'][j])
                 else:
-                    ws.write(r, 3, dataset['means'][j])
-                    ws.write(r, 4, dataset['stdevs'][j])
+                    ws.write(r, 2, dataset['ns'][j])
+                    if self.dtype in bmds.constants.DICHOTOMOUS_DTYPES:
+                        ws.write(r, 3, dataset['incidences'][j])
+                    elif self.dtype == bmds.constants.CONTINUOUS:
+                        ws.write(r, 3, dataset['means'][j])
+                        ws.write(r, 4, dataset['stdevs'][j])
 
         ws.autofilter(0, 0, r, len(headers) - 1)
 
@@ -144,7 +150,7 @@ class BMDGenerator(XLSXGeneratorBaseClass):
         headers = []
         headers.extend(self.model_header_general)
 
-        if self.dtype == bmds.constants.CONTINUOUS:
+        if self.dtype in bmds.constants.CONTINUOUS_DTYPES:
             headers.extend(self.model_header_c)
         elif self.dtype == bmds.constants.DICHOTOMOUS:
             headers.extend(self.model_header_d)
@@ -173,7 +179,7 @@ class BMDGenerator(XLSXGeneratorBaseClass):
 
                 # output content
                 if op:
-                    if self.dtype == bmds.constants.CONTINUOUS:
+                    if self.dtype in bmds.constants.CONTINUOUS_DTYPES:
                         ws.write(r, 3, op['model_version'])
                         ws.write(r, 4, op['BMD'])
                         ws.write(r, 5, op['BMDL'])

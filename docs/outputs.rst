@@ -106,7 +106,7 @@ A tabular-summary of observed versus estimated values are also captured:
 
 - ``fit_dose``: An array of doses (should be the same as input file)
 - ``fit_size``: An array of ns (should be the same as input file)
-- For continuous datasets:
+- For continuous datasets (individual or summary):
     - ``fit_stdev``: An array of stdevs (should be the same as input file)
     - ``fit_observed``: An array of response means (should be the same as input file)
     - ``fit_estimated``: An array of response means as estimated by the model

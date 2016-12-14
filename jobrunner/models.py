@@ -73,6 +73,11 @@ class Job(models.Model):
                 means=dataset['means'],
                 stdevs=dataset['stdevs']
             )
+        elif dataset_type == bmds.constants.CONTINUOUS_INDIVIDUAL:
+            dataset = bmds.ContinuousIndividualDataset(
+                doses=dataset['doses'],
+                responses=dataset['responses']
+            )
         else:
             dataset = bmds.DichotomousDataset(
                 doses=dataset['doses'],

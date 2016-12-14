@@ -16,7 +16,7 @@ Job
 
 The job object is the top-level object in the job-format. A single job object
 is required for a BMDS analysis; and its settings are applied to all datasets
-within the job. A simple example for continuous data would look like this:
+within the job. A simple example for continuous summary data would look like this:
 
 .. code-block:: javascript
 
@@ -79,7 +79,8 @@ The complete specification is below:
           "enum": [
             "D",        // Dichotomous data
             "DC",       // Dichotomous cancer
-            "C"         // Continuous
+            "CI",       // Continuous individual
+            "C"         // Continuous summary data
           ]
         },
         "datasets": {
@@ -206,10 +207,90 @@ Dichotomous Cancer
 The input format is identical to Dichotomous_ data. It's a separate dataset-type
 because the model recommendation logic is slightly different.
 
-Continuous
-----------
+Continuous Individual
+---------------------
 
-A continuous dataset consists of a collection of dose groups, the total
+A continuous individual dataset consists of a collection of individual
+dose-response relationships, one for each organism or replicate. As an example:
+
+.. code-block:: javascript
+
+    {
+        "doses": [
+            0, 0, 0, 0, 0, 0, 0, 0,
+            0.1, 0.1, 0.1, 0.1, 0.1, 0.1,
+            1, 1, 1, 1, 1, 1,
+            10, 10, 10, 10, 10, 10,
+            100, 100, 100, 100, 100, 100,
+            300, 300, 300, 300, 300, 300,
+            500, 500, 500, 500, 500, 500,
+        ],
+        "responses": [
+            8.1079, 9.3063, 9.7431, 9.781, 10.052, 10.613, 10.751, 11.057,
+            9.1556, 9.6821, 9.8256, 10.2095, 10.2222, 12.0382,
+            9.5661, 9.7059, 9.9905, 10.2716, 10.471, 11.0602,
+            8.8514, 10.0107, 10.0854, 10.5683, 11.1394, 11.4875,
+            9.5427, 9.7211, 9.8267, 10.0231, 10.1833, 10.8685,
+            10.368, 10.5176, 11.3168, 12.002, 12.1186, 12.6368,
+            9.9572, 10.1347, 10.7743, 11.0571, 11.1564, 12.0368,
+        ]
+    }
+
+**Additional optional fields:**
+
+- ``id`` <int or string>: Can be used as a unique identifier for each dataset to
+  correspond to existing frameworks external to the BMDS server; returned in the
+  output so results can be mapped externally to BMDS server application.
+
+The complete specification is below:
+
+.. code-block:: javascript
+
+    {
+      "$schema": "http://json-schema.org/draft-04/schema#",
+      "description": "Requirements for continuous individual datasets",
+      "title": "Continuous individual datasets",
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": [
+          "doses",
+          "responses"
+        ],
+        "properties": {
+          "id": {
+            "description": "An (optional) unique identifier for dataset",
+            "type": [
+              "integer",
+              "string"
+            ]
+          },
+          "doses": {
+            "description": "Dose array (float), one per assay/organism",
+            "type": "array",
+            "items": {
+              "type": "number",
+              "minimum": 0
+            },
+            "minItems": 3
+          },
+          "responses": {
+            "description": "Response array (float), one per assay/organism",
+            "type": "array",
+            "items": {
+              "type": "number"
+            },
+            "minItems": 3
+          }
+        }
+      }
+    }
+
+Continuous Summary
+------------------
+
+A continuous summary dataset consists of a collection of dose groups, the total
 observations, and the mean-response and standard-deviation of response for
 each dose-group, as an example:
 
@@ -303,7 +384,7 @@ for all datasets. An example for dichotomous data:
         "value": 0.1
     }
 
-An example for continuous data:
+An example for continuous data (individual or summary):
 
 .. code-block:: javascript
 
@@ -318,7 +399,7 @@ An example for continuous data:
 
     - Dichotomous data: 10% extra risk
     - Dichtomous cancer data: 10% extra risk
-    - Continuous data: 1 standard deviation from control
+    - Continuous data (individual or summary): 1 standard deviation from control
 
 The generic specification is below:
 
@@ -353,7 +434,7 @@ The ``BMR_NAMES`` options are dataset-type specific:
     - Added
 - Dichotomous-cancer data:
     - Extra
-- Continuous data:
+- Continuous data (individual or summary):
     - Rel. Dev.
     - Std. Dev.
     - Abs. Dev.
@@ -434,7 +515,7 @@ The ``MODEL_NAMES`` described above are dataset-type specific:
     - Dichotomous-Hill
 - Dichotomous-cancer data:
     - Multistage-Cancer
-- Continuous data:
+- Continuous data (individual or summary):
     - Linear
     - Polynomial
     - Power

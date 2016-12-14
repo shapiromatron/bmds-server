@@ -29,7 +29,7 @@ def test_base_validator(complete_continuous):
 
 
 def test_continuous_validator(complete_continuous):
-    # check that continous validators work
+    # check that continuous validators work
     datasets = complete_continuous['datasets']
     # check validity
     try:
@@ -47,7 +47,28 @@ def test_continuous_validator(complete_continuous):
     data = deepcopy(datasets)
     data[0]['ns'][1] = 0
     with pytest.raises(jsonschema.exceptions.ValidationError):
-        jsonschema.validate(data, validators.dichotomous_dataset_schema)
+        jsonschema.validate(data, validators.continuous_dataset_schema)
+
+
+def test_continuous_individual_validator(complete_continuous_individual):
+    # check that continuous individual validators work
+    datasets = complete_continuous_individual['datasets']
+    # check validity
+    try:
+        jsonschema.validate(datasets, validators.continuous_individual_dataset_schema)
+    except jsonschema.exceptions.ValidationError:
+        pytest.fail('Should be valid.')
+
+    # missing required field check
+    data = deepcopy(datasets)
+    data[0].pop('responses')
+    with pytest.raises(jsonschema.exceptions.ValidationError):
+        jsonschema.validate(data, validators.continuous_individual_dataset_schema)
+
+    data = deepcopy(datasets)
+    data[0].pop('doses')
+    with pytest.raises(jsonschema.exceptions.ValidationError):
+        jsonschema.validate(data, validators.continuous_individual_dataset_schema)
 
 
 def test_dichotomous_validator(complete_dichotomous):
@@ -72,11 +93,15 @@ def test_dichotomous_validator(complete_dichotomous):
         jsonschema.validate(data, validators.dichotomous_dataset_schema)
 
 
-def test_dataset_ids(complete_continuous, complete_dichotomous):
+def test_dataset_ids(complete_continuous, complete_dichotomous, complete_continuous_individual):
     # Check that commonly used IDs can be used.
     sets = [
-        (complete_continuous['datasets'], validators.continuous_dataset_schema),
-        (complete_dichotomous['datasets'], validators.dichotomous_dataset_schema)
+        (complete_continuous['datasets'],
+         validators.continuous_dataset_schema),
+        (complete_dichotomous['datasets'],
+         validators.dichotomous_dataset_schema),
+        (complete_continuous_individual['datasets'],
+         validators.continuous_individual_dataset_schema),
     ]
     for datasets, validator in sets:
         # check missing ID

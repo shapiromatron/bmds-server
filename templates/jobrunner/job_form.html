@@ -32,7 +32,8 @@
                     placeholder="Enter input settings for a new job"
                     id="id_inputs" name="inputs"
                     rows="10" required>{{form.inputs.value|default_if_none:""}}</textarea>
-                <p class='text-muted'>Load an example <a id="example_c" href="#">continuous</a> or <a id="example_d" href="#">dichotomous</a> input file. Or, <a href="http://bmds-server.readthedocs.io/en/latest/inputs.html">read the docs</a>.</p>
+                <p class='text-muted'>Load an example <a id="example_c" href="#">continuous summary</a>,
+                    <a id="example_ci" href="#">continuous individual</a>, or <a id="example_d" href="#">dichotomous</a> job. Or, <a href="http://bmds-server.readthedocs.io/en/latest/inputs.html">read the docs</a> learn of all of the possibilities for input files.</p>
             </div>
             {% include "jobrunner/_errors.html" with errors=form.inputs.errors %}
             <button type="submit" class="btn btn-primary btn-block">Submit a new job</button>
@@ -69,6 +70,11 @@ $(document).ready(function(){
     $('#example_c').click(function(e){
         e.preventDefault();
         $('#id_inputs').val('{\n    "dataset_type": "C",\n    "bmds_version": "BMDS2601",\n    "datasets": [\n        {\n            "doses": [0, 100, 500, 2500, 12500],\n            "ns": [9, 10, 9, 10, 6],\n            "means": [33.7, 34.9, 40.9, 56.7, 121.7],\n            "stdevs": [5.0, 5.1, 6.2, 5.9, 18.1]\n        }\n    ]\n}');
+    });
+
+    $('#example_ci').click(function(e){
+        e.preventDefault();
+        $('#id_inputs').val('{\n    "dataset_type": "CI",\n    "bmds_version": "BMDS2601",\n    "datasets": [\n        {\n            "id": 123,\n            "doses": [\n                0, 0, 0, 0, 0, 0, 0, 0,\n                0.1, 0.1, 0.1, 0.1, 0.1, 0.1,\n                1, 1, 1, 1, 1, 1,\n                10, 10, 10, 10, 10, 10,\n                100, 100, 100, 100, 100, 100,\n                300, 300, 300, 300, 300, 300,\n                500, 500, 500, 500, 500, 500\n            ],\n            "responses": [\n                8.10, 9.30, 9.74, 9.78, 10.05, 10.61, 10.75, 11.05,\n                9.15, 9.68, 9.82, 10.20, 10.22, 12.02,\n                9.56, 9.70, 9.99, 10.27, 10.41, 11.00,\n                8.85, 10.01, 10.08, 10.56, 11.13, 11.48,\n                9.54, 9.7211, 9.8267, 10.0231, 10.1833, 10.86,\n                10.36, 10.51, 11.31, 12.00, 12.11, 12.63,\n                9.95, 10.13, 10.77, 11.057, 11.15, 12.03\n            ]\n        }\n    ],\n    "models": [\n        {"name": "Linear"},\n        {"name": "Polynomial", "settings": {"degree_poly": 2}},\n        {"name": "Polynomial", "settings": {"degree_poly": 3}},\n        {"name": "Polynomial", "settings": {"degree_poly": 4}}\n    ]\n}');
     });
 
     $('#example_d').click(function(e){

@@ -87,3 +87,41 @@ def test_c_success(complete_continuous):
     # check parsed model output exists
     bmd = model['output']['BMD']
     assert bmd == 149.913
+
+
+@pytest.mark.django_db(transaction=False)
+def test_ci_success(complete_continuous_individual):
+    # BMDS execution is slow; we overload this test to check lots of things.
+    data = deepcopy(complete_continuous_individual)
+
+    # use single model for speed; w/ a model override
+    data['models'] = [
+        {'name': 'Polynomial', 'settings': {'degree_poly': 3}},
+    ]
+
+    # submit new job
+    c = Client()
+    payload = json.dumps(data)
+    resp = c.post('/api/job/', {'inputs': payload})
+    assert resp.status_code == 201
+
+    # poll until job complete
+    url = '/api/job/{}/'.format(resp.json()['id'])
+    while True:
+        time.sleep(2)
+        resp = c.get(url)
+        if resp.json()['is_finished']:
+            break
+
+    # grab model of interest
+    model = resp.json()['outputs']['outputs'][0]['models'][0]
+
+    # check that model is a 3rd order polynomial
+    assert model['output']['parameters']['beta_3']['estimate'] == 0.
+
+    # check alternative BMR definition
+    assert 'Specified effect =             1' in model['outfile']
+
+    # check parsed model output exists
+    bmd = model['output']['BMD']
+    assert bmd == 386.104

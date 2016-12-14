@@ -2,7 +2,7 @@
 History
 =======
 
-v0.2.0 (NEXT)
+v0.2.0 (2016-12-14)
 -------------------
 
 * For continuous summary datasets, rename ``responses`` array to ``means``

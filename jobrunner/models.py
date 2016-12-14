@@ -6,6 +6,7 @@ from django.conf import settings
 from django.core.urlresolvers import reverse
 from django.utils.timezone import now
 import json
+import traceback
 import uuid
 
 from . import xlsx
@@ -136,6 +137,13 @@ class Job(models.Model):
     @property
     def deletion_date(self):
         return self.created + timedelta(days=settings.DAYS_TO_KEEP_JOBS)
+
+    def try_execute(self):
+        try:
+            self.execute()
+        except Exception:
+            err = traceback.format_exc()
+            self.handle_execution_error(err)
 
     def execute(self):
         # set start time

@@ -39,8 +39,14 @@ The datasets in the example above follow the `Datasets`_ schema, described below
   for each job. If not specified, by default all models which can be used for
   a particular dataset will be used (dependent on the number of dose-groups in
   a dataset).
-- ``recommend`` <boolean>: Should the software recommend a best fitting model?
-  By default, set to true. Default model recommendation logic is used.
+- ``immediate`` <boolean, false by default>: If true and allowed by the server,
+  then instead of running a job asynchronously, the job is executed immediately
+  and results will be returned in the response to a job submission. For large
+  jobs, this can result in response timeout errors and may block other requests
+  by the server. If set to true, use with caution.
+- ``recommend`` <boolean, true by default>: Should the software recommend a
+  best fitting model? By default, set to true. Default model recommendation
+  logic is used.
 
 .. _`BMR schema`: BMR_
 .. _`Models schema`: Models_
@@ -95,6 +101,12 @@ The complete specification is below:
         "bmr": {
             "description": "A description of the BMR to use",
             "type": "object"
+        },
+        "immediate": {
+            "description": "Should execution start immediately
+                            (and potentially block other requests)",
+            "type": "boolean",
+            "default": false
         },
         "recommend": {
             "description": "Should best fitting model be recommended?",

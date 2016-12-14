@@ -37,6 +37,11 @@ base_schema = {
             'description': 'A description of the BMR to use',
             'type': 'object'
         },
+        'immediate': {
+            'description': 'Should execution start immediately (and potentially block other requests)',
+            'type': 'boolean',
+            'default': False
+        },
         'recommend': {
             'description': 'Should best fitting model be recommended?',
             'type': 'boolean',

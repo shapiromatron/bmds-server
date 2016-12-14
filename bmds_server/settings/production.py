@@ -35,3 +35,4 @@ LOGGING['handlers']['file'].update(
 
 BROKER_URL = os.environ['CELERY_BROKER_URL']
 CELERY_RESULT_BACKEND = os.environ['CELERY_RESULT_BACKEND']
+ALLOW_BLOCKING_BMDS = bool(os.environ.get('ALLOW_BLOCKING_BMDS', 'False') == 'True')

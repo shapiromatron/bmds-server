@@ -113,26 +113,8 @@ class Job(models.Model):
         return session
 
     @staticmethod
-    def get_model_output(model):
-        output = dict(
-            dfile=model.as_dfile(),
-            name=model.model_name,
-            has_output=model.output_created,
-        )
-        if model.output_created:
-            output.update(dict(
-                outfile=model.outfile,
-                output=model.output
-            ))
-        if hasattr(model, 'logic_bin'):
-            output.update(dict(
-                logic_bin=model.logic_bin,
-                logic_notes=model.logic_notes,
-                recommended=model.recommended,
-                recommended_variable=model.recommended_variable
-            ))
-
-        return output
+    def get_model_output(model_index, model):
+        return
 
     @property
     def deletion_date(self):
@@ -154,7 +136,7 @@ class Job(models.Model):
         outputs = []
 
         recommend = inputs.get('recommend', True)
-        for dataset in inputs['datasets']:
+        for i, dataset in enumerate(inputs['datasets']):
 
             # build session
             session = self.build_session(inputs, dataset)
@@ -162,23 +144,16 @@ class Job(models.Model):
             # execute
             session.execute()
 
+            # add model recommendation
             if recommend:
-                recommended_model_index = None
-                session.add_recommender()
-                recommended_model = session.recommend()
-                if recommended_model:
-                    recommended_model_index = session.models.index(recommended_model)
+                session.recommend()
 
-            output = dict(
-                dataset=dataset,
-                models=[
-                    self.get_model_output(model)
-                    for model in session.models
-                ]
-            )
-            if recommend:
-                output['recommended_model_index'] = recommended_model_index
+            # save output; override default dataset export to optionally
+            # include additional metadata in the dataset specified over JSON.
+            output = session._to_dict(i)
+            output['dataset'] = dataset
 
+            # add results to list of outputs
             outputs.append(output)
 
         inputs_no_datasets = deepcopy(inputs)

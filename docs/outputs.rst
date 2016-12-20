@@ -60,9 +60,10 @@ Output object
 An output object contains all inputs and outputs for a single dataset. It contains
 the following keys:
 
+- ``dataset_index``: The index of the dataset in the array of datasets (zero-indexed)
 - ``dataset``: The dataset specified by the user which was modeled
 - ``models``: An array of model_ objects, one for each model which was specified to be executed
-- ``recommended_model_index``: If model-recommendation was enabled, the index (zero-indexed) of the recommended model. If the value is `null`, then no model was recommended.
+- ``recommended_model_index``: The index (zero-indexed) of the recommended model, if enabled. If the value is `null`, then no model was recommended, or recommendation was disabled.
 
 .. _model: `Model object`_
 
@@ -72,14 +73,16 @@ Model object
 A model object contains all inputs and outputs for a BMDS model which was attempted
 to be executed. It contains the following keys:
 
-- ``name``: The model name, as defined in :ref:`model names <model-names>`
-- ``dfile``: The ``*.(d)`` file which was created for execution
+- ``model_index``: The array index of the model (zero-indexed)
+- ``model_name``: The model name, as defined in :ref:`model names <model-names>`
+- ``model_version``: The reported version of the executed model
 - ``has_output``: A boolean to determine if an .out file was created
+- ``dfile``: The ``*.(d)`` file which was created for execution
 - ``outfile``: The ``*.out`` file which was created after model execution
 - ``output``: An instance of a `Model output object`_, if an output file is available
 
 If model-recommendation was enabled (as described in `Wignall et al. 2014`_),
-these values are also available:
+these values are also available (or are null-values if not enabled):
 
 - ``logic_bin``: The selected bin for this model (smaller is better). Possible values include:
     - 0: No serious warnings

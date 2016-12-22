@@ -79,7 +79,8 @@ def test_c_success(complete_continuous):
     model = resp.json()['outputs']['outputs'][0]['models'][0]
 
     # check that model is a 3rd order polynomial
-    assert model['model_name'] == 'Polynomial-3'
+    assert model['name'] == 'Polynomial-3'
+    assert model['model_name'] == 'Polynomial'
     assert model['output']['parameters']['beta_3']['estimate'] == 0.
 
     # check alternative BMR definition

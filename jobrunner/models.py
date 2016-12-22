@@ -150,7 +150,7 @@ class Job(models.Model):
 
             # save output; override default dataset export to optionally
             # include additional metadata in the dataset specified over JSON.
-            output = session._to_dict(i)
+            output = session.to_dict(i)
             output['dataset'] = dataset
 
             # add results to list of outputs

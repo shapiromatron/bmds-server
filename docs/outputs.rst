@@ -76,6 +76,7 @@ to be executed. It contains the following keys:
 - ``model_index``: The array index of the model (zero-indexed)
 - ``model_name``: The model name, as defined in :ref:`model names <model-names>`
 - ``model_version``: The reported version of the executed model
+- ``name``: The model_name (as above) and polynomial degree (polynomial and multistage)
 - ``has_output``: A boolean to determine if an .out file was created
 - ``dfile``: The ``*.(d)`` file which was created for execution
 - ``outfile``: The ``*.out`` file which was created after model execution

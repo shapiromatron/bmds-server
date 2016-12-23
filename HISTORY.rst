@@ -2,13 +2,15 @@
 History
 =======
 
-v0.2.1 (NEXT)
+v0.2.1 (2016-12-23)
 -------------------
 
+* Updated to `BMDS v0.5.0`_
 * Minor updates to output JSON. See details in the `output documentation`_
     - For each output, added ``dataset_index`` integer.
     - For each model, added ``name``, ``model_index``, and ``model_version``
 
+.. _`BMDS v0.5.0`: https://pypi.python.org/pypi/bmds/0.5.0
 .. _`output documentation`: http://bmds-server.readthedocs.io/en/stable/outputs.html#output-structure
 
 v0.2.0 (2016-12-14)

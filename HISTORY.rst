@@ -2,6 +2,13 @@
 History
 =======
 
+v0.2.2 (2017-02-15)
+-------------------
+
+* Updated to `BMDS v0.5.2`_ (can run datasets with 3 dose groups w/o failure)
+
+.. _`BMDS v0.5.2`: https://github.com/shapiromatron/bmds/blob/master/HISTORY.rst#v052-2017-02-15
+
 v0.2.1 (2016-12-23)
 -------------------
 

@@ -2,6 +2,20 @@
 History
 =======
 
+v0.2.4 (2017-03-03)
+-------------------
+
+* Updated to `BMDS v0.5.4`_ (don't run models w/ parameters > dose groups)
+
+.. _`BMDS v0.5.4`: https://github.com/shapiromatron/bmds/blob/master/HISTORY.rst#v054-2017-02-15
+
+v0.2.3 (2017-03-02)
+-------------------
+
+* Updated to `BMDS v0.5.3`_ (more resilient to bad dataset errors)
+
+.. _`BMDS v0.5.3`: https://github.com/shapiromatron/bmds/blob/master/HISTORY.rst#v053-2017-02-15
+
 v0.2.2 (2017-02-15)
 -------------------
 

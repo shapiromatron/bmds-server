@@ -7,9 +7,13 @@ from django.core.urlresolvers import reverse
 from django.utils.timezone import now
 import json
 import traceback
+import logging
 import uuid
 
 from . import xlsx
+
+
+logger = logging.getLogger(__name__)
 
 
 class Job(models.Model):
@@ -127,34 +131,49 @@ class Job(models.Model):
             err = traceback.format_exc()
             self.handle_execution_error(err)
 
+    def try_run_session(self, inputs, dataset, i, recommend):
+        try:
+            return self.run_session(inputs, dataset, i, recommend)
+        except Exception:
+            exception = dict(
+                dataset=dataset,
+                error=traceback.format_exc(),
+            )
+            logger.error(exception)
+            return exception
+
+    def run_session(self, inputs, dataset, i, recommend):
+
+        # build session
+        session = self.build_session(inputs, dataset)
+
+        # execute
+        session.execute()
+
+        # add model recommendation
+        if recommend:
+            session.recommend()
+
+        # save output; override default dataset export to optionally
+        # include additional metadata in the dataset specified over JSON.
+        output = session.to_dict(i)
+        output['dataset'] = dataset
+
+        return output
+
     def execute(self):
         # set start time
         self.started = now()
         self.save()
 
         inputs = json.loads(self.inputs)
-        outputs = []
 
         recommend = inputs.get('recommend', True)
-        for i, dataset in enumerate(inputs['datasets']):
 
-            # build session
-            session = self.build_session(inputs, dataset)
-
-            # execute
-            session.execute()
-
-            # add model recommendation
-            if recommend:
-                session.recommend()
-
-            # save output; override default dataset export to optionally
-            # include additional metadata in the dataset specified over JSON.
-            output = session.to_dict(i)
-            output['dataset'] = dataset
-
-            # add results to list of outputs
-            outputs.append(output)
+        outputs = [
+            self.try_run_session(inputs, dataset, i, recommend)
+            for i, dataset in enumerate(inputs['datasets'])
+        ]
 
         inputs_no_datasets = deepcopy(inputs)
         inputs_no_datasets.pop('datasets')

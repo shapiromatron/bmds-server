@@ -2,6 +2,11 @@
 History
 =======
 
+v0.3.0 (NEXT)
+-------------------
+* In addition to catching global errors in BMD execution, try to catch errors the individual dataset level. Therefore, if a batch has a thousand datasets and only one fails, note this, but return the successful results
+
+
 v0.2.4 (2017-03-03)
 -------------------
 

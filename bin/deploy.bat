@@ -49,18 +49,19 @@ git merge --ff
 git reset --hard origin/%BMDS_SERVER_BRANCH%
 
 
-echo ------------------------------------------
-echo Smylinking BMDS to BMDS-server environment
-echo ------------------------------------------
-rmdir "%VENV_PATH%\Lib\site-packages\bmds" /s /q
-mklink /J %VENV_PATH%\Lib\site-packages\bmds %BMDS_PATH%\bmds
-
-
 echo -----------------------------------
 echo Updating python/django requirements
 echo -----------------------------------
 CALL %VENV_PATH%\Scripts\activate.bat
+
+:: install bmds-server requirements
 pip install -r .\requirements\production.txt
+
+:: remove bmds-server bmds requirement and use the local package
+pip uninstall bmds -y
+pip install -e %BMDS_PATH%
+
+:: sync staticfiles and database
 python manage.py collectstatic --no-input
 python manage.py migrate --no-input
 

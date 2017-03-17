@@ -1,35 +1,35 @@
 # Load required libraries
 library(httr)
-library(plyr)
-library(rjson)
+library(dplyr)
+library(jsonlite)
 
-# Set the URL root to the address where BMDS server is currently running
+# Set the URL root to the address where BMDS server is currently running:
 url_root <- Sys.getenv('BMDS_SERVER_URL', 'http://bmds-server.com')
 
-# Create an example BMDS job. This example uses uses BMDS v2.6.0.1. with two
-# dichotomous datasets:
+# Create a data-frame that has two continuous dose-response datasets:
+datasetsDf = data.frame(
+     id=c(rep("run #1", 4), rep("run #2", 4)),
+     doses=rep(c(0,1.96,5.69, 29.75), 2),
+     ns=rep(c(75, 49, 50, 49), 2),
+     means=c(479, 460, 462, 420, 2.61, 2.61, 2.96, 4.66),
+     stdevs=c(43, 42, 39, 39, 0.36, 0.19, 0.17, 0.42)
+)
+
+# Group the data from a dataframe:
+datasets <- datasetsDf %>%
+    group_by(id) %>%
+    summarize(doses=list(doses), ns=list(ns), means=list(means), stdevs=list(stdevs))
+
+# Create a BMDS job. This example uses uses BMDS v2.6.0.1. with both datasets:
 inputs <- list(
-    id='My first BMDS-server run',
-    dataset_type='D',
-    bmds_version='BMDS2601',
-    datasets=list(
-        list(
-            id='run #1',
-            doses=c(0, 1.96, 5.69, 29.75),
-            ns=c(75, 49, 50, 49),
-            incidences=c(5, 1, 3, 14)
-        ),
-        list(
-            id=2,
-            doses=c(0, 1.96, 5.69, 29.75),
-            ns=c(75, 49, 50, 49),
-            incidences=c(0, 0, 11, 27)
-        )
-    )
+     id='My first BMDS-server run',
+     dataset_type='C',
+     bmds_version='BMDS2601',
+     datasets=datasets
 )
 
 # Submit input data
-inputs_json <- toJSON(inputs)
+inputs_json <- toJSON(inputs, auto_unbox=TRUE)
 url <- sprintf('%s/api/job/', url_root)
 response <- POST(url, body=list(inputs=inputs_json))
 

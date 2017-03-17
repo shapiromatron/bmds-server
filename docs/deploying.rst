@@ -100,68 +100,33 @@ Install the software in a location where IIS will have access. In the example ab
 Update the ``secrets.json`` file with actual secrets. These secrets are pulled
 from the environment settings in all areas where the software may be executed
 (in activate.bat and Activate.ps1 for the virtual environment, web.config,
-and the celery background process). To sync secrets, run the command::
+and the celery background process).
+
+To deploy and redeploy
+~~~~~~~~~~~~~~~~~~~~~~
+
+An example deployment script is available in ``./bin/deploy.bat``.  The deployment
+script checks out a particular version of the source code, updates the python
+environment, syncs the database, (re)installs services, and restarts the webserver.
+
+More generally, to sync secrets, run the command::
 
     python manage.py sync_secrets
 
-Then, install the celery services::
+To install the celery services::
 
     python run_celery_winservice.py install
     python run_celerybeat_winservice.py install
 
-You can update and un-install the service using these commands, respectively::
+You can update services::
 
     python run_celery_winservice.py update
     python run_celerybeat_winservice.py update
+
+To remove services::
 
     python run_celery_winservice.py remove
     python run_celerybeat_winservice.py remove
-
-To redeploy with updates
-~~~~~~~~~~~~~~~~~~~~~~~~
-
-Create a batch file like this, and run as administrator::
-
-    :: get the latest BMDS code
-    cd C:\inetpub\wwwroot\py\bmds
-    git fetch --all
-    git reset --hard origin/master
-
-    :: Get the latest BMDS server code
-    cd C:\inetpub\wwwroot\bmds-server
-    git fetch --all
-    git reset --hard origin/master
-
-    :: Update python/django
-    CALL C:\inetpub\wwwroot\bmds-server\venv\Scripts\activate.bat
-    pip install -r .\requirements\production.txt
-    python manage.py collectstatic --no-input
-    python manage.py migrate --no-input
-
-    :: Update services
-    python manage.py sync_secrets
-
-    :: First-time only
-    :: python run_celery_winservice.py install
-    :: python run_celerybeat_winservice.py install
-
-    :: Then, just update
-    python run_celery_winservice.py update
-    python run_celerybeat_winservice.py update
-
-    :: Restart Celery
-    sc stop bmds_celery
-    sc start bmds_celery
-
-    :: Restart Celerybeat
-    sc stop bmds_celerybeat
-    sc start bmds_celerybeat
-
-    :: Reset IIS
-    iisreset.exe
-
-    :: Don't close window
-    pause
 
 Troubleshooting
 ~~~~~~~~~~~~~~~

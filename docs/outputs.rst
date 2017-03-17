@@ -106,6 +106,12 @@ key values are captured in this object. The following summary data are available
 - ``model_version``: The reported version of the executed model
 - ``parameters``: A `Model parameters object`_, as described below
 
+Runtime details are also available:
+
+- ``execution_start_time``: Execution start time (ISO 8601 string format)
+- ``execution_start_time``: Execution end time (ISO 8601 string format)
+- ``execution_duration``: Execution duration, in seconds
+
 A tabular-summary of observed versus estimated values are also captured:
 
 - ``fit_dose``: An array of doses (should be the same as input file)

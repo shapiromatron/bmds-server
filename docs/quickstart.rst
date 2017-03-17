@@ -31,8 +31,8 @@ R example
 In addition to the standard library, the following packages are required:
 
 - `httr <https://cran.r-project.org/web/packages/httr/index.html>`_
-- `plyr <https://cran.r-project.org/web/packages/plyr/index.html>`_
-- `rjson <https://cran.r-project.org/web/packages/rjson/index.html>`_
+- `dplyr <https://cran.r-project.org/web/packages/dplyr/index.html>`_
+- `jsonlite <https://cran.r-project.org/web/packages/jsonlite/index.html>`_
 
 .. literalinclude:: quickstart.r
    :language: r

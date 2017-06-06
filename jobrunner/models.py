@@ -4,6 +4,7 @@ from datetime import timedelta
 from django.db import models
 from django.conf import settings
 from django.core.urlresolvers import reverse
+from django.db import connection
 from django.utils.timezone import now
 import json
 import traceback
@@ -62,6 +63,9 @@ class Job(models.Model):
         qs = cls.objects.filter(created__lt=oldest_to_keep)
         logger.info('Removing {} old BMDS jobs'.format(qs.count()))
         qs.delete()
+        with connection.cursor() as cursor:
+            # required for sqlite3 to actually delete data
+            cursor.execute('vacuum')
 
     @staticmethod
     def build_session(inputs, dataset):

@@ -50,21 +50,25 @@ The top-level JSON object is an object with three fields:
 
 - ``job_id``: The string identifier for the JOB
 - ``inputs``: The :doc:`inputs </inputs>` object for this job (with datasets removed)
-- ``outputs``: An array of output_ objects, one for each dataset in the input file
+- ``outputs``: An array of session_ objects, one for each dataset in the input file
 
-.. _output: `Output object`_
+.. _session: `Session object`_
 
-Output object
+Session object
 ~~~~~~~~~~~~~
 
-An output object contains all inputs and outputs for a single dataset. It contains
+A session object contains all inputs and outputs for a single dataset. It contains
 the following keys:
 
+- ``bmds_version``: `BMDS`_ software version used
+- ``bmds_python_version``: `Python BMDS`_ version used
 - ``dataset_index``: The index of the dataset in the array of datasets (zero-indexed)
 - ``dataset``: The dataset specified by the user which was modeled
 - ``models``: An array of model_ objects, one for each model which was specified to be executed
 - ``recommended_model_index``: The index (zero-indexed) of the recommended model, if enabled. If the value is `null`, then no model was recommended, or recommendation was disabled.
 
+.. _`BMDS`: https://www.epa.gov/bmds/download-benchmark-dose-software-bmds
+.. _`Python BMDS`: https://pypi.python.org/pypi/bmds
 .. _model: `Model object`_
 
 Model object
@@ -78,8 +82,11 @@ to be executed. It contains the following keys:
 - ``model_version``: The reported version of the executed model
 - ``name``: The model_name (as above) and polynomial degree (polynomial and multistage)
 - ``has_output``: A boolean to determine if an .out file was created
+- ``execution_halted``: A boolean flag; was model execution terminated due from time-out
 - ``dfile``: The ``*.(d)`` file which was created for execution
 - ``outfile``: The ``*.out`` file which was created after model execution
+- ``stdout``: stdout from model execution
+- ``stderr``: stderr from model execution
 - ``output``: An instance of a `Model output object`_, if an output file is available
 
 If model-recommendation was enabled (as described in `Wignall et al. 2014`_),

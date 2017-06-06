@@ -2,6 +2,15 @@
 History
 =======
 
+v0.4.0 (2017-06-06)
+-------------------
+* Vacuum sqlite3 database after job deletion to propagate data removal
+* Update to `BMDS v0.8.1`_
+* Use asyncio for drunner tasks (unfortunately, more instable for linux/mac users)
+
+.. _`BMDS v0.8.1`: https://bmds.readthedocs.io/en/latest/history.html#v0-8-1-2017-06-06
+
+
 v0.3.0 (2017-03-17)
 -------------------
 * In addition to catching global errors in BMD execution, try to catch errors the individual dataset level. Therefore, if a batch has a thousand datasets and only one fails, note this, but return the successful results

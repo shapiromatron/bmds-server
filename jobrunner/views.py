@@ -1,3 +1,4 @@
+from celery.exceptions import TimeoutError
 from django.contrib import messages
 from django.contrib.auth.decorators import permission_required
 from django.core.urlresolvers import reverse
@@ -7,12 +8,9 @@ from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import RedirectView, DetailView, View
 from django.views.generic.edit import CreateView
 from django.conf import settings
-
 import json
 
-from bmds.drunner import BatchDfileRunner
-
-from . import forms, models
+from . import forms, models, tasks
 
 
 class Home(CreateView):
@@ -52,6 +50,12 @@ class BatchDFileExecute(View):
 
     def post(self, request, *args, **kwargs):
         payload = json.loads(request.POST.get('inputs'))
-        runner = BatchDfileRunner(payload)
-        output = runner.execute()
+
+        try:
+            output = tasks.execute_dfile\
+                .delay(payload)\
+                .get(timeout=30)
+        except TimeoutError:
+            output = {'timeout': True}
+
         return JsonResponse(output, safe=False)

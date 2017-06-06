@@ -27,6 +27,7 @@ _build
 
 # ignore logfiles
 *.log
+*log*.txt
 
 # ignore celerybeat
 celerybeat-schedule

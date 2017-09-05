@@ -45,6 +45,7 @@ bmds_server/settings/local.py
 /web.config
 /run_celery_winservice.py
 /run_celerybeat_winservice.py
+/run_cherrypy_winservice.py
 /secrets.json
 
 # keep folders, but not content

@@ -1,13 +1,30 @@
 # Adapted from: https://lincolnloop.com/blog/2008/mar/25/serving-django-cherrypy/.
+# https://gist.github.com/alfredodeza/5911893
 
+import cherrypy
+from cheroot import wsgi
 import os
 from django.core.management.base import BaseCommand
+from django.conf import settings
 
 from bmds_server.wsgi import application
-from cherrypy import wsgiserver
 
 
-HELP_TEXT = """Serve application using CherryPy WSGI server."""
+HELP_TEXT = """Serve application + static files using CherryPy WSGI server."""
+
+
+class Root:
+    pass
+
+
+def create_static_app():
+    path = os.path.join(settings.BASE_DIR, 'public')
+    cherrypy.config.update({'environment': 'production'})
+    configuration = {'/': {
+        'tools.staticdir.on': True,
+        'tools.staticdir.dir': path}
+    }
+    return cherrypy.tree.mount(Root(), '/', config=configuration)
 
 
 class Command(BaseCommand):
@@ -16,12 +33,14 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
 
-        # Added to environment by IIS
+        # Added to environment by IIS or secrets.json
         port = int(os.environ.get('HTTP_PLATFORM_PORT', 8000))
 
-        server = wsgiserver.CherryPyWSGIServer(
-            ('0.0.0.0', port),
-            application
-        )
-
+        addr = ('0.0.0.0', port)
+        path_map = {
+            '/': application,
+            '/static': create_static_app(),
+        }
+        dispatcher = wsgi.PathInfoDispatcher(path_map)
+        server = wsgi.Server(addr, dispatcher)
         server.start()

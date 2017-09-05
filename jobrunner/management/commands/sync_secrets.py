@@ -64,6 +64,23 @@ class Command(BaseCommand):
         with open(out_fn, 'w') as f:
             f.write(inputs)
 
+    def write_webserver(self, secrets):
+        txt = '\n'.join([
+            "    os.environ['{0}'] = r'{1}'".format(k, v)
+            for k, v in secrets.items()
+        ])
+
+        in_fn = os.path.join(settings.BASE_DIR, 'run_cherrypy_winservice.template.py')
+        out_fn = os.path.join(settings.BASE_DIR, 'run_cherrypy_winservice.py')
+
+        with open(in_fn, 'r') as f:
+            inputs = f.read()
+
+        inputs = inputs.replace('    pass  # ENVPLACEHOLDER', txt)
+
+        with open(out_fn, 'w') as f:
+            f.write(inputs)
+
     def write_activate_bat(self, secrets):
         txt = 'set "PATH=%VIRTUAL_ENV%\Scripts;%PATH%"\n\n'
         txt += '\n'.join([
@@ -119,5 +136,6 @@ class Command(BaseCommand):
         self.write_webconfig(secrets)
         self.write_celery(secrets)
         self.write_celerybeat(secrets)
+        self.write_webserver(secrets)
         self.write_activate_bat(secrets)
         self.write_activate_ps(secrets)

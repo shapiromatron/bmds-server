@@ -1,51 +1,22 @@
-"""Cherrypy windows service task installer.
-
-To install service, call (from virtualenv):
-    python run_cherrypy_winservice.py install
-
-To un-install service:
-    python run_cherrypy_winservice.py install
-
-To start service (batch):
-    sc start bmds_server
-
-To stop service (batch):
-    sc stop bmds_server
-
-"""
+import logging
+import os
+import subprocess
+import shlex
+import sys
 import win32service
 import win32serviceutil
 import win32api
 import win32event
-import subprocess
-import sys
-import os
-import shlex
-import logging
 
 
-BASEDIR = os.path.abspath(os.path.dirname(os.path.realpath(__file__)))
-LOGDIR = os.path.join(BASEDIR, 'logs')
-PYTHONSCRIPTPATH = os.path.join(BASEDIR, 'venv', 'Scripts')
-PROJECTDIR = 'bmds_server'
-SERVICE_NAME = 'bmds_server'
-SERVICE_DISPLAY_NAME = 'BMDS Webserver'
+class BaseService(win32serviceutil.ServiceFramework):
 
-logging.basicConfig(
-    filename=os.path.join(LOGDIR, 'server_service.log'),
-    level=logging.DEBUG,
-    format='[%(asctime)-15s: %(levelname)-7.7s] %(message)s'
-)
+    BASEDIR = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+    BINDIR = os.path.join(BASEDIR, '..', 'venv', 'Scripts')
+    LOGDIR = os.path.join(BASEDIR, 'logs')
 
-
-def set_env():
-    pass  # ENVPLACEHOLDER
-
-
-class Service(win32serviceutil.ServiceFramework):
-
-    _svc_name_ = SERVICE_NAME
-    _svc_display_name_ = SERVICE_DISPLAY_NAME
+    _svc_name_ = '<ADD>'
+    _svc_display_name_ = '<ADD>'
 
     def __init__(self, args):
         win32serviceutil.ServiceFramework.__init__(self, args)
@@ -59,19 +30,18 @@ class Service(win32serviceutil.ServiceFramework):
         sys.exit()
 
     def get_command(self):
-        exe = os.path.join(PYTHONSCRIPTPATH, 'python.exe')
-        args = 'manage.py run_cherrypy_server'
-        return '"{0}" {1}'.format(exe, args)
+        exe = os.path.join(self.BINDIR, 'python.exe')
+        py = os.path.join(self.BASEDIR, 'windows_services', 'commands.py')
+        return '"{0}" {1} {2}'.format(exe, py, self._svc_cmd)
 
     def SvcDoRun(self):
         logging.info('Starting {name} service ...'.format(name=self._svc_name_))
-        os.chdir(BASEDIR)
+        os.chdir(self.BASEDIR)
         logging.info('cwd: ' + os.getcwd())
         self.ReportServiceStatus(win32service.SERVICE_RUNNING)
         command = self.get_command()
         logging.info('Command: ' + command)
         args = shlex.split(command)
-        set_env()
         proc = subprocess.Popen(args)
         logging.info('PID: {0}'.format(proc.pid))
         self.timeout = 3000
@@ -83,7 +53,3 @@ class Service(win32serviceutil.ServiceFramework):
                 win32api.TerminateProcess(handle, -1)
                 win32api.CloseHandle(handle)
                 break
-
-
-if __name__ == '__main__':
-    win32serviceutil.HandleCommandLine(Service)

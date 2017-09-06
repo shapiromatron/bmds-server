@@ -43,4 +43,4 @@ class Command(BaseCommand):
         }
         dispatcher = wsgi.PathInfoDispatcher(path_map)
         server = wsgi.Server(addr, dispatcher)
-        server.start()
+        server.safe_start()

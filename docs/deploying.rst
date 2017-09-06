@@ -17,11 +17,12 @@ Installation requirements
 ~~~~~~~~~~~~~~~~~~~~~~~~~
 
 - Python_
-    - v3.5.2 or higher
+    - v3.6.2 or higher
     - Run as an administrator
-        - Don't install in default location (in a user's home), use custom location, ``C:\Python35``
+        - Don't install in default location (in a user's home), use custom location, ``C:\Python36``
         - install launcher for  all users, add to PATH
-    - Enable python to be used (run terminal as administrator):
+        - make sure to install `tcl/tk tkinter` option
+    - Enable python to be used (run Powershell as administrator):
         ``Set-ExecutionPolicy Unrestricted``
     - Download `pywin32`_ library (we will install later in a virtual environment)
     - Download `numpy+MKL`_ and `scipy`_ library (we can't pip-install directly)
@@ -60,7 +61,7 @@ Django web application, as well as serving static files directly.
 
 - Create new site "pySite"
     - Under "Basic Settings"
-        - Set Physical path as ``C:\inetpub\wwwroot\bmds-server``
+        - Set Physical path as ``C:\apps\bmds-server``
         - (May need to set "Connect as" to test appropriate access permissions)
     - Under Bindings
         - Set port 80, IP address *
@@ -69,30 +70,29 @@ Django web application, as well as serving static files directly.
      - Under "pySite", click "Add Virtual Directory"
          - Under "Basic settings":
              - Alias: ``static``
-             - Physical path: ``C:\inetpub\wwwroot\bmds-server\public``
+             - Physical path: ``C:\apps\bmds-server\public``
 
 Application setup
 ~~~~~~~~~~~~~~~~~
 
-Install the software in a location where IIS will have access. In the example above, we've used the location ``C:\inetpub\wwwroot\bmds-server``. Assuming this is the case, run the following commands in PowerShell::
+Install the software in a location where IIS will have access. In the example above, we've used the location ``C:\apps\bmds-server``. Assuming this is the case, run the following commands in PowerShell::
 
-    cd C:\inetpub\wwwroot
-    git clone https://github.com/shapiromatron/bmds-server
-    cd ./bmds-server
+    cd C:\apps
+    git clone https://github.com/shapiromatron/bmds-server bmds-server
 
     # create/install virtualenv
     python -m venv venv
-    ./venv/Scripts/activate
+    call ./venv/Scripts/activate
 
     # install scipy into virtual environment
     pip install ~\Downloads\numpy‑1.11.2+mkl‑cp35‑cp35m‑win32.whl
     pip install ~\Downloads\scipy‑0.18.1‑cp35‑cp35m‑win32.whl
 
     # install remaining requirements which can be pip-installed
-    pip install -r ./requirements/production.txt
+    pip install -r ./bmds-server/requirements/production.txt
 
     # install pywin32 into virtual environment
-    easy_install-3.5.exe ~\Downloads\pywin32-220.win32-py3.5.exe
+    easy_install.exe ~\Downloads\pywin32-220.win32-py3.5.exe
 
     # copy secrets.json
     cp ./secrets.example.json ./secrets.json
@@ -105,6 +105,11 @@ and the celery background process).
 To deploy and redeploy
 ~~~~~~~~~~~~~~~~~~~~~~
 
+Activate the virtual environment:
+
+    call c:\apps\venv\Scripts\activate.bat
+    cd c:\apps\bmds-server
+
 An example deployment script is available in ``./bin/deploy.bat``.  The deployment
 script checks out a particular version of the source code, updates the python
 environment, syncs the database, (re)installs services, and restarts the webserver.
@@ -115,18 +120,35 @@ More generally, to sync secrets, run the command::
 
 To install the celery services::
 
+    python run_cherrypy_winservice.py install
     python run_celery_winservice.py install
     python run_celerybeat_winservice.py install
 
 You can update services::
 
+    python run_cherrypy_winservice.py update
     python run_celery_winservice.py update
     python run_celerybeat_winservice.py update
 
 To remove services::
 
+    python run_cherrypy_winservice.py remove
     python run_celery_winservice.py remove
     python run_celerybeat_winservice.py remove
+
+To check on start service::
+
+    python run_cherrypy_winservice.py start
+    python run_celery_winservice.py start
+    python run_celerybeat_winservice.py start
+
+To check on service status::
+
+    sc query bmds_server
+    sc query bmds_celery
+    sc query bmds_celerybeat
+
+To get services to restart on reboot, modify the settings for the services in the "Service" tab and change the "Startup type" to "Automatic".
 
 Troubleshooting
 ~~~~~~~~~~~~~~~

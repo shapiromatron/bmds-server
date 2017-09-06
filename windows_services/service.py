@@ -12,8 +12,8 @@ import win32event
 class BaseService(win32serviceutil.ServiceFramework):
 
     BASEDIR = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
-    BINDIR = os.path.join(BASEDIR, '..', 'venv', 'Scripts')
-    LOGDIR = os.path.join(BASEDIR, 'logs')
+    BINDIR = os.path.abspath(os.path.join(BASEDIR, '..', 'venv', 'Scripts'))
+    LOGDIR = os.path.abspath(os.path.join(BASEDIR, 'logs'))
 
     _svc_name_ = '<ADD>'
     _svc_display_name_ = '<ADD>'

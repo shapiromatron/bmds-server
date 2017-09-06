@@ -9,7 +9,7 @@ import os
 import sys
 
 
-BASEDIR = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 
 
 class Root():
@@ -17,9 +17,7 @@ class Root():
 
 
 def _set_environment():
-    fn = os.path.abspath(os.path.join(
-        os.path.dirname(__file__),
-        './secrets.json'))
+    fn = os.path.join(BASE_DIR, 'secrets.json')
 
     with open(fn, 'r') as f:
         settings = json.load(f)
@@ -27,11 +25,8 @@ def _set_environment():
     for k, v in settings.items():
         os.environ[k] = v
 
-    print(fn)
-
 
 def _run_server():
-    from django.conf import settings
     from bmds_server.wsgi import application
 
     cherrypy.config.update({
@@ -40,7 +35,7 @@ def _run_server():
     static_app = cherrypy.tree.mount(Root(), '/', config={
         '/': {
             'tools.staticdir.on': True,
-            'tools.staticdir.dir': os.path.join(settings.BASE_DIR, 'public')}
+            'tools.staticdir.dir': os.path.join(BASE_DIR, 'public')}
     })
 
     logger = logging.getLogger(__name__)
@@ -51,19 +46,18 @@ def _run_server():
     }
     dispatcher = wsgi.PathInfoDispatcher(path_map)
     server = wsgi.Server(addr, dispatcher)
-    logger.info('Starting', server._bind_addr)
+    logger.info(f'Starting {server._bind_addr}')
     server.safe_start()
 
 
 def _run_celery():
     from bmds_server.celery import app
     from celery.bin import worker
-    from django.conf import settings
 
     worker = worker.worker(app=app)
     options = {
         'loglevel': 'INFO',
-        'logfile': os.path.join(settings.BASE_DIR, 'logs\celery.log'),
+        'logfile': os.path.join(BASE_DIR, 'logs\celery.log'),
         'events': True,
     }
     worker.run(**options)
@@ -71,13 +65,12 @@ def _run_celery():
 
 def _run_celerybeat():
     from bmds_server.celery import app
-    from celery.bin.beat import beat
-    from django.conf import settings
+    from celery.bin import beat
 
-    beat = beat(app=app)
+    beat = beat.beat(app=app)
     options = {
         'loglevel': 'INFO',
-        'logfile': os.path.join(settings.BASE_DIR, 'logs\celerybeat.log'),
+        'logfile': os.path.join(BASE_DIR, 'logs\celerybeat.log'),
     }
     beat.run(**options)
 

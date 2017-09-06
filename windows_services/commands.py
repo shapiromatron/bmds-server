@@ -16,7 +16,7 @@ class Root():
     pass
 
 
-def _set_environment():
+def set_environment():
     fn = os.path.join(BASE_DIR, 'secrets.json')
 
     with open(fn, 'r') as f:
@@ -77,7 +77,7 @@ def _run_celerybeat():
 
 if __name__ == '__main__':
 
-    _set_environment()
+    set_environment()
     os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'bmds_server.settings.production')  # noqa
     os.environ.setdefault('HTTP_PLATFORM_PORT', '8000')
 

@@ -8,6 +8,8 @@ import win32serviceutil
 import win32api
 import win32event
 
+from .commands import set_environment
+
 
 class BaseService(win32serviceutil.ServiceFramework):
 
@@ -35,6 +37,7 @@ class BaseService(win32serviceutil.ServiceFramework):
         return '"{0}" {1} {2}'.format(exe, py, self._svc_cmd)
 
     def SvcDoRun(self):
+        set_environment()
         logging.info('Starting {name} service ...'.format(name=self._svc_name_))
         os.chdir(self.BASEDIR)
         logging.info('cwd: ' + os.getcwd())

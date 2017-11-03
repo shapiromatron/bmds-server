@@ -132,6 +132,18 @@ The datasets field is one of the required field on the Job_ dataset above, and
 is a required array. Each dataset in a dataset array has its own requirements,
 as described below, depending on the dataset type.
 
+In addition to the data specifications by data-type below, a number of optional
+metadata fields are also available for use in all dataset types:
+
+- ``id`` <int or string>: Can be used as a unique identifier for each dataset
+  to correspond to existing frameworks external to the BMDS server; returned in
+  the output so results can be mapped externally to BMDS server application.
+- ``xlabel`` <str, default to "Dose">: the x-label on plot outputs
+- ``ylabel`` <str, default to "Fraction affected" for Dichotomous or "Response"
+  for Continuous>: the y-label on plot outputs
+- ``dose_units`` <str>: the dose units to print in reporting
+- ``response_units`` <str>: the response units to print in reporting
+
 
 Dichotomous
 -----------
@@ -146,12 +158,6 @@ observations, and positive observations. Thus, it is count data, as an example:
         "ns": [75, 49, 50, 49],
         "incidences": [5, 1, 3, 14]
     }
-
-**Additional optional fields:**
-
-- ``id`` <int or string>: Can be used as a unique identifier for each dataset to
-  correspond to existing frameworks external to the BMDS server; returned in the
-  output so results can be mapped externally to BMDS server application.
 
 The complete specification is below:
 
@@ -172,11 +178,27 @@ The complete specification is below:
         ],
         "properties": {
           "id": {
+            "description": "An (optional) unique identifier for dataset",
             "type": [
               "integer",
               "string"
-            ],
-            "description": "An (optional) unique identifier for dataset"
+            ]
+          },
+          "xlabel": {
+            "description": "An (optional) x-label for plots",
+            "type": "string"
+          },
+          "ylabel": {
+            "description": "An (optional) y-label for plots",
+            "type": "string"
+          },
+          "dose_units": {
+            "description": "(optional) dose units for reporting",
+            "type": "string"
+          },
+          "response_units": {
+            "description": "(optional) response units for reporting",
+            "type": "string"
           },
           "doses": {
             "type": "array",
@@ -248,12 +270,6 @@ dose-response relationships, one for each organism or replicate. As an example:
         ]
     }
 
-**Additional optional fields:**
-
-- ``id`` <int or string>: Can be used as a unique identifier for each dataset to
-  correspond to existing frameworks external to the BMDS server; returned in the
-  output so results can be mapped externally to BMDS server application.
-
 The complete specification is below:
 
 .. code-block:: javascript
@@ -277,6 +293,22 @@ The complete specification is below:
               "integer",
               "string"
             ]
+          },
+          "xlabel": {
+            "description": "An (optional) x-label for plots",
+            "type": "string"
+          },
+          "ylabel": {
+            "description": "An (optional) y-label for plots",
+            "type": "string"
+          },
+          "dose_units": {
+            "description": "(optional) dose units for reporting",
+            "type": "string"
+          },
+          "response_units": {
+            "description": "(optional) response units for reporting",
+            "type": "string"
           },
           "doses": {
             "description": "Dose array (float), one per assay/organism",
@@ -315,12 +347,6 @@ each dose-group, as an example:
         "stdevs": [5.0, 5.1, 6.2, 5.9, 18.1]
     }
 
-**Additional optional fields:**
-
-- ``id`` <int or string>: Can be used as a unique identifier for each dataset to
-  correspond to existing frameworks external to the BMDS server; returned in the
-  output so results can be mapped externally to BMDS server application.
-
 The complete specification is below:
 
 .. code-block:: javascript
@@ -340,6 +366,29 @@ The complete specification is below:
           "stdevs"
         ],
         "properties": {
+          "id": {
+            "description": "An (optional) unique identifier for dataset",
+            "type": [
+              "integer",
+              "string"
+            ]
+          },
+          "xlabel": {
+            "description": "An (optional) x-label for plots",
+            "type": "string"
+          },
+          "ylabel": {
+            "description": "An (optional) y-label for plots",
+            "type": "string"
+          },
+          "dose_units": {
+            "description": "(optional) dose units for reporting",
+            "type": "string"
+          },
+          "response_units": {
+            "description": "(optional) response units for reporting",
+            "type": "string"
+          },
           "doses": {
             "type": "array",
             "description": "An array of doses (float),

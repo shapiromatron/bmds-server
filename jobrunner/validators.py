@@ -65,10 +65,6 @@ continuous_dataset_schema = {
             'stdevs',
         ],
         'properties': {
-            'id': {
-                'description': 'An (optional) unique identifier for dataset',
-                'type': ['integer', 'string'],
-            },
             'doses': {
                 'description': 'An array of doses (float), one for each dose-group',
                 'type': 'array',
@@ -121,10 +117,6 @@ continuous_individual_dataset_schema = {
             'responses',
         ],
         'properties': {
-            'id': {
-                'description': 'An (optional) unique identifier for dataset',
-                'type': ['integer', 'string'],
-            },
             'doses': {
                 'description': 'An array of doses (float), one per assay/organism',
                 'type': 'array',
@@ -160,10 +152,6 @@ dichotomous_dataset_schema = {
             'incidences'
         ],
         'properties': {
-            'id': {
-                'description': 'An (optional) unique identifier for dataset',
-                'type': ['integer', 'string'],
-            },
             'doses': {
                 'description': 'An array of doses (float), one for each dose-group',
                 'type': 'array',
@@ -196,6 +184,33 @@ dichotomous_dataset_schema = {
     },
     'minItems': 1,
 }
+
+# optional properties for all dataset types
+optional_dataset_props = {
+    'id': {
+        'description': 'An (optional) unique identifier for dataset',
+        'type': ['integer', 'string'],
+    },
+    'xlabel': {
+        'description': 'An (optional) x-label for plots',
+        'type': 'string'
+    },
+    'ylabel': {
+        'description': 'An (optional) y-label for plots',
+        'type': 'string'
+    },
+    'dose_units': {
+        'description': '(optional) dose units for reporting',
+        'type': 'string'
+    },
+    'response_units': {
+        'description': '(optional) response units for reporting',
+        'type': 'string'
+    },
+}
+continuous_dataset_schema['properties'].update(optional_dataset_props)
+continuous_individual_dataset_schema['properties'].update(optional_dataset_props)
+dichotomous_dataset_schema['properties'].update(optional_dataset_props)
 
 
 d_model_schema = {

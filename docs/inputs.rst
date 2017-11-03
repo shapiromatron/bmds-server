@@ -138,6 +138,8 @@ metadata fields are also available for use in all dataset types:
 - ``id`` <int or string>: Can be used as a unique identifier for each dataset
   to correspond to existing frameworks external to the BMDS server; returned in
   the output so results can be mapped externally to BMDS server application.
+- ``dataset_name`` <string>: Dataset name which which is used as the title
+  of generated reports, eg. "Smith 2017: Relative Liver Weight in Male SD Rats"
 - ``xlabel`` <str, default to "Dose">: the x-label on plot outputs
 - ``ylabel`` <str, default to "Fraction affected" for Dichotomous or "Response"
   for Continuous>: the y-label on plot outputs
@@ -183,6 +185,10 @@ The complete specification is below:
               "integer",
               "string"
             ]
+          },
+          "dataset_name": {
+            "description": "An (optional) dataset name used as a title in reports",
+            "type": "string",
           },
           "xlabel": {
             "description": "An (optional) x-label for plots",
@@ -294,6 +300,10 @@ The complete specification is below:
               "string"
             ]
           },
+          "dataset_name": {
+            "description": "An (optional) dataset name used as a title in reports",
+            "type": "string",
+          },
           "xlabel": {
             "description": "An (optional) x-label for plots",
             "type": "string"
@@ -372,6 +382,10 @@ The complete specification is below:
               "integer",
               "string"
             ]
+          },
+          "dataset_name": {
+            "description": "An (optional) dataset name used as a title in reports",
+            "type": "string",
           },
           "xlabel": {
             "description": "An (optional) x-label for plots",

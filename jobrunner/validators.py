@@ -191,17 +191,21 @@ optional_dataset_props = {
         'description': 'An (optional) unique identifier for dataset',
         'type': ['integer', 'string'],
     },
+    'dataset_name': {
+        'description': 'An (optional) dataset name used as a title in reports',
+        'type': 'string',
+    },
     'xlabel': {
         'description': 'An (optional) x-label for plots',
-        'type': 'string'
+        'type': 'string',
     },
     'ylabel': {
         'description': 'An (optional) y-label for plots',
-        'type': 'string'
+        'type': 'string',
     },
     'dose_units': {
         'description': '(optional) dose units for reporting',
-        'type': 'string'
+        'type': 'string',
     },
     'response_units': {
         'description': '(optional) response units for reporting',

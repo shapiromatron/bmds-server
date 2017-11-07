@@ -11,7 +11,7 @@ url_root = os.environ.get('BMDS_SERVER_URL', 'http://bmds-server.com')
 inputs = {
   "id": "My first BMDS-server run",
   "dataset_type": "D",
-  "bmds_version": "BMDS2601",
+  "bmds_version": "BMDS270",
   "datasets": [
       {
           "id": "run #1",

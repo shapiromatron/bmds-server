@@ -4,7 +4,7 @@ import pytest
 @pytest.fixture
 def complete_continuous():
     return {
-        'bmds_version': 'BMDS2601',
+        'bmds_version': 'BMDS270',
         'dataset_type': 'C',
         'datasets': [
             {
@@ -21,7 +21,7 @@ def complete_continuous():
 @pytest.fixture
 def complete_continuous_individual():
     return {
-        'bmds_version': 'BMDS2601',
+        'bmds_version': 'BMDS270',
         'dataset_type': 'CI',
         'datasets': [
             {
@@ -52,7 +52,7 @@ def complete_continuous_individual():
 @pytest.fixture
 def complete_dichotomous():
     return {
-        'bmds_version': 'BMDS2601',
+        'bmds_version': 'BMDS270',
         'dataset_type': 'D',
         'datasets': [
             {

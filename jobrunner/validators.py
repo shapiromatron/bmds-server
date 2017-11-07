@@ -212,9 +212,9 @@ optional_dataset_props = {
         'type': 'string'
     },
 }
-continuous_dataset_schema['properties'].update(optional_dataset_props)
-continuous_individual_dataset_schema['properties'].update(optional_dataset_props)
-dichotomous_dataset_schema['properties'].update(optional_dataset_props)
+continuous_dataset_schema['items']['properties'].update(optional_dataset_props)
+continuous_individual_dataset_schema['items']['properties'].update(optional_dataset_props)
+dichotomous_dataset_schema['items']['properties'].update(optional_dataset_props)
 
 
 d_model_schema = {

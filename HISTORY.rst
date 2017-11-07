@@ -2,6 +2,15 @@
 History
 =======
 
+v0.4.1 (2017-11-07)
+-------------------
+* Update to `BMDS v0.9.0`_ (added BMDS version 2.7)
+* Backwards-compatible updates to dataset API to include new optional dose/response units
+* Updated deployment procedure
+
+.. _`BMDS v0.9.0`: https://bmds.readthedocs.io/en/latest/history.html#v0-9-0-2017-11-07
+
+
 v0.4.0 (2017-06-06)
 -------------------
 * Vacuum sqlite3 database after job deletion to propagate data removal

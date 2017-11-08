@@ -25,7 +25,6 @@ Installation requirements
     - Enable python to be used (run Powershell as administrator):
         ``Set-ExecutionPolicy Unrestricted``
     - Download `pywin32`_ library (we will install later in a virtual environment)
-    - Download `numpy+MKL`_ and `scipy`_ library (we can't pip-install directly)
 - Git_
     - v2.10.2 or higher
     - 64-bit version
@@ -36,57 +35,25 @@ Installation requirements
 - RabbitMQ_
     - v3.6.5 or higher
     - install as administrator
-- IIS configuration (Add ASP .NET)
-    - In server manager, go to Manage -> Add Roles and Features -> Role-based or feature based installation
-    - Server Roles -> Webserver IIS (check)
-        - Server Roles -> WebServer IIS -> Web Server -> Application Development -> ASP .NET 4.5 (check)
-- HttpPlatformHandler_
-    - v1.2 or higher
-    - Requires IIS configuration as described above before installing
 
 .. _Python: https://www.python.org/downloads/
 .. _pywin32: https://sourceforge.net/projects/pywin32/
-.. _`numpy+MKL`: http://www.lfd.uci.edu/~gohlke/pythonlibs/
-.. _scipy: http://www.lfd.uci.edu/~gohlke/pythonlibs/
 .. _Git: https://git-scm.com/download/win
 .. _Erlang: http://www.erlang.org/downloads
-.. _RabbitMQ: http://www.rabbitmq.com/downloads.html
-.. _HttpPlatformHandler: https://www.iis.net/downloads/microsoft/httpplatformhandler
-
-IIS configuration
-~~~~~~~~~~~~~~~~~
-We'll configure IIS to install a new python application. In normal linux webserver
-parlance, this would be equivalent to setting up nginx as a reverse proxy to a
-Django web application, as well as serving static files directly.
-
-- Create new site "pySite"
-    - Under "Basic Settings"
-        - Set Physical path as ``C:\apps\bmds-server``
-        - (May need to set "Connect as" to test appropriate access permissions)
-    - Under Bindings
-        - Set port 80, IP address *
-
- - Create static file server from IIS
-     - Under "pySite", click "Add Virtual Directory"
-         - Under "Basic settings":
-             - Alias: ``static``
-             - Physical path: ``C:\apps\bmds-server\public``
+.. _RabbitMQ: http://www.rabbitmq.com/download.html
 
 Application setup
 ~~~~~~~~~~~~~~~~~
 
 Install the software in a location where IIS will have access. In the example above, we've used the location ``C:\apps\bmds-server``. Assuming this is the case, run the following commands in PowerShell::
 
+    mkdir C:\apps
     cd C:\apps
-    git clone https://github.com/shapiromatron/bmds-server bmds-server
+    git clone https://github.com/shapiromatron/bmds-server
 
     # create/install virtualenv
     python -m venv venv
     call ./venv/Scripts/activate
-
-    # install scipy into virtual environment
-    pip install ~\Downloads\numpy‑1.11.2+mkl‑cp35‑cp35m‑win32.whl
-    pip install ~\Downloads\scipy‑0.18.1‑cp35‑cp35m‑win32.whl
 
     # install remaining requirements which can be pip-installed
     pip install -r ./bmds-server/requirements/production.txt
@@ -95,7 +62,12 @@ Install the software in a location where IIS will have access. In the example ab
     easy_install.exe ~\Downloads\pywin32-220.win32-py3.5.exe
 
     # copy secrets.json
-    cp ./secrets.example.json ./secrets.json
+    cp ./bmds_server/secrets.example.json ./bmds_server/secrets.json
+
+    # install bmds on github to run the latest (optional)
+    git clone https://github.com/shapiromatron/bmds
+    pip uninstall bmds
+    pip install -e ./bmds
 
 Update the ``secrets.json`` file with actual secrets. These secrets are pulled
 from the environment settings in all areas where the software may be executed

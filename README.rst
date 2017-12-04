@@ -1,8 +1,8 @@
 BMDS webserver
 ======================================
 
-.. image:: https://readthedocs.org/projects/bmds-server/badge/?version=latest
-        :target: https://bmds-server.readthedocs.io/en/latest/?badge=latest
+.. image:: https://readthedocs.org/projects/bmds-server/badge/?version=master
+        :target: https://bmds-server.readthedocs.io/en/master/
         :alt: Documentation Status
 
 Run a webserver that will batch process dose-response data using the US EPA's

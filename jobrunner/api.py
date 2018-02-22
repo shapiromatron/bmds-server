@@ -2,8 +2,12 @@ from rest_framework import mixins, status, viewsets
 from rest_framework.decorators import detail_route
 from rest_framework.response import Response
 from rest_framework.renderers import BaseRenderer
+from rest_framework.permissions import IsAdminUser
+from rest_framework.authentication import TokenAuthentication
 
-from . import serializers, models
+import json
+
+from . import serializers, models, tasks
 
 
 class TxtRenderer(BaseRenderer):
@@ -68,3 +72,22 @@ class JobViewset(mixins.CreateModelMixin,
 
     def get_queryset(self):
         return models.Job.objects.all()
+
+
+class DfileExecutorViewset(viewsets.ViewSet):
+
+    permission_classes = (IsAdminUser, )
+    authentication_classes = (TokenAuthentication,)
+
+    def create(self, request):
+        """
+        Execute D-file, blocking...
+        """
+        payload = json.loads(request.POST.get('inputs', "[]"))
+        try:
+            output = tasks.execute_dfile\
+                .delay(payload)\
+                .get(timeout=120)
+        except TimeoutError:
+            output = {'timeout': True}
+        return Response(output)

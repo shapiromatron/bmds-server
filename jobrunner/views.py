@@ -1,16 +1,10 @@
-from celery.exceptions import TimeoutError
 from django.contrib import messages
-from django.contrib.auth.decorators import permission_required
 from django.core.urlresolvers import reverse
-from django.http import JsonResponse
-from django.utils.decorators import method_decorator
-from django.views.decorators.csrf import csrf_exempt
-from django.views.generic import RedirectView, DetailView, View
+from django.views.generic import RedirectView, DetailView
 from django.views.generic.edit import CreateView
 from django.conf import settings
-import json
 
-from . import forms, models, tasks
+from . import forms, models
 
 
 class Home(CreateView):
@@ -41,21 +35,3 @@ class JobQuery(RedirectView):
 
 class JobDetail(DetailView):
     model = models.Job
-
-
-@method_decorator(permission_required('is_staff'), 'dispatch')
-@method_decorator(csrf_exempt, 'dispatch')
-class BatchDFileExecute(View):
-    # BLOCKING BMDS execution (for testing only)
-
-    def post(self, request, *args, **kwargs):
-        payload = json.loads(request.POST.get('inputs'))
-
-        try:
-            output = tasks.execute_dfile\
-                .delay(payload)\
-                .get(timeout=30)
-        except TimeoutError:
-            output = {'timeout': True}
-
-        return JsonResponse(output, safe=False)

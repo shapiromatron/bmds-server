@@ -6,6 +6,7 @@ from jobrunner import views, api
 
 router = DefaultRouter()
 router.register('job', api.JobViewset, base_name='job')
+router.register('dfile', api.DfileExecutorViewset, base_name='dfile')
 
 urlpatterns = [
 
@@ -15,10 +16,6 @@ urlpatterns = [
     url(r'^$',
         views.Home.as_view(),
         name='home'),
-
-    url(r'^dfile/$',
-        views.BatchDFileExecute.as_view(),
-        name='dfile'),
 
     url(r'^job/q/$',
         views.JobQuery.as_view(),

@@ -81,9 +81,9 @@ class DfileExecutorViewset(viewsets.ViewSet):
 
     def create(self, request):
         """
-        Execute D-file, blocking...
+        Execute list of dfiles
         """
-        payload = json.loads(request.POST.get('inputs', "[]"))
+        payload = request.data.get('inputs', [])
         try:
             output = tasks.execute_dfile\
                 .delay(payload)\

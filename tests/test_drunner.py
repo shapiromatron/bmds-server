@@ -1,11 +1,9 @@
-from copy import deepcopy
-from django.contrib.auth.models import User
-from django.test import Client
-import json
-import time
 import bmds
-
-from bmds.monkeypatch import _get_payload
+from django.contrib.auth.models import User
+import json
+from rest_framework.authtoken.models import Token
+from rest_framework.test import APIClient
+import pytest
 
 from .fixtures import *  # noqa
 
@@ -13,26 +11,25 @@ from .fixtures import *  # noqa
 @pytest.mark.django_db(transaction=False)
 def test_drunner(complete_continuous):
     # create and login as superuser
-    pw = 'admin'
-    my_admin = User.objects.create_superuser('admin', 'admin@test.com', pw)
-    c = Client()
+    admin = User.objects.create_superuser('admin', 'admin@test.com', 'admin')
+    token = Token.objects.create(user=admin)
+    client = APIClient()
 
     # get payload to submit
     dataset = complete_continuous['datasets'][0]
     cdataset = bmds.ContinuousDataset(**dataset)
-    payload = bmds.monkeypatch._get_payload([
+    payload = json.loads(bmds.monkeypatch._get_payload([
         bmds.models.Linear_220(cdataset),
         bmds.models.Power_218(cdataset)
-    ])
+    ]))
 
     # assert login is required
-    resp = c.post('/dfile/', payload)
-    assert '/admin/login/' in resp.url
-    assert resp.status_code == 302
+    resp = client.post('/api/dfile/', payload, format='json')
+    assert resp.status_code == 401
 
     # assert response is successful post-login
-    c.login(username=my_admin.username, password=pw)
-    resp = c.post('/dfile/', payload)
+    client.credentials(HTTP_AUTHORIZATION='Token {}'.format(token.key))
+    resp = client.post('/api/dfile/', payload, format='json')
     assert resp.status_code == 200
 
     # asset models were executed

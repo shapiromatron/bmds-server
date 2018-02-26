@@ -5,8 +5,6 @@ from rest_framework.renderers import BaseRenderer
 from rest_framework.permissions import IsAdminUser
 from rest_framework.authentication import TokenAuthentication
 
-import json
-
 from . import serializers, models, tasks
 
 

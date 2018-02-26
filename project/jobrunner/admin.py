@@ -12,4 +12,5 @@ class JobAdmin(admin.ModelAdmin):
         'is_finished',
     )
 
+
 admin.site.register(models.Job, JobAdmin)

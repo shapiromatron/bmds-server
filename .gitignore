@@ -41,7 +41,7 @@ logs/*
 !logs/.gitkeep
 
 # setting overrides
-bmds_server/settings/local.py
+project/bmds_server/settings/local.py
 /web.config
 /secrets.json
 

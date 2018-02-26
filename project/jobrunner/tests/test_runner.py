@@ -2,6 +2,7 @@ from copy import deepcopy
 from django.test import Client
 import json
 import time
+import pytest
 
 from .fixtures import *  # noqa
 

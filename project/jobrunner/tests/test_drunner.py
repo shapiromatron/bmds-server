@@ -4,10 +4,12 @@ import json
 from rest_framework.authtoken.models import Token
 from rest_framework.test import APIClient
 import pytest
+import sys
 
 from .fixtures import *  # noqa
 
 
+@pytest.mark.skipif(sys.platform != 'win32', reason='requires Windows')
 @pytest.mark.django_db(transaction=False)
 def test_drunner(complete_continuous):
     # create and login as superuser

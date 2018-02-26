@@ -1,9 +1,12 @@
-from __future__ import absolute_import
+from celery import Celery
+from decouple import config
 import os
 
-from celery import Celery
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'main.settings.production')
+os.environ.setdefault(
+    'DJANGO_SETTINGS_MODULE',
+    config('DJANGO_SETTINGS_MODULE', default='main.settings.production')
+)
 
 from django.conf import settings  # noqa
 

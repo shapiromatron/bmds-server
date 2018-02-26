@@ -1,7 +1,10 @@
+from pathlib import Path
+from decouple import config
 import os
 
 PROJECT_NAME = 'bmds-server'
-BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(os.path.abspath(__file__)), '../..'))
+BASE_DIR = str(Path('..').resolve())
+
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -166,4 +169,5 @@ REST_FRAMEWORK = {
 
 DAYS_TO_KEEP_JOBS = 7
 
-ALLOW_BLOCKING_BMDS_REQUESTS = True
+ALLOW_BLOCKING_BMDS_REQUESTS = config('ALLOW_BLOCKING_BMDS_REQUESTS',
+                                      default=False, cast=bool)

@@ -26,13 +26,13 @@ EMAIL_PORT = config('DJANGO_EMAIL_PORT', cast=int)
 EMAIL_USE_SSL = config('DJANGO_EMAIL_USE_SSL', cast=bool)
 DEFAULT_FROM_EMAIL = config('DJANGO_DEFAULT_FROM_EMAIL')
 
-PUBLIC_ROOT = join(BASE_DIR, 'public')
+PUBLIC_ROOT = join(ROOT_DIR, 'public')
 STATIC_ROOT = join(PUBLIC_ROOT, 'static')
 MEDIA_ROOT = join(PUBLIC_ROOT, 'media')
 
 LOGGING['handlers']['file'].update(
     level="INFO",
-    filename=join(BASE_DIR, 'logs', 'django.log')
+    filename=join(ROOT_DIR, 'logs', 'django.log')
 )
 
 BROKER_URL = config('CELERY_BROKER_URL')

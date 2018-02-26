@@ -3,7 +3,8 @@ from decouple import config
 import os
 
 PROJECT_NAME = 'bmds-server'
-BASE_DIR = str(Path('..').resolve())
+BASE_DIR = str(Path('.').resolve())
+ROOT_DIR = str(Path('..').resolve())
 
 
 INSTALLED_APPS = [
@@ -85,6 +86,7 @@ USE_TZ = True
 EMAIL_SUBJECT_PREFIX = "[{}] ".format(PROJECT_NAME)
 DEFAULT_FROM_EMAIL = "webmaster@{}.com".format(PROJECT_NAME)
 
+HTTP_PLATFORM_PORT = config('HTTP_PLATFORM_PORT', default=80, cast=int)
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static'),

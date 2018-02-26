@@ -30,7 +30,7 @@ _build
 *log*.txt
 
 # ignore celerybeat
-celerybeat-schedule
+*celerybeat-schedule.db
 
 # keep folders, but not content
 public/*

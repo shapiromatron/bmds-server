@@ -27,7 +27,7 @@ def set_environment():
 
 
 def _run_server():
-    from bmds_server.wsgi import application
+    from main.wsgi import application
 
     cherrypy.config.update({
         'environment': 'production'
@@ -51,7 +51,7 @@ def _run_server():
 
 
 def _run_celery():
-    from bmds_server.celery import app
+    from main.celery import app
     from celery.bin import worker
 
     worker = worker.worker(app=app)
@@ -64,7 +64,7 @@ def _run_celery():
 
 
 def _run_celerybeat():
-    from bmds_server.celery import app
+    from main.celery import app
     from celery.bin import beat
 
     beat = beat.beat(app=app)
@@ -78,7 +78,7 @@ def _run_celerybeat():
 if __name__ == '__main__':
 
     set_environment()
-    os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'bmds_server.settings.production')  # noqa
+    os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'main.settings.production')  # noqa
     os.environ.setdefault('HTTP_PLATFORM_PORT', '8000')
 
     runner = sys.argv[1]

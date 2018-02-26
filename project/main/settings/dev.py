@@ -1,4 +1,4 @@
-from bmds_server.settings.base import *  # noqa
+from .base import *  # noqa
 
 INSTALLED_APPS += (
     'django_extensions',

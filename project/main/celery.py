@@ -3,13 +3,14 @@ import os
 
 from celery import Celery
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'bmds_server.settings.production')
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'main.settings.production')
 
 from django.conf import settings  # noqa
 
-app = Celery('bmds_server')
+app = Celery('main')
 app.config_from_object('django.conf:settings')
 app.autodiscover_tasks(lambda: settings.INSTALLED_APPS)
+
 
 @app.task(bind=True)
 def debug_task(self):

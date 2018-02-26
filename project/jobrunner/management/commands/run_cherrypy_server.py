@@ -7,7 +7,7 @@ import os
 from django.core.management.base import BaseCommand
 from django.conf import settings
 
-from bmds_server.wsgi import application
+from main.wsgi import application
 
 
 HELP_TEXT = """Serve application + static files using CherryPy WSGI server."""

@@ -22,7 +22,7 @@ tmux split-window -h
 tmux send-keys -t 0 "workon bmds-server && cd project" enter
 tmux send-keys -t 1 "workon bmds-server && cd project && python manage.py shell" enter
 tmux send-keys -t 2 "workon bmds-server && cd project && python manage.py runserver 5550" enter
-tmux send-keys -t 3 "workon bmds-server && cd project && celery worker --app=bmds_server --loglevel=info --events" enter
+tmux send-keys -t 3 "workon bmds-server && cd project && celery worker --app=main --loglevel=info --events" enter
 tmux send-keys -t 4 "workon bmds-server && make servedocs" enter
 
 # attach to shell

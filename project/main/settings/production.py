@@ -1,5 +1,5 @@
 import os
-from bmds_server.settings.base import *  # noqa
+from .base import *  # noqa
 
 DEBUG = False
 

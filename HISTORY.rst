@@ -7,7 +7,9 @@ v0.5 (NEXT)
 * Refactor application
 * Updated deployment procedure; use ini file instead of environment variables
 * Update to `BMDS v0.9.1`_
+* Update to `Bootstrap v4`_
 
+.. _`Bootstrap v4`: https://getbootstrap.com/docs/4.0/getting-started/introduction/
 .. _`BMDS v0.9.1`: https://bmds.readthedocs.io/en/latest/history.html#v0-9-1-2018-02-22
 
 

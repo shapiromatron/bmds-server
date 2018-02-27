@@ -9,19 +9,11 @@ Run a webserver that will batch process dose-response data using the US EPA's
 benchmark dose modeling software (`BMDS`_).  Under the hood, this web application
 uses the `BMDS Python interface`_.
 
-.. _`BMDS Python interface`: https://pypi.python.org/pypi/bmds
-.. _`BMDS`: https://www.epa.gov/bmds
-
-.. note::
-
-    Don't want to create your own server, and want to try mine? Sure, just `ping me!`_
-
-.. _`BMDS server`: https://github.com/shapiromatron/bmds-server
-.. _`ping me!`: mailto:shapiromatron@gmail.com
-
-
 To use the webserver, specify a new BMDS Job using a input file formatted
 like this.
+
+.. _`BMDS`: https://www.epa.gov/bmds
+.. _`BMDS Python interface`: https://pypi.python.org/pypi/bmds
 
 .. code:: javascript
 

@@ -12,7 +12,7 @@ applications.
 3. Check the status of this job id every few seconds (or minutes, depending on the job size). When the job is complete, download results (or errors).
 
 .. caution::
-    By default, API requests are throttled to 10/minute; please don't poll for results more quickly than this or you will be throttled.
+    By default, API requests are throttled to 120/minute; please don't poll for results more quickly than this or you will be throttled.
 
 Python example
 --------------

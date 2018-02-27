@@ -52,25 +52,23 @@ Install the software in a location where IIS will have access. In the example ab
     pip uninstall bmds
     pip install -e ..\bmds
 
+    # install application services on Windows; to restart automatically on
+    # reboot set startup type to "automatic (delayed)" in Windows Event Viewer.
+    python ..\bin\services.py install
+
 To deploy
 ~~~~~~~~~
 
 First-time and (updates)::
 
-    call c:\apps\venv\Scripts\activate.bat
-    cd c:\apps\bmds-server\project
+    call C:\apps\venv\Scripts\activate.bat
+    cd C:\apps\bmds-server\project
+
     pip install -r ..\requirements\production.txt
+    pip uninstall bmds
+    pip install -e ..\..\bmds
+
     python manage.py migrate
-    python manage.py collectstatic --noinput
-
-Run web application::
-
-    call c:\apps\venv\Scripts\activate.bat
-    cd c:\apps\bmds-server\project
-    python manage.py run webapp
-
-To run celery worker::
-
-    call c:\apps\venv\Scripts\activate.bat
-    cd c:\apps\bmds-server\project
-    python manage.py run celery_worker
+    python manage.py collectstatic --no-input
+    python ..\bin\services.py update
+    python ..\bin\services.py restart

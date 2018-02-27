@@ -1,9 +1,5 @@
 -r base.txt
 
-pip==9.0.1
-wheel==0.29.0
-tox==2.4.1
-
 Sphinx==1.4.8
 watchdog==0.8.3
 

@@ -2,10 +2,12 @@
 History
 =======
 
-v0.5 (NEXT)
+v0.5 (2017-02-27)
 -----------------
 * Refactor application
-* Updated deployment procedure; use ini file instead of environment variables
+* Updated deployment procedure
+    - use ini file instead of environment variables
+    - add instructions for installing as Windows services
 * Update to `BMDS v0.9.1`_
 * Update to `Bootstrap v4`_
 

@@ -59,6 +59,18 @@ Paths can change as needed, but in this case all content will be installed in ``
 
 To setup the services so that they'll restart automatically on reboot, set startup type to "automatic (delayed)" in Windows Event Viewer.
 
+In a virtualenv, you'll need to install pywin32 on the system (thanks `stack overflow`_):
+
+.. _`stack overflow`: https://stackoverflow.com/a/34942168/906385
+
+.. code-block:: batch
+
+    call C:\apps\venv\Scripts\activate.bat
+    python C:\apps\venv\Scripts\pywin32_postinstall.py -install
+
+In some cases, you may also need to install pywin32 and pypiwin32 in both virtual environments and the main python install for services to start correctly.
+
+
 To (re)deploy
 ~~~~~~~~~~~~~~
 

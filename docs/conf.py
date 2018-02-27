@@ -8,8 +8,8 @@ master_doc = 'index'
 project = u'BMDS webserver'
 copyright = u'2016, Andy Shapiro'
 author = u'Andy Shapiro'
-version = u'0.1.0'
-release = u'0.1.0'
+version = u'0.5.0'
+release = u'0.5.0'
 
 language = None
 exclude_patterns = []

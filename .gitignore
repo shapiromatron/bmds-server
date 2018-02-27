@@ -30,7 +30,7 @@ _build
 *log*.txt
 
 # ignore celerybeat
-celerybeat-schedule
+*celerybeat-schedule.db
 
 # keep folders, but not content
 public/*
@@ -40,10 +40,10 @@ public/*
 logs/*
 !logs/.gitkeep
 
-# setting overrides
-bmds_server/settings/local.py
+# settings
+project/bmds_server/settings/local.py
 /web.config
-/secrets.json
+settings.ini
 
 # keep folders, but not content
 notebooks/*

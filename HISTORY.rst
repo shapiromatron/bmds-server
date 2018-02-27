@@ -2,6 +2,19 @@
 History
 =======
 
+v0.5 (2017-02-27)
+-----------------
+* Refactor application
+* Updated deployment procedure
+    - use ini file instead of environment variables
+    - add instructions for installing as Windows services
+* Update to `BMDS v0.9.1`_
+* Update to `Bootstrap v4`_
+
+.. _`Bootstrap v4`: https://getbootstrap.com/docs/4.0/getting-started/introduction/
+.. _`BMDS v0.9.1`: https://bmds.readthedocs.io/en/latest/history.html#v0-9-1-2018-02-22
+
+
 v0.4.1 (2017-11-07)
 -------------------
 * Update to `BMDS v0.9.0`_ (added BMDS version 2.7)

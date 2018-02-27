@@ -1,0 +1,12 @@
+.navbar {
+    margin-bottom: 0.5em;
+}
+
+label {
+    font-weight: bold;
+}
+
+textarea {
+    font-family: Consolas, monaco, monospace;
+    height: 25em;
+}

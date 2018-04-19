@@ -2,6 +2,12 @@
 History
 =======
 
+v0.5.1 (2018-04-19)
+-------------------
+* Update to `BMDS v0.10.0`_
+
+.. _`BMDS v0.10.0`: https://bmds.readthedocs.io/en/latest/history.html#v0-10-0-2017-04-11
+
 v0.5 (2017-02-27)
 -----------------
 * Refactor application

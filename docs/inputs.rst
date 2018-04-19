@@ -640,7 +640,7 @@ this would be an object in the ``models`` array
       or decreasing
 - To un-restrict/restrict dichotomous model parameters
     - For Weibull, use ``restrict_power`` (1=True, 0=False): default is restricted
-    - For Multistage, use ``restrict_beta`` (1=True, 0=False): default is restricted
+    - For Multistage/QuantalLinear, use ``restrict_beta`` (1=True, 0=False): default is restricted
     - For Multistage-Cancer, same as Multistage
     - For Gamma, use ``restrict_power`` (1=True, 0=False): default is restricted
     - For LogProbit, use ``restrict_slope`` (1=True, 0=False): default is restricted

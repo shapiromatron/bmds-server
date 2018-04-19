@@ -7,4 +7,4 @@ jsonschema==2.6.0
 XlsxWriter==0.9.3
 python-decouple==3.1
 
-bmds==0.9.1
+bmds==0.10.0

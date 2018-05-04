@@ -5,6 +5,8 @@ BMDS webserver
         :target: https://bmds-server.readthedocs.io/en/master/
         :alt: Documentation Status
 
+**Documentation:** https://bmds-server.readthedocs.io/en/master/index.html
+
 Run a webserver that will batch process dose-response data using the US EPA's
 benchmark dose modeling software (`BMDS`_).  Under the hood, this web application
 uses the `BMDS Python interface`_.

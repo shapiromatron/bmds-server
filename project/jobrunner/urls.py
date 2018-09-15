@@ -11,13 +11,9 @@ router.register("job", api.JobViewset, base_name="job")
 router.register("dfile", api.DfileExecutorViewset, base_name="dfile")
 
 urlpatterns = [
-    url(r"^api/", include(router.urls, namespace="api")),
-    url(r"^$", views.Home.as_view(), name="home"),
-    url(r"^job/q/$", views.JobQuery.as_view(), name="job_query"),
-    url(
-        r"^job/(?P<pk>[\w]{8}-[\w]{4}-[\w]{4}-[\w]{4}-[\w]{12})/$",
-        views.JobDetail.as_view(),
-        name="job",
-    ),
-    url(r"^batcave/", admin.site.urls),
+    path("api/", include((router.urls, "jobrunner"), namespace="api")),
+    path("", views.Home.as_view(), name="home"),
+    path("job/q/", views.JobQuery.as_view(), name="job_query"),
+    path("job/<uuid:pk>/", views.JobDetail.as_view(), name="job"),
+    path("batcave/", admin.site.urls),
 ]

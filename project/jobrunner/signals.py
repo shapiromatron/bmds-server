@@ -12,7 +12,7 @@ def start_job(sender, instance, created, **kwargs):
     if created:
         id_ = str(instance.id)
         inputs = json.loads(instance.inputs)
-        immediate = inputs.get('immediate', False)
+        immediate = inputs.get("immediate", False)
         if immediate and settings.ALLOW_BLOCKING_BMDS_REQUESTS:
             instance.try_execute()
         else:

@@ -11,8 +11,8 @@ import win32event
 
 
 # TODO: fix hard coding :(
-PROJECT_PATH = 'C:\\apps\\bmds-server\\project'
-PYTHON_EXE = 'C:\\apps\\venv\\Scripts\\python.exe'
+PROJECT_PATH = "C:\\apps\\bmds-server\\project"
+PYTHON_EXE = "C:\\apps\\venv\\Scripts\\python.exe"
 assert os.path.exists(PROJECT_PATH)
 assert os.path.exists(PYTHON_EXE)
 
@@ -20,13 +20,13 @@ assert os.path.exists(PYTHON_EXE)
 class BaseService(win32serviceutil.ServiceFramework):
 
     # Class ABC attributes
-    _svc_name_ = '<ADD>'
-    _svc_display_name_ = '<ADD>'
-    _svc_cmd_ = '<ADD>'
+    _svc_name_ = "<ADD>"
+    _svc_display_name_ = "<ADD>"
+    _svc_cmd_ = "<ADD>"
 
     PROJECT_PATH = str(Path(PROJECT_PATH).resolve())
-    ROOT_DIR = str(Path(PROJECT_PATH) / '..')
-    LOG_DIR = str(Path(ROOT_DIR) / 'logs')
+    ROOT_DIR = str(Path(PROJECT_PATH) / "..")
+    LOG_DIR = str(Path(ROOT_DIR) / "logs")
     PYTHON_EXE = str(Path(PYTHON_EXE).resolve())
     TIMEOUT = 3000  # milliseconds
 
@@ -35,12 +35,12 @@ class BaseService(win32serviceutil.ServiceFramework):
         self.stop_event = win32event.CreateEvent(None, 0, 0, None)
 
     def SvcStop(self):
-        servicemanager.LogInfoMsg(f'Stopping {self._svc_name_}')
+        servicemanager.LogInfoMsg(f"Stopping {self._svc_name_}")
         self.ReportServiceStatus(win32service.SERVICE_STOP_PENDING)
         win32event.SetEvent(self.stop_event)
 
     def SvcDoRun(self):
-        servicemanager.LogInfoMsg(f'The {self._svc_name_} service has started.')
+        servicemanager.LogInfoMsg(f"The {self._svc_name_} service has started.")
         command = f'"{self.PYTHON_EXE}" {self._svc_cmd_}'
         args = shlex.split(command)
         proc = subprocess.Popen(args, cwd=self.PROJECT_PATH)
@@ -56,38 +56,38 @@ class BaseService(win32serviceutil.ServiceFramework):
 
 
 class WebAppService(BaseService):
-    _svc_name_ = 'bmds_webapp'
-    _svc_display_name_ = 'BMDS Webapp'
-    _svc_cmd_ = 'manage.py run webapp'
+    _svc_name_ = "bmds_webapp"
+    _svc_display_name_ = "BMDS Webapp"
+    _svc_cmd_ = "manage.py run webapp"
 
 
 class CeleryService(BaseService):
-    _svc_name_ = 'bmds_celery_worker'
-    _svc_display_name_ = 'BMDS Celery Worker'
-    _svc_cmd_ = 'manage.py run celery_worker'
+    _svc_name_ = "bmds_celery_worker"
+    _svc_display_name_ = "BMDS Celery Worker"
+    _svc_cmd_ = "manage.py run celery_worker"
 
 
 class CeleryBeatService(BaseService):
-    _svc_name_ = 'bmds_celery_beat'
-    _svc_display_name_ = 'BMDS Celery Beat'
-    _svc_cmd_ = 'manage.py run celery_beat'
+    _svc_name_ = "bmds_celery_beat"
+    _svc_display_name_ = "BMDS Celery Beat"
+    _svc_cmd_ = "manage.py run celery_beat"
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
 
-    invalid_command = 'Command missing: install|remove|update|start|stop|restart|status'
+    invalid_command = "Command missing: install|remove|update|start|stop|restart|status"
     if len(sys.argv) != 2:
         raise ValueError(invalid_command)
 
     cmd = sys.argv[1]
 
-    if cmd in ['install', 'remove', 'update', 'start', 'stop', 'restart']:
+    if cmd in ["install", "remove", "update", "start", "stop", "restart"]:
         win32serviceutil.HandleCommandLine(WebAppService)
         win32serviceutil.HandleCommandLine(CeleryService)
         win32serviceutil.HandleCommandLine(CeleryBeatService)
-    elif cmd == 'status':
-        os.system('sc query bmds_webapp')
-        os.system('sc query bmds_celery_worker')
-        os.system('sc query bmds_celery_beat')
+    elif cmd == "status":
+        os.system("sc query bmds_webapp")
+        os.system("sc query bmds_celery_worker")
+        os.system("sc query bmds_celery_beat")
     else:
         raise ValueError(invalid_command)

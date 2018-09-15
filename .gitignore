@@ -6,6 +6,7 @@ venv/
 
 # Compiled python modules.
 *.py[cod]
+Pipfile.lock
 
 # Setuptools distribution folder.
 /dist/

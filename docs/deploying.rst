@@ -70,6 +70,8 @@ In a virtualenv, you'll need to install pywin32 on the system (thanks `stack ove
 
 In some cases, you may also need to install pywin32 and pypiwin32 in both virtual environments and the main python install for services to start correctly.
 
+Make sure Windows Firewall is setup and that ports 80 and optionally 443 are publicly available.
+
 
 To (re)deploy
 ~~~~~~~~~~~~~~

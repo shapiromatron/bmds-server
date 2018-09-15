@@ -3,7 +3,7 @@ import bmds
 from datetime import timedelta
 from django.db import models
 from django.conf import settings
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.db import connection
 from django.utils.timezone import now
 import json
@@ -18,36 +18,28 @@ logger = logging.getLogger(__name__)
 
 
 class Job(models.Model):
-    id = models.UUIDField(
-        primary_key=True,
-        default=uuid.uuid4,
-        editable=False)
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     inputs = models.TextField()
-    outputs = models.TextField(
-        blank=True)
-    errors = models.TextField(
-        blank=True)
-    created = models.DateTimeField(
-        auto_now_add=True)
-    started = models.DateTimeField(
-        null=True)
-    ended = models.DateTimeField(
-        null=True)
+    outputs = models.TextField(blank=True)
+    errors = models.TextField(blank=True)
+    created = models.DateTimeField(auto_now_add=True)
+    started = models.DateTimeField(null=True)
+    ended = models.DateTimeField(null=True)
 
     def __str__(self):
         return str(self.id)
 
     def get_absolute_url(self):
-        return reverse('job', args=(str(self.id), ))
+        return reverse("job", args=(str(self.id),))
 
     def get_input_url(self):
-        return reverse('api:job-inputs', args=(str(self.id), ))
+        return reverse("api:job-inputs", args=(str(self.id),))
 
     def get_output_url(self):
-        return reverse('api:job-outputs', args=(str(self.id), ))
+        return reverse("api:job-outputs", args=(str(self.id),))
 
     def get_excel_url(self):
-        return reverse('api:job-excel', args=(str(self.id), ))
+        return reverse("api:job-excel", args=(str(self.id),))
 
     @property
     def is_finished(self):
@@ -61,52 +53,48 @@ class Job(models.Model):
     def delete_old_jobs(cls):
         oldest_to_keep = now() - timedelta(days=settings.DAYS_TO_KEEP_JOBS)
         qs = cls.objects.filter(created__lt=oldest_to_keep)
-        logger.info('Removing {} old BMDS jobs'.format(qs.count()))
+        logger.info("Removing {} old BMDS jobs".format(qs.count()))
         qs.delete()
         with connection.cursor() as cursor:
             # required for sqlite3 to actually delete data
-            cursor.execute('vacuum')
+            cursor.execute("vacuum")
 
     @staticmethod
     def build_session(inputs, dataset):
 
-        bmds_version = inputs['bmds_version']
-        dataset_type = inputs['dataset_type']
-        models = inputs.get('models')
-        bmr = inputs.get('bmr')
+        bmds_version = inputs["bmds_version"]
+        dataset_type = inputs["dataset_type"]
+        models = inputs.get("models")
+        bmr = inputs.get("bmr")
 
         # build dataset
         if dataset_type == bmds.constants.CONTINUOUS:
             dataset = bmds.ContinuousDataset(
-                doses=dataset['doses'],
-                ns=dataset['ns'],
-                means=dataset['means'],
-                stdevs=dataset['stdevs']
+                doses=dataset["doses"],
+                ns=dataset["ns"],
+                means=dataset["means"],
+                stdevs=dataset["stdevs"],
             )
         elif dataset_type == bmds.constants.CONTINUOUS_INDIVIDUAL:
             dataset = bmds.ContinuousIndividualDataset(
-                doses=dataset['doses'],
-                responses=dataset['responses']
+                doses=dataset["doses"], responses=dataset["responses"]
             )
         else:
             dataset = bmds.DichotomousDataset(
-                doses=dataset['doses'],
-                ns=dataset['ns'],
-                incidences=dataset['incidences'],
+                doses=dataset["doses"],
+                ns=dataset["ns"],
+                incidences=dataset["incidences"],
             )
 
         # build session
-        session = bmds.BMDS.versions[bmds_version](
-            dataset_type,
-            dataset=dataset
-        )
+        session = bmds.BMDS.versions[bmds_version](dataset_type, dataset=dataset)
 
         # get BMR
         global_overrides = {}
         if bmr is not None:
             global_overrides = {
-                'bmr': bmr['value'],
-                'bmr_type': bmds.constants.BMR_CROSSWALK[dataset_type][bmr['type']],
+                "bmr": bmr["value"],
+                "bmr_type": bmds.constants.BMR_CROSSWALK[dataset_type][bmr["type"]],
             }
 
         # Add models to session
@@ -115,9 +103,9 @@ class Job(models.Model):
         else:
             for model in models:
                 overrides = deepcopy(global_overrides)
-                if 'settings' in model:
-                    overrides.update(model['settings'])
-                session.add_model(model['name'], overrides=overrides)
+                if "settings" in model:
+                    overrides.update(model["settings"])
+                session.add_model(model["name"], overrides=overrides)
 
         return session
 
@@ -140,10 +128,7 @@ class Job(models.Model):
         try:
             return self.run_session(inputs, dataset, i, recommend)
         except Exception:
-            exception = dict(
-                dataset=dataset,
-                error=traceback.format_exc(),
-            )
+            exception = dict(dataset=dataset, error=traceback.format_exc())
             logger.error(exception)
             return exception
 
@@ -162,7 +147,7 @@ class Job(models.Model):
         # save output; override default dataset export to optionally
         # include additional metadata in the dataset specified over JSON.
         output = session.to_dict(i)
-        output['dataset'] = dataset
+        output["dataset"] = dataset
 
         return output
 
@@ -173,23 +158,19 @@ class Job(models.Model):
 
         inputs = json.loads(self.inputs)
 
-        recommend = inputs.get('recommend', True)
+        recommend = inputs.get("recommend", True)
 
         outputs = [
             self.try_run_session(inputs, dataset, i, recommend)
-            for i, dataset in enumerate(inputs['datasets'])
+            for i, dataset in enumerate(inputs["datasets"])
         ]
 
         inputs_no_datasets = deepcopy(inputs)
-        inputs_no_datasets.pop('datasets')
-        obj = dict(
-            job_id=str(self.id),
-            inputs=inputs_no_datasets,
-            outputs=outputs,
-        )
+        inputs_no_datasets.pop("datasets")
+        obj = dict(job_id=str(self.id), inputs=inputs_no_datasets, outputs=outputs)
 
         self.outputs = json.dumps(obj)
-        self.errors = ''
+        self.errors = ""
         self.ended = now()
         self.save()
 

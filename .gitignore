@@ -17,6 +17,7 @@ Pipfile.lock
 /*.egg`
 
 # py.test cache
+.pytest_cache
 .cache/*
 .tox
 

@@ -1,5 +1,5 @@
 from rest_framework import mixins, status, viewsets
-from rest_framework.decorators import detail_route
+from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.renderers import BaseRenderer
 from rest_framework.permissions import IsAdminUser
@@ -35,7 +35,7 @@ class JobViewset(
         content = "Outputs processing; not ready yet."
         return Response(content, status=status.HTTP_204_NO_CONTENT)
 
-    @detail_route(methods=("get",), renderer_classes=(TxtRenderer,))
+    @action(detail=True, methods=("get",), renderer_classes=(TxtRenderer,))
     def inputs(self, request, *args, **kwargs):
         instance = self.get_object()
         fn = u"{}-inputs.json".format(instance.id)
@@ -43,7 +43,7 @@ class JobViewset(
         resp["Content-Disposition"] = u'attachment; filename="{}"'.format(fn)
         return resp
 
-    @detail_route(methods=("get",), renderer_classes=(TxtRenderer,))
+    @action(detail=True, methods=("get",), renderer_classes=(TxtRenderer,))
     def outputs(self, request, *args, **kwargs):
         instance = self.get_object()
 
@@ -55,7 +55,7 @@ class JobViewset(
         resp["Content-Disposition"] = u'attachment; filename="{}"'.format(fn)
         return resp
 
-    @detail_route(methods=("get",), renderer_classes=(XlsxRenderer,))
+    @action(detail=True, methods=("get",), renderer_classes=(XlsxRenderer,))
     def excel(self, request, *args, **kwargs):
         instance = self.get_object()
 

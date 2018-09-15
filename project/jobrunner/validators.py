@@ -9,7 +9,7 @@ latest_bmds = BMDS.latest_version()
 base_schema = {
     "$schema": "http://json-schema.org/draft-04/schema#",
     "title": "BMDS job overview",
-    "description": "BMDS version, dataset and dataset type, model options, recommendation logic, etc.",
+    "description": "BMDS version, dataset and dataset type, model options, recommendation logic, etc.",  # noqa: E501
     "type": "object",
     "properties": {
         "id": {
@@ -21,7 +21,7 @@ base_schema = {
             "enum": list(BMDS.versions.keys()),
         },
         "dataset_type": {
-            "description": "Type of data which should be executed (should be same for all datasets)",
+            "description": "Type of data which should be executed (should be same for all datasets)",  # noqa: E501
             "enum": list(bmds.constants.DTYPES),
         },
         "datasets": {
@@ -35,7 +35,7 @@ base_schema = {
         },
         "bmr": {"description": "A description of the BMR to use", "type": "object"},
         "immediate": {
-            "description": "Should execution start immediately (and potentially block other requests)",
+            "description": "Should execution start immediately (and potentially block other requests)",  # noqa: E501
             "type": "boolean",
             "default": False,
         },
@@ -76,7 +76,7 @@ continuous_dataset_schema = {
                 "items": {"type": "number"},
             },
             "stdevs": {
-                "description": "An array of response standard-deviations (float), one for each dose-group",
+                "description": "An array of response standard-deviations (float), one for each dose-group",  # noqa: E501
                 "type": "array",
                 "minItems": 3,
                 "items": {"type": "number"},

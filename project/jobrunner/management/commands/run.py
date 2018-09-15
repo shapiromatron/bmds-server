@@ -1,10 +1,11 @@
+from enum import Enum
+import logging
+from os.path import join
+
 from cheroot import wsgi
 import cherrypy
 from django.conf import settings
 from django.core.management.base import BaseCommand
-from enum import Enum
-import logging
-from os.path import join
 
 
 class ApplicationChoices(Enum):

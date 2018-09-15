@@ -1,4 +1,5 @@
 from copy import deepcopy
+
 from jobrunner.models import Job
 
 from .fixtures import *  # noqa

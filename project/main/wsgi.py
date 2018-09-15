@@ -1,5 +1,6 @@
-from decouple import config
 import os
+
+from decouple import config
 from django.core.wsgi import get_wsgi_application
 
 os.environ.setdefault(

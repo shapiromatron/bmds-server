@@ -1,6 +1,7 @@
+import os
+
 from celery import Celery
 from decouple import config
-import os
 
 
 os.environ.setdefault(

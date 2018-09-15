@@ -1,5 +1,5 @@
 from django.contrib import messages
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.views.generic import RedirectView, DetailView
 from django.views.generic.edit import CreateView
 from django.conf import settings

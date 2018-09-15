@@ -1,8 +1,10 @@
 from django.conf.urls import include, url
 from django.contrib import admin
+from django.urls import path
 from rest_framework.routers import DefaultRouter
 
 from jobrunner import views, api
+
 
 router = DefaultRouter()
 router.register("job", api.JobViewset, base_name="job")

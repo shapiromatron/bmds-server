@@ -1,7 +1,9 @@
 #!/usr/bin/env python
-from decouple import config
 import os
 import sys
+
+from decouple import config
+
 
 if __name__ == "__main__":
     os.environ.setdefault(

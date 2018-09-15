@@ -1,6 +1,7 @@
-from django.test import Client
 import json
 import time
+
+from django.test import Client
 import pytest
 
 from .fixtures import *  # noqa

@@ -1,10 +1,11 @@
+import json
+import sys
+
 import bmds
 from django.contrib.auth.models import User
-import json
 from rest_framework.authtoken.models import Token
 from rest_framework.test import APIClient
 import pytest
-import sys
 
 from .fixtures import *  # noqa
 

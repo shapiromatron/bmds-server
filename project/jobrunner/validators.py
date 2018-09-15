@@ -1,8 +1,8 @@
 from copy import deepcopy
+import json
+
 import bmds
 from bmds.session import BMDS
-
-import json
 import jsonschema
 
 latest_bmds = BMDS.latest_version()

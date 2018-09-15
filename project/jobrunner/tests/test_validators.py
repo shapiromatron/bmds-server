@@ -1,5 +1,6 @@
 from copy import deepcopy
 import json
+
 import jsonschema
 import pytest
 

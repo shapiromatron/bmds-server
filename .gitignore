@@ -42,7 +42,8 @@ logs/*
 !logs/.gitkeep
 
 # settings
-project/bmds_server/settings/local.py
+.env
+project/main/settings/local.py
 /web.config
 settings.ini
 

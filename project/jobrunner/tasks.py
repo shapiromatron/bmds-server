@@ -1,6 +1,7 @@
+from datetime import timedelta
+
 from celery.utils.log import get_task_logger
 from celery.decorators import task, periodic_task
-from datetime import timedelta
 from django.apps import apps
 from django.utils.timezone import now
 

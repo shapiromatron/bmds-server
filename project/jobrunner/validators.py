@@ -154,7 +154,10 @@ optional_dataset_props = {
     "xlabel": {"description": "An (optional) x-label for plots", "type": "string"},
     "ylabel": {"description": "An (optional) y-label for plots", "type": "string"},
     "dose_units": {"description": "(optional) dose units for reporting", "type": "string"},
-    "response_units": {"description": "(optional) response units for reporting", "type": "string"},
+    "response_units": {
+        "description": "(optional) response units for reporting",
+        "type": "string",
+    },  # noqa: E501
 }
 continuous_dataset_schema["items"]["properties"].update(optional_dataset_props)
 continuous_individual_dataset_schema["items"]["properties"].update(optional_dataset_props)

@@ -14,7 +14,6 @@ class Command(BaseCommand):
         oldest_to_keep = now() - timedelta(days=settings.DAYS_TO_KEEP_JOBS)
         Job = apps.get_model("jobrunner", "Job")
         qs = Job.objects.filter(created__lt=oldest_to_keep)
-        self.stdout.write(
-            "Deleting {} jobs created before {}\n".format(qs.count(), oldest_to_keep.strftime("%c"))
-        )
+        keep_time = oldest_to_keep.strftime("%c")
+        self.stdout.write("Deleting {} jobs created before {}\n".format(qs.count(), keep_time))
         qs.delete()

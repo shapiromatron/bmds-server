@@ -23,5 +23,8 @@ CherryPy = "==18.0.1"
 black = "*"
 "flake8" = "*"
 
+[pipenv]
+allow_prereleases = true
+
 [requires]
 python_version = "3.6"

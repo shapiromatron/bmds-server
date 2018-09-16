@@ -20,6 +20,8 @@ Sphinx = "==1.8.0"
 CherryPy = "==18.0.1"
 
 [dev-packages]
+black = "*"
+"flake8" = "*"
 
 [requires]
 python_version = "3.6"

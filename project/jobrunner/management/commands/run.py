@@ -16,7 +16,7 @@ class ApplicationChoices(Enum):
 
 class Command(BaseCommand):
 
-    help = "Delete old results which are older than N days."
+    help = "Run selected application."
 
     def add_arguments(self, parser):
         parser.add_argument(
@@ -61,9 +61,7 @@ class Command(BaseCommand):
         from celery.bin import worker
 
         worker.worker(app=app).run(
-            loglevel="INFO",
-            logfile=join(settings.ROOT_DIR, "logs", "celery.log"),
-            events=True,
+            loglevel="INFO", logfile=join(settings.ROOT_DIR, "logs", "celery.log"), events=True
         )
 
     def run_celerybeat(self):

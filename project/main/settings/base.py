@@ -63,9 +63,7 @@ DATABASES = {
 LOGIN_URL = "admin:login"
 
 AUTH_PASSWORD_VALIDATORS = [
-    {
-        "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator"
-    },
+    {"NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator"},
     {"NAME": "django.contrib.auth.password_validation.MinimumLengthValidator"},
     {"NAME": "django.contrib.auth.password_validation.CommonPasswordValidator"},
     {"NAME": "django.contrib.auth.password_validation.NumericPasswordValidator"},
@@ -88,20 +86,14 @@ LOGGING = {
     "version": 1,
     "disable_existing_loggers": False,
     "filters": {"require_debug_false": {"()": "django.utils.log.RequireDebugFalse"}},
-    "formatters": {
-        "basic": {"format": "%(asctime)s %(name)-20s %(levelname)-8s %(message)s"}
-    },
+    "formatters": {"basic": {"format": "%(asctime)s %(name)-20s %(levelname)-8s %(message)s"}},
     "handlers": {
         "mail_admins": {
             "level": "ERROR",
             "filters": ["require_debug_false"],
             "class": "django.utils.log.AdminEmailHandler",
         },
-        "console": {
-            "level": "DEBUG",
-            "class": "logging.StreamHandler",
-            "formatter": "basic",
-        },
+        "console": {"level": "DEBUG", "class": "logging.StreamHandler", "formatter": "basic"},
         "file": {
             "level": "DEBUG",
             "class": "logging.handlers.RotatingFileHandler",
@@ -114,11 +106,7 @@ LOGGING = {
     },
     "loggers": {
         "django.security.DisallowedHost": {"handlers": ["null"], "propagate": False},
-        "django.request": {
-            "handlers": ["mail_admins"],
-            "level": "ERROR",
-            "propagate": True,
-        },
+        "django.request": {"handlers": ["mail_admins"], "level": "ERROR", "propagate": True},
         "": {"handlers": ["file"], "level": "DEBUG"},
     },
 }
@@ -146,6 +134,4 @@ REST_FRAMEWORK = {
 
 DAYS_TO_KEEP_JOBS = 7
 
-ALLOW_BLOCKING_BMDS_REQUESTS = config(
-    "ALLOW_BLOCKING_BMDS_REQUESTS", default=False, cast=bool
-)
+ALLOW_BLOCKING_BMDS_REQUESTS = config("ALLOW_BLOCKING_BMDS_REQUESTS", default=False, cast=bool)

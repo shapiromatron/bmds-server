@@ -25,9 +25,7 @@ class XlsxRenderer(BaseRenderer):
         return wb
 
 
-class JobViewset(
-    mixins.CreateModelMixin, mixins.RetrieveModelMixin, viewsets.GenericViewSet
-):
+class JobViewset(mixins.CreateModelMixin, mixins.RetrieveModelMixin, viewsets.GenericViewSet):
     def get_serializer_class(self):
         return serializers.JobSerializer
 
@@ -38,9 +36,9 @@ class JobViewset(
     @action(detail=True, methods=("get",), renderer_classes=(TxtRenderer,))
     def inputs(self, request, *args, **kwargs):
         instance = self.get_object()
-        fn = u"{}-inputs.json".format(instance.id)
+        fn = "{}-inputs.json".format(instance.id)
         resp = Response(instance.inputs)
-        resp["Content-Disposition"] = u'attachment; filename="{}"'.format(fn)
+        resp["Content-Disposition"] = 'attachment; filename="{}"'.format(fn)
         return resp
 
     @action(detail=True, methods=("get",), renderer_classes=(TxtRenderer,))
@@ -50,9 +48,9 @@ class JobViewset(
         if not instance.is_finished:
             return self.not_ready_yet()
 
-        fn = u"{}-outputs.json".format(instance.id)
+        fn = "{}-outputs.json".format(instance.id)
         resp = Response(instance.outputs)
-        resp["Content-Disposition"] = u'attachment; filename="{}"'.format(fn)
+        resp["Content-Disposition"] = 'attachment; filename="{}"'.format(fn)
         return resp
 
     @action(detail=True, methods=("get",), renderer_classes=(XlsxRenderer,))
@@ -64,7 +62,7 @@ class JobViewset(
 
         fn, wb = instance.get_excel()
         resp = Response(wb)
-        resp["Content-Disposition"] = u'attachment; filename="{}"'.format(fn)
+        resp["Content-Disposition"] = 'attachment; filename="{}"'.format(fn)
         return resp
 
     def get_queryset(self):

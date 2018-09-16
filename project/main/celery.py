@@ -5,8 +5,7 @@ from decouple import config
 
 
 os.environ.setdefault(
-    "DJANGO_SETTINGS_MODULE",
-    config("DJANGO_SETTINGS_MODULE", default="main.settings.production"),
+    "DJANGO_SETTINGS_MODULE", config("DJANGO_SETTINGS_MODULE", default="main.settings.production")
 )
 
 from django.conf import settings  # noqa

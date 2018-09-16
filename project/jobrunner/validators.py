@@ -29,10 +29,7 @@ base_schema = {
             "minItems": 1,
             "type": "array",
         },
-        "models": {
-            "description": "An array of models which should be used",
-            "type": "array",
-        },
+        "models": {"description": "An array of models which should be used", "type": "array"},
         "bmr": {"description": "A description of the BMR to use", "type": "object"},
         "immediate": {
             "description": "Should execution start immediately (and potentially block other requests)",  # noqa: E501
@@ -156,19 +153,11 @@ optional_dataset_props = {
     },
     "xlabel": {"description": "An (optional) x-label for plots", "type": "string"},
     "ylabel": {"description": "An (optional) y-label for plots", "type": "string"},
-    "dose_units": {
-        "description": "(optional) dose units for reporting",
-        "type": "string",
-    },
-    "response_units": {
-        "description": "(optional) response units for reporting",
-        "type": "string",
-    },
+    "dose_units": {"description": "(optional) dose units for reporting", "type": "string"},
+    "response_units": {"description": "(optional) response units for reporting", "type": "string"},
 }
 continuous_dataset_schema["items"]["properties"].update(optional_dataset_props)
-continuous_individual_dataset_schema["items"]["properties"].update(
-    optional_dataset_props
-)
+continuous_individual_dataset_schema["items"]["properties"].update(optional_dataset_props)
 dichotomous_dataset_schema["items"]["properties"].update(optional_dataset_props)
 
 
@@ -184,9 +173,7 @@ d_model_schema = {
         "properties": {
             "name": {
                 "description": "BMDS model name",
-                "enum": list(
-                    latest_bmds.model_options[bmds.constants.DICHOTOMOUS].keys()
-                ),
+                "enum": list(latest_bmds.model_options[bmds.constants.DICHOTOMOUS].keys()),
             },
             "settings": {
                 "description": "BMDS model-settings (model-type specific)",
@@ -221,9 +208,7 @@ d_bmr_schema = {
     "properties": {
         "type": {
             "description": "BMR type",
-            "enum": list(
-                bmds.constants.BMR_CROSSWALK[bmds.constants.DICHOTOMOUS].keys()
-            ),
+            "enum": list(bmds.constants.BMR_CROSSWALK[bmds.constants.DICHOTOMOUS].keys()),
         },
         "value": {"description": "BMR value", "type": "number", "minimum": 0},
     },

@@ -32,9 +32,7 @@ PUBLIC_ROOT = join(ROOT_DIR, "public")
 STATIC_ROOT = join(PUBLIC_ROOT, "static")
 MEDIA_ROOT = join(PUBLIC_ROOT, "media")
 
-LOGGING["handlers"]["file"].update(
-    level="INFO", filename=join(ROOT_DIR, "logs", "django.log")
-)
+LOGGING["handlers"]["file"].update(level="INFO", filename=join(ROOT_DIR, "logs", "django.log"))
 
 BROKER_URL = config("CELERY_BROKER_URL")
 CELERY_RESULT_BACKEND = config("CELERY_RESULT_BACKEND")

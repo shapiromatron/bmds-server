@@ -82,9 +82,7 @@ class Job(models.Model):
             )
         else:
             dataset = bmds.DichotomousDataset(
-                doses=dataset["doses"],
-                ns=dataset["ns"],
-                incidences=dataset["incidences"],
+                doses=dataset["doses"], ns=dataset["ns"], incidences=dataset["incidences"]
             )
 
         # build session

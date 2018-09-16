@@ -58,9 +58,7 @@ class BMDGenerator(XLSXGeneratorBaseClass):
     @property
     def has_recommended(self):
         if not hasattr(self, "_has_recommended"):
-            self._has_recommended = (
-                "recommended_model_index" in self.content["outputs"][0]
-            )
+            self._has_recommended = "recommended_model_index" in self.content["outputs"][0]
         return self._has_recommended
 
     def _write_datasets(self):
@@ -111,9 +109,7 @@ class BMDGenerator(XLSXGeneratorBaseClass):
         ws.write(1, 1, self.content["inputs"].get("id", None))
 
         # write original inputs w/ datasets
-        self.content["inputs"]["datasets"] = [
-            ds["dataset"] for ds in self.content["outputs"]
-        ]
+        self.content["inputs"]["datasets"] = [ds["dataset"] for ds in self.content["outputs"]]
         ws.write(2, 0, "Input settings", self.bolded)
         txt = json.dumps(self.content["inputs"], indent=2)
         ws.write(2, 1, txt)

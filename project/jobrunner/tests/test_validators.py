@@ -94,9 +94,7 @@ def test_dichotomous_validator(complete_dichotomous):
         jsonschema.validate(data, validators.dichotomous_dataset_schema)
 
 
-def test_dataset_ids(
-    complete_continuous, complete_dichotomous, complete_continuous_individual
-):
+def test_dataset_ids(complete_continuous, complete_dichotomous, complete_continuous_individual):
     # Check that commonly used IDs can be used.
     sets = [
         (complete_continuous["datasets"], validators.continuous_dataset_schema),

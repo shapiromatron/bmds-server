@@ -113,11 +113,14 @@ To (re)deploy
 .. code-block:: batch
 
     :: update code
+    cd C:\apps\bmds
+    git fetch --all
+    git reset --hard origin/master
+
+    :: optional; for bleeding-edge only
     cd C:\apps\bmds-server
     git fetch --all
-    git reset --hard
-    git checkout master
-    git pull origin master
+    git reset --hard origin/master
 
     :: activate environment
     call C:\apps\venv\Scripts\activate.bat
@@ -127,7 +130,7 @@ To (re)deploy
     pip install -r ..\requirements\production.txt
 
     :: optional; for bleeding-edge only
-    pip uninstall bmds
+    pip uninstall bmds -y
     pip install -e ..\..\bmds
 
     :: run django commands and then restart services
@@ -135,3 +138,5 @@ To (re)deploy
     python manage.py collectstatic --no-input
     python ..\bin\services.py update
     python ..\bin\services.py restart
+
+    pause

@@ -61,8 +61,4 @@ for dataset in outputs["outputs"]:
     print("Dataset: {}".format(json.dumps(dataset["dataset"], indent=2)))
     print("Number of models: {}".format(len(dataset["models"])))
     for model in dataset["models"]:
-        print(
-            "  {}: BMD -> {}".format(
-                model["output"]["model_name"], model["output"]["BMD"]
-            )
-        )
+        print("  {}: BMD -> {}".format(model["output"]["model_name"], model["output"]["BMD"]))

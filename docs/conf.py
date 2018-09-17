@@ -5,11 +5,11 @@ templates_path = ["_templates"]
 source_suffix = ".rst"
 
 master_doc = "index"
-project = u"BMDS webserver"
-copyright = u"2016, Andy Shapiro"
-author = u"Andy Shapiro"
-version = u"0.5.0"
-release = u"0.5.0"
+project = "BMDS webserver"
+copyright = "2016, Andy Shapiro"
+author = "Andy Shapiro"
+version = "0.5.0"
+release = "0.5.0"
 
 language = None
 exclude_patterns = []
@@ -30,12 +30,6 @@ html_theme_options = {
 }
 html_static_path = ["_static"]
 html_sidebars = {
-    "**": [
-        "about.html",
-        "navigation.html",
-        "relations.html",
-        "searchbox.html",
-        "donate.html",
-    ]
+    "**": ["about.html", "navigation.html", "relations.html", "searchbox.html", "donate.html"]
 }
 htmlhelp_basename = "BMDSdoc"

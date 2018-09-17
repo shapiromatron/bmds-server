@@ -5,12 +5,12 @@ History
 v0.6 (2018-09-16)
 -------------------
 * Update to `BMDS v0.11.0`_
-* Use [black](https://black.readthedocs.io/) to standardize code formatting
+* Use black_ to standardize code formatting
 * Update libraries to latest versions; including Django 2.1 LTS
 * Add CI {tests, black, flake8}
 
 .. _`BMDS v0.11.0`: https://bmds.readthedocs.io/en/latest/history.html#v0-11-0-2018-09-14
-
+.. _black: https://black.readthedocs.io
 
 v0.5.1 (2018-04-19)
 -------------------

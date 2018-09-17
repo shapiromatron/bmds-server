@@ -1,5 +1,5 @@
 from django.contrib import messages
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.views.generic import RedirectView, DetailView
 from django.views.generic.edit import CreateView
 from django.conf import settings
@@ -13,24 +13,21 @@ class Home(CreateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['status_form'] = forms.JobStatusForm()
-        context['days_to_keep_jobs'] = settings.DAYS_TO_KEEP_JOBS
+        context["status_form"] = forms.JobStatusForm()
+        context["days_to_keep_jobs"] = settings.DAYS_TO_KEEP_JOBS
         return context
 
 
 class JobQuery(RedirectView):
-
     def get_redirect_url(self, *args, **kwargs):
-        id_ = self.request.GET.get('id')
+        id_ = self.request.GET.get("id")
         try:
             return models.Job.objects.get(id=id_).get_absolute_url()
         except Exception:
             messages.info(
-                self.request,
-                'Job not found; please try again.',
-                extra_tags='alert alert-warning'
+                self.request, "Job not found; please try again.", extra_tags="alert alert-warning"
             )
-            return reverse('home')
+            return reverse("home")
 
 
 class JobDetail(DetailView):

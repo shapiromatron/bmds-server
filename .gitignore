@@ -6,6 +6,7 @@ venv/
 
 # Compiled python modules.
 *.py[cod]
+Pipfile.lock
 
 # Setuptools distribution folder.
 /dist/
@@ -16,6 +17,7 @@ venv/
 /*.egg`
 
 # py.test cache
+.pytest_cache
 .cache/*
 .tox
 
@@ -41,7 +43,8 @@ logs/*
 !logs/.gitkeep
 
 # settings
-project/bmds_server/settings/local.py
+.env
+project/main/settings/local.py
 /web.config
 settings.ini
 

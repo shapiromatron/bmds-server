@@ -1,0 +1,14 @@
+sudo: false
+dist: xenial
+language: python
+cache: pip
+python: 3.6
+
+# command to install dependencies, e.g. pip install -r requirements.txt --use-mirrors
+install: pip install pipenv && pipenv install --dev --skip-lock
+
+# command to run tests, e.g. python setup.py test
+script:
+- pipenv run black --check .
+- pipenv run flake8 --config .flake8 --statistics .
+- pipenv run bash -c 'cd project && py.test'

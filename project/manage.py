@@ -1,12 +1,13 @@
 #!/usr/bin/env python
-from decouple import config
 import os
 import sys
 
+from decouple import config
+
+
 if __name__ == "__main__":
     os.environ.setdefault(
-        'DJANGO_SETTINGS_MODULE',
-        config('DJANGO_SETTINGS_MODULE', default='main.settings.local')
+        "DJANGO_SETTINGS_MODULE", config("DJANGO_SETTINGS_MODULE", default="main.settings.local")
     )
     try:
         from django.core.management import execute_from_command_line
@@ -15,7 +16,7 @@ if __name__ == "__main__":
         # issue is really that Django is missing to avoid masking other
         # exceptions on Python 2.
         try:
-            import django
+            import django  # noqa: F401
         except ImportError:
             raise ImportError(
                 "Couldn't import Django. Are you sure it's installed and "

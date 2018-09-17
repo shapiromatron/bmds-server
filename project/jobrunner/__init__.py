@@ -1,1 +1,1 @@
-default_app_config = 'jobrunner.apps.Config'
+default_app_config = "jobrunner.apps.Config"

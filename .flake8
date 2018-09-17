@@ -1,0 +1,13 @@
+[flake8]
+max-line-length = 100
+ignore =
+  E203
+exclude =
+  .git,
+  .tox,
+  bin,
+  docs,
+  logs,
+  notebooks,
+  public,
+  requirements

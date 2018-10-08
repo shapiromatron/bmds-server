@@ -116,11 +116,13 @@ To (re)deploy
     cd C:\apps\bmds
     git fetch --all
     git reset --hard origin/master
+    git checkout master
 
     :: optional; for bleeding-edge only
     cd C:\apps\bmds-server
     git fetch --all
     git reset --hard origin/master
+    git checkout master
 
     :: activate environment
     call C:\apps\venv\Scripts\activate.bat

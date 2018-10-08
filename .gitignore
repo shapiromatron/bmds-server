@@ -51,3 +51,5 @@ settings.ini
 # keep folders, but not content
 notebooks/*
 !notebooks/.gitkeep
+
+.vscode

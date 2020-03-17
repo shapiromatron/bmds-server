@@ -1,7 +1,8 @@
 import json
 import os
-import requests
 import time
+
+import requests
 
 # set the URL root to the address where BMDS server is currently running
 url_root = os.environ.get("BMDS_SERVER_URL", "http://bmds-server.com")

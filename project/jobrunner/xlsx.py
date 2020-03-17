@@ -17,10 +17,10 @@ class XLSXGeneratorBaseClass(object):
         self.bolded = self.wb.add_format({"bold": True})
 
     def get_fn(self):
-        raise NotImplemented("Should return valid filename string")
+        raise NotImplementedError("Should return valid filename string")
 
     def write_content():
-        raise NotImplemented("Should add any content to workbook")
+        raise NotImplementedError("Should add any content to workbook")
 
     def _return_wb(self):
         self.wb.close()

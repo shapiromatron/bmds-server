@@ -1,8 +1,9 @@
 # flake8: noqa
 
-from pathlib import Path
-from decouple import config
 import os
+from pathlib import Path
+
+from decouple import config
 
 PROJECT_NAME = "bmds-server"
 BASE_DIR = str(Path(".").resolve())

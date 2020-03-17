@@ -1,11 +1,10 @@
 from datetime import timedelta
 
+from bmds.drunner import BatchDfileRunner
+from celery.decorators import periodic_task, task
 from celery.utils.log import get_task_logger
-from celery.decorators import task, periodic_task
 from django.apps import apps
 from django.utils.timezone import now
-
-from bmds.drunner import BatchDfileRunner
 
 logger = get_task_logger(__name__)
 

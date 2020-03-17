@@ -1,9 +1,9 @@
-from copy import deepcopy
 import json
 import time
+from copy import deepcopy
 
-from django.test import Client
 import pytest
+from django.test import Client
 
 from .fixtures import *  # noqa
 
@@ -73,7 +73,7 @@ def test_c_success(complete_continuous):
     # check that model is a 3rd order polynomial
     assert model["name"] == "Polynomial-3"
     assert model["model_name"] == "Polynomial"
-    assert model["output"]["parameters"]["beta_3"]["estimate"] == 0.
+    assert model["output"]["parameters"]["beta_3"]["estimate"] == 0.0
 
     # check alternative BMR definition
     assert "Specified effect =           1.5" in model["outfile"]
@@ -109,7 +109,7 @@ def test_ci_success(complete_continuous_individual):
     model = resp.json()["outputs"]["outputs"][0]["models"][0]
 
     # check that model is a 3rd order polynomial
-    assert model["output"]["parameters"]["beta_3"]["estimate"] == 0.
+    assert model["output"]["parameters"]["beta_3"]["estimate"] == 0.0
 
     # check alternative BMR definition
     assert "Specified effect =             1" in model["outfile"]

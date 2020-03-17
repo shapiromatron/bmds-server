@@ -1,5 +1,6 @@
-.PHONY: clean clean-test clean-pyc clean-build docs help
+.PHONY: clean clean-test clean-pyc clean-build docs help lint lint-py lint-js format format-py format-js
 .DEFAULT_GOAL := help
+
 define BROWSER_PYSCRIPT
 import os, webbrowser, sys
 try:
@@ -38,7 +39,7 @@ test: ## This runs all of the tests.
 	#	- Use -k <MATCH> for test matching (e.g. -k test_this_thing)
 	#	- Use -s for displaying print statements (or use pdb)
 	#
-	py.test tests --ds=bmds_server.settings.dev
+	py.test
 
 docs: ## generate Sphinx HTML documentation, including API docs
 	$(MAKE) -C docs clean
@@ -47,3 +48,19 @@ docs: ## generate Sphinx HTML documentation, including API docs
 
 servedocs: docs ## compile the docs watching for changes
 	watchmedo shell-command -p '*.rst' -c '$(MAKE) -C docs html' -R -D .
+
+lint: lint-py lint-js  ## Check for javascript/python for linting issues
+
+format: format-py format-js  ## Modify javascript/python code
+
+lint-py:  ## Check for python formatting issues via black & flake8
+	@black . --check && flake8 .
+
+format-py:  ## Modify python code using black & show flake8 issues
+	@black . && isort -rc -y && flake8 .
+
+lint-js:  ## Check for javascript formatting issues
+	@npm --prefix ./frontend run lint
+
+format-js:  ## Modify javascript code if possible using linters/formatters
+	@npm --prefix ./frontend run format

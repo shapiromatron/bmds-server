@@ -1,8 +1,8 @@
+from django.conf import settings
 from django.contrib import messages
 from django.urls import reverse
-from django.views.generic import RedirectView, DetailView
+from django.views.generic import DetailView, RedirectView
 from django.views.generic.edit import CreateView
-from django.conf import settings
 
 from . import forms, models
 

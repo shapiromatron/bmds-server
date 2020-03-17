@@ -1,9 +1,9 @@
-from enum import Enum
 import logging
+from enum import Enum
 from os.path import join
 
-from cheroot import wsgi
 import cherrypy
+from cheroot import wsgi
 from django.conf import settings
 from django.core.management.base import BaseCommand
 

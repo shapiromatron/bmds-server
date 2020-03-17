@@ -1,19 +1,17 @@
+import json
+import logging
+import traceback
+import uuid
 from copy import deepcopy
 from datetime import timedelta
-import json
-import traceback
-import logging
-import uuid
 
 import bmds
-from django.db import models
 from django.conf import settings
+from django.db import connection, models
 from django.urls import reverse
-from django.db import connection
 from django.utils.timezone import now
 
 from . import xlsx
-
 
 logger = logging.getLogger(__name__)
 

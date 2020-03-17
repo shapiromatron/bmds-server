@@ -1,14 +1,14 @@
 import os
-from pathlib import Path
-import servicemanager
-import subprocess
 import shlex
+import subprocess
 import sys
-import win32service
-import win32serviceutil
+from pathlib import Path
+
+import servicemanager
 import win32api
 import win32event
-
+import win32service
+import win32serviceutil
 
 # TODO: fix hard coding :(
 PROJECT_PATH = "C:\\apps\\bmds-server\\project"

@@ -1,9 +1,10 @@
 # flake8: noqa
 
 from os.path import join
-from decouple import config
-from .base import *  # noqa
 
+from decouple import config
+
+from .base import *  # noqa
 
 DEBUG = False
 

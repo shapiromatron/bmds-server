@@ -12,3 +12,9 @@ CELERY_EAGER_PROPAGATES_EXCEPTIONS = True
 
 # disable throttling
 REST_FRAMEWORK = {"DEFAULT_THROTTLE_CLASSES": (), "DEFAULT_THROTTLE_RATES": {}}
+
+try:
+    # load local settings from `local.py` if they exist
+    from .local import *
+except ModuleNotFoundError:
+    pass

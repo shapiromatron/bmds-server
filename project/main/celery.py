@@ -3,12 +3,12 @@ import os
 from celery import Celery
 from decouple import config
 
-
 os.environ.setdefault(
     "DJANGO_SETTINGS_MODULE", config("DJANGO_SETTINGS_MODULE", default="main.settings.production")
 )
 
-from django.conf import settings  # noqa
+from django.conf import settings  # noqa  # isort:skip
+
 
 app = Celery("main")
 app.config_from_object("django.conf:settings")

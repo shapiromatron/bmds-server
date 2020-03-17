@@ -10,5 +10,6 @@ Table of contents:
     quickstart
     inputs
     outputs
+    development
     deploying
     history

@@ -27,18 +27,18 @@ jobs:
     #   run: |
     #     make test
 
-frontend:
-  name: frontend
-  runs-on: ubuntu-18.04
-  steps:
-  - uses: actions/checkout@v1
-  - uses: actions/setup-node@v1
-    with:
-      node-version: '12.x'
-  - name: install
-    run: |
-      npm install -g yarn
-      yarn --cwd ./frontend install
-  - name: lint
-    run: |
-      make lint-js
+  frontend:
+    name: frontend
+    runs-on: ubuntu-18.04
+    steps:
+    - uses: actions/checkout@v1
+    - uses: actions/setup-node@v1
+      with:
+        node-version: '12.x'
+    - name: install
+      run: |
+        npm install -g yarn
+        yarn --cwd ./frontend install
+    - name: lint
+      run: |
+        make lint-js

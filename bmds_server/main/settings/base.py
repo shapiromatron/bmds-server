@@ -76,8 +76,8 @@ USE_I18N = True
 USE_L10N = True
 USE_TZ = True
 
-EMAIL_SUBJECT_PREFIX = "[{}] ".format(PROJECT_NAME)
-DEFAULT_FROM_EMAIL = "webmaster@{}.com".format(PROJECT_NAME)
+EMAIL_SUBJECT_PREFIX = f"[{PROJECT_NAME}] "
+DEFAULT_FROM_EMAIL = f"webmaster@{PROJECT_NAME}.com"
 
 HTTP_PLATFORM_PORT = config("HTTP_PLATFORM_PORT", default=80, cast=int)
 STATIC_URL = "/static/"

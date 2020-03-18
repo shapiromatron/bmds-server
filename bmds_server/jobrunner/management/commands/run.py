@@ -53,7 +53,7 @@ class Command(BaseCommand):
         addr = ("0.0.0.0", settings.HTTP_PLATFORM_PORT)
         dispatcher = wsgi.PathInfoDispatcher({"/": application, "/static": static_app})
         server = wsgi.Server(addr, dispatcher)
-        self.logger.info("Starting webapp: {}".format(server._bind_addr))
+        self.logger.info(f"Starting webapp: {server._bind_addr}")
         server.safe_start()
 
     def run_celery(self):

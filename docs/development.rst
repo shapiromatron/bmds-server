@@ -80,6 +80,18 @@ If you navigate to `localhost`_ and see a website, you're ready to begin coding!
 
 .. _`localhost`: http://127.0.0.1:8000/
 
+To run workers for asynchronous tasks (optional), modify django settings and then start a few more services:
+
+.. code-block:: bash
+
+    # start the workers
+    source venv/bin/activate
+    celery worker --app=bmds_server.main --loglevel=info --events
+
+    # start a crontab
+    source venv/bin/activate
+    celery beat --app=bmds_server.main --loglevel=info
+
 Visual Studio Code settings
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 

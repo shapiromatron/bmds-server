@@ -30,7 +30,7 @@ def test_drunner(complete_continuous):
     assert resp.status_code == 401
 
     # assert response is successful post-login
-    client.credentials(HTTP_AUTHORIZATION="Token {}".format(token.key))
+    client.credentials(HTTP_AUTHORIZATION=f"Token {token.key}")
     resp = client.post("/api/dfile/", payload, format="json")
     assert resp.status_code == 200
 

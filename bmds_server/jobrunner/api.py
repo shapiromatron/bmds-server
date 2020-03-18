@@ -36,7 +36,7 @@ class JobViewset(mixins.CreateModelMixin, mixins.RetrieveModelMixin, viewsets.Ge
     @action(detail=True, methods=("get",), renderer_classes=(TxtRenderer,))
     def inputs(self, request, *args, **kwargs):
         instance = self.get_object()
-        fn = "{}-inputs.json".format(instance.id)
+        fn = f"{instance.id}-inputs.json"
         resp = Response(instance.inputs)
         resp["Content-Disposition"] = 'attachment; filename="{}"'.format(fn)
         return resp
@@ -48,9 +48,9 @@ class JobViewset(mixins.CreateModelMixin, mixins.RetrieveModelMixin, viewsets.Ge
         if not instance.is_finished:
             return self.not_ready_yet()
 
-        fn = "{}-outputs.json".format(instance.id)
+        fn = f"{instance.id}-outputs.json"
         resp = Response(instance.outputs)
-        resp["Content-Disposition"] = 'attachment; filename="{}"'.format(fn)
+        resp["Content-Disposition"] = f'attachment; filename="{fn}"'
         return resp
 
     @action(detail=True, methods=("get",), renderer_classes=(XlsxRenderer,))

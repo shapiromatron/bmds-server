@@ -19,9 +19,10 @@ jobs:
     - name: lint
       run: |
         make lint-py
-    - name: test
-      env:
-        BMDS_REQUEST_URL: ${{ secrets.BMDS_REQUEST_URL }}
-        BMDS_TOKEN: ${{ secrets.BMDS_TOKEN }}
-      run: |
-        make test
+    # TODO: add back
+    # - name: test
+    #   env:
+    #     BMDS_REQUEST_URL: ${{ secrets.BMDS_REQUEST_URL }}
+    #     BMDS_TOKEN: ${{ secrets.BMDS_TOKEN }}
+    #   run: |
+    #     make test

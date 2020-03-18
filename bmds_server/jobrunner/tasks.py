@@ -1,10 +1,7 @@
-from datetime import timedelta
-
 from bmds.drunner import BatchDfileRunner
-from celery.decorators import periodic_task, task
+from celery import task
 from celery.utils.log import get_task_logger
 from django.apps import apps
-from django.utils.timezone import now
 
 logger = get_task_logger(__name__)
 
@@ -12,9 +9,9 @@ logger = get_task_logger(__name__)
 @task()
 def try_execute(id_):
     job = apps.get_model("jobrunner", "Job").objects.get(id=id_)
-    logger.info("starting execution: {}".format(job))
+    logger.info(f"starting execution: {job}")
     job.try_execute()
-    logger.info("finished execution: {}".format(job))
+    logger.info(f"finished execution: {job}")
 
 
 @task()
@@ -26,7 +23,7 @@ def execute_dfile(payload):
     return output
 
 
-@periodic_task(run_every=timedelta(hours=1))
+@task()
 def delete_old_jobs():
-    logger.info("Deleting old jobs at {}.".format(now().strftime("%c")))
+    logger.info("Deleting old jobs")
     apps.get_model("jobrunner", "Job").delete_old_jobs()

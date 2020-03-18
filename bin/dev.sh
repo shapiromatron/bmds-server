@@ -13,17 +13,13 @@ tmux select-pane -t 0
 tmux split-window -h
 
 tmux select-pane -t 2
-tmux split-window -v
-
-tmux resize-pane -t 3 -y 12
 tmux split-window -h
 
 # run commands
-tmux send-keys -t 0 "workon bmds-server && cd project" enter
-tmux send-keys -t 1 "workon bmds-server && cd project && python manage.py shell" enter
-tmux send-keys -t 2 "workon bmds-server && cd project && python manage.py runserver 5550" enter
-tmux send-keys -t 3 "workon bmds-server && cd project && celery worker --app=main --loglevel=info --events" enter
-tmux send-keys -t 4 "workon bmds-server && make servedocs" enter
+tmux send-keys -t 0 "source venv/bin/activate" enter
+tmux send-keys -t 1 "source venv/bin/activate && manage.py shell" enter
+tmux send-keys -t 2 "source venv/bin/activate && manage.py runserver 5550" enter
+tmux send-keys -t 3 "source venv/bin/activate && make servedocs" enter
 
 # attach to shell
 tmux select-pane -t 0

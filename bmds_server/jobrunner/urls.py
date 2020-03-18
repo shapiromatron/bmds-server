@@ -6,8 +6,8 @@ from rest_framework.routers import DefaultRouter
 from . import api, views
 
 router = DefaultRouter()
-router.register("job", api.JobViewset, base_name="job")
-router.register("dfile", api.DfileExecutorViewset, base_name="dfile")
+router.register("job", api.JobViewset, basename="job")
+router.register("dfile", api.DfileExecutorViewset, basename="dfile")
 
 urlpatterns = [
     path("api/", include((router.urls, "jobrunner"), namespace="api")),

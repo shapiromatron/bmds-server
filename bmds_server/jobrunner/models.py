@@ -52,7 +52,7 @@ class Job(models.Model):
     def delete_old_jobs(cls):
         oldest_to_keep = now() - timedelta(days=settings.DAYS_TO_KEEP_JOBS)
         qs = cls.objects.filter(created__lt=oldest_to_keep)
-        logger.info("Removing {} old BMDS jobs".format(qs.count()))
+        logger.info(f"Removing {qs.count()} old BMDS jobs")
         qs.delete()
         with connection.cursor() as cursor:
             # required for sqlite3 to actually delete data

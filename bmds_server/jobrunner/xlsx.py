@@ -42,7 +42,7 @@ class BMDGenerator(XLSXGeneratorBaseClass):
 
     def get_fn(self):
         id_ = self.content["inputs"].get("id", self.content["job_id"])
-        return "{}.xlsx".format(id_)
+        return f"{id_}.xlsx"
 
     def write_content(self):
         self._write_datasets()

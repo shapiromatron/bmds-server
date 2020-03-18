@@ -24,7 +24,8 @@ def test_d_success(complete_dichotomous):
     assert resp.status_code == 201
 
     # poll until job complete
-    url = "/api/job/{}/".format(resp.json()["id"])
+    id_ = resp.json()["id"]
+    url = f"/api/job/{id_}/"
     while True:
         time.sleep(2)
         resp = c.get(url)
@@ -58,7 +59,8 @@ def test_c_success(complete_continuous):
     assert resp.status_code == 201
 
     # poll until job complete
-    url = "/api/job/{}/".format(resp.json()["id"])
+    id_ = resp.json()["id"]
+    url = f"/api/job/{id_}/"
     while True:
         time.sleep(2)
         resp = c.get(url)
@@ -96,7 +98,8 @@ def test_ci_success(complete_continuous_individual):
     assert resp.status_code == 201
 
     # poll until job complete
-    url = "/api/job/{}/".format(resp.json()["id"])
+    id_ = resp.json()["id"]
+    url = f"/api/job/{id_}/"
     while True:
         time.sleep(2)
         resp = c.get(url)

@@ -7,8 +7,6 @@ from django.contrib.auth.models import User
 from rest_framework.authtoken.models import Token
 from rest_framework.test import APIClient
 
-from .fixtures import *  # noqa
-
 
 @pytest.mark.skipif(sys.platform != "win32", reason="requires Windows")
 @pytest.mark.django_db(transaction=False)

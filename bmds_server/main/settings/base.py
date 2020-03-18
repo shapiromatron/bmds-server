@@ -6,8 +6,8 @@ from pathlib import Path
 from decouple import config
 
 PROJECT_NAME = "bmds-server"
-BASE_DIR = str(Path(".").resolve())
-ROOT_DIR = str(Path("..").resolve())
+BASE_DIR = str(Path(__file__).parents[2].resolve())
+ROOT_DIR = str(Path(__file__).parents[3].resolve())
 
 
 INSTALLED_APPS = [
@@ -21,7 +21,7 @@ INSTALLED_APPS = [
     "rest_framework",
     "rest_framework.authtoken",
     # Custom apps
-    "jobrunner",
+    "bmds_server.jobrunner",
 ]
 
 MIDDLEWARE = [
@@ -34,7 +34,7 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
 
-ROOT_URLCONF = "jobrunner.urls"
+ROOT_URLCONF = "bmds_server.jobrunner.urls"
 
 TEMPLATES = [
     {
@@ -52,12 +52,12 @@ TEMPLATES = [
     }
 ]
 
-WSGI_APPLICATION = "main.wsgi.application"
+WSGI_APPLICATION = "bmds_server.main.wsgi.application"
 
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.sqlite3",
-        "NAME": os.path.join(BASE_DIR, "db.sqlite3"),
+        "NAME": os.path.join(ROOT_DIR, "db.sqlite3"),
     }
 }
 
@@ -99,7 +99,7 @@ LOGGING = {
             "level": "DEBUG",
             "class": "logging.handlers.RotatingFileHandler",
             "formatter": "basic",
-            "filename": os.path.join(BASE_DIR, "django.log"),
+            "filename": os.path.join(ROOT_DIR, "django.log"),
             "maxBytes": 10 * 1024 * 1024,  # 10 MB
             "backupCount": 10,
         },

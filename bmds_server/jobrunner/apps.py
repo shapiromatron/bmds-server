@@ -2,7 +2,7 @@ from django.apps import AppConfig
 
 
 class Config(AppConfig):
-    name = "jobrunner"
+    name = "bmds_server.jobrunner"
 
     def ready(self):
         from . import signals  # noqa

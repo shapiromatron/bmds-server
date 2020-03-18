@@ -1,8 +1,6 @@
 from copy import deepcopy
 
-from jobrunner.models import Job
-
-from .fixtures import *  # noqa
+from bmds_server.jobrunner.models import Job
 
 
 def test_model_overrides(complete_continuous):

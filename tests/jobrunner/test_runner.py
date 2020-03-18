@@ -5,8 +5,6 @@ from copy import deepcopy
 import pytest
 from django.test import Client
 
-from .fixtures import *  # noqa
-
 
 @pytest.mark.django_db(transaction=False)
 def test_d_success(complete_dichotomous):

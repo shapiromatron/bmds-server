@@ -4,9 +4,7 @@ from copy import deepcopy
 import jsonschema
 import pytest
 
-from jobrunner import validators
-
-from .fixtures import *  # noqa
+from bmds_server.jobrunner import validators
 
 
 def test_invalid_json():

@@ -3,7 +3,7 @@ from django.contrib import admin
 from django.urls import path
 from rest_framework.routers import DefaultRouter
 
-from jobrunner import api, views
+from . import api, views
 
 router = DefaultRouter()
 router.register("job", api.JobViewset, base_name="job")

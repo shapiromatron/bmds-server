@@ -4,8 +4,6 @@ import time
 import pytest
 from django.test import Client
 
-from .fixtures import *  # noqa
-
 
 @pytest.mark.django_db(transaction=False)
 def test_successful_recommendation(complete_dichotomous):

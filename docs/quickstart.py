@@ -1,7 +1,8 @@
 import json
 import os
-import requests
 import time
+
+import requests
 
 # set the URL root to the address where BMDS server is currently running
 url_root = os.environ.get("BMDS_SERVER_URL", "http://bmds-server.com")
@@ -29,7 +30,7 @@ inputs = {
 }
 
 # We submit the dataset to the job API:
-url = "{}/api/job/".format(url_root)
+url = f"{url_root}/api/job/"
 data = {"inputs": json.dumps(inputs)}
 r = requests.post(url, data)
 
@@ -41,7 +42,7 @@ if r.status_code == 201:
 # Each job is added to a queue on the server; when there are no other jobs
 # running this job will be started. We can poll the results page (in this
 # case waiting 15 seconds between requests) until the job is finished:
-url = "{}/api/job/{}/".format(url_root, job_id)
+url = f"{url_root}/api/job/{job_id}/"
 while True:
     print("Polling outputs... sleeping for 15 seconds...")
     time.sleep(15)
@@ -58,7 +59,11 @@ while True:
 outputs = response["outputs"]
 for dataset in outputs["outputs"]:
     print("----")
-    print("Dataset: {}".format(json.dumps(dataset["dataset"], indent=2)))
-    print("Number of models: {}".format(len(dataset["models"])))
+    ds = json.dumps(dataset["dataset"], indent=2)
+    n_models = len(dataset["models"])
+    print(f"Dataset: {ds}")
+    print(f"Number of models: {n_models}")
     for model in dataset["models"]:
-        print("  {}: BMD -> {}".format(model["output"]["model_name"], model["output"]["BMD"]))
+        name = model["output"]["model_name"]
+        bmd = model["output"]["BMD"]
+        print(f" - {name}: BMD -> {bmd}")

@@ -1,53 +1,35 @@
-# ignore virtual environment
+# paths
+*.egg-info/
+.cache/
+.ipynb_checkpoints/
+.mypy_cache/
+.pytest_cache/
+.tox/
+.vscode/
+bmds_server/static/bundles/
+build/
+dist/
+docs/_build/
+node_modules/
 venv/
 
-# ipython/jupyter notebooks
-.ipynb_checkpoints
-
-# Compiled python modules.
-*.py[cod]
-Pipfile.lock
-
-# Setuptools distribution folder.
-/dist/
-/build/
-
-# Python egg metadata, regenerated from source files by setuptools.
-/*.egg-info
-/*.egg`
-
-# py.test cache
-.pytest_cache
-.cache/*
-.tox
-
-# docs
-_build
-
-# ignore db
-*.sqlite3
-
-# ignore logfiles
+# files
 *.log
+*.py[cod]
+*.sqlite3
+celerybeat-schedule
 *log*.txt
-
-# ignore celerybeat
-*celerybeat-schedule.db
-
-# keep folders, but not content
-public/*
-!public/.gitkeep
-
-# keep folders, but not content
-logs/*
-!logs/.gitkeep
-
-# settings
 .env
-project/main/settings/local.py
-/web.config
+.eslintcache
+bmds_server/main/settings/local.py
 settings.ini
+webpack-stats.json
+yarn.lock
 
-# keep folders, but not content
+# keep folders, ignore contents
+logs/*
 notebooks/*
+public/*
+!logs/.gitkeep
 !notebooks/.gitkeep
+!public/.gitkeep

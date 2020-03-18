@@ -1,7 +1,19 @@
 -r base.txt
 
-Sphinx==1.8.0
-watchdog==0.9.0
+# docs
+Sphinx==2.4.4
+watchdog==0.10.2
 
-pytest==3.8.0
-pytest-django==3.4.2
+# tests
+pytest==5.4.1
+pytest-django==3.8.0
+
+# lint and formatting tools
+black==19.10b0
+flake8==3.7.9
+isort==4.3.21
+flake8-isort==2.9.0
+
+# bmds_server; save in editable mode so it doesn't copy to venv
+# but instead stays in place
+-e .

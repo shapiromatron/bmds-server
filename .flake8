@@ -10,4 +10,5 @@ exclude =
   logs,
   notebooks,
   public,
-  requirements
+  requirements,
+  venv

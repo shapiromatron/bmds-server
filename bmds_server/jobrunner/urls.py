@@ -1,4 +1,5 @@
 from django.conf.urls import include
+from django.conf import settings
 from django.contrib import admin
 from django.urls import path
 from rest_framework.routers import DefaultRouter
@@ -10,9 +11,9 @@ router.register("job", api.JobViewset, basename="job")
 router.register("dfile", api.DfileExecutorViewset, basename="dfile")
 
 urlpatterns = [
-    path("api/", include((router.urls, "jobrunner"), namespace="api")),
+    path("api/v1/", include((router.urls, "jobrunner"), namespace="api")),
     path("", views.Home.as_view(), name="home"),
     path("job/q/", views.JobQuery.as_view(), name="job_query"),
     path("job/<uuid:pk>/", views.JobDetail.as_view(), name="job"),
-    path("batcave/", admin.site.urls),
+    path(f"{settings.ADMIN_URL_PREFIX}/admin/", admin.site.urls),
 ]

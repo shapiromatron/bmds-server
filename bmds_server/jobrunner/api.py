@@ -38,7 +38,7 @@ class JobViewset(mixins.CreateModelMixin, mixins.RetrieveModelMixin, viewsets.Ge
         instance = self.get_object()
         fn = f"{instance.id}-inputs.json"
         resp = Response(instance.inputs)
-        resp["Content-Disposition"] = 'attachment; filename="{}"'.format(fn)
+        resp["Content-Disposition"] = f'attachment; filename="{fn}"'
         return resp
 
     @action(detail=True, methods=("get",), renderer_classes=(TxtRenderer,))

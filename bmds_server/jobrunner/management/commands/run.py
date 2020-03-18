@@ -1,6 +1,5 @@
 import logging
 from enum import Enum
-from os.path import join
 
 import cherrypy
 from cheroot import wsgi
@@ -45,7 +44,7 @@ class Command(BaseCommand):
             config={
                 "/": {
                     "tools.staticdir.on": True,
-                    "tools.staticdir.dir": join(settings.ROOT_DIR, "public"),
+                    "tools.staticdir.dir": str(settings.ROOT_DIR / "public"),
                 }
             },
         )
@@ -61,7 +60,7 @@ class Command(BaseCommand):
         from celery.bin import worker
 
         worker.worker(app=app).run(
-            loglevel="INFO", logfile=join(settings.ROOT_DIR, "logs", "celery.log"), events=True
+            loglevel="INFO", logfile=str(settings.ROOT_DIR / "logs" / "celery.log"), events=True
         )
 
     def run_celerybeat(self):
@@ -69,5 +68,5 @@ class Command(BaseCommand):
         from celery.bin import beat
 
         beat.beat(app=app).run(
-            loglevel="INFO", logfile=join(settings.ROOT_DIR, "logs", "celerybeat.log")
+            loglevel="INFO", logfile=str(settings.ROOT_DIR / "logs" / "celerybeat.log")
         )

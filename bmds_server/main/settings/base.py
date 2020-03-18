@@ -6,8 +6,8 @@ from pathlib import Path
 from decouple import config
 
 PROJECT_NAME = "bmds-server"
-BASE_DIR = str(Path(__file__).parents[2].resolve())
-ROOT_DIR = str(Path(__file__).parents[3].resolve())
+BASE_DIR = Path(__file__).parents[2].resolve()
+ROOT_DIR = Path(__file__).parents[3].resolve()
 
 
 INSTALLED_APPS = [
@@ -20,6 +20,7 @@ INSTALLED_APPS = [
     # 3rd party apps
     "rest_framework",
     "rest_framework.authtoken",
+    "webpack_loader",
     # Custom apps
     "bmds_server.jobrunner",
 ]
@@ -39,7 +40,7 @@ ROOT_URLCONF = "bmds_server.jobrunner.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [os.path.join(BASE_DIR, "templates")],
+        "DIRS": [str(BASE_DIR / "templates")],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
@@ -55,10 +56,7 @@ TEMPLATES = [
 WSGI_APPLICATION = "bmds_server.main.wsgi.application"
 
 DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": os.path.join(ROOT_DIR, "db.sqlite3"),
-    }
+    "default": {"ENGINE": "django.db.backends.sqlite3", "NAME": str(ROOT_DIR / "db.sqlite3"),}
 }
 
 LOGIN_URL = "admin:login"
@@ -81,7 +79,7 @@ DEFAULT_FROM_EMAIL = f"webmaster@{PROJECT_NAME}.com"
 
 HTTP_PLATFORM_PORT = config("HTTP_PLATFORM_PORT", default=80, cast=int)
 STATIC_URL = "/static/"
-STATICFILES_DIRS = [os.path.join(BASE_DIR, "static")]
+STATICFILES_DIRS = [str(BASE_DIR / "static")]
 
 LOGGING = {
     "version": 1,
@@ -99,7 +97,7 @@ LOGGING = {
             "level": "DEBUG",
             "class": "logging.handlers.RotatingFileHandler",
             "formatter": "basic",
-            "filename": os.path.join(ROOT_DIR, "django.log"),
+            "filename": str(ROOT_DIR / "django.log"),
             "maxBytes": 10 * 1024 * 1024,  # 10 MB
             "backupCount": 10,
         },
@@ -131,6 +129,15 @@ REST_FRAMEWORK = {
         "rest_framework.authentication.SessionAuthentication",
         "rest_framework.authentication.TokenAuthentication",
     ),
+}
+
+WEBPACK_LOADER = {
+    "DEFAULT": {
+        "BUNDLE_DIR_NAME": "bundles/",
+        "STATS_FILE": str(ROOT_DIR / "webpack-stats.json"),
+        "POLL_INTERVAL": 0.1,
+        "IGNORE": [".+/.map"],
+    }
 }
 
 DAYS_TO_KEEP_JOBS = 7

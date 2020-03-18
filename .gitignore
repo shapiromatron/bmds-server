@@ -6,9 +6,11 @@
 .pytest_cache/
 .tox/
 .vscode/
+bmds_server/static/bundles/
 build/
 dist/
 docs/_build/
+node_modules/
 venv/
 
 # files
@@ -18,8 +20,11 @@ venv/
 celerybeat-schedule
 *log*.txt
 .env
+.eslintcache
 bmds_server/main/settings/local.py
 settings.ini
+webpack-stats.json
+yarn.lock
 
 # keep folders, ignore contents
 logs/*

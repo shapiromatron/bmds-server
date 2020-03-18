@@ -1,10 +1,8 @@
 # flake8: noqa
 
-from os.path import join
-
 from decouple import config
 
-from .base import *  # noqa
+from .base import *
 
 DEBUG = False
 
@@ -29,11 +27,11 @@ EMAIL_PORT = config("DJANGO_EMAIL_PORT", cast=int)
 EMAIL_USE_SSL = config("DJANGO_EMAIL_USE_SSL", cast=bool)
 DEFAULT_FROM_EMAIL = config("DJANGO_DEFAULT_FROM_EMAIL")
 
-PUBLIC_ROOT = join(ROOT_DIR, "public")
-STATIC_ROOT = join(PUBLIC_ROOT, "static")
-MEDIA_ROOT = join(PUBLIC_ROOT, "media")
+PUBLIC_ROOT = str(ROOT_DIR / "public")
+STATIC_ROOT = str(PUBLIC_ROOT / "static")
+MEDIA_ROOT = str(PUBLIC_ROOT / "media")
 
-LOGGING["handlers"]["file"].update(level="INFO", filename=join(ROOT_DIR, "logs", "django.log"))
+LOGGING["handlers"]["file"].update(level="INFO", filename=str(ROOT_DIR / "logs" / "django.log"))
 
 BROKER_URL = config("CELERY_BROKER_URL")
 CELERY_RESULT_BACKEND = config("CELERY_RESULT_BACKEND")

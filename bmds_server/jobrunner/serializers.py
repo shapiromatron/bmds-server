@@ -19,6 +19,7 @@ class JobSerializer(serializers.ModelSerializer):
             "inputs",
             "errors",
             "outputs",
+            "preferences",
             "is_finished",
             "has_errors",
             "input_url",
@@ -44,6 +45,7 @@ class JobSerializer(serializers.ModelSerializer):
 
     def to_representation(self, obj):
         obj = super(JobSerializer, self).to_representation(obj)
+        # TODO - revisit this
         obj.pop("inputs")
         if obj["is_finished"] and obj["outputs"]:
             obj["outputs"] = json.loads(obj["outputs"])
@@ -51,9 +53,18 @@ class JobSerializer(serializers.ModelSerializer):
             obj.pop("outputs")
         return obj
 
+    # TODO - add password check; validation fails if password isn't correct
+
     def validate_inputs(self, value):
         try:
             validators.validate_input(value)
+        except ValueError as err:
+            raise serializers.ValidationError(err)
+        return value
+
+    def validate_preferences(self, value):
+        try:
+            validators.validate_preferences(value)
         except ValueError as err:
             raise serializers.ValidationError(err)
         return value

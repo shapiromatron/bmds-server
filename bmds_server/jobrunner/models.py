@@ -11,15 +11,17 @@ from django.db import connection, models
 from django.urls import reverse
 from django.utils.timezone import now
 
-from . import xlsx
+from . import utils, xlsx
 
 logger = logging.getLogger(__name__)
 
 
 class Job(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    password = models.CharField(max_length=12, default=utils.random_string, editable=False)
     inputs = models.TextField()
     outputs = models.TextField(blank=True)
+    preferences = models.TextField(blank=True)
     errors = models.TextField(blank=True)
     created = models.DateTimeField(auto_now_add=True)
     started = models.DateTimeField(null=True)
@@ -30,6 +32,12 @@ class Job(models.Model):
 
     def get_absolute_url(self):
         return reverse("job", args=(str(self.id),))
+
+    def get_api_url(self):
+        return reverse("api:job-detail", args=(str(self.id),))
+
+    def get_edit_url(self):
+        return f"{self.get_absolute_url()}?editKey={self.password}"
 
     def get_input_url(self):
         return reverse("api:job-inputs", args=(str(self.id),))

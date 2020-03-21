@@ -279,7 +279,7 @@ def _validate_bmr(dataset_type, bmr):
         raise ValueError("BMR error(s): " + err.message)
 
 
-def validate_input(data):
+def validate_input(data) -> None:
     # Return None if successful, else raise ValueError.
     # ensure data is valid JSON
     try:
@@ -304,3 +304,7 @@ def validate_input(data):
     bmr = jsoned.get("bmr")
     if bmr:
         _validate_bmr(dataset_type, bmr)
+
+
+def validate_preferences(data) -> None:
+    pass

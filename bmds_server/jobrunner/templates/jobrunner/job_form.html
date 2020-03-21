@@ -2,12 +2,14 @@
 
 
 {% block content %}
-<h1>Welcome to the BMDS webserver.</h1>
 <div class="row">
     <div class="col-sm-12">
+        <h1>Welcome to BMDS online.</h1>
+    </div>
+    <div class="col-sm-12">
         <p>
-            This microservice is designed to batch-run the US EPA's
-            benchmark dose modeling software (<a href="https://www.epa.gov/bmds">BMDS</a>).
+            This web-application executes the US EPA's benchmark dose modeling software (<a href="https://www.epa.gov/bmds">BMDS</a>).
+        </p>
         <ul>
             <li>Load example datasets below to view example input files;
                 for more information, see the <a href="http://bmds-server.readthedocs.io/en/latest/">documentation</a>
@@ -16,75 +18,28 @@
                 programming language such as Python, R, or Java. To take
                 advantage of automation, use the <a href="{% url 'api:api-root' %}">API</a>,
                 and see the <a href="http://bmds-server.readthedocs.io/en/latest/quickstart.html">quickstart</a> section.</li>
-            <li>BMDS jobs (inputs/outputs) are deleted after {{days_to_keep_jobs}} days.</li>
         </ul>
-        </p>
     </div>
-</div>
-<div class="row">
-    <div class="col-lg-8">
+    <div class="col-md-8">
         <form method="post">
+            <label for="id_id">Create a new BMDS session:</label>
+            <ul style="padding-bottom: 0.9em;">
+                <li>BMDS results are deleted after {{days_to_keep_jobs}} days.</li>
+            </ul>
             {% csrf_token %}
-            <div class="form-group">
-                <label>Create a new BMDS job:</label>
-                <span class="badge badge-success big-example example_c pull-right">Load an example</span>
-                <textarea
-                    class="form-control" cols="40"
-                    placeholder="Enter input settings for a new job"
-                    id="id_inputs" name="inputs"
-                    rows="10" required>{{form.inputs.value|default_if_none:""}}</textarea>
-                <p class='text-muted'>Load an example <a class="example_c" href="#">continuous summary</a>,
-                    <a class="example_ci" href="#">continuous individual</a>, or <a class="example_d" href="#">dichotomous</a> job. Or, <a href="http://bmds-server.readthedocs.io/en/latest/inputs.html">read the docs</a> learn of all of the possibilities for input files.</p>
-            </div>
-            {% include "jobrunner/_errors.html" with errors=form.inputs.errors %}
-            <button type="submit" class="btn btn-primary btn-block">Submit a new job</button>
+            <button type="submit" class="btn btn-primary btn-block">Create a new BMDS session</button>
         </form>
     </div>
-
-    <div class="col-lg-4">
-
-        <form id="lookup">
+    <div class="col-md-4">
+        <form action="{% url 'job_query' %}" method='get'>
             <div class="form-group">
-                <label for="id_id">Find an BMDS existing job:</label>
+                <label for="id_id">Find an existing BMDS session:</label>
                 <input id="id_id" name="id" type="text"
-                       placeholder="Job ID"
+                       placeholder="Session ID"
                        required="" class="form-control" >
             </div>
-            <button type="submit" class="btn btn-primary btn-block">Check job status</button>
+            <button type="submit" class="btn btn-primary btn-block">View an existing BMDS session</button>
         </form>
     </div>
-
-    <div id='reactDiv'></div>
 </div>
 {% endblock content %}
-
-
-{% block extra-js %}
-<script type="text/javascript">
-$(document).ready(function(){
-
-    // redirect to job
-    $('#lookup').submit(function(e){
-        e.preventDefault();
-        window.location = "{% url 'job_query' %}?id=" + $('#id_id').val();
-        });
-
-    // load example input file
-    $('.example_c').click(function(e){
-        e.preventDefault();
-        $('#id_inputs').val('{\n    "dataset_type": "C",\n    "bmds_version": "BMDS270",\n    "datasets": [\n        {\n            "doses": [0, 100, 500, 2500, 12500],\n            "ns": [9, 10, 9, 10, 6],\n            "means": [33.7, 34.9, 40.9, 56.7, 121.7],\n            "stdevs": [5.0, 5.1, 6.2, 5.9, 18.1]\n        },\n        {\n            "doses": [0, 7, 37, 186],\n            "ns": [25, 25, 25, 24],\n            "means": [2.61, 2.61, 2.96, 4.66],\n            "stdevs": [0.15, 0.19, 0.17, 0.42]\n        }\n    ]\n}');
-    });
-
-    $('.example_ci').click(function(e){
-        e.preventDefault();
-        $('#id_inputs').val('{\n    "dataset_type": "CI",\n    "bmds_version": "BMDS270",\n    "datasets": [\n        {\n            "id": 123,\n            "doses": [\n                0, 0, 0, 0, 0, 0, 0, 0,\n                0.1, 0.1, 0.1, 0.1, 0.1, 0.1,\n                1, 1, 1, 1, 1, 1,\n                10, 10, 10, 10, 10, 10,\n                100, 100, 100, 100, 100, 100,\n                300, 300, 300, 300, 300, 300,\n                500, 500, 500, 500, 500, 500\n            ],\n            "responses": [\n                8.10, 9.30, 9.74, 9.78, 10.05, 10.61, 10.75, 11.05,\n                9.15, 9.68, 9.82, 10.20, 10.22, 12.02,\n                9.56, 9.70, 9.99, 10.27, 10.41, 11.00,\n                8.85, 10.01, 10.08, 10.56, 11.13, 11.48,\n                9.54, 9.7211, 9.8267, 10.0231, 10.1833, 10.86,\n                10.36, 10.51, 11.31, 12.00, 12.11, 12.63,\n                9.95, 10.13, 10.77, 11.057, 11.15, 12.03\n            ]\n        }\n    ],\n    "models": [\n        {"name": "Linear"},\n        {"name": "Polynomial", "settings": {"degree_poly": 2}},\n        {"name": "Polynomial", "settings": {"degree_poly": 3}},\n        {"name": "Polynomial", "settings": {"degree_poly": 4}}\n    ]\n}');
-    });
-
-    $('.example_d').click(function(e){
-        e.preventDefault();
-        $('#id_inputs').val('{\n    "id": "my dichotomous datasets",\n    "dataset_type": "D",\n    "bmds_version": "BMDS270",\n    "datasets": [\n        {\n            "id": "liver",\n            "doses": [0, 1.96, 5.69, 29.75],\n            "ns": [75, 49, 50, 49],\n            "incidences": [5, 1, 3, 14]\n        },\n        {\n            "id": "kidney",\n            "doses": [0, 40, 80, 230],\n            "ns": [12, 12, 12, 12],\n            "incidences": [0, 0, 2, 8]\n        }\n    ],\n    "bmr": {\n         "type": "Extra",\n         "value": 0.1\n    }\n}');
-    });
-});
-window.app.listStartup(document.getElementById("reactDiv"))
-</script>
-{% endblock extra-js %}

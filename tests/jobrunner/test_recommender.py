@@ -3,6 +3,7 @@ import time
 
 import pytest
 from django.test import Client
+from django.urls import reverse
 
 
 @pytest.mark.vcr()
@@ -11,12 +12,12 @@ def test_successful_recommendation(complete_dichotomous):
     # submit new job
     c = Client()
     payload = json.dumps(complete_dichotomous)
-    resp = c.post("/api/job/", {"inputs": payload})
+    url = reverse("api:job-list")
+    resp = c.post(url, {"inputs": payload})
     assert resp.status_code == 201
 
     # poll until job complete
-    id_ = resp.json()["id"]
-    url = f"/api/job/{id_}/"
+    url = resp.json()["api_url"]
     while True:
         time.sleep(2)
         resp = c.get(url)

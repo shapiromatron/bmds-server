@@ -4,8 +4,10 @@ from copy import deepcopy
 
 import pytest
 from django.test import Client
+from django.urls import reverse
 
 
+@pytest.mark.vcr()
 @pytest.mark.django_db(transaction=False)
 def test_d_success(complete_dichotomous):
     # BMDS execution is slow; we overload this test to check lots of things.
@@ -20,12 +22,12 @@ def test_d_success(complete_dichotomous):
     # submit new job
     c = Client()
     payload = json.dumps(data)
-    resp = c.post("/api/job/", {"inputs": payload})
+    url = reverse("api:job-list")
+    resp = c.post(url, {"inputs": payload})
     assert resp.status_code == 201
 
     # poll until job complete
-    id_ = resp.json()["id"]
-    url = f"/api/job/{id_}/"
+    url = resp.json()["api_url"]
     while True:
         time.sleep(2)
         resp = c.get(url)
@@ -41,6 +43,7 @@ def test_d_success(complete_dichotomous):
     assert bmd == 29.5318
 
 
+@pytest.mark.vcr()
 @pytest.mark.django_db(transaction=False)
 def test_c_success(complete_continuous):
     # BMDS execution is slow; we overload this test to check lots of things.
@@ -55,12 +58,12 @@ def test_c_success(complete_continuous):
     # submit new job
     c = Client()
     payload = json.dumps(data)
-    resp = c.post("/api/job/", {"inputs": payload})
+    url = reverse("api:job-list")
+    resp = c.post(url, {"inputs": payload})
     assert resp.status_code == 201
 
     # poll until job complete
-    id_ = resp.json()["id"]
-    url = f"/api/job/{id_}/"
+    url = resp.json()["api_url"]
     while True:
         time.sleep(2)
         resp = c.get(url)
@@ -83,6 +86,7 @@ def test_c_success(complete_continuous):
     assert bmd == 149.913
 
 
+@pytest.mark.vcr()
 @pytest.mark.django_db(transaction=False)
 def test_ci_success(complete_continuous_individual):
     # BMDS execution is slow; we overload this test to check lots of things.
@@ -94,12 +98,12 @@ def test_ci_success(complete_continuous_individual):
     # submit new job
     c = Client()
     payload = json.dumps(data)
-    resp = c.post("/api/job/", {"inputs": payload})
+    url = reverse("api:job-list")
+    resp = c.post(url, {"inputs": payload})
     assert resp.status_code == 201
 
     # poll until job complete
-    id_ = resp.json()["id"]
-    url = f"/api/job/{id_}/"
+    url = resp.json()["api_url"]
     while True:
         time.sleep(2)
         resp = c.get(url)

@@ -14,7 +14,7 @@ Make sure you have the following applications installed locally:
 .. _`Yarn`: https://yarnpkg.com/
 .. _`conda`: https://docs.conda.io/
 
-All requirements are available via `conda`_ and do not require administrative access on a machine.
+If installing on Windows, all requirements are available via `conda`_ and do not require administrative access.
 
 Initial setup
 ~~~~~~~~~~~~~
@@ -80,18 +80,6 @@ If you navigate to `localhost`_ and see a website, you're ready to begin coding!
 
 .. _`localhost`: http://127.0.0.1:8000/
 
-To run workers for asynchronous tasks (optional), modify django settings and then start a few more services:
-
-.. code-block:: bash
-
-    # start the workers
-    source venv/bin/activate
-    celery worker --app=bmds_server.main --loglevel=info --events
-
-    # start a crontab
-    source venv/bin/activate
-    celery beat --app=bmds_server.main --loglevel=info
-
 Visual Studio Code settings
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -134,3 +122,21 @@ Recommended workspace settings:
             "./frontend"
         ]
     }
+
+Additional settings
+~~~~~~~~~~~~~~~~~~~
+
+Running asynchronous worker threads
+-----------------------------------
+
+This is an optional step in development, but required in production. To run workers, modify django settings and then start a few more processes:
+
+.. code-block:: bash
+
+    # start the workers
+    source venv/bin/activate
+    celery worker --app=bmds_server.main --loglevel=info --events
+
+    # start a crontab
+    source venv/bin/activate
+    celery beat --app=bmds_server.main --loglevel=info

@@ -4,11 +4,13 @@ import sys
 import bmds
 import pytest
 from django.contrib.auth.models import User
+from django.urls import reverse
 from rest_framework.authtoken.models import Token
 from rest_framework.test import APIClient
 
 
 @pytest.mark.skipif(sys.platform != "win32", reason="requires Windows")
+@pytest.mark.vcr()
 @pytest.mark.django_db(transaction=False)
 def test_drunner(complete_continuous):
     # create and login as superuser
@@ -26,12 +28,13 @@ def test_drunner(complete_continuous):
     )
 
     # assert login is required
-    resp = client.post("/api/dfile/", payload, format="json")
+    url = reverse("api:dfile-list")
+    resp = client.post(url, payload, format="json")
     assert resp.status_code == 401
 
     # assert response is successful post-login
     client.credentials(HTTP_AUTHORIZATION=f"Token {token.key}")
-    resp = client.post("/api/dfile/", payload, format="json")
+    resp = client.post(url, payload, format="json")
     assert resp.status_code == 200
 
     # asset models were executed

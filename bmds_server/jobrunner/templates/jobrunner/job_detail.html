@@ -1,55 +1,15 @@
 {% extends "base.html" %}
 
 {% block content %}
-
-{% if object.is_finished %}
-<h1>Job complete!</h1>
-<p class='lead'>Job ID: {{object.id}}</p>
-<ul>
-    <li><b>Creation time: </b>{{object.created}}</li>
-    <li><b>BMDS job start-time: </b>{{object.started}}</li>
-    <li><b>BMDS job end-time: </b>{{object.ended}}</li>
-    <li><b>BMDS job deletion date: </b>{{object.deletion_date}}</li>
-</ul>
-
-{% if object.has_errors %}
-<p>Unfortunately, an error occurred and your results are not complete. Here's the error stacktrace:</p>
-<pre>{{object.errors}}</pre>
-<p><i>(You can send this URL to someone who speaks computer)</i></p>
-{% else %}
-<a href="{{object.get_input_url}}"
-   class='btn btn-primary'><i class="fa fa-fixed fa-download"></i>&nbsp;Download inputs</a>
-<a href="{{object.get_output_url}}"
-   class='btn btn-primary'><i class="fa fa-fixed fa-download"></i>&nbsp;Download outputs</a>
-<a href="{{object.get_excel_url}}"
-   class='btn btn-primary'><i class="fa fa-fixed fa-file-excel-o"></i>&nbsp;Download Excel</a>
-{% endif %}
-
-{% else %}
-
-<h1>Your job is running...<i class="fa fa-spinner fa-pulse fa-fw"></i>
-</h1>
-<p class='lead'>Job ID: {{object.id}}</p>
-
-<span class="sr-only">Executing...</span>
-<p>Your job has been submitted and has been added to the job queue.</p>
-<p><strong>This page will update automatically until the job is complete.</strong></p>
-<p>Now might be a good time for some ☕.</p>
-{% endif %}
+<div id='main'></div>
+<pre>{{config|safe}}</pre>
 {% endblock content %}
 
 {% block extra-js %}
-
+<script type="text/json" id="config">{{config|safe}}</script>
 <script type="text/javascript">
-var key = 'bmds-timeout-{{object.id}}',
-    timeout = parseInt(localStorage.getItem(key)) || 1,
-    reload = function(){
-        window.location = '.'
-    };
-{% if not object.is_finished %}
-timeout = Math.min(timeout + 1, 15);
-localStorage.setItem(key, timeout);
-setTimeout(reload, timeout * 1000);
-{% endif %}
+    const config = JSON.parse(document.getElementById("config").textContent)
+    window.app.listStartup(document.getElementById("main"))
+    console.log(config)
 </script>
 {% endblock %}

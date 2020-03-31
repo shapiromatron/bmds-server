@@ -8,6 +8,7 @@ exclude = '''
   | \.tox,
   | bin,
   | docs,
+  | frontend,
   | logs,
   | notebooks,
   | public,

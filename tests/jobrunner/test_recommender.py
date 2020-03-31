@@ -5,6 +5,7 @@ import pytest
 from django.test import Client
 
 
+@pytest.mark.vcr()
 @pytest.mark.django_db(transaction=False)
 def test_successful_recommendation(complete_dichotomous):
     # submit new job

@@ -6,6 +6,7 @@ import pytest
 from django.test import Client
 
 
+@pytest.mark.vcr()
 @pytest.mark.django_db(transaction=False)
 def test_d_success(complete_dichotomous):
     # BMDS execution is slow; we overload this test to check lots of things.
@@ -41,6 +42,7 @@ def test_d_success(complete_dichotomous):
     assert bmd == 29.5318
 
 
+@pytest.mark.vcr()
 @pytest.mark.django_db(transaction=False)
 def test_c_success(complete_continuous):
     # BMDS execution is slow; we overload this test to check lots of things.
@@ -83,6 +85,7 @@ def test_c_success(complete_continuous):
     assert bmd == 149.913
 
 
+@pytest.mark.vcr()
 @pytest.mark.django_db(transaction=False)
 def test_ci_success(complete_continuous_individual):
     # BMDS execution is slow; we overload this test to check lots of things.

@@ -1,6 +1,13 @@
 import pytest
 
 
+@pytest.fixture(scope="session")
+def vcr_config():
+    return {
+        "filter_headers": [("authorization", "DUMMY")],
+    }
+
+
 @pytest.fixture
 def complete_continuous():
     return {

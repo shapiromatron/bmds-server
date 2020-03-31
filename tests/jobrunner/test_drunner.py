@@ -9,6 +9,7 @@ from rest_framework.test import APIClient
 
 
 @pytest.mark.skipif(sys.platform != "win32", reason="requires Windows")
+@pytest.mark.vcr()
 @pytest.mark.django_db(transaction=False)
 def test_drunner(complete_continuous):
     # create and login as superuser

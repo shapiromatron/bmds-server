@@ -1,20 +1,16 @@
-import {observable, action, computed} from 'mobx';
+import {observable, action, computed} from "mobx";
 
-class DataStore{
+class DataStore {
+    @observable datasets = [];
 
-    @observable datasets=[];
-
-    @action addDataSets= (dataset)=>{
+    @action addDataSets = dataset => {
         this.datasets.push(dataset);
-        
-    }
-    
-    @computed get dataSetCount(){
-        
+    };
+
+    @computed get dataSetCount() {
         return this.datasets.length;
     }
 }
 
-
 const store = new DataStore();
-export default store; 
+export default store;

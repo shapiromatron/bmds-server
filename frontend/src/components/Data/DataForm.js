@@ -1,29 +1,26 @@
-import React, { Component } from 'react';
-import './DataForm.css' 
-import {Table} from 'react-bootstrap';
+import React, {Component} from "react";
+import "./DataForm.css";
+import {Table} from "react-bootstrap";
 
 export class DataForm extends Component {
-
     constructor(props) {
-        super(props) //since we are extending class Table so we have to use super in order to override Component class constructor
-        this.state={datasets:[]}
-      
-    
+        super(props); //since we are extending class Table so we have to use super in order to override Component class constructor
+        this.state = {datasets: []};
     }
-    componentDidMount(){
+    componentDidMount() {
         this.refreshList();
     }
 
-    refreshList(){
+    refreshList() {
         this.setState({
-            datasets:[]
-        })
+            datasets: [],
+        });
     }
 
-    render(){
+    render() {
         const {datasets} = this.state;
-        return(
-            <Table className="container mt-4" striped bordered hover size="sm" >
+        return (
+            <Table className="container mt-4" striped bordered hover size="sm">
                 <thead>
                     <tr>
                         <th>Dataset #</th>
@@ -32,22 +29,21 @@ export class DataForm extends Component {
                         <th>Mean</th>
                         <th>St. Dev.</th>
                     </tr>
-
                 </thead>
                 <tbody>
-                    {datasets.map(dataset=>
-                        <tr>key={dataset.id}
-                        <td>{dataset.Dose}</td>
-                        <td>{dataset.N}</td>
-                        <td>{dataset.Mean}</td>
-                        <td>{dataset.stdev}</td>
+                    {datasets.map(dataset => (
+                        <tr>
+                            key={dataset.id}
+                            <td>{dataset.Dose}</td>
+                            <td>{dataset.N}</td>
+                            <td>{dataset.Mean}</td>
+                            <td>{dataset.stdev}</td>
                         </tr>
-                        )}
+                    ))}
                 </tbody>
             </Table>
-        )
+        );
     }
-
 }
 
 export default DataForm;

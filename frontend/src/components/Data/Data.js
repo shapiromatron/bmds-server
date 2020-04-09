@@ -1,6 +1,10 @@
 import React, {Component} from "react";
-import {Modal, Button, Form} from "react-bootstrap";
+import {DataModal} from "./DataModal";
+import {DataForm} from "./DataForm";
+import {Container, Table, Row, Col} from "react-bootstrap";
+import {Modal, Button, Form, FormControl} from "react-bootstrap";
 import "./Data.css";
+
 import {inject, observer} from "mobx-react";
 
 @inject("DataStore")
@@ -76,7 +80,7 @@ class Data extends Component {
 
     render() {
         let showModal = () => this.setState({showModal: false});
-
+        const {dose, n, mean, stdev} = this;
         const {DataStore} = this.props;
 
         return (

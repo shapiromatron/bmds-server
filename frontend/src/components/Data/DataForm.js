@@ -5,9 +5,20 @@ import {Table} from "react-bootstrap";
 export class DataForm extends Component {
     constructor(props) {
         super(props); //since we are extending class Table so we have to use super in order to override Component class constructor
+        this.state = {datasets: []};
+    }
+    componentDidMount() {
+        this.refreshList();
+    }
+
+    refreshList() {
+        this.setState({
+            datasets: [],
+        });
     }
 
     render() {
+        const {datasets} = this.state;
         return (
             <Table className="container mt-4" striped bordered hover size="sm">
                 <thead>
@@ -20,12 +31,15 @@ export class DataForm extends Component {
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                    </tr>
+                    {datasets.map(dataset => (
+                        <tr>
+                            key={dataset.id}
+                            <td>{dataset.Dose}</td>
+                            <td>{dataset.N}</td>
+                            <td>{dataset.Mean}</td>
+                            <td>{dataset.stdev}</td>
+                        </tr>
+                    ))}
                 </tbody>
             </Table>
         );

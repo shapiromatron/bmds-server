@@ -1,5 +1,5 @@
 import React, {Component} from "react";
-import {Modal, Button, Form} from "react-bootstrap";
+import {Table, Modal, Button, Row, Col, Form} from "react-bootstrap";
 
 export class DataModal extends Component {
     constructor(props) {

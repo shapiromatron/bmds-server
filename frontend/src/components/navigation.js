@@ -1,13 +1,10 @@
 import React, {Component} from "react";
-import {Route, NavLink, HashRouter} from "react-router-dom";
-
+import {Route, NavLink} from "react-router-dom";
 import Main from "./Main/Main";
 import Data from "./Data/Data";
 import ReportOptions from "./ReportOptions/ReportOptions";
 import Logic from "./Logic/logic";
 import ModelParams from "./ModelParams/ModelParams";
-
-import {Button, Navbar, Nav, Form, FormControl} from "react-bootstrap";
 
 class Navigation extends Component {
     render() {

@@ -5,7 +5,7 @@ module.exports = {
     context: __dirname,
 
     entry: {
-        main: ["./bmd/index"],
+        main: ["./src/index"],
     },
 
     mode: "development",
@@ -47,9 +47,9 @@ module.exports = {
 
     resolve: {
         alias: {
-            bmd: path.join(__dirname, "bmd"),
+            bmd: path.join(__dirname, "src"),
         },
-        modules: [path.join(__dirname, "bmd"), "node_modules"],
+        modules: [path.join(__dirname, "src"), "node_modules"],
         extensions: [".js", ".css"],
     },
 };

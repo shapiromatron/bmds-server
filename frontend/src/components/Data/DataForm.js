@@ -18,7 +18,6 @@ export class DataForm extends Component {
     }
 
     render() {
-        const {datasets} = this.state;
         return (
             <Table className="container mt-4" striped bordered hover size="sm">
                 <thead>
@@ -31,13 +30,12 @@ export class DataForm extends Component {
                     </tr>
                 </thead>
                 <tbody>
-                   <tr>
-                       <td></td>
-                       <td></td>
-                       <td></td>
-                       <td></td>
-                   </tr>
-                    ))}
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
                 </tbody>
             </Table>
         );

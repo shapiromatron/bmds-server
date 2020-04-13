@@ -20,6 +20,7 @@ base_schema = {
             "description": "Version of BMDS run analysis with",
             "enum": list(BMDS.versions.keys()),
         },
+        "description": {"description": "Analysis description", "type": "string"},
         "dataset_type": {
             "description": "Type of data which should be executed (should be same for all datasets)",  # noqa: E501
             "enum": list(bmds.constants.DTYPES),
@@ -78,6 +79,31 @@ continuous_dataset_schema = {
                 "minItems": 3,
                 "items": {"type": "number"},
             },
+            "column_names": {
+                "type": "object",
+                "properties": {
+                    "dose": {
+                        "type": "string",
+                        "description": "Default dataset column name",
+                        "default": "Dose",
+                    },
+                    "n": {
+                        "type": "string",
+                        "description": "Default dataset column name",
+                        "default": "N",
+                    },
+                    "mean": {
+                        "type": "string",
+                        "description": "Default dataset column name",
+                        "default": "Mean",
+                    },
+                    "stdev": {
+                        "type": "string",
+                        "description": "Default dataset column name",
+                        "default": "Std. Dev.",
+                    },
+                },
+            },
         },
     },
     "minItems": 1,
@@ -103,6 +129,21 @@ continuous_individual_dataset_schema = {
                 "type": "array",
                 "minItems": 3,
                 "items": {"type": "number"},
+            },
+            "column_names": {
+                "type": "object",
+                "properties": {
+                    "dose": {
+                        "type": "string",
+                        "description": "Default dataset column name",
+                        "default": "Dose",
+                    },
+                    "response": {
+                        "type": "string",
+                        "description": "Default dataset column name",
+                        "default": "Response",
+                    },
+                },
             },
         },
     },
@@ -136,6 +177,26 @@ dichotomous_dataset_schema = {
                 "minItems": 3,
                 "items": {"type": "integer", "minimum": 0},
             },
+            "column_names": {
+                "type": "object",
+                "properties": {
+                    "dose": {
+                        "type": "string",
+                        "description": "Default dataset column name",
+                        "default": "Dose",
+                    },
+                    "n": {
+                        "type": "string",
+                        "description": "Default dataset column name",
+                        "default": "N",
+                    },
+                    "incidence": {
+                        "type": "string",
+                        "description": "Default dataset column name",
+                        "default": "Incidence",
+                    },
+                },
+            },
         },
     },
     "minItems": 1,
@@ -150,6 +211,12 @@ optional_dataset_props = {
     "dataset_name": {
         "description": "An (optional) dataset name used as a title in reports",
         "type": "string",
+    },
+    "description": {"description": "Dataset description", "type": "string"},
+    "include": {
+        "type": "boolean",
+        "default": True,
+        "description": "Should this dataset be included in this modeling session?",
     },
     "xlabel": {"description": "An (optional) x-label for plots", "type": "string"},
     "ylabel": {"description": "An (optional) y-label for plots", "type": "string"},
@@ -228,6 +295,166 @@ c_bmr_schema["title"] = "Continuous BMR validator"
 c_bmr_schema["properties"]["type"]["enum"] = list(
     bmds.constants.BMR_CROSSWALK[bmds.constants.CONTINUOUS].keys()
 )
+
+bmds3_d_model_selection_schema = {
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "title": "Dichotomous model selection",
+    "description": "Model selection for dichotomous bmd analysis",
+    "type": "object",
+    "properties": {
+        "frequentist_restricted": {
+            "type": "array",
+            "items": {
+                "type": {
+                    "description": "model class",
+                    "enum": bmds.constants.D_MODELS_RESTRICTABLE,
+                },
+            },
+            "uniqueItems": True,
+        },
+        "frequentist_unrestricted": {
+            "type": "array",
+            "items": {"type": {"description": "model class", "enum": bmds.constants.D_MODELS}},
+            "uniqueItems": True,
+        },
+        "bayesian": {
+            "type": "array",
+            "items": {"type": {"description": "model class", "enum": bmds.constants.D_MODELS}},
+            "uniqueItems": True,
+        },
+        "baysian_model_average": {
+            "type": "array",
+            "items": {
+                "type": {
+                    "description": "model class and model prior weights",
+                    "type": "object",
+                    "required": ["model", "prior_weight"],
+                    "properties": {
+                        "model": {"enum": bmds.constants.D_MODELS},
+                        "prior_weight": {"type": "number", "minimum": 0, "maximum": 1},
+                    },
+                },
+            },
+            "uniqueItems": True,
+        },
+    },
+}
+
+bmds3_c_model_selection_schema = {
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "title": "Continuous model selection",
+    "description": "Model selection for continuous bmd analysis",
+    "type": "object",
+    "properties": {
+        "frequentist_restricted": {
+            "type": "array",
+            "items": {
+                "type": {
+                    "description": "model class",
+                    "enum": bmds.constants.C_MODELS_RESTRICTABLE,
+                },
+            },
+            "uniqueItems": True,
+        },
+        "frequentist_unrestricted": {
+            "type": "array",
+            "items": {
+                "type": {
+                    "description": "model class",
+                    "enum": bmds.constants.C_MODELS_UNRESTRICTABLE,
+                }
+            },
+            "uniqueItems": True,
+        },
+        "bayesian": {
+            "type": "array",
+            "items": {"type": {"description": "model class", "enum": bmds.constants.C_MODELS}},
+            "uniqueItems": True,
+        },
+        "baysian_model_average": {
+            "type": "array",
+            "items": {
+                "type": {
+                    "description": "model class and model prior weights",
+                    "type": "object",
+                    "required": ["model", "prior_weight"],
+                    "properties": {
+                        "model": {"enum": bmds.constants.C_MODELS},
+                        "prior_weight": {"type": "number", "minimum": 0, "maximum": 1},
+                    },
+                },
+            },
+            "uniqueItems": True,
+        },
+    },
+}
+
+bmds3_d_option_set_schema = {
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "title": "Dichotomous option sets",
+    "description": "Option set for dichotomous models",
+    "type": "array",
+    "items": {
+        "type": "object",
+        "required": ["type", "value", "confidence_level", "background"],
+        "properties": {
+            "type": {
+                "description": "BMR type",
+                "enum": list(bmds.constants.BMR_CROSSWALK[bmds.constants.DICHOTOMOUS].keys()),
+            },
+            "value": {"description": "BMR value", "type": "number", "minimum": 0},
+            "confidence_level": {
+                "description": "Confidence level",
+                "type": "number",
+                "minimum": 0,
+                "maximum": 1,
+            },
+            "background": {"description": "background", "enum": ["Estimated", "Zero"]},
+        },
+    },
+    "minItems": 1,
+}
+
+bmds3_c_option_set_schema = {
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "title": "Continuous option sets",
+    "description": "Option set for continuous models",
+    "type": "array",
+    "items": {
+        "type": "object",
+        "required": ["type", "value", "tail_probability", "confidence_level"],
+        "properties": {
+            "type": {
+                "description": "BMR type",
+                "enum": list(bmds.constants.BMR_CROSSWALK[bmds.constants.CONTINUOUS].keys()),
+            },
+            "value": {"description": "BMRF", "type": "number", "minimum": 0},
+            "tail_probability": {
+                "description": "Tail probability",
+                "type": "number",
+                "minimum": 0,
+                "maximum": 1,
+            },
+            "confidence_level": {
+                "description": "Confidence level",
+                "type": "number",
+                "minimum": 0,
+                "maximum": 1,
+            },
+            "distribution": {"description": "Distribution", "enum": ["Normal", "Log-normal"]},
+            "variance": {
+                "description": "Variance",
+                "enum": ["Calculated", "Constant", "Non-constant"],
+            },
+            "polynomial_restriction": {
+                "description": "Polynomial restriction",
+                "enum": ["Use dataset adverse direction", "Non-negative", "Non-positive"],
+            },
+            "background": {"description": "Background", "enum": ["Estimated", "Zero"]},
+        },
+    },
+    "minItems": 1,
+}
 
 
 def _validate_base(data):

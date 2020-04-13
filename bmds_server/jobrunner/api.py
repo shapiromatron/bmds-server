@@ -1,28 +1,10 @@
-from rest_framework import mixins, status, viewsets
+from rest_framework import exceptions, mixins, status, viewsets
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.decorators import action
 from rest_framework.permissions import IsAdminUser
-from rest_framework.renderers import BaseRenderer
 from rest_framework.response import Response
 
-from . import models, serializers, tasks
-
-
-class TxtRenderer(BaseRenderer):
-
-    media_type = "text/plain"
-    format = "txt"
-
-    def render(self, txt, accepted_media_type, renderer_context):
-        return txt
-
-
-class XlsxRenderer(BaseRenderer):
-    media_type = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-    format = "xlsx"
-
-    def render(self, wb, media_type=None, renderer_context=None):
-        return wb
+from . import models, serializers, renderers, tasks
 
 
 class JobViewset(mixins.CreateModelMixin, mixins.RetrieveModelMixin, viewsets.GenericViewSet):
@@ -33,16 +15,58 @@ class JobViewset(mixins.CreateModelMixin, mixins.RetrieveModelMixin, viewsets.Ge
         content = "Outputs processing; not ready yet."
         return Response(content, status=status.HTTP_204_NO_CONTENT)
 
-    @action(detail=True, methods=("get",), renderer_classes=(TxtRenderer,))
+    @action(
+        detail=True, methods=("patch",), url_path="patch-inputs",
+    )
+    def patch_inputs(self, request, *args, **kwargs):
+        """
+        Validate input and if successful, patch inputs on server side.
+        """
+        instance = self.get_object()
+
+        # permission check
+        if request.data.get("editKey") != instance.password:
+            # todo: move to custom header?
+            raise exceptions.PermissionDenied()
+
+        # validation toggle; get validator for data
+        validate_what = request.data.get("validateWhat")
+        if validate_what is None:
+            raise NotImplementedError()
+        elif validate_what == "datasets":
+            validated = "datasets"
+        elif validate_what == "models":
+            raise NotImplementedError()
+        elif validate_what == "option_sets":
+            raise NotImplementedError()
+        else:
+            raise exceptions.ValidationError("Unknown `validate_what` option.")
+
+        save = bool(request.data.get("save", True))
+        if save:
+            instance.save()
+
+        # todo: fix response
+        response = {}
+        response[validated] = True
+        return Response(data=response)
+
+    @action(detail=True, methods=("get",), renderer_classes=(renderers.TxtRenderer,))
     def inputs(self, request, *args, **kwargs):
+        """
+        Return inputs for selected job.
+        """
         instance = self.get_object()
         fn = f"{instance.id}-inputs.json"
         resp = Response(instance.inputs)
         resp["Content-Disposition"] = f'attachment; filename="{fn}"'
         return resp
 
-    @action(detail=True, methods=("get",), renderer_classes=(TxtRenderer,))
+    @action(detail=True, methods=("get",), renderer_classes=(renderers.TxtRenderer,))
     def outputs(self, request, *args, **kwargs):
+        """
+        Return outputs for selected job
+        """
         instance = self.get_object()
 
         if not instance.is_finished:
@@ -53,8 +77,11 @@ class JobViewset(mixins.CreateModelMixin, mixins.RetrieveModelMixin, viewsets.Ge
         resp["Content-Disposition"] = f'attachment; filename="{fn}"'
         return resp
 
-    @action(detail=True, methods=("get",), renderer_classes=(XlsxRenderer,))
+    @action(detail=True, methods=("get",), renderer_classes=(renderers.XlsxRenderer,))
     def excel(self, request, *args, **kwargs):
+        """
+        Return Excel export of outputs for selected job
+        """
         instance = self.get_object()
 
         if not instance.is_finished:

@@ -11,7 +11,7 @@ router.register("job", api.JobViewset, basename="job")
 router.register("dfile", api.DfileExecutorViewset, basename="dfile")
 
 urlpatterns = [
-    path("api/v1.1/", include((router.urls, "jobrunner"), namespace="api")),
+    path("api/v1/", include((router.urls, "jobrunner"), namespace="api")),
     path("", views.Home.as_view(), name="home"),
     path("job/q/", views.JobQuery.as_view(), name="job_query"),
     path("job/<uuid:pk>/", views.JobDetail.as_view(), name="job"),

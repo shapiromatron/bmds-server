@@ -1,9 +1,12 @@
 import json
 from copy import deepcopy
+from typing import Any, Dict
 
 import bmds
 import jsonschema
+import numpy as np
 from bmds.session import BMDS
+from django.core.exceptions import ValidationError
 
 latest_bmds = BMDS.latest_version()
 base_schema = {
@@ -296,7 +299,7 @@ c_bmr_schema["properties"]["type"]["enum"] = list(
     bmds.constants.BMR_CROSSWALK[bmds.constants.CONTINUOUS].keys()
 )
 
-bmds3_d_model_selection_schema = {
+bmds3_model_selection_schema = {
     "$schema": "http://json-schema.org/draft-04/schema#",
     "title": "Dichotomous model selection",
     "description": "Model selection for dichotomous bmd analysis",
@@ -305,34 +308,39 @@ bmds3_d_model_selection_schema = {
         "frequentist_restricted": {
             "type": "array",
             "items": {
-                "type": {
-                    "description": "model class",
-                    "enum": bmds.constants.D_MODELS_RESTRICTABLE,
-                },
+                "type": "string",
+                "description": "model class",
+                "enum": bmds.constants.D_MODELS_RESTRICTABLE,
             },
             "uniqueItems": True,
         },
         "frequentist_unrestricted": {
             "type": "array",
-            "items": {"type": {"description": "model class", "enum": bmds.constants.D_MODELS}},
+            "items": {
+                "type": "string",
+                "description": "model class",
+                "enum": bmds.constants.D_MODELS,
+            },
             "uniqueItems": True,
         },
         "bayesian": {
             "type": "array",
-            "items": {"type": {"description": "model class", "enum": bmds.constants.D_MODELS}},
+            "items": {
+                "type": "string",
+                "description": "model class",
+                "enum": bmds.constants.D_MODELS,
+            },
             "uniqueItems": True,
         },
-        "baysian_model_average": {
+        "bayesian_model_average": {
             "type": "array",
             "items": {
-                "type": {
-                    "description": "model class and model prior weights",
-                    "type": "object",
-                    "required": ["model", "prior_weight"],
-                    "properties": {
-                        "model": {"enum": bmds.constants.D_MODELS},
-                        "prior_weight": {"type": "number", "minimum": 0, "maximum": 1},
-                    },
+                "type": "object",
+                "description": "model class and model prior weights",
+                "required": ["model", "prior_weight"],
+                "properties": {
+                    "model": {"enum": bmds.constants.D_MODELS},
+                    "prior_weight": {"type": "number", "minimum": 0, "maximum": 1},
                 },
             },
             "uniqueItems": True,
@@ -340,54 +348,47 @@ bmds3_d_model_selection_schema = {
     },
 }
 
-bmds3_c_model_selection_schema = {
-    "$schema": "http://json-schema.org/draft-04/schema#",
-    "title": "Continuous model selection",
-    "description": "Model selection for continuous bmd analysis",
-    "type": "object",
-    "properties": {
-        "frequentist_restricted": {
-            "type": "array",
-            "items": {
-                "type": {
-                    "description": "model class",
-                    "enum": bmds.constants.C_MODELS_RESTRICTABLE,
-                },
-            },
-            "uniqueItems": True,
-        },
-        "frequentist_unrestricted": {
-            "type": "array",
-            "items": {
-                "type": {
-                    "description": "model class",
-                    "enum": bmds.constants.C_MODELS_UNRESTRICTABLE,
-                }
-            },
-            "uniqueItems": True,
-        },
-        "bayesian": {
-            "type": "array",
-            "items": {"type": {"description": "model class", "enum": bmds.constants.C_MODELS}},
-            "uniqueItems": True,
-        },
-        "baysian_model_average": {
-            "type": "array",
-            "items": {
-                "type": {
-                    "description": "model class and model prior weights",
-                    "type": "object",
-                    "required": ["model", "prior_weight"],
-                    "properties": {
-                        "model": {"enum": bmds.constants.C_MODELS},
-                        "prior_weight": {"type": "number", "minimum": 0, "maximum": 1},
-                    },
-                },
-            },
-            "uniqueItems": True,
-        },
-    },
-}
+# fmt: off
+bmds3_d_model_selection_schema = deepcopy(bmds3_model_selection_schema)
+bmds3_d_model_selection_schema["title"] = "Dichotomous model selection"
+bmds3_d_model_selection_schema["description"] = "Model selection for dichotomous bmd analysis"
+bmds3_d_model_selection_schema["properties"]["frequentist_restricted"]["items"]["enum"] = bmds.constants.D_MODELS_RESTRICTABLE  # noqa: E501
+bmds3_d_model_selection_schema["properties"]["frequentist_unrestricted"]["items"]["enum"] = bmds.constants.D_MODELS  # noqa: E501
+bmds3_d_model_selection_schema["properties"]["bayesian"]["items"]["enum"] = bmds.constants.D_MODELS  # noqa: E501
+bmds3_d_model_selection_schema["properties"]["bayesian_model_average"]["items"]["properties"]["model"]["enum"] = bmds.constants.D_MODELS  # noqa: E501
+
+bmds3_c_model_selection_schema = deepcopy(bmds3_model_selection_schema)
+bmds3_c_model_selection_schema["title"] = "Continuous model selection"
+bmds3_c_model_selection_schema["description"] = "Model selection for continuous bmd analysis"
+bmds3_c_model_selection_schema["properties"]["frequentist_restricted"]["items"]["enum"] = bmds.constants.C_MODELS_RESTRICTABLE  # noqa: E501
+bmds3_c_model_selection_schema["properties"]["frequentist_unrestricted"]["items"]["enum"] = bmds.constants.C_MODELS_UNRESTRICTABLE  # noqa: E501
+bmds3_c_model_selection_schema["properties"]["bayesian"]["items"]["enum"] = bmds.constants.C_MODELS
+bmds3_c_model_selection_schema["properties"]["bayesian_model_average"]["items"]["properties"]["model"]["enum"] = bmds.constants.C_MODELS  # noqa: E501
+# fmt: on
+
+
+def bmds3_extra_model_validation(data: Dict):
+    # ensure at least one model is selected
+    if (
+        len(data.get("frequentist_restricted", []))
+        + len(data.get("frequentist_unrestricted", []))
+        + len(data.get("bayesian", []))
+        + len(data.get("bayesian_model_average", []))
+    ) == 0:
+        raise ValidationError("At least one model must be selected")
+
+    if len(data.get("bayesian_model_average", [])) > 0:
+
+        # if any `bayesian_model_average` ensure models aren't repeated
+        models = set([model["model"] for model in data["bayesian_model_average"]])
+        prior_weight = sum([model["prior_weight"] for model in data["bayesian_model_average"]])
+        if len(data.get("bayesian_model_average")) != len(models):
+            raise ValidationError("Model names in bayesian model average not unique")
+
+        # if any `bayesian_model_average` ensure weights sum to 1
+        if not np.isclose(prior_weight, 1.0, atol=0.005):
+            raise ValidationError("Prior weight in bayesian model average does not sum to 1")
+
 
 bmds3_d_option_set_schema = {
     "$schema": "http://json-schema.org/draft-04/schema#",
@@ -461,7 +462,7 @@ def _validate_base(data):
     try:
         jsonschema.validate(data, base_schema)
     except jsonschema.ValidationError as err:
-        raise ValueError(err.message)
+        raise ValidationError(err.message)
 
 
 def _validate_datasets(dataset_type, datasets):
@@ -475,21 +476,43 @@ def _validate_datasets(dataset_type, datasets):
     try:
         jsonschema.validate(datasets, schema)
     except jsonschema.ValidationError as err:
-        raise ValueError("Dataset error(s): " + err.message)
+        raise ("Dataset error(s): " + err.message)
 
 
-def _validate_models(dataset_type, models):
-    if dataset_type == bmds.constants.DICHOTOMOUS:
-        schema = d_model_schema
-    elif dataset_type == bmds.constants.DICHOTOMOUS_CANCER:
-        schema = dc_model_schema
+def _validate_models(bmds_version: str, dataset_type: str, data: Any):
+    extra_validation = None
+    if bmds_version in bmds.constants.BMDS_TWOS:
+        if dataset_type == bmds.constants.DICHOTOMOUS:
+            schema = d_model_schema
+        elif dataset_type == bmds.constants.DICHOTOMOUS_CANCER:
+            schema = dc_model_schema
+        elif dataset_type in bmds.constants.CONTINUOUS_DTYPES:
+            schema = c_model_schema
+        else:
+            ValidationError(f"Unknown `dataset_type`: {dataset_type}")
+
+    elif bmds_version in bmds.constants.BMDS_THREES:
+        if data is None:
+            raise ValidationError("Model specification is required")
+        extra_validation = bmds3_extra_model_validation
+        if dataset_type == bmds.constants.DICHOTOMOUS:
+            schema = bmds3_d_model_selection_schema
+        elif dataset_type == bmds.constants.DICHOTOMOUS_CANCER:
+            raise NotImplementedError()
+        elif dataset_type in bmds.constants.CONTINUOUS_DTYPES:
+            schema = bmds3_c_model_selection_schema
+        else:
+            ValidationError(f"Unknown `dataset_type`: {dataset_type}")
     else:
-        schema = c_model_schema
+        ValidationError(f"Unknown `bmds_version`: {bmds_version}")
 
     try:
-        jsonschema.validate(models, schema)
+        jsonschema.validate(data, schema)
     except jsonschema.ValidationError as err:
-        raise ValueError("Model error(s): " + err.message)
+        raise ValidationError("Model error(s): " + err.message)
+
+    if extra_validation:
+        extra_validation(data)
 
 
 def _validate_bmr(dataset_type, bmr):
@@ -503,7 +526,7 @@ def _validate_bmr(dataset_type, bmr):
     try:
         jsonschema.validate(bmr, schema)
     except jsonschema.ValidationError as err:
-        raise ValueError("BMR error(s): " + err.message)
+        raise ValidationError("BMR error(s): " + err.message)
 
 
 def validate_input(data) -> None:
@@ -512,10 +535,11 @@ def validate_input(data) -> None:
     try:
         jsoned = json.loads(data)
     except json.decoder.JSONDecodeError:
-        raise ValueError("Invalid format - must be valid JSON.")
+        raise ValidationError("Invalid format - must be valid JSON.")
 
     # check base job
     _validate_base(jsoned)
+    bmds_version = jsoned["bmds_version"]
 
     # check dataset schema
     datasets = jsoned["datasets"]
@@ -525,7 +549,7 @@ def validate_input(data) -> None:
     # check model schema
     models = jsoned.get("models")
     if models:
-        _validate_models(dataset_type, models)
+        _validate_models(bmds_version, dataset_type, models)
 
     # check bmr schema
     bmr = jsoned.get("bmr")

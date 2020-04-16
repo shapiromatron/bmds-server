@@ -36,6 +36,9 @@ class Job(models.Model):
     def get_api_url(self):
         return reverse("api:job-detail", args=(str(self.id),))
 
+    def get_api_patch_inputs(self):
+        return reverse("api:job-patch-inputs", args=(str(self.id),))
+
     def get_edit_url(self):
         return reverse("job_edit", args=(str(self.id), self.password))
 

@@ -1,11 +1,10 @@
 from copy import deepcopy
-from typing import Dict, Any
+from typing import Any, Dict
 
 import bmds
 import jsonschema
-from django.core.exceptions import ValidationError
 import numpy as np
-
+from django.core.exceptions import ValidationError
 
 d_model_schema = {
     "$schema": "http://json-schema.org/draft-04/schema#",

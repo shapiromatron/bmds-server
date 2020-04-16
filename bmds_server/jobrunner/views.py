@@ -55,9 +55,10 @@ class JobDetail(DetailView):
             "url": self.object.get_absolute_url(),
         }
         if self.edit_mode:
-            config["editUrl"] = self.object.get_edit_url()
             config["editSettings"] = {
                 "editKey": self.object.password,
+                "editUrl": self.object.get_edit_url(),
+                "patchInputUrl": self.object.get_api_patch_inputs(),
                 "allowDatasetEditing": True,
                 "allowBmdsVersionEditing": True,
             }

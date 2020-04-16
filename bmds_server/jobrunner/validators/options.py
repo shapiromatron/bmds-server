@@ -5,7 +5,6 @@ import bmds
 import jsonschema
 from django.core.exceptions import ValidationError
 
-
 d_bmr_schema = {
     "$schema": "http://json-schema.org/draft-04/schema#",
     "title": "Dichotomous BMR validator",

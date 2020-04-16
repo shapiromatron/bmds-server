@@ -32,11 +32,6 @@ base_schema = {
             "type": "array",
         },
         "models": {"description": "An array of models which should be used"},
-        "bmr": {"description": "A description of the BMR to use (BMDS 2 only)", "type": "object"},
-        "options": {
-            "description": "A description of options to use (BMDS 3 only)",
-            "type": "object",
-        },
         "immediate": {
             "description": "Should execution start immediately (and potentially block other requests)",  # noqa: E501
             "type": "boolean",
@@ -48,26 +43,43 @@ base_schema = {
             "default": True,
         },
     },
-    "required": ["bmds_version", "dataset_type", "datasets"],
+    "required": ["bmds_version", "dataset_type"],
 }
 
 
-base2_schema = deepcopy(base_schema)
-base2_schema["properties"]["models"]["type"] = "array"
-base2_schema["properties"].pop("options")
+base2_schema_partial = deepcopy(base_schema)
+base2_schema_partial["properties"]["models"]["type"] = "array"
+base2_schema_partial["properties"]["bmr"] = {
+    "description": "A description of the BMR to use (BMDS 2 only)",
+    "type": "object",
+}
 
-base3_schema = deepcopy(base_schema)
-base3_schema["properties"]["models"]["type"] = "object"
-base3_schema["properties"].pop("bmr")
-base3_schema["required"].extend(["models", "options"])
+base2_schema_complete = deepcopy(base2_schema_partial)
+base2_schema_complete["required"].extend(["datasets"])
+
+base3_schema_partial = deepcopy(base_schema)
+base3_schema_partial["properties"]["models"]["type"] = "object"
+base3_schema_partial["properties"]["optional"] = {
+    "description": "A description of options to use (BMDS 3 only)",
+    "type": "object",
+}
+
+base3_schema_complete = deepcopy(base3_schema_partial)
+base3_schema_complete["required"].extend(["datasets", "models", "options"])
 
 
-def validate_session(data: Dict):
+def validate_session(data: Dict, partial: bool = False):
     bmds_version = data.get("bmds_version")
     if bmds_version in bmds.constants.BMDS_TWOS:
-        schema = base2_schema
+        if partial:
+            schema = base2_schema_partial
+        else:
+            schema = base2_schema_complete
     elif bmds_version in bmds.constants.BMDS_THREES:
-        schema = base3_schema
+        if partial:
+            schema = base3_schema_partial
+        else:
+            schema = base3_schema_complete
     else:
         raise ValidationError("Invalid `bmds_version` specification.")
 

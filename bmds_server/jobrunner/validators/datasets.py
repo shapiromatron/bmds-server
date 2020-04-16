@@ -1,9 +1,8 @@
 from typing import Any
 
 import bmds
-from django.core.exceptions import ValidationError
 import jsonschema
-
+from django.core.exceptions import ValidationError
 
 continuous_dataset_schema = {
     "$schema": "http://json-schema.org/draft-04/schema#",

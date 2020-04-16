@@ -1,10 +1,13 @@
+import json
+
+from django.core.exceptions import ValidationError
 from rest_framework import exceptions, mixins, status, viewsets
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.decorators import action
 from rest_framework.permissions import IsAdminUser
 from rest_framework.response import Response
 
-from . import models, renderers, serializers, tasks
+from . import models, renderers, serializers, tasks, validators
 
 
 class JobViewset(mixins.CreateModelMixin, mixins.RetrieveModelMixin, viewsets.GenericViewSet):
@@ -23,33 +26,28 @@ class JobViewset(mixins.CreateModelMixin, mixins.RetrieveModelMixin, viewsets.Ge
         Validate input and if successful, patch inputs on server side.
         """
         instance = self.get_object()
+        data = request.data.get("data")
+        edit_key = request.data.get("editKey", "")
+        partial = bool(request.data.get("partial", False))
 
         # permission check
-        if request.data.get("editKey") != instance.password:
-            # todo: move to custom header?
+        if edit_key != instance.password:
             raise exceptions.PermissionDenied()
 
-        # validation toggle; get validator for data
-        validate_what = request.data.get("validateWhat")
-        if validate_what is None:
-            raise NotImplementedError()
-        elif validate_what == "datasets":
-            validated = "datasets"
-        elif validate_what == "models":
-            raise NotImplementedError()
-        elif validate_what == "option_sets":
-            raise NotImplementedError()
-        else:
-            raise exceptions.ValidationError("Unknown `validate_what` option.")
+        if not isinstance(data, dict):
+            raise exceptions.ValidationError("A `data` object is required")
 
-        save = bool(request.data.get("save", True))
-        if save:
-            instance.save()
+        input_data = json.dumps(data)
 
-        # todo: fix response
-        response = {}
-        response[validated] = True
-        return Response(data=response)
+        try:
+            validators.validate_input(input_data, partial=partial)
+        except ValidationError as err:
+            raise exceptions.ValidationError(err.message)
+
+        instance.inputs = input_data
+        instance.save()
+
+        return Response(data=data)
 
     @action(detail=True, methods=("get",), renderer_classes=(renderers.TxtRenderer,))
     def inputs(self, request, *args, **kwargs):

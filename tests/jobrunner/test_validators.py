@@ -62,6 +62,60 @@ class TestInputValidation:
         with pytest.raises(ValidationError) as err:
             validators.validate_input(json.dumps(data))
 
+    def test_bmds3_partial(self):
+        data = {
+            "bmds_version": bmds.constants.BMDS312,
+            "dataset_type": bmds.constants.CONTINUOUS,
+        }
+
+        # check minimal passes when partial
+        assert validators.validate_input(json.dumps(data), partial=True) is None
+
+        # but fails when complete
+        with pytest.raises(ValidationError) as err:
+            validators.validate_input(json.dumps(data))
+        assert "'datasets' is a required property" in str(err)
+
+        # add datasets, try again
+        data["datasets"] = [
+            {
+                "id": 123,
+                "doses": [0, 10, 50, 150, 400],
+                "ns": [111, 142, 143, 93, 42],
+                "means": [2.112, 2.095, 1.956, 1.587, 1.254],
+                "stdevs": [0.235, 0.209, 0.231, 0.263, 0.159],
+            }
+        ]
+        assert validators.validate_input(json.dumps(data), partial=True) is None
+
+        with pytest.raises(ValidationError) as err:
+            validators.validate_input(json.dumps(data))
+        assert "'models' is a required property" in str(err)
+
+        # add models, try again
+        data["models"] = {"frequentist_restricted": [bmds.constants.M_Power]}
+        assert validators.validate_input(json.dumps(data), partial=True) is None
+
+        with pytest.raises(ValidationError) as err:
+            validators.validate_input(json.dumps(data))
+        assert "'options' is a required property" in str(err)
+
+        # add options, try again
+        data["options"] = [
+            {
+                "bmr_type": "Std. Dev.",
+                "bmr_value": 1.0,
+                "tail_probability": 0.95,
+                "confidence_level": 0.05,
+                "distribution": "Normal",
+                "variance": "Calculated",
+                "polynomial_restriction": "Use dataset adverse direction",
+                "background": "Estimated",
+            }
+        ]
+        assert validators.validate_input(json.dumps(data), partial=True) is None
+        assert validators.validate_input(json.dumps(data)) is None
+
 
 class TestSessionValidation:
     def test_base_validator(self, complete_continuous):

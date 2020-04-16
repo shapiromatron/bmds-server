@@ -37,7 +37,7 @@ class Job(models.Model):
         return reverse("api:job-detail", args=(str(self.id),))
 
     def get_edit_url(self):
-        return f"{self.get_absolute_url()}?editKey={self.password}"
+        return reverse("job_edit", args=(str(self.id), self.password))
 
     def get_input_url(self):
         return reverse("api:job-inputs", args=(str(self.id),))

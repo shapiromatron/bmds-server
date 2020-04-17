@@ -15,5 +15,6 @@ urlpatterns = [
     path("", views.Home.as_view(), name="home"),
     path("job/q/", views.JobQuery.as_view(), name="job_query"),
     path("job/<uuid:pk>/", views.JobDetail.as_view(), name="job"),
+    path("job/<uuid:pk>/<str:password>/", views.JobDetail.as_view(), name="job_edit"),
     path(f"{settings.ADMIN_URL_PREFIX}/admin/", admin.site.urls),
 ]

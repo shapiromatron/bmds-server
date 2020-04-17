@@ -1,28 +1,13 @@
-from rest_framework import mixins, status, viewsets
+import json
+
+from django.core.exceptions import ValidationError
+from rest_framework import exceptions, mixins, status, viewsets
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.decorators import action
 from rest_framework.permissions import IsAdminUser
-from rest_framework.renderers import BaseRenderer
 from rest_framework.response import Response
 
-from . import models, serializers, tasks
-
-
-class TxtRenderer(BaseRenderer):
-
-    media_type = "text/plain"
-    format = "txt"
-
-    def render(self, txt, accepted_media_type, renderer_context):
-        return txt
-
-
-class XlsxRenderer(BaseRenderer):
-    media_type = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-    format = "xlsx"
-
-    def render(self, wb, media_type=None, renderer_context=None):
-        return wb
+from . import models, renderers, serializers, tasks, validators
 
 
 class JobViewset(mixins.CreateModelMixin, mixins.RetrieveModelMixin, viewsets.GenericViewSet):
@@ -33,16 +18,53 @@ class JobViewset(mixins.CreateModelMixin, mixins.RetrieveModelMixin, viewsets.Ge
         content = "Outputs processing; not ready yet."
         return Response(content, status=status.HTTP_204_NO_CONTENT)
 
-    @action(detail=True, methods=("get",), renderer_classes=(TxtRenderer,))
+    @action(
+        detail=True, methods=("patch",), url_path="patch-inputs",
+    )
+    def patch_inputs(self, request, *args, **kwargs):
+        """
+        Validate input and if successful, patch inputs on server side.
+        """
+        instance = self.get_object()
+        data = request.data.get("data")
+        edit_key = request.data.get("editKey", "")
+        partial = bool(request.data.get("partial", False))
+
+        # permission check
+        if edit_key != instance.password:
+            raise exceptions.PermissionDenied()
+
+        if not isinstance(data, dict):
+            raise exceptions.ValidationError("A `data` object is required")
+
+        input_data = json.dumps(data)
+
+        try:
+            validators.validate_input(input_data, partial=partial)
+        except ValidationError as err:
+            raise exceptions.ValidationError(err.message)
+
+        instance.inputs = input_data
+        instance.save()
+
+        return Response(data=data)
+
+    @action(detail=True, methods=("get",), renderer_classes=(renderers.TxtRenderer,))
     def inputs(self, request, *args, **kwargs):
+        """
+        Return inputs for selected job.
+        """
         instance = self.get_object()
         fn = f"{instance.id}-inputs.json"
         resp = Response(instance.inputs)
         resp["Content-Disposition"] = f'attachment; filename="{fn}"'
         return resp
 
-    @action(detail=True, methods=("get",), renderer_classes=(TxtRenderer,))
+    @action(detail=True, methods=("get",), renderer_classes=(renderers.TxtRenderer,))
     def outputs(self, request, *args, **kwargs):
+        """
+        Return outputs for selected job
+        """
         instance = self.get_object()
 
         if not instance.is_finished:
@@ -53,8 +75,11 @@ class JobViewset(mixins.CreateModelMixin, mixins.RetrieveModelMixin, viewsets.Ge
         resp["Content-Disposition"] = f'attachment; filename="{fn}"'
         return resp
 
-    @action(detail=True, methods=("get",), renderer_classes=(XlsxRenderer,))
+    @action(detail=True, methods=("get",), renderer_classes=(renderers.XlsxRenderer,))
     def excel(self, request, *args, **kwargs):
+        """
+        Return Excel export of outputs for selected job
+        """
         instance = self.get_object()
 
         if not instance.is_finished:

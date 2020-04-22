@@ -1,9 +1,4 @@
-.container{
-    padding:20px;
-}
-
-
-.data-table{
-   margin:10px;
-
+.dataRow{
+    margin-top:20px;
+    margin-bottom: 20px;
 }

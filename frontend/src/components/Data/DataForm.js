@@ -299,21 +299,21 @@ class DataForm extends Component {
         } else if (this.state.formType.toString() === "CI") {
             let data = {
                 id: Math.floor(Math.random() * 1000),
-                dataset_name: e.target.datasetnamevalue,
+                dataset_name: e.target.datasetname.value,
                 dataset: this.state.CIDataset,
             };
             this.props.DataStore.addDataSets(data);
         } else if (this.state.formType.toString() === "DI") {
             let data = {
                 id: Math.floor(Math.random() * 1000),
-                dataset_name: e.target.datasetnamevalue,
+                dataset_name: e.target.datasetname.value,
                 dataset: this.state.DIDataset,
             };
             this.props.DataStore.addDataSets(data);
         } else if (this.state.formType.toString() === "NS") {
             let data = {
                 id: Math.floor(Math.random() * 1000),
-                dataset_name: e.target.datasetnamevalue,
+                dataset_name: e.target.datasetname.value,
                 dataset: this.state.NSDataset,
             };
             this.props.DataStore.addDataSets(data);

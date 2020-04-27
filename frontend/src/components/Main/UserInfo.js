@@ -1,12 +1,5 @@
 import React, {Component} from "react";
 import {Button, Form} from "react-bootstrap";
-import RunAnalysisService from "../Service/RunAnalysisService";
-import ModelFilter from "../Filters/ModelFilter";
-import OptionsFilter from "../Filters/OptionsFilter";
-import DataFilter from "../Filters/DataFilter";
-
-import {toJS} from "mobx";
-
 import {inject, observer} from "mobx-react";
 
 @inject("DataStore")
@@ -14,37 +7,16 @@ import {inject, observer} from "mobx-react";
 class UserInfo extends Component {
     constructor(props) {
         super(props);
-        this.runAnalysisService = new RunAnalysisService();
-        this.modelFilter = new ModelFilter();
-        this.optionFilter = new OptionsFilter();
-        this.dataFilter = new DataFilter();
     }
 
-    handleSubmit = event => {
-        event.preventDefault();
-        let dataset_type = event.target.modelType.value;
+    handleSubmit = e => {
+        e.preventDefault();
+        let model_type = event.target.modelType.value;
+        this.props.DataStore.runAnalysis(model_type);
+    };
 
-        let models = toJS(this.props.DataStore.models);
-        let model = this.modelFilter.filterModel(models);
-
-        let options = toJS(this.props.DataStore.options);
-        let option = this.optionFilter.filterOptions(options[0]);
-
-        let datasets = toJS(this.props.DataStore.activeDataset);
-        let data = this.dataFilter.filterData(datasets);
-
-        let payload = {
-            editKey: "fnvuzjigoa2w",
-            data: {
-                bmds_version: "BMDS312",
-                dataset_type,
-                models: model,
-                datasets: data,
-                options: option,
-            },
-        };
-
-        this.runAnalysisService.runJob(payload);
+    handleChange = e => {
+        this.props.DataStore.addModelType(e.target.value);
     };
 
     render() {
@@ -62,7 +34,8 @@ class UserInfo extends Component {
                         </Form.Group>
                         <Form.Group>
                             <Form.Label>Select Model Type</Form.Label>
-                            <Form.Control as="select" name="modelType">
+                            <Form.Control as="select" name="modelType" onChange={this.handleChange}>
+                                <option value="">Select Model Type</option>
                                 <option value="C">Continuous</option>
                                 <option value="D">Dichotomous</option>
                                 <option value="DMT">Dichotomous-Multi-tumor(MS_Combo)</option>

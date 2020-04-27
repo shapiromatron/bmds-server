@@ -1,20 +1,25 @@
 import React from "react";
 const OptionsList = props => {
     return props.optionsList.map((val, idx) => {
-        let bmr_type = `bmr_type-${idx}`,
-            bmr_value = `bmr_value-${idx}`,
-            tail_probability = `tail_probability-${idx}`,
-            confidence_level = `confidence_level-${idx}`,
-            distribution = `distribution-${idx}`,
-            variance = `variance-${idx}`,
-            polynomial_restriction = `polynomial_restriction-${idx}`,
-            background = `background-${idx}`;
+        let bmr_type = `bmr_type-${val.index}`,
+            bmr_value = `bmr_value-${val.index}`,
+            tail_probability = `tail_probability-${val.index}`,
+            confidence_level = `confidence_level-${val.index}`,
+            distribution = `distribution-${val.index}`,
+            variance = `variance-${val.index}`,
+            polynomial_restriction = `polynomial_restriction-${val.index}`,
+            background = `background-${val.index}`;
         return (
             <tr key={idx}>
                 <td>{idx}</td>
                 <td>
-                    <select name="bmr_type" id={bmr_type} data-id={idx} className="form-control">
-                        <option value="">select</option>
+                    <select
+                        name="bmr_type"
+                        id={bmr_type}
+                        data-id={idx}
+                        className="form-control"
+                        onChange={props.onchange}>
+                        <option>Select</option>
                         <option value="Std. Dev.">Std. Dev.</option>
                         <option value="Rel. Dev.">Rel. Dev.</option>
                         <option value="Abs. Dev.">Abs. Dev.</option>
@@ -25,29 +30,35 @@ const OptionsList = props => {
 
                 <td>
                     <input
-                        type="number"
+                        type="text"
+                        pattern="[0-9]*"
                         name="bmr_value"
                         id={bmr_value}
                         data-id={idx}
                         className="form-control "
+                        onChange={props.onchange}
                     />
                 </td>
                 <td>
                     <input
-                        type="number"
+                        type="text"
+                        pattern="[0-9]*"
                         name="tail_probability"
                         id={tail_probability}
                         data-id={idx}
                         className="form-control "
+                        onChange={props.onchange}
                     />
                 </td>
                 <td>
                     <input
-                        type="number"
+                        type="text"
+                        pattern="[0-9]*"
                         name="confidence_level"
                         id={confidence_level}
                         data-id={idx}
                         className="form-control "
+                        onChange={props.onchange}
                     />
                 </td>
 
@@ -56,16 +67,22 @@ const OptionsList = props => {
                         name="distribution"
                         id={distribution}
                         data-id={idx}
-                        className="form-control">
-                        <option value="">select</option>
+                        className="form-control"
+                        onChange={props.onchange}>
+                        <option>Select</option>
                         <option value="Normal">Normal</option>
                         <option value="log normal">Log normal</option>
                     </select>
                 </td>
 
                 <td>
-                    <select name="variance" id={variance} data-id={idx} className="form-control">
-                        <option value="">select</option>
+                    <select
+                        name="variance"
+                        id={variance}
+                        data-id={idx}
+                        className="form-control"
+                        onChange={props.onchange}>
+                        <option>Select</option>
                         <option value="Constant">Constant</option>
                         <option value="Non Constant">Non-Constant</option>
                     </select>
@@ -76,8 +93,9 @@ const OptionsList = props => {
                         name="polynomial_restriction"
                         id={polynomial_restriction}
                         data-id={idx}
-                        className="form-control">
-                        <option value="">select</option>
+                        className="form-control"
+                        onChange={props.onchange}>
+                        <option>Select</option>
                         <option value="Use dataset adverse direction">
                             Use dataset adverse direction
                         </option>
@@ -91,8 +109,9 @@ const OptionsList = props => {
                         name="background"
                         id={background}
                         data-id={idx}
-                        className="form-control">
-                        <option value="">select</option>
+                        className="form-control"
+                        onChange={props.onchange}>
+                        <option>Select</option>
                         <option value="Estimated">Estimated</option>
                     </select>
                 </td>

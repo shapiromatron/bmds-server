@@ -10,13 +10,12 @@ class DatasetName extends Component {
     }
 
     handleCheckbox(e, item) {
-        if (e.target.checked) {
-            this.props.DataStore.addActiveDataset(item);
-        } else {
-            this.props.DataStore.deleteActiveDataset(item.id);
-        }
+        this.props.DataStore.toggleDataset(item.id);
     }
     render() {
+        let obj = this.props.DataStore.savedDataset.filter(data => data.enabled == true);
+        let model_type = this.props.DataStore.modelType;
+
         return (
             <div>
                 {this.props.DataStore.getDataLength > 0 ? (
@@ -29,28 +28,31 @@ class DatasetName extends Component {
                             </tr>
                         </thead>
                         <tbody>
-                            {this.props.DataStore.datasets.map((item, index) => {
-                                return [
-                                    <tr key={index}>
-                                        <td>
-                                            <input
-                                                type="checkbox"
-                                                name="isIncluded"
-                                                onChange={e => this.handleCheckbox(e, item)}
-                                            />
-                                        </td>
-                                        <td>{item.dataset_name}</td>
-                                        <td>
-                                            {" "}
-                                            <Form.Control as="select" name="adverseDirection">
-                                                <option value="automatic">autmatic</option>
-                                                <option value="up">up</option>
-                                                <option value="down">down</option>
-                                            </Form.Control>
-                                        </td>
-                                    </tr>,
-                                ];
-                            })}
+                            {this.props.DataStore.savedDataset
+                                .filter(item => item.model_type.includes(model_type))
+                                .map((item, index) => {
+                                    return [
+                                        <tr key={index}>
+                                            <td>
+                                                <input
+                                                    type="checkbox"
+                                                    name="isIncluded"
+                                                    checked={obj.includes(item)}
+                                                    onChange={e => this.handleCheckbox(e, item)}
+                                                />
+                                            </td>
+                                            <td>{item.dataset_name}</td>
+                                            <td>
+                                                {" "}
+                                                <Form.Control as="select" name="adverseDirection">
+                                                    <option value="automatic">automatic</option>
+                                                    <option value="up">up</option>
+                                                    <option value="down">down</option>
+                                                </Form.Control>
+                                            </td>
+                                        </tr>,
+                                    ];
+                                })}
                         </tbody>
                     </table>
                 ) : null}

@@ -20,6 +20,8 @@ class UserInfo extends Component {
     };
 
     render() {
+        let obj = this.props.DataStore.modelType;
+
         return (
             <div>
                 <div className="col main-form" xs={4}>
@@ -34,8 +36,12 @@ class UserInfo extends Component {
                         </Form.Group>
                         <Form.Group>
                             <Form.Label>Select Model Type</Form.Label>
-                            <Form.Control as="select" name="modelType" onChange={this.handleChange}>
-                                <option value="">Select Model Type</option>
+                            <Form.Control
+                                as="select"
+                                name="modelType"
+                                onChange={this.handleChange}
+                                value={obj}>
+                                <option value="select">Select Model Type</option>
                                 <option value="C">Continuous</option>
                                 <option value="D">Dichotomous</option>
                                 <option value="DMT">Dichotomous-Multi-tumor(MS_Combo)</option>

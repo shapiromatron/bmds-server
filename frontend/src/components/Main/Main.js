@@ -1,10 +1,9 @@
 import React, {Component} from "react";
 
 import UserInfo from "./UserInfo";
-import ModelType from "./ModelType";
+import ModelsCheckBoxList from "./ModelsCheckBoxList";
 import DatasetName from "./DatasetName";
-import OptionsForm from "./OptionsForm";
-import "./Main.css";
+import OptionsFormList from "./OptionsFormList";
 
 class Main extends Component {
     render() {
@@ -21,12 +20,12 @@ class Main extends Component {
                 </div>
                 <div className="row">
                     <div className="col">
-                        <ModelType />
+                        <ModelsCheckBoxList />
                     </div>
                 </div>
                 <div className="row">
                     <div className="col">
-                        <OptionsForm />
+                        <OptionsFormList />
                     </div>
                 </div>
             </div>

@@ -5,7 +5,7 @@ import {inject, observer} from "mobx-react";
 
 @inject("DataStore")
 @observer
-class Modaldata extends Component {
+class DataModal extends Component {
     constructor(props) {
         super(props);
     }
@@ -34,7 +34,7 @@ class Modaldata extends Component {
                                 <Form.Control as="select" name="modelType">
                                     <option value="CS">Continuous - summarized</option>
                                     <option value="CI">Continuous - individual</option>
-                                    <option value="DI">Dichotomous</option>
+                                    <option value="D">Dichotomous</option>
                                     <option value="NS">Nested</option>
                                 </Form.Control>
                             </Form.Group>
@@ -58,4 +58,4 @@ class Modaldata extends Component {
     }
 }
 
-export default Modaldata;
+export default DataModal;

@@ -1,116 +1,139 @@
-import React, {Component} from "react";
-import OptionsList from "./OptionsList";
+import React from "react";
 
-import {inject, observer} from "mobx-react";
+const OptionsForm = props => {
+    return (
+        <tr>
+            <td>{props.idx}</td>
+            {props.model_type === "C" ? (
+                <td>
+                    <select
+                        name="bmr_type"
+                        className="form-control"
+                        defaultValue={props.item.bmr_type}
+                        id={props.idx}
+                        onChange={props.onchange}>
+                        <option>Select</option>
+                        <option value="Std. Dev.">Std. Dev.</option>
+                        <option value="Rel. Dev.">Rel. Dev.</option>
+                        <option value="Abs. Dev.">Abs. Dev.</option>
+                        <option value="Point">Point</option>
+                        <option value="Hybrid Extra Risk">Hybrid- extra risk</option>
+                    </select>
+                </td>
+            ) : null}
+            {props.model_type === "D" ? (
+                <td>
+                    <select
+                        name="risk_type"
+                        className="form-control"
+                        defaultValue={props.item.risk_type}
+                        id={props.idx}
+                        onChange={props.onchange}>
+                        <option>Select</option>
+                        <option value="extra_risk">Extra Risk</option>
+                        <option value="added_risk">Added Risk</option>
+                    </select>
+                </td>
+            ) : null}
 
-@inject("DataStore")
-@observer
-class OptionsForm extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            optionsList: [
-                {
-                    index: Math.floor(Math.random() * 100),
-                    bmr_type: "",
-                    bmr_value: "",
-                    tail_probability: "",
-                    confidence_level: "",
-                    distribution: "",
-                    variance: "",
-                    polynomial_restriction: "",
-                    background: "",
-                },
-            ],
-        };
-    }
+            <td>
+                <input
+                    type="text"
+                    name="bmr_value"
+                    defaultValue={props.item.bmr_value}
+                    id={props.idx}
+                    className="form-control "
+                    onChange={props.onchange}
+                />
+            </td>
+            {props.model_type === "C" ? (
+                <td>
+                    <input
+                        type="text"
+                        name="tail_probability"
+                        defaultValue={props.item.tail_probability}
+                        id={props.idx}
+                        className="form-control "
+                        onChange={props.onchange}
+                    />
+                </td>
+            ) : null}
+            <td>
+                <input
+                    type="text"
+                    name="confidence_level"
+                    defaultValue={props.item.confidence_level}
+                    id={props.idx}
+                    className="form-control "
+                    onChange={props.onchange}
+                />
+            </td>
+            {props.model_type === "C" ? (
+                <td>
+                    <select
+                        name="distribution"
+                        className="form-control"
+                        defaultValue={props.item.distribution}
+                        id={props.idx}
+                        onChange={props.onchange}>
+                        <option>Select</option>
+                        <option value="Normal">Normal</option>
+                        <option value="log normal">Log normal</option>
+                    </select>
+                </td>
+            ) : null}
+            {props.model_type === "C" ? (
+                <td>
+                    <select
+                        name="variance"
+                        id={props.idx}
+                        className="form-control"
+                        defaultValue={props.item.variance}
+                        onChange={props.onchange}>
+                        <option>Select</option>
+                        <option value="Constant">Constant</option>
+                        <option value="Non Constant">Non-Constant</option>
+                    </select>
+                </td>
+            ) : null}
+            {props.model_type === "C" ? (
+                <td>
+                    <select
+                        name="polynomial_restriction"
+                        id={props.idx}
+                        className="form-control"
+                        defaultValue={props.item.polynomial_restriction}
+                        onChange={props.onchange}>
+                        <option>Select</option>
+                        <option value="Use dataset adverse direction">
+                            Use dataset adverse direction
+                        </option>
+                        <option value="Non-Negetive">Non-negetive</option>
+                        <option value="Non-Positive">Non-positive</option>
+                    </select>
+                </td>
+            ) : null}
+            <td>
+                <select
+                    name="background"
+                    id={props.idx}
+                    className="form-control"
+                    defaultValue={props.item.background}
+                    onChange={props.onchange}>
+                    <option>Select</option>
+                    <option value="Estimated">Estimated</option>
+                </select>
+            </td>
 
-    onChange = e => {
-        const {name, value, id} = e.target;
-        this.props.DataStore.saveOptions(name, value, id);
-    };
-
-    addNewRow = e => {
-        this.setState(prevState => ({
-            optionsList: [
-                ...prevState.optionsList,
-                {
-                    index: Math.floor(Math.random() * 100),
-                    bmr_type: "",
-                    bmr_value: "",
-                    tail_probability: "",
-                    confidence_level: "",
-                    distribution: "",
-                    variance: "",
-                    polynomial_restriction: "",
-                    background: "",
-                },
-            ],
-        }));
-    };
-
-    clickOnDelete(record) {
-        this.props.DataStore.deleteOptions(record.index);
-        this.setState({
-            optionsList: this.state.optionsList.filter(r => r !== record),
-        });
-    }
-
-    render() {
-        let {optionsList} = this.state;
-
-        return (
-            <div className="content">
-                {this.props.DataStore.modelType.length > 0 ? (
-                    <form>
-                        <div className="row" style={{marginTop: 20}}>
-                            <div className="col">
-                                <div className="card">
-                                    <div className="card-body">
-                                        <table className="table">
-                                            <thead>
-                                                <tr>
-                                                    <th>Option Set #</th>
-                                                    <th>BMR Type</th>
-                                                    <th>BMRF</th>
-                                                    <th>Tail Probability</th>
-                                                    <th>Confidence Level</th>
-                                                    <th>Distribution</th>
-                                                    <th>Variance</th>
-                                                    <th>Polynomial Restriction</th>
-                                                    <th>Background</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                <OptionsList
-                                                    add={this.addNewRow}
-                                                    delete={this.clickOnDelete.bind(this)}
-                                                    optionsList={optionsList}
-                                                    onchange={this.onChange.bind(this)}
-                                                />
-                                            </tbody>
-                                            <tfoot>
-                                                <tr>
-                                                    <td colSpan="2" className="align-left">
-                                                        <button
-                                                            onClick={this.addNewRow}
-                                                            type="button"
-                                                            className="btn btn-primary ">
-                                                            add option set
-                                                        </button>
-                                                    </td>
-                                                </tr>
-                                            </tfoot>
-                                        </table>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </form>
-                ) : null}
-            </div>
-        );
-    }
-}
-
+            <td>
+                <button
+                    className="btn btn-danger close"
+                    aria-label="Close"
+                    onClick={e => props.delete(e, props.idx)}>
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </td>
+        </tr>
+    );
+};
 export default OptionsForm;

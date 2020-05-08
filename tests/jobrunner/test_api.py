@@ -75,6 +75,7 @@ class TestPatchInputs:
         job = Job.objects.create()
         url = job.get_api_patch_inputs()
 
+        # complete bmds3 continuous
         payload = {
             "editKey": job.password,
             "data": {
@@ -99,6 +100,36 @@ class TestPatchInputs:
                         "distribution": "Normal",
                         "variance": "Calculated",
                         "polynomial_restriction": "Use dataset adverse direction",
+                        "background": "Estimated",
+                    }
+                ],
+            },
+        }
+
+        response = client.patch(url, payload, format="json")
+        assert response.status_code == 200
+        assert response.json() == payload["data"]
+
+        # complete bmds3 dichotomous
+        payload = {
+            "editKey": job.password,
+            "data": {
+                "bmds_version": "BMDS312",
+                "dataset_type": "D",
+                "models": {"frequentist_restricted": ["LogLogistic"]},
+                "datasets": [
+                    {
+                        "id": 123,
+                        "doses": [0, 10, 50, 150, 400],
+                        "ns": [20, 20, 20, 20, 20],
+                        "incidences": [0, 0, 1, 4, 11],
+                    }
+                ],
+                "options": [
+                    {
+                        "bmr_type": "Extra",
+                        "bmr_value": 0.1,
+                        "confidence_level": 0.95,
                         "background": "Estimated",
                     }
                 ],

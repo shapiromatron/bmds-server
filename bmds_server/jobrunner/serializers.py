@@ -50,7 +50,10 @@ class JobSerializer(serializers.ModelSerializer):
     def to_representation(self, obj):
         obj = super(JobSerializer, self).to_representation(obj)
         # TODO - revisit this
-        obj.pop("inputs")
+        if not obj["inputs"]:
+            obj["inputs"] = "{}"
+        obj["inputs"] = json.loads(obj["inputs"])
+
         if obj["is_finished"] and obj["outputs"]:
             obj["outputs"] = json.loads(obj["outputs"])
         else:

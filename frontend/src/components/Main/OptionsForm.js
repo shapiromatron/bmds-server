@@ -24,14 +24,14 @@ const OptionsForm = props => {
             {props.model_type === "D" ? (
                 <td>
                     <select
-                        name="risk_type"
+                        name="bmr_type"
                         className="form-control"
                         defaultValue={props.item.risk_type}
                         id={props.idx}
                         onChange={props.onchange}>
                         <option>Select</option>
-                        <option value="extra_risk">Extra Risk</option>
-                        <option value="added_risk">Added Risk</option>
+                        <option value="Extra">Extra Risk</option>
+                        <option value="Added">Added Risk</option>
                     </select>
                 </td>
             ) : null}

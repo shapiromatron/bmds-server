@@ -5,8 +5,6 @@ import StoreDebugger from "./components/StoreDebugger/StoreDebugger";
 import {inject, observer} from "mobx-react";
 import {Navbar} from "react-bootstrap";
 
-import "./index.css";
-
 @inject("DataStore")
 @observer
 class App extends Component {

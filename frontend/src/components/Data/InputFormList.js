@@ -42,6 +42,7 @@ class CSFormList extends Component {
 
     render() {
         let form_type = this.props.DataStore.dataFormType;
+        let dataFormList = this.props.DataStore.getDataFormList();
 
         return (
             <div>
@@ -62,11 +63,9 @@ class CSFormList extends Component {
                                         <table className="table">
                                             <thead className="text-center">
                                                 <tr>
-                                                    <th>Doses</th>
-                                                    <th>NS</th>
-                                                    {form_type === "D" ? <th>Incidence</th> : null}
-                                                    {form_type === "CS" ? <th>Means</th> : null}
-                                                    {form_type === "CS" ? <th>St. Dev</th> : null}
+                                                    {dataFormList.map((item, index) => {
+                                                        return [<th key={index}>{item.label}</th>];
+                                                    })}
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -74,6 +73,8 @@ class CSFormList extends Component {
                                                     <InputForm
                                                         key={id}
                                                         idx={id}
+                                                        item={item}
+                                                        form={dataFormList}
                                                         form_type={form_type}
                                                         onChange={this.onChange}
                                                         delete={this.deleteRow.bind(this)}

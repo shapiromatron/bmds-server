@@ -11,18 +11,44 @@ const ContinuousCheckBox = props => {
                             return [
                                 <td key={index}>
                                     <input
-                                        type="checkbox"
+                                        className="checkbox-input"
+                                        type={dev.type}
                                         name={dev.name}
                                         onChange={props.onChange}
-                                        defaultChecked={dev.isChecked}
+                                        checked={dev.isChecked}
+                                        disabled={dev.isDisabled}
                                     />
+
+                                    {dev.name.includes("bayesian_model_average") ? (
+                                        <input
+                                            style={{float: "right", textAlign: "right"}}
+                                            type="text"
+                                            name={dev.name}
+                                            value={dev.prior_weight + "%"}
+                                            onChange={props.onChange}
+                                        />
+                                    ) : null}
                                 </td>,
                             ];
                         })}
-                        <td></td>
                     </tr>,
                 ];
             })}
+            <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td>
+                    Total Weights{" "}
+                    <input
+                        style={{float: "right"}}
+                        name="total_weights"
+                        type="text"
+                        onChange={props.onChange}
+                    />
+                </td>
+            </tr>
         </tbody>
     );
 };

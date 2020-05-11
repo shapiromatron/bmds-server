@@ -9,9 +9,9 @@ from django.urls import reverse
 
 @pytest.mark.vcr()
 @pytest.mark.django_db(transaction=False)
-def test_d_success(complete_dichotomous):
+def test_d_success(bmds2_complete_dichotomous):
     # BMDS execution is slow; we overload this test to check lots of things.
-    data = deepcopy(complete_dichotomous)
+    data = deepcopy(bmds2_complete_dichotomous)
 
     # use a single model for speed
     data["models"] = [{"name": "Logistic"}]
@@ -45,9 +45,9 @@ def test_d_success(complete_dichotomous):
 
 @pytest.mark.vcr()
 @pytest.mark.django_db(transaction=False)
-def test_c_success(complete_continuous):
+def test_c_success(bmds2_complete_continuous):
     # BMDS execution is slow; we overload this test to check lots of things.
-    data = deepcopy(complete_continuous)
+    data = deepcopy(bmds2_complete_continuous)
 
     # use single model for speed; w/ a model override
     data["models"] = [{"name": "Polynomial", "settings": {"degree_poly": 3}}]
@@ -88,9 +88,9 @@ def test_c_success(complete_continuous):
 
 @pytest.mark.vcr()
 @pytest.mark.django_db(transaction=False)
-def test_ci_success(complete_continuous_individual):
+def test_ci_success(bmds2_complete_continuous_individual):
     # BMDS execution is slow; we overload this test to check lots of things.
-    data = deepcopy(complete_continuous_individual)
+    data = deepcopy(bmds2_complete_continuous_individual)
 
     # use single model for speed; w/ a model override
     data["models"] = [{"name": "Polynomial", "settings": {"degree_poly": 3}}]
@@ -121,4 +121,4 @@ def test_ci_success(complete_continuous_individual):
 
     # check parsed model output exists
     bmd = model["output"]["BMD"]
-    assert bmd == 386.104
+    assert bmd == 386.097

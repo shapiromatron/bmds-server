@@ -13,7 +13,7 @@ from django.db import connection, models
 from django.urls import reverse
 from django.utils.timezone import now
 
-from . import utils, tasks, validators, xlsx
+from . import tasks, transforms, utils, validators, xlsx
 
 logger = logging.getLogger(__name__)
 
@@ -40,6 +40,9 @@ class Job(models.Model):
 
     def get_api_patch_inputs(self):
         return reverse("api:job-patch-inputs", args=(str(self.id),))
+
+    def get_api_execute_url(self):
+        return reverse("api:job-execute", args=(str(self.id),))
 
     def get_edit_url(self):
         return reverse("job_edit", args=(str(self.id), self.password))
@@ -138,15 +141,24 @@ class Job(models.Model):
     def build_bmds3_session(
         cls, bmds_version: str, dataset_type: str, dataset: bmds.datasets.Dataset, inputs: Dict
     ) -> bmds.BMDS:
-
+        """
+        Puts all options and models into a single BMDS session.
+        """
         session = bmds.BMDS.versions[bmds_version](dataset_type, dataset=dataset)
-
-        raise NotImplementedError()
-
+        for options in inputs["options"]:
+            for model_class, model_names in inputs["models"].items():
+                for model_name in model_names:
+                    if dataset_type in bmds.constants.DICHOTOMOUS_DTYPES:
+                        model_options = transforms.bmds3_d_model_options(options)
+                    elif dataset_type in bmds.constants.CONTINUOUS_DTYPES:
+                        model_options = transforms.bmds3_c_model_options(options)
+                    else:
+                        raise ValueError(f"Unknown dataset_type: {dataset_type}")
+                    session.add_model(model_name, settings=model_options)
         return session
 
     @classmethod
-    def build_session(cls, inputs: Dict, dataset: Dict):
+    def build_session(cls, inputs: Dict, dataset: Dict) -> bmds.BMDS:
         bmds_version = inputs["bmds_version"]
         dataset_type = inputs["dataset_type"]
 
@@ -185,7 +197,8 @@ class Job(models.Model):
         session.execute()
 
         # add model recommendation
-        if inputs.get("recommend", True):
+        default_recommend = True if inputs["bmds_version"] in bmds.constants.BMDS_TWOS else False
+        if inputs.get("recommend", default_recommend):
             session.recommend()
 
         # save output; override default dataset export to optionally

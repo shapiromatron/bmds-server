@@ -9,7 +9,6 @@ class TestBmds2SessionBuild:
         data = deepcopy(bmds2_complete_continuous)
         session = Job.build_session(data, data["datasets"][0])
         assert len(session.models) == 10
-        assert session.recommendation_enabled is False
 
     def test_model_overrides(self, bmds2_complete_continuous):
         # assure global overides are applied
@@ -28,3 +27,17 @@ class TestBmds2SessionBuild:
         assert session.models[0].settings["bmr"] == 0.456
         for idx in range(1, len(session.models)):
             assert session.models[idx].settings["bmr"] == 0.123
+
+
+class TestBmds3SessionBuild:
+    def test_default_dichotomous(self, bmds3_complete_dichotomous):
+        # assure a default dataset can be created
+        data = deepcopy(bmds3_complete_dichotomous)
+        session = Job.build_session(data, data["datasets"][0])
+        assert len(session.models) == 1
+
+    def test_default_continuous(self, bmds3_complete_continuous):
+        # assure a default dataset can be created
+        data = deepcopy(bmds3_complete_continuous)
+        session = Job.build_session(data, data["datasets"][0])
+        assert len(session.models) == 1

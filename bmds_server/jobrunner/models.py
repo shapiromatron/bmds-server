@@ -239,8 +239,10 @@ class Job(models.Model):
         inputs_no_datasets.pop("datasets")
         obj = dict(job_id=str(self.id), inputs=inputs_no_datasets, outputs=outputs)
 
+        errors = [out["error"] for out in outputs if "error" in out]
+
         self.outputs = json.dumps(obj)
-        self.errors = ""
+        self.errors = json.dumps(errors)
         self.ended = now()
         self.save()
 

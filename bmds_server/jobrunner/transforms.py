@@ -4,14 +4,13 @@ from bmds.bmds3 import types
 from bmds.bmds3.models.continuous import ContinuousModelSettings
 from bmds.bmds3.models.dichotomous import DichotomousModelSettings
 
-
 bmds3_d_bmr_type_map = {"Extra": types.RiskType_t.eExtraRisk, "Added": types.RiskType_t.eAddedRisk}
 bmds3_c_bmr_type_map = {
     "Abs. Dev.": types.BMRType_t.eAbsoluteDev,
     "Std. Dev.": types.BMRType_t.eStandardDev,
     "Rel. Dev.": types.BMRType_t.eRelativeDev,
     "Point": types.BMRType_t.ePointEstimate,
-    "Extra": types.BMRType_t.eExtra,  # TODO - check
+    "Extra": types.BMRType_t.eExtra,  # TODO - check is this the right one?
 }
 
 

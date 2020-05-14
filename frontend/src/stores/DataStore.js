@@ -1,25 +1,297 @@
-import {observable, action, computed} from "mobx";
-import {toJS} from "mobx";
+import {observable, action, computed, toJS} from "mobx";
+import _ from "lodash";
 
 class DataStore {
     @observable config = {};
-
-    @observable datasets = [];
-    @observable savedDataset = [];
-    @observable datasetEditingIndex = null;
-
     @observable modal = false;
-    @observable showForm = false;
 
-    @observable modelType = "";
+    @observable showForm = false;
     @observable dataFormType = "";
 
     @observable prior_weight = 0;
     @observable prior_weight_models = [];
 
-    @observable CSForm = [];
-    @observable options = [];
-    @observable models = [];
+    @observable savedDataset = [];
+
+    @action saveOptions = (name, value, id) => {
+        this.usersInput.options[id][name] = value;
+    };
+
+    @action deleteOptions = val => {
+        this.usersInput.options.splice(val, 1);
+    };
+
+    // @action showDataForm = formType => {
+    //     this.dataFormType = formType;
+    //     this.showForm = true;
+    //     this.datasets = [];
+    //     this.createForm(formType);
+    // };
+
+    @action deleteDataRow = val => {
+        this.inputForm.datasets.splice(val, 1);
+    };
+
+    @action saveRowData = (name, value, id) => {
+        if (name === "dataset_name") {
+            this.inputForm.dataset_name = value;
+        } else {
+            this.inputForm.datasets[id][name] = value;
+        }
+    };
+
+    @action saveDataset() {
+        var output = {};
+        this.inputForm.datasets.forEach(newset => {
+            for (var prop in newset) {
+                if (prop in newset) {
+                    if (!(prop in output)) {
+                        output[prop] = [];
+                    }
+                }
+                output[prop].push(newset[prop]);
+            }
+        });
+        output["dataset_name"] = this.inputForm.dataset_name;
+        output["id"] = this.savedDataset.length;
+        output["enabled"] = false;
+        output["model_type"] = this.dataFormType;
+        this.savedDataset.push(output);
+    }
+
+    @action saveAdverseDirection = (name, value, id) => {
+        this.savedDataset.map((item, i) => {
+            if (item.id == id) {
+                item[name] = value;
+            }
+        });
+    };
+
+    @action deleteDataset = id => {
+        var index = this.savedDataset.findIndex(item => item.id == id);
+
+        if (index > -1) {
+            this.savedDataset.splice(index, 1);
+        }
+    };
+
+    @action updateDataset(setId, name, value, id) {
+        this.savedDataset[setId][name][id] = value;
+    }
+
+    @action toggleDataset = idx => {
+        var obj = this.savedDataset.find(item => item.id == idx);
+        obj["enabled"] = !obj["enabled"];
+    };
+
+    @action deleteForm() {
+        this.inputForm.datasets = [];
+        this.inputForm.model_type = "";
+        this.inputForm.dataset_name = "";
+    }
+
+    @action toggleModal() {
+        this.modal = !this.modal;
+    }
+
+    @action addUsersInput = (name, value) => {
+        this.usersInput[name] = value;
+    };
+
+    @action closeDataForm() {
+        this.dataform = false;
+    }
+    @action setConfig = config => {
+        this.config = config;
+    };
+
+    @action toggleModelsCheckBox = (model, checked, value) => {
+        let models = this.getModelTypeList();
+
+        if (model.includes("bayesian_model_average") && checked) {
+            this.prior_weight_models.push(model);
+        } else if (model.includes("bayesian_model_average") && !checked) {
+            let index = this.prior_weight_models.indexOf(model);
+            this.prior_weight_models.splice(index, 1);
+        }
+
+        if (this.prior_weight_models.length) {
+            this.prior_weight = 100;
+            this.prior_weight = this.prior_weight / this.prior_weight_models.length;
+        }
+        models.map(item => {
+            item.values.map(val => {
+                if (val.name === model) {
+                    val.isChecked = !val.isChecked;
+                } else if (
+                    model.split("-")[1] == "All" &&
+                    model.split("-")[0] == val.name.split("-")[0] &&
+                    !val.isDisabled
+                ) {
+                    val.isChecked = !val.isChecked;
+                }
+
+                if (this.prior_weight_models.includes(val.name)) {
+                    val.prior_weight = this.prior_weight;
+                } else if (
+                    val.name.includes("bayesian_model_average") &&
+                    !this.prior_weight_models.includes(val.name)
+                ) {
+                    val.prior_weight = 0;
+                }
+            });
+        });
+    };
+
+    //returns the dataset which are enabled
+    @action getEnabledDataset() {
+        let obj = toJS(this.savedDataset).filter(item => item.enabled == true);
+        return obj;
+    }
+
+    //returns enabled model types
+    @action getModels() {
+        let result = {};
+        let models = toJS(this.getModelTypeList());
+
+        models.forEach(item => {
+            item.values.forEach(val => {
+                if (val.isChecked) {
+                    var [k, v] = val.name.split("-");
+                    if (v === "DichotomousHill") {
+                        v = "Dichotomous-Hill";
+                    }
+                    if (k in result) {
+                        if (k === "bayesian_model_average") {
+                            result[k] = result[k].concat({
+                                model: v,
+                                prior_weight: parseFloat(val.prior_weight) / 100,
+                            });
+                        } else {
+                            result[k] = result[k].concat(v);
+                        }
+                    } else {
+                        if (k === "bayesian_model_average") {
+                            result[k] = [
+                                {model: v, prior_weight: parseFloat(val.prior_weight) / 100},
+                            ];
+                        } else {
+                            result[k] = [v];
+                        }
+                    }
+                }
+            });
+        });
+
+        return result;
+    }
+
+    @action saveAnalysis = () => {
+        let model = this.getModels();
+        let data = this.getEnabledDataset();
+        let option = this.usersInput.options;
+        let analysis_name = this.usersInput.analysis_name;
+        let analysis_description = this.usersInput.analysis_description;
+        let dataset_type = this.usersInput.dataset_type;
+        let url = this.config.editSettings.patchInputUrl;
+        let key = this.config.editSettings.editKey;
+
+        let payload = {
+            editKey: key,
+            partial: true,
+            data: {
+                bmds_version: "BMDS312",
+                analysis_name,
+                analysis_description,
+                dataset_type,
+                models: model,
+                datasets: data,
+                options: option,
+            },
+        };
+
+        this.saveAnalysisAPI(payload, url);
+    };
+
+    @action
+    async saveAnalysisAPI(payload, url) {
+        await fetch(url, {
+            method: "PATCH",
+            mode: "cors",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(payload),
+        })
+            .then(response => {
+                response.json().then(data => console.log(data));
+            })
+            .catch(error => {
+                console.log("error", error);
+            });
+    }
+
+    @action
+    async fetchSavedAnalysis() {
+        let apiUrl = this.config.apiUrl;
+        await fetch(apiUrl, {
+            method: "GET",
+            mode: "cors",
+        })
+            .then(response => {
+                response.json().then(data => {
+                    if (!_.isEmpty(data.inputs)) {
+                        this.mapInputs(data.inputs);
+                    }
+                });
+            })
+            .catch(error => {
+                console.log("error", error);
+            });
+    }
+    @observable usersInput = {
+        analysis_name: "",
+        analysis_description: "",
+        dataset_type: "",
+        models: {},
+        options: [],
+    };
+
+    @observable inputForm = {
+        dataset_name: "",
+        datasets: [],
+        model_type: "",
+    };
+
+    @observable mapInputs(inputs) {
+        this.usersInput.analysis_name = inputs.analysis_name;
+        this.usersInput.analysis_description = inputs.analysis_description;
+        this.usersInput.dataset_type = inputs.dataset_type;
+        this.usersInput.options = inputs.options;
+
+        let modelArr = [];
+        Object.keys(inputs.models).map((item, i) => {
+            inputs.models[item].map((val, index) => {
+                if (item === "bayesian_model_average") {
+                    val = val.model;
+                }
+                if (val == "Dichotomous-Hill") {
+                    let [k, v] = val.split("-");
+                    val = k + v;
+                }
+                val = item + "-" + val;
+                modelArr.push(val);
+            });
+        });
+
+        modelArr.forEach((item, i) => {
+            let checked = true;
+            let value = "";
+            this.toggleModelsCheckBox(item, checked, value);
+        });
+
+        this.savedDataset = inputs.datasets;
+    }
 
     @observable modelsCheckBoxHeaders = [
         {
@@ -47,28 +319,28 @@ class DataStore {
                     model_name: "frequentist_restricted",
                     colspan: "1",
                     type: "checkBox",
-                    input: true,
+                    isChecked: false,
                 },
                 {
                     name: "Enable",
                     model_name: "frequentist_unrestricted",
                     colspan: "1",
                     type: "checkBox",
-                    input: true,
+                    isChecked: false,
                 },
                 {
                     name: "Enable",
                     model_name: "bayesian",
                     colspan: "1",
                     type: "checkBox",
-                    input: true,
+                    isChecked: false,
                 },
                 {
                     name: "Enable",
                     model_name: "bayesian_model_average",
                     colspan: "1",
                     type: "checkBox",
-                    input: true,
+                    isChecked: false,
                     prior_weight: "Prior Weight",
                 },
             ],
@@ -461,11 +733,12 @@ class DataStore {
         },
     ];
 
-    @observable CSForm = [
-        {label: "Dose", name: "doses"},
-        {label: "N", name: "ns"},
-        {label: "Mean", name: "means"},
-        {label: "St Dev", name: "stdevs"},
+    @observable
+    CSForm = [
+        {label: "Dose", name: "doses", value: "6"},
+        {label: "N", name: "ns", value: "5"},
+        {label: "Mean", name: "means", value: "7"},
+        {label: "St Dev", name: "stdevs", value: "3"},
     ];
     @observable CIForm = [
         {label: "Dose", name: "doses"},
@@ -479,14 +752,15 @@ class DataStore {
     ];
     @observable NestedForm = [
         {label: "Dose", name: "doses"},
-        {label: "Litter Size", name: "ls"},
+        {label: "Litter Size", name: "litter_sizes"},
         {label: "Incidence", name: "incidences"},
-        {label: "Litter Specific Covariate", name: "lsc"},
+        {label: "Litter Specific Covariate", name: "litter_specific_covariates"},
     ];
 
-    @observable getDataFormList() {
+    @observable
+    getDataFormList(dataFormType) {
         let forms = [];
-        switch (this.dataFormType) {
+        switch (dataFormType) {
             case "CS":
                 forms = this.CSForm;
                 break;
@@ -505,17 +779,17 @@ class DataStore {
 
     @observable getModelTypeList() {
         let models = [];
-        if (this.modelType == "C") {
+        if (this.usersInput.dataset_type === "C") {
             models = this.CmodelType;
-        } else if (this.modelType == "D") {
+        } else if (this.usersInput.dataset_type === "D") {
             models = this.DmodelType;
         }
         return models;
     }
 
     @action createOptions() {
-        if (this.modelType == "C") {
-            this.options.push({
+        if (this.usersInput.dataset_type === "C") {
+            this.usersInput.options.push({
                 bmr_type: "",
                 bmr_value: "",
                 tail_probability: "",
@@ -527,8 +801,8 @@ class DataStore {
             });
         }
 
-        if (this.modelType == "D") {
-            this.options.push({
+        if (this.usersInput.dataset_type === "D") {
+            this.usersInput.options.push({
                 bmr_type: "",
                 bmr_value: "",
                 confidence_level: "",
@@ -540,240 +814,46 @@ class DataStore {
     @action createForm(formType) {
         switch (formType) {
             case "CS":
-                this.datasets.push({
+                this.inputForm.datasets.push({
                     doses: "",
                     ns: "",
                     means: "",
                     stdevs: "",
                 });
+
                 break;
             case "D":
-                this.datasets.push({
+                this.inputForm.datasets.push({
                     doses: "",
                     ns: "",
                     incidences: "",
                 });
                 break;
             case "CI":
-                this.datasets.push({
+                this.inputForm.datasets.push({
                     doses: "",
-                    response: "",
+                    responses: "",
                 });
+
                 break;
             case "NS":
-                this.datasets.push({
+                this.inputForm.datasets.push({
                     doses: "",
-                    litter_size: "",
+                    litter_sizes: "",
                     incidences: "",
-                    litter_Specific_covariate: "",
+                    litter_Specific_covariates: "",
                 });
                 break;
         }
     }
 
-    @action saveOptions = (name, value, id) => {
-        this.options[id][name] = value;
-    };
-
-    @action deleteOptions = val => {
-        this.options.splice(val, 1);
-    };
-    @action showDataForm = formType => {
-        this.dataFormType = formType;
-        this.showForm = true;
-        this.datasets = [];
-        this.createForm(formType);
-    };
-
-    @action deleteDataRow = val => {
-        this.datasets.splice(val, 1);
-    };
-
-    @action saveRowData = (name, value, id) => {
-        this.datasets[id][name] = value;
-    };
-
-    @action saveDataset(dataset_name) {
-        var output = {};
-        this.datasets.forEach(newset => {
-            for (var prop in newset) {
-                if (prop in newset) {
-                    if (!(prop in output)) {
-                        output[prop] = [];
-                    }
-                }
-                output[prop].push(newset[prop]);
-            }
-        });
-
-        output["id"] = this.savedDataset.length;
-        output["dataset_name"] = dataset_name;
-        output["enabled"] = false;
-        output["model_type"] = this.dataFormType;
-        this.savedDataset.push(output);
-    }
-
-    @action deleteDataset = id => {
-        var index = this.savedDataset.findIndex(item => item.id == id);
-
-        if (index > -1) {
-            this.savedDataset.splice(index, 1);
-        }
-    };
-
-    @action toggleDataset = idx => {
-        var obj = this.savedDataset.find(item => item.id == idx);
-        obj["enabled"] = !obj["enabled"];
-    };
-
-    @action deleteForm() {
-        this.dataFormType = "";
-        this.datasets = [];
-        this.showForm = false;
-    }
-
-    @action showModal() {
-        this.modal = true;
-    }
-    @action closeModal() {
-        this.modal = false;
-    }
-    @action addModelType = value => {
-        this.modelType = "";
-        this.options = [];
-        this.modelType = value;
-    };
-
-    @action closeDataForm() {
-        this.dataform = false;
-    }
-    @action setConfig = config => {
-        this.config = config;
-    };
-
-    @action toggleModelsCheckBox = (model, checked, value) => {
-        let models = this.getModelTypeList();
-
-        if (model.includes("bayesian_model_average") && checked) {
-            this.prior_weight_models.push(model);
-        } else if (model.includes("bayesian_model_average") && !checked) {
-            let index = this.prior_weight_models.indexOf(model);
-            this.prior_weight_models.splice(index, 1);
-        }
-
-        if (this.prior_weight_models.length) {
-            this.prior_weight = 100;
-            this.prior_weight = this.prior_weight / this.prior_weight_models.length;
-        }
-        models.map(item => {
-            item.values.map(val => {
-                if (val.name === model) {
-                    val.isChecked = !val.isChecked;
-                } else if (
-                    model.split("-")[1] == "All" &&
-                    model.split("-")[0] == val.name.split("-")[0] &&
-                    !val.isDisabled
-                ) {
-                    val.isChecked = !val.isChecked;
-                }
-
-                if (this.prior_weight_models.includes(val.name)) {
-                    val.prior_weight = this.prior_weight;
-                } else if (
-                    val.name.includes("bayesian_model_average") &&
-                    !this.prior_weight_models.includes(val.name)
-                ) {
-                    val.prior_weight = 0;
-                }
-            });
-        });
-    };
-
-    //returns the dataset which are enabled
-    @action getEnabledDataset() {
-        let obj = toJS(this.savedDataset).filter(item => item.enabled == true);
-        return obj;
-    }
-
-    //returns enabled model types
-    @action getModels() {
-        let result = {};
-        let models = toJS(this.getModelTypeList());
-
-        models.forEach(item => {
-            item.values.forEach(val => {
-                if (val.isChecked) {
-                    var [k, v] = val.name.split("-");
-                    if (v === "DichotomousHill") {
-                        v = "Dichotomous-Hill";
-                    }
-                    if (k in result) {
-                        if (k === "bayesian_model_average") {
-                            result[k] = result[k].concat({
-                                model: v,
-                                prior_weight: parseFloat(val.prior_weight) / 100,
-                            });
-                        } else {
-                            result[k] = result[k].concat(v);
-                        }
-                    } else {
-                        if (k === "bayesian_model_average") {
-                            result[k] = [
-                                {model: v, prior_weight: parseFloat(val.prior_weight) / 100},
-                            ];
-                        } else {
-                            result[k] = [v];
-                        }
-                    }
-                }
-            });
-        });
-
-        return result;
-    }
-
-    @action runAnalysis = (model_type, analysis_name, analysis_description) => {
-        let model = this.getModels();
-        let data = this.getEnabledDataset();
-        let option = this.options;
-        let url = this.config.editSettings.patchInputUrl;
-        let key = this.config.editSettings.editKey;
-
-        let payload = {
-            editKey: key,
-            partial: true,
-            data: {
-                bmds_version: "BMDS312",
-                analysis_name,
-                analysis_description,
-                dataset_type: model_type,
-                models: model,
-                datasets: data,
-                options: option,
-            },
-        };
-
-        this.runAnalysisAPI(payload, url);
-    };
-
-    @action
-    async runAnalysisAPI(payload, url) {
-        return fetch(url, {
-            method: "PATCH",
-            mode: "cors",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify(payload),
-        })
-            .then(response => {
-                console.log(response);
-                response.json().then(data => console.log(data));
-            })
-            .catch(error => {
-                console.log("error", error);
-            });
-    }
+    @observable DatasetNamesHeader = ["Enable", "Datasets", "Adverse Direction"];
+    @observable AdverseDirectionList = [
+        {value: "", name: "Select"},
+        {value: "automatic", name: "Automatic"},
+        {value: "up", name: "Up"},
+        {value: "down", name: "Down"},
+    ];
 
     @computed get modelTypeLength() {
         return this.modelType.length;

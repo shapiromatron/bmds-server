@@ -6,7 +6,7 @@ import {toJS} from "mobx";
 
 @inject("DataStore")
 @observer
-class ModelType extends Component {
+class ModelsCheckBoxList extends Component {
     constructor(props) {
         super(props);
     }
@@ -20,7 +20,6 @@ class ModelType extends Component {
 
     render() {
         let models = toJS(this.props.DataStore.getModelTypeList());
-
         return (
             <div>
                 <div className="checkbox-table">
@@ -60,4 +59,4 @@ class ModelType extends Component {
     }
 }
 
-export default ModelType;
+export default ModelsCheckBoxList;

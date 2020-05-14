@@ -11,37 +11,42 @@ class UserInfo extends Component {
 
     handleSubmit = e => {
         e.preventDefault();
-        let model_type = e.target.modelType.value;
-        let analysis_name = e.target.analysis_name.value;
-        let analysis_description = e.target.analysis_description.value;
-        this.props.DataStore.runAnalysis(model_type, analysis_name, analysis_description);
+        this.props.DataStore.saveAnalysis();
     };
 
     handleChange = e => {
-        let model_type = e.target.value;
-        this.props.DataStore.addModelType(model_type);
+        this.props.DataStore.addUsersInput(e.target.name, e.target.value);
     };
 
     render() {
-        let obj = this.props.DataStore.modelType;
-
         return (
             <Form onSubmit={this.handleSubmit} className="main-form">
                 <Form.Group>
                     <Form.Label>Analysis Name</Form.Label>
-                    <Form.Control type="text" name="analysis_name" />
+                    <Form.Control
+                        type="text"
+                        name="analysis_name"
+                        value={this.props.DataStore.usersInput.analysis_name}
+                        onChange={this.handleChange}
+                    />
                 </Form.Group>
                 <Form.Group>
                     <Form.Label>Analysis Description</Form.Label>
-                    <Form.Control as="textarea" rows="3" name="analysis_description" />
+                    <Form.Control
+                        as="textarea"
+                        rows="3"
+                        name="analysis_description"
+                        value={this.props.DataStore.usersInput.analysis_description}
+                        onChange={this.handleChange}
+                    />
                 </Form.Group>
                 <Form.Group>
                     <Form.Label>Select Model Type</Form.Label>
                     <Form.Control
                         as="select"
-                        name="modelType"
+                        name="dataset_type"
                         onChange={this.handleChange}
-                        value={obj}>
+                        value={this.props.DataStore.usersInput.dataset_type}>
                         <option value="select">Select Model Type</option>
                         <option value="C">Continuous</option>
                         <option value="D">Dichotomous</option>

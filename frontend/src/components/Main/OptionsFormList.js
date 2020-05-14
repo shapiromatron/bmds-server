@@ -30,7 +30,7 @@ class OptionsFormList extends Component {
     };
 
     render() {
-        let model_type = this.props.DataStore.modelType;
+        let dataset_type = this.props.DataStore.usersInput.dataset_type;
         return (
             <form>
                 <div className="row" style={{marginTop: 20}}>
@@ -41,25 +41,27 @@ class OptionsFormList extends Component {
                                     <thead>
                                         <tr>
                                             <th>Option Set #</th>
-                                            {model_type === "C" ? <th>BMR Type</th> : null}
-                                            {model_type === "D" ? <th>Risk Type</th> : null}
+                                            {dataset_type === "C" ? <th>BMR Type</th> : null}
+                                            {dataset_type === "D" ? <th>Risk Type</th> : null}
                                             <th>BMRF</th>
-                                            {model_type === "C" ? <th>Tail Probability</th> : null}
+                                            {dataset_type === "C" ? (
+                                                <th>Tail Probability</th>
+                                            ) : null}
                                             <th>Confidence Level</th>
-                                            {model_type === "C" ? <th>Distribution</th> : null}
-                                            {model_type === "C" ? <th>Variance</th> : null}
-                                            {model_type === "C" ? (
+                                            {dataset_type === "C" ? <th>Distribution</th> : null}
+                                            {dataset_type === "C" ? <th>Variance</th> : null}
+                                            {dataset_type === "C" ? (
                                                 <th>Polynomial Restriction</th>
                                             ) : null}
                                             <th>Background</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        {this.props.DataStore.options.map((item, id) => (
+                                        {this.props.DataStore.usersInput.options.map((item, id) => (
                                             <OptionsForm
                                                 key={id}
                                                 item={item}
-                                                model_type={model_type}
+                                                dataset_type={dataset_type}
                                                 idx={id}
                                                 onchange={this.onChange}
                                                 delete={this.deleteOption.bind(this)}

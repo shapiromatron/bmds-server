@@ -2,11 +2,17 @@ import React from "react";
 
 const InputForm = props => {
     return (
-        <tr key={props.idx}>
-            {props.form.map(item => {
+        <tr>
+            {props.form.map((item, id) => {
                 return [
                     <td key={props.idx}>
-                        <input name={item.name} id={props.idx} onChange={props.onChange}></input>
+                        <input
+                            type="number"
+                            name={item.name}
+                            id={props.idx}
+                            onChange={props.onChange}
+                            value={props.dataset[item.name]}
+                        />
                     </td>,
                 ];
             })}

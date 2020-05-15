@@ -4,12 +4,12 @@ const OptionsForm = props => {
     return (
         <tr>
             <td>{props.idx}</td>
-            {props.model_type === "C" ? (
+            {props.dataset_type === "C" ? (
                 <td>
                     <select
                         name="bmr_type"
                         className="form-control"
-                        defaultValue={props.item.bmr_type}
+                        value={props.item.bmr_type}
                         id={props.idx}
                         onChange={props.onchange}>
                         <option>Select</option>
@@ -21,12 +21,12 @@ const OptionsForm = props => {
                     </select>
                 </td>
             ) : null}
-            {props.model_type === "D" ? (
+            {props.dataset_type === "D" ? (
                 <td>
                     <select
                         name="bmr_type"
                         className="form-control"
-                        defaultValue={props.item.risk_type}
+                        value={props.item.bmr_type}
                         id={props.idx}
                         onChange={props.onchange}>
                         <option>Select</option>
@@ -40,18 +40,18 @@ const OptionsForm = props => {
                 <input
                     type="text"
                     name="bmr_value"
-                    defaultValue={props.item.bmr_value}
+                    value={props.item.bmr_value}
                     id={props.idx}
                     className="form-control "
                     onChange={props.onchange}
                 />
             </td>
-            {props.model_type === "C" ? (
+            {props.dataset_type === "C" ? (
                 <td>
                     <input
                         type="text"
                         name="tail_probability"
-                        defaultValue={props.item.tail_probability}
+                        value={props.item.tail_probability}
                         id={props.idx}
                         className="form-control "
                         onChange={props.onchange}
@@ -62,18 +62,18 @@ const OptionsForm = props => {
                 <input
                     type="text"
                     name="confidence_level"
-                    defaultValue={props.item.confidence_level}
+                    value={props.item.confidence_level}
                     id={props.idx}
                     className="form-control "
                     onChange={props.onchange}
                 />
             </td>
-            {props.model_type === "C" ? (
+            {props.dataset_type === "C" ? (
                 <td>
                     <select
                         name="distribution"
                         className="form-control"
-                        defaultValue={props.item.distribution}
+                        value={props.item.distribution}
                         id={props.idx}
                         onChange={props.onchange}>
                         <option>Select</option>
@@ -82,13 +82,13 @@ const OptionsForm = props => {
                     </select>
                 </td>
             ) : null}
-            {props.model_type === "C" ? (
+            {props.dataset_type === "C" ? (
                 <td>
                     <select
                         name="variance"
                         id={props.idx}
                         className="form-control"
-                        defaultValue={props.item.variance}
+                        value={props.item.variance}
                         onChange={props.onchange}>
                         <option>Select</option>
                         <option value="Constant">Constant</option>
@@ -96,13 +96,13 @@ const OptionsForm = props => {
                     </select>
                 </td>
             ) : null}
-            {props.model_type === "C" ? (
+            {props.dataset_type === "C" ? (
                 <td>
                     <select
                         name="polynomial_restriction"
                         id={props.idx}
                         className="form-control"
-                        defaultValue={props.item.polynomial_restriction}
+                        value={props.item.polynomial_restriction}
                         onChange={props.onchange}>
                         <option>Select</option>
                         <option value="Use dataset adverse direction">
@@ -118,7 +118,7 @@ const OptionsForm = props => {
                     name="background"
                     id={props.idx}
                     className="form-control"
-                    defaultValue={props.item.background}
+                    value={props.item.background}
                     onChange={props.onchange}>
                     <option>Select</option>
                     <option value="Estimated">Estimated</option>

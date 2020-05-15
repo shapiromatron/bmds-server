@@ -10,45 +10,47 @@ class DataModal extends Component {
         super(props);
     }
 
-    hideModal() {
-        this.props.DataStore.closeModal();
-    }
+    toggleModal = () => {
+        this.props.DataStore.toggleModal();
+    };
 
-    handleSubmit = event => {
-        event.preventDefault();
-        this.props.DataStore.showDataForm(event.target.modelType.value);
-        this.props.DataStore.closeModal();
+    onChange = e => {
+        this.props.DataStore.inputForm.model_type = e.target.value;
+        this.props.DataStore.toggleModal();
     };
     render() {
+        let model_type = this.props.DataStore.inputForm.model_type;
         return (
             <div>
-                <Modal show={this.props.DataStore.modal}>
+                <Modal show={this.props.DataStore.modal} onHide={this.toggleModal}>
                     <Modal.Header>
-                        <Modal.Title id="contained-modal-title-vcenter"> Add Dataset </Modal.Title>
+                        <Modal.Title id="contained-modal-title-vcenter">
+                            {" "}
+                            Add Dataset{" "}
+                            <Button
+                                className=" close"
+                                aria-label="Close"
+                                style={{float: "right"}}
+                                onClick={() => this.toggleModal()}>
+                                <span aria-hidden="true">&times;</span>
+                            </Button>
+                        </Modal.Title>
                     </Modal.Header>
 
                     <Modal.Body>
-                        <Form onSubmit={this.handleSubmit}>
+                        <Form>
                             <Form.Group>
                                 <Form.Label>Select Model Type</Form.Label>
-                                <Form.Control as="select" name="modelType">
+                                <Form.Control
+                                    as="select"
+                                    value={model_type}
+                                    onChange={e => this.onChange(e)}>
+                                    <option value="">Select a model</option>
                                     <option value="CS">Continuous - summarized</option>
                                     <option value="CI">Continuous - individual</option>
                                     <option value="D">Dichotomous</option>
                                     <option value="NS">Nested</option>
                                 </Form.Control>
-                            </Form.Group>
-
-                            <Form.Group>
-                                <Button
-                                    style={{marginRight: "20px"}}
-                                    variant="primary"
-                                    type="submit">
-                                    Create Dataset
-                                </Button>
-                                <Button variant="primary" onClick={() => this.hideModal()}>
-                                    Close
-                                </Button>
                             </Form.Group>
                         </Form>
                     </Modal.Body>

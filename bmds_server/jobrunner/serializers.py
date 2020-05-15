@@ -7,8 +7,11 @@ from . import models, tasks, validators
 
 
 class JobSerializer(serializers.ModelSerializer):
+    is_executing = serializers.BooleanField(read_only=True)
     is_finished = serializers.BooleanField(read_only=True)
     has_errors = serializers.BooleanField(read_only=True)
+    inputs_valid = serializers.BooleanField(read_only=True)
+    outputs = serializers.DictField(source="get_outputs_json", read_only=True)
     api_url = serializers.URLField(source="get_api_url", read_only=True)
     input_url = serializers.URLField(source="get_input_url", read_only=True)
     output_url = serializers.URLField(source="get_output_url", read_only=True)
@@ -22,8 +25,10 @@ class JobSerializer(serializers.ModelSerializer):
             "errors",
             "outputs",
             "preferences",
+            "is_executing",
             "is_finished",
             "has_errors",
+            "inputs_valid",
             "api_url",
             "input_url",
             "output_url",
@@ -36,8 +41,10 @@ class JobSerializer(serializers.ModelSerializer):
             "id",
             "errors",
             "outputs",
+            "is_executing",
             "is_finished",
             "has_errors",
+            "inputs_valid",
             "api_url",
             "input_url",
             "output_url",
@@ -53,11 +60,6 @@ class JobSerializer(serializers.ModelSerializer):
         if not obj["inputs"]:
             obj["inputs"] = "{}"
         obj["inputs"] = json.loads(obj["inputs"])
-
-        if obj["is_finished"] and obj["outputs"]:
-            obj["outputs"] = json.loads(obj["outputs"])
-        else:
-            obj.pop("outputs")
         return obj
 
     def create(self, validated_data):

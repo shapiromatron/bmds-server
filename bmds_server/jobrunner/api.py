@@ -11,8 +11,7 @@ from . import models, renderers, serializers, tasks, validators
 
 
 class JobViewset(mixins.CreateModelMixin, mixins.RetrieveModelMixin, viewsets.GenericViewSet):
-    def get_serializer_class(self):
-        return serializers.JobSerializer
+    serializer_class = serializers.JobSerializer
 
     def not_ready_yet(self):
         content = "Outputs processing; not ready yet."
@@ -77,9 +76,13 @@ class JobViewset(mixins.CreateModelMixin, mixins.RetrieveModelMixin, viewsets.Ge
         elif instance.is_executing:
             return Response("Execution already started", status_code=400)
 
-        # passed, start execution
+        # start job execution
         instance.start_execute()
-        return Response(instance)
+
+        instance.refresh_from_db()
+
+        serializer = self.get_serializer(instance)
+        return Response(serializer.data)
 
     @action(detail=True, methods=("get",), renderer_classes=(renderers.TxtRenderer,))
     def outputs(self, request, *args, **kwargs):

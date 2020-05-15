@@ -4,7 +4,7 @@ import traceback
 import uuid
 from copy import deepcopy
 from datetime import timedelta
-from typing import Dict
+from typing import Dict, Optional
 
 import bmds
 from django.conf import settings
@@ -223,7 +223,7 @@ class Job(models.Model):
         self.save()
 
         # add to job queue...
-        tasks.try_execute.apply(self.id)
+        tasks.try_execute.delay(str(self.id))
 
     def execute(self):
         # update start time to actual time started
@@ -250,6 +250,17 @@ class Job(models.Model):
         self.errors = err
         self.ended = now()
         self.save()
+
+    def get_outputs_json(self) -> Optional[Dict]:
+        # TODO - revisit the NaN replacement issue...
+        if self.is_finished and self.outputs:
+            outputs = (
+                self.outputs.replace("NaN", "0")
+                .replace("-Infinity", "-999")
+                .replace("Infinity", "999")
+            )
+            return json.loads(outputs)
+        return None
 
     def get_excel(self):
         generator = xlsx.BMDGenerator(self.outputs)

@@ -7,7 +7,7 @@ logger = get_task_logger(__name__)
 
 
 @task()
-def try_execute(id_):
+def try_execute(id_: str):
     job = apps.get_model("jobrunner", "Job").objects.get(id=id_)
     logger.info(f"starting execution: {job}")
     job.try_execute()

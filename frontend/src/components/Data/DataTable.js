@@ -15,7 +15,6 @@ class DataTable extends Component {
     render() {
         return (
             <div>
-                <div></div>
                 <div>
                     {this.props.DataStore.getDataLength > 0 ? (
                         <div className="row" style={{marginTop: 20}}>
@@ -37,42 +36,24 @@ class DataTable extends Component {
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                <tr>
-                                                    <th>Dose</th>
-                                                    {item.doses.map((dev, index) => {
-                                                        return [<td key={index}>{dev}</td>];
-                                                    })}
-                                                </tr>
-                                                <tr>
-                                                    <th>N</th>
-                                                    {item.ns.map((dev, index) => {
-                                                        return [<td key={index}>{dev}</td>];
-                                                    })}
-                                                </tr>
-                                                {item.model_type === "CS" ? (
-                                                    <tr>
-                                                        <th>Mean</th>
-                                                        {item.means.map((dev, index) => {
-                                                            return [<td key={index}>{dev}</td>];
-                                                        })}
-                                                    </tr>
-                                                ) : null}
-                                                {item.model_type === "CS" ? (
-                                                    <tr>
-                                                        <th>St Dev</th>
-                                                        {item.stdevs.map((dev, index) => {
-                                                            return [<td key={index}>{dev}</td>];
-                                                        })}
-                                                    </tr>
-                                                ) : null}
-                                                {item.model_type === "D" ? (
-                                                    <tr>
-                                                        <th>Incidence</th>
-                                                        {item.incidences.map((dev, index) => {
-                                                            return [<td key={index}>{dev}</td>];
-                                                        })}
-                                                    </tr>
-                                                ) : null}
+                                                {Object.keys(item).map((dev, i) => {
+                                                    return [
+                                                        <tr key={i}>
+                                                            {Array.isArray(item[dev]) ? (
+                                                                <th>{dev}</th>
+                                                            ) : null}
+                                                            {Array.isArray(item[dev])
+                                                                ? item[dev].map((val, index) => {
+                                                                      return [
+                                                                          <td key={index}>
+                                                                              {val}
+                                                                          </td>,
+                                                                      ];
+                                                                  })
+                                                                : null}
+                                                        </tr>,
+                                                    ];
+                                                })}
                                             </tbody>
                                         </table>
                                     </div>

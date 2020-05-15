@@ -1,34 +1,38 @@
 import React, {Component} from "react";
 import {inject, observer} from "mobx-react";
 import InputForm from "./InputForm";
+import {toJS} from "mobx";
 
 @inject("DataStore")
 @observer
-class CSFormList extends Component {
+class InputFormList extends Component {
     constructor(props) {
         super(props);
     }
 
-    addRow = (e, form_type) => {
+    addRow = (e, model_type) => {
         e.preventDefault();
-        this.props.DataStore.createForm(form_type);
+        this.props.DataStore.createForm(model_type);
     };
 
     onChange = e => {
         const {name, value, id} = e.target;
         let parsedValue = "";
-        if (name === "ns") {
-            parsedValue = parseInt(value);
+        if (Number(value)) {
+            if (name === "ns") {
+                parsedValue = parseInt(value);
+            } else {
+                parsedValue = parseFloat(value);
+            }
         } else {
-            parsedValue = parseFloat(value);
+            parsedValue = value;
         }
         this.props.DataStore.saveRowData(name, parsedValue, id);
     };
 
     handleSubmit = e => {
         e.preventDefault();
-        let dataset_name = e.target.dataset_name.value;
-        this.props.DataStore.saveDataset(dataset_name);
+        this.props.DataStore.saveDataset();
     };
 
     deleteRow = (e, val) => {
@@ -37,13 +41,14 @@ class CSFormList extends Component {
     };
 
     deleteForm = e => {
+        e.preventDefault();
         this.props.DataStore.deleteForm();
     };
 
     render() {
-        let form_type = this.props.DataStore.dataFormType;
-        let dataFormList = this.props.DataStore.getDataFormList();
-
+        let model_type = this.props.DataStore.inputForm.model_type;
+        let dataFormList = this.props.DataStore.getDataFormList(model_type);
+        let datasets = toJS(this.props.DataStore.inputForm.datasets);
         return (
             <div>
                 <div>
@@ -51,12 +56,16 @@ class CSFormList extends Component {
                         <div className="row" style={{marginTop: 20}}>
                             <div className="col">
                                 <div className="card">
-                                    <div className="card-header text-center">Add CS Dataset</div>
+                                    <div className="card-header text-center">
+                                        Add {model_type} Dataset
+                                    </div>
                                     <div className="card-header">
                                         <input
                                             type="text"
                                             name="dataset_name"
                                             placeholder="Enter dataset name"
+                                            value={this.props.DataStore.inputForm.dataset_name}
+                                            onChange={this.onChange}
                                         />
                                     </div>
                                     <div className="card-body ">
@@ -69,13 +78,12 @@ class CSFormList extends Component {
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                {this.props.DataStore.datasets.map((item, id) => (
+                                                {datasets.map((dataset, id) => (
                                                     <InputForm
                                                         key={id}
                                                         idx={id}
-                                                        item={item}
+                                                        dataset={dataset}
                                                         form={dataFormList}
-                                                        form_type={form_type}
                                                         onChange={this.onChange}
                                                         delete={this.deleteRow.bind(this)}
                                                     />
@@ -85,7 +93,9 @@ class CSFormList extends Component {
                                                 <tr>
                                                     <td colSpan="3">
                                                         <button
-                                                            onClick={e => this.addRow(e, form_type)}
+                                                            onClick={e =>
+                                                                this.addRow(e, model_type)
+                                                            }
                                                             type="button"
                                                             className="btn btn-primary float-left">
                                                             Add New Row
@@ -119,4 +129,4 @@ class CSFormList extends Component {
     }
 }
 
-export default CSFormList;
+export default InputFormList;

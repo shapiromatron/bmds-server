@@ -10,7 +10,7 @@ class InputButtons extends Component {
     }
 
     showModal() {
-        this.props.DataStore.showModal();
+        this.props.DataStore.toggleModal();
     }
     render() {
         return (

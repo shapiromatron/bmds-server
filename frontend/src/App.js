@@ -11,6 +11,7 @@ class App extends Component {
     componentDidMount() {
         const config = JSON.parse(document.getElementById("config").textContent);
         this.props.DataStore.setConfig(config);
+        this.props.DataStore.fetchSavedAnalysis();
     }
     render() {
         return (

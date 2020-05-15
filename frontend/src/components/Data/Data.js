@@ -22,7 +22,9 @@ class Data extends Component {
                 </div>
 
                 <div>
-                    <div>{this.props.DataStore.showForm ? <InputFormList /> : null}</div>
+                    <div>
+                        {this.props.DataStore.inputForm.model_type ? <InputFormList /> : null}
+                    </div>
                     <div>{this.props.DataStore.getDataLength > 0 ? <DataTable /> : null}</div>
                 </div>
                 <div>{this.props.DataStore.modal ? <DataModal /> : null}</div>

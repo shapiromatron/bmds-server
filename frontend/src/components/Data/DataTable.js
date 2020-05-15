@@ -4,22 +4,15 @@ import {inject, observer} from "mobx-react";
 @inject("store")
 @observer
 class DataTable extends Component {
-    constructor(props) {
-        super(props);
-    }
-
-    delete = id => {
-        this.props.store.deleteDataset(id);
-    };
-
     render() {
+        const {store} = this.props;
         return (
             <div>
                 <div>
-                    {this.props.store.getDataLength > 0 ? (
+                    {store.getDataLength > 0 ? (
                         <div className="row" style={{marginTop: 20}}>
                             <div className="col-md-6 column">
-                                {this.props.store.savedDataset.map((item, index) => (
+                                {store.savedDataset.map((item, index) => (
                                     <div key={index}>
                                         <table className="table table-bordered">
                                             <thead>
@@ -29,7 +22,9 @@ class DataTable extends Component {
                                                         <button
                                                             className="btn btn-danger close"
                                                             aria-label="Close"
-                                                            onClick={() => this.delete(item.id)}>
+                                                            onClick={() =>
+                                                                store.deleteDataset(item.id)
+                                                            }>
                                                             <span aria-hidden="true">&times;</span>
                                                         </button>
                                                     </th>

@@ -5,19 +5,13 @@ import {inject, observer} from "mobx-react";
 @inject("store")
 @observer
 class UserInfo extends Component {
-    constructor(props) {
-        super(props);
-    }
-
     handleSubmit = e => {
         e.preventDefault();
         this.props.store.saveAnalysis();
     };
-
     handleChange = e => {
         this.props.store.addUsersInput(e.target.name, e.target.value);
     };
-
     render() {
         return (
             <Form onSubmit={this.handleSubmit} className="main-form">
@@ -47,10 +41,9 @@ class UserInfo extends Component {
                         name="dataset_type"
                         onChange={this.handleChange}
                         value={this.props.store.usersInput.dataset_type}>
-                        <option value="select">Select Model Type</option>
                         <option value="C">Continuous</option>
                         <option value="D">Dichotomous</option>
-                        <option value="DMT">Dichotomous-Multi-tumor(MS_Combo)</option>
+                        <option value="DMT">Dichotomous-Multi-tumor (MS_Combo)</option>
                         <option value="DN">Dichotomous-Nested</option>
                     </Form.Control>
                 </Form.Group>

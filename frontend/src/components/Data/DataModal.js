@@ -6,14 +6,9 @@ import {inject, observer} from "mobx-react";
 @inject("store")
 @observer
 class DataModal extends Component {
-    constructor(props) {
-        super(props);
-    }
-
     toggleModal = () => {
         this.props.store.toggleModal();
     };
-
     onChange = e => {
         this.props.store.inputForm.model_type = e.target.value;
         this.props.store.toggleModal();
@@ -45,7 +40,6 @@ class DataModal extends Component {
                                     as="select"
                                     value={model_type}
                                     onChange={e => this.onChange(e)}>
-                                    <option value="">Select a model</option>
                                     <option value="CS">Continuous - summarized</option>
                                     <option value="CI">Continuous - individual</option>
                                     <option value="D">Dichotomous</option>

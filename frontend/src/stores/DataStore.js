@@ -848,7 +848,6 @@ class DataStore {
 
     @observable DatasetNamesHeader = ["Enable", "Datasets", "Adverse Direction"];
     @observable AdverseDirectionList = [
-        {value: "", name: "Select"},
         {value: "automatic", name: "Automatic"},
         {value: "up", name: "Up"},
         {value: "down", name: "Down"},

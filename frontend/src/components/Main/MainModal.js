@@ -6,14 +6,9 @@ import {inject, observer} from "mobx-react";
 @inject("store")
 @observer
 class MainModal extends Component {
-    constructor(props) {
-        super(props);
-    }
-
     hideModal() {
         this.props.store.mainModal = !this.props.store.mainModal;
     }
-
     render() {
         let errorMessage = this.props.store.modalMessage;
         return (

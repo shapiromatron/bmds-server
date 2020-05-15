@@ -6,15 +6,10 @@ import {toJS} from "mobx";
 @inject("store")
 @observer
 class InputFormList extends Component {
-    constructor(props) {
-        super(props);
-    }
-
     addRow = (e, model_type) => {
         e.preventDefault();
         this.props.store.createForm(model_type);
     };
-
     onChange = e => {
         const {name, value, id} = e.target;
         let parsedValue = "";
@@ -29,22 +24,18 @@ class InputFormList extends Component {
         }
         this.props.store.saveRowData(name, parsedValue, id);
     };
-
     handleSubmit = e => {
         e.preventDefault();
         this.props.store.saveDataset();
     };
-
     deleteRow = (e, val) => {
         e.preventDefault();
         this.props.store.deleteDataRow(val);
     };
-
     deleteForm = e => {
         e.preventDefault();
         this.props.store.deleteForm();
     };
-
     render() {
         let model_type = this.props.store.inputForm.model_type;
         let dataFormList = this.props.store.getDataFormList(model_type);

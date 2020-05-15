@@ -6,10 +6,6 @@ import {toJS} from "mobx";
 @inject("store")
 @observer
 class OptionsFormList extends Component {
-    constructor(props) {
-        super(props);
-    }
-
     onChange = e => {
         const {name, value, id} = e.target;
         let parsedValue = "";
@@ -20,16 +16,13 @@ class OptionsFormList extends Component {
         }
         this.props.store.saveOptions(name, parsedValue, id);
     };
-
     createOptionSet = e => {
         this.props.store.createOptions();
     };
-
     deleteOption = (e, val) => {
         e.preventDefault();
         this.props.store.deleteOptions(val);
     };
-
     render() {
         let dataset_type = this.props.store.usersInput.dataset_type;
         let options = toJS(this.props.store.usersInput.options);

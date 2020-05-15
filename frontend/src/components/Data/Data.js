@@ -10,24 +10,18 @@ import {inject, observer} from "mobx-react";
 @inject("store")
 @observer
 class Data extends Component {
-    constructor(props) {
-        super(props);
-    }
-
     render() {
+        const {store} = this.props;
         return (
             <div className="container">
                 <div className="row buttonRow">
                     <InputButtons />
                 </div>
-
                 <div>
-                    <div>
-                        {this.props.store.inputForm.model_type ? <InputFormList /> : null}
-                    </div>
-                    <div>{this.props.store.getDataLength > 0 ? <DataTable /> : null}</div>
+                    <div>{store.inputForm.model_type ? <InputFormList /> : null}</div>
+                    <div>{store.getDataLength > 0 ? <DataTable /> : null}</div>
                 </div>
-                <div>{this.props.store.modal ? <DataModal /> : null}</div>
+                <div>{store.modal ? <DataModal /> : null}</div>
             </div>
         );
     }

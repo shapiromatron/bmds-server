@@ -29,9 +29,7 @@ class StoreDebugger extends Component {
                         <h3>Datasets:</h3>
                         <pre>{JSON.stringify(store.savedDataset, undefined, 2)}</pre>
                         <h3>Options:</h3>
-                        <pre>
-                            {JSON.stringify(store.usersInput.options, undefined, 2)}
-                        </pre>
+                        <pre>{JSON.stringify(store.usersInput.options, undefined, 2)}</pre>
                     </div>
                 </Collapse>
             </div>

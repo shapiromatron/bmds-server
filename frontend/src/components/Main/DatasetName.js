@@ -5,10 +5,6 @@ import {Form} from "react-bootstrap";
 @inject("store")
 @observer
 class DatasetName extends Component {
-    constructor(props) {
-        super(props);
-    }
-
     handleCheckbox(e, item) {
         this.props.store.toggleDataset(item.id);
     }

@@ -7,17 +7,12 @@ import {toJS} from "mobx";
 @inject("store")
 @observer
 class ModelsCheckBoxList extends Component {
-    constructor(props) {
-        super(props);
-    }
-
     handleCheckbox = e => {
         let model_name = e.target.name;
         let checked = e.target.checked;
         let value = e.target.value;
         this.props.store.toggleModelsCheckBox(model_name, checked, value);
     };
-
     render() {
         let models = toJS(this.props.store.getModelTypeList());
         return (

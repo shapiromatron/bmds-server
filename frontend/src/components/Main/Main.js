@@ -9,7 +9,7 @@ import "./main.css";
 
 import {inject, observer} from "mobx-react";
 
-@inject("DataStore")
+@inject("store")
 @observer
 class Main extends Component {
     render() {
@@ -21,20 +21,20 @@ class Main extends Component {
                             <div className="col col-sm-5">
                                 <UserInfo />
                             </div>
-                            {this.props.DataStore.getDataLength > 0 ? (
+                            {this.props.store.getDataLength > 0 ? (
                                 <div className="col col-sm-5">
                                     <DatasetName />
                                 </div>
                             ) : null}
                         </div>
-                        {this.props.DataStore.usersInput.dataset_type ? (
+                        {this.props.store.usersInput.dataset_type ? (
                             <div className="row">
                                 <div className="col">
                                     <ModelsCheckBoxList />
                                 </div>
                             </div>
                         ) : null}
-                        {this.props.DataStore.usersInput.dataset_type ? (
+                        {this.props.store.usersInput.dataset_type ? (
                             <div className="row">
                                 <div className="col">
                                     <OptionsFormList />

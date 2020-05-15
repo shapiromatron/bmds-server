@@ -2,7 +2,7 @@ import React, {Component} from "react";
 import {Button, Form} from "react-bootstrap";
 import {inject, observer} from "mobx-react";
 
-@inject("DataStore")
+@inject("store")
 @observer
 class UserInfo extends Component {
     constructor(props) {
@@ -11,11 +11,11 @@ class UserInfo extends Component {
 
     handleSubmit = e => {
         e.preventDefault();
-        this.props.DataStore.saveAnalysis();
+        this.props.store.saveAnalysis();
     };
 
     handleChange = e => {
-        this.props.DataStore.addUsersInput(e.target.name, e.target.value);
+        this.props.store.addUsersInput(e.target.name, e.target.value);
     };
 
     render() {
@@ -26,7 +26,7 @@ class UserInfo extends Component {
                     <Form.Control
                         type="text"
                         name="analysis_name"
-                        value={this.props.DataStore.usersInput.analysis_name}
+                        value={this.props.store.usersInput.analysis_name}
                         onChange={this.handleChange}
                     />
                 </Form.Group>
@@ -36,7 +36,7 @@ class UserInfo extends Component {
                         as="textarea"
                         rows="3"
                         name="analysis_description"
-                        value={this.props.DataStore.usersInput.analysis_description}
+                        value={this.props.store.usersInput.analysis_description}
                         onChange={this.handleChange}
                     />
                 </Form.Group>
@@ -46,7 +46,7 @@ class UserInfo extends Component {
                         as="select"
                         name="dataset_type"
                         onChange={this.handleChange}
-                        value={this.props.DataStore.usersInput.dataset_type}>
+                        value={this.props.store.usersInput.dataset_type}>
                         <option value="select">Select Model Type</option>
                         <option value="C">Continuous</option>
                         <option value="D">Dichotomous</option>

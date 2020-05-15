@@ -1,7 +1,7 @@
 import React, {Component} from "react";
 import {inject, observer} from "mobx-react";
 
-@inject("DataStore")
+@inject("store")
 @observer
 class DataTable extends Component {
     constructor(props) {
@@ -9,17 +9,17 @@ class DataTable extends Component {
     }
 
     delete = id => {
-        this.props.DataStore.deleteDataset(id);
+        this.props.store.deleteDataset(id);
     };
 
     render() {
         return (
             <div>
                 <div>
-                    {this.props.DataStore.getDataLength > 0 ? (
+                    {this.props.store.getDataLength > 0 ? (
                         <div className="row" style={{marginTop: 20}}>
                             <div className="col-md-6 column">
-                                {this.props.DataStore.savedDataset.map((item, index) => (
+                                {this.props.store.savedDataset.map((item, index) => (
                                     <div key={index}>
                                         <table className="table table-bordered">
                                             <thead>

@@ -1,21 +1,20 @@
 import React, {Component} from "react";
 import {inject, observer} from "mobx-react";
 import {Button, Collapse} from "react-bootstrap";
-import {toJS} from "mobx";
 
-@inject("DataStore")
+@inject("store")
 @observer
 class StoreDebugger extends Component {
     constructor(props) {
         super(props);
         this.state = {
             isOpen: true,
-            configData: toJS(this.props.DataStore.config),
         };
     }
 
     render() {
         const {isOpen} = this.state,
+            {store} = this.props,
             setOpen = isOpen => this.setState({isOpen});
 
         return (
@@ -26,12 +25,12 @@ class StoreDebugger extends Component {
                 <Collapse in={isOpen}>
                     <div id="example-collapse-text">
                         <h3>Config:</h3>
-                        <pre>{JSON.stringify(this.props.DataStore.config, undefined, 2)}</pre>
+                        <pre>{JSON.stringify(store.config, undefined, 2)}</pre>
                         <h3>Datasets:</h3>
-                        <pre>{JSON.stringify(this.props.DataStore.savedDataset, undefined, 2)}</pre>
+                        <pre>{JSON.stringify(store.savedDataset, undefined, 2)}</pre>
                         <h3>Options:</h3>
                         <pre>
-                            {JSON.stringify(this.props.DataStore.usersInput.options, undefined, 2)}
+                            {JSON.stringify(store.usersInput.options, undefined, 2)}
                         </pre>
                     </div>
                 </Collapse>

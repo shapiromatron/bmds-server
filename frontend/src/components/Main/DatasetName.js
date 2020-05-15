@@ -2,7 +2,7 @@ import React, {Component} from "react";
 import {inject, observer} from "mobx-react";
 import {Form} from "react-bootstrap";
 
-@inject("DataStore")
+@inject("store")
 @observer
 class DatasetName extends Component {
     constructor(props) {
@@ -10,26 +10,26 @@ class DatasetName extends Component {
     }
 
     handleCheckbox(e, item) {
-        this.props.DataStore.toggleDataset(item.id);
+        this.props.store.toggleDataset(item.id);
     }
     onChange(e, item) {
-        this.props.DataStore.saveAdverseDirection(e.target.name, e.target.value, item.id);
+        this.props.store.saveAdverseDirection(e.target.name, e.target.value, item.id);
     }
     render() {
-        let obj = this.props.DataStore.savedDataset.filter(data => data.enabled == true);
+        let obj = this.props.store.savedDataset.filter(data => data.enabled == true);
         return (
             <div>
-                {this.props.DataStore.getDataLength > 0 ? (
+                {this.props.store.getDataLength > 0 ? (
                     <table className="table table-bordered">
                         <thead>
                             <tr>
-                                {this.props.DataStore.DatasetNamesHeader.map((item, i) => {
+                                {this.props.store.DatasetNamesHeader.map((item, i) => {
                                     return [<th key={i}>{item}</th>];
                                 })}
                             </tr>
                         </thead>
                         <tbody>
-                            {this.props.DataStore.savedDataset.map((item, index) => {
+                            {this.props.store.savedDataset.map((item, index) => {
                                 return [
                                     <tr key={index}>
                                         <td>
@@ -47,7 +47,7 @@ class DatasetName extends Component {
                                                 as="select"
                                                 name="adverse_direction"
                                                 onChange={e => this.onChange(e, item)}>
-                                                {this.props.DataStore.AdverseDirectionList.map(
+                                                {this.props.store.AdverseDirectionList.map(
                                                     (item, i) => {
                                                         return [
                                                             <option key={i} value={item.value}>

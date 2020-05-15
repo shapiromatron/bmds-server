@@ -4,7 +4,7 @@ import {inject, observer} from "mobx-react";
 import ModelsCheckBox from "./ModelsCheckBox";
 import {toJS} from "mobx";
 
-@inject("DataStore")
+@inject("store")
 @observer
 class ModelsCheckBoxList extends Component {
     constructor(props) {
@@ -15,17 +15,17 @@ class ModelsCheckBoxList extends Component {
         let model_name = e.target.name;
         let checked = e.target.checked;
         let value = e.target.value;
-        this.props.DataStore.toggleModelsCheckBox(model_name, checked, value);
+        this.props.store.toggleModelsCheckBox(model_name, checked, value);
     };
 
     render() {
-        let models = toJS(this.props.DataStore.getModelTypeList());
+        let models = toJS(this.props.store.getModelTypeList());
         return (
             <div>
                 <div className="checkbox-table">
                     <table className="table table-bordered hover">
                         <thead>
-                            {this.props.DataStore.modelsCheckBoxHeaders.map((item, index) => {
+                            {this.props.store.modelsCheckBoxHeaders.map((item, index) => {
                                 return [
                                     <tr key={index}>
                                         <th>{item.model}</th>

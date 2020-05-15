@@ -3,7 +3,7 @@ import {inject, observer} from "mobx-react";
 import OptionsForm from "./OptionsForm";
 import {toJS} from "mobx";
 
-@inject("DataStore")
+@inject("store")
 @observer
 class OptionsFormList extends Component {
     constructor(props) {
@@ -18,21 +18,21 @@ class OptionsFormList extends Component {
         } else {
             parsedValue = value;
         }
-        this.props.DataStore.saveOptions(name, parsedValue, id);
+        this.props.store.saveOptions(name, parsedValue, id);
     };
 
     createOptionSet = e => {
-        this.props.DataStore.createOptions();
+        this.props.store.createOptions();
     };
 
     deleteOption = (e, val) => {
         e.preventDefault();
-        this.props.DataStore.deleteOptions(val);
+        this.props.store.deleteOptions(val);
     };
 
     render() {
-        let dataset_type = this.props.DataStore.usersInput.dataset_type;
-        let options = toJS(this.props.DataStore.usersInput.options);
+        let dataset_type = this.props.store.usersInput.dataset_type;
+        let options = toJS(this.props.store.usersInput.options);
         return (
             <form>
                 <div className="row" style={{marginTop: 20}}>

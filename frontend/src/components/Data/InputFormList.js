@@ -3,7 +3,7 @@ import {inject, observer} from "mobx-react";
 import InputForm from "./InputForm";
 import {toJS} from "mobx";
 
-@inject("DataStore")
+@inject("store")
 @observer
 class InputFormList extends Component {
     constructor(props) {
@@ -12,7 +12,7 @@ class InputFormList extends Component {
 
     addRow = (e, model_type) => {
         e.preventDefault();
-        this.props.DataStore.createForm(model_type);
+        this.props.store.createForm(model_type);
     };
 
     onChange = e => {
@@ -27,28 +27,28 @@ class InputFormList extends Component {
         } else {
             parsedValue = value;
         }
-        this.props.DataStore.saveRowData(name, parsedValue, id);
+        this.props.store.saveRowData(name, parsedValue, id);
     };
 
     handleSubmit = e => {
         e.preventDefault();
-        this.props.DataStore.saveDataset();
+        this.props.store.saveDataset();
     };
 
     deleteRow = (e, val) => {
         e.preventDefault();
-        this.props.DataStore.deleteDataRow(val);
+        this.props.store.deleteDataRow(val);
     };
 
     deleteForm = e => {
         e.preventDefault();
-        this.props.DataStore.deleteForm();
+        this.props.store.deleteForm();
     };
 
     render() {
-        let model_type = this.props.DataStore.inputForm.model_type;
-        let dataFormList = this.props.DataStore.getDataFormList(model_type);
-        let datasets = toJS(this.props.DataStore.inputForm.datasets);
+        let model_type = this.props.store.inputForm.model_type;
+        let dataFormList = this.props.store.getDataFormList(model_type);
+        let datasets = toJS(this.props.store.inputForm.datasets);
         return (
             <div>
                 <div>
@@ -64,7 +64,7 @@ class InputFormList extends Component {
                                             type="text"
                                             name="dataset_name"
                                             placeholder="Enter dataset name"
-                                            value={this.props.DataStore.inputForm.dataset_name}
+                                            value={this.props.store.inputForm.dataset_name}
                                             onChange={this.onChange}
                                         />
                                     </div>

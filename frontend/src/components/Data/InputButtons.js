@@ -2,7 +2,7 @@ import React, {Component} from "react";
 
 import {inject, observer} from "mobx-react";
 
-@inject("DataStore")
+@inject("store")
 @observer
 class InputButtons extends Component {
     constructor(props) {
@@ -10,7 +10,7 @@ class InputButtons extends Component {
     }
 
     showModal() {
-        this.props.DataStore.toggleModal();
+        this.props.store.toggleModal();
     }
     render() {
         return (

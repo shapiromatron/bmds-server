@@ -3,7 +3,7 @@ import {Modal, Button, Form} from "react-bootstrap";
 
 import {inject, observer} from "mobx-react";
 
-@inject("DataStore")
+@inject("store")
 @observer
 class DataModal extends Component {
     constructor(props) {
@@ -11,18 +11,18 @@ class DataModal extends Component {
     }
 
     toggleModal = () => {
-        this.props.DataStore.toggleModal();
+        this.props.store.toggleModal();
     };
 
     onChange = e => {
-        this.props.DataStore.inputForm.model_type = e.target.value;
-        this.props.DataStore.toggleModal();
+        this.props.store.inputForm.model_type = e.target.value;
+        this.props.store.toggleModal();
     };
     render() {
-        let model_type = this.props.DataStore.inputForm.model_type;
+        let model_type = this.props.store.inputForm.model_type;
         return (
             <div>
-                <Modal show={this.props.DataStore.modal} onHide={this.toggleModal}>
+                <Modal show={this.props.store.modal} onHide={this.toggleModal}>
                     <Modal.Header>
                         <Modal.Title id="contained-modal-title-vcenter">
                             {" "}

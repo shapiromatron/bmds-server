@@ -7,7 +7,7 @@ import DataModal from "./DataModal";
 
 import {inject, observer} from "mobx-react";
 
-@inject("DataStore")
+@inject("store")
 @observer
 class Data extends Component {
     constructor(props) {
@@ -23,11 +23,11 @@ class Data extends Component {
 
                 <div>
                     <div>
-                        {this.props.DataStore.inputForm.model_type ? <InputFormList /> : null}
+                        {this.props.store.inputForm.model_type ? <InputFormList /> : null}
                     </div>
-                    <div>{this.props.DataStore.getDataLength > 0 ? <DataTable /> : null}</div>
+                    <div>{this.props.store.getDataLength > 0 ? <DataTable /> : null}</div>
                 </div>
-                <div>{this.props.DataStore.modal ? <DataModal /> : null}</div>
+                <div>{this.props.store.modal ? <DataModal /> : null}</div>
             </div>
         );
     }

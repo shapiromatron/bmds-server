@@ -18,14 +18,15 @@ class InputFormList extends Component {
     onChange = e => {
         const {name, value, id} = e.target;
         let parsedValue = "";
-        if (name === "dataset_name") {
-            parsedValue = value;
-        } else if (name === "ns") {
-            parsedValue = parseInt(value);
+        if (Number(value)) {
+            if (name === "ns") {
+                parsedValue = parseInt(value);
+            } else {
+                parsedValue = parseFloat(value);
+            }
         } else {
-            parsedValue = parseFloat(value);
+            parsedValue = value;
         }
-
         this.props.DataStore.saveRowData(name, parsedValue, id);
     };
 

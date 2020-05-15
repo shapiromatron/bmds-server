@@ -56,9 +56,6 @@ class DatasetName extends Component {
                                                         ];
                                                     }
                                                 )}
-                                                {/* <option value="automatic">automatic</option>
-                                                <option value="up">up</option>
-                                                <option value="down">down</option> */}
                                             </Form.Control>
                                         </td>
                                     </tr>,

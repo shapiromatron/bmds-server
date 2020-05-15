@@ -7,6 +7,7 @@ const InputForm = props => {
                 return [
                     <td key={props.idx}>
                         <input
+                            type="number"
                             name={item.name}
                             id={props.idx}
                             onChange={props.onChange}

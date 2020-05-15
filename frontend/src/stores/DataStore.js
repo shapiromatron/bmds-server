@@ -21,13 +21,6 @@ class DataStore {
         this.usersInput.options.splice(val, 1);
     };
 
-    // @action showDataForm = formType => {
-    //     this.dataFormType = formType;
-    //     this.showForm = true;
-    //     this.datasets = [];
-    //     this.createForm(formType);
-    // };
-
     @action deleteDataRow = val => {
         this.inputForm.datasets.splice(val, 1);
     };
@@ -98,9 +91,6 @@ class DataStore {
         this.usersInput[name] = value;
     };
 
-    @action closeDataForm() {
-        this.dataform = false;
-    }
     @action setConfig = config => {
         this.config = config;
     };
@@ -144,18 +134,18 @@ class DataStore {
     };
 
     //returns the dataset which are enabled
-    @action getEnabledDataset() {
+    @computed get getEnabledDataset() {
         let obj = toJS(this.savedDataset).filter(item => item.enabled == true);
         return obj;
     }
 
     //returns enabled model types
-    @action getModels() {
+    @computed get getModels() {
         let result = {};
         let models = toJS(this.getModelTypeList());
 
-        models.forEach(item => {
-            item.values.forEach(val => {
+        models.map(item => {
+            item.values.map(val => {
                 if (val.isChecked) {
                     var [k, v] = val.name.split("-");
                     if (v === "DichotomousHill") {
@@ -187,8 +177,8 @@ class DataStore {
     }
 
     @action saveAnalysis = () => {
-        let model = this.getModels();
-        let data = this.getEnabledDataset();
+        let model = this.getModels;
+        let data = this.getEnabledDataset;
         let option = this.usersInput.options;
         let analysis_name = this.usersInput.analysis_name;
         let analysis_description = this.usersInput.analysis_description;
@@ -213,6 +203,9 @@ class DataStore {
         this.saveAnalysisAPI(payload, url);
     };
 
+    @observable modalMessage = "";
+    @observable mainModal = false;
+
     @action
     async saveAnalysisAPI(payload, url) {
         await fetch(url, {
@@ -224,10 +217,16 @@ class DataStore {
             body: JSON.stringify(payload),
         })
             .then(response => {
-                response.json().then(data => console.log(data));
+                this.mainModal = !this.mainModal;
+                if (response.status == 200) {
+                    response.json().then(data => (this.modalMessage = "Dataset Saved"));
+                } else {
+                    response.json().then(data => (this.modalMessage = data));
+                }
             })
             .catch(error => {
-                console.log("error", error);
+                this.mainModal = !this.mainModal;
+                this.modalMessage = error;
             });
     }
 

@@ -4,6 +4,7 @@ import UserInfo from "./UserInfo";
 import ModelsCheckBoxList from "./ModelsCheckBoxList";
 import DatasetName from "./DatasetName";
 import OptionsFormList from "./OptionsFormList";
+import MainModal from "./MainModal";
 import "./main.css";
 
 import {inject, observer} from "mobx-react";
@@ -42,6 +43,7 @@ class Main extends Component {
                         ) : null}
                     </div>
                 </div>
+                <MainModal />
             </div>
         );
     }

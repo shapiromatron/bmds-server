@@ -1,6 +1,7 @@
 import React, {Component} from "react";
 import {inject, observer} from "mobx-react";
 import OptionsForm from "./OptionsForm";
+import {toJS} from "mobx";
 
 @inject("DataStore")
 @observer
@@ -31,6 +32,7 @@ class OptionsFormList extends Component {
 
     render() {
         let dataset_type = this.props.DataStore.usersInput.dataset_type;
+        let options = toJS(this.props.DataStore.usersInput.options);
         return (
             <form>
                 <div className="row" style={{marginTop: 20}}>
@@ -57,7 +59,7 @@ class OptionsFormList extends Component {
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        {this.props.DataStore.usersInput.options.map((item, id) => (
+                                        {options.map((item, id) => (
                                             <OptionsForm
                                                 key={id}
                                                 item={item}

@@ -84,7 +84,7 @@ interactions:
         4 is greater than .1.  The model chosen seems \nto adequately describe the
         data\n \n\n             Benchmark Dose Computation\n\nSpecified effect =             1\n\nRisk
         Type        =     Estimated standard deviations from the control mean\n\nConfidence
-        level =          0.95\n\n             BMD =        386.104\n\n\n            BMDL
+        level =          0.95\n\n             BMD =        386.097\n\n\n            BMDL
         =        247.296\n\n\n            BMDU =        878.098\n\n","stdout":"","stderr":""}]'
     headers:
       Allow:

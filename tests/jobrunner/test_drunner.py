@@ -12,14 +12,14 @@ from rest_framework.test import APIClient
 @pytest.mark.skipif(sys.platform != "win32", reason="requires Windows")
 @pytest.mark.vcr()
 @pytest.mark.django_db(transaction=False)
-def test_drunner(complete_continuous):
+def test_drunner(bmds2_complete_continuous):
     # create and login as superuser
     admin = User.objects.create_superuser("admin", "admin@test.com", "admin")
     token = Token.objects.create(user=admin)
     client = APIClient()
 
     # get payload to submit
-    dataset = complete_continuous["datasets"][0]
+    dataset = bmds2_complete_continuous["datasets"][0]
     cdataset = bmds.ContinuousDataset(**dataset)
     payload = json.loads(
         bmds.monkeypatch._get_payload(

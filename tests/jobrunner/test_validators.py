@@ -14,46 +14,46 @@ class TestInputValidation:
         with pytest.raises(ValidationError):
             validators.validate_input("{")
 
-    def test_bmds2_model_override(self, complete_continuous):
+    def test_bmds2_model_override(self, bmds2_complete_continuous):
         # complete check
         c_models = [{"name": "Exponential-M2"}, {"name": "Exponential-M3"}]
         d_models = [{"name": "Logistic"}, {"name": "LogLogistic"}]
-        data = deepcopy(complete_continuous)
+        data = deepcopy(bmds2_complete_continuous)
 
         data["models"] = c_models
         assert validators.validate_input(json.dumps(data)) is None
 
-        data = deepcopy(complete_continuous)
+        data = deepcopy(bmds2_complete_continuous)
         data["models"] = d_models
         with pytest.raises(ValidationError) as err:
             validators.validate_input(json.dumps(data))
         assert "is not one of" in str(err)
 
         # should fail w/ bmds3
-        data = deepcopy(complete_continuous)
+        data = deepcopy(bmds2_complete_continuous)
         data.update(bmds_version=bmds.constants.BMDS312, models=c_models)
         with pytest.raises(ValidationError) as err:
             validators.validate_input(json.dumps(data))
 
-    def test_bmds2_bmr_override(self, complete_continuous):
+    def test_bmds2_bmr_override(self, bmds2_complete_continuous):
         # Check models can be specified
         c_bmr = {"type": "Std. Dev.", "value": 1.0}
         d_bmr = {"type": "Added", "value": 0.1}
 
         # complete check
-        data = deepcopy(complete_continuous)
+        data = deepcopy(bmds2_complete_continuous)
         data["bmr"] = c_bmr
         assert validators.validate_input(json.dumps(data)) is None
 
         # wrong bmr specification
-        data = deepcopy(complete_continuous)
+        data = deepcopy(bmds2_complete_continuous)
         data["bmr"] = d_bmr
         with pytest.raises(ValidationError) as err:
             validators.validate_input(json.dumps(data))
         assert "is not one of" in str(err)
 
         # should fail w/ bmds3
-        data = deepcopy(complete_continuous)
+        data = deepcopy(bmds2_complete_continuous)
         data.update(
             bmds_version=bmds.constants.BMDS312,
             models={"frequentist_restricted": [bmds.constants.M_Hill]},
@@ -118,21 +118,21 @@ class TestInputValidation:
 
 
 class TestSessionValidation:
-    def test_base_validator(self, complete_continuous):
+    def test_base_validator(self, bmds2_complete_continuous):
         # check validity
-        assert validators.validate_session(complete_continuous) is None
+        assert validators.validate_session(bmds2_complete_continuous) is None
 
         # missing required field check
-        data = deepcopy(complete_continuous)
+        data = deepcopy(bmds2_complete_continuous)
         data.pop("bmds_version")
         with pytest.raises(ValidationError):
             validators.validate_session(data)
 
 
 class TestDatasetValidation:
-    def test_continuous_validator(self, complete_continuous):
-        dataset_type = complete_continuous["dataset_type"]
-        datasets = complete_continuous["datasets"]
+    def test_continuous_validator(self, bmds2_complete_continuous):
+        dataset_type = bmds2_complete_continuous["dataset_type"]
+        datasets = bmds2_complete_continuous["datasets"]
 
         # check validity
         assert validators.validate_datasets(dataset_type, datasets) is None
@@ -149,9 +149,9 @@ class TestDatasetValidation:
         with pytest.raises(ValidationError):
             validators.validate_datasets(dataset_type, data)
 
-    def test_continuous_individual_validator(self, complete_continuous_individual):
-        dataset_type = complete_continuous_individual["dataset_type"]
-        datasets = complete_continuous_individual["datasets"]
+    def test_continuous_individual_validator(self, bmds2_complete_continuous_individual):
+        dataset_type = bmds2_complete_continuous_individual["dataset_type"]
+        datasets = bmds2_complete_continuous_individual["datasets"]
 
         # check validity
         assert validators.validate_datasets(dataset_type, datasets) is None
@@ -167,9 +167,9 @@ class TestDatasetValidation:
         with pytest.raises(ValidationError):
             validators.validate_datasets(dataset_type, data)
 
-    def test_dichotomous_validator(self, complete_dichotomous):
-        dataset_type = complete_dichotomous["dataset_type"]
-        datasets = complete_dichotomous["datasets"]
+    def test_dichotomous_validator(self, bmds2_complete_dichotomous):
+        dataset_type = bmds2_complete_dichotomous["dataset_type"]
+        datasets = bmds2_complete_dichotomous["datasets"]
 
         # check validity
         assert validators.validate_datasets(dataset_type, datasets) is None
@@ -186,11 +186,11 @@ class TestDatasetValidation:
         with pytest.raises(ValidationError):
             validators.validate_datasets(dataset_type, data)
 
-    def test_dataset_ids(self, complete_dichotomous):
+    def test_dataset_ids(self, bmds2_complete_dichotomous):
         # Check that commonly used IDs can be used.
 
-        dataset_type = complete_dichotomous["dataset_type"]
-        datasets = complete_dichotomous["datasets"]
+        dataset_type = bmds2_complete_dichotomous["dataset_type"]
+        datasets = bmds2_complete_dichotomous["datasets"]
 
         # check missing ID
         data = deepcopy(datasets)
@@ -215,7 +215,7 @@ class TestDatasetValidation:
 
 
 class TestModelValidation:
-    def test_bmds2(self, complete_continuous):
+    def test_bmds2(self):
 
         bmds_version = bmds.constants.BMDS270
         continuous_type = bmds.constants.CONTINUOUS
@@ -235,7 +235,7 @@ class TestModelValidation:
             validators.validate_models(bmds_version, dichotomous_type, c_models)
         assert "is not one of" in str(err)
 
-    def test_bmds3_dichotomous(self, complete_dichotomous):
+    def test_bmds3_dichotomous(self):
         dtype = bmds.constants.DICHOTOMOUS
         version = bmds.constants.BMDS312
         probit = bmds.constants.M_Probit
@@ -297,7 +297,7 @@ class TestModelValidation:
             )
         assert "Prior weight in bayesian model average does not sum to 1" in str(err)
 
-    def test_bmds3_continuous(self, complete_continuous):
+    def test_bmds3_continuous(self):
         dtype = bmds.constants.CONTINUOUS
         version = bmds.constants.BMDS312
         power = bmds.constants.M_Power

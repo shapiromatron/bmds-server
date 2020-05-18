@@ -11,8 +11,7 @@ from . import models, renderers, serializers, tasks, validators
 
 
 class JobViewset(mixins.CreateModelMixin, mixins.RetrieveModelMixin, viewsets.GenericViewSet):
-    def get_serializer_class(self):
-        return serializers.JobSerializer
+    serializer_class = serializers.JobSerializer
 
     def not_ready_yet(self):
         content = "Outputs processing; not ready yet."
@@ -59,6 +58,31 @@ class JobViewset(mixins.CreateModelMixin, mixins.RetrieveModelMixin, viewsets.Ge
         resp = Response(instance.inputs)
         resp["Content-Disposition"] = f'attachment; filename="{fn}"'
         return resp
+
+    @action(detail=True, methods=("post",))
+    def execute(self, request, *args, **kwargs):
+        """
+        Attempt to execute the model.
+        """
+        instance = self.get_object()
+
+        # permissions check
+        if instance.password != request.data.get("editKey", ""):
+            raise exceptions.PermissionDenied()
+
+        # preflight execution check
+        if not instance.inputs_valid():
+            return Response("Invalid inputs", status_code=400)
+        elif instance.is_executing:
+            return Response("Execution already started", status_code=400)
+
+        # start job execution
+        instance.start_execute()
+
+        instance.refresh_from_db()
+
+        serializer = self.get_serializer(instance)
+        return Response(serializer.data)
 
     @action(detail=True, methods=("get",), renderer_classes=(renderers.TxtRenderer,))
     def outputs(self, request, *args, **kwargs):

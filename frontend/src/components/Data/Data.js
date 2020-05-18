@@ -7,27 +7,21 @@ import DataModal from "./DataModal";
 
 import {inject, observer} from "mobx-react";
 
-@inject("DataStore")
+@inject("store")
 @observer
 class Data extends Component {
-    constructor(props) {
-        super(props);
-    }
-
     render() {
+        const {store} = this.props;
         return (
             <div className="container">
                 <div className="row buttonRow">
                     <InputButtons />
                 </div>
-
                 <div>
-                    <div>
-                        {this.props.DataStore.inputForm.model_type ? <InputFormList /> : null}
-                    </div>
-                    <div>{this.props.DataStore.getDataLength > 0 ? <DataTable /> : null}</div>
+                    <div>{store.inputForm.model_type ? <InputFormList /> : null}</div>
+                    <div>{store.getDataLength > 0 ? <DataTable /> : null}</div>
                 </div>
-                <div>{this.props.DataStore.modal ? <DataModal /> : null}</div>
+                <div>{store.modal ? <DataModal /> : null}</div>
             </div>
         );
     }

@@ -4,10 +4,10 @@ import App from "./App";
 import "../node_modules/bootstrap/dist/css/bootstrap.min.css";
 
 import {Provider} from "mobx-react";
-import DataStore from "./stores/DataStore";
+import store from "./stores/DataStore";
 
 const Root = (
-    <Provider DataStore={DataStore}>
+    <Provider store={store}>
         <App />
     </Provider>
 );

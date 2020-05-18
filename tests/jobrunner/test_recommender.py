@@ -8,10 +8,10 @@ from django.urls import reverse
 
 @pytest.mark.vcr()
 @pytest.mark.django_db(transaction=False)
-def test_successful_recommendation(complete_dichotomous):
+def test_successful_recommendation(bmds2_complete_dichotomous):
     # submit new job
     c = Client()
-    payload = json.dumps(complete_dichotomous)
+    payload = json.dumps(bmds2_complete_dichotomous)
     url = reverse("api:job-list")
     resp = c.post(url, {"inputs": payload})
     assert resp.status_code == 201

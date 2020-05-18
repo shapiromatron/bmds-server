@@ -7,6 +7,7 @@ class DataStore {
 
     @observable showForm = false;
     @observable dataFormType = "";
+    @observable executionOutputs = null;
 
     @observable prior_weight = 0;
     @observable prior_weight_models = [];
@@ -176,51 +177,38 @@ class DataStore {
         return result;
     }
 
-    @action saveAnalysis = () => {
-        let model = this.getModels;
-        let data = this.getEnabledDataset;
-        let option = this.usersInput.options;
-        let analysis_name = this.usersInput.analysis_name;
-        let analysis_description = this.usersInput.analysis_description;
-        let dataset_type = this.usersInput.dataset_type;
-        let url = this.config.editSettings.patchInputUrl;
-        let key = this.config.editSettings.editKey;
-
-        let payload = {
-            editKey: key,
-            partial: true,
-            data: {
-                bmds_version: "BMDS312",
-                analysis_name,
-                analysis_description,
-                dataset_type,
-                models: model,
-                datasets: data,
-                options: option,
-            },
-        };
-
-        this.saveAnalysisAPI(payload, url);
-    };
-
-    @observable modalMessage = "";
-    @observable mainModal = false;
-
     @action
-    async saveAnalysisAPI(payload, url) {
+    async saveAnalysis() {
+        const url = this.config.editSettings.patchInputUrl,
+            getPayload = () => {
+                return {
+                    editKey: this.config.editSettings.editKey,
+                    partial: true,
+                    data: {
+                        bmds_version: "BMDS312",
+                        analysis_name: this.usersInput.analysis_name,
+                        analysis_description: this.usersInput.analysis_description,
+                        dataset_type: this.usersInput.dataset_type,
+                        models: this.getModels,
+                        datasets: this.getEnabledDataset,
+                        options: this.usersInput.options,
+                    },
+                };
+            };
+
         await fetch(url, {
             method: "PATCH",
             mode: "cors",
             headers: {
                 "Content-Type": "application/json",
             },
-            body: JSON.stringify(payload),
+            body: JSON.stringify(getPayload()),
         })
             .then(response => {
-                this.mainModal = !this.mainModal;
-                if (response.status == 200) {
-                    response.json().then(data => (this.modalMessage = "Dataset Saved"));
+                if (response.ok) {
+                    response.json().then(data => this.updateModelStateFromApi(data));
                 } else {
+                    this.mainModal = !this.mainModal;
                     response.json().then(data => (this.modalMessage = data));
                 }
             })
@@ -230,44 +218,33 @@ class DataStore {
             });
     }
 
-    @action
-    async fetchSavedAnalysis() {
-        let apiUrl = this.config.apiUrl;
-        await fetch(apiUrl, {
-            method: "GET",
-            mode: "cors",
-        })
-            .then(response => {
-                response.json().then(data => {
-                    if (!_.isEmpty(data.inputs)) {
-                        this.mapInputs(data.inputs);
-                    }
-                });
-            })
-            .catch(error => {
-                console.log("error", error);
-            });
-    }
-    @observable usersInput = {
-        analysis_name: "",
-        analysis_description: "",
-        dataset_type: "",
-        models: {},
-        options: [],
-    };
+    @observable modalMessage = "";
 
-    @observable inputForm = {
-        dataset_name: "",
-        datasets: [],
-        model_type: "",
-    };
+    @observable mainModal = false;
 
-    @observable mapInputs(inputs) {
+    @action.bound
+    updateModelStateFromApi(data) {
+        const inputs = data.inputs;
+        if (_.isEmpty(inputs)) {
+            return;
+        }
+
+        this.isExecuting = data.is_executing;
+        this.isReadyToExecute = data.inputs_valid;
+        if (data.outputs) {
+            this.executionOutputs = data.outputs.outputs;
+        }
+
+        // unpack general settings
         this.usersInput.analysis_name = inputs.analysis_name;
         this.usersInput.analysis_description = inputs.analysis_description;
         this.usersInput.dataset_type = inputs.dataset_type;
         this.usersInput.options = inputs.options;
 
+        // unpack datasets
+        this.savedDataset = inputs.datasets;
+
+        // unpack selected models
         let modelArr = [];
         Object.keys(inputs.models).map((item, i) => {
             inputs.models[item].map((val, index) => {
@@ -282,15 +259,40 @@ class DataStore {
                 modelArr.push(val);
             });
         });
-
         modelArr.forEach((item, i) => {
             let checked = true;
             let value = "";
             this.toggleModelsCheckBox(item, checked, value);
         });
-
-        this.savedDataset = inputs.datasets;
     }
+
+    @action
+    async fetchSavedAnalysis() {
+        const apiUrl = this.config.apiUrl;
+        await fetch(apiUrl, {
+            method: "GET",
+            mode: "cors",
+        })
+            .then(response => response.json())
+            .then(data => this.updateModelStateFromApi(data))
+            .catch(error => {
+                console.log("error", error);
+            });
+    }
+
+    @observable usersInput = {
+        analysis_name: "",
+        analysis_description: "",
+        dataset_type: "",
+        models: {},
+        options: [],
+    };
+
+    @observable inputForm = {
+        dataset_name: "",
+        datasets: [],
+        model_type: "",
+    };
 
     @observable modelsCheckBoxHeaders = [
         {
@@ -732,13 +734,13 @@ class DataStore {
         },
     ];
 
-    @observable
-    CSForm = [
+    @observable CSForm = [
         {label: "Dose", name: "doses", value: "6"},
         {label: "N", name: "ns", value: "5"},
         {label: "Mean", name: "means", value: "7"},
         {label: "St Dev", name: "stdevs", value: "3"},
     ];
+
     @observable CIForm = [
         {label: "Dose", name: "doses"},
         {label: "Response", name: "responses"},
@@ -749,6 +751,7 @@ class DataStore {
         {label: "N", name: "ns"},
         {label: "Incidence", name: "incidences"},
     ];
+
     @observable NestedForm = [
         {label: "Dose", name: "doses"},
         {label: "Litter Size", name: "litter_sizes"},
@@ -756,8 +759,7 @@ class DataStore {
         {label: "Litter Specific Covariate", name: "litter_specific_covariates"},
     ];
 
-    @observable
-    getDataFormList(dataFormType) {
+    @observable getDataFormList(dataFormType) {
         let forms = [];
         switch (dataFormType) {
             case "CS":
@@ -847,8 +849,8 @@ class DataStore {
     }
 
     @observable DatasetNamesHeader = ["Enable", "Datasets", "Adverse Direction"];
+
     @observable AdverseDirectionList = [
-        {value: "", name: "Select"},
         {value: "automatic", name: "Automatic"},
         {value: "up", name: "Up"},
         {value: "down", name: "Down"},
@@ -860,6 +862,40 @@ class DataStore {
 
     @computed get getDataLength() {
         return this.savedDataset.length;
+    }
+
+    @observable isReadyToExecute = false;
+    @observable isExecuting = false;
+
+    @action
+    async executeAnalysis() {
+        if (!this.isReadyToExecute) {
+            // don't execute if we're not ready
+            return;
+        }
+        if (this.isExecuting) {
+            // don't execute if we're already executing
+            return;
+        }
+        this.isExecuting = true;
+        await fetch(this.config.editSettings.executeUrl, {
+            method: "POST",
+            mode: "cors",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                editKey: this.config.editSettings.editKey,
+            }),
+        })
+            .then(response => response.json())
+            .then(data => {
+                // TODO - fix this when we don't block and execution doesn't complete immediately
+                this.updateModelStateFromApi(data);
+            })
+            .catch(error => {
+                console.log("error", error);
+            });
     }
 }
 

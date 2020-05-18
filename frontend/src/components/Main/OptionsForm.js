@@ -90,7 +90,6 @@ const OptionsForm = props => {
                         className="form-control"
                         value={props.item.variance}
                         onChange={props.onchange}>
-                        <option>Select</option>
                         <option value="Constant">Constant</option>
                         <option value="Non Constant">Non-Constant</option>
                     </select>
@@ -108,7 +107,7 @@ const OptionsForm = props => {
                         <option value="Use dataset adverse direction">
                             Use dataset adverse direction
                         </option>
-                        <option value="Non-Negetive">Non-negetive</option>
+                        <option value="Non-Negative">Non-negetive</option>
                         <option value="Non-Positive">Non-positive</option>
                     </select>
                 </td>

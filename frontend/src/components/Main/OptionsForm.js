@@ -1,5 +1,7 @@
 import React from "react";
 
+import FloatInput from "components/Inputs/FloatInput";
+
 const OptionsForm = props => {
     return (
         <tr>
@@ -37,12 +39,10 @@ const OptionsForm = props => {
             ) : null}
 
             <td>
-                <input
-                    type="text"
-                    name="bmr_value"
-                    value={props.item.bmr_value}
+                <FloatInput
                     id={props.idx}
-                    className="form-control "
+                    name={"bmr_value"}
+                    value={props.item.bmr_value}
                     onChange={props.onchange}
                 />
             </td>
@@ -59,13 +59,13 @@ const OptionsForm = props => {
                 </td>
             ) : null}
             <td>
-                <input
-                    type="text"
-                    name="confidence_level"
-                    value={props.item.confidence_level}
+                <FloatInput
                     id={props.idx}
-                    className="form-control "
+                    name={"confidence_level"}
+                    value={props.item.confidence_level}
                     onChange={props.onchange}
+                    minimum={0}
+                    maximum={1}
                 />
             </td>
             {props.dataset_type === "C" ? (

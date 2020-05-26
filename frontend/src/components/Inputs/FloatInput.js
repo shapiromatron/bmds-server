@@ -22,10 +22,12 @@ class FloatInput extends Component {
                 className="form-control"
                 onBlur={onChange}
                 onChange={e => {
+                    // edge case; handle if user enters "." which defaults to 0
                     let strValue = e.target.value;
                     if (strValue.slice(0, 1) === '.'){
                         strValue = "0" + strValue;
                     }
+                    // check if float, and value is NaN, and min/max if those exists
                     const val = parseFloat(strValue);
                     if (
                         (reFloat.test(strValue) === false) ||

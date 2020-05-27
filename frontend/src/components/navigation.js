@@ -5,6 +5,7 @@ import Data from "./Data/Data";
 import ReportOptions from "./ReportOptions/ReportOptions";
 import Logic from "./Logic/logic";
 import ModelParams from "./ModelParams/ModelParams";
+import Output from "./Output/Output";
 
 class Navigation extends Component {
     render() {
@@ -38,6 +39,11 @@ class Navigation extends Component {
                                     Model Params
                                 </NavLink>
                             </li>
+                            <li className="nav-item">
+                                <NavLink className="nav-link" to="/output">
+                                    Output
+                                </NavLink>
+                            </li>
                         </ul>
                     </div>
                 </nav>
@@ -48,6 +54,7 @@ class Navigation extends Component {
                     <Route path="/reportoptions" component={ReportOptions} />
                     <Route path="/logic" component={Logic} />
                     <Route path="/modelparams" component={ModelParams} />
+                    <Route path="/output" component={Output} />
                 </div>
             </div>
         );

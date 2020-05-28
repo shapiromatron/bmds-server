@@ -4,6 +4,7 @@ import _ from "lodash";
 class DataStore {
     @observable config = {};
     @observable modal = false;
+    @observable modelDetailModal = false;
 
     @observable showForm = false;
     @observable dataFormType = "";
@@ -27,8 +28,8 @@ class DataStore {
     };
 
     @action saveRowData = (name, value, id) => {
-        if (name === "dataset_name") {
-            this.inputForm.dataset_name = value;
+        if (isNaN(value)) {
+            this.inputForm[name] = value;
         } else {
             this.inputForm.datasets[id][name] = value;
         }
@@ -47,9 +48,10 @@ class DataStore {
             }
         });
         output["dataset_name"] = this.inputForm.dataset_name;
+        output["dataset_description"] = this.inputForm.dataset_description;
         output["id"] = this.savedDataset.length;
         output["enabled"] = false;
-        output["model_type"] = this.dataFormType;
+        output["model_type"] = this.inputForm.model_type;
         this.savedDataset.push(output);
     }
 
@@ -88,6 +90,150 @@ class DataStore {
         this.modal = !this.modal;
     }
 
+    @observable selectedModelType = {};
+    @observable goodnessFit = {};
+    @observable cdfValues = [];
+    @observable infoTable = {
+        model_name: "",
+        dataset_name: "",
+        user_notes: "",
+        dose_response_model: "",
+    };
+    @observable optionSettings = {};
+
+    @observable modelData = {
+        dependent_variable: "",
+        independent_variable: "",
+        number_of_observations: "",
+    };
+    @observable benchmarkDose = {
+        bmd: "",
+        bmdl: "",
+        bmdu: "",
+        aic: "",
+        p_value: "",
+        df: "",
+        chi_square: "",
+    };
+
+    @observable bmrType = {
+        1: "Extra Risk",
+        2: "Added Risk",
+    };
+    @observable parameters = [];
+    @observable loglikelihoods = [];
+    @observable test_of_interest = [];
+
+    @action toggleModelDetailModal(output, model_index) {
+        this.modelDetailModal = !this.modelDetailModal;
+        if (this.modelDetailModal) {
+            this.mapOutputModal(output, model_index);
+        }
+    }
+
+    @action.bound
+    mapOutputModal(output, model_index) {
+        let selectedModel = output.models.find(row => row.model_index == model_index);
+        this.selectedModelType = output.dataset.model_type;
+
+        //unpack infoTable data
+        this.infoTable.model_name = selectedModel.model_name;
+        this.infoTable.dataset_name = output.dataset.dataset_name;
+        this.infoTable.user_notes = output.dataset.dataset_description;
+        this.infoTable.dose_response_model = this.getResponseModel;
+
+        //unpack model Options
+        delete selectedModel.settings["degree"];
+        delete selectedModel.settings["background"];
+        delete selectedModel.settings["adverseDirection"];
+        delete selectedModel.settings["restriction"];
+        delete selectedModel.settings["bLognormal"];
+        delete selectedModel.settings["bUserParmInit"];
+        this.optionSettings = selectedModel.settings;
+
+        //unpack model_data
+        this.modelData.dependent_variable = "Dose";
+        this.modelData.independent_variable = "Response";
+        this.modelData.number_of_observations = output.dataset.doses.length;
+
+        //unpack benchmark dose
+        this.benchmarkDose.bmd = selectedModel.results.bmd;
+        this.benchmarkDose.bmdl = selectedModel.results.bmdl;
+        this.benchmarkDose.bmdu = selectedModel.results.bmdu;
+        this.benchmarkDose.aic = selectedModel.results.aic;
+        this.benchmarkDose.p_value = selectedModel.results.gof.p_value;
+        this.benchmarkDose.df = selectedModel.results.gof.df;
+        this.benchmarkDose.chi_square = selectedModel.results.gof.chi_square;
+
+        //godness of fit only for dichotomous
+        if (this.selectedModelType == "D") {
+            this.goodnessFit = selectedModel.results.gof.rows;
+        } else if (this.selectedModelType == "CS") {
+            this.goodnessFit = selectedModel.results.gof;
+        }
+
+        if (this.selectedModelType == "CS") {
+            this.loglikelihoods = selectedModel.results.loglikelihoods;
+            this.test_of_interest = selectedModel.results.test_rows;
+        }
+
+        let percentileValue = _.range(0.01, 1, 0.01);
+        let cdf = selectedModel.results.cdf;
+        let pValue = percentileValue.map(function(each_element) {
+            return Number(each_element.toFixed(2));
+        });
+
+        this.cdfValues = _.zipWith(pValue, cdf, (pValue, cdf) => ({pValue, cdf}));
+
+        //unpack paramters:
+        let pvariables = this.getParameterVariables;
+        this.parameters = _.zipWith(
+            pvariables,
+            selectedModel.results.parameters,
+            (p_variable, parameter) => ({p_variable, parameter})
+        );
+    }
+
+    //todo for other models
+    @computed get getResponseModel() {
+        let response_model = "";
+        switch (this.infoTable.model_name) {
+            case "Dichotomous-Hill":
+                response_model = "P[dose] = g +(v-v*g)/[1+exp(-a-b*Log(dose))]";
+                break;
+            case "Gamma":
+                response_model = "P[dose]= g+(1-g)*CumGamma[b*dose,a]";
+        }
+
+        return response_model;
+    }
+
+    //returns parameters variables based on models
+    //todo for other models
+    @computed get getParameterVariables() {
+        let parameters = [];
+        if (this.selectedModelType == "D") {
+            if (this.infoTable.model_name === "Dichotomous-Hill") {
+                parameters = this.parameter_variables.dichotomousHill;
+            } else {
+                parameters = this.parameter_variables.others;
+            }
+        } else if (this.selectedModelType == "CS") {
+            if (this.infoTable.model_name === "Hill") {
+                parameters = this.parameter_variables.hill;
+            }
+        }
+        return parameters;
+    }
+    //todo for other models
+    @observable parameter_variables = {
+        dichotomousHill: ["a", "b", "c", "d"],
+        others: ["a", "b", "c"],
+        power: ["g", "v", "n"],
+        hill: ["a", "b", "c", "d", "e", "f"],
+        polynomial: ["g"],
+    };
+
     @action addUsersInput = (name, value) => {
         this.usersInput[name] = value;
     };
@@ -112,12 +258,13 @@ class DataStore {
         }
         models.map(item => {
             item.values.map(val => {
-                if (val.name === model) {
+                if (val.name === model && val.isChecked != checked) {
                     val.isChecked = !val.isChecked;
                 } else if (
                     model.split("-")[1] == "All" &&
                     model.split("-")[0] == val.name.split("-")[0] &&
-                    !val.isDisabled
+                    !val.isDisabled &&
+                    val.isChecked != checked
                 ) {
                     val.isChecked = !val.isChecked;
                 }
@@ -290,6 +437,7 @@ class DataStore {
 
     @observable inputForm = {
         dataset_name: "",
+        dataset_description: "",
         datasets: [],
         model_type: "",
     };

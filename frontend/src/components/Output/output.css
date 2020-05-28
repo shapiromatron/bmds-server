@@ -1,0 +1,25 @@
+.modal-dialog {
+    width: auto;
+    height: auto;
+    padding: 0;
+
+  }
+  
+  .modal-content {
+    height: 100%;
+    border-radius: 0;
+    position: relative;
+    overflow-y: auto;
+  }
+
+
+
+  .card{
+      margin-top:20px;
+  }
+
+  .td-modelName:hover{
+          color:red;
+          cursor:pointer;
+      }
+  

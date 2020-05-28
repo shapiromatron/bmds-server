@@ -38,7 +38,7 @@ const OptionsForm = props => {
 
             <td>
                 <input
-                    type="text"
+                    type="number"
                     name="bmr_value"
                     value={props.item.bmr_value}
                     id={props.idx}
@@ -49,7 +49,7 @@ const OptionsForm = props => {
             {props.dataset_type === "C" ? (
                 <td>
                     <input
-                        type="text"
+                        type="number"
                         name="tail_probability"
                         value={props.item.tail_probability}
                         id={props.idx}
@@ -60,7 +60,7 @@ const OptionsForm = props => {
             ) : null}
             <td>
                 <input
-                    type="text"
+                    type="number"
                     name="confidence_level"
                     value={props.item.confidence_level}
                     id={props.idx}
@@ -91,7 +91,7 @@ const OptionsForm = props => {
                         value={props.item.variance}
                         onChange={props.onchange}>
                         <option value="Constant">Constant</option>
-                        <option value="Non Constant">Non-Constant</option>
+                        <option value="Non-constant">Non-Constant</option>
                     </select>
                 </td>
             ) : null}

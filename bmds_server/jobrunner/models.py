@@ -29,6 +29,10 @@ class Job(models.Model):
     started = models.DateTimeField(null=True)
     ended = models.DateTimeField(null=True)
 
+    class Meta:
+        ordering = ("created",)
+        get_latest_by = ("created",)
+
     def __str__(self):
         return str(self.id)
 

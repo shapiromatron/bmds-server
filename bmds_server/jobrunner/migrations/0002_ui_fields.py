@@ -22,4 +22,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name="job", name="preferences", field=models.TextField(blank=True),
         ),
+        migrations.AlterModelOptions(
+            name="job", options={"get_latest_by": ("created",), "ordering": ("created",)},
+        ),
     ]

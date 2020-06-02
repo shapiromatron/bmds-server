@@ -1,19 +1,19 @@
 import React, {Component} from "react";
 import {inject, observer} from "mobx-react";
 import InputForm from "./InputForm";
-import {toJS} from "mobx";
 
 @inject("store")
 @observer
 class InputFormList extends Component {
-    addRow = (e, model_type) => {
+    deleteRow = (e, dataset_id, index) => {
         e.preventDefault();
-        this.props.store.createForm(model_type);
+        this.props.store.deleteRow(dataset_id, index);
     };
-    onChange = e => {
-        const {name, value, id} = e.target;
+    onChange = (e, dataset_id, index) => {
+        e.preventDefault();
+        const {name, value} = e.target;
         let parsedValue = "";
-        if (Number(value)) {
+        if (Number(value) || value == "0") {
             if (name === "ns") {
                 parsedValue = parseInt(value);
             } else {
@@ -22,98 +22,68 @@ class InputFormList extends Component {
         } else {
             parsedValue = value;
         }
-        this.props.store.saveRowData(name, parsedValue, id);
-    };
-    handleSubmit = e => {
-        e.preventDefault();
-        this.props.store.saveDataset();
-    };
-    deleteRow = (e, val) => {
-        e.preventDefault();
-        this.props.store.deleteDataRow(val);
-    };
-    deleteForm = e => {
-        e.preventDefault();
-        this.props.store.deleteForm();
+        this.props.store.saveDataset(name, parsedValue, index, dataset_id);
     };
     render() {
-        let model_type = this.props.store.inputForm.model_type;
-        let dataFormList = this.props.store.getDataFormList(model_type);
-        let datasets = toJS(this.props.store.inputForm.datasets);
+        const {store} = this.props;
+
+        let selectedIndex = store.selectedDatasetIndex;
+        let currentDataset = store.getCurrentDataset(selectedIndex);
+        let labels = store.getDatasetLabels(currentDataset.model_type);
+        let datasetInputForm = [];
+        Object.keys(currentDataset).map(key => {
+            if (Array.isArray(currentDataset[key])) {
+                currentDataset[key].map((val, i) => {
+                    if (!datasetInputForm[i]) {
+                        datasetInputForm.push({[key]: val});
+                    } else {
+                        datasetInputForm[i][key] = val;
+                    }
+                });
+            }
+        });
         return (
-            <div>
+            <div className="col col-sm-4">
                 <div>
-                    <form onSubmit={this.handleSubmit}>
-                        <div className="row" style={{marginTop: 20}}>
-                            <div className="col">
-                                <div className="card">
-                                    <div className="card-header text-center">
-                                        Add {model_type} Dataset
-                                    </div>
-                                    <div className="card-header">
-                                        <input
-                                            type="text"
-                                            name="dataset_name"
-                                            placeholder="Enter dataset name"
-                                            value={this.props.store.inputForm.dataset_name}
-                                            onChange={this.onChange}
-                                        />
-                                    </div>
-                                    <div className="card-body ">
-                                        <table className="table">
-                                            <thead className="text-center">
-                                                <tr>
-                                                    {dataFormList.map((item, index) => {
-                                                        return [<th key={index}>{item.label}</th>];
-                                                    })}
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                {datasets.map((dataset, id) => (
-                                                    <InputForm
-                                                        key={id}
-                                                        idx={id}
-                                                        dataset={dataset}
-                                                        form={dataFormList}
-                                                        onChange={this.onChange}
-                                                        delete={this.deleteRow.bind(this)}
-                                                    />
-                                                ))}
-                                            </tbody>
-                                            <tfoot>
-                                                <tr>
-                                                    <td colSpan="3">
-                                                        <button
-                                                            onClick={e =>
-                                                                this.addRow(e, model_type)
-                                                            }
-                                                            type="button"
-                                                            className="btn btn-primary float-left">
-                                                            Add New Row
-                                                        </button>
-                                                    </td>
-                                                </tr>
-                                            </tfoot>
-                                        </table>
-                                    </div>
-                                    <div className="card-footer text-center">
-                                        <button
-                                            type="submit"
-                                            className="btn btn-primary text-center"
-                                            style={{marginRight: "10px"}}>
-                                            save
-                                        </button>
-                                        <button
-                                            type="button"
-                                            onClick={this.deleteForm}
-                                            className="btn btn-danger text-center">
-                                            Close
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </form>
+                    <label>Dataset Name</label>
+                    <br />
+                    <input
+                        type="text"
+                        name="dataset_name"
+                        value={currentDataset.dataset_name}
+                        onChange={e => this.onChange(e, currentDataset.dataset_id)}
+                    />
+                    <table className="table table-bordered">
+                        <thead className="text-center">
+                            <tr>
+                                {labels.map((item, index) => {
+                                    return [<th key={index}>{item.label}</th>];
+                                })}
+                                <td>
+                                    <button
+                                        type="submit"
+                                        className="btn btn-primary sm-1"
+                                        onClick={() => store.addRows(currentDataset)}>
+                                        Add Row
+                                    </button>
+                                </td>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {datasetInputForm.map((obj, i) => {
+                                return [
+                                    <InputForm
+                                        key={i}
+                                        idx={i}
+                                        row={obj}
+                                        dataset_id={currentDataset.dataset_id}
+                                        onChange={this.onChange}
+                                        delete={this.deleteRow.bind(this)}
+                                    />,
+                                ];
+                            })}
+                        </tbody>
+                    </table>
                 </div>
             </div>
         );

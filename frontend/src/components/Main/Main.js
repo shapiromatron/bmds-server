@@ -1,6 +1,6 @@
 import React, {Component} from "react";
 
-import UserInfo from "./UserInfo";
+import AnalysisForm from "./AnalysisForm";
 import ModelsCheckBoxList from "./ModelsCheckBoxList";
 import DatasetName from "./DatasetName";
 import OptionsFormList from "./OptionsFormList";
@@ -19,7 +19,7 @@ class Main extends Component {
                     <div>
                         <div className="row">
                             <div className="col col-sm-5">
-                                <UserInfo />
+                                <AnalysisForm />
                             </div>
                             {this.props.store.getDataLength > 0 ? (
                                 <div className="col col-sm-5">
@@ -27,14 +27,14 @@ class Main extends Component {
                                 </div>
                             ) : null}
                         </div>
-                        {this.props.store.usersInput.dataset_type ? (
+                        {this.props.store.analysisForm.dataset_type ? (
                             <div className="row">
                                 <div className="col">
                                     <ModelsCheckBoxList />
                                 </div>
                             </div>
                         ) : null}
-                        {this.props.store.usersInput.dataset_type ? (
+                        {this.props.store.analysisForm.dataset_type ? (
                             <div className="row">
                                 <div className="col">
                                     <OptionsFormList />

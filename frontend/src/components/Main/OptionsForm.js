@@ -12,7 +12,6 @@ const OptionsForm = props => {
                         value={props.item.bmr_type}
                         id={props.idx}
                         onChange={props.onchange}>
-                        <option>Select</option>
                         <option value="Std. Dev.">Std. Dev.</option>
                         <option value="Rel. Dev.">Rel. Dev.</option>
                         <option value="Abs. Dev.">Abs. Dev.</option>
@@ -29,7 +28,6 @@ const OptionsForm = props => {
                         value={props.item.bmr_type}
                         id={props.idx}
                         onChange={props.onchange}>
-                        <option>Select</option>
                         <option value="Extra">Extra Risk</option>
                         <option value="Added">Added Risk</option>
                     </select>
@@ -76,7 +74,6 @@ const OptionsForm = props => {
                         value={props.item.distribution}
                         id={props.idx}
                         onChange={props.onchange}>
-                        <option>Select</option>
                         <option value="Normal">Normal</option>
                         <option value="log normal">Log normal</option>
                     </select>
@@ -103,7 +100,6 @@ const OptionsForm = props => {
                         className="form-control"
                         value={props.item.polynomial_restriction}
                         onChange={props.onchange}>
-                        <option>Select</option>
                         <option value="Use dataset adverse direction">
                             Use dataset adverse direction
                         </option>
@@ -119,17 +115,15 @@ const OptionsForm = props => {
                     className="form-control"
                     value={props.item.background}
                     onChange={props.onchange}>
-                    <option>Select</option>
                     <option value="Estimated">Estimated</option>
                 </select>
             </td>
 
             <td>
                 <button
-                    className="btn btn-danger close"
-                    aria-label="Close"
+                    className="btn btn-danger"
                     onClick={e => props.delete(e, props.idx)}>
-                    <span aria-hidden="true">&times;</span>
+                     <i className="fa fa-trash"></i>
                 </button>
             </td>
         </tr>

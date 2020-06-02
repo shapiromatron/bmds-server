@@ -5,14 +5,14 @@ import {Form} from "react-bootstrap";
 @inject("store")
 @observer
 class DatasetName extends Component {
-    handleCheckbox(e, item) {
-        this.props.store.toggleDataset(item.id);
+    handleCheckbox(e, dataset_id) {
+        this.props.store.toggleDataset(dataset_id);
     }
     onChange(e, item) {
         this.props.store.saveAdverseDirection(e.target.name, e.target.value, item.id);
     }
     render() {
-        let obj = this.props.store.savedDataset.filter(data => data.enabled == true);
+        let obj = this.props.store.datasets.filter(data => data.enabled == true);
         return (
             <div>
                 {this.props.store.getDataLength > 0 ? (
@@ -25,7 +25,7 @@ class DatasetName extends Component {
                             </tr>
                         </thead>
                         <tbody>
-                            {this.props.store.savedDataset.map((item, index) => {
+                            {this.props.store.datasets.map((item, index) => {
                                 return [
                                     <tr key={index}>
                                         <td>
@@ -33,7 +33,9 @@ class DatasetName extends Component {
                                                 type="checkbox"
                                                 name="isIncluded"
                                                 checked={obj.includes(item)}
-                                                onChange={e => this.handleCheckbox(e, item)}
+                                                onChange={e =>
+                                                    this.handleCheckbox(e, item.dataset_id)
+                                                }
                                             />
                                         </td>
                                         <td>{item.dataset_name}</td>

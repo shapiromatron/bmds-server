@@ -1026,7 +1026,7 @@ class DataStore {
     @observable CSOptions = {
         bmr_type: "Std. Dev.",
         bmr_value: 0.05,
-        tail_probability: 0.80,
+        tail_probability: 0.8,
         confidence_level: 0.95,
         distribution: "Normal",
         variance: "Constant",

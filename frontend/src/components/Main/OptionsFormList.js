@@ -68,7 +68,7 @@ class OptionsFormList extends Component {
                                 <button
                                     type="button"
                                     className="btn btn-primary "
-                                    onClick={()=>store.createOptions()}>
+                                    onClick={() => store.createOptions()}>
                                     add option set
                                 </button>
                             </form>

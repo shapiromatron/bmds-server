@@ -120,10 +120,8 @@ const OptionsForm = props => {
             </td>
 
             <td>
-                <button
-                    className="btn btn-danger"
-                    onClick={e => props.delete(e, props.idx)}>
-                     <i className="fa fa-trash"></i>
+                <button className="btn btn-danger" onClick={e => props.delete(e, props.idx)}>
+                    <i className="fa fa-trash"></i>
                 </button>
             </td>
         </tr>

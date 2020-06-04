@@ -4,7 +4,7 @@ import {inject, observer} from "mobx-react";
 
 @inject("store")
 @observer
-class UserInfo extends Component {
+class AnalysisForm extends Component {
     render() {
         const {store} = this.props,
             handleSubmit = e => {
@@ -12,7 +12,7 @@ class UserInfo extends Component {
                 store.saveAnalysis();
             },
             handleChange = e => {
-                store.addUsersInput(e.target.name, e.target.value);
+                store.addanalysisForm(e.target.name, e.target.value);
             };
 
         return (
@@ -22,7 +22,7 @@ class UserInfo extends Component {
                     <Form.Control
                         type="text"
                         name="analysis_name"
-                        value={store.usersInput.analysis_name}
+                        value={store.analysisForm.analysis_name}
                         onChange={handleChange}
                     />
                 </Form.Group>
@@ -32,7 +32,7 @@ class UserInfo extends Component {
                         as="textarea"
                         rows="3"
                         name="analysis_description"
-                        value={store.usersInput.analysis_description}
+                        value={store.analysisForm.analysis_description}
                         onChange={handleChange}
                     />
                 </Form.Group>
@@ -42,7 +42,7 @@ class UserInfo extends Component {
                         as="select"
                         name="dataset_type"
                         onChange={handleChange}
-                        value={store.usersInput.dataset_type}>
+                        value={store.analysisForm.dataset_type}>
                         <option value="C">Continuous</option>
                         <option value="D">Dichotomous</option>
                         <option value="DMT">Dichotomous-Multi-tumor (MS_Combo)</option>
@@ -64,4 +64,4 @@ class UserInfo extends Component {
     }
 }
 
-export default UserInfo;
+export default AnalysisForm;

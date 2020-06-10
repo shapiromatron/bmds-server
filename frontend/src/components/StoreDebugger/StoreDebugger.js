@@ -14,7 +14,6 @@ class StoreDebugger extends Component {
 
     render() {
         const {isOpen} = this.state,
-            {store} = this.props,
             setOpen = isOpen => this.setState({isOpen});
 
         return (
@@ -25,13 +24,17 @@ class StoreDebugger extends Component {
                 <Collapse in={isOpen}>
                     <div id="example-collapse-text">
                         <h3>Config:</h3>
-                        <pre>{JSON.stringify(store.config, undefined, 2)}</pre>
+                        <pre>{JSON.stringify(this.props.store.mainStore.config, undefined, 2)}</pre>
                         <h3>Datasets:</h3>
-                        <pre>{JSON.stringify(store.datasets, undefined, 2)}</pre>
+                        <pre>
+                            {JSON.stringify(this.props.store.dataStore.datasets, undefined, 2)}
+                        </pre>
                         <h3>Options:</h3>
-                        <pre>{JSON.stringify(store.options, undefined, 2)}</pre>
+                        <pre>
+                            {JSON.stringify(this.props.store.mainStore.options, undefined, 2)}
+                        </pre>
                         <h3>Models:</h3>
-                        <pre>{JSON.stringify(store.models, undefined, 2)}</pre>
+                        <pre>{JSON.stringify(this.props.store.mainStore.models, undefined, 2)}</pre>
                     </div>
                 </Collapse>
             </div>

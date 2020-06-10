@@ -3,21 +3,22 @@ import {Modal, Button} from "react-bootstrap";
 
 import {inject, observer} from "mobx-react";
 
-@inject("store")
+@inject("mainStore")
 @observer
 class MainModal extends Component {
-    hideModal() {
-        this.props.store.mainModal = !this.props.store.mainModal;
-    }
     render() {
-        let errorMessage = this.props.store.modalMessage;
+        const {mainStore} = this.props,
+            hideModal = () => {
+                mainStore.errorModal = !mainStore.errorModal;
+            },
+            errorMessage = mainStore.errorMessage;
         return (
             <div>
-                <Modal show={this.props.store.mainModal}>
+                <Modal show={mainStore.errorModal}>
                     <Modal.Body>
                         <div>{errorMessage}</div>
                         <div>
-                            <Button variant="primary" onClick={() => this.hideModal()}>
+                            <Button variant="primary" onClick={() => hideModal()}>
                                 Ok
                             </Button>
                         </div>

@@ -1,23 +1,23 @@
 import React, {Component} from "react";
-import {Modal, Button} from "react-bootstrap";
+import {Modal} from "react-bootstrap";
 import {inject, observer} from "mobx-react";
 
-@inject("store")
+@inject("outputStore")
 @observer
 class ModelDetailModal extends Component {
-    toggleModelDetailModal = () => {
-        this.props.store.toggleModelDetailModal();
-    };
     render() {
-        const {store} = this.props;
+        const {outputStore} = this.props,
+            toggleModelDetailModal = () => {
+                outputStore.toggleModelDetailModal();
+            };
         return (
             <div>
                 <div className="container-fluid">
                     <div className="modal-dialog">
                         <div className="modal-content">
                             <Modal
-                                show={store.modelDetailModal}
-                                onHide={this.toggleModelDetailModal}
+                                show={outputStore.modelDetailModal}
+                                onHide={toggleModelDetailModal}
                                 size="xl"
                                 aria-labelledby="contained-modal-title-vcenter"
                                 centered>
@@ -25,20 +25,18 @@ class ModelDetailModal extends Component {
                                     <Modal.Title id="contained-modal-title-vcenter">
                                         {" "}
                                         Model details
-                                        <Button
-                                            className=" close"
-                                            aria-label="Close"
-                                            style={{float: "right"}}
-                                            onClick={() => this.toggleModelDetailModal()}>
-                                            <span aria-hidden="true">&times;</span>
-                                        </Button>
                                     </Modal.Title>
+                                    <button
+                                        style={{float: "right"}}
+                                        onClick={() => toggleModelDetailModal()}>
+                                        <i className="fa fa-close" aria-hidden="true"></i>
+                                    </button>
                                 </Modal.Header>
 
                                 <Modal.Body>
                                     <div>
                                         <div className="row">
-                                            <div className="col col-sm-5">
+                                            <div className="col col-sm-5 infotable">
                                                 <table className="table table-bordered">
                                                     <thead>
                                                         <tr>
@@ -46,22 +44,18 @@ class ModelDetailModal extends Component {
                                                         </tr>
                                                     </thead>
                                                     <tbody>
-                                                        {Object.keys(store.infoTable).map(
-                                                            (dev, i) => {
-                                                                return [
-                                                                    <tr key={i}>
-                                                                        <td>{dev}</td>
-                                                                        <td>
-                                                                            {store.infoTable[dev]}
-                                                                        </td>
-                                                                    </tr>,
-                                                                ];
-                                                            }
-                                                        )}
+                                                        {outputStore.infoTable.map((dev, i) => {
+                                                            return [
+                                                                <tr key={i}>
+                                                                    <td>{dev.label}</td>
+                                                                    <td>{dev.value}</td>
+                                                                </tr>,
+                                                            ];
+                                                        })}
                                                     </tbody>
                                                 </table>
                                             </div>
-                                            <div className="col col-sm-3">
+                                            <div className="col col-sm-3 modeloptions">
                                                 <table className="table table-bordered">
                                                     <thead>
                                                         <tr>
@@ -69,23 +63,21 @@ class ModelDetailModal extends Component {
                                                         </tr>
                                                     </thead>
                                                     <tbody>
-                                                        {Object.keys(store.optionSettings).map(
-                                                            (dev, i) => {
-                                                                return [
-                                                                    <tr key={i}>
-                                                                        <td>{dev}</td>
-                                                                        <td>
-                                                                            {
-                                                                                store
-                                                                                    .optionSettings[
-                                                                                    dev
-                                                                                ]
-                                                                            }
-                                                                        </td>
-                                                                    </tr>,
-                                                                ];
-                                                            }
-                                                        )}
+                                                        {Object.keys(
+                                                            outputStore.optionSettings
+                                                        ).map((dev, i) => {
+                                                            return [
+                                                                <tr key={i}>
+                                                                    <td>{dev}</td>
+                                                                    <td>
+                                                                        {
+                                                                            outputStore
+                                                                                .optionSettings[dev]
+                                                                        }
+                                                                    </td>
+                                                                </tr>,
+                                                            ];
+                                                        })}
                                                     </tbody>
                                                 </table>
                                             </div>
@@ -97,13 +89,16 @@ class ModelDetailModal extends Component {
                                                         </tr>
                                                     </thead>
                                                     <tbody>
-                                                        {Object.keys(store.modelData).map(
+                                                        {Object.keys(outputStore.modelData).map(
                                                             (dev, i) => {
                                                                 return [
                                                                     <tr key={i}>
                                                                         <td>{dev}</td>
                                                                         <td>
-                                                                            {store.modelData[dev]}
+                                                                            {
+                                                                                outputStore
+                                                                                    .modelData[dev]
+                                                                            }
                                                                         </td>
                                                                     </tr>,
                                                                 ];
@@ -114,7 +109,7 @@ class ModelDetailModal extends Component {
                                             </div>
                                         </div>
                                         <div className="row">
-                                            <div className="col col-sm-4">
+                                            <div className="col col-sm-4 benchmarkdose">
                                                 <table className="table table-bordered">
                                                     <thead>
                                                         <tr>
@@ -122,22 +117,14 @@ class ModelDetailModal extends Component {
                                                         </tr>
                                                     </thead>
                                                     <tbody>
-                                                        {Object.keys(store.benchmarkDose).map(
-                                                            (dev, i) => {
-                                                                return [
-                                                                    <tr key={i}>
-                                                                        <td>{dev}</td>
-                                                                        <td>
-                                                                            {
-                                                                                store.benchmarkDose[
-                                                                                    dev
-                                                                                ]
-                                                                            }
-                                                                        </td>
-                                                                    </tr>,
-                                                                ];
-                                                            }
-                                                        )}
+                                                        {outputStore.benchmarkDose.map((dev, i) => {
+                                                            return [
+                                                                <tr key={i}>
+                                                                    <td>{dev.label}</td>
+                                                                    <td>{dev.value}</td>
+                                                                </tr>,
+                                                            ];
+                                                        })}
                                                     </tbody>
                                                 </table>
                                             </div>
@@ -153,7 +140,7 @@ class ModelDetailModal extends Component {
                                                         </tr>
                                                     </thead>
                                                     <tbody>
-                                                        {store.parameters.map((value, i) => {
+                                                        {outputStore.parameters.map((value, i) => {
                                                             return [
                                                                 <tr key={i}>
                                                                     <td>{value.p_variable}</td>
@@ -174,89 +161,72 @@ class ModelDetailModal extends Component {
                                                             <th colSpan="9">Goodness of Fit</th>
                                                         </tr>
                                                         <tr>
-                                                            <th>Dose</th>
-                                                            <th>size</th>
-                                                            {store.selectedModelType == "D" ? (
-                                                                <th>Estimated Probability</th>
-                                                            ) : null}
-                                                            {store.selectedModelType == "D" ? (
-                                                                <th>Expected</th>
-                                                            ) : null}
-                                                            {store.selectedModelType == "D" ? (
-                                                                <th>Observed</th>
-                                                            ) : null}
-                                                            {store.selectedModelType == "CS" ? (
-                                                                <th>Estimated Median</th>
-                                                            ) : null}
-                                                            {store.selectedModelType == "CS" ? (
-                                                                <th>Calculated Median</th>
-                                                            ) : null}
-                                                            {store.selectedModelType == "CS" ? (
-                                                                <th>Observed Mean</th>
-                                                            ) : null}
-                                                            {store.selectedModelType == "CS" ? (
-                                                                <th>Estimated SD</th>
-                                                            ) : null}
-                                                            {store.selectedModelType == "CS" ? (
-                                                                <th>Calculated SD</th>
-                                                            ) : null}
-                                                            {store.selectedModelType == "CS" ? (
-                                                                <th>Observed SD</th>
-                                                            ) : null}
-                                                            <th>Scaled Residual</th>
+                                                            {outputStore.goodnessFitHeaders.map(
+                                                                (header, i) => {
+                                                                    return [
+                                                                        <th key={i}>{header}</th>,
+                                                                    ];
+                                                                }
+                                                            )}
                                                         </tr>
                                                     </thead>
                                                     <tbody>
-                                                        {store.goodnessFit.map((row, index) => {
-                                                            return [
-                                                                <tr key={index}>
-                                                                    <td>{row.dose}</td>
-                                                                    <td>{row.size}</td>
-                                                                    {store.selectedModelType ==
-                                                                    "D" ? (
-                                                                        <td>{row.est_prob}</td>
-                                                                    ) : null}
-                                                                    {store.selectedModelType ==
-                                                                    "D" ? (
-                                                                        <td>{row.expected}</td>
-                                                                    ) : null}
-                                                                    {store.selectedModelType ==
-                                                                    "D" ? (
-                                                                        <td>{row.observed}</td>
-                                                                    ) : null}
-                                                                    {store.selectedModelType ==
-                                                                    "CS" ? (
-                                                                        <td></td>
-                                                                    ) : null}
-                                                                    {store.selectedModelType ==
-                                                                    "CS" ? (
-                                                                        <td>{row.calc_median}</td>
-                                                                    ) : null}
-                                                                    {store.selectedModelType ==
-                                                                    "CS" ? (
-                                                                        <td>{row.obs_mean}</td>
-                                                                    ) : null}
-                                                                    {store.selectedModelType ==
-                                                                    "CS" ? (
-                                                                        <td>{row.est_stdev}</td>
-                                                                    ) : null}
-                                                                    {store.selectedModelType ==
-                                                                    "CS" ? (
-                                                                        <td>{row.calc_gsd}</td>
-                                                                    ) : null}
-                                                                    {store.selectedModelType ==
-                                                                    "CS" ? (
-                                                                        <td>{row.obs_stdev}</td>
-                                                                    ) : null}
-                                                                    <td>{row.scaled_residual}</td>
-                                                                </tr>,
-                                                            ];
-                                                        })}
+                                                        {outputStore.goodnessFit.map(
+                                                            (row, index) => {
+                                                                return [
+                                                                    <tr key={index}>
+                                                                        <td>{row.dose}</td>
+                                                                        <td>{row.size}</td>
+                                                                        {outputStore.selectedModelType ==
+                                                                        "D" ? (
+                                                                            <td>{row.est_prob}</td>
+                                                                        ) : null}
+                                                                        {outputStore.selectedModelType ==
+                                                                        "D" ? (
+                                                                            <td>{row.expected}</td>
+                                                                        ) : null}
+                                                                        {outputStore.selectedModelType ==
+                                                                        "D" ? (
+                                                                            <td>{row.observed}</td>
+                                                                        ) : null}
+                                                                        {outputStore.selectedModelType ==
+                                                                        "CS" ? (
+                                                                            <td></td>
+                                                                        ) : null}
+                                                                        {outputStore.selectedModelType ==
+                                                                        "CS" ? (
+                                                                            <td>
+                                                                                {row.calc_median}
+                                                                            </td>
+                                                                        ) : null}
+                                                                        {outputStore.selectedModelType ==
+                                                                        "CS" ? (
+                                                                            <td>{row.obs_mean}</td>
+                                                                        ) : null}
+                                                                        {outputStore.selectedModelType ==
+                                                                        "CS" ? (
+                                                                            <td>{row.est_stdev}</td>
+                                                                        ) : null}
+                                                                        {outputStore.selectedModelType ==
+                                                                        "CS" ? (
+                                                                            <td>{row.calc_gsd}</td>
+                                                                        ) : null}
+                                                                        {outputStore.selectedModelType ==
+                                                                        "CS" ? (
+                                                                            <td>{row.obs_stdev}</td>
+                                                                        ) : null}
+                                                                        <td>
+                                                                            {row.scaled_residual}
+                                                                        </td>
+                                                                    </tr>,
+                                                                ];
+                                                            }
+                                                        )}
                                                     </tbody>
                                                 </table>
                                             </div>
                                         </div>
-                                        {store.selectedModelType == "CS" ? (
+                                        {outputStore.selectedModelType == "CS" ? (
                                             <div className="row">
                                                 <div>
                                                     <div className="col col-sm-4">
@@ -275,7 +245,7 @@ class ModelDetailModal extends Component {
                                                                 </tr>
                                                             </thead>
                                                             <tbody>
-                                                                {store.loglikelihoods.map(
+                                                                {outputStore.loglikelihoods.map(
                                                                     (row, index) => {
                                                                         return [
                                                                             <tr key={index}>
@@ -316,7 +286,7 @@ class ModelDetailModal extends Component {
                                                                 </tr>
                                                             </thead>
                                                             <tbody>
-                                                                {store.test_of_interest.map(
+                                                                {outputStore.test_of_interest.map(
                                                                     (row, index) => {
                                                                         return [
                                                                             <tr key={index}>
@@ -356,7 +326,7 @@ class ModelDetailModal extends Component {
                                                         </tr>
                                                     </thead>
                                                     <tbody>
-                                                        {store.cdfValues.map((value, i) => {
+                                                        {outputStore.cdfValues.map((value, i) => {
                                                             return [
                                                                 <tr key={i}>
                                                                     <td>{value.pValue}</td>

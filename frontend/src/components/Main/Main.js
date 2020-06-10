@@ -2,14 +2,14 @@ import React, {Component} from "react";
 
 import AnalysisForm from "./AnalysisForm";
 import ModelsCheckBoxList from "./ModelsCheckBoxList";
-import DatasetName from "./DatasetName";
 import OptionsFormList from "./OptionsFormList";
 import MainModal from "./MainModal";
 import "./main.css";
 
 import {inject, observer} from "mobx-react";
+import DatasetList from "./DatasetList";
 
-@inject("store")
+@inject("mainStore")
 @observer
 class Main extends Component {
     render() {
@@ -21,26 +21,21 @@ class Main extends Component {
                             <div className="col col-sm-5">
                                 <AnalysisForm />
                             </div>
-                            {this.props.store.getDataLength > 0 ? (
-                                <div className="col col-sm-5">
-                                    <DatasetName />
-                                </div>
-                            ) : null}
+
+                            <div className="col col-sm-5">
+                                <DatasetList />
+                            </div>
                         </div>
-                        {this.props.store.analysisForm.dataset_type ? (
-                            <div className="row">
-                                <div className="col">
-                                    <ModelsCheckBoxList />
-                                </div>
+                        <div className="row">
+                            <div className="col">
+                                <ModelsCheckBoxList />
                             </div>
-                        ) : null}
-                        {this.props.store.analysisForm.dataset_type ? (
-                            <div className="row">
-                                <div className="col">
-                                    <OptionsFormList />
-                                </div>
+                        </div>
+                        <div className="row">
+                            <div className="col">
+                                <OptionsFormList />
                             </div>
-                        ) : null}
+                        </div>
                     </div>
                 </div>
                 <MainModal />

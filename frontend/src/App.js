@@ -5,15 +5,13 @@ import StoreDebugger from "./components/StoreDebugger/StoreDebugger";
 import {inject, observer} from "mobx-react";
 import {Navbar} from "react-bootstrap";
 
-@inject("store")
+@inject("mainStore")
 @observer
 class App extends Component {
-    componentDidMount() {
-        const config = JSON.parse(document.getElementById("config").textContent);
-        this.props.store.setConfig(config);
-        this.props.store.fetchSavedAnalysis();
-    }
     render() {
+        const config = JSON.parse(document.getElementById("config").textContent);
+        this.props.mainStore.setConfig(config);
+        this.props.mainStore.fetchSavedAnalysis();
         return (
             <HashRouter>
                 <div>

@@ -2,15 +2,15 @@ import React, {Component} from "react";
 
 import {inject, observer} from "mobx-react";
 
-@inject("store")
+@inject("mainStore")
 @observer
 class ReportOptions extends Component {
     renderOutputs() {
-        const {executionOutputs} = this.props.store;
-        if (!executionOutputs) {
+        const {mainStore} = this.props;
+        if (!mainStore.executionOutputs) {
             return null;
         }
-        return <pre>{JSON.stringify(executionOutputs, undefined, 2)}</pre>;
+        return <pre>{JSON.stringify(mainStore.executionOutputs, undefined, 2)}</pre>;
     }
     render() {
         return (

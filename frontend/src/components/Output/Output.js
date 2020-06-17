@@ -4,12 +4,13 @@ import {toJS} from "mobx";
 import ModelDetailModal from "./modelDetailModal";
 import "./output.css";
 
-@inject("store")
+@inject("outputStore")
 @observer
 class Output extends Component {
     render() {
-        const {store} = this.props;
-        let outputs = toJS(this.props.store.executionOutputs);
+        const {outputStore} = this.props,
+            outputs = toJS(outputStore.getExecutionOutputs());
+
         return (
             <div>
                 {outputs ? (
@@ -39,7 +40,7 @@ class Output extends Component {
                                                                 <td
                                                                     className="td-modelName"
                                                                     onClick={() =>
-                                                                        store.toggleModelDetailModal(
+                                                                        outputStore.toggleModelDetailModal(
                                                                             output,
                                                                             val.model_index
                                                                         )
@@ -65,7 +66,7 @@ class Output extends Component {
                             <div className="card-body"></div>
                         </div>
                         <div>
-                            <div>{store.modelDetailModal ? <ModelDetailModal /> : null}</div>
+                            <div>{outputStore.modelDetailModal ? <ModelDetailModal /> : null}</div>
                         </div>
                     </div>
                 ) : null}

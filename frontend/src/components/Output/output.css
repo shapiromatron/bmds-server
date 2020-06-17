@@ -11,9 +11,6 @@
     position: relative;
     overflow-y: auto;
   }
-
-
-
   .card{
       margin-top:20px;
   }
@@ -21,5 +18,7 @@
   .td-modelName:hover{
           color:red;
           cursor:pointer;
-      }
-  
+  }
+  .fa-close{
+    color: red;
+  }

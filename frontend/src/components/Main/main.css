@@ -16,3 +16,7 @@
     text-align: right;
     max-width: 2;
 }
+
+.analysisFormReadOnly th{
+  width: 200px;
+}

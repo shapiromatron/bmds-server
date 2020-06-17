@@ -1,62 +1,65 @@
 import React, {Component} from "react";
 import {inject, observer} from "mobx-react";
 
-@inject("store")
+@inject("dataStore")
 @observer
 class InputButtons extends Component {
-    onChange = e => {
-        this.props.store.model_type = e.target.value;
-    };
     render() {
-        const {store} = this.props;
+        const {dataStore} = this.props,
+            onChange = e => {
+                dataStore.model_type = e.target.value;
+            },
+            isEditSettings = dataStore.getEditSettings();
         return (
             <div className="col col-sm-4">
-                <div>
-                    <form>
-                        <label htmlFor="selectmodel">Select Model Type</label>
-                        <select
-                            className="form-control"
-                            id="selectmodel"
-                            style={{maxWidth: "70%"}}
-                            onChange={this.onChange}>
-                            {store.DatasetTypes.map((item, i) => {
-                                return [
-                                    <option key={i} value={item.value}>
-                                        {item.name}
-                                    </option>,
-                                ];
-                            })}
-                        </select>
-                        <div className="btn-toolbar">
-                            <button
-                                type="submit"
-                                className="btn btn-primary btn-xs btn-space"
-                                onClick={() => store.createForm()}>
-                                Add Dataset
-                            </button>
-                            <div className="btn btn-primary btn-file">
-                                Import Dataset <input type="file" />
+                {isEditSettings ? (
+                    <div>
+                        <form>
+                            <label htmlFor="selectmodel">Select Model Type</label>
+                            <select
+                                className="form-control"
+                                id="selectmodel"
+                                style={{maxWidth: "70%"}}
+                                onChange={onChange}>
+                                {dataStore.ModelTypes.map((item, i) => {
+                                    return [
+                                        <option key={i} value={item.value}>
+                                            {item.name}
+                                        </option>,
+                                    ];
+                                })}
+                            </select>
+                            <div className="btn-toolbar">
+                                <button
+                                    type="submit"
+                                    className="btn btn-primary btn-xs btn-space"
+                                    onClick={e => dataStore.addDataset(e)}>
+                                    Add Dataset
+                                </button>
+                                <div className="btn btn-primary btn-file">
+                                    Import Dataset <input type="file" />
+                                </div>
                             </div>
-                        </div>
-                    </form>
-                </div>
-                {store.datasets.length ? (
+                        </form>
+                    </div>
+                ) : null}
+                {dataStore.datasets.length ? (
                     <div className="editdataset">
                         <table className="table table-bordered">
                             <thead>
                                 <tr>
-                                    <th>Edit Dataset</th>
+                                    <th>{isEditSettings ? "Edit" : null}&nbsp; Datasets</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                {store.datasets.map((item, index) => {
+                                {dataStore.datasets.map((item, index) => {
                                     return [
                                         <tr key={index}>
                                             <td>
                                                 <a
                                                     className="currentdataset"
                                                     onClick={() =>
-                                                        store.setCurrentDatasetIndex(
+                                                        dataStore.setCurrentDatasetIndex(
                                                             item.dataset_id
                                                         )
                                                     }>
@@ -70,9 +73,11 @@ class InputButtons extends Component {
                         </table>
                     </div>
                 ) : null}
-                {store.datasets.length ? (
+                {dataStore.datasets.length && isEditSettings ? (
                     <div>
-                        <button className="btn btn-danger" onClick={() => store.deleteDataset()}>
+                        <button
+                            className="btn btn-danger"
+                            onClick={() => dataStore.deleteDataset()}>
                             Delete Dataset
                         </button>
                     </div>

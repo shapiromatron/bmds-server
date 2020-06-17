@@ -5,10 +5,14 @@ import "../node_modules/bootstrap/dist/css/bootstrap.min.css";
 import "../node_modules/font-awesome/css/font-awesome.min.css";
 
 import {Provider} from "mobx-react";
-import store from "./stores/DataStore";
+import rootStore from "./stores/RootStore";
 
 const Root = (
-    <Provider store={store}>
+    <Provider
+        store={rootStore}
+        dataStore={rootStore.dataStore}
+        mainStore={rootStore.mainStore}
+        outputStore={rootStore.outputStore}>
         <App />
     </Provider>
 );

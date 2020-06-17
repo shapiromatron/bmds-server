@@ -1,6 +1,6 @@
 import React from "react";
 
-const ContinuousCheckBox = props => {
+const ModelsCheckBox = props => {
     return (
         <tbody>
             {props.models.map((item, index) => {
@@ -53,4 +53,4 @@ const ContinuousCheckBox = props => {
     );
 };
 
-export default ContinuousCheckBox;
+export default ModelsCheckBox;

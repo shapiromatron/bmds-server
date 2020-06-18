@@ -2,7 +2,6 @@ import React, {Component} from "react";
 import {inject, observer} from "mobx-react";
 import InputForm from "./InputForm";
 import InputFormReadOnly from "./InputFormReadOnly";
-import {toJS} from "mobx";
 
 @inject("dataStore")
 @observer

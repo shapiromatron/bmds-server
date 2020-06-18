@@ -11,16 +11,12 @@ class InputButtons extends Component {
             },
             isEditSettings = dataStore.getEditSettings();
         return (
-            <div className="col col-sm-4">
+            <div className="col col-sm-3">
                 {isEditSettings ? (
                     <div>
-                        <form>
+                        <form className="model-type form-group">
                             <label htmlFor="selectmodel">Select Model Type</label>
-                            <select
-                                className="form-control"
-                                id="selectmodel"
-                                style={{maxWidth: "70%"}}
-                                onChange={onChange}>
+                            <select className="form-control" id="selectmodel" onChange={onChange}>
                                 {dataStore.ModelTypes.map((item, i) => {
                                     return [
                                         <option key={i} value={item.value}>
@@ -32,11 +28,11 @@ class InputButtons extends Component {
                             <div className="btn-toolbar">
                                 <button
                                     type="submit"
-                                    className="btn btn-primary btn-xs btn-space"
+                                    className="btn btn-primary btn-xs"
                                     onClick={e => dataStore.addDataset(e)}>
                                     Add Dataset
                                 </button>
-                                <div className="btn btn-primary btn-file">
+                                <div className="btn btn-primary btn-file ">
                                     Import Dataset <input type="file" />
                                 </div>
                             </div>
@@ -45,7 +41,7 @@ class InputButtons extends Component {
                 ) : null}
                 {dataStore.datasets.length ? (
                     <div className="editdataset">
-                        <table className="table table-bordered">
+                        <table className="table table-bordered table-hover">
                             <thead>
                                 <tr>
                                     <th>{isEditSettings ? "Edit" : null}&nbsp; Datasets</th>
@@ -54,10 +50,9 @@ class InputButtons extends Component {
                             <tbody>
                                 {dataStore.datasets.map((item, index) => {
                                     return [
-                                        <tr key={index}>
+                                        <tr key={index} className="currentdataset">
                                             <td>
                                                 <a
-                                                    className="currentdataset"
                                                     onClick={() =>
                                                         dataStore.setCurrentDatasetIndex(
                                                             item.dataset_id

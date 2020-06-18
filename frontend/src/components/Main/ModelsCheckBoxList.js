@@ -23,28 +23,32 @@ class ModelsCheckBoxList extends Component {
                 <div className="checkbox-table">
                     <table className="table table-bordered hover">
                         <thead>
-                            {mainStore.modelsCheckBoxHeaders.map((item, index) => {
+                            {Object.keys(mainStore.modelsCheckBoxHeaders).map((item, index) => {
                                 return [
                                     <tr key={index}>
-                                        <th>{item.model}</th>
-                                        {item.values.map((dev, index) => {
-                                            return [
-                                                <th key={index} colSpan={dev.colspan}>
-                                                    {dev.name}{" "}
-                                                    {(dev.name === "Enable") & isEditSettings ? (
-                                                        <input
-                                                            type="checkbox"
-                                                            name={dev.model_name + "-All"}
-                                                            onChange={this.handleCheckbox}
-                                                        />
-                                                    ) : null}
-                                                    &emsp;
-                                                    {dev.model_name === "bayesian_model_average"
-                                                        ? dev.prior_weight
-                                                        : null}
-                                                </th>,
-                                            ];
-                                        })}
+                                        <th>{mainStore.modelsCheckBoxHeaders[item].model}</th>
+                                        {mainStore.modelsCheckBoxHeaders[item].values.map(
+                                            (dev, index) => {
+                                                return [
+                                                    <th key={index} colSpan={dev.colspan}>
+                                                        {dev.name}{" "}
+                                                        {(dev.name === "Enable") &
+                                                        isEditSettings ? (
+                                                            <input
+                                                                type="checkbox"
+                                                                name={dev.model_name + "-All"}
+                                                                onChange={handleCheckbox}
+                                                                checked={dev.isChecked}
+                                                            />
+                                                        ) : null}
+                                                        &emsp;
+                                                        {dev.model_name === "bayesian_model_average"
+                                                            ? dev.prior_weight
+                                                            : null}
+                                                    </th>,
+                                                ];
+                                            }
+                                        )}
                                     </tr>,
                                 ];
                             })}

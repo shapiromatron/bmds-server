@@ -1,5 +1,6 @@
 import {observable, action, computed} from "mobx";
 import rootStore from "./RootStore";
+import {toJS} from "mobx";
 
 class DataStore {
     @observable model_type = "CS";
@@ -22,6 +23,7 @@ class DataStore {
         form["model_type"] = this.model_type;
         form["dataset_id"] = this.datasets.length;
         form["dataset_name"] = "DatasetName " + form["dataset_id"];
+        form["column_names"] = this.getColumnNames();
         this.selectedDatasetIndex = form["dataset_id"];
         this.datasets.push(form);
     }
@@ -67,6 +69,9 @@ class DataStore {
         } else {
             this.datasets[dataset_id][name][id] = value;
         }
+    };
+    @action changeColumnName = (name, value, dataset_id) => {
+        this.datasets[dataset_id]["column_names"][name] = value;
     };
 
     @action deleteDataset() {
@@ -115,33 +120,16 @@ class DataStore {
         let labels = [];
         switch (model_type) {
             case "CS":
-                labels = [
-                    {label: "Dose", name: "doses"},
-                    {label: "N", name: "ns"},
-                    {label: "Mean", name: "means"},
-                    {label: "St Dev", name: "stdevs"},
-                ];
+                labels = ["Dose", "St.Dev", "Mean", "St Dev"];
                 break;
             case "CI":
-                labels = [
-                    {label: "Dose", name: "doses"},
-                    {label: "Response", name: "responses"},
-                ];
+                labels = ["Dose", "Response"];
                 break;
             case "D":
-                labels = [
-                    {label: "Dose", name: "doses"},
-                    {label: "N", name: "ns"},
-                    {label: "Incidence", name: "incidences"},
-                ];
+                labels = ["Dose", "N", "Incidence"];
                 break;
             case "N":
-                labels = [
-                    {label: "Dose", name: "doses"},
-                    {label: "Litter Size", name: "litter_sizes"},
-                    {label: "Incidence", name: "incidences"},
-                    {label: "Litter Specific Covariate", name: "litter_specific_covariates"},
-                ];
+                labels = ["Dose", "Litter Size", "Incidence", "Litter Specific Covariate"];
                 break;
         }
         return labels;
@@ -176,6 +164,43 @@ class DataStore {
                     litter_sizes: ["", "", "", "", ""],
                     incidences: ["", "", "", "", ""],
                     litter_specific_covariates: ["", "", "", "", ""],
+                };
+
+                break;
+        }
+        return form;
+    }
+
+    @action getColumnNames() {
+        let form = {};
+        switch (this.model_type) {
+            case "CS":
+                form = {
+                    doses: "Dose",
+                    ns: "N",
+                    means: "Mean",
+                    stdevs: "Std. Dev.",
+                };
+                break;
+            case "CI":
+                form = {
+                    doses: "Dose",
+                    responses: "Response",
+                };
+                break;
+            case "D":
+                form = {
+                    doses: "Dose",
+                    ns: "N",
+                    incidences: "Incidence",
+                };
+                break;
+            case "N":
+                form = {
+                    doses: "Dose",
+                    litter_sizes: "LItter Size",
+                    incidences: "Incidence",
+                    litter_specific_covariates: "Litter Specific Covariate",
                 };
 
                 break;

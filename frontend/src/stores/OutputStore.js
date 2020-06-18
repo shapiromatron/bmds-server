@@ -1,37 +1,36 @@
-import {observable, action, computed} from "mobx";
+import {observable, action} from "mobx";
 import _ from "lodash";
 import rootStore from "./RootStore";
-import {toJS} from "mobx";
 
 class OutputStore {
     @observable modelDetailModal = false;
     @observable selectedModelType = {};
     @observable goodnessFitHeaders = [];
-    @observable goodnessFit = {};
     @observable cdfValues = [];
     @observable infoTable = {
-        model_name: "",
-        dataset_name: "",
-        user_notes: "",
-        dose_response_model: "",
+        model_name: {label: "Model Name", value: ""},
+        dataset_name: {label: "Dataset Name", value: ""},
+        user_notes: {label: "User Notes", value: ""},
+        dose_response_model: {label: "Dose Response Model", value: ""},
     };
-    @observable optionSettings = {};
+    @observable goodnessFit = [];
+    @observable modelOptions = [];
 
     @observable modelData = {
-        dependent_variable: "",
-        independent_variable: "",
-        number_of_observations: "",
+        dependent_variable: {label: "Dependent Variable", value: "Dose"},
+        independent_variable: {label: "Independent Variable", value: "Response"},
+        number_of_observations: {label: "Number of Observations", value: ""},
     };
     @observable benchmarkDose = {
-        bmd: "",
-        bmdl: "",
-        bmdu: "",
-        aic: "",
-        p_value: "",
-        df: "",
-        chi_square: "",
+        bmd: {label: "BMD", value: ""},
+        bmdl: {label: "BMDL", value: ""},
+        bmdu: {label: "BMDU", value: ""},
+        aic: {label: "AIC", value: ""},
+        p_value: {label: "P Value", value: ""},
+        df: {label: "DOF", value: ""},
     };
     @observable parameters = [];
+    @observable response_models = [];
     @observable loglikelihoods = [];
     @observable test_of_interest = [];
 
@@ -45,72 +44,41 @@ class OutputStore {
     @action getExecutionOutputs() {
         return rootStore.mainStore.getExecutionOutputs();
     }
-
     @action.bound
     mapOutputModal(output, model_index) {
-        this.infoTable = [];
-        this.benchmarkDose = [];
         let selectedModel = output.models.find(row => row.model_index == model_index);
         this.selectedModelType = output.dataset.model_type;
+        this.setOutputValues(selectedModel, this.selectedModelType);
+        this.setResponseModel(selectedModel.model_name);
 
         //unpack infoTable data
-        this.model_name.value = selectedModel.model_name;
-        this.dataset_name.value = output.dataset.dataset_name;
-        this.user_notes.value = output.dataset.dataset_description;
-        this.dose_response_model.value = this.getResponseModel;
-        this.infoTable.push(
-            this.model_name,
-            this.dataset_name,
-            this.user_notes,
-            this.dose_response_model
+        this.infoTable.model_name.value = selectedModel.model_name;
+        this.infoTable.dataset_name.value = output.dataset.dataset_name;
+        this.infoTable.user_notes.value = output.dataset.dataset_description;
+
+        //set model Optins values
+        this.modelOptions.map(option => {
+            option.value = selectedModel.settings[option.name];
+        });
+
+        this.modelData.number_of_observations.value = output.dataset.doses.length;
+
+        //set benchmark dose values
+        this.benchmarkDose.bmd.value = selectedModel.results.bmd;
+        this.benchmarkDose.bmdl.value = selectedModel.results.bmdl;
+        this.benchmarkDose.bmdu.value = selectedModel.results.bmdu;
+        this.benchmarkDose.aic.value = selectedModel.results.aic;
+        this.benchmarkDose.p_value.value = selectedModel.results.gof.p_value;
+        this.benchmarkDose.df.value = selectedModel.results.gof.df;
+
+        //set parameters values  TODO
+        this.parameters = _.zipWith(
+            this.parameter_variables,
+            selectedModel.results.parameters,
+            (p_variable, parameter) => ({p_variable, parameter})
         );
 
-        //unpack model Options
-        delete selectedModel.settings["degree"];
-        delete selectedModel.settings["background"];
-        delete selectedModel.settings["adverseDirection"];
-        delete selectedModel.settings["restriction"];
-        delete selectedModel.settings["bLognormal"];
-        delete selectedModel.settings["bUserParmInit"];
-        this.optionSettings = selectedModel.settings;
-
-        //unpack model_data todo
-        this.modelData.dependent_variable = "Dose";
-        this.modelData.independent_variable = "Response";
-        this.modelData.number_of_observations = output.dataset.doses.length;
-
-        //unpack benchmark dose
-        this.bmd.value = selectedModel.results.bmd;
-        this.bmdl.value = selectedModel.results.bmdl;
-        this.bmdu.value = selectedModel.results.bmdu;
-        this.aic.value = selectedModel.results.aic;
-        this.p_value.value = selectedModel.results.gof.p_value;
-        this.df.value = selectedModel.results.gof.df;
-        this.chi_square.value = selectedModel.results.gof.chi_square;
-        this.benchmarkDose.push(
-            this.bmd,
-            this.bmdl,
-            this.bmdu,
-            this.aic,
-            this.p_value,
-            this.df,
-            this.chi_square
-        );
-
-        this.getGoodessFitHeaders(this.selectedModelType);
-        console.log(toJS(this.goodnessFitHeaders));
-        //godness of fit only for dichotomous
-        if (this.selectedModelType == "D") {
-            this.goodnessFit = selectedModel.results.gof.rows;
-        } else if (this.selectedModelType == "CS") {
-            this.goodnessFit = selectedModel.results.gof;
-        }
-
-        if (this.selectedModelType == "CS") {
-            this.loglikelihoods = selectedModel.results.loglikelihoods;
-            this.test_of_interest = selectedModel.results.test_rows;
-        }
-
+        //set cdf values with percentiles
         let percentileValue = _.range(0.01, 1, 0.01);
         let cdf = selectedModel.results.cdf;
         let pValue = percentileValue.map(function(each_element) {
@@ -118,98 +86,127 @@ class OutputStore {
         });
 
         this.cdfValues = _.zipWith(pValue, cdf, (pValue, cdf) => ({pValue, cdf}));
-
-        //unpack paramters:
-        let pvariables = this.getParameterVariables;
-        this.parameters = _.zipWith(
-            pvariables,
-            selectedModel.results.parameters,
-            (p_variable, parameter) => ({p_variable, parameter})
-        );
     }
 
-    @action getGoodessFitHeaders(model_type) {
-        console.log("goodness headers called", model_type);
+    @action setOutputValues(selectedModel, model_type) {
         switch (model_type) {
             case "CS":
+                this.modelOptions = [
+                    {label: "BMR Type", name: "bmrType", value: ""},
+                    {label: "BMRF", name: "bmr", value: ""},
+                    {label: "Tail Probability", name: "tailProb", value: ""},
+                    {label: "Confidence Level", name: "alpha", value: ""},
+                    {label: "Distribution Type", name: "distType", value: ""},
+                    {label: "Variance Type", name: "varType", value: ""},
+                ];
                 this.goodnessFitHeaders = [
                     "Dose",
-                    "Size",
-                    "Estimated Median",
-                    "Calculated Median",
                     "Observed Mean",
-                    "Estimated SD",
-                    "Calculated SD",
                     "Observed SD",
+                    "Calculated Median",
+                    "Calculated SD",
+                    "Estimated Median",
+                    "Estimated SD",
+                    "Size",
                     "Scaled Residual",
                 ];
+                this.loglikelihoods = selectedModel.results.loglikelihoods;
+                this.test_of_interest = selectedModel.results.test_rows;
+                this.modelData["adverse_direction"] = {
+                    label: "Adverse Direction",
+                    value: selectedModel.settings.adverseDirection,
+                };
+                this.goodnessFit = selectedModel.results.gof;
                 break;
             case "D":
+                this.modelOptions = [
+                    {label: "Risk Type", name: "bmrType", value: ""},
+                    {label: "BMR", name: "bmr", value: ""},
+                    {label: "Confidence Level", name: "alpha", value: ""},
+                    {label: "Background", name: "background", value: ""},
+                ];
                 this.goodnessFitHeaders = [
                     "Dose",
-                    "Size",
                     "Estimated probability",
                     "Expected",
                     "Observed",
+                    "Size",
                     "Scaled Residual",
                 ];
+                this.benchmarkDose["chi_square"] = {
+                    label: "Chi Square",
+                    value: selectedModel.results.gof.chi_square,
+                };
+                this.goodnessFit = selectedModel.results.gof.rows;
+                break;
         }
     }
 
     //todo for other models
-    @computed get getResponseModel() {
-        let response_model = "";
-        switch (this.infoTable.model_name) {
+    @action setResponseModel(model_name) {
+        switch (model_name) {
             case "Dichotomous-Hill":
-                response_model = "P[dose] = g +(v-v*g)/[1+exp(-a-b*Log(dose))]";
+                this.infoTable.dose_response_model.value =
+                    "P[dose] = g +(v-v*g)/[1+exp(-a-b*Log(dose))]";
+                this.parameter_variables = ["g", "v", "a", "b"];
                 break;
             case "Gamma":
-                response_model = "P[dose]= g+(1-g)*CumGamma[b*dose,a]";
+                this.infoTable.dose_response_model.value = "P[dose]= g+(1-g)*CumGamma[b*dose,a]";
+                this.parameter_variables = ["g", "a", "b"];
+                break;
+            case "LogLogistic":
+                this.infoTable.dose_response_model.value =
+                    "P[dose] = g+(1-g)/[1+exp(-a-b*Log(dose))]";
+                this.parameter_variables = ["g", "a", "b"];
+                break;
+            case "Log-Probit":
+                this.infoTable.dose_response_model.value =
+                    "P[dose] = g+(1-g) * CumNorm(a+b*Log(Dose))";
+                this.parameter_variables = ["g", "a", "b"];
+                break;
+            case "Multistage": // multistage has multiple degree analysisi TODO
+                this.infoTable.dose_response_model.value =
+                    "P[dose] = g + (1-g)*[1-exp(-b1*dose^1-b2*dose^2 - ...)";
+                this.parameter_variables = ["g", "b1", "b2"];
+                break;
+            case "Weibull":
+                this.infoTable.dose_response_model.value = "P[dose] = g + (1-g)*[1-exp(-b*dose^a)]";
+                this.parameter_variables = ["g", "a", "b"];
+                break;
+            case "Logistic":
+                this.infoTable.dose_response_model.value = "P[dose] = 1/[1+exp(-a-b*dose)]";
+                this.parameter_variables = ["a", "b"];
+                break;
+            case "Probit":
+                this.infoTable.dose_response_model.value = "P[dose] = CumNorm(a+b*Dose)";
+                this.parameter_variables = ["a", "b"];
+                break;
+            case "Quantal_Linear":
+                this.infoTable.dose_response_model.value = "P[dose] = g + (1-g)*[1-exp(-b*dose)]";
+                this.parameter_variables = ["g", "b"];
+                break;
+            case "Hill":
+                this.infoTable.dose_response_model.value = "M[dose] = g + v*dose^n/(k^n + dose^n)";
+                this.parameter_variables = ["g", "v", "k", "n", "alpha"];
+                break;
+            case "Power":
+                this.infoTable.dose_response_model.value = "M[dose] = g + v * dose^n";
+                this.parameter_variables = ["g", "v", "n", "alpha"];
+                break;
+            case "Linear":
+                this.infoTable.dose_response_model.value = "M[dose] = g + b1*dose";
+                this.parameter_variables = ["g", "beta1", "alpha"];
+                break;
+            case "Exponential": //exponential has multiple degree analysis TODO
+                this.infoTable.dose_response_model.value = "TODO";
+                this.parameter_variables = ["a", "b", "c"];
+                break;
+            case "Polynomial": //polynomial has multiple degree analysis TODO
+                this.infoTable.dose_response_model.value = "TODO";
+                this.parameter_variables = ["a", "b", "c"];
+                break;
         }
-
-        return response_model;
     }
-
-    //returns parameters variables based on models
-    //todo for other models
-    @computed get getParameterVariables() {
-        let parameters = [];
-        if (this.selectedModelType == "D") {
-            if (this.infoTable.model_name === "Dichotomous-Hill") {
-                parameters = this.parameter_variables.dichotomousHill;
-            } else {
-                parameters = this.parameter_variables.others;
-            }
-        } else if (this.selectedModelType == "CS") {
-            if (this.infoTable.model_name === "Hill") {
-                parameters = this.parameter_variables.hill;
-            }
-        }
-        return parameters;
-    }
-    //todo for other models
-    @observable parameter_variables = {
-        dichotomousHill: ["a", "b", "c", "d"],
-        others: ["a", "b", "c"],
-        power: ["g", "v", "n"],
-        hill: ["a", "b", "c", "d", "e", "f"],
-        polynomial: ["g"],
-    };
-
-    @observable infoTable = [];
-    @observable model_name = {label: "Model Name", value: ""};
-    @observable dataset_name = {label: "Dataset Name", value: ""};
-    @observable user_notes = {label: "User Notes", value: ""};
-    @observable dose_response_model = {label: "Dose Response Model", value: ""};
-
-    @observable benchmarkDose = [];
-    @observable bmd = {label: "BMD", value: ""};
-    @observable bmdl = {label: "BMDL", value: ""};
-    @observable bmdu = {label: "BMDU", value: ""};
-    @observable aic = {label: "AIC", value: ""};
-    @observable p_value = {label: "P Value", value: ""};
-    @observable df = {label: "DOF", value: ""};
-    @observable chi_square = {label: "Chi Square", value: ""};
 }
 
 const outputStore = new OutputStore();

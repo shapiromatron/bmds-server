@@ -14,9 +14,27 @@
 
 .bma-input{
     text-align: right;
-    max-width: 2;
+    width:75px;
+    margin-left: 50px;
 }
 
 .analysisFormReadOnly th{
   width: 200px;
+}
+
+.options-table{
+    width:100%;
+}
+.options-table td input {
+    width:100%;
+    font-size:auto;
+}
+.options-table td select{
+    font-size:auto;
+    width:100%;
+    overflow: hidden;
+}
+.options-table td select option{
+    font-size:14px;
+    max-width: 100%;
 }

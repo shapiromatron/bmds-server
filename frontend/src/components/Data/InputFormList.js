@@ -2,6 +2,7 @@ import React, {Component} from "react";
 import {inject, observer} from "mobx-react";
 import InputForm from "./InputForm";
 import InputFormReadOnly from "./InputFormReadOnly";
+import {toJS} from "mobx";
 
 @inject("dataStore")
 @observer
@@ -27,6 +28,11 @@ class InputFormList extends Component {
                 }
                 dataStore.saveDataset(name, parsedValue, index, dataset_id);
             },
+            changeColumnName = (e, dataset_id) => {
+                e.preventDefault();
+                const {name, value} = e.target;
+                dataStore.changeColumnName(name, value, dataset_id);
+            },
             selectedIndex = dataStore.selectedDatasetIndex,
             currentDataset = dataStore.getCurrentDataset(selectedIndex),
             labels = dataStore.getDatasetLabels(currentDataset.model_type),
@@ -44,7 +50,7 @@ class InputFormList extends Component {
             }
         });
         return (
-            <div className="col col-sm-4">
+            <div className="col col-sm-5">
                 <div>
                     <div className="border border-light">
                         <label style={{marginRight: "20px"}}>Dataset Name:</label>
@@ -60,22 +66,39 @@ class InputFormList extends Component {
                         )}
                     </div>
 
-                    <table className="table table-bordered">
+                    <table className="table table-bordered inputformtable">
                         <thead className="text-center">
                             <tr>
                                 {labels.map((item, index) => {
-                                    return [<th key={index}>{item.label}</th>];
+                                    return [<th key={index}>{item}</th>];
                                 })}
                                 {isEditSettings ? (
                                     <td>
                                         <button
                                             type="submit"
-                                            className="btn btn-primary sm-1"
+                                            className="btn btn-primary"
                                             onClick={() => dataStore.addRows(currentDataset)}>
-                                            Add Row
+                                            <i className="fa fa-plus-square" aria-hidden="true"></i>{" "}
+                                            Row
                                         </button>
                                     </td>
                                 ) : null}
+                            </tr>
+                            <tr>
+                                {Object.keys(currentDataset.column_names).map((item, i) => {
+                                    return [
+                                        <td key={i} className="inputform">
+                                            <input
+                                                name={item}
+                                                value={currentDataset.column_names[item]}
+                                                onChange={e =>
+                                                    changeColumnName(e, currentDataset.dataset_id)
+                                                }
+                                            />
+                                        </td>,
+                                    ];
+                                })}
+                                <td></td>
                             </tr>
                         </thead>
                         {isEditSettings ? (

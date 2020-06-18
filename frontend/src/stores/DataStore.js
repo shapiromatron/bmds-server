@@ -1,6 +1,5 @@
 import {observable, action, computed} from "mobx";
 import rootStore from "./RootStore";
-import {toJS} from "mobx";
 
 class DataStore {
     @observable model_type = "CS";

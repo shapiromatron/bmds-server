@@ -17,7 +17,6 @@ class DataStore {
         e.preventDefault();
         let form = this.getDatasetForm();
         form["enabled"] = false;
-        form["adverse_direction"] = "automatic";
         form["dataset_description"] = "";
         form["model_type"] = this.model_type;
         form["dataset_id"] = this.datasets.length;
@@ -99,6 +98,18 @@ class DataStore {
     };
     @action setDatasets(datasets) {
         this.datasets = datasets;
+        this.datasets.map(item => {
+            this.selectedDatasetIndex = item.dataset_id;
+            return;
+        });
+    }
+
+    @action getDatasets() {
+        return this.datasets;
+    }
+
+    @action getEnabledDatasets() {
+        return this.datasets.filter(item => item.enabled == true);
     }
 
     //returns the dataset which are enabled
@@ -115,6 +126,17 @@ class DataStore {
         return rootStore.mainStore.getEditSettings();
     }
 
+    @action getModelTypeDatasets() {
+        return this.datasets.filter(item =>
+            item.model_type.includes(rootStore.mainStore.analysisForm.dataset_type)
+        );
+    }
+
+    @action getSelectedDatasets() {
+        let dataset_type = rootStore.mainStore.analysisForm.dataset_type;
+        let selectedDataset = this.datasets.filter(item => item.model_type.includes(dataset_type));
+        return selectedDataset;
+    }
     @action getDatasetLabels(model_type) {
         let labels = [];
         switch (model_type) {
@@ -142,6 +164,7 @@ class DataStore {
                     ns: [6, 7, 8, 9, 10],
                     means: [6, 7, 8, 9, 10],
                     stdevs: [6, 7, 8, 9, 10],
+                    adverse_direction: "automatic",
                 };
                 break;
             case "CI":
@@ -207,12 +230,6 @@ class DataStore {
         return form;
     }
 
-    @observable DatasetNamesHeader = ["Enable", "Datasets", "Adverse Direction"];
-    @observable AdverseDirectionList = [
-        {value: "automatic", name: "Automatic"},
-        {value: "up", name: "Up"},
-        {value: "down", name: "Down"},
-    ];
     @observable ModelTypes = [
         {value: "CS", name: "Continuous Summarized"},
         {value: "CI", name: "Continuous Individual"},

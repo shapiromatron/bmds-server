@@ -28,22 +28,37 @@ class OptionsFormList extends Component {
                 e.preventDefault();
                 mainStore.deleteOptions(val);
             },
+            createOptions = () => {
+                mainStore.createOptions();
+            },
             dataset_type = mainStore.analysisForm.dataset_type,
             labels = mainStore.getOptionsLabels(dataset_type),
-            options = toJS(mainStore.options),
-            isEditSettings = mainStore.getEditSettings();
+            isEditSettings = mainStore.getEditSettings(),
+            options = mainStore.getOptionsType(dataset_type);
         return (
-            <form>
-                <div className="row" style={{marginTop: 20}}>
-                    <div className="col form-group">
-                        <div>
-                            <table className="table table-bordered options-table">
-                                <thead>
+            <div className="options-div">
+                {labels.length ? (
+                    <div className="panel panel-default">
+                        <form className="form-horizontal">
+                            <table className="options-table table table-bordered">
+                                <thead className="table-primary">
                                     <tr>
                                         {labels.map((item, index) => {
                                             return [<th key={index}>{item.label}</th>];
                                         })}
-                                        <th></th>
+                                        <th>
+                                            {isEditSettings ? (
+                                                <button
+                                                    type="button"
+                                                    data-toggle="tooltip"
+                                                    data-placement="right"
+                                                    title="Add New Option Set"
+                                                    className="btn btn-primary "
+                                                    onClick={createOptions}>
+                                                    <i className="fa fa-plus"></i>{" "}
+                                                </button>
+                                            ) : null}
+                                        </th>
                                     </tr>
                                 </thead>
                                 {isEditSettings ? (
@@ -72,18 +87,10 @@ class OptionsFormList extends Component {
                                     </tbody>
                                 )}
                             </table>
-                            {isEditSettings ? (
-                                <button
-                                    type="button"
-                                    className="btn btn-primary "
-                                    onClick={() => mainStore.createOptions()}>
-                                    Add option set
-                                </button>
-                            ) : null}
-                        </div>
+                        </form>
                     </div>
-                </div>
-            </form>
+                ) : null}
+            </div>
         );
     }
 }

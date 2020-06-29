@@ -1,40 +1,133 @@
-.main-form{
-    border: 1px solid rgba(213, 226, 226, 0.562);
-    padding:20px;
+.main{
+    font-size: 12px;
 }
+.navbar{
+    margin-bottom: 0!important;
+ }
+.row{
+    margin-bottom: 20px;
+    margin-top:20px;
+}
+.main-form{
+    padding:10px;
+
+}
+  
+
+.analysis-form select,
+.analysis-form input,
+.analysis-form textarea{
+    font-size: 13px;
+}
+
 .main-form Button {
     margin-right: 10px;
+    text-overflow: inherit;
+    font-size:13px;
 
 }
 
-.checkbox-table{
-    margin-top: 20px;
-    text-align: center;
+
+.options-table th{
+    font-size: 14px;
+    color: black;
 }
 
-.bma-input{
-    text-align: right;
-    width:75px;
-    margin-left: 50px;
-}
+.options-table th, .options-table td{
+    word-break: normal;
+    border:1px solid rgb(163, 212, 221);
+    text-align:center;
+    height: fit-content;
+} 
 
-.analysisFormReadOnly th{
-  width: 200px;
-}
-
-.options-table{
-    width:100%;
-}
 .options-table td input {
-    width:100%;
-    font-size:auto;
+
+    display: block;
+     top:0;
+     left:0;
+     margin: 0;
+     height: 100%;
+     width: 100%;
+      border: none;
+     padding: 10px;
+     box-sizing: border-box; 
+     text-align: center;
+     font-size: 12px;
 }
+
+
 .options-table td select{
-    font-size:auto;
+    font-size:12px;
     width:100%;
     overflow: hidden;
+    padding:0;
 }
-.options-table td select option{
-    font-size:14px;
-    max-width: 100%;
+
+ .modelscheckbox{
+    text-align: center;
+    border-collapse: collapse;
+    table-layout:fixed;
+    width:auto;
+
+}
+
+
+ .modelscheckbox th{
+     word-break:break-all;
+    word-wrap: break-word;
+    font-size: 12px;
+    text-align: center;
+    color:black;
+    border: 1px solid rgb(163, 212, 221);
+} 
+
+.modelscheckbox td input{
+    size: 10px;
+    margin-left: 30px;
+    text-align: right;
+    width: 70px;
+}
+.modelscheckbox td .checkbox{
+  margin-left: 10px;
+}
+
+.modelscheckbox td{
+    size: 10px;
+    border:1px solid rgb(163, 212, 221);
+    font-size: 12px;
+}
+
+.modelscheckbox input:disabled:hover{
+    cursor:not-allowed;
+
+}
+
+.dataset-list{
+    position: fixed;
+    overflow-y: auto;
+    height:400px;
+}
+.table-responsive{
+    height:400px;
+    overflow:auto;
+    text-align: center;
+
+}
+
+.table-responsive  thead tr:nth-child(1) th{
+    position: sticky;
+    top: 0;
+    z-index: 10;
+  }
+.datasetlist-table th{
+    text-align: center;
+    border: 1px solid rgb(163, 212, 221);
+}
+
+
+.datasetlist-table td select{
+    font-size:12px;
+    width:100%;
+    overflow: hidden;
+    padding:0;
 }

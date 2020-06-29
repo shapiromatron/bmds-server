@@ -21,8 +21,8 @@ class ModelDetailModal extends Component {
                 outputStore.toggleModelDetailModal();
             };
         return (
-            <div>
-                <div className="container-fluid">
+            <div className="container">
+                <div className="modal">
                     <div className="modal-dialog">
                         <div className="modal-content">
                             <Modal
@@ -37,14 +37,15 @@ class ModelDetailModal extends Component {
                                         Model details
                                     </Modal.Title>
                                     <button
+                                        className="btn btn-danger"
                                         style={{float: "right"}}
                                         onClick={() => toggleModelDetailModal()}>
-                                        <i className="fa fa-close" aria-hidden="true"></i>
+                                        <i className="fa fa-times" aria-hidden="true"></i>
                                     </button>
                                 </Modal.Header>
 
                                 <Modal.Body>
-                                    <div>
+                                    <div className="modal-body">
                                         <div className="row">
                                             <div className="col col-sm-5 infotable">
                                                 <InfoTable infoTable={outputStore.infoTable} />
@@ -59,12 +60,12 @@ class ModelDetailModal extends Component {
                                             </div>
                                         </div>
                                         <div className="row">
-                                            <div className="col col-sm-4 benchmarkdose">
+                                            <div className="col benchmarkdose">
                                                 <BenchmarkDose
                                                     benchmarkDose={outputStore.benchmarkDose}
                                                 />
                                             </div>
-                                            <div className="col col-sm-6">
+                                            <div className="col">
                                                 <ModelParameters
                                                     parameters={outputStore.parameters}
                                                 />
@@ -72,7 +73,7 @@ class ModelDetailModal extends Component {
                                         </div>
 
                                         <div className="row">
-                                            <div className="col col-sm-4">
+                                            <div className="col ">
                                                 <GoodnessFit
                                                     headers={outputStore.goodnessFitHeaders}
                                                     goodnessFit={outputStore.goodnessFit}

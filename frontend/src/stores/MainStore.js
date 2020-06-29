@@ -4,7 +4,6 @@ import rootStore from "./RootStore";
 
 class MainStore {
     @observable config = {};
-    @observable options = [];
     @observable models = {};
     @observable prior_weight = 0;
     @observable prior_weight_models = [];
@@ -18,10 +17,10 @@ class MainStore {
     @observable hasEditSettings = false;
     @observable executionOutputs = null;
     @observable checked_items = [];
-
-    @action calldatastore() {
-        rootStore.dataStore.calldatastore();
-    }
+    @observable isUpdateComplete = false;
+    @observable options = [];
+    @observable CSOptionsList = [];
+    @observable DIOptionsList = [];
 
     @action setConfig = config => {
         this.config = config;
@@ -34,13 +33,14 @@ class MainStore {
         }
         return editSettings;
     }
-    @action createOptions() {
+
+    @observable createOptions() {
         switch (this.analysisForm.dataset_type) {
             case "C":
-                this.options.push(this.CSOptions);
+                this.CSOptionsList.push(this.CSOptions);
                 break;
             case "D":
-                this.options.push(this.DIOptions);
+                this.DIOptionsList.push(this.DIOptions);
                 break;
         }
     }
@@ -50,7 +50,11 @@ class MainStore {
     };
 
     @action deleteOptions = val => {
-        this.options.splice(val, 1);
+        if (this.analysisForm.dataset_type === "C") {
+            this.CSOptionsList.splice(val, 1);
+        } else if (this.analysisForm.dataset_type === "D") {
+            this.DIOptionsList.splice(val, 1);
+        }
     };
 
     @action addanalysisForm = (name, value) => {
@@ -200,6 +204,27 @@ class MainStore {
         return result;
     }
 
+    @computed get getOptions() {
+        let models = [];
+        switch (this.analysisForm.dataset_type) {
+            case "C":
+                models = this.CSOptionsList;
+                break;
+            case "D":
+                models = this.DIOptionsList;
+                break;
+        }
+        return models;
+    }
+    @computed get getSelectedDataset() {
+        let datasets = rootStore.dataStore.getDatasets();
+        let enabledDatasets = datasets.filter(item => item.enabled == true);
+        let selectedDatasets = enabledDatasets.filter(item =>
+            item.model_type.includes(this.analysisForm.dataset_type)
+        );
+        return selectedDatasets;
+    }
+
     @action
     async saveAnalysis() {
         const url = this.config.editSettings.patchInputUrl,
@@ -213,8 +238,8 @@ class MainStore {
                         analysis_description: this.analysisForm.analysis_description,
                         dataset_type: this.analysisForm.dataset_type,
                         models: this.getModels,
-                        datasets: rootStore.dataStore.getEnabledDataset,
-                        options: this.options,
+                        datasets: this.getSelectedDataset,
+                        options: this.getOptions,
                     },
                 };
             };
@@ -290,6 +315,7 @@ class MainStore {
     updateModelStateFromApi(data) {
         const inputs = data.inputs;
         if (_.isEmpty(inputs)) {
+            this.isUpdateComplete = true;
             return;
         }
 
@@ -303,7 +329,7 @@ class MainStore {
         this.analysisForm.analysis_description = inputs.analysis_description;
         this.analysisForm.dataset_type = inputs.dataset_type;
         this.options = inputs.options;
-
+        this.setOptions(inputs.options, this.analysisForm.dataset_type);
         // unpack datasets
         var datasets = inputs.datasets;
         rootStore.dataStore.setDatasets(datasets);
@@ -328,12 +354,60 @@ class MainStore {
             let value = "";
             this.toggleModelsCheckBox(item, checked, value);
         });
+
+        this.isUpdateComplete = true;
     }
 
+    @action toggleDataset = id => {
+        rootStore.dataStore.toggleDataset(id);
+    };
+
+    @action saveAdverseDirection = (name, value, id) => {
+        rootStore.dataStore.saveAdverseDirection(name, value, id);
+    };
     @action getExecutionOutputs() {
         return this.executionOutputs;
     }
 
+    @action getDatasets() {
+        return rootStore.dataStore.getDatasets();
+    }
+
+    @action toggleDataset(dataset_id) {
+        rootStore.dataStore.toggleDataset(dataset_id);
+    }
+    @action saveAdverseDiretion = (name, value, id) => {
+        rootStore.dataStore.saveAdverseDirection(name, value, id);
+    };
+    @action getEnabledDatasets() {
+        return rootStore.dataStore.datasets.filter(item => item.enabled == true);
+    }
+    @action getDatasetLength() {
+        return rootStore.dataStore.getDataLength;
+    }
+    @action getOptionsType(dataset_type) {
+        let options = [];
+        switch (dataset_type) {
+            case "C":
+                options = this.CSOptionsList;
+                break;
+            case "D":
+                options = this.DIOptionsList;
+                break;
+        }
+        return options;
+    }
+
+    @action setOptions(options, dataset_type) {
+        switch (dataset_type) {
+            case "C":
+                this.CSOptionsList = options;
+                break;
+            case "D":
+                this.DIOptionsList = options;
+                break;
+        }
+    }
     @observable DIOptions = {
         bmr_type: "Extra",
         bmr_value: 0.05,
@@ -351,6 +425,26 @@ class MainStore {
         polynomial_restriction: "Use dataset adverse direction",
         background: "Estimated",
     };
+    @observable DiHeader = ["Enable", "Datasets"];
+    @observable CHeader = ["Enable", "Datasets", "Adverse Direction"];
+    @observable AdverseDirectionList = [
+        {value: "automatic", name: "Automatic"},
+        {value: "up", name: "Up"},
+        {value: "down", name: "Down"},
+    ];
+
+    @action getDatasetNamesHeader() {
+        let datasetNames = [];
+        switch (this.analysisForm.dataset_type) {
+            case "C":
+                datasetNames = this.CHeader;
+                break;
+            case "D":
+                datasetNames = this.DiHeader;
+                break;
+        }
+        return datasetNames;
+    }
 
     @action getOptionsLabels(dataset_type) {
         let labels = [];
@@ -772,66 +866,12 @@ class MainStore {
             ],
         },
     ];
-
-    // @observable modelsCheckBoxHeaders = [
-    //     {
-    //         model: "",
-    //         values: [
-    //             {name: "MLE", colspan: "2"},
-    //             {name: "ALternatives", colspan: "2"},
-    //         ],
-    //     },
-    //     {
-    //         model: "",
-    //         values: [
-    //             {name: "Frequntist Restricted", colspan: "1"},
-    //             {name: "Frequentist Unrestricted", colspan: "1"},
-    //             {name: "Bayesian", colspan: "1"},
-    //             {name: "Bayesian Model Average", colspan: "1"},
-    //         ],
-    //     },
-
-    //     {
-    //         model: "Model Name",
-    //         values: [
-    //             {
-    //                 name: "Enable",
-    //                 model_name: "frequentist_restricted",
-    //                 colspan: "1",
-    //                 type: "checkBox",
-    //                 isChecked: false,
-    //             },
-    //             {
-    //                 name: "Enable",
-    //                 model_name: "frequentist_unrestricted",
-    //                 colspan: "1",
-    //                 type: "checkBox",
-    //                 isChecked: false,
-    //             },
-    //             {
-    //                 name: "Enable",
-    //                 model_name: "bayesian",
-    //                 colspan: "1",
-    //                 type: "checkBox",
-    //                 isChecked: false,
-    //             },
-    //             {
-    //                 name: "Enable",
-    //                 model_name: "bayesian_model_average",
-    //                 colspan: "1",
-    //                 type: "checkBox",
-    //                 isChecked: false,
-    //                 prior_weight: "Prior Weight",
-    //             },
-    //         ],
-    //     },
-    // ];
     @observable modelsCheckBoxHeaders = {
         first: {
             model: "",
             values: [
                 {name: "MLE", colspan: "2"},
-                {name: "ALternatives", colspan: "2"},
+                {name: "Alternatives", colspan: "2"},
             ],
         },
         second: {

@@ -5,7 +5,7 @@ const InputForm = props => {
         <tr>
             {Object.keys(props.row).map((key, index) => {
                 return [
-                    <td key={index} className="inputform">
+                    <td key={index}>
                         <input
                             type="number"
                             name={key}
@@ -17,10 +17,9 @@ const InputForm = props => {
             })}
             <td>
                 <button
-                    className="btn btn-danger"
-                    style={{float: "right"}}
+                    className="btn btn-danger btn-sq-xs"
                     onClick={e => props.delete(e, props.dataset_id, props.idx)}>
-                    <i className="fa fa-trash"></i>
+                    <i className="fa fa-trash fa-1x"></i>
                 </button>
             </td>
         </tr>

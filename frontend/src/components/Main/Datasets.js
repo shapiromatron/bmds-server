@@ -16,6 +16,7 @@ const Datasets = props => {
                             />
                         </td>
                         <td>{item.dataset_name}</td>
+                        {props.dataset_type=="C" ? (
                         <td>
                             {" "}
                             <Form.Control
@@ -31,6 +32,7 @@ const Datasets = props => {
                                 })}
                             </Form.Control>
                         </td>
+                        ):null}
                     </tr>,
                 ];
             })}

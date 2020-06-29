@@ -11,7 +11,7 @@ const ModelsCheckBox = props => {
                             return [
                                 <td key={index}>
                                     <input
-                                        className="checkbox-input"
+                                        className="checkbox"
                                         type={dev.type}
                                         name={dev.name}
                                         onChange={props.onChange}
@@ -21,7 +21,6 @@ const ModelsCheckBox = props => {
 
                                     {dev.name.includes("bayesian_model_average") ? (
                                         <input
-                                            className="bma-input"
                                             type="text"
                                             name={dev.name}
                                             value={dev.prior_weight + "%"}

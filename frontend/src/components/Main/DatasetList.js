@@ -21,7 +21,7 @@ class DatasetList extends Component {
             selectedDatasets = datasets.filter(item =>
                 item.model_type.includes(mainStore.analysisForm.dataset_type)
             ),
-            datasetnames=mainStore.getDatasetNamesHeader();
+            datasetnames = mainStore.getDatasetNamesHeader();
         return (
             <div className="table-responsive ">
                 {mainStore.getDatasetLength ? (

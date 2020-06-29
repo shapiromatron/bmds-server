@@ -16,23 +16,23 @@ const Datasets = props => {
                             />
                         </td>
                         <td>{item.dataset_name}</td>
-                        {props.dataset_type=="C" ? (
-                        <td>
-                            {" "}
-                            <Form.Control
-                                as="select"
-                                name="adverse_direction"
-                                onChange={e => props.onChange(e, item.dataset_id)}>
-                                {props.adverseList.map((item, i) => {
-                                    return [
-                                        <option key={i} value={item.value}>
-                                            {item.name}
-                                        </option>,
-                                    ];
-                                })}
-                            </Form.Control>
-                        </td>
-                        ):null}
+                        {props.dataset_type == "C" ? (
+                            <td>
+                                {" "}
+                                <Form.Control
+                                    as="select"
+                                    name="adverse_direction"
+                                    onChange={e => props.onChange(e, item.dataset_id)}>
+                                    {props.adverseList.map((item, i) => {
+                                        return [
+                                            <option key={i} value={item.value}>
+                                                {item.name}
+                                            </option>,
+                                        ];
+                                    })}
+                                </Form.Control>
+                            </td>
+                        ) : null}
                     </tr>,
                 ];
             })}

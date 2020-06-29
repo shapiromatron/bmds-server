@@ -1,7 +1,6 @@
 import React, {Component} from "react";
 import {inject, observer} from "mobx-react";
 import OptionsForm from "./OptionsForm";
-import {toJS} from "mobx";
 import OptionsReadOnly from "./OptionsReadOnly";
 
 @inject("mainStore")

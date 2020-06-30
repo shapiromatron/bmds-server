@@ -61,7 +61,6 @@ class ModelDetailModal extends Component {
                                         </div>
                                         <div className="row">
                                             <div className="col benchmarkdose">
-
                                                 <BenchmarkDose
                                                     benchmarkDose={outputStore.benchmarkDose}
                                                 />
@@ -72,7 +71,6 @@ class ModelDetailModal extends Component {
                                                 />
                                             </div>
                                         </div>
-
                                         <div className="row">
                                             <div className="col ">
                                                 <GoodnessFit

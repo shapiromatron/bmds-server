@@ -8,7 +8,8 @@ from decouple import config
 PROJECT_NAME = "bmds-server"
 BASE_DIR = Path(__file__).parents[2].resolve()
 ROOT_DIR = Path(__file__).parents[3].resolve()
-
+PUBLIC_DATA_ROOT = Path(os.environ.get("PUBLIC_DATA_ROOT", ROOT_DIR / "public"))
+LOGS_PATH = Path(os.environ.get("LOGS_PATH", ROOT_DIR))
 
 INSTALLED_APPS = [
     "django.contrib.admin",
@@ -84,6 +85,9 @@ HTTP_PLATFORM_PORT = config("HTTP_PLATFORM_PORT", default=80, cast=int)
 STATIC_URL = "/static/"
 STATICFILES_DIRS = [str(BASE_DIR / "static")]
 
+STATIC_ROOT = str(PUBLIC_DATA_ROOT / "static")
+MEDIA_ROOT = str(PUBLIC_DATA_ROOT / "media")
+
 LOGGING = {
     "version": 1,
     "disable_existing_loggers": False,
@@ -100,7 +104,7 @@ LOGGING = {
             "level": "DEBUG",
             "class": "logging.handlers.RotatingFileHandler",
             "formatter": "basic",
-            "filename": str(ROOT_DIR / "django.log"),
+            "filename": str(LOGS_PATH / "django.log"),
             "maxBytes": 10 * 1024 * 1024,  # 10 MB
             "backupCount": 10,
         },

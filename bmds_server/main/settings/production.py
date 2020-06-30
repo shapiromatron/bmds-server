@@ -20,18 +20,26 @@ ALLOWED_HOSTS = config("DJANGO_ALLOWED_HOSTS", default="").split("|")
 if len(ALLOWED_HOSTS) < 1:
     raise ValueError("DJANGO_ALLOWED_HOSTS is required")
 
-EMAIL_HOST = config("DJANGO_EMAIL_HOST")
-EMAIL_HOST_USER = config("DJANGO_EMAIL_USER")
-EMAIL_HOST_PASSWORD = config("DJANGO_EMAIL_PASSWORD")
-EMAIL_PORT = config("DJANGO_EMAIL_PORT", cast=int)
-EMAIL_USE_SSL = config("DJANGO_EMAIL_USE_SSL", cast=bool)
+
+if os.environ.get("DJANGO_EMAIL_BACKEND") == "SMTP":
+    EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+    EMAIL_HOST = config("DJANGO_EMAIL_HOST")
+    EMAIL_HOST_USER = config("DJANGO_EMAIL_USER")
+    EMAIL_HOST_PASSWORD = config("DJANGO_EMAIL_PASSWORD")
+    EMAIL_PORT = config("DJANGO_EMAIL_PORT", cast=int)
+    EMAIL_USE_SSL = config("DJANGO_EMAIL_USE_SSL", cast=bool)
+elif os.environ.get("DJANGO_EMAIL_BACKEND") == "MAILGUN":
+    INSTALLED_APPS += ("anymail",)
+    EMAIL_BACKEND = "anymail.backends.mailgun.EmailBackend"
+    ANYMAIL = dict(
+        MAILGUN_API_KEY=os.environ["MAILGUN_ACCESS_KEY"],
+        MAILGUN_SENDER_DOMAIN=os.environ["MAILGUN_SERVER_NAME"],
+    )
+else:
+    raise ValueError("Unknown email backend")
+
+
 DEFAULT_FROM_EMAIL = config("DJANGO_DEFAULT_FROM_EMAIL")
 
-PUBLIC_ROOT = str(ROOT_DIR / "public")
-STATIC_ROOT = str(PUBLIC_ROOT / "static")
-MEDIA_ROOT = str(PUBLIC_ROOT / "media")
-
-LOGGING["handlers"]["file"].update(level="INFO", filename=str(ROOT_DIR / "logs" / "django.log"))
-
-BROKER_URL = config("CELERY_BROKER_URL")
-CELERY_RESULT_BACKEND = config("CELERY_RESULT_BACKEND")
+BROKER_URL = config("DJANGO_BROKER_URL")
+CELERY_RESULT_BACKEND = config("DJANGO_CELERY_RESULT_BACKEND")

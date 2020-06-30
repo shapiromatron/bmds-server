@@ -1,7 +1,6 @@
 import React, {Component} from "react";
 import {HashRouter} from "react-router-dom";
 import Navigation from "./components/navigation";
-import StoreDebugger from "./components/StoreDebugger/StoreDebugger";
 import {inject, observer} from "mobx-react";
 
 @inject("mainStore")

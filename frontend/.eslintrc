@@ -15,7 +15,12 @@
             }
         ],
         "object-shorthand": 1,
-        "prettier/prettier": "error",
+        "prettier/prettier": [
+            "error",
+            {
+                "endOfLine": "lf"
+            }
+        ],
         "react/jsx-uses-react": 2,
         "react/jsx-uses-vars": 2,
         "react/no-deprecated": 1,

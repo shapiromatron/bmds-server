@@ -5,8 +5,8 @@ import bmds
 import xlsxwriter
 
 
-class XLSXGeneratorBaseClass(object):
-    # Abstract base-class for generating an Excel workbook.
+class XLSXGeneratorBaseClass:
+    # Base-class for generating an Excel workbook.
 
     def __init__(self, content):
         self.content = content
@@ -126,8 +126,9 @@ class BMDGenerator(XLSXGeneratorBaseClass):
 
     model_header_c = (
         "model_version",
-        "BMD",
         "BMDL",
+        "BMD",
+        "BMDU",
         "AIC",
         "pvalue1",
         "pvalue2",
@@ -143,8 +144,8 @@ class BMDGenerator(XLSXGeneratorBaseClass):
 
     model_header_d = (
         "model_version",
-        "BMD",
         "BMDL",
+        "BMD",
         "BMDU",
         "AIC",
         "pvalue",
@@ -158,8 +159,8 @@ class BMDGenerator(XLSXGeneratorBaseClass):
 
     model_header_dc = (
         "model_version",
-        "BMD",
         "BMDL",
+        "BMD",
         "BMDU",
         "CSF",
         "AIC",
@@ -211,24 +212,25 @@ class BMDGenerator(XLSXGeneratorBaseClass):
                 if op:
                     if self.dtype in bmds.constants.CONTINUOUS_DTYPES:
                         ws.write(r, 3, op["model_version"])
-                        ws.write(r, 4, op["BMD"])
-                        ws.write(r, 5, op["BMDL"])
-                        ws.write(r, 6, op["AIC"])
-                        ws.write(r, 7, op["p_value1"])
-                        ws.write(r, 8, op["p_value2"])
-                        ws.write(r, 9, op["p_value3"])
-                        ws.write(r, 10, op["p_value4"])
-                        ws.write(r, 11, op["Chi2"])
-                        ws.write(r, 12, op["df"])
-                        ws.write(r, 13, op["residual_of_interest"])
-                        ws.write(r, 14, "\n".join(op["warnings"]))
-                        ws.write(r, 15, model["dfile"])
-                        ws.write(r, 16, model["outfile"])
+                        ws.write(r, 4, op["BMDL"])
+                        ws.write(r, 5, op["BMD"])
+                        ws.write(r, 6, op["BMDU"])
+                        ws.write(r, 7, op["AIC"])
+                        ws.write(r, 8, op["p_value1"])
+                        ws.write(r, 9, op["p_value2"])
+                        ws.write(r, 10, op["p_value3"])
+                        ws.write(r, 11, op["p_value4"])
+                        ws.write(r, 12, op["Chi2"])
+                        ws.write(r, 13, op["df"])
+                        ws.write(r, 14, op["residual_of_interest"])
+                        ws.write(r, 15, "\n".join(op["warnings"]))
+                        ws.write(r, 16, model["dfile"])
+                        ws.write(r, 17, model["outfile"])
 
                     elif self.dtype == bmds.constants.DICHOTOMOUS:
                         ws.write(r, 3, op["model_version"])
-                        ws.write(r, 4, op["BMD"])
-                        ws.write(r, 5, op["BMDL"])
+                        ws.write(r, 4, op["BMDL"])
+                        ws.write(r, 5, op["BMD"])
                         ws.write(r, 6, op["BMDU"])
                         ws.write(r, 7, op["AIC"])
                         ws.write(r, 8, op["p_value4"])
@@ -241,8 +243,8 @@ class BMDGenerator(XLSXGeneratorBaseClass):
 
                     elif self.dtype == bmds.constants.DICHOTOMOUS_CANCER:
                         ws.write(r, 3, op["model_version"])
-                        ws.write(r, 4, op["BMD"])
-                        ws.write(r, 5, op["BMDL"])
+                        ws.write(r, 4, op["BMDL"])
+                        ws.write(r, 5, op["BMD"])
                         ws.write(r, 6, op["BMDU"])
                         ws.write(r, 7, op["CSF"])
                         ws.write(r, 8, op["AIC"])

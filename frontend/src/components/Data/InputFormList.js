@@ -49,7 +49,6 @@ class InputFormList extends Component {
             }
         });
         return (
-
             <div className="col">
                 <div>
                     <div>
@@ -87,7 +86,7 @@ class InputFormList extends Component {
                                     return [
                                         <td key={i}>
                                             <input
-                                                className="column-names"r
+                                                className="column-names"
                                                 name={item}
                                                 value={currentDataset.column_names[item]}
                                                 onChange={e =>

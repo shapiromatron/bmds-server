@@ -37,9 +37,9 @@ class InputButtons extends Component {
                                     onClick={e => dataStore.addDataset(e)}>
                                     Add Dataset
                                 </button>
-                              </div>
-                      </form>
-             </div>
+                            </div>
+                        </form>
+                    </div>
                 ) : null}
 
                 {dataStore.datasets.length ? (

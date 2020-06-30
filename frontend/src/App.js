@@ -15,7 +15,6 @@ class App extends Component {
             <HashRouter className="app">
                 <div>
                     <Navigation />
-                    <StoreDebugger />
                 </div>
             </HashRouter>
         );

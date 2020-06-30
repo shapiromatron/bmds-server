@@ -1,27 +1,23 @@
 import React, {Component} from "react";
-
 import InputFormList from "./InputFormList";
-import DataTable from "./DataTable";
 import InputButtons from "./InputButtons";
-import DataModal from "./DataModal";
-
+import "./Data.css";
 import {inject, observer} from "mobx-react";
+import DatasetScatterplot from "./DatasetScatterplot";
 
-@inject("store")
+@inject("dataStore")
 @observer
 class Data extends Component {
     render() {
-        const {store} = this.props;
+        const {dataStore} = this.props;
         return (
-            <div className="container">
-                <div className="row buttonRow">
+            <div className="container data">
+                <div className="row">
                     <InputButtons />
+                    {dataStore.getDataLength ? <InputFormList /> : null}
+
+                    {dataStore.getDataLength ? <DatasetScatterplot /> : null}
                 </div>
-                <div>
-                    <div>{store.inputForm.model_type ? <InputFormList /> : null}</div>
-                    <div>{store.getDataLength > 0 ? <DataTable /> : null}</div>
-                </div>
-                <div>{store.modal ? <DataModal /> : null}</div>
             </div>
         );
     }

@@ -1,48 +1,46 @@
 import React, {Component} from "react";
 
-import UserInfo from "./UserInfo";
+import AnalysisForm from "./AnalysisForm";
 import ModelsCheckBoxList from "./ModelsCheckBoxList";
-import DatasetName from "./DatasetName";
 import OptionsFormList from "./OptionsFormList";
 import MainModal from "./MainModal";
 import "./main.css";
 
 import {inject, observer} from "mobx-react";
+import DatasetList from "./DatasetList";
 
-@inject("store")
+@inject("mainStore")
 @observer
 class Main extends Component {
     render() {
+        const {mainStore} = this.props;
         return (
             <div>
-                <div className="container ">
+                {mainStore.isUpdateComplete ? (
                     <div>
-                        <div className="row">
-                            <div className="col col-sm-5">
-                                <UserInfo />
-                            </div>
-                            {this.props.store.getDataLength > 0 ? (
+                        <div className="main">
+                            <div className="row">
                                 <div className="col col-sm-5">
-                                    <DatasetName />
+                                    <AnalysisForm />
                                 </div>
-                            ) : null}
-                        </div>
-                        {this.props.store.usersInput.dataset_type ? (
+
+                                <div className="col col-sm-5">
+                                    <DatasetList />
+                                </div>
+                            </div>
                             <div className="row">
                                 <div className="col">
                                     <ModelsCheckBoxList />
                                 </div>
                             </div>
-                        ) : null}
-                        {this.props.store.usersInput.dataset_type ? (
                             <div className="row">
                                 <div className="col">
                                     <OptionsFormList />
                                 </div>
                             </div>
-                        ) : null}
+                        </div>
                     </div>
-                </div>
+                ) : null}
                 <MainModal />
             </div>
         );

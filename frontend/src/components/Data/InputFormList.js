@@ -1,119 +1,127 @@
 import React, {Component} from "react";
 import {inject, observer} from "mobx-react";
 import InputForm from "./InputForm";
-import {toJS} from "mobx";
+import InputFormReadOnly from "./InputFormReadOnly";
 
-@inject("store")
+@inject("dataStore")
 @observer
 class InputFormList extends Component {
-    addRow = (e, model_type) => {
-        e.preventDefault();
-        this.props.store.createForm(model_type);
-    };
-    onChange = e => {
-        const {name, value, id} = e.target;
-        let parsedValue = "";
-        if (Number(value)) {
-            if (name === "ns") {
-                parsedValue = parseInt(value);
-            } else {
-                parsedValue = parseFloat(value);
-            }
-        } else {
-            parsedValue = value;
-        }
-        this.props.store.saveRowData(name, parsedValue, id);
-    };
-    handleSubmit = e => {
-        e.preventDefault();
-        this.props.store.saveDataset();
-    };
-    deleteRow = (e, val) => {
-        e.preventDefault();
-        this.props.store.deleteDataRow(val);
-    };
-    deleteForm = e => {
-        e.preventDefault();
-        this.props.store.deleteForm();
-    };
     render() {
-        let model_type = this.props.store.inputForm.model_type;
-        let dataFormList = this.props.store.getDataFormList(model_type);
-        let datasets = toJS(this.props.store.inputForm.datasets);
+        const {dataStore} = this.props,
+            deleteRow = (e, dataset_id, index) => {
+                e.preventDefault();
+                dataStore.deleteRow(dataset_id, index);
+            },
+            onChange = (e, dataset_id, index) => {
+                e.preventDefault();
+                const {name, value} = e.target;
+                let parsedValue = "";
+                if (Number(value) || value == "0") {
+                    if (name === "ns") {
+                        parsedValue = parseInt(value);
+                    } else {
+                        parsedValue = parseFloat(value);
+                    }
+                } else {
+                    parsedValue = value;
+                }
+                dataStore.saveDataset(name, parsedValue, index, dataset_id);
+            },
+            changeColumnName = (e, dataset_id) => {
+                e.preventDefault();
+                const {name, value} = e.target;
+                dataStore.changeColumnName(name, value, dataset_id);
+            },
+            selectedIndex = dataStore.selectedDatasetIndex,
+            currentDataset = dataStore.getCurrentDataset(selectedIndex),
+            labels = dataStore.getDatasetLabels(currentDataset.model_type),
+            datasetInputForm = [],
+            isEditSettings = dataStore.getEditSettings();
+        Object.keys(currentDataset).map(key => {
+            if (Array.isArray(currentDataset[key])) {
+                currentDataset[key].map((val, i) => {
+                    if (!datasetInputForm[i]) {
+                        datasetInputForm.push({[key]: val});
+                    } else {
+                        datasetInputForm[i][key] = val;
+                    }
+                });
+            }
+        });
         return (
-            <div>
+            <div className="col">
                 <div>
-                    <form onSubmit={this.handleSubmit}>
-                        <div className="row" style={{marginTop: 20}}>
-                            <div className="col">
-                                <div className="card">
-                                    <div className="card-header text-center">
-                                        Add {model_type} Dataset
-                                    </div>
-                                    <div className="card-header">
-                                        <input
-                                            type="text"
-                                            name="dataset_name"
-                                            placeholder="Enter dataset name"
-                                            value={this.props.store.inputForm.dataset_name}
-                                            onChange={this.onChange}
-                                        />
-                                    </div>
-                                    <div className="card-body ">
-                                        <table className="table">
-                                            <thead className="text-center">
-                                                <tr>
-                                                    {dataFormList.map((item, index) => {
-                                                        return [<th key={index}>{item.label}</th>];
-                                                    })}
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                {datasets.map((dataset, id) => (
-                                                    <InputForm
-                                                        key={id}
-                                                        idx={id}
-                                                        dataset={dataset}
-                                                        form={dataFormList}
-                                                        onChange={this.onChange}
-                                                        delete={this.deleteRow.bind(this)}
-                                                    />
-                                                ))}
-                                            </tbody>
-                                            <tfoot>
-                                                <tr>
-                                                    <td colSpan="3">
-                                                        <button
-                                                            onClick={e =>
-                                                                this.addRow(e, model_type)
-                                                            }
-                                                            type="button"
-                                                            className="btn btn-primary float-left">
-                                                            Add New Row
-                                                        </button>
-                                                    </td>
-                                                </tr>
-                                            </tfoot>
-                                        </table>
-                                    </div>
-                                    <div className="card-footer text-center">
+                    <div>
+                        <label style={{marginRight: "20px"}}>Dataset Name:</label>
+                        {isEditSettings ? (
+                            <input
+                                type="text"
+                                name="dataset_name"
+                                value={currentDataset.dataset_name}
+                                onChange={e => onChange(e, currentDataset.dataset_id)}
+                            />
+                        ) : (
+                            currentDataset.dataset_name
+                        )}
+                    </div>
+                    <table className="inputformlist">
+                        <thead>
+                            <tr className="table-primary ">
+                                {labels.map((item, index) => {
+                                    return [<th key={index}>{item}</th>];
+                                })}
+                                {isEditSettings ? (
+                                    <td>
                                         <button
                                             type="submit"
-                                            className="btn btn-primary text-center"
-                                            style={{marginRight: "10px"}}>
-                                            save
+                                            className="btn btn-primary addrow"
+                                            onClick={() => dataStore.addRows(currentDataset)}>
+                                            <i className="fa fa-plus-square" aria-hidden="true"></i>{" "}
                                         </button>
-                                        <button
-                                            type="button"
-                                            onClick={this.deleteForm}
-                                            className="btn btn-danger text-center">
-                                            Close
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </form>
+                                    </td>
+                                ) : null}
+                            </tr>
+                            <tr>
+                                {Object.keys(currentDataset.column_names).map((item, i) => {
+                                    return [
+                                        <td key={i}>
+                                            <input
+                                                className="column-names"
+                                                name={item}
+                                                value={currentDataset.column_names[item]}
+                                                onChange={e =>
+                                                    changeColumnName(e, currentDataset.dataset_id)
+                                                }
+                                            />
+                                        </td>,
+                                    ];
+                                })}
+                                <td></td>
+                            </tr>
+                        </thead>
+                        {isEditSettings ? (
+                            <tbody>
+                                {datasetInputForm.map((obj, i) => {
+                                    return [
+                                        <InputForm
+                                            key={i}
+                                            idx={i}
+                                            row={obj}
+                                            dataset_id={currentDataset.dataset_id}
+                                            onChange={onChange}
+                                            delete={deleteRow.bind(this)}
+                                        />,
+                                    ];
+                                })}
+                            </tbody>
+                        ) : (
+                            <tbody>
+                                {datasetInputForm.map((obj, i) => {
+                                    return [<InputFormReadOnly key={i} row={obj} />];
+                                })}
+                            </tbody>
+                        )}
+                    </table>
                 </div>
             </div>
         );

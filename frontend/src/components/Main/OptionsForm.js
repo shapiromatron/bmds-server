@@ -1,10 +1,8 @@
 import React from "react";
 
-import FloatInput from "components/Inputs/FloatInput";
-
 const OptionsForm = props => {
     return (
-        <tr>
+        <tr className="form-group">
             <td>{props.idx}</td>
             {props.dataset_type === "C" ? (
                 <td>
@@ -14,7 +12,6 @@ const OptionsForm = props => {
                         value={props.item.bmr_type}
                         id={props.idx}
                         onChange={props.onchange}>
-                        <option>Select</option>
                         <option value="Std. Dev.">Std. Dev.</option>
                         <option value="Rel. Dev.">Rel. Dev.</option>
                         <option value="Abs. Dev.">Abs. Dev.</option>
@@ -31,7 +28,6 @@ const OptionsForm = props => {
                         value={props.item.bmr_type}
                         id={props.idx}
                         onChange={props.onchange}>
-                        <option>Select</option>
                         <option value="Extra">Extra Risk</option>
                         <option value="Added">Added Risk</option>
                     </select>
@@ -39,30 +35,34 @@ const OptionsForm = props => {
             ) : null}
 
             <td>
-                <FloatInput
-                    id={props.idx}
-                    name={"bmr_value"}
+                <input
+                    type="number"
+                    name="bmr_value"
+                    className="form-control"
                     value={props.item.bmr_value}
+                    id={props.idx}
                     onChange={props.onchange}
                 />
             </td>
             {props.dataset_type === "C" ? (
                 <td>
                     <input
-                        type="text"
+                        type="number"
                         name="tail_probability"
+                        className="form-control"
                         value={props.item.tail_probability}
                         id={props.idx}
-                        className="form-control "
                         onChange={props.onchange}
                     />
                 </td>
             ) : null}
             <td>
-                <FloatInput
-                    id={props.idx}
-                    name={"confidence_level"}
+                <input
+                    className="form-control"
+                    type="number"
+                    name="confidence_level"
                     value={props.item.confidence_level}
+                    id={props.idx}
                     onChange={props.onchange}
                     minimum={0}
                     maximum={1}
@@ -76,7 +76,6 @@ const OptionsForm = props => {
                         value={props.item.distribution}
                         id={props.idx}
                         onChange={props.onchange}>
-                        <option>Select</option>
                         <option value="Normal">Normal</option>
                         <option value="log normal">Log normal</option>
                     </select>
@@ -91,7 +90,7 @@ const OptionsForm = props => {
                         value={props.item.variance}
                         onChange={props.onchange}>
                         <option value="Constant">Constant</option>
-                        <option value="Non Constant">Non-Constant</option>
+                        <option value="Non-constant">Non-Constant</option>
                     </select>
                 </td>
             ) : null}
@@ -103,7 +102,6 @@ const OptionsForm = props => {
                         className="form-control"
                         value={props.item.polynomial_restriction}
                         onChange={props.onchange}>
-                        <option>Select</option>
                         <option value="Use dataset adverse direction">
                             Use dataset adverse direction
                         </option>
@@ -119,17 +117,18 @@ const OptionsForm = props => {
                     className="form-control"
                     value={props.item.background}
                     onChange={props.onchange}>
-                    <option>Select</option>
                     <option value="Estimated">Estimated</option>
                 </select>
             </td>
 
             <td>
                 <button
-                    className="btn btn-danger close"
-                    aria-label="Close"
+                    className="btn btn-danger"
+                    data-toggle="tooltip"
+                    data-placement="top"
+                    title="Delete Option Set"
                     onClick={e => props.delete(e, props.idx)}>
-                    <span aria-hidden="true">&times;</span>
+                    <i className="fa fa-trash"></i>
                 </button>
             </td>
         </tr>

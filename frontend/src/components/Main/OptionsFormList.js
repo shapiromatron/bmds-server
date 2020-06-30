@@ -1,56 +1,66 @@
 import React, {Component} from "react";
 import {inject, observer} from "mobx-react";
 import OptionsForm from "./OptionsForm";
-import {toJS} from "mobx";
+import OptionsReadOnly from "./OptionsReadOnly";
 
-@inject("store")
+@inject("mainStore")
 @observer
 class OptionsFormList extends Component {
-    onChange = e => {
-        const {name, value, id} = e.target;
-        let parsedValue = "";
-        if (name == "bmr_value" || name == "tail_probability" || name == "confidence_level") {
-            parsedValue = parseFloat(value);
-        } else {
-            parsedValue = value;
-        }
-        this.props.store.saveOptions(name, parsedValue, id);
-    };
-    createOptionSet = e => {
-        this.props.store.createOptions();
-    };
-    deleteOption = (e, val) => {
-        e.preventDefault();
-        this.props.store.deleteOptions(val);
-    };
     render() {
-        let dataset_type = this.props.store.usersInput.dataset_type;
-        let options = toJS(this.props.store.usersInput.options);
+        const {mainStore} = this.props,
+            onChange = e => {
+                e.preventDefault();
+                const {name, value, id} = e.target;
+                let parsedValue = "";
+                if (
+                    name == "bmr_value" ||
+                    name == "tail_probability" ||
+                    name == "confidence_level"
+                ) {
+                    parsedValue = parseFloat(value);
+                } else {
+                    parsedValue = value;
+                }
+                mainStore.saveOptions(name, parsedValue, id);
+            },
+            deleteOption = (e, val) => {
+                e.preventDefault();
+                mainStore.deleteOptions(val);
+            },
+            createOptions = () => {
+                mainStore.createOptions();
+            },
+            dataset_type = mainStore.analysisForm.dataset_type,
+            labels = mainStore.getOptionsLabels(dataset_type),
+            isEditSettings = mainStore.getEditSettings(),
+            options = mainStore.getOptionsType(dataset_type);
         return (
-            <form>
-                <div className="row" style={{marginTop: 20}}>
-                    <div className="col">
-                        <div className="card">
-                            <div className="card-body">
-                                <table className="table">
-                                    <thead>
-                                        <tr>
-                                            <th>Option Set #</th>
-                                            {dataset_type === "C" ? <th>BMR Type</th> : null}
-                                            {dataset_type === "D" ? <th>Risk Type</th> : null}
-                                            <th>BMRF</th>
-                                            {dataset_type === "C" ? (
-                                                <th>Tail Probability</th>
+            <div className="options-div">
+                {labels.length ? (
+                    <div className="panel panel-default">
+                        <form className="form-horizontal">
+                            <table className="options-table table table-bordered">
+                                <thead className="table-primary">
+                                    <tr>
+                                        {labels.map((item, index) => {
+                                            return [<th key={index}>{item.label}</th>];
+                                        })}
+                                        <th>
+                                            {isEditSettings ? (
+                                                <button
+                                                    type="button"
+                                                    data-toggle="tooltip"
+                                                    data-placement="right"
+                                                    title="Add New Option Set"
+                                                    className="btn btn-primary "
+                                                    onClick={createOptions}>
+                                                    <i className="fa fa-plus"></i>{" "}
+                                                </button>
                                             ) : null}
-                                            <th>Confidence Level</th>
-                                            {dataset_type === "C" ? <th>Distribution</th> : null}
-                                            {dataset_type === "C" ? <th>Variance</th> : null}
-                                            {dataset_type === "C" ? (
-                                                <th>Polynomial Restriction</th>
-                                            ) : null}
-                                            <th>Background</th>
-                                        </tr>
-                                    </thead>
+                                        </th>
+                                    </tr>
+                                </thead>
+                                {isEditSettings ? (
                                     <tbody>
                                         {options.map((item, id) => (
                                             <OptionsForm
@@ -58,29 +68,28 @@ class OptionsFormList extends Component {
                                                 item={item}
                                                 dataset_type={dataset_type}
                                                 idx={id}
-                                                onchange={this.onChange}
-                                                delete={this.deleteOption.bind(this)}
+                                                onchange={onChange}
+                                                delete={deleteOption.bind(this)}
                                             />
                                         ))}
                                     </tbody>
-                                    <tfoot>
-                                        <tr>
-                                            <td colSpan="2" className="align-left">
-                                                <button
-                                                    type="button"
-                                                    className="btn btn-primary "
-                                                    onClick={this.createOptionSet}>
-                                                    add option set
-                                                </button>
-                                            </td>
-                                        </tr>
-                                    </tfoot>
-                                </table>
-                            </div>
-                        </div>
+                                ) : (
+                                    <tbody>
+                                        {options.map((item, id) => (
+                                            <OptionsReadOnly
+                                                className="form-control"
+                                                key={id}
+                                                idx={id}
+                                                item={item}
+                                            />
+                                        ))}
+                                    </tbody>
+                                )}
+                            </table>
+                        </form>
                     </div>
-                </div>
-            </form>
+                ) : null}
+            </div>
         );
     }
 }

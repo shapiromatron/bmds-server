@@ -1,0 +1,66 @@
+
+
+ .data{
+  font-size: 12px;
+}
+
+.inputformlist{
+  text-align: center;
+}
+.inputformlist {
+  border-collapse:separate; 
+  border-spacing:0 10px; 
+}
+
+.inputformlist  input{
+ width:100px;
+ height:30px;
+ text-align: center;
+}
+.column-names{
+  text-align: center;
+  width: auto;
+}
+
+.inputformlist textarea{
+  width: 50px;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.btn-sq-xs {
+  width: 30px !important;
+  height: 30px !important;
+
+}
+button.btn-sq-xs{
+  display: inline-block;
+  text-align: center;
+  margin: auto;
+}
+
+.model-type{
+  margin-bottom: 20px;
+}
+.model-type select{
+  width: auto;
+  font-size:12px;
+}
+
+.textarea textarea{
+
+  font-size: 12px;
+}
+
+.currentdataset a:hover{
+  font-weight: bold;
+  cursor:pointer;
+}
+.currentdataset td:hover{
+  background-color:#0275d8 ;
+  color:white;
+}

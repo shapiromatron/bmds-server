@@ -1,6 +1,6 @@
 import React from "react";
 
-const ContinuousCheckBox = props => {
+const ModelsCheckBox = props => {
     return (
         <tbody>
             {props.models.map((item, index) => {
@@ -11,7 +11,7 @@ const ContinuousCheckBox = props => {
                             return [
                                 <td key={index}>
                                     <input
-                                        className="checkbox-input"
+                                        className="checkbox"
                                         type={dev.type}
                                         name={dev.name}
                                         onChange={props.onChange}
@@ -21,7 +21,6 @@ const ContinuousCheckBox = props => {
 
                                     {dev.name.includes("bayesian_model_average") ? (
                                         <input
-                                            style={{float: "right", textAlign: "right"}}
                                             type="text"
                                             name={dev.name}
                                             value={dev.prior_weight + "%"}
@@ -53,4 +52,4 @@ const ContinuousCheckBox = props => {
     );
 };
 
-export default ContinuousCheckBox;
+export default ModelsCheckBox;

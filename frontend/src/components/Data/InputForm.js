@@ -3,29 +3,26 @@ import React from "react";
 const InputForm = props => {
     return (
         <tr>
-            {props.form.map((item, id) => {
+            {Object.keys(props.row).map((key, index) => {
                 return [
-                    <td key={props.idx}>
+                    <td key={index} className="inputform">
                         <input
                             type="number"
-                            name={item.name}
-                            id={props.idx}
-                            onChange={props.onChange}
-                            value={props.dataset[item.name]}
+                            name={key}
+                            value={props.row[key]}
+                            onChange={e => props.onChange(e, props.dataset_id, props.idx)}
                         />
                     </td>,
                 ];
             })}
             <td>
                 <button
-                    className="btn btn-danger close"
-                    aria-label="Close"
-                    onClick={e => props.delete(e, props.idx)}>
-                    <span aria-hidden="true">&times;</span>
+                    className="btn btn-danger btn-sq-xs"
+                    onClick={e => props.delete(e, props.dataset_id, props.idx)}>
+                    <i className="fa fa-trash fa-1x"></i>
                 </button>
             </td>
         </tr>
     );
 };
-
 export default InputForm;

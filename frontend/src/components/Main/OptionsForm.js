@@ -64,8 +64,6 @@ const OptionsForm = props => {
                     value={props.item.confidence_level}
                     id={props.idx}
                     onChange={props.onchange}
-                    minimum={0}
-                    maximum={1}
                 />
             </td>
             {props.dataset_type === "C" ? (

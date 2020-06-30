@@ -5,10 +5,9 @@ const InputForm = props => {
         <tr>
             {Object.keys(props.row).map((key, index) => {
                 return [
-                    <td key={index}>
+                    <td key={index} className="inputform">
                         <input
                             type="number"
-                            className="form-control"
                             name={key}
                             value={props.row[key]}
                             onChange={e => props.onChange(e, props.dataset_id, props.idx)}

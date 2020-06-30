@@ -15,7 +15,7 @@ class Main extends Component {
     render() {
         return (
             <div>
-                <div className="container ">
+                <div className="container-fluid">
                     <div>
                         <div className="row">
                             <div className="col col-sm-5">

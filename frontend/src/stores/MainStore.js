@@ -17,6 +17,7 @@ class MainStore {
     @observable errorModal = false;
     @observable hasEditSettings = false;
     @observable executionOutputs = null;
+    @observable checked_items = [];
 
     @action calldatastore() {
         rootStore.dataStore.calldatastore();
@@ -66,44 +67,101 @@ class MainStore {
         return models;
     }
 
-    @action toggleModelsCheckBox = (model, checked, value) => {
+    @action toggleModelsCheckBox = (selectedModel, checked, value) => {
         let models = this.getModelTypeList();
-
-        if (model.includes("bayesian_model_average") && checked) {
-            this.prior_weight_models.push(model);
-        } else if (model.includes("bayesian_model_average") && !checked) {
-            let index = this.prior_weight_models.indexOf(model);
-            this.prior_weight_models.splice(index, 1);
+        if (selectedModel.split("-")[1] == "All") {
+            this.modelsCheckBoxHeaders.third.values.map(value => {
+                if (value.model_name == selectedModel.split("-")[0]) {
+                    value.isChecked = !value.isChecked;
+                    this.enableAllModels(models, selectedModel, value.isChecked);
+                }
+            });
+        } else {
+            models.map(item => {
+                item.values.map(value => {
+                    if (
+                        value.name === selectedModel &&
+                        !value.isDisabled &&
+                        value.isChecked == !checked
+                    ) {
+                        value.isChecked = !value.isChecked;
+                        this.checkAllEnabled(models, selectedModel);
+                        if (selectedModel.split("-")[0] === "bayesian_model_average") {
+                            if (checked) {
+                                this.prior_weight_models.push(selectedModel);
+                            } else {
+                                let index = this.prior_weight_models.indexOf(selectedModel);
+                                this.prior_weight_models.splice(index, 1);
+                            }
+                        }
+                    }
+                });
+            });
         }
 
         if (this.prior_weight_models.length) {
             this.prior_weight = 100;
             this.prior_weight = this.prior_weight / this.prior_weight_models.length;
         }
+
         models.map(item => {
             item.values.map(val => {
-                if (val.name === model && val.isChecked != checked) {
-                    val.isChecked = !val.isChecked;
-                } else if (
-                    model.split("-")[1] == "All" &&
-                    model.split("-")[0] == val.name.split("-")[0] &&
-                    !val.isDisabled &&
-                    val.isChecked != checked
-                ) {
-                    val.isChecked = !val.isChecked;
-                }
-
-                if (this.prior_weight_models.includes(val.name)) {
-                    val.prior_weight = this.prior_weight;
-                } else if (
-                    val.name.includes("bayesian_model_average") &&
-                    !this.prior_weight_models.includes(val.name)
-                ) {
-                    val.prior_weight = 0;
+                if (val.name.includes("bayesian_model_average")) {
+                    if (this.prior_weight_models.includes(val.name)) {
+                        val.prior_weight = this.prior_weight;
+                    } else {
+                        val.prior_weight = 0;
+                    }
                 }
             });
         });
     };
+
+    @action enableAllModels(models, selectedModel, isChecked) {
+        models.map(item => {
+            item.values.map(value => {
+                if (
+                    value.name.split("-")[0] === selectedModel.split("-")[0] &&
+                    !value.isDisabled &&
+                    value.isChecked == !isChecked
+                ) {
+                    value.isChecked = !value.isChecked;
+                    if (selectedModel.split("-")[0] == "bayesian_model_average") {
+                        if (isChecked) {
+                            this.prior_weight_models.push(value.name);
+                        } else {
+                            this.prior_weight_models = [];
+                        }
+                    }
+                }
+            });
+        });
+    }
+
+    //checks if all models are enabled
+    @action checkAllEnabled(models, modelName) {
+        let totalModels = [];
+        let enabledModels = [];
+        models.map(model => {
+            model.values.map(item => {
+                if (item.name.split("-")[0] == modelName.split("-")[0] && !item.isDisabled) {
+                    totalModels.push(item.name);
+                }
+                if (item.name.split("-")[0] == modelName.split("-")[0] && item.isChecked) {
+                    enabledModels.push(item.name);
+                }
+                this.modelsCheckBoxHeaders.third.values.map(value => {
+                    if (value.model_name == modelName.split("-")[0]) {
+                        if (totalModels.length == enabledModels.length) {
+                            value.isChecked = true;
+                        } else {
+                            value.isChecked = false;
+                        }
+                    }
+                });
+            });
+        });
+    }
 
     //returns enabled model types
     @computed get getModels() {
@@ -314,7 +372,7 @@ class MainStore {
                 labels = [
                     {label: "Option Set", name: "doses"},
                     {label: "Risk Type", name: "ns"},
-                    {label: "BMRF", name: "means"},
+                    {label: "BMR", name: "means"},
                     {label: "Confidence Level", name: "doses"},
                     {label: "Background", name: "doses"},
                 ];
@@ -715,15 +773,68 @@ class MainStore {
         },
     ];
 
-    @observable modelsCheckBoxHeaders = [
-        {
+    // @observable modelsCheckBoxHeaders = [
+    //     {
+    //         model: "",
+    //         values: [
+    //             {name: "MLE", colspan: "2"},
+    //             {name: "ALternatives", colspan: "2"},
+    //         ],
+    //     },
+    //     {
+    //         model: "",
+    //         values: [
+    //             {name: "Frequntist Restricted", colspan: "1"},
+    //             {name: "Frequentist Unrestricted", colspan: "1"},
+    //             {name: "Bayesian", colspan: "1"},
+    //             {name: "Bayesian Model Average", colspan: "1"},
+    //         ],
+    //     },
+
+    //     {
+    //         model: "Model Name",
+    //         values: [
+    //             {
+    //                 name: "Enable",
+    //                 model_name: "frequentist_restricted",
+    //                 colspan: "1",
+    //                 type: "checkBox",
+    //                 isChecked: false,
+    //             },
+    //             {
+    //                 name: "Enable",
+    //                 model_name: "frequentist_unrestricted",
+    //                 colspan: "1",
+    //                 type: "checkBox",
+    //                 isChecked: false,
+    //             },
+    //             {
+    //                 name: "Enable",
+    //                 model_name: "bayesian",
+    //                 colspan: "1",
+    //                 type: "checkBox",
+    //                 isChecked: false,
+    //             },
+    //             {
+    //                 name: "Enable",
+    //                 model_name: "bayesian_model_average",
+    //                 colspan: "1",
+    //                 type: "checkBox",
+    //                 isChecked: false,
+    //                 prior_weight: "Prior Weight",
+    //             },
+    //         ],
+    //     },
+    // ];
+    @observable modelsCheckBoxHeaders = {
+        first: {
             model: "",
             values: [
                 {name: "MLE", colspan: "2"},
                 {name: "ALternatives", colspan: "2"},
             ],
         },
-        {
+        second: {
             model: "",
             values: [
                 {name: "Frequntist Restricted", colspan: "1"},
@@ -732,8 +843,7 @@ class MainStore {
                 {name: "Bayesian Model Average", colspan: "1"},
             ],
         },
-
-        {
+        third: {
             model: "Model Name",
             values: [
                 {
@@ -767,7 +877,7 @@ class MainStore {
                 },
             ],
         },
-    ];
+    };
 }
 
 const mainStore = new MainStore();

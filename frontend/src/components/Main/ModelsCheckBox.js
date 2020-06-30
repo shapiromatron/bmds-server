@@ -21,7 +21,7 @@ const ModelsCheckBox = props => {
 
                                     {dev.name.includes("bayesian_model_average") ? (
                                         <input
-                                            style={{float: "right", textAlign: "right"}}
+                                            className="bma-input"
                                             type="text"
                                             name={dev.name}
                                             value={dev.prior_weight + "%"}

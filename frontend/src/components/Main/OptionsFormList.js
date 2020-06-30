@@ -35,21 +35,21 @@ class OptionsFormList extends Component {
         return (
             <form>
                 <div className="row" style={{marginTop: 20}}>
-                    <div className="col">
+                    <div className="col form-group">
                         <div>
-                            <table className="table table-bordered">
+                            <table className="table table-bordered options-table">
                                 <thead>
                                     <tr>
                                         {labels.map((item, index) => {
                                             return [<th key={index}>{item.label}</th>];
                                         })}
+                                        <th></th>
                                     </tr>
                                 </thead>
                                 {isEditSettings ? (
                                     <tbody>
                                         {options.map((item, id) => (
                                             <OptionsForm
-                                                className="form-control"
                                                 key={id}
                                                 item={item}
                                                 dataset_type={dataset_type}

@@ -37,13 +37,11 @@ class InputButtons extends Component {
                                     onClick={e => dataStore.addDataset(e)}>
                                     Add Dataset
                                 </button>
-                                {/* <div>
-                                    Import Dataset <input type="file" />
-                                </div> */}
-                            </div>
-                        </form>
-                    </div>
+                              </div>
+                      </form>
+             </div>
                 ) : null}
+
                 {dataStore.datasets.length ? (
                     <div className="editdataset">
                         <table className="table table-bordered table-hover">

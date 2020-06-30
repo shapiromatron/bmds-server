@@ -229,7 +229,6 @@ class DataStore {
         }
         return form;
     }
-
     @observable ModelTypes = [
         {value: "CS", name: "Continuous Summarized"},
         {value: "CI", name: "Continuous Individual"},

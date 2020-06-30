@@ -4,7 +4,7 @@ const CDFTable = props => {
     return (
         <table className="table table-bordered">
             <thead>
-                <tr className="table-primary">
+                <tr className="table-primary">r
                     <th colSpan="2">CDF</th>
                 </tr>
                 <tr>

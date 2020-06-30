@@ -11,7 +11,7 @@ class Data extends Component {
     render() {
         const {dataStore} = this.props;
         return (
-            <div className="container position-static">
+            <div className="container data">
                 <div className="row">
                     <InputButtons />
                     {dataStore.getDataLength ? <InputFormList /> : null}

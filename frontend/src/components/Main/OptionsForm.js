@@ -2,7 +2,7 @@ import React from "react";
 
 const OptionsForm = props => {
     return (
-        <tr>
+        <tr className="form-group">
             <td>{props.idx}</td>
             {props.dataset_type === "C" ? (
                 <td>
@@ -38,9 +38,9 @@ const OptionsForm = props => {
                 <input
                     type="number"
                     name="bmr_value"
+                    className="form-control"
                     value={props.item.bmr_value}
                     id={props.idx}
-                    className="form-control "
                     onChange={props.onchange}
                 />
             </td>
@@ -49,20 +49,20 @@ const OptionsForm = props => {
                     <input
                         type="number"
                         name="tail_probability"
+                        className="form-control"
                         value={props.item.tail_probability}
                         id={props.idx}
-                        className="form-control "
                         onChange={props.onchange}
                     />
                 </td>
             ) : null}
             <td>
                 <input
+                    className="form-control"
                     type="number"
                     name="confidence_level"
                     value={props.item.confidence_level}
                     id={props.idx}
-                    className="form-control "
                     onChange={props.onchange}
                 />
             </td>
@@ -120,7 +120,12 @@ const OptionsForm = props => {
             </td>
 
             <td>
-                <button className="btn btn-danger" onClick={e => props.delete(e, props.idx)}>
+                <button
+                    className="btn btn-danger"
+                    data-toggle="tooltip"
+                    data-placement="top"
+                    title="Delete Option Set"
+                    onClick={e => props.delete(e, props.idx)}>
                     <i className="fa fa-trash"></i>
                 </button>
             </td>

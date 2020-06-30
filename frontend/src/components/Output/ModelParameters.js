@@ -4,7 +4,7 @@ const ModelParameters = props => {
     return (
         <table className="table table-bordered">
             <thead>
-                <tr>
+                <tr className="table-primary">
                     <th colSpan="2">Model Parameters</th>
                 </tr>
                 <tr>

@@ -20,9 +20,9 @@ class ModelsCheckBoxList extends Component {
             isEditSettings = mainStore.getEditSettings();
         return (
             <div>
-                <div className="checkbox-table">
-                    <table className="table table-bordered hover">
-                        <thead>
+                {models.length ? (
+                    <table className="modelscheckbox table table-bordered">
+                        <thead className="table-primary">
                             {Object.keys(mainStore.modelsCheckBoxHeaders).map((item, index) => {
                                 return [
                                     <tr key={index}>
@@ -59,7 +59,7 @@ class ModelsCheckBoxList extends Component {
                             <ModelsReadOnly models={models} />
                         )}
                     </table>
-                </div>
+                ) : null}
             </div>
         );
     }

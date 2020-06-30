@@ -49,9 +49,9 @@ class InputFormList extends Component {
             }
         });
         return (
-            <div className="col col-sm-5">
+            <div className="col">
                 <div>
-                    <div className="border border-light">
+                    <div>
                         <label style={{marginRight: "20px"}}>Dataset Name:</label>
                         {isEditSettings ? (
                             <input
@@ -64,10 +64,9 @@ class InputFormList extends Component {
                             currentDataset.dataset_name
                         )}
                     </div>
-
-                    <table className="table table-bordered inputformtable">
-                        <thead className="text-center">
-                            <tr>
+                    <table className="inputformlist">
+                        <thead>
+                            <tr className="table-primary ">
                                 {labels.map((item, index) => {
                                     return [<th key={index}>{item}</th>];
                                 })}
@@ -75,10 +74,9 @@ class InputFormList extends Component {
                                     <td>
                                         <button
                                             type="submit"
-                                            className="btn btn-primary"
+                                            className="btn btn-primary addrow"
                                             onClick={() => dataStore.addRows(currentDataset)}>
                                             <i className="fa fa-plus-square" aria-hidden="true"></i>{" "}
-                                            Row
                                         </button>
                                     </td>
                                 ) : null}
@@ -86,8 +84,9 @@ class InputFormList extends Component {
                             <tr>
                                 {Object.keys(currentDataset.column_names).map((item, i) => {
                                     return [
-                                        <td key={i} className="inputform">
+                                        <td key={i}>
                                             <input
+                                                className="column-names"
                                                 name={item}
                                                 value={currentDataset.column_names[item]}
                                                 onChange={e =>

@@ -12,20 +12,23 @@ class Output extends Component {
             outputs = toJS(outputStore.getExecutionOutputs());
 
         return (
-            <div>
+            <div className="output">
                 {outputs ? (
                     <div>
                         <div>
                             {outputs.map((output, i) => {
                                 return [
-                                    <div className="card" key={i}>
-                                        <div className="card-header">
+                                    <div key={i}>
+                                        {/* <div className="card-header">
                                             {output.dataset.dataset_name}
-                                        </div>
-                                        <div className="card-body">
-                                            <table className="table table-bordered hover">
+                                        </div> */}
+                                        <div>
+                                            <table className="table table-bordered ">
                                                 <thead>
-                                                    <tr>
+                                                    <tr className="bg-primary dataset-name">
+                                                        <td>{output.dataset.dataset_name}</td>
+                                                    </tr>
+                                                    <tr className="table-primary">
                                                         <th>Model</th>
                                                         <th>BMD</th>
                                                         <th>BMDL</th>

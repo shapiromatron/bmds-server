@@ -13,31 +13,34 @@ import DatasetList from "./DatasetList";
 @observer
 class Main extends Component {
     render() {
+        const {mainStore} = this.props;
         return (
             <div>
-                <div className="container-fluid">
+                {mainStore.isUpdateComplete ? (
                     <div>
-                        <div className="row">
-                            <div className="col col-sm-5">
-                                <AnalysisForm />
-                            </div>
+                        <div className="main">
+                            <div className="row">
+                                <div className="col col-sm-5">
+                                    <AnalysisForm />
+                                </div>
 
-                            <div className="col col-sm-5">
-                                <DatasetList />
+                                <div className="col col-sm-5">
+                                    <DatasetList />
+                                </div>
                             </div>
-                        </div>
-                        <div className="row">
-                            <div className="col">
-                                <ModelsCheckBoxList />
+                            <div className="row">
+                                <div className="col">
+                                    <ModelsCheckBoxList />
+                                </div>
                             </div>
-                        </div>
-                        <div className="row">
-                            <div className="col">
-                                <OptionsFormList />
+                            <div className="row">
+                                <div className="col">
+                                    <OptionsFormList />
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
+                ) : null}
                 <MainModal />
             </div>
         );

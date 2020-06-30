@@ -3,10 +3,10 @@ import React from "react";
 const CSLoglikelihoods = props => {
     return (
         <div>
-            <div className="row">
-                <div className="col col-sm-4">
+            <div className="row row-flex">
+                <div className="col">
                     <table className="table table-bordered">
-                        <thead>
+                        <thead className="table-primary">
                             <tr>
                                 <th colSpan="4">Likelihoods of Interest</th>
                             </tr>
@@ -31,11 +31,9 @@ const CSLoglikelihoods = props => {
                         </tbody>
                     </table>
                 </div>
-            </div>
-            <div className="row">
-                <div className="col col-sm-4">
+                <div className="col">
                     <table className="table table-bordered">
-                        <thead>
+                        <thead className="table-primary">
                             <tr>
                                 <th colSpan="4">Test of Interest</th>
                             </tr>

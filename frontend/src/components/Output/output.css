@@ -1,24 +1,38 @@
-.modal-dialog {
-    width: auto;
-    height: auto;
-    padding: 0;
 
-  }
+.output{
+  text-align: center;
+  margin-top:20px;
+  font-size: 12px;
+}
+
+.table{
+  margin-bottom: 200px;
+}
+
   
+div.modal-body{
+  padding:6px;
+  margin-top: 0px;
+}
   .modal-content {
     height: 100%;
     border-radius: 0;
     position: relative;
     overflow-y: auto;
-  }
-  .card{
-      margin-top:20px;
+    font-size: 12px;
+    text-align: center;
   }
 
   .td-modelName:hover{
-          color:red;
+          font-weight: bold;
           cursor:pointer;
+          background-color:#0275d8;
+          color:white;
   }
   .fa-close{
     color: red;
+  }
+
+  .dataset-name{
+    color:white;
   }

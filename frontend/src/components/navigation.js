@@ -11,35 +11,38 @@ class Navigation extends Component {
     render() {
         return (
             <div>
-                <nav className="navbar navbar-expand-lg navbar-light bg-light">
-                    <div className="collapse navbar-collapse" id="navbarSupportedContent">
-                        <ul className="navbar-nav mr-auto">
-                            <li className="nav-item active">
+                <nav className="navbar navbar-expand-lg bg-primary navbar-dark">
+                    <a className="navbar-brand" href="/">
+                        BMDS 3.1.2
+                    </a>
+                    <div>
+                        <ul className="navbar-nav">
+                            <li className=" active">
                                 <NavLink className="nav-link" to="/">
                                     Main
                                 </NavLink>
                             </li>
-                            <li className="nav-item">
+                            <li className="">
                                 <NavLink className="nav-link" to="/data">
                                     Data
                                 </NavLink>
                             </li>
-                            <li className="nav-item">
+                            <li className="">
                                 <NavLink className="nav-link" to="/reportoptions">
                                     Report Options
                                 </NavLink>
                             </li>
-                            <li className="nav-item">
+                            <li className="">
                                 <NavLink className="nav-link" to="/logic">
                                     Logic
                                 </NavLink>
                             </li>
-                            <li className="nav-item">
+                            <li className="">
                                 <NavLink className="nav-link" to="/modelparams">
                                     Model Params
                                 </NavLink>
                             </li>
-                            <li className="nav-item">
+                            <li className="">
                                 <NavLink className="nav-link" to="/output">
                                     Output
                                 </NavLink>

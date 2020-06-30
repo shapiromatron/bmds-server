@@ -4,7 +4,7 @@ const ModelOptionsTable = props => {
     return (
         <table className="table table-bordered">
             <thead>
-                <tr>
+                <tr className="table-primary">
                     <th colSpan="2">Model Options</th>
                 </tr>
             </thead>

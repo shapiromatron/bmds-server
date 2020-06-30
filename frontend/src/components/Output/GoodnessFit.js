@@ -5,7 +5,7 @@ import DGoodnessFit from "./DGoodnessFit";
 const GoodnessFit = props => {
     return (
         <table className="table table-bordered">
-            <thead>
+            <thead className="table-primary">
                 <tr>
                     <th colSpan="9">Goodness of Fit</th>
                 </tr>

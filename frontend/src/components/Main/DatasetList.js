@@ -3,41 +3,47 @@ import {inject, observer} from "mobx-react";
 import Datasets from "./Datasets";
 import DatasetsReadOnly from "./DatasetsReadOnly";
 
-@inject("dataStore")
+@inject("mainStore")
 @observer
 class DatasetList extends Component {
     render() {
-        const {dataStore} = this.props,
+        const {mainStore} = this.props,
             toggleDataset = (e, dataset_id) => {
-                dataStore.toggleDataset(dataset_id);
+                mainStore.toggleDataset(dataset_id);
             },
             onChange = (e, dataset_id) => {
-                dataStore.saveAdverseDirection(e.target.name, e.target.value, dataset_id);
+                mainStore.saveAdverseDirection(e.target.name, e.target.value, dataset_id);
             },
-            isEditSettings = dataStore.getEditSettings(),
-            adverseList = dataStore.AdverseDirectionList,
-            enabledDatasets = dataStore.datasets.filter(item => item.enabled == true);
+            isEditSettings = mainStore.getEditSettings(),
+            adverseList = mainStore.AdverseDirectionList,
+            datasets = mainStore.getDatasets(),
+            enabledDatasets = datasets.filter(item => item.enabled == true),
+            selectedDatasets = datasets.filter(item =>
+                item.model_type.includes(mainStore.analysisForm.dataset_type)
+            ),
+            datasetnames = mainStore.getDatasetNamesHeader();
         return (
-            <div>
-                {dataStore.getDataLength > 0 ? (
-                    <table className="table table-bordered">
+            <div className="table-responsive ">
+                {mainStore.getDatasetLength ? (
+                    <table className="table table-bordered  datasetlist-table">
                         <thead>
-                            <tr>
-                                {dataStore.DatasetNamesHeader.map((item, i) => {
+                            <tr className="table-primary">
+                                {datasetnames.map((item, i) => {
                                     return [<th key={i}>{item}</th>];
                                 })}
                             </tr>
                         </thead>
                         {isEditSettings ? (
                             <Datasets
-                                datasets={dataStore.datasets}
+                                datasets={selectedDatasets}
                                 adverseList={adverseList}
+                                dataset_type={mainStore.analysisForm.dataset_type}
                                 enabledDatasets={enabledDatasets}
                                 onChange={onChange.bind(this)}
                                 toggleDatasets={toggleDataset.bind(this)}
                             />
                         ) : (
-                            <DatasetsReadOnly datasets={dataStore.datasets} />
+                            <DatasetsReadOnly datasets={datasets} />
                         )}
                     </table>
                 ) : null}

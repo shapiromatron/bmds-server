@@ -4,7 +4,7 @@ const BenchmarkDose = props => {
     return (
         <table className="table table-bordered">
             <thead>
-                <tr>
+                <tr className="table-primary">
                     <th colSpan="2">Benchmark Dose</th>
                 </tr>
             </thead>

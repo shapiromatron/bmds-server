@@ -15,7 +15,6 @@
             }
         ],
         "object-shorthand": 1,
-        "prettier/prettier": "error",
         "prettier/prettier": [
             "error",
             {

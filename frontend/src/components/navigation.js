@@ -6,15 +6,13 @@ import ReportOptions from "./ReportOptions/ReportOptions";
 import Logic from "./Logic/logic";
 import ModelParams from "./ModelParams/ModelParams";
 import Output from "./Output/Output";
+import StoreDebugger from "./StoreDebugger/StoreDebugger";
 
 class Navigation extends Component {
     render() {
         return (
             <div>
                 <nav className="navbar navbar-expand-lg bg-primary navbar-dark">
-                    <a className="navbar-brand" href="/">
-                        BMDS 3.1.2
-                    </a>
                     <div>
                         <ul className="navbar-nav">
                             <li className=" active">
@@ -28,23 +26,13 @@ class Navigation extends Component {
                                 </NavLink>
                             </li>
                             <li className="">
-                                <NavLink className="nav-link" to="/reportoptions">
-                                    Report Options
-                                </NavLink>
-                            </li>
-                            <li className="">
-                                <NavLink className="nav-link" to="/logic">
-                                    Logic
-                                </NavLink>
-                            </li>
-                            <li className="">
-                                <NavLink className="nav-link" to="/modelparams">
-                                    Model Params
-                                </NavLink>
-                            </li>
-                            <li className="">
                                 <NavLink className="nav-link" to="/output">
                                     Output
+                                </NavLink>
+                            </li>
+                            <li className="">
+                                <NavLink className="nav-link" to="/debugger">
+                                    Debugger
                                 </NavLink>
                             </li>
                         </ul>
@@ -58,6 +46,7 @@ class Navigation extends Component {
                     <Route path="/logic" component={Logic} />
                     <Route path="/modelparams" component={ModelParams} />
                     <Route path="/output" component={Output} />
+                    <Route path="/debugger" component={StoreDebugger} />
                 </div>
             </div>
         );

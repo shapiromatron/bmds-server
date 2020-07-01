@@ -117,6 +117,10 @@ LOGGING = {
     },
 }
 
+# Session and authentication
+SESSION_ENGINE = "django.contrib.sessions.backends.cached_db"
+
+# Celery
 CELERYD_HIJACK_ROOT_LOGGER = False
 CELERY_ACCEPT_CONTENT = ["application/json"]
 CELERY_TASK_SERIALIZER = "json"
@@ -124,6 +128,14 @@ CELERY_RESULT_SERIALIZER = "json"
 CELERY_SEND_TASK_ERROR_EMAILS = True
 CELERY_TIMEZONE = TIME_ZONE
 
+
+# Cache settings
+CACHES = {
+    "default": {
+        "BACKEND": "django.core.cache.backends.locmem.LocMemCache",
+        "TIMEOUT": 60 * 10,  # 10 minutes (in seconds)
+    }
+}
 
 REST_FRAMEWORK = {
     "DEFAULT_THROTTLE_CLASSES": (

@@ -8,9 +8,11 @@
 .vscode/
 bmds_server/static/bundles/
 build/
+data/
 dist/
 docs/_build/
 node_modules/
+vendor/*.whl
 venv/
 
 # files
@@ -22,6 +24,7 @@ celerybeat-schedule
 .env
 .eslintcache
 bmds_server/main/settings/local.py
+compose/nginx/conf/nginx.conf
 settings.ini
 webpack-stats.json
 yarn.lock

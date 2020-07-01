@@ -1,0 +1,12 @@
+.git/
+.mypy_cache/
+.pytest_cache/
+bin/
+bmds_server/
+docs/
+frontend/
+logs/
+notebooks/
+public/
+tests/
+venv/

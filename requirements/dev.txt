@@ -18,6 +18,9 @@ flake8==3.7.9
 isort==4.3.21
 mypy==0.770
 
-# install bmds and bmds_server in editable mode
--e ../bmds
+# install `bmds`; pin version for CI, but locally it should be the relative dir
+git+https://github.com/shapiromatron/bmds.git@d29d6889c6b8dba8249aab8528b3952bbccf6cd8#egg=bmds
+# -e ../bmds
+
+# install `bmds_server` editable
 -e .

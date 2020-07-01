@@ -48,7 +48,7 @@ class TestPatchInputs:
         }
         response = client.patch(url, payload, format="json",)
         assert response.status_code == 200
-        assert response.json() == payload["data"]
+        assert response.json()["inputs"] == payload["data"]
 
         payload["data"] = {
             "bmds_version": "BMDS312",
@@ -68,7 +68,7 @@ class TestPatchInputs:
         }
         response = client.patch(url, payload, format="json",)
         assert response.status_code == 200
-        assert response.json() == payload["data"]
+        assert response.json()["inputs"] == payload["data"]
 
     def test_complete(self, bmds3_complete_continuous, bmds3_complete_dichotomous):
         client = APIClient()
@@ -83,7 +83,7 @@ class TestPatchInputs:
 
         response = client.patch(url, payload, format="json")
         assert response.status_code == 200
-        assert response.json() == payload["data"]
+        assert response.json()["inputs"] == payload["data"]
 
         # complete bmds3 dichotomous
         payload = {
@@ -93,4 +93,4 @@ class TestPatchInputs:
 
         response = client.patch(url, payload, format="json")
         assert response.status_code == 200
-        assert response.json() == payload["data"]
+        assert response.json()["inputs"] == payload["data"]

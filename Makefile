@@ -1,4 +1,4 @@
-.PHONY: clean clean-test clean-pyc clean-build docs help lint lint-py lint-js format format-py format-js
+.PHONY: build clean clean-test clean-pyc clean-build docs help lint lint-py lint-js format format-py format-js
 .DEFAULT_GOAL := help
 
 define BROWSER_PYSCRIPT
@@ -26,6 +26,11 @@ BROWSER := python -c "$$BROWSER_PYSCRIPT"
 
 help:
 	@python -c "$$PRINT_HELP_PYSCRIPT" < $(MAKEFILE_LIST)
+
+build:  ## build application for containerization
+	rm -rf build/ dist/
+	npm --prefix ./frontend run build
+	manage.py bundle
 
 dev: ## Start developer environment.
 	./bin/dev.sh

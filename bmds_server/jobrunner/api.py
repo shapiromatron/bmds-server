@@ -46,7 +46,8 @@ class JobViewset(mixins.CreateModelMixin, mixins.RetrieveModelMixin, viewsets.Ge
         instance.inputs = input_data
         instance.save()
 
-        return Response(data=data)
+        serializer = self.get_serializer(instance)
+        return Response(serializer.data)
 
     @action(detail=True, methods=("get",), renderer_classes=(renderers.TxtRenderer,))
     def inputs(self, request, *args, **kwargs):

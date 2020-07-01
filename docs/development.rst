@@ -135,8 +135,8 @@ This is an optional step in development, but required in production. To run work
 
     # start the workers
     source venv/bin/activate
-    celery worker --app=bmds_server.main --loglevel=info --events
+    celery worker --app=bmds_server.main.celery --loglevel=info --events
 
     # start a crontab
     source venv/bin/activate
-    celery beat --app=bmds_server.main --loglevel=info
+    celery beat --app=bmds_server.main.celery --loglevel=info

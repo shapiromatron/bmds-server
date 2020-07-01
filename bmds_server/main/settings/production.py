@@ -7,8 +7,8 @@ from .base import *
 DEBUG = False
 
 ADMINS = []
-_admin_names = config("DJANGO_ADMIN_NAMES", default="")
-_admin_emails = config("DJANGO_ADMIN_EMAILS", "")
+_admin_names = config("DJANGO_ADMIN_NAMES")
+_admin_emails = config("DJANGO_ADMIN_EMAILS")
 if len(_admin_names) > 0 and len(_admin_emails) > 0:
     ADMINS = list(zip(_admin_names.split("|"), _admin_emails.split("|")))
     MANAGERS = ADMINS
@@ -16,10 +16,11 @@ else:
     raise ValueError("Invalid DJANGO_ADMIN_NAMES or DJANGO_ADMIN_EMAILS")
 
 SECRET_KEY = config("DJANGO_SECRET_KEY")
-ALLOWED_HOSTS = config("DJANGO_ALLOWED_HOSTS", default="").split("|")
+ALLOWED_HOSTS = config("DJANGO_ALLOWED_HOSTS").split("|")
 if len(ALLOWED_HOSTS) < 1:
     raise ValueError("DJANGO_ALLOWED_HOSTS is required")
 
+# Email settings
 DEFAULT_FROM_EMAIL = config("DJANGO_DEFAULT_FROM_EMAIL")
 if os.environ.get("DJANGO_EMAIL_BACKEND") == "SMTP":
     EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
@@ -38,7 +39,7 @@ elif os.environ.get("DJANGO_EMAIL_BACKEND") == "MAILGUN":
 else:
     raise ValueError("Unknown email backend")
 
-# DB settings
+# Database settings
 DATABASES["default"] = dict(
     ENGINE="django.db.backends.postgresql",
     NAME=config("DJANGO_DB_NAME"),
@@ -48,7 +49,7 @@ DATABASES["default"] = dict(
     CONN_MAX_AGE=300,
 )
 
-# cache settings
+# Cache settings
 CACHES["default"] = dict(
     BACKEND="django_redis.cache.RedisCache",
     LOCATION=config("DJANGO_CACHE_LOCATION"),
@@ -56,5 +57,6 @@ CACHES["default"] = dict(
     TIMEOUT=60 * 10,  # 10 minutes (in seconds)
 )
 
-BROKER_URL = config("DJANGO_BROKER_URL")
+# Celery settings
+CELERY_BROKER_URL = config("DJANGO_CELERY_BROKER_URL")
 CELERY_RESULT_BACKEND = config("DJANGO_CELERY_RESULT_BACKEND")

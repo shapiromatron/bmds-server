@@ -1,7 +1,6 @@
 import os
 
 from celery import Celery
-from celery.schedules import crontab
 from decouple import config
 
 os.environ.setdefault(
@@ -13,13 +12,13 @@ from django.conf import settings  # noqa  # isort:skip
 
 
 app = Celery("bmds_server")
-app.config_from_object("django.conf:settings")
-app.autodiscover_tasks(lambda: settings.INSTALLED_APPS)
+app.config_from_object("django.conf:settings", namespace="CELERY")
+app.autodiscover_tasks()
 
 
 app.conf.beat_schedule = {
-    "hourly-clear-old-results": {
+    "ten-minutes-delete-old-jobs": {
         "task": "bmds_server.jobrunner.tasks.delete_old_jobs",
-        "schedule": crontab(minute="*/15"),
+        "schedule": 60 * 10,  # every 10 minutes
     },
 }

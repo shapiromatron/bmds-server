@@ -23,7 +23,7 @@ class DatasetList extends Component {
             ),
             datasetnames = mainStore.getDatasetNamesHeader();
         return (
-            <div className="table-responsive ">
+            <div>
                 {mainStore.getDatasetLength ? (
                     <table className="table table-bordered  datasetlist-table">
                         <thead>

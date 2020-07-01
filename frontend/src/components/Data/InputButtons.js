@@ -11,7 +11,7 @@ class InputButtons extends Component {
             },
             isEditSettings = dataStore.getEditSettings();
         return (
-            <div className="col col-sm-3">
+            <div>
                 {isEditSettings ? (
                     <div>
                         <form className="model-type">

@@ -1,9 +1,6 @@
-
-
- .data{
-  font-size: 12px;
+.row{
+  margin: 20px;
 }
-
 .inputformlist{
   text-align: center;
 }
@@ -54,6 +51,11 @@ button.btn-sq-xs{
 .textarea textarea{
 
   font-size: 12px;
+}
+
+.editdataset{
+  font-size: 12px;
+  width: 70%;
 }
 
 .currentdataset a:hover{

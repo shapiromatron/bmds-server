@@ -46,7 +46,14 @@ class MainStore {
     }
 
     @action saveOptions = (name, value, id) => {
-        this.options[id][name] = value;
+        switch (this.analysisForm.dataset_type) {
+            case "C":
+                this.CSOptionsList[id][name] = value;
+                break;
+            case "D":
+                this.DIOptionsList[id][name] = value;
+                break;
+        }
     };
 
     @action deleteOptions = val => {

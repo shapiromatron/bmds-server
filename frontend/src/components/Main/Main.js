@@ -17,24 +17,27 @@ class Main extends Component {
         return (
             <div>
                 {mainStore.isUpdateComplete ? (
-                    <div>
-                        <div className="main">
-                            <div className="row">
-                                <div className="col col-sm-5">
+                    <div className="main ">
+                        <div className="row first-row">
+                            <div className="col-lg-3">
+                                <div className="analysis">
                                     <AnalysisForm />
                                 </div>
-
-                                <div className="col col-sm-5">
-                                    <DatasetList />
-                                </div>
                             </div>
-                            <div className="row">
-                                <div className="col">
+                            <div className="col-lg-7">
+                                <div className="modelsCheckbox">
                                     <ModelsCheckBoxList />
                                 </div>
                             </div>
-                            <div className="row">
-                                <div className="col">
+                        </div>
+                        <div className="row second-row">
+                            <div className="col-lg-3">
+                                <div className="datasetlist">
+                                    <DatasetList />
+                                </div>
+                            </div>
+                            <div className="col-lg-7">
+                                <div className="optionslist">
                                     <OptionsFormList />
                                 </div>
                             </div>

@@ -1,16 +1,24 @@
 .main{
     font-size: 12px;
+    justify-content: center;
+}
+
+div.col{
+    padding: 0;
+    margin-left:15px;
+   
 }
 .navbar{
     margin-bottom: 0!important;
  }
+
 .row{
     margin-bottom: 20px;
     margin-top:20px;
 }
-.main-form{
+.analysis-form{
     padding:10px;
-
+    position: relative;
 }
   
 
@@ -20,11 +28,14 @@
     font-size: 13px;
 }
 
-.main-form Button {
+.analysis-form Button {
     margin-right: 10px;
     text-overflow: inherit;
-    font-size:13px;
 
+
+}
+.btn-group{
+    text-align: center;
 }
 
 
@@ -47,7 +58,7 @@
      left:0;
      margin: 0;
      height: 100%;
-     width: 100%;
+     width: 70%;
       border: none;
      padding: 10px;
      box-sizing: border-box; 
@@ -58,17 +69,9 @@
 
 .options-table td select{
     font-size:12px;
-    width:100%;
+    width:auto;
     overflow: hidden;
     padding:0;
-}
-
- .modelscheckbox{
-    text-align: center;
-    border-collapse: collapse;
-    table-layout:fixed;
-    width:auto;
-
 }
 
 
@@ -102,32 +105,33 @@
 
 }
 
-.dataset-list{
-    position: fixed;
-    overflow-y: auto;
-    height:400px;
-}
-.table-responsive{
-    height:400px;
-    overflow:auto;
-    text-align: center;
-
-}
-
-.table-responsive  thead tr:nth-child(1) th{
-    position: sticky;
-    top: 0;
-    z-index: 10;
-  }
-.datasetlist-table th{
-    text-align: center;
-    border: 1px solid rgb(163, 212, 221);
-}
-
-
 .datasetlist-table td select{
     font-size:12px;
-    width:100%;
-    overflow: hidden;
-    padding:0;
+
+} 
+
+.first-row{
+    justify-content: center;
+}
+.second-row{
+    justify-content: center;
+}
+
+
+.analysis {height: auto; overflow: auto; background: #eee; margin-bottom: 20px;}
+.modelsCheckbox {
+    min-height: auto; 
+    justify-content: center; 
+    text-align: center;
+}
+.datasetlist {min-height: auto; margin-bottom: 20px;}
+.optionslist{
+    justify-content: center;
+}
+
+@media only screen and (min-width: 768px){
+    .analysis-form button{
+        margin-bottom: 10px;
+        justify-content: center;
+    }
 }

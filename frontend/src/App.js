@@ -11,7 +11,7 @@ class App extends Component {
         this.props.mainStore.setConfig(config);
         this.props.mainStore.fetchSavedAnalysis();
         return (
-            <HashRouter className="app">
+            <HashRouter>
                 <div>
                     <Navigation />
                 </div>

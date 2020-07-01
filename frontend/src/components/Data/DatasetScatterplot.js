@@ -6,7 +6,7 @@ import {inject, observer} from "mobx-react";
 @observer
 class DatasetScatterplot extends Component {
     render() {
-        return <div className="col col-sm-4">Scatter Plot</div>;
+        return <div>Scatter Plot</div>;
     }
 }
 

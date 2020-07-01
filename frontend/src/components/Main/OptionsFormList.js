@@ -2,7 +2,7 @@ import React, {Component} from "react";
 import {inject, observer} from "mobx-react";
 import OptionsForm from "./OptionsForm";
 import OptionsReadOnly from "./OptionsReadOnly";
-
+import {toJS} from "mobx";
 @inject("mainStore")
 @observer
 class OptionsFormList extends Component {
@@ -33,7 +33,7 @@ class OptionsFormList extends Component {
             dataset_type = mainStore.analysisForm.dataset_type,
             labels = mainStore.getOptionsLabels(dataset_type),
             isEditSettings = mainStore.getEditSettings(),
-            options = mainStore.getOptionsType(dataset_type);
+            options = toJS(mainStore.getOptionsType(dataset_type));
         return (
             <div className="options-div">
                 {labels.length ? (

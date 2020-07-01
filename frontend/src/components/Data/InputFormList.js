@@ -49,7 +49,7 @@ class InputFormList extends Component {
             }
         });
         return (
-            <div className="col">
+            <div>
                 <div>
                     <div>
                         <label style={{marginRight: "20px"}}>Dataset Name:</label>

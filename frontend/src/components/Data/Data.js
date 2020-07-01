@@ -11,12 +11,15 @@ class Data extends Component {
     render() {
         const {dataStore} = this.props;
         return (
-            <div className="container data">
-                <div className="row">
-                    <InputButtons />
-                    {dataStore.getDataLength ? <InputFormList /> : null}
-
-                    {dataStore.getDataLength ? <DatasetScatterplot /> : null}
+            <div className="data">
+                <div className="row data-row">
+                    <div className="col col-lg-3 inputbuttons">
+                        <InputButtons />
+                    </div>
+                    <div className="col">{dataStore.getDataLength ? <InputFormList /> : null}</div>
+                    <div className="col scatterplot">
+                        {dataStore.getDataLength ? <DatasetScatterplot /> : null}
+                    </div>
                 </div>
             </div>
         );

@@ -11,32 +11,39 @@ import StoreDebugger from "./StoreDebugger/StoreDebugger";
 class Navigation extends Component {
     render() {
         return (
-            <div>
-                <nav className="navbar navbar-expand-lg bg-primary navbar-dark">
-                    <div>
+            <div className="app-nav">
+                <nav className="navbar navbar-expand-md bg-primary navbar-dark">
+                    <div className="collapse navbar-collapse" id="collapsibleNavbar">
                         <ul className="navbar-nav">
-                            <li className=" active">
+                            <li className=" nav-item active">
                                 <NavLink className="nav-link" to="/">
                                     Main
                                 </NavLink>
                             </li>
-                            <li className="">
+                            <li className="nav-item">
                                 <NavLink className="nav-link" to="/data">
                                     Data
                                 </NavLink>
                             </li>
-                            <li className="">
+                            <li className="nav-item">
                                 <NavLink className="nav-link" to="/output">
                                     Output
                                 </NavLink>
                             </li>
-                            <li className="">
+                            <li className="nav-item">
                                 <NavLink className="nav-link" to="/debugger">
                                     Debugger
                                 </NavLink>
                             </li>
                         </ul>
                     </div>
+                    <button
+                        className="navbar-toggler"
+                        type="button"
+                        data-toggle="collapse"
+                        data-target="#collapsibleNavbar">
+                        <span className="navbar-toggler-icon"></span>
+                    </button>
                 </nav>
 
                 <div className="content">

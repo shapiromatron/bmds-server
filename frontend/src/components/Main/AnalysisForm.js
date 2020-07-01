@@ -17,9 +17,9 @@ class AnalysisForm extends Component {
             isEditSettings = mainStore.getEditSettings();
 
         return (
-            <div className="table-primary">
+            <div>
                 {isEditSettings ? (
-                    <form onSubmit={handleSubmit} className="main-form">
+                    <form onSubmit={handleSubmit} className="analysis-form table-primary ">
                         <div className="form-group">
                             <label>Analysis Name</label>
                             <input
@@ -56,19 +56,19 @@ class AnalysisForm extends Component {
                                 })}
                             </select>
                         </div>
-                        <div className="btn-group form-group">
-                            <button type="button" className="btn btn-primary btn-xs">
+                        <div className="btngroupform-group" role="toolbar">
+                            <button type="button" className="btn btn-primary">
                                 Load Analysis
                             </button>
                             <button
                                 type="button"
-                                className="btn btn-primary btn-xs"
+                                className="btn btn-primary"
                                 onClick={() => mainStore.saveAnalysis()}>
                                 Save Analysis
                             </button>
                             <button
                                 type="button"
-                                className="btn btn-primary btn-xs"
+                                className="btn btn-primary"
                                 disabled={!mainStore.isReadyToExecute}
                                 onClick={() => mainStore.executeAnalysis()}>
                                 Run Analysis

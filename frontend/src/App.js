@@ -11,11 +11,15 @@ class App extends Component {
         this.props.mainStore.setConfig(config);
         this.props.mainStore.fetchSavedAnalysis();
         return (
-            <HashRouter>
-                <div>
-                    <Navigation />
-                </div>
-            </HashRouter>
+            <div>
+                {this.props.mainStore.isUpdateComplete ? (
+                    <HashRouter>
+                        <div>
+                            <Navigation />
+                        </div>
+                    </HashRouter>
+                ) : null}
+            </div>
         );
     }
 }

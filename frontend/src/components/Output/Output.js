@@ -1,76 +1,63 @@
 import React, {Component} from "react";
 import {inject, observer} from "mobx-react";
-import {toJS} from "mobx";
 import ModelDetailModal from "./modelDetailModal";
 import "./output.css";
+import DatasetPlot from "./DatasetPlot";
+import Results from "./Results";
+import DatasetList from "../Data/DatasetList";
+import InputFormReadOnly from "../Data/InputFormReadOnly";
 
 @inject("outputStore")
 @observer
 class Output extends Component {
     render() {
         const {outputStore} = this.props,
-            outputs = toJS(outputStore.getExecutionOutputs());
-
+            showModal = (e, selectedOutput, index) => {
+                outputStore.toggleModelDetailModal(selectedOutput, index);
+            },
+            onClick = (e, id) => {
+                outputStore.setCurrentDatasetIndex(id);
+            },
+            selectedOutput = outputStore.getCurrentOutput(outputStore.selectedDatasetIndex),
+            datasetList = outputStore.getDatasets();
+        let mappedDatasets = [];
+        if (selectedOutput != null) {
+            mappedDatasets = outputStore.getMappingDataset(selectedOutput.dataset);
+        }
         return (
             <div className="output">
-                {outputs ? (
+                {selectedOutput != null ? (
                     <div>
                         <div>
-                            {outputs.map((output, i) => {
-                                return [
-                                    <div key={i}>
-                                        {/* <div className="card-header">
-                                            {output.dataset.dataset_name}
-                                        </div> */}
-                                        <div>
-                                            <table className="table table-bordered ">
-                                                <thead>
-                                                    <tr className="bg-primary dataset-name">
-                                                        <td>{output.dataset.dataset_name}</td>
-                                                    </tr>
-                                                    <tr className="table-primary">
-                                                        <th>Model</th>
-                                                        <th>BMD</th>
-                                                        <th>BMDL</th>
-                                                        <th>BMDU</th>
-                                                        <th>AIC</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody key={i}>
-                                                    {output.models.map((val, idx) => {
-                                                        return [
-                                                            <tr key={idx}>
-                                                                <td
-                                                                    className="td-modelName"
-                                                                    onClick={() =>
-                                                                        outputStore.toggleModelDetailModal(
-                                                                            output,
-                                                                            val.model_index
-                                                                        )
-                                                                    }>
-                                                                    {val.model_name}
-                                                                </td>
-                                                                <td>{val.results.bmd}</td>
-                                                                <td>{val.results.bmdl}</td>
-                                                                <td>{val.results.bmdu}</td>
-                                                                <td>{val.results.aic}</td>
-                                                            </tr>,
-                                                        ];
-                                                    })}
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                    </div>,
-                                ];
-                            })}
+                            <div className="row">
+                                <div className="col col-lg-2">
+                                    <DatasetList
+                                        datasets={datasetList}
+                                        onClick={onClick.bind(this)}
+                                    />
+                                </div>
+                                <div className="col col-lg-4">
+                                    <InputFormReadOnly
+                                        datasets={mappedDatasets}
+                                        currentDataset={selectedOutput.dataset}
+                                    />
+                                </div>
+                                <div className="col col-lg-3">
+                                    <DatasetPlot />
+                                </div>
+                            </div>
+                            <div className="row">
+                                <div className="col col-lg-4">
+                                    <Results
+                                        selectedOutput={selectedOutput}
+                                        onClick={showModal.bind(this)}
+                                    />
+                                </div>
+                            </div>
+                            ,
                         </div>
-                        <div className="card">
-                            <div className="card-header">Plot</div>
-                            <div className="card-body"></div>
-                        </div>
-                        <div>
-                            <div>{outputStore.modelDetailModal ? <ModelDetailModal /> : null}</div>
-                        </div>
+
+                        <div>{outputStore.modelDetailModal ? <ModelDetailModal /> : null}</div>
                     </div>
                 ) : null}
             </div>

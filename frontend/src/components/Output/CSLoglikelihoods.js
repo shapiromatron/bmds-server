@@ -5,7 +5,7 @@ const CSLoglikelihoods = props => {
         <div>
             <div className="row row-flex">
                 <div className="col">
-                    <table className="table table-bordered">
+                    <table className="table table-bordered table-sm">
                         <thead className="table-primary">
                             <tr>
                                 <th colSpan="4">Likelihoods of Interest</th>

@@ -16,16 +16,15 @@ class DatasetList extends Component {
             },
             isEditSettings = mainStore.getEditSettings(),
             adverseList = mainStore.AdverseDirectionList,
+            degree = mainStore.degree,
+            background = mainStore.background,
             datasets = mainStore.getDatasets(),
             enabledDatasets = datasets.filter(item => item.enabled == true),
-            selectedDatasets = datasets.filter(item =>
-                item.model_type.includes(mainStore.analysisForm.dataset_type)
-            ),
             datasetnames = mainStore.getDatasetNamesHeader();
         return (
             <div>
-                {mainStore.getDatasetLength ? (
-                    <table className="table table-bordered  datasetlist-table">
+                {mainStore.getDatasetLength() ? (
+                    <table className="table table-bordered table-sm  datasetlist-table">
                         <thead>
                             <tr className="table-primary">
                                 {datasetnames.map((item, i) => {
@@ -35,8 +34,10 @@ class DatasetList extends Component {
                         </thead>
                         {isEditSettings ? (
                             <Datasets
-                                datasets={selectedDatasets}
+                                datasets={datasets}
                                 adverseList={adverseList}
+                                degree={degree}
+                                background={background}
                                 dataset_type={mainStore.analysisForm.dataset_type}
                                 enabledDatasets={enabledDatasets}
                                 onChange={onChange.bind(this)}

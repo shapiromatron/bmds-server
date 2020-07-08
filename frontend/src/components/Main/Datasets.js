@@ -33,6 +33,39 @@ const Datasets = props => {
                                 </Form.Control>
                             </td>
                         ) : null}
+                        {props.dataset_type == "DM" ? (
+                            <td>
+                                {" "}
+                                <Form.Control
+                                    as="select"
+                                    name="degree"
+                                    onChange={e => props.onChange(e, item.dataset_id)}>
+                                    {props.degree.map((item, i) => {
+                                        return [
+                                            <option key={i} value={item.value}>
+                                                {item.name}
+                                            </option>,
+                                        ];
+                                    })}
+                                </Form.Control>
+                            </td>
+                        ) : null}
+                        {props.dataset_type == "DM" ? (
+                            <td>
+                                <Form.Control
+                                    as="select"
+                                    name="background"
+                                    onChange={e => props.onChange(e, item.dataset_id)}>
+                                    {props.background.map((item, i) => {
+                                        return [
+                                            <option key={i} value={item.value}>
+                                                {item.name}
+                                            </option>,
+                                        ];
+                                    })}
+                                </Form.Control>
+                            </td>
+                        ) : null}
                     </tr>,
                 ];
             })}

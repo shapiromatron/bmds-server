@@ -33,21 +33,18 @@ const ModelsCheckBox = props => {
                     </tr>,
                 ];
             })}
-            <tr>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td>
-                    Total Weights{" "}
-                    <input
-                        style={{float: "right"}}
-                        name="total_weights"
-                        type="text"
-                        onChange={props.onChange}
-                    />
-                </td>
-            </tr>
+            {props.models.length > 2 ? (
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>
+                        Total Weights{" "}
+                        <input name="total_weights" type="text" onChange={props.onChange} />
+                    </td>
+                </tr>
+            ) : null}
         </tbody>
     );
 };

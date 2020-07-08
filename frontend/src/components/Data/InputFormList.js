@@ -50,21 +50,18 @@ class InputFormList extends Component {
         });
         return (
             <div>
-                <div>
+                {isEditSettings ? (
                     <div>
-                        <label style={{marginRight: "20px"}}>Dataset Name:</label>
-                        {isEditSettings ? (
+                        <div className="label">
+                            <label>Dataset Name:</label>
+
                             <input
                                 type="text"
                                 name="dataset_name"
                                 value={currentDataset.dataset_name}
                                 onChange={e => onChange(e, currentDataset.dataset_id)}
                             />
-                        ) : (
-                            currentDataset.dataset_name
-                        )}
-                    </div>
-                    {isEditSettings ? (
+                        </div>
                         <table className="inputformlist">
                             <thead>
                                 <tr className="table-primary ">
@@ -121,13 +118,14 @@ class InputFormList extends Component {
                                 })}
                             </tbody>
                         </table>
-                    ) : (
-                        <InputFormReadOnly
-                            datasets={datasetInputForm}
-                            currentDataset={currentDataset}
-                        />
-                    )}
-                </div>
+                    </div>
+                ) : (
+                    <InputFormReadOnly
+                        labels={labels}
+                        datasets={datasetInputForm}
+                        currentDataset={currentDataset}
+                    />
+                )}
             </div>
         );
     }

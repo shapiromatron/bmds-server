@@ -19,14 +19,15 @@ class Output extends Component {
                 outputStore.setCurrentDatasetIndex(id);
             },
             selectedOutput = outputStore.getCurrentOutput(outputStore.selectedDatasetIndex),
-            datasetList = outputStore.getDatasets();
+            datasetList = outputStore.getDatasets(),
+            labels = outputStore.getLabels(selectedOutput.dataset.model_type);
         let mappedDatasets = [];
         if (selectedOutput != null) {
             mappedDatasets = outputStore.getMappingDataset(selectedOutput.dataset);
         }
         return (
             <div className="output">
-                {selectedOutput != null ? (
+                {!selectedOutput.error ? (
                     <div>
                         <div>
                             <div className="row">
@@ -38,6 +39,7 @@ class Output extends Component {
                                 </div>
                                 <div className="col col-lg-4">
                                     <InputFormReadOnly
+                                        labels={labels}
                                         datasets={mappedDatasets}
                                         currentDataset={selectedOutput.dataset}
                                     />
@@ -59,7 +61,9 @@ class Output extends Component {
 
                         <div>{outputStore.modelDetailModal ? <ModelDetailModal /> : null}</div>
                     </div>
-                ) : null}
+                ) : (
+                    <p>{selectedOutput.error}</p>
+                )}
             </div>
         );
     }

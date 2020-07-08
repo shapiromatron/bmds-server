@@ -2,7 +2,7 @@ import React from "react";
 
 const Results = props => {
     return (
-        <table className="table table-bordered result">
+        <table className="table table-bordered result table-sm">
             <thead>
                 <tr className="table-primary">
                     <th>Model</th>
@@ -16,12 +16,14 @@ const Results = props => {
                 {props.selectedOutput.models.map((val, idx) => {
                     return [
                         <tr key={idx}>
-                            <td
-                                className="td-modelName"
-                                onClick={e =>
-                                    props.onClick(e, props.selectedOutput, val.model_index)
-                                }>
-                                {val.model_name}
+                            <td className="button">
+                                <button
+                                    onClick={e =>
+                                        props.onClick(e, props.selectedOutput, val.model_index)
+                                    }
+                                    className="btn btn-primary btn-sm">
+                                    {val.model_name}{" "}
+                                </button>
                             </td>
                             <td>{val.results.bmd}</td>
                             <td>{val.results.bmdl}</td>

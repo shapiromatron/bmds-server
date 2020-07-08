@@ -4,7 +4,7 @@ import DGoodnessFit from "./DGoodnessFit";
 
 const GoodnessFit = props => {
     return (
-        <table className="table table-bordered">
+        <table className="table table-bordered table-sm">
             <thead className="table-primary">
                 <tr>
                     <th colSpan="9">Goodness of Fit</th>
@@ -16,7 +16,7 @@ const GoodnessFit = props => {
                 </tr>
             </thead>
             {props.model_type == "CS" ? <CSGoodnessFit goodnessfit={props.goodnessFit} /> : null}
-            {props.model_type == "D" ? <DGoodnessFit goodnessfit={props.goodnessFit} /> : null}
+            {props.model_type == "DM" ? <DGoodnessFit goodnessfit={props.goodnessFit} /> : null}
         </table>
     );
 };

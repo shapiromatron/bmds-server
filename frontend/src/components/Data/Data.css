@@ -1,6 +1,16 @@
 .row{
   margin: 20px;
 }
+.table{
+  font-size: 12px;
+}
+.label{
+  font-size: 12px;
+ 
+}
+.label label{
+  margin-right: 20px;
+}
 .inputformlist{
   text-align: center;
 }
@@ -13,6 +23,23 @@
  width:100px;
  height:30px;
  text-align: center;
+}
+.inputformlist input, .label input {
+  -webkit-transition: all 0.30s ease-in-out;
+  -moz-transition: all 0.30s ease-in-out;
+  -ms-transition: all 0.30s ease-in-out;
+  -o-transition: all 0.30s ease-in-out;
+  outline: none;
+  padding: 3px 0px 3px 3px;
+  margin: 5px 1px 3px 0px;
+  border: 1px solid #DDDDDD;
+}
+ 
+.inputformlist input:focus, .label input:focus {
+  box-shadow: 0 0 5px #5BC0DE;
+  padding: 3px 0px 3px 3px;
+  margin: 5px 1px 3px 0px;
+  border: 1px solid #5BC0DE;
 }
 .column-names{
   text-align: center;
@@ -58,6 +85,10 @@ button.btn-sq-xs{
   width: 70%;
 }
 
+.currentdataset td a {
+  display:block;
+  width:100%;
+}
 .currentdataset a:hover{
   font-weight: bold;
   cursor:pointer;

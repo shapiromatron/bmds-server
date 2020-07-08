@@ -2,7 +2,6 @@ import React, {Component} from "react";
 import {inject, observer} from "mobx-react";
 import OptionsForm from "./OptionsForm";
 import OptionsReadOnly from "./OptionsReadOnly";
-import {toJS} from "mobx";
 @inject("mainStore")
 @observer
 class OptionsFormList extends Component {
@@ -32,21 +31,22 @@ class OptionsFormList extends Component {
             },
             dataset_type = mainStore.analysisForm.dataset_type,
             labels = mainStore.getOptionsLabels(dataset_type),
-            isEditSettings = mainStore.getEditSettings(),
-            options = toJS(mainStore.getOptionsType(dataset_type));
+            options = mainStore.options,
+            isEditSettings = mainStore.getEditSettings();
+
         return (
             <div className="options-div">
                 {labels.length ? (
                     <div className="panel panel-default">
                         <form className="form-horizontal">
-                            <table className="options-table table table-bordered">
+                            <table className="options-table table table-bordered table-sm">
                                 <thead className="table-primary">
                                     <tr>
                                         {labels.map((item, index) => {
-                                            return [<th key={index}>{item.label}</th>];
+                                            return [<th key={index}>{item}</th>];
                                         })}
-                                        <th>
-                                            {isEditSettings ? (
+                                        {isEditSettings ? (
+                                            <th>
                                                 <button
                                                     type="button"
                                                     data-toggle="tooltip"
@@ -56,8 +56,8 @@ class OptionsFormList extends Component {
                                                     onClick={createOptions}>
                                                     <i className="fa fa-plus"></i>{" "}
                                                 </button>
-                                            ) : null}
-                                        </th>
+                                            </th>
+                                        ) : null}
                                     </tr>
                                 </thead>
                                 {isEditSettings ? (

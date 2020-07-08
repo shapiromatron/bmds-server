@@ -3,7 +3,7 @@ const DatasetList = props => {
     return (
         <div>
             <div className="editdataset">
-                <table className="table table-bordered table-hover">
+                <table className="table table-bordered table-hover table-sm">
                     <thead>
                         <tr className="table-primary">
                             <th>Datasets</th>

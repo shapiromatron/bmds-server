@@ -59,7 +59,7 @@ class InputFormList extends Component {
                                 name="dataset_name"
                                 value={currentDataset.dataset_name}
                                 onChange={e => onChange(e, currentDataset.dataset_id)}
-                              />
+                            />
                         </div>
                         <table className="inputformlist">
                             <thead>

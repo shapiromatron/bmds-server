@@ -9,6 +9,9 @@ class DataStore {
     @observable currentDataset = {};
     @observable currentDatasetLabels = [];
 
+    @action setModelType(model_type) {
+        this.model_type = model_type;
+    }
     @action setCurrentDatasetIndex(dataset_id) {
         this.selectedDatasetIndex = dataset_id;
     }
@@ -152,6 +155,13 @@ class DataStore {
         let selectedDataset = this.datasets.filter(item => item.model_type.includes(dataset_type));
         return selectedDataset;
     }
+
+    @action getFilteredModelTypes() {
+        let dataset_types = rootStore.mainStore.analysisForm.dataset_type;
+        let modeltype_list = this.ModelTypes.filter(model => model.value.includes(dataset_types));
+        this.model_type = modeltype_list[0].value;
+        return modeltype_list;
+    }
     @action getDatasetLabels(model_type) {
         let labels = [];
         switch (model_type) {
@@ -161,7 +171,7 @@ class DataStore {
             case "CI":
                 labels = ["Dose", "Response"];
                 break;
-            case "D":
+            case "DM":
                 labels = ["Dose", "N", "Incidence"];
                 break;
             case "N":
@@ -188,7 +198,7 @@ class DataStore {
                     responses: ["", "", "", "", ""],
                 };
                 break;
-            case "D":
+            case "DM":
                 form = {
                     doses: [1, 2, 3, 4, 5],
                     ns: [6, 7, 8, 9, 10],
@@ -216,7 +226,7 @@ class DataStore {
                     doses: "Dose",
                     ns: "N",
                     means: "Mean",
-                    stdevs: "Std. Dev.",
+                    stdevs: "St. Dev.",
                 };
                 break;
             case "CI":
@@ -225,7 +235,7 @@ class DataStore {
                     responses: "Response",
                 };
                 break;
-            case "D":
+            case "DM":
                 form = {
                     doses: "Dose",
                     ns: "N",
@@ -247,7 +257,7 @@ class DataStore {
     @observable ModelTypes = [
         {value: "CS", name: "Continuous Summarized"},
         {value: "CI", name: "Continuous Individual"},
-        {value: "D", name: "Dichotomous"},
+        {value: "DM", name: "Dichotomous"},
         {value: "N", name: "Nested"},
     ];
 }

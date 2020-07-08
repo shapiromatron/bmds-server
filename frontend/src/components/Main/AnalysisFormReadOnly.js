@@ -11,7 +11,7 @@ class AnalysisFormReadOnly extends Component {
             );
         return (
             <div>
-                <table className="table table-bordered analysisFormReadOnly">
+                <table className="table table-bordered table-primary table-sm analysis-readonly">
                     <tbody>
                         <tr>
                             <th>Analysis Name:</th>

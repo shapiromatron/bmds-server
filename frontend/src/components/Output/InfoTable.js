@@ -2,7 +2,7 @@ import React from "react";
 
 const InfoTable = props => {
     return (
-        <table className="table table-bordered">
+        <table className="table table-bordered table-sm">
             <thead>
                 <tr className="table-primary">
                     <th colSpan="2">Info</th>

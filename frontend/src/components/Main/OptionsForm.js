@@ -20,7 +20,7 @@ const OptionsForm = props => {
                     </select>
                 </td>
             ) : null}
-            {props.dataset_type === "D" ? (
+            {props.dataset_type != "C" ? (
                 <td>
                     <select
                         name="bmr_type"
@@ -66,6 +66,20 @@ const OptionsForm = props => {
                     onChange={props.onchange}
                 />
             </td>
+            {props.dataset_type === "N" ? (
+                <td>
+                    <select
+                        name="litter_specific_covariate"
+                        className="form-control"
+                        value={props.item.litter_specific_covariate}
+                        id={props.idx}
+                        onChange={props.onchange}>
+                        <option value="Overall_Mean">Overall Mean</option>
+                        <option value="Control_Group_Mean">Control Group Mean</option>
+                    </select>
+                </td>
+            ) : null}
+
             {props.dataset_type === "C" ? (
                 <td>
                     <select
@@ -108,17 +122,43 @@ const OptionsForm = props => {
                     </select>
                 </td>
             ) : null}
-            <td>
-                <select
-                    name="background"
-                    id={props.idx}
-                    className="form-control"
-                    value={props.item.background}
-                    onChange={props.onchange}>
-                    <option value="Estimated">Estimated</option>
-                </select>
-            </td>
-
+            {props.dataset_type != "DM" ? (
+                <td>
+                    <select
+                        name="background"
+                        id={props.idx}
+                        className="form-control"
+                        value={props.item.background}
+                        onChange={props.onchange}>
+                        <option value="Estimated">Estimated</option>
+                    </select>
+                </td>
+            ) : null}
+            {props.dataset_type === "N" ? (
+                <td>
+                    <input
+                        type="number"
+                        name="bootstrap_iterations"
+                        className="form-control"
+                        value={props.item.bootstrap_iterations}
+                        id={props.idx}
+                        onChange={props.onchange}
+                    />
+                </td>
+            ) : null}
+            {props.dataset_type === "N" ? (
+                <td>
+                    <select
+                        name="bootstrap_seed"
+                        id={props.idx}
+                        className="form-control"
+                        value={props.item.bootstrap_seed}
+                        onChange={props.onchange}>
+                        <option value="Automatic">Automatic</option>
+                        <option value="User_Specified">User Specified</option>
+                    </select>
+                </td>
+            ) : null}
             <td>
                 <button
                     className="btn btn-danger"

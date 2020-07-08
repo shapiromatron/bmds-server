@@ -17,38 +17,36 @@ class ModelsCheckBoxList extends Component {
                 mainStore.toggleModelsCheckBox(model_name, checked, value);
             },
             models = toJS(mainStore.getModelTypeList()),
+            modelsHeaders = mainStore.getmodelsHeaders(),
             isEditSettings = mainStore.getEditSettings();
         return (
             <div>
                 {models.length ? (
-                    <table className="modelscheckbox table table-bordered">
+                    <table className="modelscheckbox table table-bordered table-sm">
                         <thead className="table-primary">
-                            {Object.keys(mainStore.modelsCheckBoxHeaders).map((item, index) => {
+                            {Object.keys(modelsHeaders).map((item, index) => {
                                 return [
                                     <tr key={index}>
-                                        <th>{mainStore.modelsCheckBoxHeaders[item].model}</th>
-                                        {mainStore.modelsCheckBoxHeaders[item].values.map(
-                                            (dev, index) => {
-                                                return [
-                                                    <th key={index} colSpan={dev.colspan}>
-                                                        {dev.name}{" "}
-                                                        {(dev.name === "Enable") &
-                                                        isEditSettings ? (
-                                                            <input
-                                                                type="checkbox"
-                                                                name={dev.model_name + "-All"}
-                                                                onChange={handleCheckbox}
-                                                                checked={dev.isChecked}
-                                                            />
-                                                        ) : null}
-                                                        &emsp;
-                                                        {dev.model_name === "bayesian_model_average"
-                                                            ? dev.prior_weight
-                                                            : null}
-                                                    </th>,
-                                                ];
-                                            }
-                                        )}
+                                        <th>{modelsHeaders[item].model}</th>
+                                        {modelsHeaders[item].values.map((dev, index) => {
+                                            return [
+                                                <th key={index} colSpan={dev.colspan}>
+                                                    {dev.name}{" "}
+                                                    {(dev.name === "Enable") & isEditSettings ? (
+                                                        <input
+                                                            type="checkbox"
+                                                            name={dev.model_name + "-All"}
+                                                            onChange={handleCheckbox}
+                                                            checked={dev.isChecked}
+                                                        />
+                                                    ) : null}
+                                                    &emsp;
+                                                    {dev.model_name === "bayesian_model_average"
+                                                        ? dev.prior_weight
+                                                        : null}
+                                                </th>,
+                                            ];
+                                        })}
                                     </tr>,
                                 ];
                             })}

@@ -58,6 +58,9 @@ class OutputStore {
     @action getDatasets() {
         return rootStore.dataStore.datasets;
     }
+    @action getLabels(model_type) {
+        return rootStore.dataStore.getDatasetLabels(model_type);
+    }
     @action getMappingDataset(dataset) {
         return rootStore.dataStore.getMappingDataset(dataset);
     }
@@ -135,7 +138,7 @@ class OutputStore {
                 };
                 this.goodnessFit = selectedModel.results.gof;
                 break;
-            case "D":
+            case "DM":
                 this.modelOptions = [
                     {label: "Risk Type", name: "bmrType", value: ""},
                     {label: "BMR", name: "bmr", value: ""},

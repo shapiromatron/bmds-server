@@ -30,10 +30,7 @@ const ModelsReadOnly = props => {
                 <td></td>
                 <td></td>
                 <td></td>
-                <td>
-                    <p style={{float: "left"}}>Total weight</p>
-                    <p style={{float: "right"}}></p>
-                </td>
+                <td>Total weight 0%</td>
             </tr>
         </tbody>
     );

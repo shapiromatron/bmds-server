@@ -9,13 +9,14 @@ class InputButtons extends Component {
     render() {
         const {dataStore} = this.props,
             onChange = e => {
-                dataStore.model_type = e.target.value;
+                dataStore.setModelType(e.target.value);
             },
             onClick = (e, id) => {
                 dataStore.setCurrentDatasetIndex(id);
             },
             isEditSettings = dataStore.getEditSettings(),
-            datasets = toJS(dataStore.datasets);
+            datasets = toJS(dataStore.datasets),
+            modelTypes = dataStore.getFilteredModelTypes();
         return (
             <div>
                 {isEditSettings ? (
@@ -27,7 +28,7 @@ class InputButtons extends Component {
                                     className="form-control"
                                     id="selectmodel"
                                     onChange={onChange}>
-                                    {dataStore.ModelTypes.map((item, i) => {
+                                    {modelTypes.map((item, i) => {
                                         return [
                                             <option key={i} value={item.value}>
                                                 {item.name}
@@ -47,8 +48,9 @@ class InputButtons extends Component {
                         </form>
                     </div>
                 ) : null}
-
-                <DatasetList onClick={onClick.bind(this)} datasets={datasets} />
+                {dataStore.datasets.length ? (
+                    <DatasetList onClick={onClick.bind(this)} datasets={datasets} />
+                ) : null}
                 {dataStore.datasets.length && isEditSettings ? (
                     <div>
                         <button

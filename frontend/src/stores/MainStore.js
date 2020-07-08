@@ -19,8 +19,6 @@ class MainStore {
     @observable checked_items = [];
     @observable isUpdateComplete = false;
     @observable options = [];
-    @observable CSOptionsList = [];
-    @observable DIOptionsList = [];
 
     @action setConfig = config => {
         this.config = config;
@@ -34,37 +32,32 @@ class MainStore {
         return editSettings;
     }
 
-    @observable createOptions() {
-        switch (this.analysisForm.dataset_type) {
-            case "C":
-                this.CSOptionsList.push(this.CSOptions);
-                break;
-            case "D":
-                this.DIOptionsList.push(this.DIOptions);
-                break;
-        }
-    }
-
     @action saveOptions = (name, value, id) => {
-        switch (this.analysisForm.dataset_type) {
-            case "C":
-                this.CSOptionsList[id][name] = value;
-                break;
-            case "D":
-                this.DIOptionsList[id][name] = value;
-                break;
-        }
+        this.options[id][name] = value;
     };
 
     @action deleteOptions = val => {
-        if (this.analysisForm.dataset_type === "C") {
-            this.CSOptionsList.splice(val, 1);
-        } else if (this.analysisForm.dataset_type === "D") {
-            this.DIOptionsList.splice(val, 1);
-        }
+        this.options.splice(val, 1);
     };
 
     @action addanalysisForm = (name, value) => {
+        if (name === "dataset_type") {
+            this.options = [];
+            rootStore.dataStore.datasets = [];
+            let modelsList = this.getModelTypeList();
+            modelsList.map(models => {
+                models.values.map(val => {
+                    if (val.isChecked) {
+                        val.isChecked = !val.isChecked;
+                    }
+                });
+            });
+            this.modelsCheckBoxHeaders.third.values.map(value => {
+                if (value.isChecked) {
+                    value.isChecked = !value.isChecked;
+                }
+            });
+        }
         this.analysisForm[name] = value;
     };
 
@@ -74,8 +67,20 @@ class MainStore {
             models = this.CmodelType;
         } else if (this.analysisForm.dataset_type === "D") {
             models = this.DmodelType;
+        } else if (this.analysisForm.dataset_type === "N") {
+            models = this.NmodelType;
         }
         return models;
+    }
+
+    @observable getmodelsHeaders() {
+        let modelsHeader = {};
+        if (this.analysisForm.dataset_type === "N") {
+            modelsHeader = this.NestedCheckBoxHeaders;
+        } else {
+            modelsHeader = this.modelsCheckBoxHeaders;
+        }
+        return modelsHeader;
     }
 
     @action toggleModelsCheckBox = (selectedModel, checked, value) => {
@@ -211,18 +216,6 @@ class MainStore {
         return result;
     }
 
-    @computed get getOptions() {
-        let models = [];
-        switch (this.analysisForm.dataset_type) {
-            case "C":
-                models = this.CSOptionsList;
-                break;
-            case "D":
-                models = this.DIOptionsList;
-                break;
-        }
-        return models;
-    }
     @computed get getSelectedDataset() {
         let datasets = rootStore.dataStore.getDatasets();
         let enabledDatasets = datasets.filter(item => item.enabled == true);
@@ -246,7 +239,7 @@ class MainStore {
                         dataset_type: this.analysisForm.dataset_type,
                         models: this.getModels,
                         datasets: this.getSelectedDataset,
-                        options: this.getOptions,
+                        options: this.options,
                     },
                 };
             };
@@ -325,7 +318,6 @@ class MainStore {
             this.isUpdateComplete = true;
             return;
         }
-
         this.isExecuting = data.is_executing;
         this.isReadyToExecute = data.inputs_valid;
         if (data.outputs) {
@@ -336,7 +328,7 @@ class MainStore {
         this.analysisForm.analysis_description = inputs.analysis_description;
         this.analysisForm.dataset_type = inputs.dataset_type;
         this.options = inputs.options;
-        this.setOptions(inputs.options, this.analysisForm.dataset_type);
+        // this.setOptions(inputs.options, this.analysisForm.dataset_type);
         // unpack datasets
         var datasets = inputs.datasets;
         rootStore.dataStore.setDatasets(datasets);
@@ -392,28 +384,85 @@ class MainStore {
     @action getDatasetLength() {
         return rootStore.dataStore.getDataLength;
     }
-    @action getOptionsType(dataset_type) {
-        let options = [];
-        switch (dataset_type) {
+
+    @action getDatasetNamesHeader() {
+        let datasetNames = [];
+        switch (this.analysisForm.dataset_type) {
             case "C":
-                options = this.CSOptionsList;
+                datasetNames = ["Enable", "Datasets", "Adverse Direction"];
                 break;
             case "D":
-                options = this.DIOptionsList;
+                datasetNames = ["Enable", "Datasets"];
+                break;
+            case "DM":
+                datasetNames = ["Enable", "Datasets", "Degree", "Background"];
+                break;
+            case "N":
+                datasetNames = ["Enable", "Datasets"];
+                break;
+        }
+        return datasetNames;
+    }
+
+    @observable createOptions() {
+        let option = this.getOptions(this.analysisForm.dataset_type);
+        this.options.push(option);
+    }
+    @action getOptions(dataset_type) {
+        let options = {};
+        switch (dataset_type) {
+            case "C":
+                options = this.CSOptions;
+                break;
+            case "D":
+                options = this.DIOptions;
+                break;
+            case "DM":
+                options = this.DMTOptions;
+                break;
+            case "N":
+                options = this.NOptions;
                 break;
         }
         return options;
     }
 
-    @action setOptions(options, dataset_type) {
+    @action getOptionsLabels(dataset_type) {
+        let labels = [];
         switch (dataset_type) {
             case "C":
-                this.CSOptionsList = options;
+                labels = [
+                    "Option Set",
+                    "BMR Type",
+                    "BMRF",
+                    "Tail Probability",
+                    "Confidence Level",
+                    "Distribution",
+                    "Variance",
+                    "Polynomial Restriction",
+                    "Background",
+                ];
                 break;
             case "D":
-                this.DIOptionsList = options;
+                labels = ["Option Set", "Risk Type", "BMR", "Confidence Level", "Background"];
+                break;
+            case "DM":
+                labels = ["Option Set", "Risk Type", "BMR", "Confidence Level"];
+                break;
+            case "N":
+                labels = [
+                    "Option Set",
+                    "Risk Type",
+                    "BMR",
+                    "Confidence Level",
+                    "Litter Specific Covariate",
+                    "Background",
+                    "Bootstrap Iterations",
+                    "Bootstrap Seed",
+                ];
                 break;
         }
+        return labels;
     }
     @observable DIOptions = {
         bmr_type: "Extra",
@@ -432,61 +481,77 @@ class MainStore {
         polynomial_restriction: "Use dataset adverse direction",
         background: "Estimated",
     };
-    @observable DiHeader = ["Enable", "Datasets"];
-    @observable CHeader = ["Enable", "Datasets", "Adverse Direction"];
+    @observable NOptions = {
+        bmr_type: "Extra",
+        bmr_value: 0.05,
+        confidence_level: 0.95,
+        litter_sepcific_covariate: "Overall Mean",
+        background: "Estimated",
+        bootstrap_iterations: 1000,
+        bootstrap_speed: "Automatic",
+    };
+    @observable DMTOptions = {
+        bmr_type: "Extra",
+        bmr_value: 0.05,
+        confidence_level: 0.95,
+    };
     @observable AdverseDirectionList = [
         {value: "automatic", name: "Automatic"},
         {value: "up", name: "Up"},
         {value: "down", name: "Down"},
     ];
-
-    @action getDatasetNamesHeader() {
-        let datasetNames = [];
-        switch (this.analysisForm.dataset_type) {
-            case "C":
-                datasetNames = this.CHeader;
-                break;
-            case "D":
-                datasetNames = this.DiHeader;
-                break;
-        }
-        return datasetNames;
-    }
-
-    @action getOptionsLabels(dataset_type) {
-        let labels = [];
-        switch (dataset_type) {
-            case "C":
-                labels = [
-                    {label: "Option Set", name: "doses"},
-                    {label: "BMR Type", name: "ns"},
-                    {label: "BMRF", name: "means"},
-                    {label: "Tail Probability", name: "stdevs"},
-                    {label: "Confidence Level", name: "doses"},
-                    {label: "Distribution", name: "ns"},
-                    {label: "Variance", name: "means"},
-                    {label: "Polynomial Restriction", name: "stdevs"},
-                    {label: "Background", name: "doses"},
-                ];
-                break;
-            case "D":
-                labels = [
-                    {label: "Option Set", name: "doses"},
-                    {label: "Risk Type", name: "ns"},
-                    {label: "BMR", name: "means"},
-                    {label: "Confidence Level", name: "doses"},
-                    {label: "Background", name: "doses"},
-                ];
-                break;
-        }
-        return labels;
-    }
+    @observable degree = [
+        {value: "auto-select", name: "auto-select"},
+        {value: "1", name: "1"},
+        {value: "2", name: "2"},
+        {value: "3", name: "3"},
+    ];
+    @observable background = [
+        {value: "Estimated", name: "Esimated"},
+        {value: "0", name: "Zero"},
+    ];
 
     @observable modelTypes = [
         {name: "Continuous", value: "C"},
         {name: "Dichotomous", value: "D"},
-        {name: "Dichotomous-Multi-tumor (MS_Combo)", value: "DMT"},
-        {name: "Dichotomous-Nested", value: "DN"},
+        {name: "Dichotomous-Multi-tumor (MS_Combo)", value: "DM"},
+        {name: "Dichotomous-Nested", value: "N"},
+    ];
+    @observable NmodelType = [
+        {
+            model: "Nested Logistic",
+            values: [
+                {
+                    name: "frequentist_restricted-Nested_Logistic",
+                    type: "checkbox",
+                    isChecked: false,
+                    isDisabled: false,
+                },
+                {
+                    name: "frequentist_unrestricted-Nested_Logistic",
+                    type: "checkbox",
+                    isChecked: false,
+                    isDisabled: false,
+                },
+            ],
+        },
+        {
+            model: "NCTR",
+            values: [
+                {
+                    name: "frequentist_restricted-NCTR",
+                    type: "checkbox",
+                    isChecked: false,
+                    isDisabled: true,
+                },
+                {
+                    name: "frequentist_unrestricted-NCTR",
+                    type: "checkbox",
+                    isChecked: false,
+                    isDisabled: true,
+                },
+            ],
+        },
     ];
     @observable CmodelType = [
         {
@@ -921,6 +986,39 @@ class MainStore {
                     type: "checkBox",
                     isChecked: false,
                     prior_weight: "Prior Weight",
+                },
+            ],
+        },
+    };
+
+    @observable NestedCheckBoxHeaders = {
+        first: {
+            model: "",
+            values: [{name: "MLE", colspan: "2"}],
+        },
+        second: {
+            model: "",
+            values: [
+                {name: "Frequntist Restricted", colspan: "1"},
+                {name: "Frequentist Unrestricted", colspan: "1"},
+            ],
+        },
+        third: {
+            model: "Model Name",
+            values: [
+                {
+                    name: "Enable",
+                    model_name: "frequentist_restricted",
+                    colspan: "1",
+                    type: "checkBox",
+                    isChecked: false,
+                },
+                {
+                    name: "Enable",
+                    model_name: "frequentist_unrestricted",
+                    colspan: "1",
+                    type: "checkBox",
+                    isChecked: false,
                 },
             ],
         },

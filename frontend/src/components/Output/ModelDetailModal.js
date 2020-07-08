@@ -21,7 +21,7 @@ class ModelDetailModal extends Component {
                 outputStore.toggleModelDetailModal();
             };
         return (
-            <div className="container">
+            <div>
                 <div className="modal">
                     <div className="modal-dialog">
                         <div className="modal-content">
@@ -47,7 +47,7 @@ class ModelDetailModal extends Component {
                                 <Modal.Body>
                                     <div className="modal-body">
                                         <div className="row">
-                                            <div className="col col-sm-5 infotable">
+                                            <div className="col col-sm-4 infotable">
                                                 <InfoTable infoTable={outputStore.infoTable} />
                                             </div>
                                             <div className="col col-sm-3 modeloptions">
@@ -55,17 +55,17 @@ class ModelDetailModal extends Component {
                                                     modelOptions={outputStore.modelOptions}
                                                 />
                                             </div>
-                                            <div className="col col-sm-4">
+                                            <div className="col col-sm-3">
                                                 <ModelData modelData={outputStore.modelData} />
                                             </div>
                                         </div>
                                         <div className="row">
-                                            <div className="col benchmarkdose">
+                                            <div className="col col-sm-3 benchmarkdose">
                                                 <BenchmarkDose
                                                     benchmarkDose={outputStore.benchmarkDose}
                                                 />
                                             </div>
-                                            <div className="col">
+                                            <div className="col col-sm-3">
                                                 <ModelParameters
                                                     parameters={outputStore.parameters}
                                                 />

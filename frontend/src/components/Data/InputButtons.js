@@ -1,5 +1,7 @@
 import React, {Component} from "react";
 import {inject, observer} from "mobx-react";
+import DatasetList from "./DatasetList";
+import {toJS} from "mobx";
 
 @inject("dataStore")
 @observer
@@ -9,7 +11,11 @@ class InputButtons extends Component {
             onChange = e => {
                 dataStore.model_type = e.target.value;
             },
-            isEditSettings = dataStore.getEditSettings();
+            onClick = (e, id) => {
+                dataStore.setCurrentDatasetIndex(id);
+            },
+            isEditSettings = dataStore.getEditSettings(),
+            datasets = toJS(dataStore.datasets);
         return (
             <div>
                 {isEditSettings ? (
@@ -42,35 +48,7 @@ class InputButtons extends Component {
                     </div>
                 ) : null}
 
-                {dataStore.datasets.length ? (
-                    <div className="editdataset">
-                        <table className="table table-bordered table-hover">
-                            <thead>
-                                <tr className="table-primary">
-                                    <th>{isEditSettings ? "Edit" : null}&nbsp; Datasets</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {dataStore.datasets.map((item, index) => {
-                                    return [
-                                        <tr key={index} className="currentdataset">
-                                            <td>
-                                                <a
-                                                    onClick={() =>
-                                                        dataStore.setCurrentDatasetIndex(
-                                                            item.dataset_id
-                                                        )
-                                                    }>
-                                                    {item.dataset_name}
-                                                </a>
-                                            </td>
-                                        </tr>,
-                                    ];
-                                })}
-                            </tbody>
-                        </table>
-                    </div>
-                ) : null}
+                <DatasetList onClick={onClick.bind(this)} datasets={datasets} />
                 {dataStore.datasets.length && isEditSettings ? (
                     <div>
                         <button

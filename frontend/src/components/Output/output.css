@@ -1,38 +1,29 @@
 
 .output{
-  text-align: center;
   margin-top:20px;
   font-size: 12px;
 }
 
-.table{
-  margin-bottom: 200px;
+.result{
+  margin-left: 330px;
 }
 
-  
-div.modal-body{
-  padding:6px;
-  margin-top: 0px;
+.modal-content {
+  height: auto;
+  min-height: 100%;
+  border-radius: 0;
+  font-size: 12px;
 }
-  .modal-content {
-    height: 100%;
-    border-radius: 0;
-    position: relative;
-    overflow-y: auto;
-    font-size: 12px;
-    text-align: center;
-  }
 
-  .td-modelName:hover{
-          font-weight: bold;
-          cursor:pointer;
-          background-color:#0275d8;
-          color:white;
-  }
-  .fa-close{
+.td-modelName:hover{
+  font-weight: bold;
+  cursor:pointer;
+  background-color:#0275d8;
+  color:white;
+}
+.fa-close{
     color: red;
-  }
-
-  .dataset-name{
-    color:white;
-  }
+}
+.inputformreadonly{
+  text-align: center;
+}

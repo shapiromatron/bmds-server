@@ -64,42 +64,48 @@ class InputFormList extends Component {
                             currentDataset.dataset_name
                         )}
                     </div>
-                    <table className="inputformlist">
-                        <thead>
-                            <tr className="table-primary ">
-                                {labels.map((item, index) => {
-                                    return [<th key={index}>{item}</th>];
-                                })}
-                                {isEditSettings ? (
-                                    <td>
-                                        <button
-                                            type="submit"
-                                            className="btn btn-primary addrow"
-                                            onClick={() => dataStore.addRows(currentDataset)}>
-                                            <i className="fa fa-plus-square" aria-hidden="true"></i>{" "}
-                                        </button>
-                                    </td>
-                                ) : null}
-                            </tr>
-                            <tr>
-                                {Object.keys(currentDataset.column_names).map((item, i) => {
-                                    return [
-                                        <td key={i}>
-                                            <input
-                                                className="column-names"
-                                                name={item}
-                                                value={currentDataset.column_names[item]}
-                                                onChange={e =>
-                                                    changeColumnName(e, currentDataset.dataset_id)
-                                                }
-                                            />
-                                        </td>,
-                                    ];
-                                })}
-                                <td></td>
-                            </tr>
-                        </thead>
-                        {isEditSettings ? (
+                    {isEditSettings ? (
+                        <table className="inputformlist">
+                            <thead>
+                                <tr className="table-primary ">
+                                    {labels.map((item, index) => {
+                                        return [<th key={index}>{item}</th>];
+                                    })}
+                                    {isEditSettings ? (
+                                        <td>
+                                            <button
+                                                type="submit"
+                                                className="btn btn-primary addrow"
+                                                onClick={() => dataStore.addRows(currentDataset)}>
+                                                <i
+                                                    className="fa fa-plus-square"
+                                                    aria-hidden="true"></i>{" "}
+                                            </button>
+                                        </td>
+                                    ) : null}
+                                </tr>
+                                <tr>
+                                    {Object.keys(currentDataset.column_names).map((item, i) => {
+                                        return [
+                                            <td key={i}>
+                                                <input
+                                                    className="column-names"
+                                                    name={item}
+                                                    value={currentDataset.column_names[item]}
+                                                    onChange={e =>
+                                                        changeColumnName(
+                                                            e,
+                                                            currentDataset.dataset_id
+                                                        )
+                                                    }
+                                                />
+                                            </td>,
+                                        ];
+                                    })}
+                                    <td></td>
+                                </tr>
+                            </thead>
+
                             <tbody>
                                 {datasetInputForm.map((obj, i) => {
                                     return [
@@ -114,14 +120,13 @@ class InputFormList extends Component {
                                     ];
                                 })}
                             </tbody>
-                        ) : (
-                            <tbody>
-                                {datasetInputForm.map((obj, i) => {
-                                    return [<InputFormReadOnly key={i} row={obj} />];
-                                })}
-                            </tbody>
-                        )}
-                    </table>
+                        </table>
+                    ) : (
+                        <InputFormReadOnly
+                            datasets={datasetInputForm}
+                            currentDataset={currentDataset}
+                        />
+                    )}
                 </div>
             </div>
         );

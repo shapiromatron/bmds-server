@@ -131,6 +131,21 @@ class DataStore {
             item.model_type.includes(rootStore.mainStore.analysisForm.dataset_type)
         );
     }
+    @action getMappingDataset(dataset) {
+        let datasetInputForm = [];
+        Object.keys(dataset).map(key => {
+            if (Array.isArray(dataset[key])) {
+                dataset[key].map((val, i) => {
+                    if (!datasetInputForm[i]) {
+                        datasetInputForm.push({[key]: val});
+                    } else {
+                        datasetInputForm[i][key] = val;
+                    }
+                });
+            }
+        });
+        return datasetInputForm;
+    }
 
     @action getSelectedDatasets() {
         let dataset_type = rootStore.mainStore.analysisForm.dataset_type;

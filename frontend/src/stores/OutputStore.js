@@ -33,6 +33,7 @@ class OutputStore {
     @observable response_models = [];
     @observable loglikelihoods = [];
     @observable test_of_interest = [];
+    @observable selectedDatasetIndex = "";
 
     @action toggleModelDetailModal(output, model_index) {
         this.modelDetailModal = !this.modelDetailModal;
@@ -41,8 +42,24 @@ class OutputStore {
         }
     }
 
+    @action setCurrentDatasetIndex(dataset_id) {
+        this.selectedDatasetIndex = dataset_id;
+    }
     @action getExecutionOutputs() {
         return rootStore.mainStore.getExecutionOutputs();
+    }
+    @action getCurrentOutput(index) {
+        let outputs = this.getExecutionOutputs();
+        if (outputs != null) {
+            let currentOutputObject = outputs.find(item => item.dataset.dataset_id == index);
+            return currentOutputObject;
+        }
+    }
+    @action getDatasets() {
+        return rootStore.dataStore.datasets;
+    }
+    @action getMappingDataset(dataset) {
+        return rootStore.dataStore.getMappingDataset(dataset);
     }
     @action.bound
     mapOutputModal(output, model_index) {

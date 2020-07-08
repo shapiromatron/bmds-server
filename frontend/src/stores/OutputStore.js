@@ -1,7 +1,6 @@
 import {observable, action} from "mobx";
 import _ from "lodash";
 import rootStore from "./RootStore";
-import {toJS} from "mobx";
 
 class OutputStore {
     @observable modelDetailModal = false;

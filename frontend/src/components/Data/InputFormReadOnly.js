@@ -1,5 +1,4 @@
 import React from "react";
-import {toJS} from "mobx";
 
 const InputFormReadOnly = props => {
     return (

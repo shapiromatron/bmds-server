@@ -54,13 +54,12 @@ class InputFormList extends Component {
                     <div>
                         <div className="label">
                             <label>Dataset Name:</label>
-
                             <input
                                 type="text"
                                 name="dataset_name"
                                 value={currentDataset.dataset_name}
                                 onChange={e => onChange(e, currentDataset.dataset_id)}
-                            />
+                              />
                         </div>
                         <table className="inputformlist">
                             <thead>
@@ -102,7 +101,6 @@ class InputFormList extends Component {
                                     <td></td>
                                 </tr>
                             </thead>
-
                             <tbody>
                                 {datasetInputForm.map((obj, i) => {
                                     return [

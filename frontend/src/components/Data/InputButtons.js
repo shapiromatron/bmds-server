@@ -48,7 +48,6 @@ class InputButtons extends Component {
                         </form>
                     </div>
                 ) : null}
-
                 {dataStore.datasets.length ? (
                     <DatasetList onClick={onClick.bind(this)} datasets={datasets} />
                 ) : null}

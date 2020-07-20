@@ -12,7 +12,8 @@ const Root = (
         store={rootStore}
         dataStore={rootStore.dataStore}
         mainStore={rootStore.mainStore}
-        outputStore={rootStore.outputStore}>
+        outputStore={rootStore.outputStore}
+        navStore = {rootStore.navStore}>
         <App />
     </Provider>
 );

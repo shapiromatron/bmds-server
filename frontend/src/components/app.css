@@ -1,0 +1,33 @@
+.app-nav nav{
+    margin: 0;
+}
+.dropdown{
+        right: 4px;
+        left: auto;
+}
+
+.app-nav ul li {
+    position: relative; 
+    display: inline-block;
+  }
+
+a.dropdown-item{
+    color: darkblue;
+}
+
+.app-nav .dropdown a{
+    cursor: pointer;
+}
+.app-nav .dropdown-menu{
+    list-style-type: none;
+    text-align: center;
+}
+.app-nav .dropdown a:hover{
+background-color: rgb(199, 200, 238);
+}
+
+@media(max-width: 600px){
+    .app-nav .dropdown a{
+        position: relative;
+    }
+}

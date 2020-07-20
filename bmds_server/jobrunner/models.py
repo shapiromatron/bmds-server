@@ -60,6 +60,9 @@ class Job(models.Model):
     def get_excel_url(self):
         return reverse("api:job-excel", args=(str(self.id),))
 
+    def get_word_url(self):
+        return reverse("api:job-word", args=(str(self.id),))
+
     def inputs_valid(self) -> bool:
         try:
             validators.validate_input(self.inputs)

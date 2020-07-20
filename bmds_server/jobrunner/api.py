@@ -6,6 +6,10 @@ from rest_framework.authentication import TokenAuthentication
 from rest_framework.decorators import action
 from rest_framework.permissions import IsAdminUser
 from rest_framework.response import Response
+import io
+from pathlib import Path
+from docx import Document
+import pandas as pd
 
 from . import models, renderers, serializers, tasks, validators
 
@@ -105,15 +109,34 @@ class JobViewset(mixins.CreateModelMixin, mixins.RetrieveModelMixin, viewsets.Ge
         """
         Return Excel export of outputs for selected job
         """
-        instance = self.get_object()
+        # instance = self.get_object()
 
-        if not instance.is_finished:
-            return self.not_ready_yet()
+        # if not instance.is_finished:
+        #     return self.not_ready_yet()
 
-        fn, wb = instance.get_excel()
-        resp = Response(wb)
-        resp["Content-Disposition"] = 'attachment; filename="{}"'.format(fn)
-        return resp
+        # fn, wb = instance.get_excel()
+        # resp = Response(wb)
+        # resp["Content-Disposition"] = 'attachment; filename="{}"'.format(fn)
+        # return resp
+
+        df = pd.DataFrame(data=dict(a=[1,2,3],b=[4,5,6]))
+        f = io.BytesIO()
+        df.to_excel(f, index=False)
+        Path('~/Desktop/test.xlsx').expanduser().write_bytes(f.getvalue())
+        return Response(status=status.HTTP_201_CREATED)
+    
+    #todo
+    @action(detail=True, methods=("get",), renderer_classes=(renderers.docxRenderer,))
+    def word(self, request, *args, **kwargs):
+        """
+        Return Excel export of outputs for selected job
+        """
+        f = io.BytesIO()
+        document = Document()
+        document.add_heading('Hello world', 0)
+        document.save(f)
+        Path('~/Desktop/test.docx').expanduser().write_bytes(f.getvalue())
+        return Response(status=status.HTTP_201_CREATED)
 
     def get_queryset(self):
         return models.Job.objects.all()

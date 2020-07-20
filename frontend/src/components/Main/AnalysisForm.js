@@ -56,13 +56,13 @@ class AnalysisForm extends Component {
                                 })}
                             </select>
                         </div>
-                        <div className="btngroupform-group" role="toolbar">
-                            <button type="button" className="btn btn-primary">
+                        <div className="btngroup form-group" role="toolbar">
+                            <button type="button" className="btn btn-primary  mr-1">
                                 Load Analysis
                             </button>
                             <button
                                 type="button"
-                                className="btn btn-primary"
+                                className="btn btn-primary  mr-1"
                                 onClick={() => mainStore.saveAnalysis()}>
                                 Save Analysis
                             </button>

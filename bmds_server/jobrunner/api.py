@@ -1,6 +1,5 @@
 import io
 import json
-from pathlib import Path
 
 import pandas as pd
 from django.core.exceptions import ValidationError
@@ -120,10 +119,10 @@ class JobViewset(mixins.CreateModelMixin, mixins.RetrieveModelMixin, viewsets.Ge
         df = pd.DataFrame(data=dict(a=[1, 2, 3], b=[4, 5, 6]))
         f = io.BytesIO()
         df.to_excel(f, index=False)
-        Path("~/Desktop/test.xlsx").expanduser().write_bytes(f.getvalue())
         return Response(status=status.HTTP_201_CREATED)
 
-    # todo
+        # todo
+
     @action(detail=True, methods=("get",), renderer_classes=(renderers.docxRenderer,))
     def word(self, request, *args, **kwargs):
         """
@@ -133,7 +132,6 @@ class JobViewset(mixins.CreateModelMixin, mixins.RetrieveModelMixin, viewsets.Ge
         document = Document()
         document.add_heading("Hello world", 0)
         document.save(f)
-        Path("~/Desktop/test.docx").expanduser().write_bytes(f.getvalue())
         return Response(status=status.HTTP_201_CREATED)
 
     def get_queryset(self):

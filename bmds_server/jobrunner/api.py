@@ -110,22 +110,20 @@ class JobViewset(mixins.CreateModelMixin, mixins.RetrieveModelMixin, viewsets.Ge
         Return Excel export of outputs for selected job
         """
         # instance = self.get_object()
-
         # if not instance.is_finished:
         #     return self.not_ready_yet()
-
         # fn, wb = instance.get_excel()
         # resp = Response(wb)
         # resp["Content-Disposition"] = 'attachment; filename="{}"'.format(fn)
         # return resp
 
-        df = pd.DataFrame(data=dict(a=[1,2,3],b=[4,5,6]))
+        df = pd.DataFrame(data=dict(a=[1, 2, 3], b=[4, 5, 6]))
         f = io.BytesIO()
         df.to_excel(f, index=False)
         Path('~/Desktop/test.xlsx').expanduser().write_bytes(f.getvalue())
         return Response(status=status.HTTP_201_CREATED)
-    
-    #todo
+
+    # todo
     @action(detail=True, methods=("get",), renderer_classes=(renderers.docxRenderer,))
     def word(self, request, *args, **kwargs):
         """

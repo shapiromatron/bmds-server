@@ -16,9 +16,10 @@ class XlsxRenderer(BaseRenderer):
 
     def render(self, wb, media_type=None, renderer_context=None):
         return wb
-        
+
+
 class docxRenderer(BaseRenderer):
-    media_type="application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+    media_type = "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
     format = "docx"
 
     def render(self, wb, media_type=None, renderer_context=None):

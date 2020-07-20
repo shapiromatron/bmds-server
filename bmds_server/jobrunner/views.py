@@ -13,6 +13,7 @@ from . import forms, models
 class Home(CreateView):
     model = models.Job
     form_class = forms.CreateJobForm
+
     def get_success_url(self):
         return self.object.get_edit_url()
 
@@ -40,6 +41,7 @@ class JobQuery(RedirectView):
 class JobDetail(DetailView):
     model = models.Job
     print("job detail class")
+
     def get_object(self, queryset=None):
         kwargs = dict(pk=self.kwargs.get("pk"), password=self.kwargs.get("password"))
         if kwargs["password"] is None:
@@ -60,7 +62,7 @@ class JobDetail(DetailView):
                 "patchInputUrl": self.object.get_api_patch_inputs(),
                 "executeUrl": self.object.get_api_execute_url(),
                 "excelUrl": self.object.get_excel_url(),
-                "wordUrl":self.object.get_word_url(),
+                "wordUrl": self.object.get_word_url(),
                 "allowDatasetEditing": True,
                 "allowBmdsVersionEditing": True,
             }

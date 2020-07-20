@@ -1,15 +1,15 @@
+import io
 import json
+from pathlib import Path
 
+import pandas as pd
 from django.core.exceptions import ValidationError
+from docx import Document
 from rest_framework import exceptions, mixins, status, viewsets
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.decorators import action
 from rest_framework.permissions import IsAdminUser
 from rest_framework.response import Response
-import io
-from pathlib import Path
-from docx import Document
-import pandas as pd
 
 from . import models, renderers, serializers, tasks, validators
 
@@ -120,7 +120,7 @@ class JobViewset(mixins.CreateModelMixin, mixins.RetrieveModelMixin, viewsets.Ge
         df = pd.DataFrame(data=dict(a=[1, 2, 3], b=[4, 5, 6]))
         f = io.BytesIO()
         df.to_excel(f, index=False)
-        Path('~/Desktop/test.xlsx').expanduser().write_bytes(f.getvalue())
+        Path("~/Desktop/test.xlsx").expanduser().write_bytes(f.getvalue())
         return Response(status=status.HTTP_201_CREATED)
 
     # todo
@@ -131,9 +131,9 @@ class JobViewset(mixins.CreateModelMixin, mixins.RetrieveModelMixin, viewsets.Ge
         """
         f = io.BytesIO()
         document = Document()
-        document.add_heading('Hello world', 0)
+        document.add_heading("Hello world", 0)
         document.save(f)
-        Path('~/Desktop/test.docx').expanduser().write_bytes(f.getvalue())
+        Path("~/Desktop/test.docx").expanduser().write_bytes(f.getvalue())
         return Response(status=status.HTTP_201_CREATED)
 
     def get_queryset(self):

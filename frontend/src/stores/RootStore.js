@@ -1,7 +1,7 @@
 import dataStore from "./DataStore";
 import outputStore from "./OutputStore";
 import mainStore from "./MainStore";
-import navStore from "./NavStore"
+import navStore from "./NavStore";
 
 class RootStore {
     constructor() {

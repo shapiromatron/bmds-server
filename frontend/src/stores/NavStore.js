@@ -1,9 +1,8 @@
-import {observable, action, computed} from "mobx";
+import {observable, action} from "mobx";
 import rootStore from "./RootStore";
 
 class NavStore {
-
-   @observable config =rootStore.mainStore.config;
+    @observable config = rootStore.mainStore.config;
 
     @action
     async downloadExcelReport() {
@@ -30,7 +29,6 @@ class NavStore {
                 console.error("error", error);
             });
     }
-
 }
 
 const navStore = new NavStore();

@@ -50,11 +50,11 @@ class OutputStore {
     }
     @action getCurrentOutput(index) {
         let outputs = this.getExecutionOutputs();
-        let currentOutputObject=null;
+        let currentOutputObject = null;
         if (outputs != null) {
             currentOutputObject = outputs.find(item => item.dataset.dataset_id == index);
         }
-        return currentOutputObject
+        return currentOutputObject;
     }
     @action getDatasets() {
         return rootStore.dataStore.datasets;

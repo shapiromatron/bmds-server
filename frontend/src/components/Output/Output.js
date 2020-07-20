@@ -21,13 +21,14 @@ class Output extends Component {
             selectedOutput = outputStore.getCurrentOutput(outputStore.selectedDatasetIndex),
             datasetList = outputStore.getDatasets();
         let mappedDatasets = [];
+        let labels = [];
         if (selectedOutput != null) {
             labels = outputStore.getLabels(selectedOutput.dataset.model_type);
             mappedDatasets = outputStore.getMappingDataset(selectedOutput.dataset);
         }
         return (
             <div className="output">
-                { selectedOutput != null? (
+                {selectedOutput != null ? (
                     <div>
                         <div>
                             <div className="row">
@@ -61,9 +62,7 @@ class Output extends Component {
 
                         <div>{outputStore.modelDetailModal ? <ModelDetailModal /> : null}</div>
                     </div>
-                ) : (
-                   null
-                )}
+                ) : null}
             </div>
         );
     }

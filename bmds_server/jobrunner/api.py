@@ -108,7 +108,7 @@ class JobViewset(mixins.CreateModelMixin, mixins.RetrieveModelMixin, viewsets.Ge
         """
         Return Excel export of outputs for selected job
         """
-        # instance = self.get_object()
+        instance = self.get_object()
         # if not instance.is_finished:
         #     return self.not_ready_yet()
         # fn, wb = instance.get_excel()

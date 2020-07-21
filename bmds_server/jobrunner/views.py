@@ -54,6 +54,8 @@ class JobDetail(DetailView):
         config = {
             "apiUrl": self.object.get_api_url(),
             "url": self.object.get_absolute_url(),
+            "excelUrl": self.object.get_excel_url(),
+            "wordUrl": self.object.get_word_url(),
         }
         if self.edit_mode:
             config["editSettings"] = {

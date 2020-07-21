@@ -108,31 +108,39 @@ class JobViewset(mixins.CreateModelMixin, mixins.RetrieveModelMixin, viewsets.Ge
         """
         Return Excel export of outputs for selected job
         """
-        # instance = self.get_object()
+        instance = self.get_object()
+
         # if not instance.is_finished:
         #     return self.not_ready_yet()
         # fn, wb = instance.get_excel()
-        # resp = Response(wb)
-        # resp["Content-Disposition"] = 'attachment; filename="{}"'.format(fn)
-        # return resp
 
+        # TODO - set to temporary file for building UI - change later
         df = pd.DataFrame(data=dict(a=[1, 2, 3], b=[4, 5, 6]))
         f = io.BytesIO()
         df.to_excel(f, index=False)
-        return Response(status=status.HTTP_201_CREATED)
 
-        # todo
+        data = renderers.BinaryFile(data=f, filename=str(instance.id))
+        return Response(data)
 
-    @action(detail=True, methods=("get",), renderer_classes=(renderers.docxRenderer,))
+    @action(detail=True, methods=("get",), renderer_classes=(renderers.DocxRenderer,))
     def word(self, request, *args, **kwargs):
         """
-        Return Excel export of outputs for selected job
+        Return Word report for the selected job
         """
+        instance = self.get_object()
+
+        # if not instance.is_finished:
+        #     return self.not_ready_yet()
+        # fn, wb = instance.get_word()
+
+        # TODO - set to temporary file for building UI - change later
         f = io.BytesIO()
         document = Document()
         document.add_heading("Hello world", 0)
         document.save(f)
-        return Response(status=status.HTTP_201_CREATED)
+
+        data = renderers.BinaryFile(data=f, filename=str(instance.id))
+        return Response(data)
 
     def get_queryset(self):
         return models.Job.objects.all()

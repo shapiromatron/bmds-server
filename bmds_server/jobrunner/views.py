@@ -40,7 +40,6 @@ class JobQuery(RedirectView):
 
 class JobDetail(DetailView):
     model = models.Job
-    print("job detail class")
 
     def get_object(self, queryset=None):
         kwargs = dict(pk=self.kwargs.get("pk"), password=self.kwargs.get("password"))
@@ -54,6 +53,8 @@ class JobDetail(DetailView):
         config = {
             "apiUrl": self.object.get_api_url(),
             "url": self.object.get_absolute_url(),
+            "excelUrl": self.object.get_excel_url(),
+            "wordUrl": self.object.get_word_url(),
         }
         if self.edit_mode:
             config["editSettings"] = {
@@ -61,8 +62,6 @@ class JobDetail(DetailView):
                 "editUrl": self.object.get_edit_url(),
                 "patchInputUrl": self.object.get_api_patch_inputs(),
                 "executeUrl": self.object.get_api_execute_url(),
-                "excelUrl": self.object.get_excel_url(),
-                "wordUrl": self.object.get_word_url(),
                 "allowDatasetEditing": True,
                 "allowBmdsVersionEditing": True,
             }

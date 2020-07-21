@@ -10,11 +10,11 @@ import Output from "./Output/Output";
 import StoreDebugger from "./StoreDebugger/StoreDebugger";
 import "./app.css";
 
-@inject("navStore")
+@inject("mainStore")
 @observer
 class Navigation extends Component {
     render() {
-        const {navStore} = this.props;
+        const {excelUrl, wordUrl} = this.props.mainStore.config;
         return (
             <div className="app-nav">
                 <nav className="navbar navbar-expand-md bg-primary navbar-dark">
@@ -44,7 +44,7 @@ class Navigation extends Component {
                     </div>
                     <div className="dropdown btn-group pull-xs-right">
                         <button
-                            className="btn btn-primary "
+                            className="btn btn-primary"
                             type="button"
                             id="dropdownMenuButton"
                             data-toggle="dropdown"
@@ -55,15 +55,11 @@ class Navigation extends Component {
                         <div
                             className="dropdown-menu dropdown-menu-right"
                             aria-labelledby="dropdownMenuButton">
-                            <a
-                                className="dropdown-item"
-                                onClick={e => navStore.downloadExcelReport()}>
-                                Download Report (Excel)
+                            <a className="text-left dropdown-item" href={excelUrl}>
+                                <i className="fa fa-file-excel-o"></i>&nbsp;Download dataset
                             </a>
-                            <a
-                                className="dropdown-item"
-                                onClick={e => navStore.downloadWordReport()}>
-                                Download Report (Word)
+                            <a className="text-left dropdown-item" href={wordUrl}>
+                                <i className="fa fa-file-word-o"></i>&nbsp;Download report
                             </a>
                         </div>
                     </div>

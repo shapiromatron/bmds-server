@@ -63,8 +63,6 @@ class JobDetail(DetailView):
                 "editUrl": self.object.get_edit_url(),
                 "patchInputUrl": self.object.get_api_patch_inputs(),
                 "executeUrl": self.object.get_api_execute_url(),
-                "excelUrl": self.object.get_excel_url(),
-                "wordUrl": self.object.get_word_url(),
                 "allowDatasetEditing": True,
                 "allowBmdsVersionEditing": True,
             }

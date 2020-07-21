@@ -8,7 +8,7 @@
                 <div class="site-slogan">United States Environmental Protection Agency</div>
             </hgroup>
         </header>
-        <nav class="nav main-nav clearfix" role="navigation">
+          <nav class="nav main-nav clearfix" role="navigation">
             <div class="nav__inner">
                 <h2 class="element-invisible">Main menu</h2>
                 <ul class="menu" role="menu">
@@ -24,16 +24,21 @@
                             title="Learn more about: our mission and what we do, how we are organized, and our history."
                             class="menu-link" role="menuitem">About EPA</a></li>
                 </ul>
-                <form class="epa-search" method="get" action="https://search.epa.gov/epasearch/epasearch"><label
-                        class="element-hidden" for="search-box">Search</label><input class="form-text"
-                        placeholder="Search EPA.gov" name="querytext" id="search-box"><button
-                        class="epa-search-button white-text-button" id="search-button" type="submit" title="Search"
-                        data-gtm-vis-recent-on-screen-42870_124="1248" data-gtm-vis-first-on-screen-42870_124="1248"
-                        data-gtm-vis-total-visible-time-42870_124="100"
-                        data-gtm-vis-has-fired-42870_124="1">Search</button><input type="hidden" name="areaname"
-                        value=""><input type="hidden" name="areacontacts" value=""><input type="hidden"
-                        name="areasearchurl" value=""><input type="hidden" name="typeofsearch" value="epa"><input
-                        type="hidden" name="result_template" value="2col.ftl"></form>
+                <form class="epa-search" method="get" action="https://search.epa.gov/epasearch/epasearch">
+                    <label class="element-hidden" for="search-box">Search</label>
+                        <input type="hidden" name="areaname" value="">
+                        <input type="hidden" name="areacontacts" value="">
+                        <input type="hidden" name="areasearchurl" value="">
+                        <input type="hidden" name="typeofsearch" value="epa">
+                        <input type="hidden" name="result_template" value="2col.ftl">
+                        <div class="input-group">
+                            <input type="text" class="form-control " placeholder="Search EPA.gov" name="querytext" id="search-box">
+                            <div class="input-group-append">
+                              <button type="submit" class="btn btn-outline-primary" ><i class="fa fa-search" aria-hidden="true"></i></button>
+
+                            </div>
+                          </div>
+                    </form>
             </div>
         </nav>
         <div class="contact-share-container">

@@ -55,7 +55,6 @@ img{
   }
 }
 
-
 .site-slogan {
   color: #0071bc;
   font-family: Arial, sans-serif;
@@ -83,7 +82,6 @@ img{
 }
 }
 
-  
 hgroup{
   display:block;
 }
@@ -145,7 +143,7 @@ hgroup{
   }
   @media screen and (min-width: 46em) {
     .main-nav > .nav__inner > .menu > .menu-item > .menu-link {
-      font-size: 1.5rem;
+      font-size: 1.2rem;
     }
   }
   .main-nav > .nav__inner > .menu > .menu-item > .active {
@@ -230,27 +228,7 @@ hgroup{
     padding: 0.2647058824em 2.8235294118em 0.2647058824em 0.6470588235em;
     width: 100%;
   }
-  
-  .epa-search-button {
-    background-color: #02bfe7;
-    background-image: url(https://www.epa.gov/sites/all/themes/epa/img/svg/search.svg);
-    background-position: 50% 50%;
-    background-repeat: no-repeat;
-    background-size: 12px 12px;
-    border-color: #02bfe7;
-    border-radius: 0 3px 3px 0;
-    box-sizing: border-box;
-    color: #212121;
-    font: 0/0 a;
-    height: 28px;
-    right: 0;
-    position: absolute;
-    text-decoration: none;
-    text-indent: -999em; /* BlackBerry fix */
-    text-shadow: none;
-    top: 18px;
-    width: 44px;
-  }
+
   .epa-search-button:focus,
   .epa-search-button:hover {
     background-color: #046b99;
@@ -298,11 +276,13 @@ svg:not(:root) {
 .icon {
   display: inline-block;
   fill: currentColor;
-  height: 1em;
+  height: 0.8em;
   position: relative;
-  top: -0.0625em;
-  vertical-align: middle;
-  width: 1em;
+  font: 20px;
+}
+
+.share-links li {
+    text-align: -webkit-match-parent;
 }
 .app-header .contact-share-container .share-links {
   margin: 0;
@@ -320,17 +300,7 @@ svg:not(:root) {
   vertical-align: middle;
   white-space: nowrap;
 }
-.share-links__link {
-  border: 1px solid #0071bc;
-  border-radius: 50%;
-  color: #0071bc;
-  display: inline-block;
-  font-size: 4.6rem;
-  height: 0.666666em;
-  line-height: 0.666666em;
-  vertical-align: middle;
-  width: 0.666666em;
-}
+
 a:-webkit-any-link {
   color: -webkit-link;
   cursor: pointer;
@@ -383,8 +353,8 @@ li {
   }
   
   .region-footer .col__title {
-    font-size: 2rem;
-    margin: 0 0 1.25em;
+    font-size: 20px ;
+    margin: 0 0 25px;
   }
   
   .region-footer .last-updated {
@@ -457,8 +427,7 @@ li {
     box-shadow: none;
     opacity: .8;
   }
-  
-  .social-facebook {
+ .social-facebook {
     background: url(https://www.epa.gov/sites/all/themes/epa/img/svg/epa_icons_Facebook.svg) no-repeat;
   }
   .social-flickr {
@@ -472,6 +441,72 @@ li {
   }
   .social-youtube {
     background: url(https://www.epa.gov/sites/all/themes/epa/img/svg/epa_icons_YouTube.svg) no-repeat;
-  }
+  } 
   
-  
+/* .masthead .form-inline{
+  margin-left: 400px;
+} */
+
+
+
+
+#block-pane-epa-web-area-connect,
+#block-pane-social-sharing {
+  display: inline-block;
+  margin-left: 1em;
+  vertical-align: top;
+}
+
+.connect-title {
+  display: inline-block;
+  line-height: 1.882353;
+  margin-right: 0.5em;
+  text-transform: uppercase;
+  outline: none !important;
+}
+
+.connect-title__link {
+  text-decoration: none;
+  font: 17px;
+  font-family: Roboto;
+}
+
+
+.share-links {
+  display: inline-block;
+  list-style: none;
+  margin: 0 0 0.75em;
+  padding: 0;
+}
+
+.share-links__item {
+  display: -moz-inline-stack;
+  display: inline-block;
+  margin: 0;
+  vertical-align: middle;
+  white-space: nowrap;
+}
+
+.share-links__item + .share-links__item {
+  margin-left: 0.5em;
+}
+
+.share-links__link {
+  border: 1px solid #0071bc;
+  border-radius: 50%;
+  color: #0071bc;
+  display: inline-block;
+  font-size: 4.6rem;
+  height: 0.666666em;
+  line-height: 0.666666em;
+  vertical-align: middle;
+  width: 0.666666em;
+}
+
+.share-links__link:focus,
+.share-links__link:hover {
+  background-color: #0071bc;
+  color: #fff;
+  text-decoration: none;
+}
+

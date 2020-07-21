@@ -29,24 +29,14 @@ div.col{
 }
 
 .analysis-form Button {
-    margin-right: 10px;
     text-overflow: inherit;
-
+    font-size: 12px;
+    padding: 6px 6px;
 
 }
 .btn-group{
     text-align: center;
 }
-/* .analysis-form .form-control:focus{
-    outline:none;
-    border-color:black;
-    box-shadow: none;
-}
-.options-table .form-control:focus{
-    outline:none;
-    border-color:black;
-    box-shadow: none;
-} */
  .options-table th{
     font-size: 14px;
     color: black;
@@ -148,10 +138,13 @@ div.col{
     justify-content: center;
 }
 
-@media only screen and (min-width: 768px){
+@media only screen and (max-width: 768px){
     .analysis-form button{
         margin-bottom: 10px;
         justify-content: center;
+    }
+    .analysis-form{
+        margin-bottom:20px ;
     }
 }
 

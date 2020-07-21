@@ -363,10 +363,13 @@ li {
   
   .region-footer .last-updated {
     font-family: "Source Sans Pro", "Helvetica Neue", "Helvetica", "Roboto", "Arial", sans-serif;
-    font-size: 1.2rem;
+    font-size: 12px;
     font-weight: 500;
     padding: 0.8333em 0 0;
     text-transform: uppercase;
+  }
+  .last-updated p{
+    font-size: 12px;
   }
   
   .region-footer .menu {
@@ -379,7 +382,7 @@ li {
   
   .region-footer .menu a {
     display: inline-block;
-    font-size: 1rem;
+    font-size: 15px;
     line-height: 1.2;
     margin: 0;
     padding: 0;

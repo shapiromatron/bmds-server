@@ -1,23 +1,12 @@
 body{
   padding:0 !important;
 }
-
 .masthead {
-    padding-bottom: 1em;
-    padding-top: 1.4em;
-    position: relative;
-}
-.masthead hgroup{
-  margin-left: 200px;
+  padding-bottom: 1em;
+  padding-top: 1.4em;
+  position: relative;
 }
 
-.site-logo {
-  display: none;
-}
-img{
-  height: auto;
-  max-width: 100%;
-}
 .site-name {
   height: 31px;
   margin: 0 0 0.125em;
@@ -39,6 +28,17 @@ img{
   position: relative;
   z-index: 1;
 }
+
+.site-slogan {
+  color: #0071bc;
+  font-family: Arial, sans-serif;
+  font-size: 11px;
+  font-weight: 500;
+  line-height: 1;
+  margin-top: 0;
+  position: relative;
+}
+
 @media screen and (min-width: 23em) {
   .site-name {
     float: left;
@@ -55,32 +55,21 @@ img{
   }
 }
 
-
-.site-slogan {
-  color: #0071bc;
-  font-family: Arial, sans-serif;
-  font-size: 1.1rem;
-  font-weight: 500;
-  line-height: 1;
-  margin-top: 0;
-  position: relative;
-  outline: none !important;
-}
-@media screen and (min-width: 50em){
-  .site-name-and-slogan {
-    float: left;
+@media screen and (min-width: 35em), print and (min-width: 35em) {
+.masthead {
+    max-width: 60em;
 }
 }
-
-@media screen and (min-width: 23em){
-  .site-name {
-
-    margin-right: 0.2em;
-  }
-  .site-slogan {
-
-    width: 21.8em;
+.masthead hgroup{
+  margin-left: 200px;
 }
+
+.site-logo {
+  display: none;
+}
+img{
+  height: auto;
+  max-width: 100%;
 }
 
   
@@ -195,13 +184,7 @@ hgroup{
       margin: 0;
       padding: 0;
     }
-  /** Search Box ****************************************************************/
- .epa-search {
-    clear: both;
-    padding-top: 1em;
-    position: fixed;
-    margin-top: auto;
-  }
+  
     
   @media screen and (min-width: 50em) {
     .epa-search {
@@ -252,6 +235,9 @@ hgroup{
   
   .app-header .nav .epa-search {
     right: 23%;
+}
+.app-header header{
+  display: block;
 }
 
 .app-header .contact-share-container {
@@ -449,45 +435,47 @@ li {
   .social-youtube {
     background: url(https://www.epa.gov/sites/all/themes/epa/img/svg/epa_icons_YouTube.svg) no-repeat;
   } 
-  
-/* .masthead .form-inline{
-  margin-left: 400px;
-} */
 
-.masthead .form-inline{
-height: auto;
-margin: auto;
-}
-  /* new navbar */
 
 a.nav-link{
-  font-size: 1rem;
+  font-size: 15px;
   color: white !important ;
   display: block;
   margin: 0;
   font-weight: bold;
   font-family: "Merriweather", "Georgia", "Cambria", "Times New Roman", "Times", serif;
   line-height: 1;
-  padding: 1.2em 1.6em;
+  padding: 1.2em 20px ;
   text-decoration: none;
 }
-.epa-navbar ul {
-  text-align: center;
-  margin-left: 20px;
-  padding: auto;
+
+ a.nav-link:hover {
+  background-color: #071a57;
+  color: #fff;
 }
-.form-inline button{
-  background-color: #0071bc;;
-}
+
+
 .form-inline .fa-search{
   color: white !important;
 }
-
-.epa-navbar{
+.search-input input{
+  height: 30px;
+}
+.search-input button{
+  height: 30px;
+}
+.search-input .btn .fa{
+  vertical-align: center;
+}
+.epa-nav .navbar-collapse{
   margin-left: 150px;
 }
+
 .epa-nav{
   background-color: #0071bc;
+  padding: 0px;
+  line-height: 1;
+  height: 50px;
 }
 
 
@@ -550,3 +538,4 @@ a.nav-link{
   color: #fff;
   text-decoration: none;
 }
+

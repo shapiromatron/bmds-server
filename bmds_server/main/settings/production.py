@@ -3,8 +3,14 @@
 from decouple import config
 
 from .base import *
+from ..constants import SkinStyle
 
 DEBUG = False
+
+# deployment environment
+SERVER_ROLE = "test deployment"
+SERVER_BANNER_COLOR = "#EE8416"
+SKIN = SkinStyle(int(os.environ.get("DJANGO_SKIN", SkinStyle.NONE.value)))
 
 ADMINS = []
 _admin_names = config("DJANGO_ADMIN_NAMES")

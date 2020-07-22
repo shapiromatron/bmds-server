@@ -5,11 +5,15 @@ from pathlib import Path
 
 from decouple import config
 
+from ..constants import SkinStyle
+
 PROJECT_NAME = "bmds-server"
 BASE_DIR = Path(__file__).parents[2].resolve()
 ROOT_DIR = Path(__file__).parents[3].resolve()
 PUBLIC_DATA_ROOT = Path(os.environ.get("PUBLIC_DATA_ROOT", ROOT_DIR / "public"))
 LOGS_PATH = Path(os.environ.get("LOGS_PATH", ROOT_DIR))
+
+SKIN = SkinStyle.NONE
 
 INSTALLED_APPS = [
     "django.contrib.admin",
@@ -49,6 +53,7 @@ TEMPLATES = [
                 "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
+                "bmds_server.main.context_processors.from_settings",
             ]
         },
     }

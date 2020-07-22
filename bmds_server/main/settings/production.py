@@ -8,9 +8,9 @@ from ..constants import SkinStyle
 DEBUG = False
 
 # deployment environment
-SERVER_ROLE = "test deployment"
+SERVER_ROLE = os.environ["DJANGO_SERVER_ROLE"]
 SERVER_BANNER_COLOR = "#EE8416"
-SKIN = SkinStyle(int(os.environ.get("DJANGO_SKIN", SkinStyle.NONE.value)))
+SKIN = SkinStyle(int(os.environ["DJANGO_SKIN"]))
 
 ADMINS = []
 _admin_names = config("DJANGO_ADMIN_NAMES")

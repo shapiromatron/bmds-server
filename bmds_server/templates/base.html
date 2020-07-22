@@ -15,9 +15,12 @@
           href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" type="text/css"
           href="{% static 'css/site.css' %}">
+    <link rel="stylesheet" type="text/css"
+          href="{% static 'css/epa-styles.css' %}">
+    {% include "./includes/environment_banner.html" %}
 </head>
 <body>
-
+{% include "./includes/epa-header.html" %}
 <nav class="navbar navbar-expand-md navbar-dark bg-dark">
   <a class="navbar-brand" href="{% url 'home' %}">BMDS Online</a>
 
@@ -61,7 +64,7 @@
 {% block content %}
 {% endblock content %}
 </div>
-
+{% include "./includes/epa-footer.html" %}
 <script type="text/javascript"
         src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
 <script charset="utf-8"

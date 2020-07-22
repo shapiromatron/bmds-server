@@ -1,0 +1,518 @@
+body{
+  padding:0 !important;
+}
+.masthead {
+  padding-bottom: 1em;
+  padding-top: 1.4em;
+  position: relative;
+}
+
+.site-name {
+  height: 31px;
+  margin: 0 0 0.125em;
+  padding: 0;
+  width: 101px;
+}
+.site-name span {
+  background: url(https://www.epa.gov/sites/all/themes/epa/img/svg/epa-logo.svg) no-repeat;
+  color: transparent;
+  display: block;
+  font: 0/0 a;
+  height: 31px;
+  text-shadow: none;
+}
+.site-name > a {
+  display: block;
+  margin: 0;
+  padding: 0;
+  position: relative;
+  z-index: 1;
+}
+
+.site-slogan {
+  color: #0071bc;
+  font-family: Arial, sans-serif;
+  font-size: 11px;
+  font-weight: 500;
+  line-height: 1;
+  margin-top: 0;
+  position: relative;
+}
+
+@media screen and (min-width: 23em) {
+  .site-name {
+    float: left;
+    margin-right: 0.2em;
+  }
+  .site-slogan {
+    top: -1px;
+    width: 21.8em;
+  }
+}
+@media screen and (min-width: 50em) {
+  .site-name-and-slogan {
+    float: left;
+  }
+}
+
+@media screen and (min-width: 35em), print and (min-width: 35em) {
+.masthead {
+    max-width: 60em;
+}
+}
+.masthead hgroup{
+  margin-left: 200px;
+}
+
+.site-logo {
+  display: none;
+}
+img{
+  height: auto;
+  max-width: 100%;
+}
+
+
+hgroup{
+  display:block;
+}
+
+
+/* main nav */
+
+.main-footer > .main-footer__inner,
+.main-nav > .nav__inner,
+.secondary-nav {
+  margin: 0 auto;
+  max-width: 35em;
+  padding: 0 1em;
+  position: relative;
+}
+
+@media screen and (min-width: 35em), print and (min-width: 35em) {
+  .main-nav > .nav__inner,
+  .masthead,
+  .main-footer > .main-footer__inner {
+    max-width: 60em;
+  }
+}
+
+.main-nav > .menu > .menu-item {
+  display: block;
+  float: left; /* LTR */
+}
+.main-nav > .menu > .menu-item > .menu-link {
+  display: block;
+  white-space: nowrap;
+}
+
+.masthead,
+.main-nav,
+.main-footer {
+      width: 100%;
+    }
+
+/** Main Nav ******************************************************************/
+.main-nav {
+  background-color: #0071bc;
+  line-height: 1;
+}
+.main-nav > .nav__inner > .menu {
+  float: left;
+}
+.main-nav > .nav__inner > .menu > .menu-item {
+  float: left;
+}
+.main-nav > .nav__inner > .menu > .menu-item > .menu-link {
+  color: #fff;
+  font-family: "Merriweather", "Georgia", "Cambria", "Times New Roman", "Times", serif;
+  font-size: 12px;
+  font-weight: bold;
+  line-height: 0.5;
+  padding: 1em 1.2em;
+  text-decoration: none;
+}
+@media screen and (min-width: 46em) {
+  .main-nav > .nav__inner > .menu > .menu-item > .menu-link {
+    font-size: 1.2rem;
+  }
+}
+.main-nav > .nav__inner > .menu > .menu-item > .active {
+  background-color: #112e51;
+}
+.main-nav > .nav__inner > .menu > .menu-item > .menu-link:focus,
+.main-nav > .nav__inner > .menu > .menu-item > .menu-link:hover,
+.main-nav > .nav__inner > .menu > .menu-item:hover > .menu-link,
+.main-nav > .nav__inner > .menu > .show-menu > .menu-link {
+  background-color: #112e51;
+  box-shadow: none;
+}
+
+.nav form{
+  position: relative;
+  top: -120px;
+}
+.main-nav{
+  height: 60px;
+}
+.element-invisible {
+  clip: rect(1px, 1px, 1px, 1px);
+  position: absolute !important;
+}
+.element-hidden {
+  display: none;
+}
+
+.menu:after {
+  clear: both;
+  content: "";
+  display: table;
+}
+
+/** Menus *********************************************************************/
+.menu {
+  list-style: none !important;
+  margin: 0;
+  padding: 0;
+}
+.menu-item {
+  margin: 0;
+}
+.menu-link {
+  display: block;
+  margin: 0;
+  padding: 0;
+}
+
+@media screen and (min-width: 50em) {
+  .epa-search {
+    clear: right;
+    padding-top: 60px;
+    float: right;
+    width: 16.5em;
+  }
+}
+@media screen and (min-width: 65em) {
+  .epa-search {
+    bottom: 0em;
+    padding-right: 1em;
+    position: fixed;
+    right: 0;
+  }
+  .js .epa-search {
+    bottom: 0em;
+  }
+}
+
+.epa-search > .form-text {
+  border-color: #0071bc;
+  border-radius: 0 3px 3px 0;
+  color: #212121;
+  height: 1.6470588235em;
+  line-height: 1;
+  padding: 0.2647058824em 2.8235294118em 0.2647058824em 0.6470588235em;
+  width: 100%;
+}
+
+.epa-search-button:focus,
+.epa-search-button:hover {
+  background-color: #046b99;
+  border-color: #046b99;
+  box-shadow: none;
+}
+@media screen and (min-width: 50em) {
+  .epa-search-button {
+    top: 0;
+  }
+}
+@media screen and (min-width: 61em) {
+  .js .epa-search > .form-text {
+    border-color: #fff;
+  }
+}
+
+.app-header .nav .epa-search {
+  right: 23%;
+}
+.app-header header{
+  display: block;
+}
+
+.app-header .contact-share-container {
+  max-width: 60em;
+  margin: 0 auto;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  padding: 5px 0;
+}
+.connect-title {
+  display: inline-block;
+  line-height: 1.882353;
+  margin-right: 0.5em;
+  text-transform: uppercase;
+}
+
+svg:not(:root) {
+  overflow: hidden;
+}
+.icon--social-link {
+  left: -9px;
+  top: -9px;
+}
+
+.icon {
+  display: inline-block;
+  fill: currentColor;
+  height: 0.8em;
+  position: relative;
+  font: 20px;
+}
+
+.share-links li {
+    text-align: -webkit-match-parent;
+}
+.app-header .contact-share-container .share-links {
+  margin: 0;
+}
+.share-links {
+  display: inline-block;
+  list-style: none;
+  margin: 0 0 0.75em;
+  padding: 0;
+}
+.share-links__item {
+  display: -moz-inline-stack;
+  display: inline-block;
+  margin: 0;
+  vertical-align: middle;
+  white-space: nowrap;
+}
+
+a:-webkit-any-link {
+  color: -webkit-link;
+  cursor: pointer;
+}
+li {
+  text-align: -webkit-match-parent;
+}
+.share-links {
+  display: inline-block;
+  list-style: none;
+  margin: 0 0 0.75em;
+  padding: 0;
+}
+
+/** Main Footer ***************************************************************/
+.main-footer {
+  background-color: #323a45;
+  color: #fff;
+  padding-bottom: 3.9em;
+  padding-top: 2.5em;
+}
+.main-footer a {
+  color: #fff;
+}
+.region-footer {
+  background: url(https://www.epa.gov/sites/all/themes/epa/img/svg/epa-seal.svg) 50% 100% no-repeat;
+  background-position: 0 0;
+  background-size: 5.8824em 5.8824em; /* 100px */
+  font-family: "Merriweather", "Georgia", "Cambria", "Times New Roman", "Times", serif;
+  font-weight: bold;
+  min-height: 5.8824em;
+  padding-top: 8em;
+}
+@media screen and (min-width: 55em) {
+  .region-footer {
+    padding-left: 11em;
+    padding-top: 0;
+  }
+}
+.region-footer a {
+  text-decoration: none;
+}
+.region-footer a:hover {
+  text-decoration: underline;
+}
+.region-footer .col__title {
+  font-size: 20px ;
+  margin: 0 0 25px;
+}
+.region-footer .last-updated {
+  font-family: "Source Sans Pro", "Helvetica Neue", "Helvetica", "Roboto", "Arial", sans-serif;
+  font-size: 12px;
+  font-weight: 500;
+  padding: 0.8333em 0 0;
+  text-transform: uppercase;
+}
+.last-updated p{
+  font-size: 12px;
+}
+.region-footer .menu {
+  margin-bottom: 2em;
+}
+.region-footer .menu > li {
+  margin: 0 0 .75em;
+}
+.region-footer .menu a {
+  display: inline-block;
+  font-size: 15px;
+  line-height: 1.2;
+  margin: 0;
+  padding: 0;
+  font-family: "Merriweather", "Georgia", "Cambria", "Times New Roman", "Times", serif;
+  font-weight: bold;
+}
+.region-footer .sub-menu {
+  list-style: none;
+  margin: 0.1176em 0 0;
+  padding-left: 0.5882em;
+}
+.region-footer .social-menu {
+  margin: 0;
+  padding: 0;
+}
+
+.region-footer .social-menu > li {
+  display: inline-block;
+  margin: 0 .25em 1em;
+  vertical-align: top;
+}
+@media screen and (min-width: 58em),print and (min-width: 58em) {
+  .region-footer .social-menu > li {
+    margin: 0 .5em 1em;
+  }
+}
+
+.region-footer .social-menu > li:first-child {
+  margin-left: 0;
+}
+.region-footer .social-menu > li:last-child {
+  margin-right: 0;
+}
+
+.region-footer .social-menu > li > a {
+  background-size: 26px 26px;
+  color: transparent;
+  font: 0/0 a;
+  height: 26px;
+  text-decoration: none;
+  text-shadow: none;
+  width: 26px;
+}
+
+.region-footer .social-menu > li > a:hover,
+.region-footer .social-menu > li > a:focus {
+  box-shadow: none;
+  opacity: .8;
+}
+.social-facebook {
+  background: url(https://www.epa.gov/sites/all/themes/epa/img/svg/epa_icons_Facebook.svg) no-repeat;
+}
+.social-flickr {
+  background: url(https://www.epa.gov/sites/all/themes/epa/img/svg/epa_icons_Flickr.svg) no-repeat;
+}
+.social-instagram {
+  background: url(https://www.epa.gov/sites/all/themes/epa/img/svg/epa_icons_Instagram.svg) no-repeat;
+}
+.social-twitter {
+  background: url(https://www.epa.gov/sites/all/themes/epa/img/svg/epa_icons_Twitter.svg) no-repeat;
+}
+.social-youtube {
+  background: url(https://www.epa.gov/sites/all/themes/epa/img/svg/epa_icons_YouTube.svg) no-repeat;
+}
+
+a.nav-link{
+  font-size: 15px;
+  color: white !important ;
+  display: block;
+  margin: 0;
+  font-weight: bold;
+  font-family: "Merriweather", "Georgia", "Cambria", "Times New Roman", "Times", serif;
+  line-height: 1;
+  padding: 1.2em 20px ;
+  text-decoration: none;
+}
+ a.nav-link:hover {
+  background-color: #071a57;
+  color: #fff;
+}
+
+.form-inline .fa-search{
+  color: white !important;
+}
+.search-input input{
+  height: 30px;
+}
+.search-input button{
+  height: 30px;
+}
+.epa-nav .navbar-collapse{
+  margin-left: 150px;
+}
+
+.epa-nav {
+  background-color: #0071bc;
+  padding: 0px;
+  line-height: 1;
+  height: 50px;
+}
+
+#block-pane-epa-web-area-connect,
+#block-pane-social-sharing {
+  display: inline-block;
+  margin-left: 1em;
+  vertical-align: top;
+}
+
+.connect-title {
+  display: inline-block;
+  line-height: 1.882353;
+  margin-right: 0.5em;
+  text-transform: uppercase;
+  outline: none !important;
+}
+
+.connect-title__link {
+  text-decoration: none;
+  font: 17px;
+  font-family: Roboto;
+}
+
+.share-links {
+  display: inline-block;
+  list-style: none;
+  margin: 0 0 0.75em;
+  padding: 0;
+}
+
+.share-links__item {
+  display: -moz-inline-stack;
+  display: inline-block;
+  margin: 0;
+  vertical-align: middle;
+  white-space: nowrap;
+}
+
+.share-links__item + .share-links__item {
+  margin-left: 0.5em;
+}
+
+.share-links__link {
+  border: 1px solid #0071bc;
+  border-radius: 50%;
+  color: #0071bc;
+  display: inline-block;
+  font-size: 4.6rem;
+  height: 0.666666em;
+  line-height: 0.666666em;
+  vertical-align: middle;
+  width: 0.666666em;
+}
+
+.share-links__link:focus,
+.share-links__link:hover {
+  background-color: #0071bc;
+  color: #fff;
+  text-decoration: none;
+}

@@ -128,6 +128,10 @@ class DataStore {
     @action getEditSettings() {
         return rootStore.mainStore.getEditSettings();
     }
+    @action getExecutionOutputs() {
+        let outputs = rootStore.mainStore.getExecutionOutputs();
+        return outputs;
+    }
 
     @action getModelTypeDatasets() {
         return this.datasets.filter(item =>
@@ -166,7 +170,7 @@ class DataStore {
         let labels = [];
         switch (model_type) {
             case "CS":
-                labels = ["Dose", "St.Dev", "Mean", "St Dev"];
+                labels = ["Dose", "N", "Mean", "St Dev"];
                 break;
             case "CI":
                 labels = ["Dose", "Response"];

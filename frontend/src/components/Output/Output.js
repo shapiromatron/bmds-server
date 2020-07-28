@@ -12,6 +12,12 @@ import InputFormReadOnly from "../Data/InputFormReadOnly";
 class Output extends Component {
     render() {
         const {outputStore} = this.props,
+            onMouseOver = (e, index) => {
+                outputStore.addPlotData(index);
+            },
+            onMouseOut = e => {
+                outputStore.clearPlotData();
+            },
             showModal = (e, selectedOutput, index) => {
                 outputStore.toggleModelDetailModal(selectedOutput, index);
             },
@@ -27,33 +33,34 @@ class Output extends Component {
             mappedDatasets = outputStore.getMappingDataset(selectedOutput.dataset);
         }
         return (
-            <div className="output">
-                {selectedOutput != null ? (
+            <div className="output container-fluid">
+                {selectedOutput ? (
                     <div>
                         <div>
-                            <div className="row">
-                                <div className="col col-lg-2">
+                            <div className="row justify-content-around">
+                                <div className="col col-sm-2">
                                     <DatasetList
                                         datasets={datasetList}
                                         onClick={onClick.bind(this)}
                                     />
                                 </div>
-                                <div className="col col-lg-4">
+                                <div className="col col-sm-4 col-md-auto col-sm-auto inputformreadonly">
                                     <InputFormReadOnly
                                         labels={labels}
                                         datasets={mappedDatasets}
                                         currentDataset={selectedOutput.dataset}
                                     />
-                                </div>
-                                <div className="col col-lg-3">
-                                    <DatasetPlot />
-                                </div>
-                            </div>
-                            <div className="row">
-                                <div className="col col-lg-4">
                                     <Results
+                                        onMouseOver={onMouseOver.bind(this)}
+                                        onMouseOut={onMouseOut}
                                         selectedOutput={selectedOutput}
                                         onClick={showModal.bind(this)}
+                                    />
+                                </div>
+                                <div className="col col-sm-4 datasetplot">
+                                    <DatasetPlot
+                                        data={outputStore.plotdata}
+                                        layout={outputStore.layout}
                                     />
                                 </div>
                             </div>

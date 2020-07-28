@@ -1,5 +1,10 @@
 .app-nav nav{
     margin: 0;
+    height: 50px;
+}
+
+.app-nav nav{
+    padding: 0px 20px 0px 20px;
 }
 .dropdown{
         right: 4px;

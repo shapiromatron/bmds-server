@@ -15,7 +15,11 @@ const Results = props => {
             <tbody>
                 {props.selectedOutput.models.map((val, idx) => {
                     return [
-                        <tr key={idx}>
+                        <tr
+                            key={idx}
+                            className="result-row"
+                            onMouseOver={e => props.onMouseOver(e, val.model_index)}
+                            onMouseOut={e => props.onMouseOut(e)}>
                             <td className="button">
                                 <button
                                     onClick={e =>

@@ -1,6 +1,5 @@
 import {observable, action, computed} from "mobx";
 import _ from "lodash";
-import {toJS} from "mobx";
 import rootStore from "./RootStore";
 
 class OutputStore {
@@ -54,16 +53,21 @@ class OutputStore {
     }
     @action getCurrentOutput(index) {
         let outputs = this.getExecutionOutputs();
-        console.log("outputs fsdfs", toJS(outputs));
         let currentOutputObject = null;
         if (outputs) {
-            console.log("outputs if ");
             currentOutputObject = outputs.find(item => item.dataset.dataset_id == index);
         }
         return currentOutputObject;
     }
     @action getDatasets() {
-        return rootStore.dataStore.datasets;
+        let outputs = this.getExecutionOutputs();
+        let datasetList = [];
+        if (outputs) {
+            outputs.map(item => {
+                datasetList.push(item.dataset);
+            });
+        }
+        return datasetList;
     }
     @action getLabels(model_type) {
         return rootStore.dataStore.getDatasetLabels(model_type);
@@ -272,13 +276,14 @@ class OutputStore {
                 array: errorbars,
                 visible: true,
             },
-            mode: "markers",
+            mode: "markers+lines",
             type: "scatter",
-            name: "estimated probability",
+            name: "Response",
         };
         this.plotData.push(trace1);
     }
     @observable layout = {
+        showlegend: true,
         title: {
             text: "",
             font: {
@@ -286,7 +291,6 @@ class OutputStore {
                 size: 12,
             },
             xref: "paper",
-            x: 0.05,
         },
         xaxis: {
             title: {
@@ -315,33 +319,30 @@ class OutputStore {
         let currentModel = output.models.find(item => item.model_index == index);
         let cdf = currentModel.results.cdf;
         let doses = output.dataset.doses;
-
+        let means = output.dataset.means;
         let doseRange = _.max(doses) - _.min(doses);
-        let pValue = this.getPValue;
+        let responseRange = _.max(means) - _.min(means);
+        let yArray = [];
+        means.map(item => {
+            let new_item = item * responseRange;
+            yArray.push(new_item);
+        });
         let xArray = [];
-        pValue.map(item => {
+        cdf.map(item => {
             let new_item = (item / 100) * doseRange;
             xArray.push(new_item);
         });
-
         var trace2 = {
             x: xArray,
-            y: cdf,
+            y: yArray,
             mode: "marker",
             type: "line",
         };
-
-        this.plotData.push(trace2);
+        rootStore.dataStore.addFitCurve(trace2);
     };
     @action clearPlotData = () => {
         this.plotData.pop();
     };
-
-    @observable est_probability = [1, 2, 3, 4];
-    @observable response_at_bmd = [1, 2, 3, 4];
-    @observable data = [1, 2, 3, 4];
-    @observable bmd = "";
-    @observable bmdl = "";
 }
 
 const outputStore = new OutputStore();

@@ -314,6 +314,7 @@ li {
     color: #fff;
     padding-bottom: 3.9em;
     padding-top: 2.5em;
+    position: absolute;
   }
   .main-footer a {
     color: #fff;

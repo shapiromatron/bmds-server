@@ -40,7 +40,6 @@ class JobQuery(RedirectView):
 
 class JobDetail(DetailView):
     model = models.Job
-    print("job detail class")
 
     def get_object(self, queryset=None):
         kwargs = dict(pk=self.kwargs.get("pk"), password=self.kwargs.get("password"))

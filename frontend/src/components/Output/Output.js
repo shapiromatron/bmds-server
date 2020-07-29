@@ -2,10 +2,10 @@ import React, {Component} from "react";
 import {inject, observer} from "mobx-react";
 import ModelDetailModal from "./modelDetailModal";
 import "./output.css";
-import DatasetPlot from "./DatasetPlot";
 import Results from "./Results";
-import DatasetList from "../Data/DatasetList";
 import InputFormReadOnly from "../Data/InputFormReadOnly";
+import DatasetNames from "../Data/DatasetNames";
+import DatasetScatterplot from "../Data/DatasetScatterplot";
 
 @inject("outputStore")
 @observer
@@ -20,12 +20,8 @@ class Output extends Component {
             },
             showModal = (e, selectedOutput, index) => {
                 outputStore.toggleModelDetailModal(selectedOutput, index);
-            },
-            onClick = (e, id) => {
-                outputStore.setCurrentDatasetIndex(id);
-            },
-            selectedOutput = outputStore.getCurrentOutput(outputStore.selectedDatasetIndex),
-            datasetList = outputStore.getDatasets();
+            };
+        let selectedOutput = outputStore.getCurrentOutput(outputStore.selectedDatasetIndex);
         let mappedDatasets = [];
         let labels = [];
         if (selectedOutput != null) {
@@ -33,18 +29,15 @@ class Output extends Component {
             mappedDatasets = outputStore.getMappingDataset(selectedOutput.dataset);
         }
         return (
-            <div className="output container-fluid">
+            <div className="container-fluid output">
                 {selectedOutput ? (
                     <div>
                         <div>
                             <div className="row justify-content-around">
-                                <div className="col col-sm-2">
-                                    <DatasetList
-                                        datasets={datasetList}
-                                        onClick={onClick.bind(this)}
-                                    />
+                                <div className="col  col-sm-2 ">
+                                    <DatasetNames />
                                 </div>
-                                <div className="col col-sm-4 col-md-auto col-sm-auto inputformreadonly">
+                                <div className="col col-md-auto col-sm-auto col-xs-12 inputformreadonly">
                                     <InputFormReadOnly
                                         labels={labels}
                                         datasets={mappedDatasets}
@@ -58,10 +51,7 @@ class Output extends Component {
                                     />
                                 </div>
                                 <div className="col col-sm-4 datasetplot">
-                                    <DatasetPlot
-                                        data={outputStore.plotdata}
-                                        layout={outputStore.layout}
-                                    />
+                                    <DatasetScatterplot />
                                 </div>
                             </div>
                             ,

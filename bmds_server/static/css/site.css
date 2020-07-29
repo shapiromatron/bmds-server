@@ -19,7 +19,3 @@ textarea {
 .container-fluid{
     min-height:600px !important;
 }
-
-html, body {
-    min-height: 100%;
-}

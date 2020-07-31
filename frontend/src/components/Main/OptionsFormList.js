@@ -33,7 +33,6 @@ class OptionsFormList extends Component {
             labels = mainStore.getOptionsLabels(dataset_type),
             options = mainStore.options,
             isEditSettings = mainStore.getEditSettings();
-
         return (
             <div className="options-div">
                 {labels.length ? (

@@ -14,6 +14,7 @@ class DataStore {
     }
     @action setCurrentDatasetIndex(dataset_id) {
         this.selectedDatasetIndex = dataset_id;
+        rootStore.outputStore.setCurrentDatasetIndex(this.selectedDatasetIndex);
     }
 
     @action addDataset(e) {
@@ -106,6 +107,68 @@ class DataStore {
             return;
         });
     }
+    @observable plotData = [];
+    @action setPlotData(index) {
+        let currentDataset = this.getCurrentDataset(index);
+        this.plotData = [];
+        let doses = currentDataset.doses;
+        let mean = currentDataset.means;
+        let stdevs = currentDataset.stdevs;
+        let ns = currentDataset.ns;
+        let errorbars = [];
+        for (var i = 0; i < stdevs.length; i++) {
+            var value = stdevs[i] / Math.sqrt(ns[i]);
+            errorbars.push(value);
+        }
+        var trace1 = {
+            x: doses,
+            y: mean,
+            error_y: {
+                type: "data",
+                array: errorbars,
+                visible: true,
+            },
+            mode: "markers+lines",
+            type: "scatter",
+            name: "Response",
+        };
+        this.plotData.push(trace1);
+    }
+    @observable layout = {
+        showlegend: true,
+        title: {
+            text: "Scatter Plot",
+            font: {
+                family: "Courier New, monospace",
+                size: 12,
+            },
+            xref: "paper",
+        },
+        xaxis: {
+            title: {
+                text: "Dose (mg/kg-day)",
+                font: {
+                    family: "Courier New, monospace",
+                    size: 14,
+                    color: "#7f7f7f",
+                },
+            },
+        },
+        yaxis: {
+            title: {
+                text: "Response (mg/dL)",
+                font: {
+                    family: "Courier New, monospace",
+                    size: 14,
+                    color: "#7f7f7f",
+                },
+            },
+        },
+    };
+
+    @action addFitCurve(trace2) {
+        this.plotData.push(trace2);
+    }
 
     @action getDatasets() {
         return this.datasets;
@@ -127,6 +190,10 @@ class DataStore {
 
     @action getEditSettings() {
         return rootStore.mainStore.getEditSettings();
+    }
+    @action getExecutionOutputs() {
+        let outputs = rootStore.mainStore.getExecutionOutputs();
+        return outputs;
     }
 
     @action getModelTypeDatasets() {
@@ -166,7 +233,7 @@ class DataStore {
         let labels = [];
         switch (model_type) {
             case "CS":
-                labels = ["Dose", "St.Dev", "Mean", "St Dev"];
+                labels = ["Dose", "N", "Mean", "St Dev"];
                 break;
             case "CI":
                 labels = ["Dose", "Response"];
@@ -185,10 +252,10 @@ class DataStore {
         switch (this.model_type) {
             case "CS":
                 form = {
-                    doses: [1, 2, 3, 4, 5],
-                    ns: [6, 7, 8, 9, 10],
-                    means: [6, 7, 8, 9, 10],
-                    stdevs: [6, 7, 8, 9, 10],
+                    doses: [0, 7, 37, 186],
+                    ns: [25, 25, 25, 24],
+                    means: [55.8, 52.9, 64.8, 119.9],
+                    stdevs: [12.5, 15.4, 17.4, 32.5],
                     adverse_direction: "automatic",
                 };
                 break;

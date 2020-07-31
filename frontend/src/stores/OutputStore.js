@@ -1,11 +1,14 @@
-import {observable, action} from "mobx";
+import {observable, action, computed} from "mobx";
 import _ from "lodash";
 import rootStore from "./RootStore";
 
 class OutputStore {
     @observable modelDetailModal = false;
     @observable selectedModelType = {};
+    @observable selectedModel = {};
     @observable goodnessFitHeaders = [];
+    @observable cdf = [];
+    @observable pValue = [];
     @observable cdfValues = [];
     @observable infoTable = {
         model_name: {label: "Model Name", value: ""},
@@ -18,7 +21,7 @@ class OutputStore {
 
     @observable modelData = {
         dependent_variable: {label: "Dependent Variable", value: "Dose"},
-        independent_variable: {label: "Independent Variable", value: "Response"},
+        independent_variable: {label: "Independent Variable", value: "Mean"},
         number_of_observations: {label: "Number of Observations", value: ""},
     };
     @observable benchmarkDose = {
@@ -51,13 +54,20 @@ class OutputStore {
     @action getCurrentOutput(index) {
         let outputs = this.getExecutionOutputs();
         let currentOutputObject = null;
-        if (outputs != null) {
+        if (outputs) {
             currentOutputObject = outputs.find(item => item.dataset.dataset_id == index);
         }
         return currentOutputObject;
     }
     @action getDatasets() {
-        return rootStore.dataStore.datasets;
+        let outputs = this.getExecutionOutputs();
+        let datasetList = [];
+        if (outputs) {
+            outputs.map(item => {
+                datasetList.push(item.dataset);
+            });
+        }
+        return datasetList;
     }
     @action getLabels(model_type) {
         return rootStore.dataStore.getDatasetLabels(model_type);
@@ -67,46 +77,54 @@ class OutputStore {
     }
     @action.bound
     mapOutputModal(output, model_index) {
-        let selectedModel = output.models.find(row => row.model_index == model_index);
+        this.selectedModel = output.models.find(row => row.model_index == model_index);
         this.selectedModelType = output.dataset.model_type;
-        this.setOutputValues(selectedModel, this.selectedModelType);
-        this.setResponseModel(selectedModel.model_name);
+        this.setResponseModel(this.selectedModel.model_name);
+        this.setOutputValues(this.selectedModel, this.selectedModelType);
 
         //unpack infoTable data
-        this.infoTable.model_name.value = selectedModel.model_name;
+        this.infoTable.model_name.value = this.selectedModel.model_name;
         this.infoTable.dataset_name.value = output.dataset.dataset_name;
         this.infoTable.user_notes.value = output.dataset.dataset_description;
 
         //set model Optins values
         this.modelOptions.map(option => {
-            option.value = selectedModel.settings[option.name];
+            option.value = this.selectedModel.settings[option.name];
         });
 
         this.modelData.number_of_observations.value = output.dataset.doses.length;
 
         //set benchmark dose values
-        this.benchmarkDose.bmd.value = selectedModel.results.bmd;
-        this.benchmarkDose.bmdl.value = selectedModel.results.bmdl;
-        this.benchmarkDose.bmdu.value = selectedModel.results.bmdu;
-        this.benchmarkDose.aic.value = selectedModel.results.aic;
-        this.benchmarkDose.p_value.value = selectedModel.results.gof.p_value;
-        this.benchmarkDose.df.value = selectedModel.results.gof.df;
+        this.benchmarkDose.bmd.value = this.selectedModel.results.bmd;
+        this.benchmarkDose.bmdl.value = this.selectedModel.results.bmdl;
+        this.benchmarkDose.bmdu.value = this.selectedModel.results.bmdu;
+        this.benchmarkDose.aic.value = this.selectedModel.results.aic;
+        this.benchmarkDose.p_value.value = this.selectedModel.results.gof.p_value;
+        this.benchmarkDose.df.value = this.selectedModel.results.gof.df;
+
+        this.bmd = this.benchmarkDose.bmd.value;
+        this.bmdl = this.benchmarkDose.bmdl.value;
 
         //set parameters values  TODO
         this.parameters = _.zipWith(
             this.parameter_variables,
-            selectedModel.results.parameters,
+            this.selectedModel.results.parameters,
             (p_variable, parameter) => ({p_variable, parameter})
         );
 
         //set cdf values with percentiles
+        let cdf = this.selectedModel.results.cdf;
+        let pValue = this.getPValue;
+
+        this.cdfValues = _.zipWith(pValue, cdf, (pValue, cdf) => ({pValue, cdf}));
+    }
+
+    @computed get getPValue() {
         let percentileValue = _.range(0.01, 1, 0.01);
-        let cdf = selectedModel.results.cdf;
         let pValue = percentileValue.map(function(each_element) {
             return Number(each_element.toFixed(2));
         });
-
-        this.cdfValues = _.zipWith(pValue, cdf, (pValue, cdf) => ({pValue, cdf}));
+        return pValue;
     }
 
     @action setOutputValues(selectedModel, model_type) {
@@ -131,6 +149,10 @@ class OutputStore {
                     "Size",
                     "Scaled Residual",
                 ];
+                this.infoTable["variance_model"] = {
+                    label: "Variance Model",
+                    value: this.variance_model,
+                };
                 this.loglikelihoods = selectedModel.results.loglikelihoods;
                 this.test_of_interest = selectedModel.results.test_rows;
                 this.modelData["adverse_direction"] = {
@@ -209,6 +231,7 @@ class OutputStore {
             case "Hill":
                 this.infoTable.dose_response_model.value = "M[dose] = g + v*dose^n/(k^n + dose^n)";
                 this.parameter_variables = ["g", "v", "k", "n", "alpha"];
+                this.variance_model = "Var[i]=alpha";
                 break;
             case "Power":
                 this.infoTable.dose_response_model.value = "M[dose] = g + v * dose^n";
@@ -228,6 +251,98 @@ class OutputStore {
                 break;
         }
     }
+
+    @observable plotData = [];
+    @action setPlotData() {
+        this.plotData = [];
+        let output = this.getCurrentOutput(this.selectedDatasetIndex);
+        if (output == null || "error" in output) {
+            return output;
+        }
+        let doses = output.dataset.doses;
+        let mean = output.dataset.means;
+        let stdevs = output.dataset.stdevs;
+        let ns = output.dataset.ns;
+        let errorbars = [];
+        for (var i = 0; i < stdevs.length; i++) {
+            var value = stdevs[i] / Math.sqrt(ns[i]);
+            errorbars.push(value);
+        }
+        var trace1 = {
+            x: doses,
+            y: mean,
+            error_y: {
+                type: "data",
+                array: errorbars,
+                visible: true,
+            },
+            mode: "markers+lines",
+            type: "scatter",
+            name: "Response",
+        };
+        this.plotData.push(trace1);
+    }
+    @observable layout = {
+        showlegend: true,
+        title: {
+            text: "",
+            font: {
+                family: "Courier New, monospace",
+                size: 12,
+            },
+            xref: "paper",
+        },
+        xaxis: {
+            title: {
+                text: "Dose (mg/kg-day)",
+                font: {
+                    family: "Courier New, monospace",
+                    size: 14,
+                    color: "#7f7f7f",
+                },
+            },
+        },
+        yaxis: {
+            title: {
+                text: "Response (mg/dL)",
+                font: {
+                    family: "Courier New, monospace",
+                    size: 14,
+                    color: "#7f7f7f",
+                },
+            },
+        },
+    };
+
+    @action addPlotData = index => {
+        let output = this.getCurrentOutput(this.selectedDatasetIndex);
+        let currentModel = output.models.find(item => item.model_index == index);
+        let cdf = currentModel.results.cdf;
+        let doses = output.dataset.doses;
+        let means = output.dataset.means;
+        let doseRange = _.max(doses) - _.min(doses);
+        let responseRange = _.max(means) - _.min(means);
+        let yArray = [];
+        means.map(item => {
+            let new_item = item * responseRange;
+            yArray.push(new_item);
+        });
+        let xArray = [];
+        cdf.map(item => {
+            let new_item = (item / 100) * doseRange;
+            xArray.push(new_item);
+        });
+        var trace2 = {
+            x: xArray,
+            y: yArray,
+            mode: "marker",
+            type: "line",
+        };
+        rootStore.dataStore.addFitCurve(trace2);
+    };
+    @action clearPlotData = () => {
+        this.plotData.pop();
+    };
 }
 
 const outputStore = new OutputStore();

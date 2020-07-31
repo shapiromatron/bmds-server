@@ -1,7 +1,7 @@
 import React, {Component} from "react";
 import {inject, observer} from "mobx-react";
-import DatasetList from "./DatasetList";
 import {toJS} from "mobx";
+import DatasetNames from "./DatasetNames";
 
 @inject("dataStore")
 @observer
@@ -49,7 +49,7 @@ class InputButtons extends Component {
                     </div>
                 ) : null}
                 {dataStore.datasets.length ? (
-                    <DatasetList onClick={onClick.bind(this)} datasets={datasets} />
+                    <DatasetNames onClick={onClick.bind(this)} datasets={datasets} />
                 ) : null}
                 {dataStore.datasets.length && isEditSettings ? (
                     <div>

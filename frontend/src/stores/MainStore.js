@@ -313,6 +313,9 @@ class MainStore {
     }
     @action.bound
     updateModelStateFromApi(data) {
+        if ("errors" in data) {
+            this.executionOutputs = data.errors;
+        }
         const inputs = data.inputs;
         if (_.isEmpty(inputs)) {
             this.isUpdateComplete = true;
@@ -328,7 +331,6 @@ class MainStore {
         this.analysisForm.analysis_description = inputs.analysis_description;
         this.analysisForm.dataset_type = inputs.dataset_type;
         this.options = inputs.options;
-        // this.setOptions(inputs.options, this.analysisForm.dataset_type);
         // unpack datasets
         var datasets = inputs.datasets;
         rootStore.dataStore.setDatasets(datasets);
@@ -473,7 +475,7 @@ class MainStore {
 
     @observable CSOptions = {
         bmr_type: "Std. Dev.",
-        bmr_value: 0.05,
+        bmr_value: 1,
         tail_probability: 0.8,
         confidence_level: 0.95,
         distribution: "Normal",

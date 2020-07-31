@@ -11,10 +11,20 @@ import GoodnessFit from "./GoodnessFit";
 import CDFTable from "./CDFTable";
 import ResponsePlot from "./ResponsePlot";
 import CSLoglikelihoods from "./CSLoglikelihoods";
+import Plotly from "plotly.js";
 
 @inject("outputStore")
 @observer
 class ModelDetailModal extends Component {
+    componentDidMount() {
+        this.props.outputStore.setPlotData();
+        let data = this.props.outputStore.plotData;
+        if (data != null && !("error" in data)) {
+            var layout = this.props.outputStore.layout;
+            layout.title.text = this.props.outputStore.selectedModel.model_name + " Plot";
+            Plotly.newPlot("model_chart", data, layout);
+        }
+    }
     render() {
         const {outputStore} = this.props,
             toggleModelDetailModal = () => {
@@ -46,7 +56,7 @@ class ModelDetailModal extends Component {
 
                                 <Modal.Body>
                                     <div className="modal-body">
-                                        <div className="row">
+                                        <div className="row justify-content-around">
                                             <div className="col col-sm-4 infotable">
                                                 <InfoTable infoTable={outputStore.infoTable} />
                                             </div>
@@ -71,7 +81,7 @@ class ModelDetailModal extends Component {
                                                 />
                                             </div>
                                         </div>
-                                        <div className="row">
+                                        <div className="row justify-content-around">
                                             <div className="col ">
                                                 <GoodnessFit
                                                     headers={outputStore.goodnessFitHeaders}
@@ -87,12 +97,12 @@ class ModelDetailModal extends Component {
                                             />
                                         ) : null}
 
-                                        <div className="row">
+                                        <div className="row justify-content-around">
                                             <div className="col col-sm-3">
                                                 <CDFTable cdfValues={outputStore.cdfValues} />
                                             </div>
                                             <div className="col col-sm-6">
-                                                <ResponsePlot style={{float: "right"}} />
+                                                <ResponsePlot />
                                             </div>
                                         </div>
                                     </div>

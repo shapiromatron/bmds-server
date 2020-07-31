@@ -1,6 +1,5 @@
 .main{
     font-size: 12px;
-    justify-content: center;
 }
 
 div.col{
@@ -117,15 +116,6 @@ div.col{
     font-size:12px;
 
 } 
-
-.first-row{
-    justify-content: center;
-
-}
-.second-row{
-    justify-content: center;
-}
-
 
 .analysis {height: auto; overflow: auto;}
 .modelsCheckbox {

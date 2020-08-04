@@ -17,10 +17,21 @@ class Navigation extends Component {
         const {excelUrl, wordUrl} = this.props.mainStore.config;
         return (
             <div className="app-nav">
-                <nav className="navbar navbar-expand-md bg-primary navbar-dark">
-                    <div className="collapse navbar-collapse" id="collapsibleNavbar">
-                        <ul className="navbar-nav">
-                            <li className=" nav-item active">
+                <nav className="navbar navbar-expand-lg bg-primary navbar-dark">
+                    <button
+                        className="navbar-toggler"
+                        type="button"
+                        data-toggle="collapse"
+                        data-target="#bmdsNavbar"
+                        aria-controls="bmdsNavbar"
+                        aria-expanded="false"
+                        aria-label="Toggle navigation">
+                        <span className="navbar-toggler-icon"></span>
+                    </button>
+
+                    <div className="collapse navbar-collapse" id="bmdsNavbar">
+                        <ul className="navbar-nav mr-auto">
+                            <li className=" nav-item">
                                 <NavLink className="nav-link" to="/">
                                     Main
                                 </NavLink>
@@ -41,36 +52,28 @@ class Navigation extends Component {
                                 </NavLink>
                             </li>
                         </ul>
-                    </div>
-                    <div className="dropdown btn-group pull-xs-right">
-                        <button
-                            className="btn btn-primary"
-                            type="button"
-                            id="dropdownMenuButton"
-                            data-toggle="dropdown"
-                            aria-haspopup="true"
-                            aria-expanded="false">
-                            <i className="fa fa-bars" aria-hidden="true"></i>
-                        </button>
-                        <div
-                            className="dropdown-menu dropdown-menu-right"
-                            aria-labelledby="dropdownMenuButton">
-                            <a className="text-left dropdown-item" href={excelUrl}>
-                                <i className="fa fa-file-excel-o"></i>&nbsp;Download dataset
-                            </a>
-                            <a className="text-left dropdown-item" href={wordUrl}>
-                                <i className="fa fa-file-word-o"></i>&nbsp;Download report
-                            </a>
+                        <div className="dropdown btn-group my-2 my-lg-0">
+                            <button
+                                className="btn btn-primary"
+                                type="button"
+                                id="dropdownMenuButton"
+                                data-toggle="dropdown"
+                                aria-haspopup="true"
+                                aria-expanded="false">
+                                <i className="fa fa-bars" aria-hidden="true"></i>
+                            </button>
+                            <div
+                                className="dropdown-menu dropdown-menu-right"
+                                aria-labelledby="dropdownMenuButton">
+                                <a className="text-left dropdown-item" href={excelUrl}>
+                                    <i className="fa fa-file-excel-o"></i>&nbsp;Download dataset
+                                </a>
+                                <a className="text-left dropdown-item" href={wordUrl}>
+                                    <i className="fa fa-file-word-o"></i>&nbsp;Download report
+                                </a>
+                            </div>
                         </div>
                     </div>
-
-                    <button
-                        className="navbar-toggler"
-                        type="button"
-                        data-toggle="collapse"
-                        data-target="#collapsibleNavbar">
-                        <span className="navbar-toggler-icon"></span>
-                    </button>
                 </nav>
 
                 <div className="content">

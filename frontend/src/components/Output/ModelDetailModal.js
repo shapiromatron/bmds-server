@@ -9,22 +9,13 @@ import ModelData from "./ModelData";
 import ModelParameters from "./ModelParameters";
 import GoodnessFit from "./GoodnessFit";
 import CDFTable from "./CDFTable";
-import ResponsePlot from "./ResponsePlot";
+import CDFPlot from "./CDFPlot";
 import CSLoglikelihoods from "./CSLoglikelihoods";
-import Plotly from "plotly.js";
+import ModelResponsePlot from "./ModelResponsePlot";
 
 @inject("outputStore")
 @observer
 class ModelDetailModal extends Component {
-    componentDidMount() {
-        this.props.outputStore.setPlotData();
-        let data = this.props.outputStore.plotData;
-        if (data != null && !("error" in data)) {
-            var layout = this.props.outputStore.layout;
-            layout.title.text = this.props.outputStore.selectedModel.model_name + " Plot";
-            Plotly.newPlot("model_chart", data, layout);
-        }
-    }
     render() {
         const {outputStore} = this.props,
             toggleModelDetailModal = () => {
@@ -44,7 +35,7 @@ class ModelDetailModal extends Component {
                                 <Modal.Header>
                                     <Modal.Title id="contained-modal-title-vcenter">
                                         {" "}
-                                        Model details
+                                        {outputStore.selectedModel.model_name} - Details
                                     </Modal.Title>
                                     <button
                                         className="btn btn-danger"
@@ -101,8 +92,12 @@ class ModelDetailModal extends Component {
                                             <div className="col col-sm-3">
                                                 <CDFTable cdfValues={outputStore.cdfValues} />
                                             </div>
-                                            <div className="col col-sm-6">
-                                                <ResponsePlot />
+                                            <div className="col plot">
+                                                <ModelResponsePlot
+                                                    currentDataset={this.props.currentDataset}
+                                                    title={outputStore.selectedModel.model_name}
+                                                />
+                                                <CDFPlot />
                                             </div>
                                         </div>
                                     </div>

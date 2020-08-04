@@ -107,8 +107,20 @@ class DataStore {
             return;
         });
     }
-    @observable plotData = [];
     @action setPlotData(index) {
+        switch (this.model_type) {
+            case "CS":
+                this.getCSScatterPlot(index);
+                break;
+            case "DM":
+                this.getDMScatterPlot(index);
+                break;
+            default:
+                break;
+        }
+    }
+    @observable plotData = [];
+    @action getCSScatterPlot(index) {
         let currentDataset = this.getCurrentDataset(index);
         this.plotData = [];
         let doses = currentDataset.doses;
@@ -128,6 +140,27 @@ class DataStore {
                 array: errorbars,
                 visible: true,
             },
+            mode: "markers",
+            type: "scatter",
+            name: "Response",
+        };
+        this.plotData.push(trace1);
+    }
+
+    @action getDMScatterPlot(index) {
+        let currentDataset = this.getCurrentDataset(index);
+        this.plotData = [];
+        let doses = currentDataset.doses;
+        let incidences = currentDataset.incidences;
+        let ns = currentDataset.ns;
+        let responses = [];
+        for (var i = 0; i < ns.length; i++) {
+            var response = incidences[i] / ns[i];
+            responses.push(response);
+        }
+        var trace1 = {
+            x: doses,
+            y: responses,
             mode: "markers+lines",
             type: "scatter",
             name: "Response",
@@ -167,6 +200,9 @@ class DataStore {
     };
 
     @action addFitCurve(trace2) {
+        if (this.plotData.length > 1) {
+            this.plotData.pop();
+        }
         this.plotData.push(trace2);
     }
 
@@ -267,9 +303,9 @@ class DataStore {
                 break;
             case "DM":
                 form = {
-                    doses: [1, 2, 3, 4, 5],
-                    ns: [6, 7, 8, 9, 10],
-                    incidences: [1, 2, 3, 4, 5],
+                    doses: [0, 0.46, 1.39, 4.17, 12.5],
+                    ns: [9, 9, 11, 10, 7],
+                    incidences: [0, 0, 3, 2, 3],
                 };
                 break;
             case "N":

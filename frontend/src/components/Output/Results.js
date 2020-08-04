@@ -13,26 +13,26 @@ const Results = props => {
                 </tr>
             </thead>
             <tbody>
-                {props.selectedOutput.models.map((val, idx) => {
+                {props.selectedOutput.models.map((model, idx) => {
                     return [
                         <tr
                             key={idx}
                             className="result-row"
-                            onMouseOver={e => props.onMouseOver(e, val.model_index)}
+                            onMouseOver={e => props.onMouseOver(e, model)}
                             onMouseOut={e => props.onMouseOut(e)}>
                             <td className="button">
                                 <button
                                     onClick={e =>
-                                        props.onClick(e, props.selectedOutput, val.model_index)
+                                        props.onClick(e, props.selectedOutput, model.model_index)
                                     }
                                     className="btn btn-primary btn-sm">
-                                    {val.model_name}{" "}
+                                    {model.model_name}{" "}
                                 </button>
                             </td>
-                            <td>{val.results.bmd}</td>
-                            <td>{val.results.bmdl}</td>
-                            <td>{val.results.bmdu}</td>
-                            <td>{val.results.aic}</td>
+                            <td>{model.results.bmd}</td>
+                            <td>{model.results.bmdl}</td>
+                            <td>{model.results.bmdu}</td>
+                            <td>{model.results.aic}</td>
                         </tr>,
                     ];
                 })}

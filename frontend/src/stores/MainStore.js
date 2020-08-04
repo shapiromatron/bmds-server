@@ -313,14 +313,18 @@ class MainStore {
     }
     @action.bound
     updateModelStateFromApi(data) {
-        if ("errors" in data) {
-            this.executionOutputs = data.errors;
+        if (data.errors.length > 2) {
+            this.errorModal = !this.errorModal;
+            this.errorMessage = data.errors;
+            this.isUpdateComplete = true;
         }
+
         const inputs = data.inputs;
         if (_.isEmpty(inputs)) {
             this.isUpdateComplete = true;
             return;
         }
+
         this.isExecuting = data.is_executing;
         this.isReadyToExecute = data.inputs_valid;
         if (data.outputs) {
@@ -468,7 +472,7 @@ class MainStore {
     }
     @observable DIOptions = {
         bmr_type: "Extra",
-        bmr_value: 0.05,
+        bmr_value: 0.1,
         confidence_level: 0.95,
         background: "Estimated",
     };
@@ -476,7 +480,7 @@ class MainStore {
     @observable CSOptions = {
         bmr_type: "Std. Dev.",
         bmr_value: 1,
-        tail_probability: 0.8,
+        tail_probability: 0.01,
         confidence_level: 0.95,
         distribution: "Normal",
         variance: "Constant",
@@ -485,7 +489,7 @@ class MainStore {
     };
     @observable NOptions = {
         bmr_type: "Extra",
-        bmr_value: 0.05,
+        bmr_value: 0.1,
         confidence_level: 0.95,
         litter_sepcific_covariate: "Overall Mean",
         background: "Estimated",
@@ -494,7 +498,7 @@ class MainStore {
     };
     @observable DMTOptions = {
         bmr_type: "Extra",
-        bmr_value: 0.05,
+        bmr_value: 0.1,
         confidence_level: 0.95,
     };
     @observable AdverseDirectionList = [

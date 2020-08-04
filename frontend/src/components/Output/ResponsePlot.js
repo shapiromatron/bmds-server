@@ -1,6 +1,5 @@
-import React, { Component } from "react";
-import { inject, observer } from "mobx-react";
-import _ from "lodash";
+import React, {Component} from "react";
+import {inject, observer} from "mobx-react";
 import Plotly from "plotly.js";
 
 @inject("outputStore")
@@ -21,10 +20,10 @@ class ResponsePlot extends Component {
             "scatter-plot",
             this.props.outputStore.plotData,
             this.props.outputStore.layout
-        )
+        );
     }
     render() {
-        const { outputStore } = this.props;
+        const {outputStore} = this.props;
         // eslint-disable-next-line no-unused-vars
         let bmdLine = outputStore.bmdLine;
         return <div id="scatter-plot"></div>;

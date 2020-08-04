@@ -1,21 +1,17 @@
-.navbar {
-    margin-bottom: 0.5em;
-}
-
 label {
-    font-weight: bold;
+  font-weight: bold;
 }
 
 textarea {
-    font-family: Consolas, monaco, monospace;
-    height: 25em;
+  font-family: Consolas, monaco, monospace;
+  height: 25em;
 }
 
 .big-example {
-    cursor: pointer;
-    font-size: 1.1rem;
+  cursor: pointer;
+  font-size: 1.1rem;
 }
 
-.container-fluid{
-    min-height:600px !important;
+.container-fluid {
+  min-height: 450px !important;
 }

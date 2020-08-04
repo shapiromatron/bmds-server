@@ -1,6 +1,7 @@
 import {observable, action, computed} from "mobx";
 import _ from "lodash";
 import rootStore from "./RootStore";
+import * as constant from "../constants/outputConstants";
 
 class OutputStore {
     @observable modelDetailModal = false;
@@ -48,19 +49,21 @@ class OutputStore {
     @action setCurrentDatasetIndex(dataset_id) {
         this.selectedDatasetIndex = dataset_id;
     }
-    @action getExecutionOutputs() {
+    @computed get getExecutionOutputs() {
         return rootStore.mainStore.getExecutionOutputs();
     }
+    @observable currentOutputObject = {};
     @action getCurrentOutput(index) {
-        let outputs = this.getExecutionOutputs();
+        let outputs = this.getExecutionOutputs;
         let currentOutputObject = null;
         if (outputs) {
             currentOutputObject = outputs.find(item => item.dataset.dataset_id == index);
+            this.currentOutputObject = outputs.find(item => item.dataset.dataset_id == index);
         }
         return currentOutputObject;
     }
     @action getDatasets() {
-        let outputs = this.getExecutionOutputs();
+        let outputs = this.getExecutionOutputs;
         let datasetList = [];
         if (outputs) {
             outputs.map(item => {
@@ -113,10 +116,10 @@ class OutputStore {
         );
 
         //set cdf values with percentiles
-        let cdf = this.selectedModel.results.cdf;
-        let pValue = this.getPValue;
+        this.cdf = this.selectedModel.results.cdf;
+        this.pValue = this.getPValue;
 
-        this.cdfValues = _.zipWith(pValue, cdf, (pValue, cdf) => ({pValue, cdf}));
+        this.cdfValues = _.zipWith(this.pValue, this.cdf, (pValue, cdf) => ({pValue, cdf}));
     }
 
     @computed get getPValue() {
@@ -239,7 +242,7 @@ class OutputStore {
                 break;
             case "Linear":
                 this.infoTable.dose_response_model.value = "M[dose] = g + b1*dose";
-                this.parameter_variables = ["g", "beta1", "alpha"];
+                this.parameter_variables = ["g", "b1", "alpha"];
                 break;
             case "Exponential": //exponential has multiple degree analysis TODO
                 this.infoTable.dose_response_model.value = "TODO";
@@ -252,17 +255,27 @@ class OutputStore {
         }
     }
 
-    @observable plotData = [];
-    @action setPlotData() {
-        this.plotData = [];
-        let output = this.getCurrentOutput(this.selectedDatasetIndex);
-        if (output == null || "error" in output) {
-            return output;
+    @action getScatterPlotData(currentDataset) {
+        let model_type = currentDataset.model_type;
+        switch (model_type) {
+            case "CS":
+                this.getCSScatterPlot(currentDataset);
+                break;
+            case "DM":
+                this.getDMScatterPlot(currentDataset);
+                break;
+            default:
+                break;
         }
-        let doses = output.dataset.doses;
-        let mean = output.dataset.means;
-        let stdevs = output.dataset.stdevs;
-        let ns = output.dataset.ns;
+    }
+
+    @observable plotData = [];
+    @action getCSScatterPlot(currentDataset) {
+        this.plotData = [];
+        let doses = currentDataset.doses;
+        let mean = currentDataset.means;
+        let stdevs = currentDataset.stdevs;
+        let ns = currentDataset.ns;
         let errorbars = [];
         for (var i = 0; i < stdevs.length; i++) {
             var value = stdevs[i] / Math.sqrt(ns[i]);
@@ -282,6 +295,25 @@ class OutputStore {
         };
         this.plotData.push(trace1);
     }
+    @action getDMScatterPlot(currentDataset) {
+        this.plotData = [];
+        let doses = currentDataset.doses;
+        let incidences = currentDataset.incidences;
+        let ns = currentDataset.ns;
+        let responses = [];
+        for (var i = 0; i < ns.length; i++) {
+            var response = incidences[i] / ns[i];
+            responses.push(response);
+        }
+        var trace1 = {
+            x: doses,
+            y: responses,
+            mode: "markers+lines",
+            type: "scatter",
+            name: "Response",
+        };
+        this.plotData.push(trace1);
+    }
     @observable layout = {
         showlegend: true,
         title: {
@@ -293,6 +325,9 @@ class OutputStore {
             xref: "paper",
         },
         xaxis: {
+            linecolor: "black",
+            linewidth: 1,
+            mirror: true,
             title: {
                 text: "Dose (mg/kg-day)",
                 font: {
@@ -303,6 +338,9 @@ class OutputStore {
             },
         },
         yaxis: {
+            linecolor: "black",
+            linewidth: 1,
+            mirror: true,
             title: {
                 text: "Response (mg/dL)",
                 font: {
@@ -312,37 +350,99 @@ class OutputStore {
                 },
             },
         },
+        plot_bgcolor: "",
+        paper_bgcolor: "#eee",
     };
 
-    @action addPlotData = index => {
-        let output = this.getCurrentOutput(this.selectedDatasetIndex);
-        let currentModel = output.models.find(item => item.model_index == index);
-        let cdf = currentModel.results.cdf;
-        let doses = output.dataset.doses;
-        let means = output.dataset.means;
-        let doseRange = _.max(doses) - _.min(doses);
-        let responseRange = _.max(means) - _.min(means);
-        let yArray = [];
-        means.map(item => {
-            let new_item = item * responseRange;
-            yArray.push(new_item);
-        });
-        let xArray = [];
-        cdf.map(item => {
-            let new_item = (item / 100) * doseRange;
-            xArray.push(new_item);
-        });
-        var trace2 = {
-            x: xArray,
-            y: yArray,
+    @observable cdfPlot = [];
+    @action setCDFPlot() {
+        this.cdfPlot = [];
+        var trace1 = {
+            x: this.pValue,
+            y: this.cdf,
+            mode: "markers",
+            type: "scatter",
+            name: "CDF",
+        };
+        this.cdfPlot.push(trace1);
+    }
+    @observable cdfLayout = {
+        showlegend: true,
+        title: {
+            text: "CDF Plot",
+            font: {
+                family: "Courier New, monospace",
+                size: 16,
+            },
+            xref: "paper",
+        },
+        xaxis: {
+            linecolor: "black",
+            linewidth: 1,
+            mirror: true,
+            title: {
+                text: "Percentile",
+                font: {
+                    family: "Courier New, monospace",
+                    size: 14,
+                    color: "#7f7f7f",
+                },
+            },
+        },
+        yaxis: {
+            linecolor: "black",
+            linewidth: 1,
+            mirror: true,
+            title: {
+                text: "CDF",
+                font: {
+                    family: "Courier New, monospace",
+                    size: 14,
+                    color: "#7f7f7f",
+                },
+            },
+        },
+        plot_bgcolor: "",
+        paper_bgcolor: "#eee",
+    };
+
+    @observable currentModel;
+    @observable currentDataset;
+    @observable model_index;
+    @observable param = {};
+    @observable bmdLine = {};
+    @action addBMDLine = model => {
+        this.setResponseModel(model.model_name);
+        let param_variables = this.parameter_variables;
+        let parameters = model.results.parameters;
+        this.param = parameters.reduce(function(result, field, index) {
+            result[param_variables[index]] = field;
+            return result;
+        }, {});
+        let maxDose = _.max(this.currentOutputObject.dataset.doses);
+        let minDose = _.min(this.currentOutputObject.dataset.doses);
+        let number_of_values = 100;
+        var doseArr = [];
+        var step = (maxDose - minDose) / (number_of_values - 1);
+        for (var i = 0; i < number_of_values; i++) {
+            doseArr.push(minDose + step * i);
+        }
+        let response = this.getBMDLine(model.model_name, doseArr);
+        this.bmdLine = {
+            x: doseArr,
+            y: response,
             mode: "marker",
             type: "line",
+            name: model.model_name,
         };
-        rootStore.dataStore.addFitCurve(trace2);
     };
-    @action clearPlotData = () => {
-        this.plotData.pop();
+    @action removeBMDLine = () => {
+        this.bmdLine = {};
     };
+
+    @action getBMDLine(model_name, doseArr) {
+        return constant.generateLine[model_name](doseArr, this.param);
+    }
 }
 
 const outputStore = new OutputStore();

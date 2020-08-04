@@ -18,7 +18,7 @@ class Main extends Component {
             <div>
                 {mainStore.isUpdateComplete ? (
                     <div className="main container-fluid ">
-                        <div className="row first-row">
+                        <div className="row">
                             <div className="col-lg-3">
                                 <div className="analysis">
                                     <AnalysisForm />

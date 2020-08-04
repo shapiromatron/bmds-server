@@ -1,6 +1,6 @@
 .app-nav nav{
     margin: 0;
-    height: 50px;
+    height: auto!important;
 }
 
 .app-nav nav{

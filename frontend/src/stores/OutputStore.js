@@ -1,6 +1,8 @@
-import {observable, action, computed} from "mobx";
+import { observable, action, computed } from "mobx";
 import _ from "lodash";
 import rootStore from "./RootStore";
+import * as constant from "./Constants"
+import { toJS } from "mobx"
 
 class OutputStore {
     @observable modelDetailModal = false;
@@ -11,26 +13,26 @@ class OutputStore {
     @observable pValue = [];
     @observable cdfValues = [];
     @observable infoTable = {
-        model_name: {label: "Model Name", value: ""},
-        dataset_name: {label: "Dataset Name", value: ""},
-        user_notes: {label: "User Notes", value: ""},
-        dose_response_model: {label: "Dose Response Model", value: ""},
+        model_name: { label: "Model Name", value: "" },
+        dataset_name: { label: "Dataset Name", value: "" },
+        user_notes: { label: "User Notes", value: "" },
+        dose_response_model: { label: "Dose Response Model", value: "" },
     };
     @observable goodnessFit = [];
     @observable modelOptions = [];
 
     @observable modelData = {
-        dependent_variable: {label: "Dependent Variable", value: "Dose"},
-        independent_variable: {label: "Independent Variable", value: "Mean"},
-        number_of_observations: {label: "Number of Observations", value: ""},
+        dependent_variable: { label: "Dependent Variable", value: "Dose" },
+        independent_variable: { label: "Independent Variable", value: "Mean" },
+        number_of_observations: { label: "Number of Observations", value: "" },
     };
     @observable benchmarkDose = {
-        bmd: {label: "BMD", value: ""},
-        bmdl: {label: "BMDL", value: ""},
-        bmdu: {label: "BMDU", value: ""},
-        aic: {label: "AIC", value: ""},
-        p_value: {label: "P Value", value: ""},
-        df: {label: "DOF", value: ""},
+        bmd: { label: "BMD", value: "" },
+        bmdl: { label: "BMDL", value: "" },
+        bmdu: { label: "BMDU", value: "" },
+        aic: { label: "AIC", value: "" },
+        p_value: { label: "P Value", value: "" },
+        df: { label: "DOF", value: "" },
     };
     @observable parameters = [];
     @observable response_models = [];
@@ -111,19 +113,19 @@ class OutputStore {
         this.parameters = _.zipWith(
             this.parameter_variables,
             this.selectedModel.results.parameters,
-            (p_variable, parameter) => ({p_variable, parameter})
+            (p_variable, parameter) => ({ p_variable, parameter })
         );
 
         //set cdf values with percentiles
         this.cdf = this.selectedModel.results.cdf;
         this.pValue = this.getPValue;
 
-        this.cdfValues = _.zipWith(this.pValue, this.cdf, (pValue, cdf) => ({pValue, cdf}));
+        this.cdfValues = _.zipWith(this.pValue, this.cdf, (pValue, cdf) => ({ pValue, cdf }));
     }
 
     @computed get getPValue() {
         let percentileValue = _.range(0.01, 1, 0.01);
-        let pValue = percentileValue.map(function(each_element) {
+        let pValue = percentileValue.map(function (each_element) {
             return Number(each_element.toFixed(2));
         });
         return pValue;
@@ -133,12 +135,12 @@ class OutputStore {
         switch (model_type) {
             case "CS":
                 this.modelOptions = [
-                    {label: "BMR Type", name: "bmrType", value: ""},
-                    {label: "BMRF", name: "bmr", value: ""},
-                    {label: "Tail Probability", name: "tailProb", value: ""},
-                    {label: "Confidence Level", name: "alpha", value: ""},
-                    {label: "Distribution Type", name: "distType", value: ""},
-                    {label: "Variance Type", name: "varType", value: ""},
+                    { label: "BMR Type", name: "bmrType", value: "" },
+                    { label: "BMRF", name: "bmr", value: "" },
+                    { label: "Tail Probability", name: "tailProb", value: "" },
+                    { label: "Confidence Level", name: "alpha", value: "" },
+                    { label: "Distribution Type", name: "distType", value: "" },
+                    { label: "Variance Type", name: "varType", value: "" },
                 ];
                 this.goodnessFitHeaders = [
                     "Dose",
@@ -165,10 +167,10 @@ class OutputStore {
                 break;
             case "DM":
                 this.modelOptions = [
-                    {label: "Risk Type", name: "bmrType", value: ""},
-                    {label: "BMR", name: "bmr", value: ""},
-                    {label: "Confidence Level", name: "alpha", value: ""},
-                    {label: "Background", name: "background", value: ""},
+                    { label: "Risk Type", name: "bmrType", value: "" },
+                    { label: "BMR", name: "bmr", value: "" },
+                    { label: "Confidence Level", name: "alpha", value: "" },
+                    { label: "Background", name: "background", value: "" },
                 ];
                 this.goodnessFitHeaders = [
                     "Dose",
@@ -414,13 +416,21 @@ class OutputStore {
         this.setResponseModel(model.model_name);
         let param_variables = this.parameter_variables;
         let parameters = model.results.parameters;
-        this.param = parameters.reduce(function(result, field, index) {
+        this.param = parameters.reduce(function (result, field, index) {
             result[param_variables[index]] = field;
             return result;
         }, {});
-        let response = this.getBMDLine(model.model_name);
+        let maxDose = _.max(this.currentOutputObject.dataset.doses);
+        let minDose = _.min(this.currentOutputObject.dataset.doses);
+        let number_of_values = 100;
+        var doseArr = [];
+        var step = (maxDose - minDose) / (number_of_values - 1);
+        for (var i = 0; i < number_of_values; i++) {
+            doseArr.push(minDose + (step * i));
+        }
+        let response = this.getBMDLine(model.model_name, doseArr);
         this.bmdLine = {
-            x: this.currentOutputObject.dataset.doses,
+            x: doseArr,
             y: response,
             mode: "marker",
             type: "line",
@@ -431,174 +441,8 @@ class OutputStore {
         this.bmdLine = {};
     };
 
-    @action getBMDLine(model_name) {
-        let bmd_line = [];
-        switch (model_name) {
-            case "Exponential":
-                bmd_line = this.getBMDLine_Exponential();
-                break;
-            case "Hill":
-                bmd_line = this.getBMDLine_Hill();
-                break;
-            case "Power":
-                bmd_line = this.getBMDLine_Power();
-                break;
-            case "Linear":
-                bmd_line = this.getBMDLine_Linear();
-                break;
-            case "Polynomial":
-                bmd_line = this.getBMDLine_Polynomial();
-                break;
-            case "Dichotomous-Hill":
-                bmd_line = this.getBMDLine_DichotomousHill();
-                break;
-            case "Gamma":
-                bmd_line = this.getBMDLine_Gamma();
-                break;
-            case "LogLogistic":
-                bmd_line = this.getBMDLine_LogLogistic();
-                break;
-            case "Log-Probit":
-                bmd_line = this.getBMDLine_LogProbit();
-                break;
-            case "Multistage": // multistage has multiple degree analysisi TODO
-                bmd_line = this.getBMDLine_Multistage();
-                break;
-            case "Weibull":
-                bmd_line = this.getBMDLine_Weibull();
-                break;
-            case "Logistic":
-                bmd_line = this.getBMDLine_Logistic();
-                break;
-            case "Probit":
-                bmd_line = this.getBMDLine_Probit();
-                break;
-            case "Quantal_Linear":
-                bmd_line = this.getBMDLine_QuantalLinear();
-                break;
-
-            default:
-                break;
-        }
-        return bmd_line;
-    }
-
-    @action getBMDLine_Hill() {
-        let response = [];
-        this.currentOutputObject.dataset.doses.map(dose => {
-            let r =
-                this.param.g +
-                (this.param.v * Math.pow(dose, this.param.n)) /
-                    (Math.pow(this.param.k, this.param.n) + Math.pow(dose, this.param.n));
-            response.push(r);
-        });
-        return response;
-    }
-    @action getBMDLine_Power() {
-        let response = [];
-        this.currentOutputObject.dataset.doses.map(dose => {
-            let r = this.param.g + this.param.v * Math.pow(dose, this.param.n);
-            response.push(r);
-        });
-        return response;
-    }
-
-    @action getBMDLine_Linear() {
-        let response = [];
-        this.currentOutputObject.dataset.doses.map(dose => {
-            let r = this.param.g + this.param.b1 * dose;
-            response.push(r);
-        });
-        return response;
-    }
-
-    //CumGamma
-    @action getBMDLine_DichotomousHill() {
-        let response = [];
-        this.currentOutputObject.dataset.doses.map(dose => {
-            let r =
-                this.param.g +
-                (this.param.v - this.param.v * this.param.g) /
-                    [1 + Math.exp(-this.param.a - this.param.b * Math.log(dose))];
-            response.push(r);
-        });
-        return response;
-    }
-    @action getBMDLine_Gamma() {
-        let response = [];
-        this.currentOutputObject.dataset.doses.map(dose => {
-            let r = this.param.g + (1 - this.param.g);
-            response.push(r);
-        });
-        return response;
-    }
-    @action getBMDLine_LogLogistic() {
-        let response = [];
-        this.currentOutputObject.dataset.doses.map(dose => {
-            let r =
-                this.param.g +
-                (1 - this.param.g) / [1 + Math.exp(-this.param.a - this.param.b * Math.Log(dose))];
-            response.push(r);
-        });
-        return response;
-    }
-
-    //TODO CumNorm in Math.sqrt
-    @action getBMDLine_LogProbit() {
-        let response = [];
-        this.currentOutputObject.dataset.doses.map(dose => {
-            let r =
-                this.param.g +
-                (1 - this.param.g) * Math.sqrt(this.param.a + this.param.b * Math.Log(dose));
-            response.push(r);
-        });
-        return response;
-    }
-    @action getBMDLine_Multistage() {
-        let response = [];
-        this.currentOutputObject.dataset.doses.map(dose => {
-            let r =
-                this.param.g +
-                (1 - this.param.g) *
-                    [1 - Math.exp((-this.param.b1 * dose) ^ (1 - this.param.b2 * dose) ^ 2)];
-            response.push(r);
-        });
-        return response;
-    }
-    @action getBMDLine_Weibull() {
-        let response = [];
-        this.currentOutputObject.dataset.doses.map(dose => {
-            let r =
-                this.param.g +
-                (1 - this.param.g) * [1 - Math.exp((-this.param.b * dose) ^ this.param.a)];
-            response.push(r);
-        });
-        return response;
-    }
-    @action getBMDLine_Logistic() {
-        let response = [];
-        this.currentOutputObject.dataset.doses.map(dose => {
-            let r = 1 / [1 + Math.exp(-this.param.a - this.param.b * dose)];
-            response.push(r);
-        });
-        return response;
-    }
-    //TODO CumNorm in Math.sqrt
-    @action getBMDLine_Probit() {
-        let response = [];
-        this.currentOutputObject.dataset.doses.map(dose => {
-            let r = Math.sqrt(this.param.a + this.param.b * dose);
-            response.push(r);
-        });
-        return response;
-    }
-    @action getBMDLine_QuantalLinear() {
-        let response = [];
-        this.currentOutputObject.dataset.doses.map(dose => {
-            let r = this.param.g + (1 - this.param.g) * [1 - Math.exp(-this.param.b * dose)];
-            response.push(r);
-        });
-        return response;
+    @action getBMDLine(model_name, doseArr) {
+        return constant.generateLine[model_name](doseArr, this.param)
     }
 }
 

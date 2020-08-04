@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, {Component} from "react";
 
 import AnalysisForm from "./AnalysisForm";
 import ModelsCheckBoxList from "./ModelsCheckBoxList";
@@ -6,14 +6,14 @@ import OptionsFormList from "./OptionsFormList";
 import MainModal from "./MainModal";
 import "./main.css";
 
-import { inject, observer } from "mobx-react";
+import {inject, observer} from "mobx-react";
 import DatasetList from "./DatasetList";
 
 @inject("mainStore")
 @observer
 class Main extends Component {
     render() {
-        const { mainStore } = this.props;
+        const {mainStore} = this.props;
         return (
             <div>
                 {mainStore.isUpdateComplete ? (

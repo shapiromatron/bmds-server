@@ -1,7 +1,7 @@
-import {observable, action, computed} from "mobx";
+import { observable, action, computed } from "mobx";
 import _ from "lodash";
 import rootStore from "./RootStore";
-import * as constant from "./Constants";
+import * as constant from "../constants/outputConstants";
 
 class OutputStore {
     @observable modelDetailModal = false;
@@ -12,26 +12,26 @@ class OutputStore {
     @observable pValue = [];
     @observable cdfValues = [];
     @observable infoTable = {
-        model_name: {label: "Model Name", value: ""},
-        dataset_name: {label: "Dataset Name", value: ""},
-        user_notes: {label: "User Notes", value: ""},
-        dose_response_model: {label: "Dose Response Model", value: ""},
+        model_name: { label: "Model Name", value: "" },
+        dataset_name: { label: "Dataset Name", value: "" },
+        user_notes: { label: "User Notes", value: "" },
+        dose_response_model: { label: "Dose Response Model", value: "" },
     };
     @observable goodnessFit = [];
     @observable modelOptions = [];
 
     @observable modelData = {
-        dependent_variable: {label: "Dependent Variable", value: "Dose"},
-        independent_variable: {label: "Independent Variable", value: "Mean"},
-        number_of_observations: {label: "Number of Observations", value: ""},
+        dependent_variable: { label: "Dependent Variable", value: "Dose" },
+        independent_variable: { label: "Independent Variable", value: "Mean" },
+        number_of_observations: { label: "Number of Observations", value: "" },
     };
     @observable benchmarkDose = {
-        bmd: {label: "BMD", value: ""},
-        bmdl: {label: "BMDL", value: ""},
-        bmdu: {label: "BMDU", value: ""},
-        aic: {label: "AIC", value: ""},
-        p_value: {label: "P Value", value: ""},
-        df: {label: "DOF", value: ""},
+        bmd: { label: "BMD", value: "" },
+        bmdl: { label: "BMDL", value: "" },
+        bmdu: { label: "BMDU", value: "" },
+        aic: { label: "AIC", value: "" },
+        p_value: { label: "P Value", value: "" },
+        df: { label: "DOF", value: "" },
     };
     @observable parameters = [];
     @observable response_models = [];
@@ -112,19 +112,19 @@ class OutputStore {
         this.parameters = _.zipWith(
             this.parameter_variables,
             this.selectedModel.results.parameters,
-            (p_variable, parameter) => ({p_variable, parameter})
+            (p_variable, parameter) => ({ p_variable, parameter })
         );
 
         //set cdf values with percentiles
         this.cdf = this.selectedModel.results.cdf;
         this.pValue = this.getPValue;
 
-        this.cdfValues = _.zipWith(this.pValue, this.cdf, (pValue, cdf) => ({pValue, cdf}));
+        this.cdfValues = _.zipWith(this.pValue, this.cdf, (pValue, cdf) => ({ pValue, cdf }));
     }
 
     @computed get getPValue() {
         let percentileValue = _.range(0.01, 1, 0.01);
-        let pValue = percentileValue.map(function(each_element) {
+        let pValue = percentileValue.map(function (each_element) {
             return Number(each_element.toFixed(2));
         });
         return pValue;
@@ -134,12 +134,12 @@ class OutputStore {
         switch (model_type) {
             case "CS":
                 this.modelOptions = [
-                    {label: "BMR Type", name: "bmrType", value: ""},
-                    {label: "BMRF", name: "bmr", value: ""},
-                    {label: "Tail Probability", name: "tailProb", value: ""},
-                    {label: "Confidence Level", name: "alpha", value: ""},
-                    {label: "Distribution Type", name: "distType", value: ""},
-                    {label: "Variance Type", name: "varType", value: ""},
+                    { label: "BMR Type", name: "bmrType", value: "" },
+                    { label: "BMRF", name: "bmr", value: "" },
+                    { label: "Tail Probability", name: "tailProb", value: "" },
+                    { label: "Confidence Level", name: "alpha", value: "" },
+                    { label: "Distribution Type", name: "distType", value: "" },
+                    { label: "Variance Type", name: "varType", value: "" },
                 ];
                 this.goodnessFitHeaders = [
                     "Dose",
@@ -166,10 +166,10 @@ class OutputStore {
                 break;
             case "DM":
                 this.modelOptions = [
-                    {label: "Risk Type", name: "bmrType", value: ""},
-                    {label: "BMR", name: "bmr", value: ""},
-                    {label: "Confidence Level", name: "alpha", value: ""},
-                    {label: "Background", name: "background", value: ""},
+                    { label: "Risk Type", name: "bmrType", value: "" },
+                    { label: "BMR", name: "bmr", value: "" },
+                    { label: "Confidence Level", name: "alpha", value: "" },
+                    { label: "Background", name: "background", value: "" },
                 ];
                 this.goodnessFitHeaders = [
                     "Dose",
@@ -415,7 +415,7 @@ class OutputStore {
         this.setResponseModel(model.model_name);
         let param_variables = this.parameter_variables;
         let parameters = model.results.parameters;
-        this.param = parameters.reduce(function(result, field, index) {
+        this.param = parameters.reduce(function (result, field, index) {
             result[param_variables[index]] = field;
             return result;
         }, {});

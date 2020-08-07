@@ -9,7 +9,7 @@ const OptionsForm = props => {
                     <select
                         name="bmr_type"
                         className="form-control"
-                        value={props.item.bmr_type}
+                        value={props.options.bmr_type}
                         id={props.idx}
                         onChange={props.onchange}>
                         <option value="Std. Dev.">Std. Dev.</option>
@@ -25,7 +25,7 @@ const OptionsForm = props => {
                     <select
                         name="bmr_type"
                         className="form-control"
-                        value={props.item.bmr_type}
+                        value={props.options.bmr_type}
                         id={props.idx}
                         onChange={props.onchange}>
                         <option value="Extra">Extra Risk</option>
@@ -39,7 +39,7 @@ const OptionsForm = props => {
                     type="number"
                     name="bmr_value"
                     className="form-control"
-                    value={props.item.bmr_value}
+                    value={props.options.bmr_value}
                     id={props.idx}
                     onChange={props.onchange}
                 />
@@ -50,7 +50,7 @@ const OptionsForm = props => {
                         type="number"
                         name="tail_probability"
                         className="form-control"
-                        value={props.item.tail_probability}
+                        value={props.options.tail_probability}
                         id={props.idx}
                         onChange={props.onchange}
                     />
@@ -61,7 +61,7 @@ const OptionsForm = props => {
                     className="form-control"
                     type="number"
                     name="confidence_level"
-                    value={props.item.confidence_level}
+                    value={props.options.confidence_level}
                     id={props.idx}
                     onChange={props.onchange}
                 />
@@ -71,7 +71,7 @@ const OptionsForm = props => {
                     <select
                         name="litter_specific_covariate"
                         className="form-control"
-                        value={props.item.litter_specific_covariate}
+                        value={props.options.litter_specific_covariate}
                         id={props.idx}
                         onChange={props.onchange}>
                         <option value="Overall_Mean">Overall Mean</option>
@@ -85,7 +85,7 @@ const OptionsForm = props => {
                     <select
                         name="distribution"
                         className="form-control"
-                        value={props.item.distribution}
+                        value={props.options.distribution}
                         id={props.idx}
                         onChange={props.onchange}>
                         <option value="Normal">Normal</option>
@@ -99,7 +99,7 @@ const OptionsForm = props => {
                         name="variance"
                         id={props.idx}
                         className="form-control"
-                        value={props.item.variance}
+                        value={props.options.variance}
                         onChange={props.onchange}>
                         <option value="Constant">Constant</option>
                         <option value="Non-constant">Non-Constant</option>
@@ -112,7 +112,7 @@ const OptionsForm = props => {
                         name="polynomial_restriction"
                         id={props.idx}
                         className="form-control"
-                        value={props.item.polynomial_restriction}
+                        value={props.options.polynomial_restriction}
                         onChange={props.onchange}>
                         <option value="Use dataset adverse direction">
                             Use dataset adverse direction
@@ -128,7 +128,7 @@ const OptionsForm = props => {
                         name="background"
                         id={props.idx}
                         className="form-control"
-                        value={props.item.background}
+                        value={props.options.background}
                         onChange={props.onchange}>
                         <option value="Estimated">Estimated</option>
                     </select>
@@ -140,7 +140,7 @@ const OptionsForm = props => {
                         type="number"
                         name="bootstrap_iterations"
                         className="form-control"
-                        value={props.item.bootstrap_iterations}
+                        value={props.options.bootstrap_iterations}
                         id={props.idx}
                         onChange={props.onchange}
                     />
@@ -152,7 +152,7 @@ const OptionsForm = props => {
                         name="bootstrap_seed"
                         id={props.idx}
                         className="form-control"
-                        value={props.item.bootstrap_seed}
+                        value={props.options.bootstrap_seed}
                         onChange={props.onchange}>
                         <option value="Automatic">Automatic</option>
                         <option value="User_Specified">User Specified</option>

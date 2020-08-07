@@ -4,7 +4,6 @@
 
 div.col {
     padding: 0;
-    margin-left: 15px;
 }
 
 .navbar {
@@ -31,6 +30,7 @@ div.col {
     text-overflow: inherit;
     font-size: 12px;
     padding: 6px 6px;
+    width: fit-content;
 }
 
 .btn-group {
@@ -38,8 +38,7 @@ div.col {
 }
 
 .options-table th {
-    font-size: 14px;
-    color: black;
+    font-size: 12px;
 }
 
 .options-table th,
@@ -71,23 +70,23 @@ div.col {
 
 .options-table td select {
     font-size: 12px;
-    width: auto;
     overflow: hidden;
     padding: 0;
 }
 
-.modelscheckbox th {
+/* .modelscheckbox th {
     word-break: break-all;
     word-wrap: break-word;
     font-size: 12px;
 }
+*/
 
 .modelscheckbox td input {
     size: 10px;
     margin-left: 30px;
     text-align: right;
     width: 70px;
-}
+} 
 
 .modelscheckbox td input[type=text] {
     -webkit-transition: all 0.30s ease-in-out;
@@ -142,13 +141,19 @@ div.col {
     justify-content: center;
 }
 
-@media only screen and (max-width: 768px) {
+@media only screen and (max-width: 991px) {
     .analysis-form button {
         margin-bottom: 10px;
         justify-content: center;
     }
     .analysis-form {
         margin-bottom: 20px;
+    }
+}
+@media only screen and (min-width: 991px) {
+    .analysis-form button {
+        margin-bottom: 10px;
+        justify-content: center;
     }
 }
 

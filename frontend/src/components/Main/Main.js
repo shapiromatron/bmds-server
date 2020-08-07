@@ -19,24 +19,24 @@ class Main extends Component {
                 {mainStore.isUpdateComplete ? (
                     <div className="main container-fluid ">
                         <div className="row">
-                            <div className="col-lg-3">
+                            <div className="col-sm-12 col-lg-3">
                                 <div className="analysis">
                                     <AnalysisForm />
                                 </div>
                             </div>
-                            <div className="col-lg-7">
+                            <div className="col-sm-12 col-lg-8">
                                 <div className="modelsCheckbox">
                                     <ModelsCheckBoxList />
                                 </div>
                             </div>
                         </div>
                         <div className="row second-row">
-                            <div className="col-lg-3">
+                            <div className="col-sm-12 col-lg-3">
                                 <div className="datasetlist">
                                     <DatasetList />
                                 </div>
                             </div>
-                            <div className="col-lg-7">
+                            <div className="col-sm-12 col-lg-8">
                                 <div className="optionslist">
                                     <OptionsFormList />
                                 </div>

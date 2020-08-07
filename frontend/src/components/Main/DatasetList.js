@@ -15,9 +15,9 @@ class DatasetList extends Component {
                 mainStore.saveAdverseDirection(e.target.name, e.target.value, dataset_id);
             },
             isEditSettings = mainStore.getEditSettings(),
-            adverseList = mainStore.AdverseDirectionList,
-            degree = mainStore.degree,
-            background = mainStore.background,
+            adverseList = mainStore.getAdverseDirectionList(),
+            degree = mainStore.getDegree(),
+            background = mainStore.getBackground(),
             datasets = mainStore.getDatasets(),
             enabledDatasets = datasets.filter(item => item.enabled == true),
             datasetnames = mainStore.getDatasetNamesHeader();
@@ -38,7 +38,7 @@ class DatasetList extends Component {
                                 adverseList={adverseList}
                                 degree={degree}
                                 background={background}
-                                dataset_type={mainStore.analysisForm.dataset_type}
+                                dataset_type={mainStore.dataset_type}
                                 enabledDatasets={enabledDatasets}
                                 onChange={onChange.bind(this)}
                                 toggleDatasets={toggleDataset.bind(this)}

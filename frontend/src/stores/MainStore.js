@@ -1,28 +1,36 @@
-import {observable, action, computed, toJS} from "mobx";
+import { observable, action, computed, toJS } from "mobx";
 import _ from "lodash";
 import rootStore from "./RootStore";
+import * as constant from "../constants/mainConstants";
 
 class MainStore {
     @observable config = {};
     @observable models = {};
     @observable prior_weight = 0;
     @observable prior_weight_models = [];
-    @observable analysisForm = {
-        analysis_name: "",
-        analysis_description: "",
-        dataset_type: "C",
-    };
+    @observable analysis_name = "";
+    @observable analysis_description = "";
+    @observable dataset_type = "C";
     @observable errorMessage = "";
     @observable errorModal = false;
     @observable hasEditSettings = false;
     @observable executionOutputs = null;
     @observable checked_items = [];
     @observable isUpdateComplete = false;
-    @observable options = [];
 
     @action setConfig = config => {
         this.config = config;
     };
+    @action changeAnalysisName(value) {
+        this.analysis_name = value;
+    }
+    @action changeAnalysisDescription(value) {
+        this.analysis_description = value;
+    }
+    @action changeDatasetType(value) {
+        this.dataset_type = value;
+        rootStore.optionsStore.dataset_type = this.dataset_type;
+    }
 
     @observable getEditSettings() {
         let editSettings = false;
@@ -32,42 +40,13 @@ class MainStore {
         return editSettings;
     }
 
-    @action saveOptions = (name, value, id) => {
-        this.options[id][name] = value;
-    };
-
-    @action deleteOptions = val => {
-        this.options.splice(val, 1);
-    };
-
-    @action addanalysisForm = (name, value) => {
-        if (name === "dataset_type") {
-            this.options = [];
-            rootStore.dataStore.datasets = [];
-            let modelsList = this.getModelTypeList();
-            modelsList.map(models => {
-                models.values.map(val => {
-                    if (val.isChecked) {
-                        val.isChecked = !val.isChecked;
-                    }
-                });
-            });
-            this.modelsCheckBoxHeaders.third.values.map(value => {
-                if (value.isChecked) {
-                    value.isChecked = !value.isChecked;
-                }
-            });
-        }
-        this.analysisForm[name] = value;
-    };
-
     @observable getModelTypeList() {
         let models = [];
-        if (this.analysisForm.dataset_type === "C") {
+        if (this.dataset_type === "C") {
             models = this.CmodelType;
-        } else if (this.analysisForm.dataset_type === "D") {
+        } else if (this.dataset_type === "D") {
             models = this.DmodelType;
-        } else if (this.analysisForm.dataset_type === "N") {
+        } else if (this.dataset_type === "N") {
             models = this.NmodelType;
         }
         return models;
@@ -75,7 +54,7 @@ class MainStore {
 
     @observable getmodelsHeaders() {
         let modelsHeader = {};
-        if (this.analysisForm.dataset_type === "N") {
+        if (this.dataset_type === "N") {
             modelsHeader = this.NestedCheckBoxHeaders;
         } else {
             modelsHeader = this.modelsCheckBoxHeaders;
@@ -203,7 +182,7 @@ class MainStore {
                     } else {
                         if (k === "bayesian_model_average") {
                             result[k] = [
-                                {model: v, prior_weight: parseFloat(val.prior_weight) / 100},
+                                { model: v, prior_weight: parseFloat(val.prior_weight) / 100 },
                             ];
                         } else {
                             result[k] = [v];
@@ -220,9 +199,12 @@ class MainStore {
         let datasets = rootStore.dataStore.getDatasets();
         let enabledDatasets = datasets.filter(item => item.enabled == true);
         let selectedDatasets = enabledDatasets.filter(item =>
-            item.model_type.includes(this.analysisForm.dataset_type)
+            item.model_type.includes(this.dataset_type)
         );
         return selectedDatasets;
+    }
+    @computed get getOptions() {
+        return rootStore.optionsStore.optionsList;
     }
 
     @action
@@ -234,15 +216,16 @@ class MainStore {
                     partial: true,
                     data: {
                         bmds_version: "BMDS312",
-                        analysis_name: this.analysisForm.analysis_name,
-                        analysis_description: this.analysisForm.analysis_description,
-                        dataset_type: this.analysisForm.dataset_type,
+                        analysis_name: this.analysis_name,
+                        analysis_description: this.analysis_description,
+                        dataset_type: this.dataset_type,
                         models: this.getModels,
                         datasets: this.getSelectedDataset,
-                        options: this.options,
+                        options: this.getOptions,
                     },
                 };
             };
+
         await fetch(url, {
             method: "PATCH",
             mode: "cors",
@@ -331,10 +314,11 @@ class MainStore {
             this.executionOutputs = data.outputs.outputs;
         }
         // unpack general settings
-        this.analysisForm.analysis_name = inputs.analysis_name;
-        this.analysisForm.analysis_description = inputs.analysis_description;
-        this.analysisForm.dataset_type = inputs.dataset_type;
-        this.options = inputs.options;
+        this.analysis_name = inputs.analysis_name;
+        this.analysis_description = inputs.analysis_description;
+        this.dataset_type = inputs.dataset_type;
+
+        rootStore.optionsStore.optionsList = inputs.options;
         // unpack datasets
         var datasets = inputs.datasets;
         rootStore.dataStore.setDatasets(datasets);
@@ -392,137 +376,21 @@ class MainStore {
     }
 
     @action getDatasetNamesHeader() {
-        let datasetNames = [];
-        switch (this.analysisForm.dataset_type) {
-            case "C":
-                datasetNames = ["Enable", "Datasets", "Adverse Direction"];
-                break;
-            case "D":
-                datasetNames = ["Enable", "Datasets"];
-                break;
-            case "DM":
-                datasetNames = ["Enable", "Datasets", "Degree", "Background"];
-                break;
-            case "N":
-                datasetNames = ["Enable", "Datasets"];
-                break;
-        }
-        return datasetNames;
+        return constant.datasetNamesHeaders[this.dataset_type];
+    }
+    @action getAdverseDirectionList() {
+        return constant.AdverseDirectionList;
+    }
+    @action getDegree() {
+        return constant.degree;
+    }
+    @action getBackground() {
+        return constant.background;
+    }
+    @action getModelTypes() {
+        return constant.modelTypes;
     }
 
-    @observable createOptions() {
-        let option = this.getOptions(this.analysisForm.dataset_type);
-        this.options.push(option);
-    }
-    @action getOptions(dataset_type) {
-        let options = {};
-        switch (dataset_type) {
-            case "C":
-                options = this.CSOptions;
-                break;
-            case "D":
-                options = this.DIOptions;
-                break;
-            case "DM":
-                options = this.DMTOptions;
-                break;
-            case "N":
-                options = this.NOptions;
-                break;
-        }
-        return options;
-    }
-
-    @action getOptionsLabels(dataset_type) {
-        let labels = [];
-        switch (dataset_type) {
-            case "C":
-                labels = [
-                    "Option Set",
-                    "BMR Type",
-                    "BMRF",
-                    "Tail Probability",
-                    "Confidence Level",
-                    "Distribution",
-                    "Variance",
-                    "Polynomial Restriction",
-                    "Background",
-                ];
-                break;
-            case "D":
-                labels = ["Option Set", "Risk Type", "BMR", "Confidence Level", "Background"];
-                break;
-            case "DM":
-                labels = ["Option Set", "Risk Type", "BMR", "Confidence Level"];
-                break;
-            case "N":
-                labels = [
-                    "Option Set",
-                    "Risk Type",
-                    "BMR",
-                    "Confidence Level",
-                    "Litter Specific Covariate",
-                    "Background",
-                    "Bootstrap Iterations",
-                    "Bootstrap Seed",
-                ];
-                break;
-        }
-        return labels;
-    }
-    @observable DIOptions = {
-        bmr_type: "Extra",
-        bmr_value: 0.1,
-        confidence_level: 0.95,
-        background: "Estimated",
-    };
-
-    @observable CSOptions = {
-        bmr_type: "Std. Dev.",
-        bmr_value: 1,
-        tail_probability: 0.01,
-        confidence_level: 0.95,
-        distribution: "Normal",
-        variance: "Constant",
-        polynomial_restriction: "Use dataset adverse direction",
-        background: "Estimated",
-    };
-    @observable NOptions = {
-        bmr_type: "Extra",
-        bmr_value: 0.1,
-        confidence_level: 0.95,
-        litter_sepcific_covariate: "Overall Mean",
-        background: "Estimated",
-        bootstrap_iterations: 1000,
-        bootstrap_speed: "Automatic",
-    };
-    @observable DMTOptions = {
-        bmr_type: "Extra",
-        bmr_value: 0.1,
-        confidence_level: 0.95,
-    };
-    @observable AdverseDirectionList = [
-        {value: "automatic", name: "Automatic"},
-        {value: "up", name: "Up"},
-        {value: "down", name: "Down"},
-    ];
-    @observable degree = [
-        {value: "auto-select", name: "auto-select"},
-        {value: "1", name: "1"},
-        {value: "2", name: "2"},
-        {value: "3", name: "3"},
-    ];
-    @observable background = [
-        {value: "Estimated", name: "Esimated"},
-        {value: "0", name: "Zero"},
-    ];
-
-    @observable modelTypes = [
-        {name: "Continuous", value: "C"},
-        {name: "Dichotomous", value: "D"},
-        {name: "Dichotomous-Multi-tumor (MS_Combo)", value: "DM"},
-        {name: "Dichotomous-Nested", value: "N"},
-    ];
     @observable NmodelType = [
         {
             model: "Nested Logistic",
@@ -605,7 +473,7 @@ class MainStore {
                     isChecked: false,
                     isDisabled: false,
                 },
-                {name: "bayesian-Hill", type: "checkbox", isChecked: false, isDisabled: false},
+                { name: "bayesian-Hill", type: "checkbox", isChecked: false, isDisabled: false },
                 {
                     name: "bayesian_model_average-Hill",
                     type: "checkbox",
@@ -630,7 +498,7 @@ class MainStore {
                     isChecked: false,
                     isDisabled: false,
                 },
-                {name: "bayesian-Linear", type: "checkbox", isChecked: false, isDisabled: false},
+                { name: "bayesian-Linear", type: "checkbox", isChecked: false, isDisabled: false },
                 {
                     name: "bayesian_model_average-Linear",
                     type: "checkbox",
@@ -685,7 +553,7 @@ class MainStore {
                     isChecked: false,
                     isDisabled: false,
                 },
-                {name: "bayesian-Power", type: "checkbox", isChecked: false, isDisabled: false},
+                { name: "bayesian-Power", type: "checkbox", isChecked: false, isDisabled: false },
                 {
                     name: "bayesian_model_average-Power",
                     type: "checkbox",
@@ -743,7 +611,7 @@ class MainStore {
                     isChecked: false,
                     isDisabled: false,
                 },
-                {name: "bayesian-Gamma", type: "checkbox", isChecked: false, isDisabled: false},
+                { name: "bayesian-Gamma", type: "checkbox", isChecked: false, isDisabled: false },
                 {
                     name: "bayesian_model_average-Gamma",
                     type: "checkbox",
@@ -768,7 +636,7 @@ class MainStore {
                     isChecked: false,
                     isDisabled: false,
                 },
-                {name: "bayesian-Logistic", type: "checkbox", isChecked: false, isDisabled: false},
+                { name: "bayesian-Logistic", type: "checkbox", isChecked: false, isDisabled: false },
                 {
                     name: "bayesian_model_average-Logistic",
                     type: "checkbox",
@@ -823,7 +691,7 @@ class MainStore {
                     isChecked: false,
                     isDisabled: false,
                 },
-                {name: "bayesian-LogProbit", type: "checkbox", isChecked: false, isDisabled: false},
+                { name: "bayesian-LogProbit", type: "checkbox", isChecked: false, isDisabled: false },
                 {
                     name: "bayesian_model_average-LogProbit",
                     type: "checkbox",
@@ -878,7 +746,7 @@ class MainStore {
                     isChecked: false,
                     isDisabled: false,
                 },
-                {name: "bayesian-Probit", type: "checkbox", isChecked: false, isDisabled: false},
+                { name: "bayesian-Probit", type: "checkbox", isChecked: false, isDisabled: false },
                 {
                     name: "bayesian_model_average-Probit",
                     type: "checkbox",
@@ -933,7 +801,7 @@ class MainStore {
                     isChecked: false,
                     isDisabled: false,
                 },
-                {name: "bayesian-Weibull", type: "checkbox", isChecked: false, isDisabled: false},
+                { name: "bayesian-Weibull", type: "checkbox", isChecked: false, isDisabled: false },
                 {
                     name: "bayesian_model_average-Weibull",
                     type: "checkbox",
@@ -948,17 +816,17 @@ class MainStore {
         first: {
             model: "",
             values: [
-                {name: "MLE", colspan: "2"},
-                {name: "Alternatives", colspan: "2"},
+                { name: "MLE", colspan: "2" },
+                { name: "Alternatives", colspan: "2" },
             ],
         },
         second: {
             model: "",
             values: [
-                {name: "Frequntist Restricted", colspan: "1"},
-                {name: "Frequentist Unrestricted", colspan: "1"},
-                {name: "Bayesian", colspan: "1"},
-                {name: "Bayesian Model Average", colspan: "1"},
+                { name: "Frequntist Restricted", colspan: "1" },
+                { name: "Frequentist Unrestricted", colspan: "1" },
+                { name: "Bayesian", colspan: "1" },
+                { name: "Bayesian Model Average", colspan: "1" },
             ],
         },
         third: {
@@ -1000,13 +868,13 @@ class MainStore {
     @observable NestedCheckBoxHeaders = {
         first: {
             model: "",
-            values: [{name: "MLE", colspan: "2"}],
+            values: [{ name: "MLE", colspan: "2" }],
         },
         second: {
             model: "",
             values: [
-                {name: "Frequntist Restricted", colspan: "1"},
-                {name: "Frequentist Unrestricted", colspan: "1"},
+                { name: "Frequntist Restricted", colspan: "1" },
+                { name: "Frequentist Unrestricted", colspan: "1" },
             ],
         },
         third: {

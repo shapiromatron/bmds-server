@@ -11,11 +11,16 @@ class AnalysisForm extends Component {
                 e.preventDefault();
                 mainStore.saveAnalysis();
             },
-            handleChange = e => {
-                mainStore.addanalysisForm(e.target.name, e.target.value);
+            changeAnalysisName = e => {
+                mainStore.changeAnalaysisName(e.target.value);
+            },
+            changeAnalysisDescription = e => {
+                mainStore.changeAnalysisDescription(e.target.value);
+            },
+            changeDatasetType = e => {
+                mainStore.changeDatasetType(e.target.value);
             },
             isEditSettings = mainStore.getEditSettings();
-
         return (
             <div>
                 {isEditSettings ? (
@@ -26,8 +31,8 @@ class AnalysisForm extends Component {
                                 className="form-control"
                                 type="text"
                                 name="analysis_name"
-                                value={mainStore.analysisForm.analysis_name}
-                                onChange={handleChange}
+                                value={mainStore.analysis_name}
+                                onChange={changeAnalysisName}
                             />
                         </div>
                         <div className="form-group">
@@ -37,17 +42,17 @@ class AnalysisForm extends Component {
                                 type="textarea"
                                 rows="3"
                                 name="analysis_description"
-                                value={mainStore.analysisForm.analysis_description}
-                                onChange={handleChange}></textarea>
+                                value={mainStore.analysis_description}
+                                onChange={changeAnalysisDescription}></textarea>
                         </div>
                         <div className="form-group">
                             <label>Select Model Type</label>
                             <select
                                 className="form-control"
                                 name="dataset_type"
-                                onChange={handleChange}
-                                value={mainStore.analysisForm.dataset_type}>
-                                {mainStore.modelTypes.map((item, i) => {
+                                onChange={changeDatasetType}
+                                value={mainStore.dataset_type}>
+                                {mainStore.getModelTypes().map((item, i) => {
                                     return [
                                         <option key={i} value={item.value}>
                                             {item.name}
@@ -56,19 +61,19 @@ class AnalysisForm extends Component {
                                 })}
                             </select>
                         </div>
-                        <div className="btngroup form-group" role="toolbar">
-                            <button type="button" className="btn btn-primary  mr-1">
+                        <div className="btn-toolbar btn-group form-group" role="toolbar">
+                            <button type="button" className="btn btn-primary btn-sm mr-1">
                                 Load Analysis
                             </button>
                             <button
                                 type="button"
-                                className="btn btn-primary  mr-1"
+                                className="btn btn-primary btn-sm mr-1"
                                 onClick={() => mainStore.saveAnalysis()}>
                                 Save Analysis
                             </button>
                             <button
                                 type="button"
-                                className="btn btn-primary"
+                                className="btn btn-primary btn-sm"
                                 disabled={!mainStore.isReadyToExecute}
                                 onClick={() => mainStore.executeAnalysis()}>
                                 Run Analysis

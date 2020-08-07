@@ -234,7 +234,7 @@ class DataStore {
 
     @action getModelTypeDatasets() {
         return this.datasets.filter(item =>
-            item.model_type.includes(rootStore.mainStore.analysisForm.dataset_type)
+            item.model_type.includes(rootStore.mainStore.dataset_type)
         );
     }
     @action getMappingDataset(dataset) {
@@ -254,13 +254,13 @@ class DataStore {
     }
 
     @action getSelectedDatasets() {
-        let dataset_type = rootStore.mainStore.analysisForm.dataset_type;
+        let dataset_type = rootStore.mainStore.dataset_type;
         let selectedDataset = this.datasets.filter(item => item.model_type.includes(dataset_type));
         return selectedDataset;
     }
 
     @action getFilteredModelTypes() {
-        let dataset_types = rootStore.mainStore.analysisForm.dataset_type;
+        let dataset_types = rootStore.mainStore.dataset_type;
         let modeltype_list = this.ModelTypes.filter(model => model.value.includes(dataset_types));
         this.model_type = modeltype_list[0].value;
         return modeltype_list;

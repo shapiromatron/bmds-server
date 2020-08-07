@@ -1,4 +1,4 @@
-import { observable, action, computed, toJS } from "mobx";
+import {observable, action, computed, toJS} from "mobx";
 import _ from "lodash";
 import rootStore from "./RootStore";
 import * as constant from "../constants/mainConstants";
@@ -182,7 +182,7 @@ class MainStore {
                     } else {
                         if (k === "bayesian_model_average") {
                             result[k] = [
-                                { model: v, prior_weight: parseFloat(val.prior_weight) / 100 },
+                                {model: v, prior_weight: parseFloat(val.prior_weight) / 100},
                             ];
                         } else {
                             result[k] = [v];
@@ -473,7 +473,7 @@ class MainStore {
                     isChecked: false,
                     isDisabled: false,
                 },
-                { name: "bayesian-Hill", type: "checkbox", isChecked: false, isDisabled: false },
+                {name: "bayesian-Hill", type: "checkbox", isChecked: false, isDisabled: false},
                 {
                     name: "bayesian_model_average-Hill",
                     type: "checkbox",
@@ -498,7 +498,7 @@ class MainStore {
                     isChecked: false,
                     isDisabled: false,
                 },
-                { name: "bayesian-Linear", type: "checkbox", isChecked: false, isDisabled: false },
+                {name: "bayesian-Linear", type: "checkbox", isChecked: false, isDisabled: false},
                 {
                     name: "bayesian_model_average-Linear",
                     type: "checkbox",
@@ -553,7 +553,7 @@ class MainStore {
                     isChecked: false,
                     isDisabled: false,
                 },
-                { name: "bayesian-Power", type: "checkbox", isChecked: false, isDisabled: false },
+                {name: "bayesian-Power", type: "checkbox", isChecked: false, isDisabled: false},
                 {
                     name: "bayesian_model_average-Power",
                     type: "checkbox",
@@ -611,7 +611,7 @@ class MainStore {
                     isChecked: false,
                     isDisabled: false,
                 },
-                { name: "bayesian-Gamma", type: "checkbox", isChecked: false, isDisabled: false },
+                {name: "bayesian-Gamma", type: "checkbox", isChecked: false, isDisabled: false},
                 {
                     name: "bayesian_model_average-Gamma",
                     type: "checkbox",
@@ -636,7 +636,7 @@ class MainStore {
                     isChecked: false,
                     isDisabled: false,
                 },
-                { name: "bayesian-Logistic", type: "checkbox", isChecked: false, isDisabled: false },
+                {name: "bayesian-Logistic", type: "checkbox", isChecked: false, isDisabled: false},
                 {
                     name: "bayesian_model_average-Logistic",
                     type: "checkbox",
@@ -691,7 +691,7 @@ class MainStore {
                     isChecked: false,
                     isDisabled: false,
                 },
-                { name: "bayesian-LogProbit", type: "checkbox", isChecked: false, isDisabled: false },
+                {name: "bayesian-LogProbit", type: "checkbox", isChecked: false, isDisabled: false},
                 {
                     name: "bayesian_model_average-LogProbit",
                     type: "checkbox",
@@ -746,7 +746,7 @@ class MainStore {
                     isChecked: false,
                     isDisabled: false,
                 },
-                { name: "bayesian-Probit", type: "checkbox", isChecked: false, isDisabled: false },
+                {name: "bayesian-Probit", type: "checkbox", isChecked: false, isDisabled: false},
                 {
                     name: "bayesian_model_average-Probit",
                     type: "checkbox",
@@ -801,7 +801,7 @@ class MainStore {
                     isChecked: false,
                     isDisabled: false,
                 },
-                { name: "bayesian-Weibull", type: "checkbox", isChecked: false, isDisabled: false },
+                {name: "bayesian-Weibull", type: "checkbox", isChecked: false, isDisabled: false},
                 {
                     name: "bayesian_model_average-Weibull",
                     type: "checkbox",
@@ -816,17 +816,17 @@ class MainStore {
         first: {
             model: "",
             values: [
-                { name: "MLE", colspan: "2" },
-                { name: "Alternatives", colspan: "2" },
+                {name: "MLE", colspan: "2"},
+                {name: "Alternatives", colspan: "2"},
             ],
         },
         second: {
             model: "",
             values: [
-                { name: "Frequntist Restricted", colspan: "1" },
-                { name: "Frequentist Unrestricted", colspan: "1" },
-                { name: "Bayesian", colspan: "1" },
-                { name: "Bayesian Model Average", colspan: "1" },
+                {name: "Frequntist Restricted", colspan: "1"},
+                {name: "Frequentist Unrestricted", colspan: "1"},
+                {name: "Bayesian", colspan: "1"},
+                {name: "Bayesian Model Average", colspan: "1"},
             ],
         },
         third: {
@@ -868,13 +868,13 @@ class MainStore {
     @observable NestedCheckBoxHeaders = {
         first: {
             model: "",
-            values: [{ name: "MLE", colspan: "2" }],
+            values: [{name: "MLE", colspan: "2"}],
         },
         second: {
             model: "",
             values: [
-                { name: "Frequntist Restricted", colspan: "1" },
-                { name: "Frequentist Unrestricted", colspan: "1" },
+                {name: "Frequntist Restricted", colspan: "1"},
+                {name: "Frequentist Unrestricted", colspan: "1"},
             ],
         },
         third: {

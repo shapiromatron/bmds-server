@@ -12,16 +12,15 @@ class ModelsCheckBoxList extends Component {
     render() {
         const {modelsStore} = this.props,
             handleCheckbox = e => {
-                let model_name = e.target.name;
-                let checked = e.target.checked;
-                let value = e.target.value;
+                let model_name = e.target.name,
+                    checked = e.target.checked,
+                    value = e.target.value;
                 modelsStore.toggleModelsCheckBox(model_name, checked, value);
             },
             isEditSettings = modelsStore.getEditSettings();
-        let dataset_type = modelsStore.dataset_type;
-        modelsStore.getModelsList(dataset_type);
-        let models = toJS(modelsStore.models);
-        let modelsHeaders = modelsStore.getmodelsHeaders();
+        let models = toJS(modelsStore.models),
+            modelsHeaders = modelsStore.getmodelsHeaders();
+
         return (
             <div>
                 <table className="modelscheckbox table table-bordered table-sm">

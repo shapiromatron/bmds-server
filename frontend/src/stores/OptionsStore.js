@@ -1,30 +1,42 @@
 import {observable, action} from "mobx";
 import _ from "lodash";
-import rootStore from "./RootStore";
-import * as constant from "../constants/optionsConstants";
+import {headers, options} from "../constants/optionsConstants";
 
 class OptionsStore {
-    @observable dataset_type = "C";
+    constructor(rootStore) {
+        this.rootStore = rootStore;
+        this.setDefaultsByDatasetType();
+    }
+
     @observable optionsList = [];
+    @observable headers = [];
 
-    @action getEditSettings() {
-        return rootStore.mainStore.getEditSettings();
-    }
-    @action getOptionsLabels() {
-        return constant.optionsLabel[this.dataset_type];
+    @action.bound getEditSettings() {
+        return this.rootStore.mainStore.getEditSettings();
     }
 
-    @action addOptions() {
-        let option = _.cloneDeep(constant.options[this.dataset_type]);
+    @action.bound setDefaultsByDatasetType() {
+        const dataset_type = this.rootStore.mainStore.dataset_type,
+            option = _.cloneDeep(options[dataset_type]);
+
+        this.optionsList = [option];
+        this.headers = headers[this.rootStore.mainStore.dataset_type];
+    }
+
+    @action.bound addOptions() {
+        const dataset_type = this.rootStore.mainStore.dataset_type,
+            option = _.cloneDeep(options[dataset_type]);
+
         this.optionsList.push(option);
     }
-    @action saveOptions = (name, value, id) => {
+
+    @action.bound saveOptions(name, value, id) {
         this.optionsList[id][name] = value;
-    };
-    @action deleteOptions = val => {
+    }
+
+    @action.bound deleteOptions(val) {
         this.optionsList.splice(val, 1);
-    };
+    }
 }
 
-const optionsStore = new OptionsStore();
-export default optionsStore;
+export default OptionsStore;

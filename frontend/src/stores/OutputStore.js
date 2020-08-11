@@ -1,9 +1,12 @@
 import {observable, action, computed} from "mobx";
 import _ from "lodash";
-import rootStore from "./RootStore";
 import * as constant from "../constants/outputConstants";
 
 class OutputStore {
+    constructor(rootStore) {
+        this.rootStore = rootStore;
+    }
+
     @observable modelDetailModal = false;
     @observable selectedModelType = {};
     @observable selectedModel = {};
@@ -50,7 +53,7 @@ class OutputStore {
         this.selectedDatasetIndex = dataset_id;
     }
     @computed get getExecutionOutputs() {
-        return rootStore.mainStore.getExecutionOutputs();
+        return this.rootStore.mainStore.getExecutionOutputs();
     }
     @observable currentOutputObject = {};
     @action getCurrentOutput(index) {
@@ -73,10 +76,10 @@ class OutputStore {
         return datasetList;
     }
     @action getLabels(model_type) {
-        return rootStore.dataStore.getDatasetLabels(model_type);
+        return this.rootStore.dataStore.getDatasetLabels(model_type);
     }
     @action getMappingDataset(dataset) {
-        return rootStore.dataStore.getMappingDataset(dataset);
+        return this.rootStore.dataStore.getMappingDataset(dataset);
     }
     @action.bound
     mapOutputModal(output, model_index) {
@@ -445,5 +448,4 @@ class OutputStore {
     }
 }
 
-const outputStore = new OutputStore();
-export default outputStore;
+export default OutputStore;

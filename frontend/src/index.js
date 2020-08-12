@@ -13,7 +13,8 @@ const Root = (
         dataStore={rootStore.dataStore}
         mainStore={rootStore.mainStore}
         outputStore={rootStore.outputStore}
-        optionsStore={rootStore.optionsStore}>
+        optionsStore={rootStore.optionsStore}
+        modelsStore={rootStore.modelsStore}>
         <App />
     </Provider>
 );

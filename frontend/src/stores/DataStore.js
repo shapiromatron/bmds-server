@@ -1,7 +1,10 @@
 import {observable, action, computed} from "mobx";
-import rootStore from "./RootStore";
 
 class DataStore {
+    constructor(rootStore) {
+        this.rootStore = rootStore;
+    }
+
     @observable model_type = "CS";
     @observable datasets = [];
 
@@ -14,7 +17,7 @@ class DataStore {
     }
     @action setCurrentDatasetIndex(dataset_id) {
         this.selectedDatasetIndex = dataset_id;
-        rootStore.outputStore.setCurrentDatasetIndex(this.selectedDatasetIndex);
+        this.rootStore.outputStore.setCurrentDatasetIndex(this.selectedDatasetIndex);
     }
 
     @action addDataset(e) {
@@ -225,16 +228,16 @@ class DataStore {
     }
 
     @action getEditSettings() {
-        return rootStore.mainStore.getEditSettings();
+        return this.rootStore.mainStore.getEditSettings();
     }
     @action getExecutionOutputs() {
-        let outputs = rootStore.mainStore.getExecutionOutputs();
+        let outputs = this.rootStore.mainStore.getExecutionOutputs();
         return outputs;
     }
 
     @action getModelTypeDatasets() {
         return this.datasets.filter(item =>
-            item.model_type.includes(rootStore.mainStore.dataset_type)
+            item.model_type.includes(this.rootStore.mainStore.dataset_type)
         );
     }
     @action getMappingDataset(dataset) {
@@ -254,13 +257,13 @@ class DataStore {
     }
 
     @action getSelectedDatasets() {
-        let dataset_type = rootStore.mainStore.dataset_type;
+        let dataset_type = this.rootStore.mainStore.dataset_type;
         let selectedDataset = this.datasets.filter(item => item.model_type.includes(dataset_type));
         return selectedDataset;
     }
 
     @action getFilteredModelTypes() {
-        let dataset_types = rootStore.mainStore.dataset_type;
+        let dataset_types = this.rootStore.mainStore.dataset_type;
         let modeltype_list = this.ModelTypes.filter(model => model.value.includes(dataset_types));
         this.model_type = modeltype_list[0].value;
         return modeltype_list;
@@ -365,5 +368,4 @@ class DataStore {
     ];
 }
 
-const dataStore = new DataStore();
-export default dataStore;
+export default DataStore;

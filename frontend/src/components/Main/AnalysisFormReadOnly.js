@@ -6,7 +6,9 @@ import {inject, observer} from "mobx-react";
 class AnalysisFormReadOnly extends Component {
     render() {
         const {mainStore} = this.props,
-            dataset_type = mainStore.modelTypes.find(item => item.value == mainStore.dataset_type);
+            dataset_type = mainStore
+                .getModelTypes()
+                .find(item => item.value == mainStore.dataset_type);
         return (
             <div>
                 <table className="table table-bordered table-primary table-sm analysis-readonly">

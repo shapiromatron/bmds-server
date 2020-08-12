@@ -104,7 +104,7 @@ class MainStore {
                         analysis_name: this.analysis_name,
                         analysis_description: this.analysis_description,
                         dataset_type: this.dataset_type,
-                        models: this.rootStore.modelsStore.getModels(),
+                        models: this.getModels,
                         datasets: this.getSelectedDataset,
                         options: this.getOptions,
                     },

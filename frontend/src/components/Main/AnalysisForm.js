@@ -12,7 +12,7 @@ class AnalysisForm extends Component {
                 mainStore.saveAnalysis();
             },
             changeAnalysisName = e => {
-                mainStore.changeAnalaysisName(e.target.value);
+                mainStore.changeAnalysisName(e.target.value);
             },
             changeAnalysisDescription = e => {
                 mainStore.changeAnalysisDescription(e.target.value);

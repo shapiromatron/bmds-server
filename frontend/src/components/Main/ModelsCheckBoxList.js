@@ -19,22 +19,24 @@ class ModelsCheckBoxList extends Component {
             },
             isEditSettings = modelsStore.getEditSettings();
         let models = toJS(modelsStore.models),
-            modelsHeaders = modelsStore.getmodelsHeaders();
+            modelsHeaders = modelsStore.model_headers;
 
         return (
             <div>
-                <table className="modelscheckbox table table-bordered table-sm">
-                    <ModelsCheckBoxHeader
-                        model_headers={modelsHeaders}
-                        isEditSettings={isEditSettings}
-                        onChange={handleCheckbox}
-                    />
-                    {isEditSettings ? (
-                        <ModelsCheckBox models={models} onChange={handleCheckbox} />
-                    ) : (
-                        <ModelsReadOnly models={models} />
-                    )}
-                </table>
+                {!(typeof models === "undefined") ? (
+                    <table className="modelscheckbox table table-bordered table-sm">
+                        <ModelsCheckBoxHeader
+                            model_headers={modelsHeaders}
+                            isEditSettings={isEditSettings}
+                            onChange={handleCheckbox}
+                        />
+                        {isEditSettings ? (
+                            <ModelsCheckBox models={models} onChange={handleCheckbox} />
+                        ) : (
+                            <ModelsReadOnly models={models} />
+                        )}
+                    </table>
+                ) : null}
             </div>
         );
     }

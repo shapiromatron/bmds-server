@@ -446,4 +446,90 @@ const modelsList = {
     ],
 };
 
-export {modelsList};
+const modelHeaders = {
+    first: {
+        model: "",
+        values: [
+            {name: "MLE", colspan: "2"},
+            {name: "Alternatives", colspan: "2"},
+        ],
+    },
+    second: {
+        model: "",
+        values: [
+            {name: "Frequntist Restricted", colspan: "1"},
+            {name: "Frequentist Unrestricted", colspan: "1"},
+            {name: "Bayesian", colspan: "1"},
+            {name: "Bayesian Model Average", colspan: "1"},
+        ],
+    },
+    third: {
+        model: "Model Name",
+        values: [
+            {
+                name: "Enable",
+                model_name: "frequentist_restricted",
+                colspan: "1",
+                type: "checkBox",
+                isChecked: false,
+            },
+            {
+                name: "Enable",
+                model_name: "frequentist_unrestricted",
+                colspan: "1",
+                type: "checkBox",
+                isChecked: false,
+            },
+            {
+                name: "Enable",
+                model_name: "bayesian",
+                colspan: "1",
+                type: "checkBox",
+                isChecked: false,
+            },
+            {
+                name: "Enable",
+                model_name: "bayesian_model_average",
+                colspan: "1",
+                type: "checkBox",
+                isChecked: false,
+                prior_weight: "Prior Weight",
+            },
+        ],
+    },
+};
+
+const nestedHeaders = {
+    first: {
+        model: "",
+        values: [{name: "MLE", colspan: "2"}],
+    },
+    second: {
+        model: "",
+        values: [
+            {name: "Frequntist Restricted", colspan: "1"},
+            {name: "Frequentist Unrestricted", colspan: "1"},
+        ],
+    },
+    third: {
+        model: "Model Name",
+        values: [
+            {
+                name: "Enable",
+                model_name: "frequentist_restricted",
+                colspan: "1",
+                type: "checkBox",
+                isChecked: false,
+            },
+            {
+                name: "Enable",
+                model_name: "frequentist_unrestricted",
+                colspan: "1",
+                type: "checkBox",
+                isChecked: false,
+            },
+        ],
+    },
+};
+
+export {modelsList, modelHeaders, nestedHeaders};

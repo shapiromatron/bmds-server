@@ -1,9 +1,12 @@
 import {observable, action, computed} from "mobx";
 import _ from "lodash";
-import rootStore from "./RootStore";
 import * as constant from "../constants/mainConstants";
 
 class MainStore {
+    constructor(rootStore) {
+        this.rootStore = rootStore;
+    }
+
     @observable config = {};
     @observable models = {};
 
@@ -28,8 +31,8 @@ class MainStore {
     }
     @action changeDatasetType(value) {
         this.dataset_type = value;
-        rootStore.optionsStore.dataset_type = this.dataset_type;
-        rootStore.modelsStore.dataset_type = this.dataset_type;
+        this.rootStore.modelsStore.setDefaultsByDatasetType();
+        this.rootStore.optionsStore.setDefaultsByDatasetType();
     }
 
     @observable getEditSettings() {
@@ -43,7 +46,7 @@ class MainStore {
     //returns enabled model types
     @computed get getModels() {
         let result = {};
-        let models = rootStore.modelsStore.getModels;
+        let models = this.rootStore.modelsStore.getModels;
 
         models.map(item => {
             item.values.map(val => {
@@ -78,7 +81,7 @@ class MainStore {
     }
 
     @computed get getSelectedDataset() {
-        let datasets = rootStore.dataStore.getDatasets();
+        let datasets = this.rootStore.dataStore.getDatasets();
         let enabledDatasets = datasets.filter(item => item.enabled == true);
         let selectedDatasets = enabledDatasets.filter(item =>
             item.model_type.includes(this.dataset_type)
@@ -86,7 +89,7 @@ class MainStore {
         return selectedDatasets;
     }
     @computed get getOptions() {
-        return rootStore.optionsStore.optionsList;
+        return this.rootStore.optionsStore.optionsList;
     }
 
     @action
@@ -200,10 +203,10 @@ class MainStore {
         this.analysis_description = inputs.analysis_description;
         this.dataset_type = inputs.dataset_type;
 
-        rootStore.optionsStore.optionsList = inputs.options;
+        this.rootStore.optionsStore.optionsList = inputs.options;
         // unpack datasets
         var datasets = inputs.datasets;
-        rootStore.dataStore.setDatasets(datasets);
+        this.rootStore.dataStore.setDatasets(datasets);
 
         // unpack selected models
         let modelArr = [];
@@ -223,38 +226,36 @@ class MainStore {
         modelArr.forEach((item, i) => {
             let checked = true;
             let value = "";
-            rootStore.modelsStore.toggleModelsCheckBox(item, checked, value);
+            this.rootStore.modelsStore.toggleModelsCheckBox(item, checked, value);
         });
 
         this.isUpdateComplete = true;
     }
 
-    @action toggleDataset = id => {
-        rootStore.dataStore.toggleDataset(id);
-    };
+    @action.bound toggleDataset(id) {
+        this.rootStore.dataStore.toggleDataset(id);
+    }
 
-    @action saveAdverseDirection = (name, value, id) => {
-        rootStore.dataStore.saveAdverseDirection(name, value, id);
-    };
+    @action.bound saveAdverseDirection(name, value, id) {
+        this.rootStore.dataStore.saveAdverseDirection(name, value, id);
+    }
+
     @action getExecutionOutputs() {
         return this.executionOutputs;
     }
 
     @action getDatasets() {
-        return rootStore.dataStore.getDatasets();
+        return this.rootStore.dataStore.getDatasets();
     }
 
-    @action toggleDataset(dataset_id) {
-        rootStore.dataStore.toggleDataset(dataset_id);
+    @action.bound saveAdverseDiretion(name, value, id) {
+        this.rootStore.dataStore.saveAdverseDirection(name, value, id);
     }
-    @action saveAdverseDiretion = (name, value, id) => {
-        rootStore.dataStore.saveAdverseDirection(name, value, id);
-    };
     @action getEnabledDatasets() {
-        return rootStore.dataStore.datasets.filter(item => item.enabled == true);
+        return this.rootStore.dataStore.datasets.filter(item => item.enabled == true);
     }
     @action getDatasetLength() {
-        return rootStore.dataStore.getDataLength;
+        return this.rootStore.dataStore.getDataLength;
     }
 
     @action getDatasetNamesHeader() {
@@ -274,5 +275,4 @@ class MainStore {
     }
 }
 
-const mainStore = new MainStore();
-export default mainStore;
+export default MainStore;

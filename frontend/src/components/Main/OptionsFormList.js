@@ -2,7 +2,7 @@ import React, {Component} from "react";
 import {inject, observer} from "mobx-react";
 import OptionsForm from "./OptionsForm";
 import OptionsReadOnly from "./OptionsReadOnly";
-import {toJS} from "mobx";
+
 @inject("optionsStore")
 @observer
 class OptionsFormList extends Component {
@@ -27,10 +27,11 @@ class OptionsFormList extends Component {
                 e.preventDefault();
                 optionsStore.deleteOptions(val);
             },
-            dataset_type = optionsStore.dataset_type;
-        let labels = optionsStore.getOptionsLabels(dataset_type);
-        let options = toJS(optionsStore.optionsList);
+            dataset_type = optionsStore.rootStore.mainStore.dataset_type;
+        let headers = optionsStore.headers;
+        let options = optionsStore.optionsList;
         let isEditSettings = optionsStore.getEditSettings();
+
         return (
             <div className="options-div">
                 <div className="panel panel-default">
@@ -38,7 +39,7 @@ class OptionsFormList extends Component {
                         <table className="options-table table table-bordered table-sm">
                             <thead className="table-primary">
                                 <tr>
-                                    {labels.map((item, index) => {
+                                    {headers.map((item, index) => {
                                         return [<th key={index}>{item}</th>];
                                     })}
                                     {isEditSettings ? (

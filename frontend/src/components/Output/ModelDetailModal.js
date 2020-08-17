@@ -11,16 +11,14 @@ import GoodnessFit from "./GoodnessFit";
 import CDFTable from "./CDFTable";
 import CDFPlot from "./CDFPlot";
 import CSLoglikelihoods from "./CSLoglikelihoods";
-import ModelResponsePlot from "./ModelResponsePlot";
+import ResponsePlot from "./ResponsePlot";
+import CSTestofInterest from "./CSTestofInterest";
 
 @inject("outputStore")
 @observer
 class ModelDetailModal extends Component {
     render() {
-        const {outputStore} = this.props,
-            toggleModelDetailModal = () => {
-                outputStore.toggleModelDetailModal();
-            };
+        const {outputStore} = this.props;
         return (
             <div>
                 <div className="modal">
@@ -28,7 +26,7 @@ class ModelDetailModal extends Component {
                         <div className="modal-content">
                             <Modal
                                 show={outputStore.modelDetailModal}
-                                onHide={toggleModelDetailModal}
+                                onHide={() => outputStore.toggleModelDetailModal()}
                                 size="xl"
                                 aria-labelledby="contained-modal-title-vcenter"
                                 centered>
@@ -40,7 +38,7 @@ class ModelDetailModal extends Component {
                                     <button
                                         className="btn btn-danger"
                                         style={{float: "right"}}
-                                        onClick={() => toggleModelDetailModal()}>
+                                        onClick={() => outputStore.toggleModelDetailModal()}>
                                         <i className="fa fa-times" aria-hidden="true"></i>
                                     </button>
                                 </Modal.Header>
@@ -60,8 +58,8 @@ class ModelDetailModal extends Component {
                                                 <ModelData modelData={outputStore.modelData} />
                                             </div>
                                         </div>
-                                        <div className="row">
-                                            <div className="col col-sm-3 benchmarkdose">
+                                        <div className="row justify-content-around">
+                                            <div className="col col-sm-3 ">
                                                 <BenchmarkDose
                                                     benchmarkDose={outputStore.benchmarkDose}
                                                 />
@@ -75,28 +73,36 @@ class ModelDetailModal extends Component {
                                         <div className="row justify-content-around">
                                             <div className="col ">
                                                 <GoodnessFit
-                                                    headers={outputStore.goodnessFitHeaders}
+                                                    headers={outputStore.getGoodnessFitHeaders}
                                                     goodnessFit={outputStore.goodnessFit}
                                                     model_type={outputStore.selectedModelType}
                                                 />
                                             </div>
                                         </div>
+
                                         {outputStore.selectedModelType == "CS" ? (
-                                            <CSLoglikelihoods
-                                                loglikelihoods={outputStore.loglikelihoods}
-                                                test_of_interest={outputStore.test_of_interest}
-                                            />
+                                            <div className="row justify-content-around">
+                                                <div className="col col-sm-3 text-center">
+                                                    <CSLoglikelihoods
+                                                        loglikelihoods={outputStore.loglikelihoods}
+                                                    />
+                                                </div>
+                                                <div className="col col-sm-3 text-center">
+                                                    <CSTestofInterest
+                                                        test_of_interest={
+                                                            outputStore.test_of_interest
+                                                        }
+                                                    />
+                                                </div>
+                                            </div>
                                         ) : null}
 
-                                        <div className="row justify-content-around">
-                                            <div className="col col-sm-3">
+                                        <div className="row ">
+                                            <div className="col col-sm-3 text-center">
                                                 <CDFTable cdfValues={outputStore.cdfValues} />
                                             </div>
-                                            <div className="col plot">
-                                                <ModelResponsePlot
-                                                    currentDataset={this.props.currentDataset}
-                                                    title={outputStore.selectedModel.model_name}
-                                                />
+                                            <div className="col text-center">
+                                                <ResponsePlot />
                                                 <CDFPlot />
                                             </div>
                                         </div>

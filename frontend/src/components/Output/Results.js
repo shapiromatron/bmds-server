@@ -22,9 +22,7 @@ const Results = props => {
                             onMouseOut={e => props.onMouseOut(e)}>
                             <td className="button">
                                 <button
-                                    onClick={e =>
-                                        props.onClick(e, props.selectedOutput, model.model_index)
-                                    }
+                                    onClick={e => props.onClick(e, model.model_index)}
                                     className="btn btn-primary btn-sm">
                                     {model.model_name}{" "}
                                 </button>

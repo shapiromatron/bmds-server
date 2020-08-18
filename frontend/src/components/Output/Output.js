@@ -10,65 +10,56 @@ import ResponsePlot from "./ResponsePlot";
 @inject("outputStore")
 @observer
 class Output extends Component {
+    constructor(props) {
+        super(props);
+        this.props.outputStore.setDefaultState();
+    }
     render() {
         const {outputStore} = this.props,
             onMouseOver = (e, model) => {
                 outputStore.addBMDLine(model);
             },
-            onMouseOut = e => {
-                outputStore.removeBMDLine();
-            },
-            showModal = (e, selectedOutput, index) => {
-                outputStore.toggleModelDetailModal(selectedOutput, index);
-            },
-            selectedOutput = outputStore.getCurrentOutput(outputStore.selectedDatasetIndex);
-        let mappedDatasets = [];
-        let labels = [];
-        if (selectedOutput != null) {
-            labels = outputStore.getLabels(selectedOutput.dataset.model_type);
-            mappedDatasets = outputStore.getMappingDataset(selectedOutput.dataset);
-        }
-        let title =
-            "BMR of 1 Std. Dev. for the BMD <br> and 0.95 Lower Confidence Limit for the BMDL";
+            showModal = (e, index) => {
+                outputStore.toggleModelDetailModal(index);
+            };
         return (
-            <div className="container-fluid output">
-                {selectedOutput != null ? (
+            <div className="container-fluid">
+                {outputStore.currentOutput != null ? (
                     <div>
-                        {!("error" in selectedOutput) ? (
+                        {!("error" in outputStore.currentOutput) ? (
                             <div>
                                 <div className="row justify-content-lg-around">
-                                    <div className="col-xs-12 col-sm-12 col-md-2">
+                                    <div className="col-xs-12 col-md-2">
                                         <DatasetNames />
                                     </div>
-                                    <div className="col-xs-12 col-sm-12 col-md-auto">
+                                    <div className="col-xs-12 col-md-auto">
                                         <InputFormReadOnly
-                                            labels={labels}
-                                            datasets={mappedDatasets}
-                                            currentDataset={selectedOutput.dataset}
+                                            labels={outputStore.labels}
+                                            datasets={outputStore.mappedDatasets}
+                                            currentDataset={outputStore.currentOutput.dataset}
                                         />
                                         <Results
                                             onMouseOver={onMouseOver.bind(this)}
-                                            onMouseOut={onMouseOut}
-                                            selectedOutput={selectedOutput}
+                                            onMouseOut={() => outputStore.removeBMDLine()}
+                                            selectedOutput={outputStore.currentOutput}
                                             onClick={showModal.bind(this)}
                                         />
                                     </div>
-                                    <div className="col-xs-12 col-sm-12 col-md-4">
-                                        <ResponsePlot
-                                            currentDataset={selectedOutput.dataset}
-                                            title={title}
-                                        />
+                                    <div className="col-xs-12 col-md-4">
+                                        <ResponsePlot />
                                     </div>
                                 </div>
                                 ,
                             </div>
                         ) : (
-                            <p>{selectedOutput.error}</p>
+                            <p>{outputStore.currentOutput.error}</p>
                         )}
 
                         <div>
                             {outputStore.modelDetailModal ? (
-                                <ModelDetailModal currentDataset={selectedOutput.dataset} />
+                                <ModelDetailModal
+                                    currentDataset={outputStore.currentOutput.dataset}
+                                />
                             ) : null}
                         </div>
                     </div>

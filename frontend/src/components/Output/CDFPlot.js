@@ -1,16 +1,17 @@
 import React, {Component} from "react";
 import {inject, observer} from "mobx-react";
-import Plotly from "plotly.js";
+import Plot from "react-plotly.js";
 
 @inject("outputStore")
 @observer
 class CDFPlot extends Component {
-    componentDidMount() {
-        this.props.outputStore.setCDFPlot();
-        Plotly.react("cdf-plot", this.props.outputStore.cdfPlot, this.props.outputStore.cdfLayout);
-    }
     render() {
-        return <div id="cdf-plot"></div>;
+        const {outputStore} = this.props;
+        return (
+            <div>
+                <Plot data={outputStore.cdfPlot} layout={outputStore.getCDFPlotLayout} />
+            </div>
+        );
     }
 }
 

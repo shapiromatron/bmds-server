@@ -31,10 +31,18 @@ class StoreDebugger extends Component {
                         </pre>
                         <h3>Options:</h3>
                         <pre>
-                            {JSON.stringify(this.props.store.mainStore.options, undefined, 2)}
+                            {JSON.stringify(this.props.store.mainStore.optionsList, undefined, 2)}
                         </pre>
                         <h3>Models:</h3>
                         <pre>{JSON.stringify(this.props.store.mainStore.models, undefined, 2)}</pre>
+                        <h3>Results:</h3>
+                        <pre>
+                            {JSON.stringify(
+                                this.props.store.mainStore.getExecutionOutputs,
+                                undefined,
+                                2
+                            )}
+                        </pre>
                     </div>
                 </Collapse>
             </div>

@@ -2,36 +2,13 @@ import React, {Component} from "react";
 import {inject, observer} from "mobx-react";
 import OptionsForm from "./OptionsForm";
 import OptionsReadOnly from "./OptionsReadOnly";
+import PropTypes from "prop-types";
 
 @inject("optionsStore")
 @observer
 class OptionsFormList extends Component {
     render() {
-        const {optionsStore} = this.props,
-            onChange = e => {
-                e.preventDefault();
-                const {name, value, id} = e.target;
-                let parsedValue = "";
-                if (
-                    name == "bmr_value" ||
-                    name == "tail_probability" ||
-                    name == "confidence_level"
-                ) {
-                    parsedValue = parseFloat(value);
-                } else {
-                    parsedValue = value;
-                }
-                optionsStore.saveOptions(name, parsedValue, id);
-            },
-            deleteOption = (e, val) => {
-                e.preventDefault();
-                optionsStore.deleteOptions(val);
-            },
-            dataset_type = optionsStore.rootStore.mainStore.dataset_type;
-        let headers = optionsStore.headers;
-        let options = optionsStore.optionsList;
-        let isEditSettings = optionsStore.getEditSettings();
-
+        const {optionsStore} = this.props;
         return (
             <div className="options-div">
                 <div className="panel panel-default">
@@ -39,10 +16,10 @@ class OptionsFormList extends Component {
                         <table className="options-table table table-bordered table-sm">
                             <thead className="table-primary">
                                 <tr>
-                                    {headers.map((item, index) => {
+                                    {optionsStore.headers.map((item, index) => {
                                         return [<th key={index}>{item}</th>];
                                     })}
-                                    {isEditSettings ? (
+                                    {optionsStore.getEditSettings ? (
                                         <th>
                                             <button
                                                 type="button"
@@ -57,27 +34,25 @@ class OptionsFormList extends Component {
                                     ) : null}
                                 </tr>
                             </thead>
-                            {isEditSettings ? (
+                            {optionsStore.getEditSettings ? (
                                 <tbody>
-                                    {options.map((options, id) => (
+                                    {optionsStore.optionsList.map((options, id) => (
                                         <OptionsForm
                                             key={id}
                                             options={options}
-                                            dataset_type={dataset_type}
+                                            dataset_type={optionsStore.getDatasetType}
                                             idx={id}
-                                            onchange={onChange}
-                                            delete={deleteOption.bind(this)}
                                         />
                                     ))}
                                 </tbody>
                             ) : (
                                 <tbody>
-                                    {options.map((option, id) => (
+                                    {optionsStore.optionsList.map((options, id) => (
                                         <OptionsReadOnly
                                             className="form-control"
                                             key={id}
                                             idx={id}
-                                            item={option}
+                                            options={options}
                                         />
                                     ))}
                                 </tbody>
@@ -90,4 +65,13 @@ class OptionsFormList extends Component {
     }
 }
 
+OptionsFormList.propTypes = {
+    optionsStore: PropTypes.object,
+    saveOptions: PropTypes.func,
+    deleteOptions: PropTypes.func,
+    headers: PropTypes.array,
+    getEditSettings: PropTypes.func,
+    addOptions: PropTypes.func,
+    optionsList: PropTypes.array,
+};
 export default OptionsFormList;

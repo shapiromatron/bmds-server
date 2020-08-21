@@ -8,6 +8,7 @@ import Logic from "./Logic/logic";
 import ModelParams from "./ModelParams/ModelParams";
 import Output from "./Output/Output";
 import StoreDebugger from "./StoreDebugger/StoreDebugger";
+import PropTypes from "prop-types";
 import "./app.css";
 
 @inject("mainStore")
@@ -89,5 +90,10 @@ class Navigation extends Component {
         );
     }
 }
-
+Navigation.propTypes = {
+    mainStore: PropTypes.object,
+    wordUrl: PropTypes.string,
+    ExcelUrl: PropTypes.string,
+    config: PropTypes.object,
+};
 export default Navigation;

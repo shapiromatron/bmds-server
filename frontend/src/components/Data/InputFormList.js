@@ -2,6 +2,7 @@ import React, {Component} from "react";
 import {inject, observer} from "mobx-react";
 import InputForm from "./InputForm";
 import InputFormReadOnly from "./InputFormReadOnly";
+import PropTypes from "prop-types";
 
 @inject("dataStore")
 @observer
@@ -31,48 +32,32 @@ class InputFormList extends Component {
                 e.preventDefault();
                 const {name, value} = e.target;
                 dataStore.changeColumnName(name, value, dataset_id);
-            },
-            selectedIndex = dataStore.selectedDatasetIndex,
-            currentDataset = dataStore.getCurrentDataset(selectedIndex),
-            labels = dataStore.getDatasetLabels(currentDataset.model_type),
-            datasetInputForm = [],
-            isEditSettings = dataStore.getEditSettings();
-        Object.keys(currentDataset).map(key => {
-            if (Array.isArray(currentDataset[key])) {
-                currentDataset[key].map((val, i) => {
-                    if (!datasetInputForm[i]) {
-                        datasetInputForm.push({[key]: val});
-                    } else {
-                        datasetInputForm[i][key] = val;
-                    }
-                });
-            }
-        });
+            };
         return (
             <div>
-                {isEditSettings ? (
+                {dataStore.getEditSettings ? (
                     <div>
                         <div className="label">
                             <label>Dataset Name:</label>
                             <input
                                 type="text"
                                 name="dataset_name"
-                                value={currentDataset.dataset_name}
-                                onChange={e => onChange(e, currentDataset.dataset_id)}
+                                value={dataStore.getCurrentDatasets.dataset_name}
+                                onChange={e => dataStore.saveDatasetName(e.target.value)}
                             />
                         </div>
                         <table className="inputformlist">
                             <thead>
                                 <tr className="table-primary ">
-                                    {labels.map((item, index) => {
+                                    {dataStore.getLabels.map((item, index) => {
                                         return [<th key={index}>{item}</th>];
                                     })}
-                                    {isEditSettings ? (
+                                    {dataStore.getEditSettings ? (
                                         <td>
                                             <button
-                                                type="submit"
+                                                type="button"
                                                 className="btn btn-primary addrow"
-                                                onClick={() => dataStore.addRows(currentDataset)}>
+                                                onClick={() => dataStore.addRows()}>
                                                 <i
                                                     className="fa fa-plus-square"
                                                     aria-hidden="true"></i>{" "}
@@ -81,34 +66,40 @@ class InputFormList extends Component {
                                     ) : null}
                                 </tr>
                                 <tr>
-                                    {Object.keys(currentDataset.column_names).map((item, i) => {
-                                        return [
-                                            <td key={i}>
-                                                <input
-                                                    className="column-names"
-                                                    name={item}
-                                                    value={currentDataset.column_names[item]}
-                                                    onChange={e =>
-                                                        changeColumnName(
-                                                            e,
-                                                            currentDataset.dataset_id
-                                                        )
-                                                    }
-                                                />
-                                            </td>,
-                                        ];
-                                    })}
+                                    {Object.keys(dataStore.getCurrentDatasets.column_names).map(
+                                        (item, i) => {
+                                            return [
+                                                <td key={i}>
+                                                    <input
+                                                        className="column-names"
+                                                        name={item}
+                                                        value={
+                                                            dataStore.getCurrentDatasets
+                                                                .column_names[item]
+                                                        }
+                                                        onChange={e =>
+                                                            changeColumnName(
+                                                                e,
+                                                                dataStore.getCurrentDatasets
+                                                                    .dataset_id
+                                                            )
+                                                        }
+                                                    />
+                                                </td>,
+                                            ];
+                                        }
+                                    )}
                                     <td></td>
                                 </tr>
                             </thead>
                             <tbody>
-                                {datasetInputForm.map((obj, i) => {
+                                {dataStore.getMappedArray.map((obj, i) => {
                                     return [
                                         <InputForm
                                             key={i}
                                             idx={i}
                                             row={obj}
-                                            dataset_id={currentDataset.dataset_id}
+                                            dataset_id={dataStore.getCurrentDatasets.dataset_id}
                                             onChange={onChange}
                                             delete={deleteRow.bind(this)}
                                         />,
@@ -119,14 +110,28 @@ class InputFormList extends Component {
                     </div>
                 ) : (
                     <InputFormReadOnly
-                        labels={labels}
-                        datasets={datasetInputForm}
-                        currentDataset={currentDataset}
+                        labels={dataStore.getLabels}
+                        mappedDatasets={dataStore.getMappedArray}
+                        currentDataset={dataStore.getCurrentDatasets}
                     />
                 )}
             </div>
         );
     }
 }
-
+InputFormList.propTypes = {
+    dataStore: PropTypes.object,
+    deleteRow: PropTypes.func,
+    saveDataset: PropTypes.func,
+    changeColumnName: PropTypes.func,
+    getEditSettings: PropTypes.func,
+    getCurrentDatasets: PropTypes.func,
+    dataset_name: PropTypes.string,
+    saveDatasetName: PropTypes.func,
+    getLabels: PropTypes.func,
+    addRows: PropTypes.func,
+    column_names: PropTypes.array,
+    dataset_id: PropTypes.number,
+    getMappedArray: PropTypes.func,
+};
 export default InputFormList;

@@ -89,7 +89,6 @@ button.btn-sq-xs{
   width:100%;
 }
 .currentdataset a:hover{
-  font-weight: bold;
   cursor:pointer;
 }
 .currentdataset td:hover{

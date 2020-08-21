@@ -1,5 +1,5 @@
 import React from "react";
-
+import PropTypes from "prop-types";
 const InputForm = props => {
     return (
         <tr>
@@ -24,5 +24,12 @@ const InputForm = props => {
             </td>
         </tr>
     );
+};
+InputForm.propTypes = {
+    row: PropTypes.object,
+    onChange: PropTypes.func,
+    dataset_id: PropTypes.number,
+    idx: PropTypes.number,
+    delete: PropTypes.func,
 };
 export default InputForm;

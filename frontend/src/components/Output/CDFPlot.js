@@ -1,6 +1,7 @@
 import React, {Component} from "react";
 import {inject, observer} from "mobx-react";
 import Plot from "react-plotly.js";
+import PropTypes from "prop-types";
 
 @inject("outputStore")
 @observer
@@ -9,10 +10,16 @@ class CDFPlot extends Component {
         const {outputStore} = this.props;
         return (
             <div>
-                <Plot data={outputStore.cdfPlot} layout={outputStore.getCDFPlotLayout} />
+                <Plot data={outputStore.getCDFPlot} layout={outputStore.getCDFLayout} />
             </div>
         );
     }
 }
+
+CDFPlot.propTypes = {
+    outputStore: PropTypes.object,
+    getCDFPlot: PropTypes.func,
+    getCDFPlotLayout: PropTypes.func,
+};
 
 export default CDFPlot;

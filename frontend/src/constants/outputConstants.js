@@ -198,10 +198,10 @@ const goodnessFitHeaders = {
     DM: ["Dose", "Estimated probability", "Expected", "Observed", "Size", "Scaled Residual"],
 };
 
-const scatter_plot_layout = {
+const layout = {
     showlegend: true,
     title: {
-        text: "Scatter Plot",
+        text: "Response Plot",
         font: {
             family: "Courier New, monospace",
             size: 12,
@@ -241,13 +241,13 @@ const scatter_plot_layout = {
     autosize: true,
 };
 
-const cdf_plot_layout = {
+const cdf_layout = {
     showlegend: true,
     title: {
         text: "CDF Plot",
         font: {
             family: "Courier New, monospace",
-            size: 16,
+            size: 12,
         },
         xref: "paper",
     },
@@ -256,10 +256,10 @@ const cdf_plot_layout = {
         linewidth: 1,
         mirror: true,
         title: {
-            text: "Percentile",
+            text: "Dose (mg/kg-day)",
             font: {
                 family: "Courier New, monospace",
-                size: 14,
+                size: 12,
                 color: "#7f7f7f",
             },
         },
@@ -269,10 +269,10 @@ const cdf_plot_layout = {
         linewidth: 1,
         mirror: true,
         title: {
-            text: "CDF",
+            text: "Response (mg/dL)",
             font: {
                 family: "Courier New, monospace",
-                size: 14,
+                size: 12,
                 color: "#7f7f7f",
             },
         },
@@ -297,6 +297,6 @@ export {
     adverse_direction,
     benchmarkDose,
     goodnessFitHeaders,
-    scatter_plot_layout,
-    cdf_plot_layout,
+    layout,
+    cdf_layout,
 };

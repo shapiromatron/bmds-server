@@ -1,9 +1,10 @@
 import React from "react";
+import PropTypes from "prop-types";
 
 const DGoodnessFit = props => {
     return (
         <tbody>
-            {props.goodnessfit.map((row, index) => {
+            {props.goodnessFit.map((row, index) => {
                 return [
                     <tr key={index}>
                         <td>{row.dose}</td>
@@ -18,5 +19,7 @@ const DGoodnessFit = props => {
         </tbody>
     );
 };
-
+DGoodnessFit.propTypes = {
+    goodnessFit: PropTypes.array,
+};
 export default DGoodnessFit;

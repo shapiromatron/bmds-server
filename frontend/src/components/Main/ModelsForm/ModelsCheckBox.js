@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from "prop-types";
 
 const ModelsCheckBox = props => {
     return (
@@ -48,5 +49,9 @@ const ModelsCheckBox = props => {
         </tbody>
     );
 };
-
+ModelsCheckBox.propTypes = {
+    models: PropTypes.array,
+    onChange: PropTypes.func,
+    length: PropTypes.number,
+};
 export default ModelsCheckBox;

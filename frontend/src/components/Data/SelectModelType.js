@@ -1,25 +1,15 @@
 import React, {Component} from "react";
 import {inject, observer} from "mobx-react";
-import {toJS} from "mobx";
-import DatasetNames from "./DatasetNames";
+import PropTypes from "prop-types";
 
 @inject("dataStore")
 @observer
-class InputButtons extends Component {
+class SelectModelType extends Component {
     render() {
-        const {dataStore} = this.props,
-            onChange = e => {
-                dataStore.setModelType(e.target.value);
-            },
-            onClick = (e, id) => {
-                dataStore.setCurrentDatasetIndex(id);
-            },
-            isEditSettings = dataStore.getEditSettings(),
-            datasets = toJS(dataStore.datasets),
-            modelTypes = dataStore.getFilteredModelTypes();
+        const {dataStore} = this.props;
         return (
             <div>
-                {isEditSettings ? (
+                {dataStore.getEditSettings ? (
                     <div>
                         <form className="model-type">
                             <div className="form-group">
@@ -27,8 +17,8 @@ class InputButtons extends Component {
                                 <select
                                     className="form-control"
                                     id="selectmodel"
-                                    onChange={onChange}>
-                                    {modelTypes.map((item, i) => {
+                                    onChange={e => dataStore.setModelType(e.target.value)}>
+                                    {dataStore.getFilteredModelTypes.map((item, i) => {
                                         return [
                                             <option key={i} value={item.value}>
                                                 {item.name}
@@ -48,21 +38,15 @@ class InputButtons extends Component {
                         </form>
                     </div>
                 ) : null}
-                {dataStore.datasets.length ? (
-                    <DatasetNames onClick={onClick.bind(this)} datasets={datasets} />
-                ) : null}
-                {dataStore.datasets.length && isEditSettings ? (
-                    <div>
-                        <button
-                            className="btn btn-danger btn-sm"
-                            onClick={() => dataStore.deleteDataset()}>
-                            Delete Dataset
-                        </button>
-                    </div>
-                ) : null}
             </div>
         );
     }
 }
-
-export default InputButtons;
+SelectModelType.propTypes = {
+    dataStore: PropTypes.object,
+    setModelType: PropTypes.func,
+    getEditSettings: PropTypes.func,
+    getFilteredModelTypes: PropTypes.func,
+    addDataset: PropTypes.func,
+};
+export default SelectModelType;

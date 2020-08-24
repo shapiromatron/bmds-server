@@ -1,13 +1,14 @@
 import React, {Component} from "react";
 
-import AnalysisForm from "./AnalysisForm";
-import ModelsCheckBoxList from "./ModelsCheckBoxList";
-import OptionsFormList from "./OptionsFormList";
-import MainModal from "./MainModal";
+import AnalysisForm from "./AnalysisForm/AnalysisForm";
+import ModelsCheckBoxList from "./ModelsForm/ModelsCheckBoxList";
+import OptionsFormList from "./OptionsForm/OptionsFormList";
+import MainModal from "./ErrorModal";
+import PropTypes from "prop-types";
 import "./main.css";
 
 import {inject, observer} from "mobx-react";
-import DatasetList from "./DatasetList";
+import DatasetList from "./DatasetList/DatasetList";
 
 @inject("mainStore")
 @observer
@@ -49,5 +50,8 @@ class Main extends Component {
         );
     }
 }
-
+Main.propTypes = {
+    mainStore: PropTypes.object,
+    isUpdateComplete: PropTypes.bool,
+};
 export default Main;

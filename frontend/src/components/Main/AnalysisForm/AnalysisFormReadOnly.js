@@ -1,14 +1,12 @@
 import React, {Component} from "react";
 import {inject, observer} from "mobx-react";
+import PropTypes from "prop-types";
 
 @inject("mainStore")
 @observer
 class AnalysisFormReadOnly extends Component {
     render() {
-        const {mainStore} = this.props,
-            dataset_type = mainStore
-                .getModelTypes()
-                .find(item => item.value == mainStore.dataset_type);
+        const {mainStore} = this.props;
         return (
             <div>
                 <table className="table table-bordered table-primary table-sm analysis-readonly">
@@ -23,7 +21,7 @@ class AnalysisFormReadOnly extends Component {
                         </tr>
                         <tr>
                             <th>Model Type:</th>
-                            <td>{dataset_type.name}</td>
+                            <td>{mainStore.getDatasetTypeName.name}</td>
                         </tr>
                     </tbody>
                 </table>
@@ -31,5 +29,11 @@ class AnalysisFormReadOnly extends Component {
         );
     }
 }
-
+AnalysisFormReadOnly.propTypes = {
+    mainStore: PropTypes.object,
+    analysis_name: PropTypes.string,
+    analysis_description: PropTypes.string,
+    getDatasetTypeName: PropTypes.func,
+    name: PropTypes.string,
+};
 export default AnalysisFormReadOnly;

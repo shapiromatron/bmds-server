@@ -1,6 +1,7 @@
 import React, {Component} from "react";
 import {Modal} from "react-bootstrap";
 import {inject, observer} from "mobx-react";
+import PropTypes from "prop-types";
 
 import InfoTable from "./InfoTable";
 import ModelOptionsTable from "./ModelOptionsTable";
@@ -45,61 +46,45 @@ class ModelDetailModal extends Component {
 
                                 <Modal.Body>
                                     <div className="modal-body">
-                                        <div className="row justify-content-around">
-                                            <div className="col col-sm-4 infotable">
-                                                <InfoTable infoTable={outputStore.infoTable} />
+                                        <div className="row ">
+                                            <div className="col col-sm-4 ">
+                                                <InfoTable />
                                             </div>
-                                            <div className="col col-sm-3 modeloptions">
-                                                <ModelOptionsTable
-                                                    modelOptions={outputStore.modelOptions}
-                                                />
+                                            <div className="col col-sm-3 offset-sm-1">
+                                                <ModelOptionsTable />
                                             </div>
-                                            <div className="col col-sm-3">
-                                                <ModelData modelData={outputStore.modelData} />
+                                            <div className="col col-sm-3 offset-sm-1">
+                                                <ModelData />
                                             </div>
                                         </div>
-                                        <div className="row justify-content-around">
+                                        <div className="row ">
                                             <div className="col col-sm-3 ">
-                                                <BenchmarkDose
-                                                    benchmarkDose={outputStore.benchmarkDose}
-                                                />
+                                                <BenchmarkDose />
                                             </div>
-                                            <div className="col col-sm-3">
-                                                <ModelParameters
-                                                    parameters={outputStore.parameters}
-                                                />
+                                            <div className="col col-sm-3 offset-sm-2">
+                                                <ModelParameters />
                                             </div>
                                         </div>
                                         <div className="row justify-content-around">
                                             <div className="col ">
-                                                <GoodnessFit
-                                                    headers={outputStore.getGoodnessFitHeaders}
-                                                    goodnessFit={outputStore.goodnessFit}
-                                                    model_type={outputStore.selectedModelType}
-                                                />
+                                                <GoodnessFit />
                                             </div>
                                         </div>
 
-                                        {outputStore.selectedModelType == "CS" ? (
-                                            <div className="row justify-content-around">
-                                                <div className="col col-sm-3 text-center">
-                                                    <CSLoglikelihoods
-                                                        loglikelihoods={outputStore.loglikelihoods}
-                                                    />
+                                        {outputStore.getCurrentOutput.dataset.model_type == "CS" ? (
+                                            <div className="row">
+                                                <div className="col col-sm-3">
+                                                    <CSLoglikelihoods />
                                                 </div>
-                                                <div className="col col-sm-3 text-center">
-                                                    <CSTestofInterest
-                                                        test_of_interest={
-                                                            outputStore.test_of_interest
-                                                        }
-                                                    />
+                                                <div className="col col-sm-3 offset-sm-2 ">
+                                                    <CSTestofInterest />
                                                 </div>
                                             </div>
                                         ) : null}
 
                                         <div className="row ">
                                             <div className="col col-sm-3 text-center">
-                                                <CDFTable cdfValues={outputStore.cdfValues} />
+                                                <CDFTable />
                                             </div>
                                             <div className="col text-center">
                                                 <ResponsePlot />
@@ -116,5 +101,14 @@ class ModelDetailModal extends Component {
         );
     }
 }
-
+ModelDetailModal.propTypes = {
+    outputStore: PropTypes.object,
+    modelDetailModal: PropTypes.bool,
+    toggleModelDetailModal: PropTypes.func,
+    selectedModel: PropTypes.object,
+    model_name: PropTypes.string,
+    getCurrentOutput: PropTypes.func,
+    dataset: PropTypes.object,
+    model_type: PropTypes.string,
+};
 export default ModelDetailModal;

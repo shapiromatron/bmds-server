@@ -7,72 +7,68 @@ class OutputStore {
         this.rootStore = rootStore;
     }
 
-    @observable currentOutput;
-    @observable labels = [];
-    @observable mappedDatasets = [];
     @observable modelDetailModal = false;
-    @observable selectedModelType = {};
     @observable selectedModel = {};
-    @observable goodnessFitHeaders = [];
-    @observable cdf = [];
-    @observable pValue = [];
-    @observable cdfValues = [];
-    @observable infoTable = {};
-    @observable goodnessFit = [];
-    @observable modelOptions = [];
-    @observable modelData = {};
-    @observable benchmarkDose = {};
-    @observable parameters = [];
-    @observable response_models = [];
-    @observable loglikelihoods = [];
-    @observable test_of_interest = [];
     @observable selectedDatasetIndex = "";
-    @observable currentDataset = {};
     @observable plotData = [];
-
-    @action setDefaultState() {
-        let outputs = this.rootStore.mainStore.getExecutionOutputs;
-        if (outputs) {
-            this.currentOutput = outputs.find(
-                item => item.dataset.dataset_id == this.selectedDatasetIndex
-            );
-            this.labels = this.rootStore.dataStore.getDatasetLabels(
-                this.currentOutput.dataset.model_type
-            );
-            this.mappedDatasets = this.rootStore.dataStore.getMappingDataset(
-                this.currentOutput.dataset
-            );
-        }
-    }
+    @observable showBMDLine = false;
 
     @action setCurrentDatasetIndex(dataset_id) {
         this.selectedDatasetIndex = dataset_id;
-        this.setDefaultState();
-        this.setPlotData();
     }
-
-    @action toggleModelDetailModal(model_index) {
+    @action toggleModelDetailModal(model) {
+        this.selectedModel = model;
         this.modelDetailModal = !this.modelDetailModal;
-        if (this.modelDetailModal) {
-            this.mapOutputModal(model_index);
-        }
     }
 
-    @action.bound
-    mapOutputModal(model_index) {
-        this.selectedModel = this.currentOutput.models.find(row => row.model_index == model_index);
-        this.selectedModelType = this.currentOutput.dataset.model_type;
+    @computed get getCurrentOutput() {
+        let outputs = this.rootStore.mainStore.getExecutionOutputs;
+        let current_output = {};
+        if (outputs) {
+            current_output = outputs.find(
+                item => item.dataset.dataset_id == this.selectedDatasetIndex
+            );
+        }
+        return current_output;
+    }
+    @computed get getModelType() {
+        return this.getCurrentOutput.dataset.model_type;
+    }
 
-        //unpack infoTable data
-        this.infoTable = _.cloneDeep(constant.infoTable);
-        this.infoTable.model_name.value = this.selectedModel.model_name;
-        this.infoTable.dataset_name.value = this.currentOutput.dataset.dataset_name;
-        this.infoTable.dose_response_model.value =
+    @computed get getLabels() {
+        return this.rootStore.dataStore.getLabels;
+    }
+
+    @computed get getMappedDatasets() {
+        let datasetInputForm = [];
+        Object.keys(this.getCurrentOutput.dataset).map(key => {
+            if (Array.isArray(this.getCurrentOutput.dataset[key])) {
+                this.getCurrentOutput.dataset[key].map((val, i) => {
+                    if (!datasetInputForm[i]) {
+                        datasetInputForm.push({[key]: val});
+                    } else {
+                        datasetInputForm[i][key] = val;
+                    }
+                });
+            }
+        });
+        return datasetInputForm;
+    }
+
+    @computed get getInfoTable() {
+        let infoTable = _.cloneDeep(constant.infoTable);
+        infoTable.model_name.value = this.selectedModel.model_name;
+        infoTable.dataset_name.value = this.getCurrentOutput.dataset.dataset_name;
+        infoTable.dose_response_model.value =
             constant.dose_response_model[this.selectedModel.model_name];
+        return infoTable;
+    }
 
-        //set model Optins values
-        this.modelOptions = _.cloneDeep(constant.model_options[this.selectedModelType]);
-        this.modelOptions.map(option => {
+    @computed get getModelOptions() {
+        let modelOptions = _.cloneDeep(
+            constant.model_options[this.getCurrentOutput.dataset.model_type]
+        );
+        modelOptions.map(option => {
             option.value = this.selectedModel.settings[option.name];
             if (option.name == "bmrType") {
                 option.value = constant.bmrType[option.value];
@@ -84,46 +80,57 @@ class OutputStore {
                 option.value = constant.varType[option.value];
             }
         });
+        return modelOptions;
+    }
 
-        this.modelData = _.cloneDeep(constant.modelData);
-        this.modelData.number_of_observations.value = this.currentOutput.dataset.doses.length;
-        this.modelData.adverse_direction.value =
+    @computed get getModelData() {
+        let modelData = _.cloneDeep(constant.modelData);
+        modelData.number_of_observations.value = this.getCurrentOutput.dataset.doses.length;
+        modelData.adverse_direction.value =
             constant.adverse_direction[this.selectedModel.settings.adverseDirection];
+        return modelData;
+    }
 
-        //set benchmark dose values
-        this.benchmarkDose = _.cloneDeep(constant.benchmarkDose);
-        this.benchmarkDose.bmd.value = this.selectedModel.results.bmd;
-        this.benchmarkDose.bmdl.value = this.selectedModel.results.bmdl;
-        this.benchmarkDose.bmdu.value = this.selectedModel.results.bmdu;
-        this.benchmarkDose.aic.value = this.selectedModel.results.aic;
-        this.benchmarkDose.p_value.value = this.selectedModel.results.gof.p_value;
-        this.benchmarkDose.df.value = this.selectedModel.results.gof.df;
-        if (this.selectedModelType === "DM") {
-            this.benchmarkDose["chi_square"] = {
+    @computed get getBenchmarkDose() {
+        let benchmarkDose = _.cloneDeep(constant.benchmarkDose);
+        benchmarkDose.bmd.value = this.selectedModel.results.bmd;
+        benchmarkDose.bmdl.value = this.selectedModel.results.bmdl;
+        benchmarkDose.bmdu.value = this.selectedModel.results.bmdu;
+        benchmarkDose.aic.value = this.selectedModel.results.aic;
+        benchmarkDose.p_value.value = this.selectedModel.results.gof.p_value;
+        benchmarkDose.df.value = this.selectedModel.results.gof.df;
+        if (this.getCurrentOutput.dataset.model_type === "DM") {
+            benchmarkDose["chi_square"] = {
                 label: "Chi Square",
                 value: this.selectedModel.results.gof.chi_square,
             };
         }
+        return benchmarkDose;
+    }
 
-        //set parameters values  TODO
-        this.parameters = _.zipWith(
+    @computed get getParameters() {
+        let parameters = _.zipWith(
             constant.parameters[this.selectedModel.model_name],
             this.selectedModel.results.parameters,
             (p_variable, parameter) => ({p_variable, parameter})
         );
 
-        this.goodnessFit = this.getGoodnessFit;
+        return parameters;
+    }
+    @computed get getCDFValues() {
+        let cdf = this.selectedModel.results.cdf;
+        let pValue = this.getPValue;
+        let cdfValues = _.zipWith(pValue, cdf, (pValue, cdf) => ({pValue, cdf}));
+        return cdfValues;
+    }
 
-        if (this.selectedModelType === "CS") {
-            this.loglikelihoods = this.selectedModel.results.loglikelihoods;
-            this.test_of_interest = this.selectedModel.results.test_rows;
-        }
+    @computed get getLoglikelihoods() {
+        return this.selectedModel.results.loglikelihoods;
+    }
 
-        //set cdf values with percentiles
-        this.cdf = this.selectedModel.results.cdf;
-        this.pValue = this.getPValue;
-        this.cdfValues = _.zipWith(this.pValue, this.cdf, (pValue, cdf) => ({pValue, cdf}));
-        this.setCDFPlot();
+    @computed get getTestofInterest() {
+        let rows = this.selectedModel.results.test_rows;
+        return rows;
     }
 
     @computed get getPValue() {
@@ -134,38 +141,28 @@ class OutputStore {
         return pValue;
     }
     @computed get getGoodnessFitHeaders() {
-        return constant.goodnessFitHeaders[this.selectedModelType];
+        return constant.goodnessFitHeaders[this.getCurrentOutput.dataset.model_type];
     }
     @computed get getGoodnessFit() {
         let goodnessFit = [];
-        if (this.selectedModelType === "CS") {
+        if (this.getCurrentOutput.dataset.model_type === "CS") {
             goodnessFit = this.selectedModel.results.gof;
-        } else if (this.selectedModelType === "DM") {
+        } else if (this.this.getCurrentOutput.dataset.model_type === "DM") {
             goodnessFit = this.selectedModel.results.gof.rows;
         }
         return goodnessFit;
     }
 
-    @action setPlotData() {
-        this.setDefaultState();
-        this.plotData = [];
-        var trace1 = {
-            x: this.currentOutput.dataset.doses,
-            y: this.getResponse,
-            mode: "markers",
-            type: "scatter",
-            name: "Response",
-        };
-        this.plotData.push(trace1);
-    }
+    @observable scatterPlotData = [];
 
     @computed get getResponse() {
         let responses = [];
-        let ns = this.currentOutput.dataset.ns;
-        let incidences = this.currentOutput.dataset.incidences;
-        if (this.currentOutput.dataset.model_type === "CS") {
-            responses = this.currentOutput.dataset.means;
-        } else if (this.currentOutput.dataset.model_type === "DM") {
+        let dataset = this.getCurrentOutput.dataset;
+        let ns = dataset.ns;
+        let incidences = dataset.incidences;
+        if (dataset.model_type === "CS") {
+            responses = dataset.means;
+        } else if (dataset.model_type === "DM") {
             for (var i = 0; i < ns.length; i++) {
                 var response = incidences[i] / ns[i];
                 responses.push(response);
@@ -175,51 +172,62 @@ class OutputStore {
     }
 
     @computed get getLayout() {
-        return constant.scatter_plot_layout;
+        return constant.layout;
     }
 
-    @observable cdfPlot = [];
-    @action setCDFPlot() {
-        this.cdfPlot = [];
+    @computed get getCDFLayout() {
+        return constant.cdf_layout;
+    }
+    @computed get getCDFPlot() {
         var trace1 = {
-            x: this.pValue,
-            y: this.cdf,
+            x: this.getPValue,
+            y: this.selectedModel.results.cdf,
             mode: "markers",
             type: "scatter",
             name: "CDF",
         };
-        this.cdfPlot.push(trace1);
+        let cdfPlot = [trace1];
+        return cdfPlot;
+    }
+    @action setPlotData() {
+        this.plotData = [];
+        var trace1 = {
+            x: this.getCurrentOutput.dataset.doses.slice(),
+            y: this.getResponse.slice(),
+            mode: "markers",
+            type: "scatter",
+            name: "Response",
+        };
+        this.plotData.push(trace1);
     }
 
-    @computed get getCDFPlotLayout() {
-        return constant.cdf_plot_layout;
-    }
-
-    @action addBMDLine = model => {
+    @action addBMDLine(model) {
         let param_variables = constant.parameters[model.model_name];
         let parameters = model.results.parameters;
         let param = parameters.reduce(function(result, field, index) {
             result[param_variables[index]] = field;
             return result;
         }, {});
-        let response = constant.generateLine[model.model_name](this.getDoseArrar, param);
+        let response = constant.generateLine[model.model_name](this.getDoseArray, param);
         let bmdLine = {
-            x: this.getDoseArrar,
+            x: this.getDoseArray,
             y: response,
-            mode: "markers",
+            mode: "markers+line",
             type: "line",
             name: model.model_name,
         };
         this.plotData.push(bmdLine);
-    };
+    }
 
-    @action removeBMDLine = () => {
-        this.plotData.pop();
-    };
+    @action removeBMDLine() {
+        if (this.plotData.length > 1) {
+            this.plotData.pop();
+        }
+    }
 
-    @computed get getDoseArrar() {
-        let maxDose = _.max(this.currentOutput.dataset.doses);
-        let minDose = _.min(this.currentOutput.dataset.doses);
+    @computed get getDoseArray() {
+        let maxDose = _.max(this.getCurrentOutput.dataset.doses);
+        let minDose = _.min(this.getCurrentOutput.dataset.doses);
         let number_of_values = 100;
         var doseArr = [];
         var step = (maxDose - minDose) / (number_of_values - 1);

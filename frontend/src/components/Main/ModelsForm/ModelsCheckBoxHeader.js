@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from "prop-types";
 
 const ModelsCheckBoxHeader = props => {
     return (
@@ -32,5 +33,11 @@ const ModelsCheckBoxHeader = props => {
         </thead>
     );
 };
-
+ModelsCheckBoxHeader.propTypes = {
+    model_headers: PropTypes.object,
+    model: PropTypes.string,
+    values: PropTypes.array,
+    isEditSettings: PropTypes.bool,
+    onChange: PropTypes.func,
+};
 export default ModelsCheckBoxHeader;

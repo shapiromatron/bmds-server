@@ -17,9 +17,11 @@ class MainStore {
     @observable errorModal = false;
     @observable hasEditSettings = false;
     @observable executionOutputs = null;
-    @observable checked_items = [];
     @observable isUpdateComplete = false;
 
+    @action hideModal() {
+        this.errorModal = !this.errorModal;
+    }
     @action setConfig = config => {
         this.config = config;
     };
@@ -33,63 +35,24 @@ class MainStore {
         this.dataset_type = value;
         this.rootStore.modelsStore.setDefaultsByDatasetType();
         this.rootStore.optionsStore.setDefaultsByDatasetType();
+        this.rootStore.dataStore.setDefaultsByDatasetType();
+    }
+    @action.bound toggleDataset(id) {
+        this.rootStore.dataStore.toggleDataset(id);
     }
 
-    @observable getEditSettings() {
-        let editSettings = false;
-        if ("editSettings" in this.config) {
-            editSettings = true;
-        }
-        return editSettings;
+    @action.bound saveAdverseDirection(name, value, id) {
+        this.rootStore.dataStore.saveAdverseDirection(name, value, id);
     }
 
-    //returns enabled model types
-    @computed get getModels() {
-        let result = {};
-        let models = this.rootStore.modelsStore.getModels;
-
-        models.map(item => {
-            item.values.map(val => {
-                if (val.isChecked) {
-                    var [k, v] = val.name.split("-");
-                    if (v === "DichotomousHill") {
-                        v = "Dichotomous-Hill";
-                    }
-                    if (k in result) {
-                        if (k === "bayesian_model_average") {
-                            result[k] = result[k].concat({
-                                model: v,
-                                prior_weight: parseFloat(val.prior_weight) / 100,
-                            });
-                        } else {
-                            result[k] = result[k].concat(v);
-                        }
-                    } else {
-                        if (k === "bayesian_model_average") {
-                            result[k] = [
-                                {model: v, prior_weight: parseFloat(val.prior_weight) / 100},
-                            ];
-                        } else {
-                            result[k] = [v];
-                        }
-                    }
-                }
-            });
-        });
-
-        return result;
-    }
-
-    @computed get getSelectedDataset() {
-        let datasets = this.rootStore.dataStore.getDatasets();
-        let enabledDatasets = datasets.filter(item => item.enabled == true);
-        let selectedDatasets = enabledDatasets.filter(item =>
-            item.model_type.includes(this.dataset_type)
-        );
-        return selectedDatasets;
-    }
     @computed get getOptions() {
         return this.rootStore.optionsStore.optionsList;
+    }
+    @computed get getEnabledModels() {
+        return this.rootStore.modelsStore.getEnabledModels;
+    }
+    @computed get getEnabledDatasets() {
+        return this.rootStore.dataStore.getEnabledDatasets;
     }
 
     @action
@@ -104,8 +67,8 @@ class MainStore {
                         analysis_name: this.analysis_name,
                         analysis_description: this.analysis_description,
                         dataset_type: this.dataset_type,
-                        models: this.getModels,
-                        datasets: this.getSelectedDataset,
+                        models: this.getEnabledModels,
+                        datasets: this.getEnabledDatasets,
                         options: this.getOptions,
                     },
                 };
@@ -203,75 +166,48 @@ class MainStore {
         this.analysis_description = inputs.analysis_description;
         this.dataset_type = inputs.dataset_type;
 
-        this.rootStore.optionsStore.optionsList = inputs.options;
-        // unpack datasets
-        var datasets = inputs.datasets;
-        this.rootStore.dataStore.setDatasets(datasets);
-
-        // unpack selected models
-        let modelArr = [];
-        Object.keys(inputs.models).map((item, i) => {
-            inputs.models[item].map((val, index) => {
-                if (item === "bayesian_model_average") {
-                    val = val.model;
-                }
-                if (val == "Dichotomous-Hill") {
-                    let [k, v] = val.split("-");
-                    val = k + v;
-                }
-                val = item + "-" + val;
-                modelArr.push(val);
-            });
-        });
-        modelArr.forEach((item, i) => {
-            let checked = true;
-            let value = "";
-            this.rootStore.modelsStore.toggleModelsCheckBox(item, checked, value);
-        });
-
+        this.rootStore.optionsStore.setOptions(inputs);
+        this.rootStore.dataStore.setDatasets(inputs);
+        this.rootStore.modelsStore.setModels(inputs);
         this.isUpdateComplete = true;
     }
 
-    @action.bound toggleDataset(id) {
-        this.rootStore.dataStore.toggleDataset(id);
+    @computed get getEditSettings() {
+        let editSettings = false;
+        if ("editSettings" in this.config) {
+            editSettings = true;
+        }
+        return editSettings;
     }
 
-    @action.bound saveAdverseDirection(name, value, id) {
-        this.rootStore.dataStore.saveAdverseDirection(name, value, id);
-    }
-
-    @action getExecutionOutputs() {
+    @computed get getExecutionOutputs() {
         return this.executionOutputs;
     }
 
-    @action getDatasets() {
-        return this.rootStore.dataStore.getDatasets();
+    @computed get getDatasets() {
+        return this.rootStore.dataStore.getDatasets;
     }
-
-    @action.bound saveAdverseDiretion(name, value, id) {
-        this.rootStore.dataStore.saveAdverseDirection(name, value, id);
-    }
-    @action getEnabledDatasets() {
-        return this.rootStore.dataStore.datasets.filter(item => item.enabled == true);
-    }
-    @action getDatasetLength() {
+    @computed get getDatasetLength() {
         return this.rootStore.dataStore.getDataLength;
     }
 
-    @action getDatasetNamesHeader() {
+    @computed get getDatasetNamesHeader() {
         return constant.datasetNamesHeaders[this.dataset_type];
     }
-    @action getAdverseDirectionList() {
+    @computed get getAdverseDirectionList() {
         return constant.AdverseDirectionList;
     }
-    @action getDegree() {
+    @computed get getDegree() {
         return constant.degree;
     }
-    @action getBackground() {
+    @computed get getBackground() {
         return constant.background;
     }
-    @action getModelTypes() {
+    @computed get getModelTypes() {
         return constant.modelTypes;
+    }
+    @computed get getDatasetTypeName() {
+        return this.getModelTypes.find(item => item.value == this.dataset_type);
     }
 }
 

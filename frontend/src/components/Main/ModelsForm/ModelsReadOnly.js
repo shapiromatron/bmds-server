@@ -1,5 +1,5 @@
 import React from "react";
-
+import PropTypes from "prop-types";
 const ModelsReadOnly = props => {
     return (
         <tbody>
@@ -35,5 +35,7 @@ const ModelsReadOnly = props => {
         </tbody>
     );
 };
-
+ModelsReadOnly.propTypes = {
+    models: PropTypes.array,
+};
 export default ModelsReadOnly;

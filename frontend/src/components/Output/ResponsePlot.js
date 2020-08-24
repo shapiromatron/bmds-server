@@ -1,6 +1,8 @@
 import React, {Component} from "react";
 import {inject, observer} from "mobx-react";
 import Plot from "react-plotly.js";
+import PropTypes from "prop-types";
+import {toJS} from "mobx";
 
 @inject("outputStore")
 @observer
@@ -11,8 +13,18 @@ class ResponsePlot extends Component {
     }
     render() {
         const {outputStore} = this.props;
-        return <Plot data={outputStore.plotData} layout={outputStore.getLayout} />;
+        let plotData = toJS(outputStore.plotData);
+        return (
+            <div>
+                <Plot data={plotData} layout={outputStore.getLayout} />
+            </div>
+        );
     }
 }
-
+ResponsePlot.propTypes = {
+    outputStore: PropTypes.object,
+    getPlotData: PropTypes.func,
+    getBMDLine: PropTypes.func,
+    getLayout: PropTypes.func,
+};
 export default ResponsePlot;

@@ -1,6 +1,6 @@
-import _ from "lodash";
 import {observable, action, computed} from "mobx";
 import {modelsList, modelHeaders, nestedHeaders} from "../constants/modelConstants";
+import _ from "lodash";
 
 class ModelsStore {
     constructor(rootStore) {
@@ -13,8 +13,8 @@ class ModelsStore {
     @observable prior_weight = 0;
     @observable prior_weight_models = [];
 
-    @action getEditSettings() {
-        return this.rootStore.mainStore.getEditSettings();
+    @computed get getEditSettings() {
+        return this.rootStore.mainStore.getEditSettings;
     }
 
     @action setDefaultsByDatasetType() {
@@ -25,10 +25,6 @@ class ModelsStore {
         } else {
             this.model_headers = modelHeaders;
         }
-    }
-
-    @computed get getModels() {
-        return this.models;
     }
 
     @action.bound toggleModelsCheckBox(selectedModel, checked, value) {
@@ -124,6 +120,65 @@ class ModelsStore {
                     }
                 });
             });
+        });
+    }
+
+    //returns enabled model types
+    @computed get getEnabledModels() {
+        let result = {};
+        this.models.map(item => {
+            item.values.map(val => {
+                if (val.isChecked) {
+                    var [k, v] = val.name.split("-");
+                    if (v === "DichotomousHill") {
+                        v = "Dichotomous-Hill";
+                    }
+                    if (k in result) {
+                        if (k === "bayesian_model_average") {
+                            result[k] = result[k].concat({
+                                model: v,
+                                prior_weight: parseFloat(val.prior_weight) / 100,
+                            });
+                        } else {
+                            result[k] = result[k].concat(v);
+                        }
+                    } else {
+                        if (k === "bayesian_model_average") {
+                            result[k] = [
+                                {model: v, prior_weight: parseFloat(val.prior_weight) / 100},
+                            ];
+                        } else {
+                            result[k] = [v];
+                        }
+                    }
+                }
+            });
+        });
+
+        return result;
+    }
+
+    @action setModels(inputs) {
+        this.setDefaultsByDatasetType();
+        let modelArr = [];
+        Object.keys(inputs.models).map((item, i) => {
+            inputs.models[item].map((val, index) => {
+                if (item === "bayesian_model_average") {
+                    val = val.model;
+                }
+                if (val == "Dichotomous-Hill") {
+                    let [k, v] = val.split("-");
+                    val = k + v;
+                }
+                val = item + "-" + val;
+                modelArr.push(val);
+            });
+        });
+        modelArr.forEach((item, i) => {
+            let checked = true;
+            let value = "";
+
+            this.toggleModelsCheckBox(item, checked, value);
         });
     }
 }

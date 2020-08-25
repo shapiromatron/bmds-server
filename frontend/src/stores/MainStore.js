@@ -54,9 +54,6 @@ class MainStore {
     @computed get getEnabledDatasets() {
         return this.rootStore.dataStore.getEnabledDatasets;
     }
-    @computed get getLogic() {
-        return this.rootStore.logicStore.getLogic;
-    }
 
     @action
     async saveAnalysis() {

@@ -23,7 +23,7 @@ class OutputStore {
 
     @computed get getCurrentOutput() {
         let outputs = this.rootStore.mainStore.getExecutionOutputs;
-        let current_output = null;
+        let current_output = {};
         if (outputs) {
             current_output = outputs.find(
                 item => item.dataset.dataset_id == this.selectedDatasetIndex

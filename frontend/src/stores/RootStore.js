@@ -3,6 +3,7 @@ import OutputStore from "./OutputStore";
 import MainStore from "./MainStore";
 import OptionsStore from "./OptionsStore";
 import ModelsStore from "./ModelsStore";
+import LogicStore from "./LogicStore";
 
 class RootStore {
     constructor() {
@@ -11,6 +12,7 @@ class RootStore {
         this.optionsStore = new OptionsStore(this);
         this.modelsStore = new ModelsStore(this);
         this.outputStore = new OutputStore(this);
+        this.logicStore = new LogicStore(this);
     }
 }
 

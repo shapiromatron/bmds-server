@@ -11,27 +11,30 @@ const Rule = props => {
                         <td className="text-center">
                             <input
                                 type="checkbox"
-                                name={rule + "-continuous"}
                                 checked={props.rules[rule].enabled_continuous}
-                                onChange={e => props.toggleTest(e)}
+                                onChange={e =>
+                                    props.toggleTest(rule, "enabled_continuous", e.target.checked)
+                                }
                                 disabled={props.disableList.includes(rule + "-continuous")}
                             />
                         </td>
                         <td className="text-center">
                             <input
                                 type="checkbox"
-                                name={rule + "-dichotomous"}
                                 checked={props.rules[rule].enabled_dichotomous}
-                                onChange={e => props.toggleTest(e)}
+                                onChange={e =>
+                                    props.toggleTest(rule, "enabled_dichotomous", e.target.checked)
+                                }
                                 disabled={props.disableList.includes(rule + "-dichotomous")}
                             />
                         </td>
                         <td className="text-center">
                             <input
                                 type="checkbox"
-                                name={rule + "-nested"}
                                 checked={props.rules[rule].enabled_nested}
-                                onChange={e => props.toggleTest(e)}
+                                onChange={e =>
+                                    props.toggleTest(rule, "enabled_nested", e.target.checked)
+                                }
                                 disabled={props.disableList.includes(rule + "-nested")}
                             />
                         </td>
@@ -39,17 +42,17 @@ const Rule = props => {
                             <input
                                 className="text-center"
                                 type="number"
-                                name={rule + "-threshold"}
                                 value={props.rules[rule].threshold}
-                                onChange={e => props.changeThreshold(e)}
+                                onChange={e =>
+                                    props.changeThreshold(rule, parseFloat(e.target.value))
+                                }
                                 disabled={props.disableList.includes(rule + "-threshold")}
                             />
                         </td>
                         <td className="text-center">
                             <select
-                                name={rule + "-failure_bin"}
                                 value={props.rules[rule].failure_bin}
-                                onChange={e => props.changeBinType(e)}
+                                onChange={e => props.changeBinType(rule, parseInt(e.target.value))}
                                 disabled={props.disableList.includes(rule + "-failure_bin")}>
                                 <option value="2">Unusable Bin</option>
                                 <option value="1">No Bin-Change (warning)</option>

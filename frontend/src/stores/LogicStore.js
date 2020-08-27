@@ -45,24 +45,16 @@ class LogicStore {
         this.logic.sufficiently_close_bmdl = parseFloat(e.target.value);
     }
 
-    @action changeThreshold(e) {
-        let name = e.target.name.split("-")[0];
-        this.logic.rules[name].threshold = parseFloat(e.target.value);
+    @action.bound changeThreshold(rule, threshold) {
+        this.logic.rules[rule].threshold = threshold;
     }
 
-    @action changeBinType(e) {
-        let name = e.target.name.split("-")[0];
-        this.logic.rules[name].failure_bin = parseInt(e.target.value);
+    @action.bound changeBinType(rule, binType) {
+        this.logic.rules[rule].failure_bin = binType;
     }
 
-    @action toggleTest(e) {
-        let name = e.target.name.split("-")[0];
-        let model = e.target.name.split("-")[1];
-        Object.keys(this.logic.rules[name]).map(item => {
-            if (item.split("_")[1] == model) {
-                this.logic.rules[name][item] = !this.logic.rules[name][item];
-            }
-        });
+    @action.bound toggleTest(rule, key, value) {
+        this.logic.rules[rule][key] = value;
     }
 }
 export default LogicStore;

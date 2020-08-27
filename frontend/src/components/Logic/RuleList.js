@@ -33,9 +33,9 @@ class RuleList extends Component {
                         </thead>
                         <Rule
                             rules={rules}
-                            toggleTest={e => logicStore.toggleTest(e)}
-                            changeThreshold={e => logicStore.changeThreshold(e)}
-                            changeBinType={e => logicStore.changeBinType(e)}
+                            toggleTest={logicStore.toggleTest}
+                            changeThreshold={logicStore.changeThreshold}
+                            changeBinType={logicStore.changeBinType}
                             disableList={logicStore.getDisableList}
                             long_name={logicStore.getLongName}
                         />

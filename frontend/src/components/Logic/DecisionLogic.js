@@ -20,7 +20,7 @@ class DecisionLogic extends Component {
                 </div>
 
                 <div className="row">
-                    <div className="col col-xs-12 col-sm-3">
+                    <div className="col col-xs-12 col-md-3 table-responsive">
                         <table className="table table-bordered table-sm decision-logic">
                             <thead>
                                 <tr className="table-primary">
@@ -30,39 +30,37 @@ class DecisionLogic extends Component {
                             <tbody>
                                 <tr>
                                     <td>{logicStore.getDecisionLogic.recommend_viable}</td>
-                                    <td>
-                                        <select
-                                            className="form-control"
+                                    <td className="text-center">
+                                        <input
+                                            className="text-center"
+                                            type="checkbox"
                                             name="recommend_viable"
-                                            onChange={e => logicStore.changeDecisionLogic(e)}
-                                            value={logicStore.logic.recommend_viable}>
-                                            <option value="true">True</option>
-                                            <option value="false">False</option>
-                                        </select>
+                                            onChange={e => logicStore.toggleDecisionLogic(e)}
+                                            checked={logicStore.logic.recommend_viable}
+                                        />
                                     </td>
                                 </tr>
                                 <tr>
                                     <td>{logicStore.getDecisionLogic.recommend_questionable}</td>
-                                    <td>
-                                        <select
-                                            className="form-control"
+                                    <td className="text-center">
+                                        <input
+                                            type="checkbox"
+                                            className="text-center"
                                             name="recommend_questionable"
-                                            onChange={e => logicStore.changeDecisionLogic(e)}
-                                            value={logicStore.logic.recommend_questionable}>
-                                            <option value="true">True</option>
-                                            <option value="false">False</option>
-                                        </select>
+                                            onChange={e => logicStore.toggleDecisionLogic(e)}
+                                            checked={logicStore.logic.recommend_questionable}
+                                        />
                                     </td>
                                 </tr>
                                 <tr>
                                     <td>{logicStore.getDecisionLogic.sufficiently_close_bmdl}</td>
-                                    <td>
+                                    <td className="text-center">
                                         <input
-                                            className="form-control text-center"
+                                            className=" text-center"
                                             type="number"
                                             name="sufficiently_close_bmdl"
                                             value={logicStore.logic.sufficiently_close_bmdl}
-                                            onChange={e => logicStore.changeCloseBMDL(e)}
+                                            onChange={e => logicStore.saveCloseBMDL(e)}
                                         />
                                     </td>
                                 </tr>

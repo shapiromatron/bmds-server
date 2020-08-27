@@ -3,7 +3,8 @@
 }
 
 .decision-logic input{
-    font-size:12px
+    font-size:12px;
+    width: 50%;
 }
 .model-recommend{
     font-size: 12px;

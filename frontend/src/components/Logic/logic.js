@@ -1,9 +1,9 @@
 import React, {Component} from "react";
 import DecisionLogic from "./DecisionLogic";
-import ModelRecommendation from "./ModelRecommendation";
+import RuleList from "./RuleList";
 import {inject, observer} from "mobx-react";
 import PropTypes from "prop-types";
-import "./logic.css";
+import "./Logic.css";
 
 @inject("logicStore")
 @observer
@@ -17,7 +17,7 @@ class Logic extends Component {
             <div className="container-fluid">
                 <div className="logic">
                     <DecisionLogic />
-                    <ModelRecommendation />
+                    <RuleList />
                 </div>
             </div>
         );

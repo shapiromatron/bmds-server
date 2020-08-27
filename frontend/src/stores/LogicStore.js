@@ -1,5 +1,11 @@
 import {observable, action, computed} from "mobx";
-import {headers, list, logic, bool, decision_logic} from "../constants/logicConstants";
+import {
+    headers,
+    logic,
+    disabled_properties,
+    decision_logic,
+    long_name,
+} from "../constants/logicConstants";
 
 class LogicStore {
     constructor(rootStore) {
@@ -10,7 +16,6 @@ class LogicStore {
     @observable logic = {};
 
     @action setDefaultState() {
-        this.modelRecommendationList = list;
         this.logic = logic;
     }
     @computed get getModelRecommendationHeaders() {
@@ -23,32 +28,39 @@ class LogicStore {
     @computed get getLogic() {
         return this.logic;
     }
-    @action changeDecisionLogic(e) {
-        this.logic[e.target.name] = bool[e.target.value];
+    @computed get getLogicRules() {
+        return logic.rules;
+    }
+    @computed get getDisableList() {
+        return disabled_properties;
+    }
+    @computed get getLongName() {
+        return long_name;
+    }
+    @action toggleDecisionLogic(e) {
+        this.logic[e.target.name] = !this.logic[e.target.name];
     }
 
-    @action changeCloseBMDL(e) {
+    @action saveCloseBMDL(e) {
         this.logic.sufficiently_close_bmdl = parseFloat(e.target.value);
+    }
+
+    @action changeThreshold(e) {
+        let name = e.target.name.split("-")[0];
+        this.logic.rules[name].threshold = parseFloat(e.target.value);
+    }
+
+    @action changeBinType(e) {
+        let name = e.target.name.split("-")[0];
+        this.logic.rules[name].failure_bin = parseInt(e.target.value);
     }
 
     @action toggleTest(e) {
         let name = e.target.name.split("-")[0];
         let model = e.target.name.split("-")[1];
-        let value = e.target.value;
-        this.modelRecommendationList.map(model => {
-            model.values.map(val => {
-                if (val.name == e.target.name) {
-                    val.value = e.target.value;
-                }
-            });
-        });
-        let rule_object = this.logic.rules[name];
-        if (model == "threshold") {
-            rule_object.threshold = parseFloat(value);
-        }
-        Object.keys(rule_object).map(item => {
+        Object.keys(this.logic.rules[name]).map(item => {
             if (item.split("_")[1] == model) {
-                rule_object[item] = bool[e.target.value];
+                this.logic.rules[name][item] = !this.logic.rules[name][item];
             }
         });
     }

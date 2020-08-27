@@ -60,9 +60,15 @@ const Rule = props => {
                             </select>
                         </td>
                         <td>
-                            {props.long_name[rule].note1}
-                            {props.rules[rule].threshold}
-                            {props.long_name[rule].note2}
+                            {props.long_name[rule].notes !== undefined ? (
+                                props.long_name[rule].notes(props.rules[rule].threshold)
+                            ) : (
+                                <p>
+                                    {props.long_name[rule].note1}
+                                    {props.rules[rule].threshold}
+                                    {props.long_name[rule].note2}
+                                </p>
+                            )}
                         </td>
                     </tr>
                 );

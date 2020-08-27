@@ -17,9 +17,9 @@ const decision_logic = {
 
 const long_name = {
     bmd_missing: {
+        // example here; you can rewrite the others like this
+        notes: val => "BMD not estimated",
         name: "BMD calculated",
-        note1: "BMD not estimated",
-        note2: "",
     },
     bmdl_missing: {
         name: "BMDL calculated",
@@ -42,9 +42,9 @@ const long_name = {
         note2: "",
     },
     variance_type: {
+        // example here; you can rewrite the others like this
+        notes: val => `Constant variance test failed (Test 2 p-value < ${val})`,
         name: "Constant Variance",
-        note1: "Constant variance test failed (Test 2 p-value < ",
-        note2: ")",
     },
     variance_fit: {
         name: "Non-Constant Variance",

@@ -17,7 +17,6 @@ class AnalysisForm extends Component {
                             <input
                                 className="form-control"
                                 type="text"
-                                name="analysis_name"
                                 value={mainStore.analysis_name}
                                 onChange={e => mainStore.changeAnalysisName(e.target.value)}
                             />
@@ -28,7 +27,6 @@ class AnalysisForm extends Component {
                                 className="form-control"
                                 type="textarea"
                                 rows="3"
-                                name="analysis_description"
                                 value={mainStore.analysis_description}
                                 onChange={e =>
                                     mainStore.changeAnalysisDescription(e.target.value)
@@ -38,7 +36,6 @@ class AnalysisForm extends Component {
                             <label>Select Model Type</label>
                             <select
                                 className="form-control"
-                                name="dataset_type"
                                 onChange={e => mainStore.changeDatasetType(e.target.value)}
                                 value={mainStore.dataset_type}>
                                 {mainStore.getModelTypes.map((item, i) => {

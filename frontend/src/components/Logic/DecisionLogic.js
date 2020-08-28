@@ -32,10 +32,13 @@ class DecisionLogic extends Component {
                                     <td>{logicStore.getDecisionLogic.recommend_viable}</td>
                                     <td className="text-center">
                                         <input
-                                            className="text-center"
                                             type="checkbox"
-                                            name="recommend_viable"
-                                            onChange={e => logicStore.toggleDecisionLogic(e)}
+                                            onChange={e =>
+                                                logicStore.changeDecisionLogicValues(
+                                                    "recommend_viable",
+                                                    e.target.checked
+                                                )
+                                            }
                                             checked={logicStore.logic.recommend_viable}
                                         />
                                     </td>
@@ -45,9 +48,12 @@ class DecisionLogic extends Component {
                                     <td className="text-center">
                                         <input
                                             type="checkbox"
-                                            className="text-center"
-                                            name="recommend_questionable"
-                                            onChange={e => logicStore.toggleDecisionLogic(e)}
+                                            onChange={e =>
+                                                logicStore.changeDecisionLogicValues(
+                                                    "recommend_questionable",
+                                                    e.target.checked
+                                                )
+                                            }
                                             checked={logicStore.logic.recommend_questionable}
                                         />
                                     </td>
@@ -56,11 +62,16 @@ class DecisionLogic extends Component {
                                     <td>{logicStore.getDecisionLogic.sufficiently_close_bmdl}</td>
                                     <td className="text-center">
                                         <input
-                                            className=" text-center"
+                                            className=" text-center form-control"
                                             type="number"
                                             name="sufficiently_close_bmdl"
                                             value={logicStore.logic.sufficiently_close_bmdl}
-                                            onChange={e => logicStore.saveCloseBMDL(e)}
+                                            onChange={e =>
+                                                logicStore.changeDecisionLogicValues(
+                                                    "sufficiently_close_bmdl",
+                                                    parseInt(e.target.value)
+                                                )
+                                            }
                                         />
                                     </td>
                                 </tr>

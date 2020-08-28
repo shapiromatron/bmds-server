@@ -1,14 +1,9 @@
-.logic{
+ .logic{
     margin-left: 30px;
 }
 
-.decision-logic input{
+.decision-logic input, 
+.rule-list select, 
+.rule-list input{
     font-size:12px;
-    width: 50%;
-}
-.model-recommend{
-    font-size: 12px;
-}
-.model-recommend input{
-    font-size: 12px;
 }

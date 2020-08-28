@@ -10,7 +10,9 @@ const InputForm = props => {
                             type="number"
                             name={key}
                             value={props.row[key]}
-                            onChange={e => props.onChange(e, props.dataset_id, props.idx)}
+                            onChange={e =>
+                                props.onChange(key, e.target.value, props.dataset_id, props.idx)
+                            }
                         />
                     </td>,
                 ];
@@ -18,7 +20,7 @@ const InputForm = props => {
             <td>
                 <button
                     className="btn btn-danger btn-sq-xs"
-                    onClick={e => props.delete(e, props.dataset_id, props.idx)}>
+                    onClick={e => props.delete(props.dataset_id, props.idx)}>
                     <i className="fa fa-trash fa-1x"></i>
                 </button>
             </td>

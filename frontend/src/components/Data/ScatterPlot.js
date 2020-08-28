@@ -10,7 +10,11 @@ class ScatterPlot extends Component {
         const {dataStore} = this.props;
         let layout = dataStore.getLayout;
         layout.title.text = dataStore.getModelTypesName.name + " Scatter Plot";
-        return <Plot data={dataStore.getScatterPlotData} layout={layout} />;
+        return (
+            <div className="text-center">
+                <Plot data={dataStore.getScatterPlotData} layout={layout} />
+            </div>
+        );
     }
 }
 ScatterPlot.propTypes = {

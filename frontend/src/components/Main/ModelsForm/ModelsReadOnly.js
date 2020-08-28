@@ -1,5 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
+import {model} from "../../../constants/modelConstants";
 const ModelsReadOnly = props => {
     return (
         <tbody>
@@ -16,7 +17,7 @@ const ModelsReadOnly = props => {
                                         <i className="fa fa-square-o"></i>
                                     )}
                                     &emsp;&emsp;
-                                    {dev.name.includes("bayesian_model_average")
+                                    {dev.name.includes(model.Bayesian_Model_Average)
                                         ? dev.prior_weight + "%"
                                         : null}
                                 </td>,

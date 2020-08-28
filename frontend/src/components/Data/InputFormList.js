@@ -8,31 +8,7 @@ import PropTypes from "prop-types";
 @observer
 class InputFormList extends Component {
     render() {
-        const {dataStore} = this.props,
-            deleteRow = (e, dataset_id, index) => {
-                e.preventDefault();
-                dataStore.deleteRow(dataset_id, index);
-            },
-            onChange = (e, dataset_id, index) => {
-                e.preventDefault();
-                const {name, value} = e.target;
-                let parsedValue = "";
-                if (Number(value) || value == "0") {
-                    if (name === "ns") {
-                        parsedValue = parseInt(value);
-                    } else {
-                        parsedValue = parseFloat(value);
-                    }
-                } else {
-                    parsedValue = value;
-                }
-                dataStore.saveDataset(name, parsedValue, index, dataset_id);
-            },
-            changeColumnName = (e, dataset_id) => {
-                e.preventDefault();
-                const {name, value} = e.target;
-                dataStore.changeColumnName(name, value, dataset_id);
-            };
+        const {dataStore} = this.props;
         return (
             <div>
                 {dataStore.getEditSettings ? (
@@ -43,12 +19,14 @@ class InputFormList extends Component {
                                 type="text"
                                 name="dataset_name"
                                 value={dataStore.getCurrentDatasets.dataset_name}
-                                onChange={e => dataStore.saveDatasetName(e.target.value)}
+                                onChange={e =>
+                                    dataStore.saveDatasetName("dataset_name", e.target.value)
+                                }
                             />
                         </div>
                         <table className="inputformlist">
                             <thead>
-                                <tr className="table-primary ">
+                                <tr className="table-primary text-center">
                                     {dataStore.getLabels.map((item, index) => {
                                         return [<th key={index}>{item}</th>];
                                     })}
@@ -67,21 +45,20 @@ class InputFormList extends Component {
                                 </tr>
                                 <tr>
                                     {Object.keys(dataStore.getCurrentDatasets.column_names).map(
-                                        (item, i) => {
+                                        (columnName, i) => {
                                             return [
                                                 <td key={i}>
                                                     <input
                                                         className="column-names"
-                                                        name={item}
+                                                        name={columnName}
                                                         value={
                                                             dataStore.getCurrentDatasets
-                                                                .column_names[item]
+                                                                .column_names[columnName]
                                                         }
                                                         onChange={e =>
-                                                            changeColumnName(
-                                                                e,
-                                                                dataStore.getCurrentDatasets
-                                                                    .dataset_id
+                                                            dataStore.changeColumnName(
+                                                                columnName,
+                                                                e.target.value
                                                             )
                                                         }
                                                     />
@@ -100,8 +77,8 @@ class InputFormList extends Component {
                                             idx={i}
                                             row={obj}
                                             dataset_id={dataStore.getCurrentDatasets.dataset_id}
-                                            onChange={onChange}
-                                            delete={deleteRow.bind(this)}
+                                            onChange={dataStore.saveDataset}
+                                            delete={dataStore.deleteRow}
                                         />,
                                     ];
                                 })}

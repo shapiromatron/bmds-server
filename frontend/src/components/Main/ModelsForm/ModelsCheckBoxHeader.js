@@ -1,5 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
+import {model} from "../../../constants/modelConstants";
 
 const ModelsCheckBoxHeader = props => {
     return (
@@ -15,13 +16,17 @@ const ModelsCheckBoxHeader = props => {
                                     {(dev.name === "Enable") & props.isEditSettings ? (
                                         <input
                                             type="checkbox"
-                                            name={dev.model_name + "-All"}
-                                            onChange={props.onChange}
+                                            onChange={e =>
+                                                props.onChange(
+                                                    dev.model_name + "-All",
+                                                    e.target.checked
+                                                )
+                                            }
                                             checked={dev.isChecked}
                                         />
                                     ) : null}
                                     &emsp;
-                                    {dev.model_name === "bayesian_model_average"
+                                    {dev.model_name === model.Bayesian_Model_Average
                                         ? dev.prior_weight
                                         : null}
                                 </th>,

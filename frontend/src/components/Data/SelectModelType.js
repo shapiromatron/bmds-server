@@ -29,9 +29,9 @@ class SelectModelType extends Component {
                             </div>
                             <div className="">
                                 <button
-                                    type="submit"
+                                    type="button"
                                     className="btn btn-primary btn-sm"
-                                    onClick={e => dataStore.addDataset(e)}>
+                                    onClick={() => dataStore.addDataset()}>
                                     Add Dataset
                                 </button>
                             </div>

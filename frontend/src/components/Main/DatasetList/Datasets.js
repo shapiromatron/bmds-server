@@ -10,35 +10,39 @@ class Datasets extends Component {
         const {dataStore} = this.props;
         return (
             <tbody>
-                {dataStore.datasets.map((item, index) => {
+                {dataStore.datasets.map((dataset, index) => {
                     return [
                         <tr key={index}>
                             <td>
                                 <input
                                     type="checkbox"
-                                    name="isIncluded"
-                                    checked={item.enabled}
-                                    onChange={e => dataStore.toggleDataset(item.dataset_id)}
+                                    checked={dataset.enabled}
+                                    onChange={e =>
+                                        dataStore.toggleDataset(
+                                            "enabled",
+                                            e.target.checked,
+                                            dataset.dataset_id
+                                        )
+                                    }
                                 />
                             </td>
-                            <td>{item.dataset_name}</td>
+                            <td>{dataset.dataset_name}</td>
                             {dataStore.getDatasetType == "C" ? (
                                 <td>
                                     {" "}
                                     <Form.Control
                                         as="select"
-                                        name="adverse_direction"
                                         onChange={e =>
                                             dataStore.changeDatasetProperties(
-                                                e.target.name,
+                                                "adverse_direction",
                                                 e.target.value,
-                                                item.dataset_id
+                                                dataset.dataset_id
                                             )
                                         }>
-                                        {dataStore.getAdverseDirectionList.map((item, i) => {
+                                        {dataStore.getAdverseDirectionList.map((dataset, i) => {
                                             return [
-                                                <option key={i} value={item.value}>
-                                                    {item.name}
+                                                <option key={i} value={dataset.value}>
+                                                    {dataset.name}
                                                 </option>,
                                             ];
                                         })}
@@ -50,18 +54,17 @@ class Datasets extends Component {
                                     {" "}
                                     <Form.Control
                                         as="select"
-                                        name="degree"
                                         onChange={e =>
                                             dataStore.changeDatasetProperties(
-                                                e.target.name,
+                                                "degree",
                                                 e.target.value,
-                                                item.dataset_id
+                                                dataset.dataset_id
                                             )
                                         }>
-                                        {dataStore.getDegree.map((item, i) => {
+                                        {dataStore.getDegree.map((dataset, i) => {
                                             return [
-                                                <option key={i} value={item.value}>
-                                                    {item.name}
+                                                <option key={i} value={dataset.value}>
+                                                    {dataset.name}
                                                 </option>,
                                             ];
                                         })}
@@ -72,18 +75,17 @@ class Datasets extends Component {
                                 <td>
                                     <Form.Control
                                         as="select"
-                                        name="background"
                                         onChange={e =>
                                             dataStore.changeDatasetProperties(
-                                                e.target.name,
+                                                "background",
                                                 e.target.value,
-                                                item.dataset_id
+                                                dataset.dataset_id
                                             )
                                         }>
-                                        {dataStore.getBackground.map((item, i) => {
+                                        {dataStore.getBackground.map((dataset, i) => {
                                             return [
-                                                <option key={i} value={item.value}>
-                                                    {item.name}
+                                                <option key={i} value={dataset.value}>
+                                                    {dataset.name}
                                                 </option>,
                                             ];
                                         })}

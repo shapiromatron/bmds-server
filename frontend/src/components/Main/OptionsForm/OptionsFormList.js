@@ -48,12 +48,7 @@ class OptionsFormList extends Component {
                             ) : (
                                 <tbody>
                                     {optionsStore.optionsList.map((options, id) => (
-                                        <OptionsReadOnly
-                                            className="form-control"
-                                            key={id}
-                                            idx={id}
-                                            options={options}
-                                        />
+                                        <OptionsReadOnly key={id} idx={id} options={options} />
                                     ))}
                                 </tbody>
                             )}

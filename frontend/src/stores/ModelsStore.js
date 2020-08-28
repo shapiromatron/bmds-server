@@ -1,5 +1,5 @@
 import {observable, action, computed} from "mobx";
-import {modelsList, modelHeaders, nestedHeaders} from "../constants/modelConstants";
+import {modelsList, modelHeaders, nestedHeaders, model} from "../constants/modelConstants";
 import _ from "lodash";
 
 class ModelsStore {
@@ -27,26 +27,21 @@ class ModelsStore {
         }
     }
 
-    @action.bound toggleModelsCheckBox(selectedModel, checked, value) {
-        let models = this.models;
+    @action.bound toggleModelsCheckBox(selectedModel, checked) {
         if (selectedModel.split("-")[1] == "All") {
             this.model_headers.third.values.map(value => {
                 if (value.model_name == selectedModel.split("-")[0]) {
-                    value.isChecked = !value.isChecked;
-                    this.enableAllModels(models, selectedModel, value.isChecked);
+                    value.isChecked = checked;
+                    this.enableAllModels(selectedModel, checked);
                 }
             });
         } else {
-            models.map(item => {
+            this.models.map(item => {
                 item.values.map(value => {
-                    if (
-                        value.name === selectedModel &&
-                        !value.isDisabled &&
-                        value.isChecked == !checked
-                    ) {
-                        value.isChecked = !value.isChecked;
-                        this.checkAllEnabled(models, selectedModel);
-                        if (selectedModel.split("-")[0] === "bayesian_model_average") {
+                    if (value.name === selectedModel && !value.isDisabled) {
+                        value.isChecked = checked;
+                        this.checkAllEnabled(selectedModel);
+                        if (selectedModel.split("-")[0] === model.Bayesian_Model_Average) {
                             if (checked) {
                                 this.prior_weight_models.push(selectedModel);
                             } else {
@@ -64,9 +59,9 @@ class ModelsStore {
             this.prior_weight = this.prior_weight / this.prior_weight_models.length;
         }
 
-        models.map(item => {
+        this.models.map(item => {
             item.values.map(val => {
-                if (val.name.includes("bayesian_model_average")) {
+                if (val.name.includes(model.Bayesian_Model_Average)) {
                     if (this.prior_weight_models.includes(val.name)) {
                         val.prior_weight = this.prior_weight;
                     } else {
@@ -77,16 +72,12 @@ class ModelsStore {
         });
     }
 
-    @action enableAllModels(models, selectedModel, isChecked) {
-        models.map(item => {
+    @action enableAllModels(selectedModel, isChecked) {
+        this.models.map(item => {
             item.values.map(value => {
-                if (
-                    value.name.split("-")[0] === selectedModel.split("-")[0] &&
-                    !value.isDisabled &&
-                    value.isChecked == !isChecked
-                ) {
-                    value.isChecked = !value.isChecked;
-                    if (selectedModel.split("-")[0] == "bayesian_model_average") {
+                if (value.name.split("-")[0] === selectedModel.split("-")[0] && !value.isDisabled) {
+                    value.isChecked = isChecked;
+                    if (selectedModel.split("-")[0] == model.Bayesian_Model_Average) {
                         if (isChecked) {
                             this.prior_weight_models.push(value.name);
                         } else {
@@ -99,10 +90,10 @@ class ModelsStore {
     }
 
     //checks if all models are enabled
-    @action checkAllEnabled(models, modelName) {
+    @action checkAllEnabled(modelName) {
         let totalModels = [];
         let enabledModels = [];
-        models.map(model => {
+        this.models.map(model => {
             model.values.map(item => {
                 if (item.name.split("-")[0] == modelName.split("-")[0] && !item.isDisabled) {
                     totalModels.push(item.name);
@@ -130,11 +121,11 @@ class ModelsStore {
             item.values.map(val => {
                 if (val.isChecked) {
                     var [k, v] = val.name.split("-");
-                    if (v === "DichotomousHill") {
-                        v = "Dichotomous-Hill";
+                    if (v === model.DichotomousHill) {
+                        v = model.Dichotomous_Hill;
                     }
                     if (k in result) {
-                        if (k === "bayesian_model_average") {
+                        if (k === model.Bayesian_Model_Average) {
                             result[k] = result[k].concat({
                                 model: v,
                                 prior_weight: parseFloat(val.prior_weight) / 100,
@@ -143,7 +134,7 @@ class ModelsStore {
                             result[k] = result[k].concat(v);
                         }
                     } else {
-                        if (k === "bayesian_model_average") {
+                        if (k === model.Bayesian_Model_Average) {
                             result[k] = [
                                 {model: v, prior_weight: parseFloat(val.prior_weight) / 100},
                             ];
@@ -162,11 +153,11 @@ class ModelsStore {
         this.setDefaultsByDatasetType();
         let modelArr = [];
         Object.keys(inputs.models).map((item, i) => {
-            inputs.models[item].map((val, index) => {
-                if (item === "bayesian_model_average") {
+            inputs.models[item].map(val => {
+                if (item === model.Bayesian_Model_Average) {
                     val = val.model;
                 }
-                if (val == "Dichotomous-Hill") {
+                if (val == model.Dichotomous_Hill) {
                     let [k, v] = val.split("-");
                     val = k + v;
                 }
@@ -174,11 +165,9 @@ class ModelsStore {
                 modelArr.push(val);
             });
         });
-        modelArr.forEach((item, i) => {
+        modelArr.forEach((model, i) => {
             let checked = true;
-            let value = "";
-
-            this.toggleModelsCheckBox(item, checked, value);
+            this.toggleModelsCheckBox(model, checked);
         });
     }
 }

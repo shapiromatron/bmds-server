@@ -17,115 +17,93 @@ const decision_logic = {
 
 const long_name = {
     bmd_missing: {
-        // example here; you can rewrite the others like this
         notes: val => "BMD not estimated",
         name: "BMD calculated",
     },
     bmdl_missing: {
         name: "BMDL calculated",
-        note1: "BMDL not estimated",
-        note2: "",
+        notes: val => "BMDL not estimated",
     },
     bmdu_missing: {
         name: "BMDU calculated",
-        note1: "BMDU not estimated",
-        note2: "",
+        notes: val => "BMDU not estimated",
     },
     aic_missing: {
         name: "AIC calculated",
-        note1: "AIC not estimated",
-        note2: "",
+        notes: val => "AIC not estimated",
     },
     roi_missing: {
         name: "Residual of Interest calculated",
-        note1: "To Do",
-        note2: "",
+        notes: val => "To Do",
     },
     variance_type: {
-        // example here; you can rewrite the others like this
         notes: val => `Constant variance test failed (Test 2 p-value < ${val})`,
         name: "Constant Variance",
     },
     variance_fit: {
         name: "Non-Constant Variance",
-        note1: "Non-Constant variance test failed (Test 3 p-value < ",
-        note2: ")",
+        notes: val => `Non-Constant variance test failed (Test 3 p-value < ${val})`,
     },
     gof: {
         name: "Goodness of fit p-test",
-        note1: "Goodness of fit p-value < ",
-        note2: "",
+        notes: val => `Goodness of fit p-value < ${val} `,
     },
     gof_cancer: {
         name: "Goodness of fit p-test (cancer)",
-        note1: "BGoodness of fit p-value < ",
-        note2: "",
+        notes: val => `BGoodness of fit p-value < ${val}`,
     },
     bmd_bmdl_ratio_fail: {
         name: "Ratio of BMD/BMDL (serious)",
-        note1: "BMD/BMDL ratio > ",
-        note2: "",
+        notes: val => `BMD/BMDL ratio > ${val}`,
     },
     bmd_bmdl_ratio_warn: {
-        name: "Ratio of BMD/BMDL (caution)",
-        note1: "BMD/BMDL ratio > ",
-        note2: "",
+        name: `Ratio of BMD/BMDL (caution)`,
+        notes: val => `BMD/BMDL ratio > ${val}`,
     },
     roi_large: {
         name: "Abs(Residual of interest) too large",
-        note1: "|Residual for Dose Group Near BMD| > ",
-        note2: "",
+        notes: val => `|Residual for Dose Group Near BMD| > ${val}`,
     },
     warnings: {
         name: "BMDS model Warning",
-        note1: "BMD output file included warning",
-        note2: "",
+        notes: val => "BMD output file included warning",
     },
     high_bmd: {
         name: "BMD higher than higher dose",
-        note1: "BMD ",
-        note2: "x higher than maximum dose",
+        notes: val => `BMD ${val}x higher than maximum dose`,
     },
     high_bmdl: {
         name: "BMDL higher than highest dose",
-        note1: "BMDL ",
-        note2: "x higher than maximum dose",
+        notes: val => `BMDL ${val}x higher than maximum dose`,
     },
 
     low_bmd_warn: {
         name: "BMD lower than lowest dose (warning)",
-        note1: "BMD ",
-        note2: "x lower than lowest non-zero dose",
+        notes: val => `BMD ${val}x lower than lowest non-zero dose`,
     },
     low_bmdl_warn: {
         name: "BMDL lower than lowest dose (warning)",
-        note1: "BMDL ",
-        note2: "x lower than lowest non-zero dose",
+        notes: val => `BMDL ${val}x lower than lowest non-zero dose`,
     },
     low_bmd_fail: {
         name: "BMD lower than lowest dose (serious)",
-        note1: "BMD ",
-        note2: "x lower than lowest non-zero dose",
+        notes: val => `BMD ${val}x lower than lowest non-zero dose`,
     },
     low_bmdl_fail: {
         name: "BMDL lower than lowest dose (serious)",
-        note1: "BMDL ",
-        note2: "x lower than lowest non-zero dose",
+        notes: val => `BMDL ${val}x lower than lowest non-zero dose`,
     },
     control_residual_high: {
         name: "Abs(Residual at control) too large",
-        note1: "|Residual at control| > ",
-        note2: "",
+        notes: val => `|Residual at control| > ${val}`,
     },
     control_stdev_fit: {
         name: "Poor control dose std. dev.",
-        note1: "Modeled control response std. dev. > |",
-        note2: "| actual response std. dev",
+        notes: val => `Modeled control response std. dev. > |${val}| actual response std. dev`,
     },
     dof_zero: {
         name: "D.O.F equal 0",
-        note1: "d.f=0, saturated model (Goodness of fit test cannot be calculated)",
-        note2: "",
+        notes: val => "d.f=0, saturated model (Goodness of fit test cannot be calculated)",
     },
 };
 

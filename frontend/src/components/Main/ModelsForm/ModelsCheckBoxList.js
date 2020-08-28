@@ -20,24 +20,12 @@ class ModelsCheckBoxList extends Component {
                         <ModelsCheckBoxHeader
                             model_headers={modelsStore.model_headers}
                             isEditSettings={modelsStore.getEditSettings}
-                            onChange={e =>
-                                modelsStore.toggleModelsCheckBox(
-                                    e.target.name,
-                                    e.target.checked,
-                                    e.target.value
-                                )
-                            }
+                            onChange={modelsStore.toggleModelsCheckBox}
                         />
                         {modelsStore.getEditSettings ? (
                             <ModelsCheckBox
                                 models={models}
-                                onChange={e =>
-                                    modelsStore.toggleModelsCheckBox(
-                                        e.target.name,
-                                        e.target.checked,
-                                        e.target.value
-                                    )
-                                }
+                                toggleModelsCheckBox={modelsStore.toggleModelsCheckBox}
                             />
                         ) : (
                             <ModelsReadOnly models={models} />

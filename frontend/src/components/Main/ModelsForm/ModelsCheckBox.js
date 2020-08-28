@@ -13,9 +13,11 @@ const ModelsCheckBox = props => {
                                 <td key={index}>
                                     <input
                                         className="checkbox"
-                                        type={dev.type}
+                                        type="checkbox"
                                         name={dev.name}
-                                        onChange={props.onChange}
+                                        onChange={e =>
+                                            props.toggleModelsCheckBox(dev.name, e.target.checked)
+                                        }
                                         checked={dev.isChecked}
                                         disabled={dev.isDisabled}
                                     />
@@ -25,7 +27,7 @@ const ModelsCheckBox = props => {
                                             type="text"
                                             name={dev.name}
                                             value={dev.prior_weight + "%"}
-                                            onChange={props.onChange}
+                                            onChange={props.toggleModelsCheckBox}
                                         />
                                     ) : null}
                                 </td>,
@@ -53,5 +55,6 @@ ModelsCheckBox.propTypes = {
     models: PropTypes.array,
     onChange: PropTypes.func,
     length: PropTypes.number,
+    toggleModelsCheckBox: PropTypes.func,
 };
 export default ModelsCheckBox;

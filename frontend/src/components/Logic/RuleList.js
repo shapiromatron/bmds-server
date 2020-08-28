@@ -13,8 +13,8 @@ class RuleList extends Component {
 
         return (
             <div className=" row">
-                <div className="col col-sm-8">
-                    <table className="table table-bordered table-sm model-recommend">
+                <div className="col col-sm-8 table-responsive ">
+                    <table className="table table-bordered table-sm rule-list">
                         <thead className="table-primary">
                             <tr>
                                 <th colSpan="7" className="text-center">
@@ -31,14 +31,21 @@ class RuleList extends Component {
                                 })}
                             </tr>
                         </thead>
-                        <Rule
-                            rules={rules}
-                            toggleTest={logicStore.toggleTest}
-                            changeThreshold={logicStore.changeThreshold}
-                            changeBinType={logicStore.changeBinType}
-                            disableList={logicStore.getDisableList}
-                            long_name={logicStore.getLongName}
-                        />
+                        <tbody>
+                            {Object.keys(rules).map((rule, i) => {
+                                return (
+                                    <Rule
+                                        key={i}
+                                        rule={rules[rule]}
+                                        rule_name={rule}
+                                        long_name={logicStore.getLongName[rule].name}
+                                        notes={logicStore.getLongName[rule].notes}
+                                        changeLogicValues={logicStore.changeLogicValues}
+                                        disableList={logicStore.getDisableList}
+                                    />
+                                );
+                            })}
+                        </tbody>
                     </table>
                 </div>
             </div>

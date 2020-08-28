@@ -11,8 +11,6 @@ class LogicStore {
     constructor(rootStore) {
         this.rootStore = rootStore;
     }
-
-    @observable modelRecommendationList = [];
     @observable logic = {};
 
     @action setDefaultState() {
@@ -37,23 +35,10 @@ class LogicStore {
     @computed get getLongName() {
         return long_name;
     }
-    @action toggleDecisionLogic(e) {
-        this.logic[e.target.name] = !this.logic[e.target.name];
+    @action.bound changeDecisionLogicValues(key, value) {
+        this.logic[key] = value;
     }
-
-    @action saveCloseBMDL(e) {
-        this.logic.sufficiently_close_bmdl = parseFloat(e.target.value);
-    }
-
-    @action.bound changeThreshold(rule, threshold) {
-        this.logic.rules[rule].threshold = threshold;
-    }
-
-    @action.bound changeBinType(rule, binType) {
-        this.logic.rules[rule].failure_bin = binType;
-    }
-
-    @action.bound toggleTest(rule, key, value) {
+    @action.bound changeLogicValues(rule, key, value) {
         this.logic.rules[rule][key] = value;
     }
 }

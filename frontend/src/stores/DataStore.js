@@ -24,12 +24,11 @@ class DataStore {
         this.rootStore.outputStore.setCurrentDatasetIndex(this.selectedDatasetIndex);
     }
 
-    @action saveDatasetName(name) {
-        this.getCurrentDatasets["dataset_name"] = name;
+    @action saveDatasetName(key, value) {
+        this.getCurrentDatasets[key] = value;
     }
 
-    @action addDataset(e) {
-        e.preventDefault();
+    @action addDataset() {
         let form = constant.datasetForm[this.model_type];
         if (this.getDatasetType === "DM") {
             form["degree"] = "auto-select";
@@ -61,18 +60,21 @@ class DataStore {
         });
     };
 
-    @action saveDataset = (name, value, id, dataset_id) => {
-        if (isNaN(value)) {
-            this.datasets[dataset_id][name] = value;
+    @action.bound saveDataset(key, value, dataset_id, index) {
+        let parsedValue = "";
+        if (key === "ns") {
+            parsedValue = parseInt(value);
         } else {
-            this.datasets[dataset_id][name][id] = value;
+            parsedValue = parseFloat(value);
         }
-    };
-    @action changeColumnName = (name, value, dataset_id) => {
-        this.datasets[dataset_id]["column_names"][name] = value;
-    };
+        this.datasets[dataset_id][key][index] = parsedValue;
+    }
 
-    @action deleteDataset() {
+    @action.bound changeColumnName(name, value) {
+        this.datasets[this.getCurrentDatasets.dataset_id]["column_names"][name] = value;
+    }
+
+    @action.bound deleteDataset() {
         var index = this.datasets.findIndex(item => item.dataset_id == this.selectedDatasetIndex);
         if (index > -1) {
             this.datasets.splice(index, 1);
@@ -85,10 +87,9 @@ class DataStore {
             this.selectedDatasetIndex = idArray[0];
         }
     }
-    @action toggleDataset = dataset_id => {
-        var obj = this.datasets.find(item => item.dataset_id == dataset_id);
-        obj["enabled"] = !obj["enabled"];
-    };
+    @action toggleDataset(key, value, dataset_id) {
+        this.datasets.find(dataset => dataset.dataset_id == dataset_id)[key] = value;
+    }
     @action changeDatasetProperties = (name, value, id) => {
         this.datasets.map(item => {
             if (item.dataset_id == id) {

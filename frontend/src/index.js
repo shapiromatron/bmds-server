@@ -14,7 +14,8 @@ const Root = (
         mainStore={rootStore.mainStore}
         outputStore={rootStore.outputStore}
         optionsStore={rootStore.optionsStore}
-        modelsStore={rootStore.modelsStore}>
+        modelsStore={rootStore.modelsStore}
+        logicStore={rootStore.logicStore}>
         <App />
     </Provider>
 );

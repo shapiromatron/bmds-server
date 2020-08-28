@@ -4,7 +4,7 @@ import {inject, observer} from "mobx-react";
 import Main from "./Main/Main";
 import Data from "./Data/Data";
 import ReportOptions from "./ReportOptions/ReportOptions";
-import Logic from "./Logic/logic";
+import Logic from "./Logic/Logic";
 import ModelParams from "./ModelParams/ModelParams";
 import Output from "./Output/Output";
 import StoreDebugger from "./StoreDebugger/StoreDebugger";
@@ -45,6 +45,11 @@ class Navigation extends Component {
                             <li className="nav-item">
                                 <NavLink className="nav-link" to="/output">
                                     Output
+                                </NavLink>
+                            </li>
+                            <li className="nav-item">
+                                <NavLink className="nav-link" to="/logic">
+                                    Logic
                                 </NavLink>
                             </li>
                             <li className="nav-item">

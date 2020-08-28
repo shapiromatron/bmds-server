@@ -54,6 +54,9 @@ class MainStore {
     @computed get getEnabledDatasets() {
         return this.rootStore.dataStore.getEnabledDatasets;
     }
+    @computed get getLogic() {
+        return this.rootStore.logicStore.getLogic;
+    }
 
     @action
     async saveAnalysis() {
@@ -70,10 +73,10 @@ class MainStore {
                         models: this.getEnabledModels,
                         datasets: this.getEnabledDatasets,
                         options: this.getOptions,
+                        logic: this.getLogic,
                     },
                 };
             };
-
         await fetch(url, {
             method: "PATCH",
             mode: "cors",

@@ -14,12 +14,10 @@ class OptionsForm extends Component {
                 {this.props.dataset_type === "C" ? (
                     <td>
                         <select
-                            name="bmr_type"
                             className="form-control"
                             value={options.bmr_type}
-                            id={this.props.idx}
                             onChange={e =>
-                                optionsStore.saveOptions(e.target.name, e.target.value, e.target.id)
+                                optionsStore.saveOptions("bmr_type", e.target.value, this.props.idx)
                             }>
                             {optionsStore.getBmrType.map((item, i) => {
                                 return [
@@ -34,12 +32,10 @@ class OptionsForm extends Component {
                 {this.props.dataset_type != "C" ? (
                     <td>
                         <select
-                            name="bmr_type"
                             className="form-control"
                             value={this.props.options.bmr_type}
-                            id={this.props.idx}
                             onChange={e =>
-                                optionsStore.saveOptions(e.target.name, e.target.value, e.target.id)
+                                optionsStore.saveOptions("bmr_type", e.target.value, this.props.idx)
                             }>
                             {optionsStore.getOtherBmrType.map((item, i) => {
                                 return [
@@ -55,12 +51,10 @@ class OptionsForm extends Component {
                 <td>
                     <input
                         type="number"
-                        name="bmr_value"
                         className="form-control"
                         value={this.props.options.bmr_value}
-                        id={this.props.idx}
                         onChange={e =>
-                            optionsStore.saveOptions(e.target.name, e.target.value, e.target.id)
+                            optionsStore.saveOptions("bmr_value", e.target.value, this.props.idx)
                         }
                     />
                 </td>
@@ -68,12 +62,14 @@ class OptionsForm extends Component {
                     <td>
                         <input
                             type="number"
-                            name="tail_probability"
                             className="form-control"
                             value={this.props.options.tail_probability}
-                            id={this.props.idx}
                             onChange={e =>
-                                optionsStore.saveOptions(e.target.name, e.target.value, e.target.id)
+                                optionsStore.saveOptions(
+                                    "tail_probability",
+                                    e.target.value,
+                                    this.props.idx
+                                )
                             }
                         />
                     </td>
@@ -82,23 +78,27 @@ class OptionsForm extends Component {
                     <input
                         className="form-control"
                         type="number"
-                        name="confidence_level"
                         value={this.props.options.confidence_level}
-                        id={this.props.idx}
                         onChange={e =>
-                            optionsStore.saveOptions(e.target.name, e.target.value, e.target.id)
+                            optionsStore.saveOptions(
+                                "confidence_level",
+                                e.target.value,
+                                this.props.idx
+                            )
                         }
                     />
                 </td>
                 {this.props.dataset_type === "N" ? (
                     <td>
                         <select
-                            name="litter_specific_covariate"
                             className="form-control"
                             value={this.props.options.litter_specific_covariate}
-                            id={this.props.idx}
                             onChange={e =>
-                                optionsStore.saveOptions(e.target.name, e.target.value, e.target.id)
+                                optionsStore.saveOptions(
+                                    "litter_specific_covariate",
+                                    e.target.value,
+                                    this.props.idx
+                                )
                             }>
                             {optionsStore.getLitterSpecificCovariate.map((item, i) => {
                                 return [
@@ -114,12 +114,14 @@ class OptionsForm extends Component {
                 {this.props.dataset_type === "C" ? (
                     <td>
                         <select
-                            name="distribution"
                             className="form-control"
                             value={this.props.options.distribution}
-                            id={this.props.idx}
                             onChange={e =>
-                                optionsStore.saveOptions(e.target.name, e.target.value, e.target.id)
+                                optionsStore.saveOptions(
+                                    "distribution",
+                                    e.target.value,
+                                    this.props.idx
+                                )
                             }>
                             {optionsStore.getDistribution.map((item, i) => {
                                 return [
@@ -134,12 +136,10 @@ class OptionsForm extends Component {
                 {this.props.dataset_type === "C" ? (
                     <td>
                         <select
-                            name="variance"
-                            id={this.props.idx}
                             className="form-control"
                             value={this.props.options.variance}
                             onChange={e =>
-                                optionsStore.saveOptions(e.target.name, e.target.value, e.target.id)
+                                optionsStore.saveOptions("variance", e.target.value, this.props.idx)
                             }>
                             {optionsStore.getVariance.map((item, i) => {
                                 return [
@@ -154,12 +154,14 @@ class OptionsForm extends Component {
                 {this.props.dataset_type === "C" ? (
                     <td>
                         <select
-                            name="polynomial_restriction"
-                            id={this.props.idx}
                             className="form-control"
                             value={this.props.options.polynomial_restriction}
                             onChange={e =>
-                                optionsStore.saveOptions(e.target.name, e.target.value, e.target.id)
+                                optionsStore.saveOptions(
+                                    "polynomial_restriction",
+                                    e.target.value,
+                                    this.props.idx
+                                )
                             }>
                             {optionsStore.getPolynomialRestriction.map((item, i) => {
                                 return [
@@ -174,12 +176,14 @@ class OptionsForm extends Component {
                 {this.props.dataset_type != "DM" ? (
                     <td>
                         <select
-                            name="background"
-                            id={this.props.idx}
                             className="form-control"
                             value={this.props.options.background}
                             onChange={e =>
-                                optionsStore.saveOptions(e.target.name, e.target.value, e.target.id)
+                                optionsStore.saveOptions(
+                                    "background",
+                                    e.target.value,
+                                    this.props.idx
+                                )
                             }>
                             <option value="Estimated">Estimated</option>
                         </select>
@@ -189,12 +193,14 @@ class OptionsForm extends Component {
                     <td>
                         <input
                             type="number"
-                            name="bootstrap_iterations"
                             className="form-control"
                             value={this.props.options.bootstrap_iterations}
-                            id={this.props.idx}
                             onChange={e =>
-                                optionsStore.saveOptions(e.target.name, e.target.value, e.target.id)
+                                optionsStore.saveOptions(
+                                    "bootstrap_iterations",
+                                    e.target.value,
+                                    this.props.idx
+                                )
                             }
                         />
                     </td>
@@ -202,12 +208,14 @@ class OptionsForm extends Component {
                 {this.props.dataset_type === "N" ? (
                     <td>
                         <select
-                            name="bootstrap_seed"
-                            id={this.props.idx}
                             className="form-control"
                             value={this.props.options.bootstrap_seed}
                             onChange={e =>
-                                optionsStore.saveOptions(e.target.name, e.target.value, e.target.id)
+                                optionsStore.saveOptions(
+                                    "bootstrap_seed",
+                                    e.target.value,
+                                    this.props.idx
+                                )
                             }>
                             {optionsStore.getBootstrapSeed.map((item, i) => {
                                 return [

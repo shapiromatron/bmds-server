@@ -40,8 +40,9 @@ class DatasetNames extends Component {
                 {dataStore.getEditSettings ? (
                     <div>
                         <button
+                            type="button"
                             className="btn btn-danger btn-sm"
-                            onClick={() => dataStore.deleteDataset()}>
+                            onClick={e => dataStore.deleteDataset()}>
                             Delete Dataset
                         </button>
                     </div>

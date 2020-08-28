@@ -8,7 +8,7 @@ const InputFormReadOnly = props => {
                 {props.currentDataset.dataset_name}
             </div>
             <div className="table-responsive-sm inputformreadonly">
-                <table className="table table-bordered table-stripped table-hover table-sm">
+                <table className="table table-bordered table-stripped table-hover table-sm text-center">
                     <thead className="table-primary">
                         <tr>
                             {props.labels.map((item, index) => {

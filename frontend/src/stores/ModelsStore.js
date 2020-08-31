@@ -1,5 +1,5 @@
-import { observable, action, computed } from "mobx";
-import { modelsList, modelHeaders, nestedHeaders, model } from "../constants/modelConstants";
+import {observable, action, computed} from "mobx";
+import {modelsList, modelHeaders, nestedHeaders, model} from "../constants/modelConstants";
 import _ from "lodash";
 
 class ModelsStore {
@@ -65,7 +65,7 @@ class ModelsStore {
                 }
             });
         });
-        let sum = total_weight.reduce(function (a, b) {
+        let sum = total_weight.reduce(function(a, b) {
             return a + b;
         });
         return sum;
@@ -154,7 +154,7 @@ class ModelsStore {
                     } else {
                         if (k === model.Bayesian_Model_Average) {
                             result[k] = [
-                                { model: v, prior_weight: parseFloat(val.prior_weight) / 100 },
+                                {model: v, prior_weight: parseFloat(val.prior_weight) / 100},
                             ];
                         } else {
                             result[k] = [v];

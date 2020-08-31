@@ -12,20 +12,23 @@ import PropTypes from "prop-types";
 class ModelsCheckBoxList extends Component {
     render() {
         const {modelsStore} = this.props;
-        let models = toJS(modelsStore.models);
+        let models = toJS(modelsStore.models),
+            model_headers = toJS(modelsStore.model_headers);
         return (
             <div>
                 {!(typeof models === "undefined") ? (
                     <table className="modelscheckbox table table-bordered table-sm">
                         <ModelsCheckBoxHeader
-                            model_headers={modelsStore.model_headers}
+                            model_headers={model_headers}
                             isEditSettings={modelsStore.getEditSettings}
-                            onChange={modelsStore.toggleModelsCheckBox}
+                            enableAll={modelsStore.enableAllModels}
                         />
                         {modelsStore.getEditSettings ? (
                             <ModelsCheckBox
                                 models={models}
                                 toggleModelsCheckBox={modelsStore.toggleModelsCheckBox}
+                                savePriorWeght={modelsStore.savePriorWeght}
+                                total_weight={modelsStore.total_weight}
                             />
                         ) : (
                             <ModelsReadOnly models={models} />

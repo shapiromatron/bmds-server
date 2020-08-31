@@ -1,5 +1,5 @@
-import {observable, action, computed} from "mobx";
-import {modelsList, modelHeaders, nestedHeaders, model} from "../constants/modelConstants";
+import { observable, action, computed } from "mobx";
+import { modelsList, modelHeaders, nestedHeaders, model } from "../constants/modelConstants";
 import _ from "lodash";
 
 class ModelsStore {
@@ -10,7 +10,7 @@ class ModelsStore {
 
     @observable model_headers = {};
     @observable models = [];
-    @observable prior_weight = 0;
+    @observable total_weight = 100;
     @observable prior_weight_models = [];
 
     @computed get getEditSettings() {
@@ -28,65 +28,83 @@ class ModelsStore {
     }
 
     @action.bound toggleModelsCheckBox(selectedModel, checked) {
-        if (selectedModel.split("-")[1] == "All") {
-            this.model_headers.third.values.map(value => {
-                if (value.model_name == selectedModel.split("-")[0]) {
-                    value.isChecked = checked;
-                    this.enableAllModels(selectedModel, checked);
-                }
-            });
-        } else {
-            this.models.map(item => {
-                item.values.map(value => {
-                    if (value.name === selectedModel && !value.isDisabled) {
-                        value.isChecked = checked;
-                        this.checkAllEnabled(selectedModel);
-                        if (selectedModel.split("-")[0] === model.Bayesian_Model_Average) {
-                            if (checked) {
-                                this.prior_weight_models.push(selectedModel);
-                            } else {
-                                let index = this.prior_weight_models.indexOf(selectedModel);
-                                this.prior_weight_models.splice(index, 1);
-                            }
-                        }
-                    }
-                });
-            });
-        }
-
-        if (this.prior_weight_models.length) {
-            this.prior_weight = 100;
-            this.prior_weight = this.prior_weight / this.prior_weight_models.length;
-        }
-
         this.models.map(item => {
-            item.values.map(val => {
-                if (val.name.includes(model.Bayesian_Model_Average)) {
-                    if (this.prior_weight_models.includes(val.name)) {
-                        val.prior_weight = this.prior_weight;
-                    } else {
-                        val.prior_weight = 0;
+            item.values.map(value => {
+                if (value.name === selectedModel && !value.isDisabled) {
+                    value.isChecked = checked;
+                    this.checkAllEnabled(selectedModel);
+                    if (selectedModel.split("-")[0] === model.Bayesian_Model_Average) {
+                        this.calculatePriorWeight();
                     }
                 }
             });
         });
     }
 
-    @action enableAllModels(selectedModel, isChecked) {
-        this.models.map(item => {
-            item.values.map(value => {
-                if (value.name.split("-")[0] === selectedModel.split("-")[0] && !value.isDisabled) {
-                    value.isChecked = isChecked;
-                    if (selectedModel.split("-")[0] == model.Bayesian_Model_Average) {
-                        if (isChecked) {
-                            this.prior_weight_models.push(value.name);
-                        } else {
-                            this.prior_weight_models = [];
-                        }
+    @action.bound savePriorWeght(key, val) {
+        this.models.map(model => {
+            model.values.map(value => {
+                if (value.name == key) {
+                    value.prior_weight = parseFloat(val);
+                    if (this.checkTotalWeight > 100) {
+                        value.prior_weight = 0;
+                    } else {
+                        this.total_weight = this.checkTotalWeight;
                     }
                 }
             });
         });
+    }
+
+    @computed get checkTotalWeight() {
+        let total_weight = [];
+        this.models.map(model => {
+            model.values.map(value => {
+                if (value.name.split("-")[0] === model.Bayesian_Model_Average) {
+                    total_weight.push(parseFloat(value.prior_weight));
+                }
+            });
+        });
+        let sum = total_weight.reduce(function (a, b) {
+            return a + b;
+        });
+        return sum;
+    }
+    @action.bound calculatePriorWeight() {
+        let checkedModels = [];
+        this.models.map(model => {
+            model.values.map(item => {
+                if (item.isChecked) {
+                    checkedModels.push(item);
+                }
+            });
+        });
+        let prior_weight = 100 / checkedModels.length;
+        this.models.map(model => {
+            model.values.map(item => {
+                if (item.isChecked) {
+                    item.prior_weight = prior_weight;
+                } else {
+                    item.prior_weight = 0;
+                }
+            });
+        });
+    }
+
+    @action.bound enableAllModels(selectedModel, checked) {
+        this.model_headers.third.values.map(value => {
+            if (value.model_name == selectedModel.split("-")[0]) {
+                value.isChecked = checked;
+            }
+        });
+        this.models.map(item => {
+            item.values.map(value => {
+                if (value.name.split("-")[0] === selectedModel.split("-")[0] && !value.isDisabled) {
+                    value.isChecked = checked;
+                }
+            });
+        });
+        this.calculatePriorWeight();
     }
 
     //checks if all models are enabled
@@ -136,7 +154,7 @@ class ModelsStore {
                     } else {
                         if (k === model.Bayesian_Model_Average) {
                             result[k] = [
-                                {model: v, prior_weight: parseFloat(val.prior_weight) / 100},
+                                { model: v, prior_weight: parseFloat(val.prior_weight) / 100 },
                             ];
                         } else {
                             result[k] = [v];

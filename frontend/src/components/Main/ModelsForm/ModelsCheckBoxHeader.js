@@ -17,7 +17,7 @@ const ModelsCheckBoxHeader = props => {
                                         <input
                                             type="checkbox"
                                             onChange={e =>
-                                                props.onChange(
+                                                props.enableAll(
                                                     dev.model_name + "-All",
                                                     e.target.checked
                                                 )
@@ -44,5 +44,6 @@ ModelsCheckBoxHeader.propTypes = {
     values: PropTypes.array,
     isEditSettings: PropTypes.bool,
     onChange: PropTypes.func,
+    enableAll: PropTypes.func,
 };
 export default ModelsCheckBoxHeader;

@@ -24,10 +24,13 @@ const ModelsCheckBox = props => {
 
                                     {dev.name.includes("bayesian_model_average") ? (
                                         <input
+                                            className="text-center"
                                             type="text"
                                             name={dev.name}
                                             value={dev.prior_weight + "%"}
-                                            onChange={props.toggleModelsCheckBox}
+                                            onChange={e =>
+                                                props.savePriorWeght(dev.name, e.target.value)
+                                            }
                                         />
                                     ) : null}
                                 </td>,
@@ -44,7 +47,12 @@ const ModelsCheckBox = props => {
                     <td></td>
                     <td>
                         Total Weights{" "}
-                        <input name="total_weights" type="text" onChange={props.onChange} />
+                        <input
+                            type="text"
+                            className="text-center"
+                            readOnly
+                            value={props.total_weight + "%"}
+                        />
                     </td>
                 </tr>
             ) : null}
@@ -56,5 +64,7 @@ ModelsCheckBox.propTypes = {
     onChange: PropTypes.func,
     length: PropTypes.number,
     toggleModelsCheckBox: PropTypes.func,
+    savePriorWeght: PropTypes.func,
+    total_weight: PropTypes.number,
 };
 export default ModelsCheckBox;

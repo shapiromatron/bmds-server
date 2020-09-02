@@ -1,7 +1,8 @@
 import React, {Component} from "react";
 import {HashRouter} from "react-router-dom";
-import Navigation from "./components/navigation";
+import Navigation from "./components/Navigation";
 import {inject, observer} from "mobx-react";
+import PropTypes from "prop-types";
 
 @inject("mainStore")
 @observer
@@ -23,5 +24,10 @@ class App extends Component {
         );
     }
 }
-
+App.propTypes = {
+    mainStore: PropTypes.object,
+    setConfig: PropTypes.func,
+    fetchSavedAnalysis: PropTypes.func,
+    isUpdateComplete: PropTypes.func,
+};
 export default App;

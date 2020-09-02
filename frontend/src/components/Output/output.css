@@ -1,32 +1,12 @@
-
-.output{
-  margin-top:20px;
-  font-size: 12px;
-}
-.result{
-  margin-left: 330px;
-}
-.modal-content {
-  height: auto;
-  min-height: 100%;
-  border-radius: 0;
-  font-size: 12px;
-}
 .td-modelName:hover{
-  font-weight: bold;
   cursor:pointer;
   background-color:#0275d8;
   color:white;
 }
-.fa-close{
-    color: red;
-}
-.inputformreadonly{
-  text-align: center;
-}
+
 .button button{
   width: 100px;
 }
-table th {
-  text-align: center;
+#cdf-plot {
+  margin-top: 20px;
 }

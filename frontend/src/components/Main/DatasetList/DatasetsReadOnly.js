@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from "prop-types";
 
 const DatasetsReadOnly = props => {
     return (
@@ -22,5 +23,8 @@ const DatasetsReadOnly = props => {
             })}
         </tbody>
     );
+};
+DatasetsReadOnly.propTypes = {
+    datasets: PropTypes.array,
 };
 export default DatasetsReadOnly;

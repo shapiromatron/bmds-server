@@ -12,7 +12,8 @@
   margin-right: 20px;
 }
 .inputformlist{
-  text-align: center;
+  margin: auto;
+   width: 50% !important; 
 }
 .inputformlist {
   border-collapse:separate; 
@@ -82,7 +83,6 @@ button.btn-sq-xs{
 
 .editdataset{
   font-size: 12px;
-  width: 70%;
 }
 
 .currentdataset td a {
@@ -90,7 +90,6 @@ button.btn-sq-xs{
   width:100%;
 }
 .currentdataset a:hover{
-  font-weight: bold;
   cursor:pointer;
 }
 .currentdataset td:hover{

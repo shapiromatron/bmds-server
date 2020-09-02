@@ -1,6 +1,6 @@
 import React, {Component} from "react";
-
 import {inject, observer} from "mobx-react";
+import PropTypes from "prop-types";
 
 @inject("mainStore")
 @observer
@@ -22,4 +22,8 @@ class ReportOptions extends Component {
     }
 }
 
+ReportOptions.propTypes = {
+    mainStore: PropTypes.object.isRequired,
+    executionOutputs: PropTypes.object.isRequired,
+};
 export default ReportOptions;

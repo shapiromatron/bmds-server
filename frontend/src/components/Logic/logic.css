@@ -1,0 +1,9 @@
+ .logic{
+    margin-left: 30px;
+}
+
+.decision-logic input, 
+.rule-list select, 
+.rule-list input{
+    font-size:12px;
+}

@@ -12,7 +12,10 @@ const Root = (
         store={rootStore}
         dataStore={rootStore.dataStore}
         mainStore={rootStore.mainStore}
-        outputStore={rootStore.outputStore}>
+        outputStore={rootStore.outputStore}
+        optionsStore={rootStore.optionsStore}
+        modelsStore={rootStore.modelsStore}
+        logicStore={rootStore.logicStore}>
         <App />
     </Provider>
 );

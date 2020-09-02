@@ -1,12 +1,18 @@
-import dataStore from "./DataStore";
-import outputStore from "./OutputStore";
-import mainStore from "./MainStore";
+import DataStore from "./DataStore";
+import OutputStore from "./OutputStore";
+import MainStore from "./MainStore";
+import OptionsStore from "./OptionsStore";
+import ModelsStore from "./ModelsStore";
+import LogicStore from "./LogicStore";
 
 class RootStore {
     constructor() {
-        this.dataStore = dataStore;
-        this.mainStore = mainStore;
-        this.outputStore = outputStore;
+        this.mainStore = new MainStore(this);
+        this.dataStore = new DataStore(this);
+        this.optionsStore = new OptionsStore(this);
+        this.modelsStore = new ModelsStore(this);
+        this.outputStore = new OutputStore(this);
+        this.logicStore = new LogicStore(this);
     }
 }
 

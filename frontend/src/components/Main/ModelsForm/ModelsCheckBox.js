@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from "prop-types";
 
 const ModelsCheckBox = props => {
     return (
@@ -12,19 +13,24 @@ const ModelsCheckBox = props => {
                                 <td key={index}>
                                     <input
                                         className="checkbox"
-                                        type={dev.type}
+                                        type="checkbox"
                                         name={dev.name}
-                                        onChange={props.onChange}
+                                        onChange={e =>
+                                            props.toggleModelsCheckBox(dev.name, e.target.checked)
+                                        }
                                         checked={dev.isChecked}
                                         disabled={dev.isDisabled}
                                     />
 
                                     {dev.name.includes("bayesian_model_average") ? (
                                         <input
+                                            className="text-center"
                                             type="text"
                                             name={dev.name}
                                             value={dev.prior_weight + "%"}
-                                            onChange={props.onChange}
+                                            onChange={e =>
+                                                props.savePriorWeght(dev.name, e.target.value)
+                                            }
                                         />
                                     ) : null}
                                 </td>,
@@ -41,12 +47,24 @@ const ModelsCheckBox = props => {
                     <td></td>
                     <td>
                         Total Weights{" "}
-                        <input name="total_weights" type="text" onChange={props.onChange} />
+                        <input
+                            type="text"
+                            className="text-center"
+                            readOnly
+                            value={props.total_weight + "%"}
+                        />
                     </td>
                 </tr>
             ) : null}
         </tbody>
     );
 };
-
+ModelsCheckBox.propTypes = {
+    models: PropTypes.array,
+    onChange: PropTypes.func,
+    length: PropTypes.number,
+    toggleModelsCheckBox: PropTypes.func,
+    savePriorWeght: PropTypes.func,
+    total_weight: PropTypes.number,
+};
 export default ModelsCheckBox;

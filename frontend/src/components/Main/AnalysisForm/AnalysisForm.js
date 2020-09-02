@@ -1,33 +1,24 @@
 import React, {Component} from "react";
 import {inject, observer} from "mobx-react";
 import AnalysisFormReadOnly from "./AnalysisFormReadOnly";
+import PropTypes from "prop-types";
 
 @inject("mainStore")
 @observer
 class AnalysisForm extends Component {
     render() {
-        const {mainStore} = this.props,
-            handleSubmit = e => {
-                e.preventDefault();
-                mainStore.saveAnalysis();
-            },
-            handleChange = e => {
-                mainStore.addanalysisForm(e.target.name, e.target.value);
-            },
-            isEditSettings = mainStore.getEditSettings();
-
+        const {mainStore} = this.props;
         return (
             <div>
-                {isEditSettings ? (
-                    <form onSubmit={handleSubmit} className="analysis-form table-primary ">
+                {mainStore.getEditSettings ? (
+                    <form className="analysis-form table-primary ">
                         <div className="form-group">
                             <label>Analysis Name</label>
                             <input
                                 className="form-control"
                                 type="text"
-                                name="analysis_name"
-                                value={mainStore.analysisForm.analysis_name}
-                                onChange={handleChange}
+                                value={mainStore.analysis_name}
+                                onChange={e => mainStore.changeAnalysisName(e.target.value)}
                             />
                         </div>
                         <div className="form-group">
@@ -36,18 +27,18 @@ class AnalysisForm extends Component {
                                 className="form-control"
                                 type="textarea"
                                 rows="3"
-                                name="analysis_description"
-                                value={mainStore.analysisForm.analysis_description}
-                                onChange={handleChange}></textarea>
+                                value={mainStore.analysis_description}
+                                onChange={e =>
+                                    mainStore.changeAnalysisDescription(e.target.value)
+                                }></textarea>
                         </div>
                         <div className="form-group">
                             <label>Select Model Type</label>
                             <select
                                 className="form-control"
-                                name="dataset_type"
-                                onChange={handleChange}
-                                value={mainStore.analysisForm.dataset_type}>
-                                {mainStore.modelTypes.map((item, i) => {
+                                onChange={e => mainStore.changeDatasetType(e.target.value)}
+                                value={mainStore.dataset_type}>
+                                {mainStore.getModelTypes.map((item, i) => {
                                     return [
                                         <option key={i} value={item.value}>
                                             {item.name}
@@ -56,19 +47,19 @@ class AnalysisForm extends Component {
                                 })}
                             </select>
                         </div>
-                        <div className="btngroup form-group" role="toolbar">
-                            <button type="button" className="btn btn-primary  mr-1">
+                        <div className="btn-toolbar btn-group form-group" role="toolbar">
+                            <button type="button" className="btn btn-primary btn-sm mr-1">
                                 Load Analysis
                             </button>
                             <button
                                 type="button"
-                                className="btn btn-primary  mr-1"
+                                className="btn btn-primary btn-sm mr-1"
                                 onClick={() => mainStore.saveAnalysis()}>
                                 Save Analysis
                             </button>
                             <button
                                 type="button"
-                                className="btn btn-primary"
+                                className="btn btn-primary btn-sm"
                                 disabled={!mainStore.isReadyToExecute}
                                 onClick={() => mainStore.executeAnalysis()}>
                                 Run Analysis
@@ -84,5 +75,19 @@ class AnalysisForm extends Component {
         );
     }
 }
-
+AnalysisForm.propTypes = {
+    mainStore: PropTypes.object,
+    getEditSettings: PropTypes.func,
+    analysis_name: PropTypes.string,
+    changeAnalysisName: PropTypes.func,
+    analysis_description: PropTypes.string,
+    changeAnalysisDescription: PropTypes.func,
+    changeDatasetType: PropTypes.func,
+    dataset_type: PropTypes.string,
+    getModelTypes: PropTypes.func,
+    saveAnalysis: PropTypes.func,
+    isReadyToExecute: PropTypes.bool,
+    executeAnalysis: PropTypes.func,
+    isExecuting: PropTypes.bool,
+};
 export default AnalysisForm;

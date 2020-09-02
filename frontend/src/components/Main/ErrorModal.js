@@ -2,23 +2,20 @@ import React, {Component} from "react";
 import {Modal, Button} from "react-bootstrap";
 
 import {inject, observer} from "mobx-react";
+import PropTypes from "prop-types";
 
 @inject("mainStore")
 @observer
-class MainModal extends Component {
+class ErrorModal extends Component {
     render() {
-        const {mainStore} = this.props,
-            hideModal = () => {
-                mainStore.errorModal = !mainStore.errorModal;
-            },
-            errorMessage = mainStore.errorMessage;
+        const {mainStore} = this.props;
         return (
             <div>
                 <Modal show={mainStore.errorModal}>
                     <Modal.Body>
-                        <div>{errorMessage}</div>
+                        <div>{mainStore.errorMessage}</div>
                         <div>
-                            <Button variant="primary" onClick={() => hideModal()}>
+                            <Button variant="primary" onClick={() => mainStore.hideModal()}>
                                 Ok
                             </Button>
                         </div>
@@ -28,5 +25,10 @@ class MainModal extends Component {
         );
     }
 }
-
-export default MainModal;
+ErrorModal.propTypes = {
+    mainStore: PropTypes.object,
+    errorModal: PropTypes.bool,
+    errorMessage: PropTypes.string,
+    hideModal: PropTypes.func,
+};
+export default ErrorModal;

@@ -13,7 +13,7 @@ ROOT_DIR = Path(__file__).parents[3].resolve()
 PUBLIC_DATA_ROOT = Path(os.environ.get("PUBLIC_DATA_ROOT", ROOT_DIR / "public"))
 LOGS_PATH = Path(os.environ.get("LOGS_PATH", ROOT_DIR))
 
-SKIN = SkinStyle.NONE
+SKIN = SkinStyle.Base
 
 INSTALLED_APPS = [
     "django.contrib.admin",

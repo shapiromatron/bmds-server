@@ -1,5 +1,17 @@
 import {observable, action, computed} from "mobx";
-import * as constant from "../constants/dataConstants";
+import {
+    labels,
+    modelTypes,
+    columnNames,
+    datasetForm,
+    datasetNamesHeaders,
+    AdverseDirectionList,
+    degree,
+    background,
+    scatter_plot_layout,
+    yAxisTitle,
+    model_type,
+} from "../constants/dataConstants";
 
 class DataStore {
     constructor(rootStore) {
@@ -29,7 +41,7 @@ class DataStore {
     }
 
     @action addDataset() {
-        let form = constant.datasetForm[this.model_type];
+        let form = datasetForm[this.model_type];
         if (this.getDatasetType === "DM") {
             form["degree"] = "auto-select";
             form["background"] = "Estimated";
@@ -38,7 +50,7 @@ class DataStore {
         form["model_type"] = this.model_type;
         form["dataset_id"] = this.datasets.length;
         form["dataset_name"] = "DatasetName " + form["dataset_id"];
-        form["column_names"] = constant.columnNames[this.model_type];
+        form["column_names"] = columnNames[this.model_type];
         this.selectedDatasetIndex = form["dataset_id"];
         this.datasets.push(form);
     }
@@ -133,20 +145,34 @@ class DataStore {
     @computed get getResponse() {
         let responses = [];
         let dataset = this.getCurrentDatasets;
-        let ns = dataset.ns;
-        let incidences = dataset.incidences;
-        if (dataset.model_type === "CS") {
+        if (dataset.model_type === model_type.Continuous_Summarized) {
             responses = dataset.means;
-        } else if (dataset.model_type === "DM") {
+        } else if (dataset.model_type === model_type.Continuous_Individual) {
+            responses = dataset.responses;
+        } else if (dataset.model_type === model_type.Dichotomous) {
+            let ns = dataset.ns;
+            let incidences = dataset.incidences;
             for (var i = 0; i < ns.length; i++) {
-                var response = incidences[i] / ns[i];
+                let response = incidences[i] / ns[i];
+                responses.push(response);
+            }
+        } else if (dataset.model_type === model_type.Nested) {
+            let incidences = dataset.incidences;
+            let litter_sizes = dataset.litter_sizes;
+            for (var j = 0; j < litter_sizes.length; j++) {
+                let response = incidences[j] / litter_sizes[j];
                 responses.push(response);
             }
         }
         return responses;
     }
     @computed get getLayout() {
-        return constant.scatter_plot_layout;
+        let model_type = this.getCurrentDatasets.model_type;
+        let layout = scatter_plot_layout;
+        layout.title.text = this.getCurrentDatasets.dataset_name;
+        layout.xaxis.title.text = this.getCurrentDatasets.column_names["doses"];
+        layout.yaxis.title.text = yAxisTitle[model_type];
+        return layout;
     }
 
     @computed get getDatasets() {
@@ -169,10 +195,10 @@ class DataStore {
     }
 
     @computed get getFilteredModelTypes() {
-        return constant.modelTypes.filter(model => model.value.includes(this.getDatasetType));
+        return modelTypes.filter(model => model.value.includes(this.getDatasetType));
     }
     @computed get getModelTypesName() {
-        return constant.modelTypes.find(item => item.value === this.model_type);
+        return modelTypes.find(item => item.value === this.model_type);
     }
 
     @computed get getDatasetType() {
@@ -180,7 +206,7 @@ class DataStore {
     }
 
     @computed get getLabels() {
-        return constant.labels[this.getCurrentDatasets.model_type];
+        return labels[this.getCurrentDatasets.model_type];
     }
 
     @computed get getEnabledDatasets() {
@@ -192,16 +218,16 @@ class DataStore {
     }
 
     @computed get getDatasetNamesHeader() {
-        return constant.datasetNamesHeaders[this.getDatasetType];
+        return datasetNamesHeaders[this.getDatasetType];
     }
     @computed get getAdverseDirectionList() {
-        return constant.AdverseDirectionList;
+        return AdverseDirectionList;
     }
     @computed get getDegree() {
-        return constant.degree;
+        return degree;
     }
     @computed get getBackground() {
-        return constant.background;
+        return background;
     }
 }
 

@@ -8,13 +8,7 @@ import PropTypes from "prop-types";
 class ScatterPlot extends Component {
     render() {
         const {dataStore} = this.props;
-        let layout = dataStore.getLayout;
-        layout.title.text = dataStore.getModelTypesName.name + " Scatter Plot";
-        return (
-            <div>
-                <Plot data={dataStore.getScatterPlotData} layout={layout} />
-            </div>
-        );
+        return <Plot data={dataStore.getScatterPlotData} layout={dataStore.getLayout} />;
     }
 }
 ScatterPlot.propTypes = {

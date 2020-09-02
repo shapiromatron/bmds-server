@@ -9,6 +9,7 @@ import "./main.css";
 
 import {inject, observer} from "mobx-react";
 import DatasetList from "./DatasetList/DatasetList";
+import AnalysisFormReadOnly from "./AnalysisForm/AnalysisFormReadOnly";
 
 @inject("mainStore")
 @observer
@@ -20,10 +21,12 @@ class Main extends Component {
                 {mainStore.isUpdateComplete ? (
                     <div className="main container-fluid ">
                         <div className="row">
-                            <div className="col-sm-12 col-lg-3">
-                                <div className="analysis">
+                            <div className="col-sm-12 col-lg-3 analysis">
+                                {mainStore.getEditSettings ? (
                                     <AnalysisForm />
-                                </div>
+                                ) : (
+                                    <AnalysisFormReadOnly />
+                                )}
                             </div>
                             <div className="col-sm-12 col-lg-8">
                                 <div className="modelsCheckbox">
@@ -34,7 +37,7 @@ class Main extends Component {
                         <div className="row second-row">
                             <div className="col-sm-12 col-lg-3">
                                 <div className="datasetlist">
-                                    <DatasetList />
+                                    {mainStore.getDatasetLength ? <DatasetList /> : null}
                                 </div>
                             </div>
                             <div className="col-sm-12 col-lg-8">

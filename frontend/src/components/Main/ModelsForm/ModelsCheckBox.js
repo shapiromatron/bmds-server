@@ -5,11 +5,11 @@ const ModelsCheckBox = props => {
     return (
         <tbody>
             {props.models.map((item, index) => {
-                return [
+                return (
                     <tr key={index}>
                         <td>{item.model}</td>
                         {item.values.map((dev, index) => {
-                            return [
+                            return (
                                 <td key={index}>
                                     <input
                                         className="checkbox"
@@ -33,11 +33,11 @@ const ModelsCheckBox = props => {
                                             }
                                         />
                                     ) : null}
-                                </td>,
-                            ];
+                                </td>
+                            );
                         })}
-                    </tr>,
-                ];
+                    </tr>
+                );
             })}
             {props.models.length > 2 ? (
                 <tr>

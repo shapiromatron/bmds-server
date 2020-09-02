@@ -3,12 +3,14 @@ import {inject, observer} from "mobx-react";
 import OptionsForm from "./OptionsForm";
 import OptionsReadOnly from "./OptionsReadOnly";
 import PropTypes from "prop-types";
+import {toJS} from "mobx";
 
 @inject("optionsStore")
 @observer
 class OptionsFormList extends Component {
     render() {
-        const {optionsStore} = this.props;
+        const {optionsStore} = this.props,
+            optionsList = toJS(optionsStore.optionsList);
         return (
             <div className="options-div">
                 <div className="panel panel-default">
@@ -17,7 +19,7 @@ class OptionsFormList extends Component {
                             <thead className="table-primary">
                                 <tr>
                                     {optionsStore.headers.map((item, index) => {
-                                        return [<th key={index}>{item}</th>];
+                                        return <th key={index}>{item}</th>;
                                     })}
                                     {optionsStore.getEditSettings ? (
                                         <th>
@@ -36,18 +38,19 @@ class OptionsFormList extends Component {
                             </thead>
                             {optionsStore.getEditSettings ? (
                                 <tbody>
-                                    {optionsStore.optionsList.map((options, id) => (
+                                    {optionsList.map((options, id) => (
                                         <OptionsForm
                                             key={id}
+                                            idx={id}
                                             options={options}
                                             dataset_type={optionsStore.getDatasetType}
-                                            idx={id}
+                                            saveOptions={optionsStore.saveOptions}
                                         />
                                     ))}
                                 </tbody>
                             ) : (
                                 <tbody>
-                                    {optionsStore.optionsList.map((options, id) => (
+                                    {optionsList.map((options, id) => (
                                         <OptionsReadOnly key={id} idx={id} options={options} />
                                     ))}
                                 </tbody>

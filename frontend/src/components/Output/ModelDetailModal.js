@@ -1,5 +1,5 @@
 import React, {Component} from "react";
-import {Modal} from "react-bootstrap";
+import {Modal, Row, Col} from "react-bootstrap";
 import {inject, observer} from "mobx-react";
 import PropTypes from "prop-types";
 
@@ -21,83 +21,72 @@ class ModelDetailModal extends Component {
     render() {
         const {outputStore} = this.props;
         return (
-            <div>
-                <div className="modal">
-                    <div className="modal-dialog">
-                        <div className="modal-content">
-                            <Modal
-                                show={outputStore.modelDetailModal}
-                                onHide={() => outputStore.toggleModelDetailModal()}
-                                size="xl"
-                                aria-labelledby="contained-modal-title-vcenter"
-                                centered>
-                                <Modal.Header>
-                                    <Modal.Title id="contained-modal-title-vcenter">
-                                        {" "}
-                                        {outputStore.selectedModel.model_name} - Details
-                                    </Modal.Title>
-                                    <button
-                                        className="btn btn-danger"
-                                        style={{float: "right"}}
-                                        onClick={() => outputStore.toggleModelDetailModal()}>
-                                        <i className="fa fa-times" aria-hidden="true"></i>
-                                    </button>
-                                </Modal.Header>
+            <Modal
+                show={outputStore.modelDetailModal}
+                onHide={() => outputStore.toggleModelDetailModal()}
+                size="xl"
+                aria-labelledby="contained-modal-title-vcenter"
+                centered>
+                <Modal.Header>
+                    <Modal.Title id="contained-modal-title-vcenter">
+                        {" "}
+                        {outputStore.selectedModel.model_name} - Details
+                    </Modal.Title>
+                    <button
+                        className="btn btn-danger"
+                        style={{float: "right"}}
+                        onClick={() => outputStore.toggleModelDetailModal()}>
+                        <i className="fa fa-times" aria-hidden="true"></i>
+                    </button>
+                </Modal.Header>
 
-                                <Modal.Body>
-                                    <div className="modal-body">
-                                        <div className="row ">
-                                            <div className="col col-sm-4 ">
-                                                <InfoTable />
-                                            </div>
-                                            <div className="col col-sm-3 offset-sm-1">
-                                                <ModelOptionsTable />
-                                            </div>
-                                            <div className="col col-sm-3 offset-sm-1">
-                                                <ModelData />
-                                            </div>
-                                        </div>
-                                        <div className="row ">
-                                            <div className="col col-sm-3 ">
-                                                <BenchmarkDose />
-                                            </div>
-                                            <div className="col col-sm-3 offset-sm-2">
-                                                <ModelParameters />
-                                            </div>
-                                        </div>
-                                        <div className="row justify-content-around">
-                                            <div className="col ">
-                                                <GoodnessFit />
-                                            </div>
-                                        </div>
+                <Modal.Body>
+                    <Row>
+                        <Col xs={4}>
+                            <InfoTable />
+                        </Col>
+                        <Col xs={4}>
+                            <ModelOptionsTable />
+                        </Col>
+                        <Col xs={4}>
+                            <ModelData />
+                        </Col>
+                    </Row>
+                    <Row>
+                        <Col xs={4}>
+                            <BenchmarkDose />
+                        </Col>
+                        <Col xs={4}>
+                            <ModelParameters />
+                        </Col>
+                    </Row>
+                    <Row>
+                        <Col xs={12}>
+                            <GoodnessFit />
+                        </Col>
+                    </Row>
 
-                                        {outputStore.getCurrentOutput.dataset.model_type == "CS" ? (
-                                            <div className="row">
-                                                <div className="col col-sm-3">
-                                                    <CSLoglikelihoods />
-                                                </div>
-                                                <div className="col col-sm-3 offset-sm-2 ">
-                                                    <CSTestofInterest />
-                                                </div>
-                                            </div>
-                                        ) : null}
-
-                                        <div className="row ">
-                                            <div className="col col-sm-3 text-center">
-                                                <CDFTable />
-                                            </div>
-                                            <div className="col text-center">
-                                                <ResponsePlot />
-                                                <CDFPlot />
-                                            </div>
-                                        </div>
-                                    </div>
-                                </Modal.Body>
-                            </Modal>
-                        </div>
-                    </div>
-                </div>
-            </div>
+                    {outputStore.getCurrentOutput.dataset.model_type == "CS" ? (
+                        <Row>
+                            <Col xs={4}>
+                                <CSLoglikelihoods />
+                            </Col>
+                            <Col xs={4}>
+                                <CSTestofInterest />
+                            </Col>
+                        </Row>
+                    ) : null}
+                    <Row>
+                        <Col xs={4}>
+                            <CDFTable />
+                        </Col>
+                        <Col>
+                            <ResponsePlot />
+                            <CDFPlot />
+                        </Col>
+                    </Row>
+                </Modal.Body>
+            </Modal>
         );
     }
 }

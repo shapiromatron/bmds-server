@@ -16,12 +16,12 @@ class BenchmarkDose extends Component {
                 </thead>
                 <tbody>
                     {Object.keys(outputStore.getBenchmarkDose).map((dev, i) => {
-                        return [
+                        return (
                             <tr key={i}>
                                 <td>{outputStore.getBenchmarkDose[dev].label}</td>
                                 <td>{outputStore.getBenchmarkDose[dev].value}</td>
-                            </tr>,
-                        ];
+                            </tr>
+                        );
                     })}
                 </tbody>
             </table>

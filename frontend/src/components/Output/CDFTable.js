@@ -20,12 +20,12 @@ class CDFTable extends Component {
                 </thead>
                 <tbody>
                     {outputStore.getCDFValues.map((value, i) => {
-                        return [
+                        return (
                             <tr key={i}>
                                 <td>{value.pValue}</td>
                                 <td>{value.cdf}</td>
-                            </tr>,
-                        ];
+                            </tr>
+                        );
                     })}
                 </tbody>
             </table>

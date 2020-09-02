@@ -20,12 +20,12 @@ class ModelParameters extends Component {
                 </thead>
                 <tbody>
                     {outputStore.getParameters.map((value, i) => {
-                        return [
+                        return (
                             <tr key={i}>
                                 <td>{value.p_variable}</td>
                                 <td>{value.parameter}</td>
-                            </tr>,
-                        ];
+                            </tr>
+                        );
                     })}
                 </tbody>
             </table>

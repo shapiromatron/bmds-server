@@ -30,11 +30,7 @@ class Output extends Component {
                                         <DatasetNames />
                                     </div>
                                     <div className="col-xs-12 col-md-auto">
-                                        <InputFormReadOnly
-                                            labels={outputStore.getLabels}
-                                            mappedDatasets={outputStore.getMappedDatasets}
-                                            currentDataset={outputStore.getCurrentOutput.dataset}
-                                        />
+                                        <InputFormReadOnly />
                                         <Results
                                             onMouseOver={onMouseOver.bind(this)}
                                             onMouseOut={() => outputStore.removeBMDLine()}
@@ -46,7 +42,6 @@ class Output extends Component {
                                         <ResponsePlot />
                                     </div>
                                 </div>
-                                ,
                             </div>
                         ) : (
                             <p>{outputStore.getCurrentOutput.error}</p>

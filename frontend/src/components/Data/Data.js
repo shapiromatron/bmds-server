@@ -5,7 +5,9 @@ import InputFormList from "./InputFormList";
 import DatasetNames from "./DatasetNames";
 import SelecModelType from "./SelectModelType";
 import ScatterPlot from "./ScatterPlot";
+import DeleteButton from "./DeleteButton";
 import "./Data.css";
+import InputFormReadOnly from "./InputFormReadOnly";
 
 @inject("dataStore")
 @observer
@@ -16,11 +18,24 @@ class Data extends Component {
             <div className="container-fluid">
                 <div className="row justify-content-sm-around">
                     <div className="col-xs-12 col-sm-12 col-md-2">
-                        <SelecModelType />
-                        {dataStore.getDataLength ? <DatasetNames /> : null}
+                        {dataStore.getEditSettings ? <SelecModelType /> : null}
+                        {dataStore.getDataLength ? (
+                            <div>
+                                <DatasetNames />
+                                {dataStore.getEditSettings ? <DeleteButton /> : null}
+                            </div>
+                        ) : null}
                     </div>
                     <div className="col-xs-12 col-sm-12 col-md-4">
-                        {dataStore.getDataLength ? <InputFormList /> : null}
+                        {dataStore.getDataLength ? (
+                            <div>
+                                {dataStore.getEditSettings ? (
+                                    <InputFormList />
+                                ) : (
+                                    <InputFormReadOnly />
+                                )}
+                            </div>
+                        ) : null}
                     </div>
                     <div className="col-xs-12 col-sm-12 col-md-4">
                         {dataStore.getDataLength ? <ScatterPlot /> : null}

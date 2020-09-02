@@ -3,11 +3,8 @@ import {Route, NavLink} from "react-router-dom";
 import {inject, observer} from "mobx-react";
 import Main from "./Main/Main";
 import Data from "./Data/Data";
-import ReportOptions from "./ReportOptions/ReportOptions";
 import Logic from "./Logic/Logic";
-import ModelParams from "./ModelParams/ModelParams";
 import Output from "./Output/Output";
-import StoreDebugger from "./StoreDebugger/StoreDebugger";
 import PropTypes from "prop-types";
 import "./app.css";
 
@@ -52,11 +49,6 @@ class Navigation extends Component {
                                     Logic
                                 </NavLink>
                             </li>
-                            <li className="nav-item">
-                                <NavLink className="nav-link" to="/debugger">
-                                    Debugger
-                                </NavLink>
-                            </li>
                         </ul>
                         <div className="dropdown btn-group my-2 my-lg-0">
                             <button
@@ -85,11 +77,8 @@ class Navigation extends Component {
                 <div className="content">
                     <Route exact path="/" component={Main} />
                     <Route path="/data" component={Data} />
-                    <Route path="/reportoptions" component={ReportOptions} />
                     <Route path="/logic" component={Logic} />
-                    <Route path="/modelparams" component={ModelParams} />
                     <Route path="/output" component={Output} />
-                    <Route path="/debugger" component={StoreDebugger} />
                 </div>
             </div>
         );

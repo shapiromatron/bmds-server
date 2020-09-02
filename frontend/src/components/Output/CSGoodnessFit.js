@@ -5,7 +5,7 @@ const CSGoodnessFit = props => {
     return (
         <tbody>
             {props.goodnessFit.map((row, index) => {
-                return [
+                return (
                     <tr key={index}>
                         <td>{row.dose}</td>
                         <td>{row.obs_mean}</td>
@@ -16,8 +16,8 @@ const CSGoodnessFit = props => {
                         <td>{row.est_stdev}</td>
                         <td>{row.size}</td>
                         <td>{row.scaled_residual}</td>
-                    </tr>,
-                ];
+                    </tr>
+                );
             })}
         </tbody>
     );

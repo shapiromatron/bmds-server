@@ -16,12 +16,12 @@ class ModelData extends Component {
                 </thead>
                 <tbody>
                     {Object.keys(outputStore.getModelData).map((dev, i) => {
-                        return [
+                        return (
                             <tr key={i}>
                                 <td>{outputStore.getModelData[dev].label}</td>
                                 <td>{outputStore.getModelData[dev].value}</td>
-                            </tr>,
-                        ];
+                            </tr>
+                        );
                     })}
                 </tbody>
             </table>

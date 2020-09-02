@@ -8,11 +8,7 @@ import PropTypes from "prop-types";
 class CDFPlot extends Component {
     render() {
         const {outputStore} = this.props;
-        return (
-            <div>
-                <Plot data={outputStore.getCDFPlot} layout={outputStore.getCDFLayout} />
-            </div>
-        );
+        return <Plot data={outputStore.getCDFPlot} layout={outputStore.getCDFLayout} />;
     }
 }
 

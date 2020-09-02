@@ -27,13 +27,7 @@ class OptionsStore {
     }
 
     @action.bound saveOptions(name, value, id) {
-        let parsedValue = "";
-        if (name == "bmr_value" || name == "tail_probability" || name == "confidence_level") {
-            parsedValue = parseFloat(value);
-        } else {
-            parsedValue = value;
-        }
-        this.optionsList[id][name] = parsedValue;
+        this.optionsList[id][name] = value;
     }
 
     @action.bound deleteOptions(val) {
@@ -46,27 +40,6 @@ class OptionsStore {
 
     @computed get getDatasetType() {
         return this.rootStore.mainStore.dataset_type;
-    }
-    @computed get getBmrType() {
-        return constant.bmr_type;
-    }
-    @computed get getOtherBmrType() {
-        return constant.other_bmr_type;
-    }
-    @computed get getLitterSpecificCovariate() {
-        return constant.litter_specific_covariate;
-    }
-    @computed get getDistribution() {
-        return constant.distribution;
-    }
-    @computed get getVariance() {
-        return constant.variance;
-    }
-    @computed get getPolynomialRestriction() {
-        return constant.polynomial_restriction;
-    }
-    @computed get getBootstrapSeed() {
-        return constant.bootstrap_seed;
     }
 }
 

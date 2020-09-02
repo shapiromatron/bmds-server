@@ -14,11 +14,7 @@ class ResponsePlot extends Component {
     render() {
         const {outputStore} = this.props;
         let plotData = toJS(outputStore.plotData);
-        return (
-            <div>
-                <Plot data={plotData} layout={outputStore.getLayout} />
-            </div>
-        );
+        return <Plot data={plotData} layout={outputStore.getLayout} />;
     }
 }
 ResponsePlot.propTypes = {

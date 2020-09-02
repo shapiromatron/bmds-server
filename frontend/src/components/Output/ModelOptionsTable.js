@@ -16,12 +16,12 @@ class ModelOptionsTable extends Component {
                 </thead>
                 <tbody>
                     {outputStore.getModelOptions.map((dev, i) => {
-                        return [
+                        return (
                             <tr key={i}>
                                 <td>{dev.label}</td>
                                 <td>{dev.value}</td>
-                            </tr>,
-                        ];
+                            </tr>
+                        );
                     })}
                 </tbody>
             </table>

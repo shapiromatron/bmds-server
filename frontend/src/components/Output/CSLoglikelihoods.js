@@ -22,14 +22,14 @@ class CSLoglikelihoods extends Component {
                 </thead>
                 <tbody>
                     {outputStore.getLoglikelihoods.map((row, index) => {
-                        return [
+                        return (
                             <tr key={index}>
                                 <td>{row.model}</td>
                                 <td>{row.loglikelihood}</td>
                                 <td>{row.n_parms}</td>
                                 <td>{row.aic}</td>
-                            </tr>,
-                        ];
+                            </tr>
+                        );
                     })}
                 </tbody>
             </table>

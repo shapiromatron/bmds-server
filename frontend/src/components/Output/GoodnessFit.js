@@ -18,7 +18,7 @@ class GoodnessFit extends Component {
                     </tr>
                     <tr>
                         {outputStore.getGoodnessFitHeaders.map((header, i) => {
-                            return [<th key={i}>{header}</th>];
+                            return <th key={i}>{header}</th>;
                         })}
                     </tr>
                 </thead>

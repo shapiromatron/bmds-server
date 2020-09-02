@@ -22,14 +22,14 @@ class CSTestofInterest extends Component {
                 </thead>
                 <tbody>
                     {outputStore.getTestofInterest.map((row, index) => {
-                        return [
+                        return (
                             <tr key={index}>
                                 <td>{row.test_number}</td>
                                 <td>{row.deviance}</td>
                                 <td>{row.df}</td>
                                 <td>{row.p_value}</td>
-                            </tr>,
-                        ];
+                            </tr>
+                        );
                     })}
                 </tbody>
             </table>

@@ -6,11 +6,11 @@ const ModelsCheckBoxHeader = props => {
     return (
         <thead className="table-primary">
             {Object.keys(props.model_headers).map((item, index) => {
-                return [
+                return (
                     <tr key={index}>
                         <th>{props.model_headers[item].model}</th>
                         {props.model_headers[item].values.map((dev, index) => {
-                            return [
+                            return (
                                 <th key={index} colSpan={dev.colspan}>
                                     {dev.name}{" "}
                                     {(dev.name === "Enable") & props.isEditSettings ? (
@@ -29,11 +29,11 @@ const ModelsCheckBoxHeader = props => {
                                     {dev.model_name === model.Bayesian_Model_Average
                                         ? dev.prior_weight
                                         : null}
-                                </th>,
-                            ];
+                                </th>
+                            );
                         })}
-                    </tr>,
-                ];
+                    </tr>
+                );
             })}
         </thead>
     );

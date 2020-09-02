@@ -4,7 +4,7 @@ const InputForm = props => {
     return (
         <tr>
             {Object.keys(props.row).map((key, index) => {
-                return [
+                return (
                     <td key={index} className="inputform">
                         <input
                             type="number"
@@ -14,8 +14,8 @@ const InputForm = props => {
                                 props.onChange(key, e.target.value, props.dataset_id, props.idx)
                             }
                         />
-                    </td>,
-                ];
+                    </td>
+                );
             })}
             <td>
                 <button

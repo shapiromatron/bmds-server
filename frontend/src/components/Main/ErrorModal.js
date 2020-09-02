@@ -10,18 +10,16 @@ class ErrorModal extends Component {
     render() {
         const {mainStore} = this.props;
         return (
-            <div>
-                <Modal show={mainStore.errorModal}>
-                    <Modal.Body>
-                        <div>{mainStore.errorMessage}</div>
-                        <div>
-                            <Button variant="primary" onClick={() => mainStore.hideModal()}>
-                                Ok
-                            </Button>
-                        </div>
-                    </Modal.Body>
-                </Modal>
-            </div>
+            <Modal show={mainStore.errorModal}>
+                <Modal.Body>
+                    <div>{mainStore.errorMessage}</div>
+                    <div>
+                        <Button variant="primary" onClick={() => mainStore.hideModal()}>
+                            Ok
+                        </Button>
+                    </div>
+                </Modal.Body>
+            </Modal>
         );
     }
 }

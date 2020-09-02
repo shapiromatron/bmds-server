@@ -87,16 +87,10 @@ class DataStore {
             this.selectedDatasetIndex = idArray[0];
         }
     }
-    @action toggleDataset(key, value, dataset_id) {
+    @action.bound toggleDataset(key, value, dataset_id) {
         this.datasets.find(dataset => dataset.dataset_id == dataset_id)[key] = value;
     }
-    @action changeDatasetProperties = (name, value, id) => {
-        this.datasets.map(item => {
-            if (item.dataset_id == id) {
-                item[name] = value;
-            }
-        });
-    };
+
     @action setDatasets(inputs) {
         this.datasets = inputs.datasets;
         this.datasets.map(item => {

@@ -14,11 +14,9 @@ class Logic extends Component {
     }
     render() {
         return (
-            <div className="container-fluid">
-                <div className="logic">
-                    <DecisionLogic />
-                    <RuleList />
-                </div>
+            <div className="container-fluid logic">
+                <DecisionLogic />
+                <RuleList />
             </div>
         );
     }

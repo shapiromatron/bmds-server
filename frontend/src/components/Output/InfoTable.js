@@ -11,17 +11,19 @@ class InfoTable extends Component {
             <table className="table table-bordered table-sm">
                 <thead>
                     <tr className="table-primary">
-                        <th colSpan="2">Info</th>
+                        <th colSpan="2" className="text-center">
+                            Info
+                        </th>
                     </tr>
                 </thead>
                 <tbody>
                     {Object.keys(outputStore.getInfoTable).map((dev, i) => {
-                        return [
+                        return (
                             <tr key={i}>
                                 <td>{outputStore.getInfoTable[dev].label}</td>
                                 <td>{outputStore.getInfoTable[dev].value}</td>
-                            </tr>,
-                        ];
+                            </tr>
+                        );
                     })}
                 </tbody>
             </table>

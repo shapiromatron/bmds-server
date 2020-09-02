@@ -5,11 +5,11 @@ const ModelsReadOnly = props => {
     return (
         <tbody>
             {props.models.map((item, index) => {
-                return [
+                return (
                     <tr key={index}>
                         <td>{item.model}</td>
                         {item.values.map((dev, index) => {
-                            return [
+                            return (
                                 <td key={index}>
                                     {dev.isChecked ? (
                                         <i className="fa fa-check-square-o"></i>
@@ -20,11 +20,11 @@ const ModelsReadOnly = props => {
                                     {dev.name.includes(model.Bayesian_Model_Average)
                                         ? dev.prior_weight + "%"
                                         : null}
-                                </td>,
-                            ];
+                                </td>
+                            );
                         })}
-                    </tr>,
-                ];
+                    </tr>
+                );
             })}
             <tr>
                 <td></td>

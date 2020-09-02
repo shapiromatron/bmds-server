@@ -11,7 +11,7 @@ class ScatterPlot extends Component {
         let layout = dataStore.getLayout;
         layout.title.text = dataStore.getModelTypesName.name + " Scatter Plot";
         return (
-            <div className="text-center">
+            <div>
                 <Plot data={dataStore.getScatterPlotData} layout={layout} />
             </div>
         );

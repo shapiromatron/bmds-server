@@ -6,7 +6,7 @@ const OptionsReadOnly = props => {
         <tr>
             <td>{props.idx}</td>
             {Object.keys(props.options).map((val, index) => {
-                return [<td key={index}>{props.options[val]}</td>];
+                return <td key={index}>{props.options[val]}</td>;
             })}
         </tr>
     );

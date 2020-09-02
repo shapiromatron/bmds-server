@@ -5,7 +5,7 @@ const DGoodnessFit = props => {
     return (
         <tbody>
             {props.goodnessFit.map((row, index) => {
-                return [
+                return (
                     <tr key={index}>
                         <td>{row.dose}</td>
                         <td>{row.est_prob}</td>
@@ -13,8 +13,8 @@ const DGoodnessFit = props => {
                         <td>{row.observed}</td>
                         <td>{row.size}</td>
                         <td>{row.scaled_residual}</td>
-                    </tr>,
-                ];
+                    </tr>
+                );
             })}
         </tbody>
     );

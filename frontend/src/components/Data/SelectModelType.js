@@ -8,37 +8,29 @@ class SelectModelType extends Component {
     render() {
         const {dataStore} = this.props;
         return (
-            <div>
-                {dataStore.getEditSettings ? (
-                    <div>
-                        <form className="model-type">
-                            <div className="form-group">
-                                <label htmlFor="selectmodel">Select Model Type</label>
-                                <select
-                                    className="form-control"
-                                    id="selectmodel"
-                                    onChange={e => dataStore.setModelType(e.target.value)}>
-                                    {dataStore.getFilteredModelTypes.map((item, i) => {
-                                        return [
-                                            <option key={i} value={item.value}>
-                                                {item.name}
-                                            </option>,
-                                        ];
-                                    })}
-                                </select>
-                            </div>
-                            <div className="">
-                                <button
-                                    type="button"
-                                    className="btn btn-primary btn-sm"
-                                    onClick={() => dataStore.addDataset()}>
-                                    Add Dataset
-                                </button>
-                            </div>
-                        </form>
-                    </div>
-                ) : null}
-            </div>
+            <form className="model-type">
+                <div className="form-group">
+                    <label htmlFor="selectmodel">Select Model Type</label>
+                    <select
+                        className="form-control"
+                        id="selectmodel"
+                        onChange={e => dataStore.setModelType(e.target.value)}>
+                        {dataStore.getFilteredModelTypes.map((item, i) => {
+                            return (
+                                <option key={i} value={item.value}>
+                                    {item.name}
+                                </option>
+                            );
+                        })}
+                    </select>
+                </div>
+                <button
+                    type="button"
+                    className="btn btn-primary btn-sm"
+                    onClick={() => dataStore.addDataset()}>
+                    Add Dataset
+                </button>
+            </form>
         );
     }
 }

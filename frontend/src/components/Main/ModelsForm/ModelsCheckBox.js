@@ -1,5 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
+import {model} from "../../../constants/modelConstants";
 
 const ModelsCheckBox = props => {
     return (
@@ -14,7 +15,6 @@ const ModelsCheckBox = props => {
                                     <input
                                         className="checkbox"
                                         type="checkbox"
-                                        name={dev.name}
                                         onChange={e =>
                                             props.toggleModelsCheckBox(dev.name, e.target.checked)
                                         }
@@ -22,14 +22,16 @@ const ModelsCheckBox = props => {
                                         disabled={dev.isDisabled}
                                     />
 
-                                    {dev.name.includes("bayesian_model_average") ? (
+                                    {dev.name.includes(model.Bayesian_Model_Average) ? (
                                         <input
                                             className="text-center"
-                                            type="text"
-                                            name={dev.name}
-                                            value={dev.prior_weight + "%"}
+                                            type="number"
+                                            value={dev.prior_weight}
                                             onChange={e =>
-                                                props.savePriorWeght(dev.name, e.target.value)
+                                                props.savePriorWeght(
+                                                    dev.name,
+                                                    parseFloat(e.target.value)
+                                                )
                                             }
                                         />
                                     ) : null}
@@ -48,10 +50,10 @@ const ModelsCheckBox = props => {
                     <td>
                         Total Weights{" "}
                         <input
-                            type="text"
+                            type="number"
                             className="text-center"
                             readOnly
-                            value={props.total_weight + "%"}
+                            value={props.total_weight}
                         />
                     </td>
                 </tr>

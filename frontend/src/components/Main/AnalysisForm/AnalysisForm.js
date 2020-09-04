@@ -1,6 +1,7 @@
 import React, {Component} from "react";
 import {inject, observer} from "mobx-react";
 import PropTypes from "prop-types";
+import {modelTypes} from "../../../constants/mainConstants";
 
 @inject("mainStore")
 @observer
@@ -35,7 +36,7 @@ class AnalysisForm extends Component {
                         className="form-control"
                         onChange={e => mainStore.changeDatasetType(e.target.value)}
                         value={mainStore.dataset_type}>
-                        {mainStore.getModelTypes.map((item, i) => {
+                        {modelTypes.map((item, i) => {
                             return (
                                 <option key={i} value={item.value}>
                                     {item.name}

@@ -1,6 +1,6 @@
 import {observable, action, computed} from "mobx";
 import _ from "lodash";
-import * as constant from "../constants/mainConstants";
+import modelType from "../constants/mainConstants";
 
 class MainStore {
     constructor(rootStore) {
@@ -37,13 +37,13 @@ class MainStore {
         this.rootStore.optionsStore.setDefaultsByDatasetType();
         this.rootStore.dataStore.setDefaultsByDatasetType();
     }
-    @action.bound toggleDataset(id) {
-        this.rootStore.dataStore.toggleDataset(id);
-    }
+    // @action.bound toggleDataset(id) {
+    //     this.rootStore.dataStore.toggleDataset(id);
+    // }
 
-    @action.bound saveAdverseDirection(name, value, id) {
-        this.rootStore.dataStore.saveAdverseDirection(name, value, id);
-    }
+    // @action.bound saveAdverseDirection(name, value, id) {
+    //     this.rootStore.dataStore.saveAdverseDirection(name, value, id);
+    // }
 
     @computed get getOptions() {
         return this.rootStore.optionsStore.optionsList;
@@ -194,23 +194,8 @@ class MainStore {
         return this.rootStore.dataStore.getDataLength;
     }
 
-    @computed get getDatasetNamesHeader() {
-        return constant.datasetNamesHeaders[this.dataset_type];
-    }
-    @computed get getAdverseDirectionList() {
-        return constant.AdverseDirectionList;
-    }
-    @computed get getDegree() {
-        return constant.degree;
-    }
-    @computed get getBackground() {
-        return constant.background;
-    }
-    @computed get getModelTypes() {
-        return constant.modelTypes;
-    }
     @computed get getDatasetTypeName() {
-        return this.getModelTypes.find(item => item.value == this.dataset_type);
+        return modelType.find(item => item.value == this.dataset_type);
     }
 }
 

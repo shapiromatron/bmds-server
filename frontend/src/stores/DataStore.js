@@ -12,6 +12,7 @@ import {
     yAxisTitle,
     model_type,
 } from "../constants/dataConstants";
+import _ from "lodash";
 
 class DataStore {
     constructor(rootStore) {
@@ -42,7 +43,7 @@ class DataStore {
 
     @action addDataset() {
         let form = datasetForm[this.model_type];
-        if (this.getDatasetType === "DM") {
+        if (this.getDatasetType === model_type.Dichotomous) {
             form["degree"] = "auto-select";
             form["background"] = "Estimated";
         }
@@ -168,10 +169,11 @@ class DataStore {
     }
     @computed get getLayout() {
         let model_type = this.getCurrentDatasets.model_type;
-        let layout = scatter_plot_layout;
+        let layout = _.cloneDeep(scatter_plot_layout);
+        let ylabel = yAxisTitle[model_type];
         layout.title.text = this.getCurrentDatasets.dataset_name;
         layout.xaxis.title.text = this.getCurrentDatasets.column_names["doses"];
-        layout.yaxis.title.text = yAxisTitle[model_type];
+        layout.yaxis.title.text = this.getCurrentDatasets.column_names[ylabel];
         return layout;
     }
 

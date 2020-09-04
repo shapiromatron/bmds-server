@@ -1,5 +1,11 @@
 import {observable, action, computed} from "mobx";
-import {modelsList, modelHeaders, nestedHeaders, model} from "../constants/modelConstants";
+import {
+    modelsList,
+    modelHeaders,
+    nestedHeaders,
+    model,
+    datasetType,
+} from "../constants/modelConstants";
 import _ from "lodash";
 
 class ModelsStore {
@@ -20,7 +26,7 @@ class ModelsStore {
     @action setDefaultsByDatasetType() {
         let dataset_type = this.rootStore.mainStore.dataset_type;
         this.models = _.cloneDeep(modelsList[dataset_type]);
-        if (dataset_type === "N") {
+        if (dataset_type === datasetType.Nested) {
             this.model_headers = nestedHeaders;
         } else {
             this.model_headers = modelHeaders;
@@ -28,47 +34,42 @@ class ModelsStore {
     }
 
     @action.bound toggleModelsCheckBox(selectedModel, checked) {
+        let model = selectedModel.split("-")[0];
         this.models.map(item => {
             item.values.map(value => {
                 if (value.name === selectedModel && !value.isDisabled) {
                     value.isChecked = checked;
-                    this.checkAllEnabled(selectedModel);
-                    if (selectedModel.split("-")[0] === model.Bayesian_Model_Average) {
+                    this.checkAllEnabled(model);
+                    if (model === model.Bayesian_Model_Average) {
                         this.calculatePriorWeight();
                     }
                 }
             });
         });
     }
-
-    @action.bound savePriorWeght(key, val) {
+    //checks if all models are enabled
+    @action checkAllEnabled(modelName) {
+        let totalModels = [];
+        let enabledModels = [];
         this.models.map(model => {
-            model.values.map(value => {
-                if (value.name == key) {
-                    value.prior_weight = parseFloat(val);
-                    if (this.checkTotalWeight > 100) {
-                        value.prior_weight = 0;
-                    } else {
-                        this.total_weight = this.checkTotalWeight;
-                    }
+            model.values.map(item => {
+                if (item.name.split("-")[0] == modelName && !item.isDisabled) {
+                    totalModels.push(item.name);
+                }
+                if (item.name.split("-")[0] == modelName && item.isChecked) {
+                    enabledModels.push(item.name);
                 }
             });
         });
-    }
-
-    @computed get checkTotalWeight() {
-        let total_weight = [];
-        this.models.map(model => {
-            model.values.map(value => {
-                if (value.name.split("-")[0] === model.Bayesian_Model_Average) {
-                    total_weight.push(parseFloat(value.prior_weight));
+        this.model_headers.third.values.map(value => {
+            if (value.model_name == modelName) {
+                if (totalModels.length == enabledModels.length) {
+                    value.isChecked = true;
+                } else {
+                    value.isChecked = false;
                 }
-            });
+            }
         });
-        let sum = total_weight.reduce(function(a, b) {
-            return a + b;
-        });
-        return sum;
     }
     @action.bound calculatePriorWeight() {
         let checkedModels = [];
@@ -91,45 +92,50 @@ class ModelsStore {
         });
     }
 
-    @action.bound enableAllModels(selectedModel, checked) {
+    @action.bound savePriorWeght(key, val) {
+        this.models.map(model => {
+            model.values.map(value => {
+                if (value.name == key) {
+                    value.prior_weight = val;
+                    if (this.checkTotalWeight > 100) {
+                        value.prior_weight = 0;
+                    } else {
+                        this.total_weight = this.checkTotalWeight;
+                    }
+                }
+            });
+        });
+    }
+
+    @computed get checkTotalWeight() {
+        let total_weight = [];
+        this.models.map(modelArr => {
+            modelArr.values.map(value => {
+                if (value.name.split("-")[0] === model.Bayesian_Model_Average) {
+                    total_weight.push(value.prior_weight);
+                }
+            });
+        });
+        let sum = total_weight.reduce(function(a, b) {
+            return a + b;
+        });
+        return sum;
+    }
+
+    @action.bound enableAllModels(model, checked) {
         this.model_headers.third.values.map(value => {
-            if (value.model_name == selectedModel.split("-")[0]) {
+            if (value.model_name == model) {
                 value.isChecked = checked;
             }
         });
         this.models.map(item => {
             item.values.map(value => {
-                if (value.name.split("-")[0] === selectedModel.split("-")[0] && !value.isDisabled) {
+                if (value.name.split("-")[0] === model && !value.isDisabled) {
                     value.isChecked = checked;
                 }
             });
         });
         this.calculatePriorWeight();
-    }
-
-    //checks if all models are enabled
-    @action checkAllEnabled(modelName) {
-        let totalModels = [];
-        let enabledModels = [];
-        this.models.map(model => {
-            model.values.map(item => {
-                if (item.name.split("-")[0] == modelName.split("-")[0] && !item.isDisabled) {
-                    totalModels.push(item.name);
-                }
-                if (item.name.split("-")[0] == modelName.split("-")[0] && item.isChecked) {
-                    enabledModels.push(item.name);
-                }
-                this.model_headers.third.values.map(value => {
-                    if (value.model_name == modelName.split("-")[0]) {
-                        if (totalModels.length == enabledModels.length) {
-                            value.isChecked = true;
-                        } else {
-                            value.isChecked = false;
-                        }
-                    }
-                });
-            });
-        });
     }
 
     //returns enabled model types
@@ -146,16 +152,14 @@ class ModelsStore {
                         if (k === model.Bayesian_Model_Average) {
                             result[k] = result[k].concat({
                                 model: v,
-                                prior_weight: parseFloat(val.prior_weight) / 100,
+                                prior_weight: val.prior_weight / 100,
                             });
                         } else {
                             result[k] = result[k].concat(v);
                         }
                     } else {
                         if (k === model.Bayesian_Model_Average) {
-                            result[k] = [
-                                {model: v, prior_weight: parseFloat(val.prior_weight) / 100},
-                            ];
+                            result[k] = [{model: v, prior_weight: val.prior_weight / 100}];
                         } else {
                             result[k] = [v];
                         }

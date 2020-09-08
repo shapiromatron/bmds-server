@@ -1,12 +1,12 @@
 import React, {Component} from "react";
 import {inject, observer} from "mobx-react";
 import PropTypes from "prop-types";
-import ModelDetailModal from "./modelDetailModal";
+import ModelDetailModal from "./ModelDetailModal";
 import Results from "./Results";
 import InputFormReadOnly from "../Data/InputFormReadOnly";
 import DatasetNames from "../Data/DatasetNames";
 import ResponsePlot from "./ResponsePlot";
-import "./output.css";
+import "./Output.css";
 
 @inject("outputStore")
 @observer

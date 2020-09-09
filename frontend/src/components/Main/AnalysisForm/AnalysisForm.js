@@ -33,6 +33,7 @@ class AnalysisForm extends Component {
                 <div className="form-group">
                     <label>Select Model Type</label>
                     <select
+                        id="dataset-type"
                         className="form-control"
                         onChange={e => mainStore.changeDatasetType(e.target.value)}
                         value={mainStore.dataset_type}>

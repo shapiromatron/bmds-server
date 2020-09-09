@@ -6,6 +6,7 @@ const Datasets = props => {
         <tr>
             <td>
                 <input
+                    id="enable-model"
                     type="checkbox"
                     checked={props.dataset.enabled}
                     onChange={e =>

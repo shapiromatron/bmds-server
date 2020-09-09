@@ -13,6 +13,7 @@ const ModelsCheckBox = props => {
                             return (
                                 <td key={index}>
                                     <input
+                                        name={dev.name}
                                         className="checkbox"
                                         type="checkbox"
                                         onChange={e =>

@@ -3,6 +3,7 @@ import {inject, observer} from "mobx-react";
 import PropTypes from "prop-types";
 import {toJS} from "mobx";
 import Rule from "./Rule";
+import {headers, disabled_properties, long_name} from "../../constants/logicConstants";
 
 @inject("logicStore")
 @observer
@@ -22,7 +23,7 @@ class RuleList extends Component {
                                 </th>
                             </tr>
                             <tr>
-                                {logicStore.getModelRecommendationHeaders.map((item, i) => {
+                                {headers.map((item, i) => {
                                     return (
                                         <th key={i} className="text-center">
                                             {item}
@@ -38,10 +39,10 @@ class RuleList extends Component {
                                         key={i}
                                         rule={rules[rule]}
                                         rule_name={rule}
-                                        long_name={logicStore.getLongName[rule].name}
-                                        notes={logicStore.getLongName[rule].notes}
+                                        long_name={long_name[rule].name}
+                                        notes={long_name[rule].notes}
                                         changeLogicValues={logicStore.changeLogicValues}
-                                        disableList={logicStore.getDisableList}
+                                        disableList={disabled_properties}
                                     />
                                 );
                             })}

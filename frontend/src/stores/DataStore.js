@@ -1,4 +1,5 @@
 import {observable, action, computed} from "mobx";
+import _ from "lodash";
 import {
     labels,
     modelTypes,
@@ -12,7 +13,6 @@ import {
     yAxisTitle,
     model_type,
 } from "../constants/dataConstants";
-import _ from "lodash";
 
 class DataStore {
     constructor(rootStore) {
@@ -43,7 +43,7 @@ class DataStore {
 
     @action addDataset() {
         let form = datasetForm[this.model_type];
-        if (this.getDatasetType === model_type.Dichotomous) {
+        if (this.getDatasetType === "DM") {
             form["degree"] = "auto-select";
             form["background"] = "Estimated";
         }

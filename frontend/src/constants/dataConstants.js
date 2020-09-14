@@ -99,7 +99,7 @@ const scatter_plot_layout = {
         linewidth: 1,
         mirror: true,
         title: {
-            text: "Dose (mg/kg-day)",
+            text: "",
             font: {
                 family: "Courier New, monospace",
                 size: 12,
@@ -112,7 +112,7 @@ const scatter_plot_layout = {
         linewidth: 1,
         mirror: true,
         title: {
-            text: "Response (mg/dL)",
+            text: "",
             font: {
                 family: "Courier New, monospace",
                 size: 12,
@@ -127,6 +127,20 @@ const scatter_plot_layout = {
     autosize: true,
 };
 
+const yAxisTitle = {
+    CI: "responses",
+    CS: "means",
+    DM: "incidences",
+    N: "incidences",
+};
+
+const model_type = {
+    Continuous_Summarized: "CS",
+    Continuous_Individual: "CI",
+    Dichotomous: "DM",
+    Nested: "N",
+};
+
 export {
     labels,
     modelTypes,
@@ -137,4 +151,6 @@ export {
     degree,
     background,
     scatter_plot_layout,
+    yAxisTitle,
+    model_type,
 };

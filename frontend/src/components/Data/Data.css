@@ -11,10 +11,7 @@
 .label label{
   margin-right: 20px;
 }
-.inputformlist{
-  margin: auto;
-  width: 50% !important; 
-}
+
 .inputformlist {
   border-collapse:separate; 
   border-spacing:0 10px; 

@@ -1,6 +1,6 @@
 const path = require("path"),
     BundleTracker = require("webpack-bundle-tracker"),
-    CaseSensitivePathsPlugin = require('case-sensitive-paths-webpack-plugin');
+    CaseSensitivePathsPlugin = require("case-sensitive-paths-webpack-plugin");
 
 module.exports = {
     context: __dirname,
@@ -43,7 +43,7 @@ module.exports = {
     },
 
     plugins: [
-        new CaseSensitivePathsPlugin(),  // windows/mac doesn't always enforce
+        new CaseSensitivePathsPlugin(), // windows/mac doesn't always enforce
         new BundleTracker({
             filename: "../webpack-stats.json",
         }),

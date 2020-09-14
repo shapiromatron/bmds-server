@@ -1,4 +1,5 @@
 import {observable, action, computed} from "mobx";
+import _ from "lodash";
 import {
     labels,
     modelTypes,
@@ -168,10 +169,11 @@ class DataStore {
     }
     @computed get getLayout() {
         let model_type = this.getCurrentDatasets.model_type;
-        let layout = scatter_plot_layout;
+        let layout = _.cloneDeep(scatter_plot_layout);
+        let ylabel = yAxisTitle[model_type];
         layout.title.text = this.getCurrentDatasets.dataset_name;
         layout.xaxis.title.text = this.getCurrentDatasets.column_names["doses"];
-        layout.yaxis.title.text = yAxisTitle[model_type];
+        layout.yaxis.title.text = this.getCurrentDatasets.column_names[ylabel];
         return layout;
     }
 

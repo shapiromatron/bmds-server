@@ -128,10 +128,10 @@ const scatter_plot_layout = {
 };
 
 const yAxisTitle = {
-    CI: "Response",
-    CS: "Mean",
-    DM: "Incidence",
-    N: "Incidence",
+    CI: "responses",
+    CS: "means",
+    DM: "incidences",
+    N: "incidences",
 };
 
 const model_type = {

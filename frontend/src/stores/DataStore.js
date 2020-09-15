@@ -6,9 +6,6 @@ import {
     columnNames,
     datasetForm,
     datasetNamesHeaders,
-    AdverseDirectionList,
-    degree,
-    background,
     scatter_plot_layout,
     yAxisTitle,
     model_type,
@@ -221,15 +218,6 @@ class DataStore {
 
     @computed get getDatasetNamesHeader() {
         return datasetNamesHeaders[this.getDatasetType];
-    }
-    @computed get getAdverseDirectionList() {
-        return AdverseDirectionList;
-    }
-    @computed get getDegree() {
-        return degree;
-    }
-    @computed get getBackground() {
-        return background;
     }
 }
 

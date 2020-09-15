@@ -29,9 +29,6 @@ class DatasetList extends Component {
                                     dataset={dataset}
                                     toggleDataset={dataStore.toggleDataset}
                                     changeDatasetProperties={dataStore.changeDatasetProperties}
-                                    adverseList={dataStore.getAdverseDirectionList}
-                                    degree={dataStore.getDegree}
-                                    background={dataStore.getBackground}
                                     dataset_type={dataStore.getDatasetType}
                                 />
                             );

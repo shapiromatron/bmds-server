@@ -17,10 +17,7 @@ const ModelsCheckBoxHeader = props => {
                                         <input
                                             type="checkbox"
                                             onChange={e =>
-                                                props.enableAll(
-                                                    dev.model_name + "-All",
-                                                    e.target.checked
-                                                )
+                                                props.enableAll(dev.model_name, e.target.checked)
                                             }
                                             checked={dev.isChecked}
                                         />

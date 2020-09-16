@@ -1,6 +1,7 @@
 import React, {Component} from "react";
 import {inject, observer} from "mobx-react";
 import PropTypes from "prop-types";
+import {decision_logic} from "../../constants/logicConstants";
 
 @inject("logicStore")
 @observer
@@ -29,10 +30,11 @@ class DecisionLogic extends Component {
                             </thead>
                             <tbody>
                                 <tr>
-                                    <td>{logicStore.getDecisionLogic.recommend_viable}</td>
+                                    <td>{decision_logic.recommend_viable}</td>
                                     <td className="text-center">
                                         <input
                                             type="checkbox"
+                                            id="recommend_viable"
                                             onChange={e =>
                                                 logicStore.changeDecisionLogicValues(
                                                     "recommend_viable",
@@ -44,7 +46,7 @@ class DecisionLogic extends Component {
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td>{logicStore.getDecisionLogic.recommend_questionable}</td>
+                                    <td>{decision_logic.recommend_questionable}</td>
                                     <td className="text-center">
                                         <input
                                             type="checkbox"
@@ -59,12 +61,12 @@ class DecisionLogic extends Component {
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td>{logicStore.getDecisionLogic.sufficiently_close_bmdl}</td>
+                                    <td>{decision_logic.sufficiently_close_bmdl}</td>
                                     <td className="text-center">
                                         <input
                                             className=" text-center form-control"
                                             type="number"
-                                            name="sufficiently_close_bmdl"
+                                            id="sufficiently_close_bmdl"
                                             value={logicStore.logic.sufficiently_close_bmdl}
                                             onChange={e =>
                                                 logicStore.changeDecisionLogicValues(

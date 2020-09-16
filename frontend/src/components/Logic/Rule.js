@@ -8,6 +8,8 @@ const Rule = props => {
             <td className="text-center">
                 <input
                     type="checkbox"
+                    id="enabled_continuous"
+                    name={props.rule_name}
                     checked={props.rule.enabled_continuous}
                     onChange={e =>
                         props.changeLogicValues(
@@ -22,6 +24,7 @@ const Rule = props => {
             <td className="text-center">
                 <input
                     type="checkbox"
+                    id="dichotomous-checkbox"
                     checked={props.rule.enabled_dichotomous}
                     onChange={e =>
                         props.changeLogicValues(
@@ -36,6 +39,7 @@ const Rule = props => {
             <td className="text-center">
                 <input
                     type="checkbox"
+                    id="nested-checkbox"
                     checked={props.rule.enabled_nested}
                     onChange={e =>
                         props.changeLogicValues(props.rule_name, "enabled_nested", e.target.checked)

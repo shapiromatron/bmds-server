@@ -1,6 +1,6 @@
 import {observable, action, computed} from "mobx";
 import _ from "lodash";
-import * as constant from "../constants/mainConstants";
+import modelType from "../constants/mainConstants";
 
 class MainStore {
     constructor(rootStore) {
@@ -37,13 +37,6 @@ class MainStore {
         this.rootStore.optionsStore.setDefaultsByDatasetType();
         this.rootStore.dataStore.setDefaultsByDatasetType();
     }
-    @action.bound toggleDataset(id) {
-        this.rootStore.dataStore.toggleDataset(id);
-    }
-
-    @action.bound saveAdverseDirection(name, value, id) {
-        this.rootStore.dataStore.saveAdverseDirection(name, value, id);
-    }
 
     @computed get getOptions() {
         return this.rootStore.optionsStore.optionsList;
@@ -58,32 +51,33 @@ class MainStore {
         return this.rootStore.logicStore.getLogic;
     }
 
+    @computed get getPayload() {
+        return {
+            editKey: this.config.editSettings.editKey,
+            partial: true,
+            data: {
+                bmds_version: "BMDS312",
+                analysis_name: this.analysis_name,
+                analysis_description: this.analysis_description,
+                dataset_type: this.dataset_type,
+                models: this.getEnabledModels,
+                datasets: this.getEnabledDatasets,
+                options: this.getOptions,
+                logic: this.getLogic,
+            },
+        };
+    }
+
     @action
     async saveAnalysis() {
-        const url = this.config.editSettings.patchInputUrl,
-            getPayload = () => {
-                return {
-                    editKey: this.config.editSettings.editKey,
-                    partial: true,
-                    data: {
-                        bmds_version: "BMDS312",
-                        analysis_name: this.analysis_name,
-                        analysis_description: this.analysis_description,
-                        dataset_type: this.dataset_type,
-                        models: this.getEnabledModels,
-                        datasets: this.getEnabledDatasets,
-                        options: this.getOptions,
-                        logic: this.getLogic,
-                    },
-                };
-            };
+        const url = this.config.editSettings.patchInputUrl;
         await fetch(url, {
             method: "PATCH",
             mode: "cors",
             headers: {
                 "Content-Type": "application/json",
             },
-            body: JSON.stringify(getPayload()),
+            body: JSON.stringify(this.getPayload),
         })
             .then(response => {
                 if (response.ok) {
@@ -168,10 +162,10 @@ class MainStore {
         this.analysis_name = inputs.analysis_name;
         this.analysis_description = inputs.analysis_description;
         this.dataset_type = inputs.dataset_type;
-
         this.rootStore.optionsStore.setOptions(inputs);
         this.rootStore.dataStore.setDatasets(inputs);
         this.rootStore.modelsStore.setModels(inputs);
+        this.rootStore.logicStore.setLogic(inputs);
         this.isUpdateComplete = true;
     }
 
@@ -194,23 +188,8 @@ class MainStore {
         return this.rootStore.dataStore.getDataLength;
     }
 
-    @computed get getDatasetNamesHeader() {
-        return constant.datasetNamesHeaders[this.dataset_type];
-    }
-    @computed get getAdverseDirectionList() {
-        return constant.AdverseDirectionList;
-    }
-    @computed get getDegree() {
-        return constant.degree;
-    }
-    @computed get getBackground() {
-        return constant.background;
-    }
-    @computed get getModelTypes() {
-        return constant.modelTypes;
-    }
     @computed get getDatasetTypeName() {
-        return this.getModelTypes.find(item => item.value == this.dataset_type);
+        return modelType.find(item => item.value == this.dataset_type);
     }
 }
 

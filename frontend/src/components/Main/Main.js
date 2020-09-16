@@ -46,6 +46,9 @@ class Main extends Component {
                                 </div>
                             </div>
                         </div>
+                        <div name="payload">
+                            {JSON.stringify(mainStore.getPayload, undefined, 2)}
+                        </div>
                     </div>
                 ) : null}
                 <MainModal />

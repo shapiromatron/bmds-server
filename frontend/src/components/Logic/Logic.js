@@ -10,7 +10,6 @@ import "./Logic.css";
 class Logic extends Component {
     constructor(props) {
         super(props);
-        this.props.logicStore.setDefaultState();
     }
     render() {
         return (

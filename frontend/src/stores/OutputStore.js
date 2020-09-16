@@ -1,6 +1,7 @@
 import {observable, action, computed} from "mobx";
 import _ from "lodash";
 import * as constant from "../constants/outputConstants";
+import {model_type} from "../constants/dataConstants";
 
 class OutputStore {
     constructor(rootStore) {
@@ -99,7 +100,7 @@ class OutputStore {
         benchmarkDose.aic.value = this.selectedModel.results.aic;
         benchmarkDose.p_value.value = this.selectedModel.results.gof.p_value;
         benchmarkDose.df.value = this.selectedModel.results.gof.df;
-        if (this.getCurrentOutput.dataset.model_type === "DM") {
+        if (this.getCurrentOutput.dataset.model_type === model_type.Dichotomous) {
             benchmarkDose["chi_square"] = {
                 label: "Chi Square",
                 value: this.selectedModel.results.gof.chi_square,
@@ -145,9 +146,9 @@ class OutputStore {
     }
     @computed get getGoodnessFit() {
         let goodnessFit = [];
-        if (this.getCurrentOutput.dataset.model_type === "CS") {
+        if (this.getCurrentOutput.dataset.model_type === model_type.Continuous_Summarized) {
             goodnessFit = this.selectedModel.results.gof;
-        } else if (this.this.getCurrentOutput.dataset.model_type === "DM") {
+        } else if (this.this.getCurrentOutput.dataset.model_type === model_type.di) {
             goodnessFit = this.selectedModel.results.gof.rows;
         }
         return goodnessFit;
@@ -160,9 +161,9 @@ class OutputStore {
         let dataset = this.getCurrentOutput.dataset;
         let ns = dataset.ns;
         let incidences = dataset.incidences;
-        if (dataset.model_type === "CS") {
+        if (dataset.model_type === model_type.Continuous_Summarized) {
             responses = dataset.means;
-        } else if (dataset.model_type === "DM") {
+        } else if (dataset.model_type === model_type.Dichotomous) {
             for (var i = 0; i < ns.length; i++) {
                 var response = incidences[i] / ns[i];
                 responses.push(response);
@@ -172,7 +173,10 @@ class OutputStore {
     }
 
     @computed get getLayout() {
-        return constant.layout;
+        let layout = _.cloneDeep(constant.layout);
+        let currentDataset = this.rootStore.dataStore.getCurrentDatasets;
+        layout.title.text = currentDataset.dataset_name;
+        return layout;
     }
 
     @computed get getCDFLayout() {

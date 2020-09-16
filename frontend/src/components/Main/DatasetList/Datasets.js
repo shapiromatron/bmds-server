@@ -1,11 +1,13 @@
 import React from "react";
 import PropTypes from "prop-types";
+import {AdverseDirectionList, degree, background} from "../../../constants/dataConstants";
 
 const Datasets = props => {
     return (
         <tr>
             <td>
                 <input
+                    id="enable-model"
                     type="checkbox"
                     checked={props.dataset.enabled}
                     onChange={e =>
@@ -26,7 +28,7 @@ const Datasets = props => {
                                 props.dataset.dataset_id
                             )
                         }>
-                        {props.adverseList.map((adverse, i) => {
+                        {AdverseDirectionList.map((adverse, i) => {
                             return (
                                 <option key={i} value={adverse.value}>
                                     {adverse.name}
@@ -44,7 +46,7 @@ const Datasets = props => {
                         onChange={e =>
                             props.toggleDataset("degree", e.target.value, props.dataset.dataset_id)
                         }>
-                        {props.degree.map((dataset, i) => {
+                        {degree.map((dataset, i) => {
                             return (
                                 <option key={i} value={dataset.value}>
                                     {dataset.name}
@@ -65,7 +67,7 @@ const Datasets = props => {
                                 props.dataset.dataset_id
                             )
                         }>
-                        {props.background.map((dataset, i) => {
+                        {background.map((dataset, i) => {
                             return (
                                 <option key={i} value={dataset.value}>
                                     {dataset.name}

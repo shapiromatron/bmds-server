@@ -8,13 +8,14 @@ import {
     variance,
     polynomial_restriction,
     bootstrap_seed,
+    datasetType,
 } from "../../../constants/optionsConstants";
 
 const OptionsForm = props => {
     return (
         <tr className="form-group">
             <td>{props.idx}</td>
-            {props.dataset_type === "C" ? (
+            {props.dataset_type === datasetType.Continuous ? (
                 <td>
                     <select
                         className="form-control"
@@ -30,7 +31,7 @@ const OptionsForm = props => {
                     </select>
                 </td>
             ) : null}
-            {props.dataset_type != "C" ? (
+            {props.dataset_type != datasetType.Continuous ? (
                 <td>
                     <select
                         className="form-control"
@@ -57,7 +58,7 @@ const OptionsForm = props => {
                     }
                 />
             </td>
-            {props.dataset_type === "C" ? (
+            {props.dataset_type === datasetType.Continuous ? (
                 <td>
                     <input
                         type="number"
@@ -83,7 +84,7 @@ const OptionsForm = props => {
                     }
                 />
             </td>
-            {props.dataset_type === "N" ? (
+            {props.dataset_type === datasetType.Nested ? (
                 <td>
                     <select
                         className="form-control"
@@ -106,7 +107,7 @@ const OptionsForm = props => {
                 </td>
             ) : null}
 
-            {props.dataset_type === "C" ? (
+            {props.dataset_type === datasetType.Continuous ? (
                 <td>
                     <select
                         className="form-control"
@@ -124,7 +125,7 @@ const OptionsForm = props => {
                     </select>
                 </td>
             ) : null}
-            {props.dataset_type === "C" ? (
+            {props.dataset_type === datasetType.Continuous ? (
                 <td>
                     <select
                         className="form-control"
@@ -140,7 +141,7 @@ const OptionsForm = props => {
                     </select>
                 </td>
             ) : null}
-            {props.dataset_type === "C" ? (
+            {props.dataset_type === datasetType.Continuous ? (
                 <td>
                     <select
                         className="form-control"
@@ -158,7 +159,7 @@ const OptionsForm = props => {
                     </select>
                 </td>
             ) : null}
-            {props.dataset_type != "DM" ? (
+            {props.dataset_type != datasetType.Dichotomous ? (
                 <td>
                     <select
                         className="form-control"
@@ -168,7 +169,7 @@ const OptionsForm = props => {
                     </select>
                 </td>
             ) : null}
-            {props.dataset_type === "N" ? (
+            {props.dataset_type === datasetType.Nested ? (
                 <td>
                     <input
                         type="number"
@@ -180,7 +181,7 @@ const OptionsForm = props => {
                     />
                 </td>
             ) : null}
-            {props.dataset_type === "N" ? (
+            {props.dataset_type === datasetType.Nested ? (
                 <td>
                     <select
                         className="form-control"

@@ -19,6 +19,16 @@ class DataStore {
     @observable model_type = "CS";
     @observable datasets = [];
     @observable selectedDatasetIndex = "";
+    @observable selectedFile = {};
+
+    @action.bound importDatasets(file) {
+        let reader = new FileReader();
+        reader.readAsText(file);
+        reader.onload = e => {
+            let settings = JSON.parse(e.target.result);
+            this.datasets = settings.inputs.datasets;
+        };
+    }
 
     @action setDefaultsByDatasetType() {
         let modelTypes = this.getFilteredModelTypes;
@@ -101,8 +111,8 @@ class DataStore {
         this.datasets.find(dataset => dataset.dataset_id == dataset_id)[key] = value;
     }
 
-    @action setDatasets(inputs) {
-        this.datasets = inputs.datasets;
+    @action setDatasets(datasets) {
+        this.datasets = datasets;
         this.datasets.map(item => {
             this.selectedDatasetIndex = item.dataset_id;
         });

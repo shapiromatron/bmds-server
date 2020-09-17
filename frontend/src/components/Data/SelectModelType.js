@@ -24,12 +24,22 @@ class SelectModelType extends Component {
                         })}
                     </select>
                 </div>
-                <button
-                    type="button"
-                    className="btn btn-primary btn-sm"
-                    onClick={() => dataStore.addDataset()}>
-                    Add Dataset
-                </button>
+                <div className="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
+                    <button
+                        type="button"
+                        className="adddataset btn btn-primary btn-sm mr-2"
+                        onClick={() => dataStore.addDataset()}>
+                        Add Dataset
+                    </button>
+                    <label htmlFor="file" className="fileContainer btn btn-primary">
+                        Import Datasets
+                        <input
+                            type="file"
+                            id="file"
+                            onChange={e => dataStore.importDatasets(e.target.files[0])}
+                        />
+                    </label>
+                </div>
             </form>
         );
     }

@@ -93,3 +93,11 @@ button.btn-sq-xs{
   background-color:#0275d8 ;
   color:white;
 }
+.adddataset{
+  padding:6px 12px;
+  margin:0px 4px 10px -1px;
+  font-size:14px;
+}
+label.fileContainer{
+  font-size: 14px;
+}

@@ -74,13 +74,6 @@ div.col {
     padding: 0;
 }
 
-/* .modelscheckbox th {
-    word-break: break-all;
-    word-wrap: break-word;
-    font-size: 12px;
-}
-*/
-
 .modelscheckbox td input {
     size: 10px;
     margin-left: 30px;
@@ -159,4 +152,42 @@ div.col {
 
 .analysis-readonly th {
     width: 150px;
+}
+
+.inputfile {
+	width: 0.1px;
+	height: 0.1px;
+	opacity: 0;
+	overflow: hidden;
+	position: absolute;
+	z-index: -1;
+}
+ .inputfile + label {
+    font-size: 1.25em;
+    width:fit-content;
+    font-size: 12px;
+    color: white;
+    background-color: rgb(71, 144, 173);
+    display: inline-block;
+}
+.inputfile + label {
+	cursor: pointer; 
+}
+
+.fileContainer {
+    overflow: hidden;
+    position: relative;
+    margin:0px 4px 10px -1px;
+    text-overflow: inherit;
+    font-size: 12px;
+    padding: 6px 6px;
+    width: fit-content;
+}
+
+.fileContainer [type=file] {
+    display: none;
+}
+
+.fileContainer [type=file] {
+    cursor: pointer;
 }

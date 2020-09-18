@@ -162,11 +162,33 @@ class MainStore {
         this.analysis_name = inputs.analysis_name;
         this.analysis_description = inputs.analysis_description;
         this.dataset_type = inputs.dataset_type;
-        this.rootStore.optionsStore.setOptions(inputs);
-        this.rootStore.dataStore.setDatasets(inputs);
-        this.rootStore.modelsStore.setModels(inputs);
+        this.rootStore.optionsStore.setOptions(inputs.options);
+        this.rootStore.dataStore.setDatasets(inputs.datasets);
+        this.rootStore.modelsStore.setModels(inputs.models);
         this.rootStore.logicStore.setLogic(inputs);
         this.isUpdateComplete = true;
+    }
+
+    @action.bound loadAnalysis(file) {
+        let reader = new FileReader();
+        reader.readAsText(file);
+        reader.onload = e => {
+            let settings = JSON.parse(e.target.result);
+            this.hydrateInputs(settings);
+            this.hydrateOutputs(settings);
+        };
+    }
+
+    @action hydrateInputs(settings) {
+        this.rootStore.dataStore.setDatasets(settings.inputs.datasets);
+        this.rootStore.optionsStore.setOptions(settings.inputs.options);
+        this.rootStore.modelsStore.setModels(settings.inputs.models);
+    }
+    @action hydrateOutputs(settings) {
+        if (!settings.outputs) {
+            return;
+        }
+        this.executionOutputs = settings.outputs.outputs;
     }
 
     @computed get getEditSettings() {

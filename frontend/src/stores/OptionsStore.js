@@ -33,8 +33,8 @@ class OptionsStore {
     @action.bound deleteOptions(val) {
         this.optionsList.splice(val, 1);
     }
-    @action setOptions(inputs) {
-        this.optionsList = inputs.options;
+    @action setOptions(options) {
+        this.optionsList = options;
         this.headers = constant.headers[this.getDatasetType];
     }
 

@@ -171,11 +171,11 @@ class ModelsStore {
         return result;
     }
 
-    @action setModels(inputs) {
+    @action setModels(models) {
         this.setDefaultsByDatasetType();
         let modelArr = [];
-        Object.keys(inputs.models).map((item, i) => {
-            inputs.models[item].map(val => {
+        Object.keys(models).map((item, i) => {
+            models[item].map(val => {
                 if (item === model.Bayesian_Model_Average) {
                     val = val.model;
                 }

@@ -15,6 +15,7 @@ class AnalysisForm extends Component {
                     <input
                         className="form-control"
                         type="text"
+                        id="analysis_name"
                         value={mainStore.analysis_name}
                         onChange={e => mainStore.changeAnalysisName(e.target.value)}
                     />
@@ -24,6 +25,7 @@ class AnalysisForm extends Component {
                     <textarea
                         className="form-control"
                         type="textarea"
+                        id="analysis_description"
                         rows="3"
                         value={mainStore.analysis_description}
                         onChange={e =>

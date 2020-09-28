@@ -140,3 +140,18 @@ This is an optional step in development, but required in production. To run work
     # start a crontab
     source venv/bin/activate
     celery beat --app=bmds_server.main.celery --loglevel=info
+
+
+Integration tests
+-----------------
+
+Integration tests use selenium and Firefox or Chrome for for testing. By default, integration tests are skipped. Firefox appears to be more stable based on initial investigation for these tests To run, you'll need to set a few environment variables.
+
+.. code-block:: bash
+
+    export BMDS_INTEGRATION_TESTS=1
+    export SHOW_BROWSER=1            # or 0 for headless
+    export BROWSER="firefox"         # or "chrome"
+    py.test -s tests/integration/ --pdb
+
+When writing these tests, it's often easiest to write the tests in an interactive scripting environment like ipython or jupyter. This allows you to interact with the DOM and the requests much easier than manually re-running tests as they're written.

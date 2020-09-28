@@ -101,7 +101,6 @@ jobs:
         pip install -r requirements/dev.txt
     - name: setup web server
       run: |
-        mv ci-webpack-stats.json webpack-stats.json
         yarn --cwd ./frontend install
         npm run --prefix ./frontend start  &
     - name: run integration tests

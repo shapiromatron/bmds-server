@@ -18,12 +18,10 @@ def test_dichotomous():
     assert urlparse(driver.current_url).fragment == "/"
 
     driver.find_element_by_id("enable-model").click()
-    if driver.find_element_by_id("enable-model").is_selected():
-        assert True
+    assert driver.find_element_by_id("enable-model").is_selected()
 
     driver.find_element_by_name("frequentist_restricted-Gamma").click()
-    if driver.find_element_by_name("frequentist_restricted-Gamma").is_selected():
-        assert True
+    assert driver.find_element_by_name("frequentist_restricted-Gamma").is_selected()
 
     h.click("Save Analysis")
 
@@ -46,8 +44,7 @@ def test_modelTypeDichotomous():
     assert urlparse(driver.current_url).fragment == "/"
 
     driver.find_element_by_id("enable-model").click()
-    if driver.find_element_by_id("enable-model").is_selected():
-        assert True
+    assert driver.find_element_by_id("enable-model").is_selected()
     payload = driver.find_element_by_name("payload").text
     payloadJson = json.loads(payload)
     assert payloadJson["data"]["datasets"][0]["model_type"] == "DM"

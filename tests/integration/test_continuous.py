@@ -16,12 +16,10 @@ def test_continuousSummarized():
     assert urlparse(driver.current_url).fragment == "/"
 
     driver.find_element_by_id("enable-model").click()
-    if driver.find_element_by_id("enable-model").is_selected():
-        assert True
+    assert driver.find_element_by_id("enable-model").is_selected()
 
     driver.find_element_by_name("frequentist_restricted-Hill").click()
-    if driver.find_element_by_name("frequentist_restricted-Hill").is_selected():
-        assert True
+    assert driver.find_element_by_name("frequentist_restricted-Hill").is_selected()
     h.click("Save Analysis")
 
     h.wait_until(h.Button("Run Analysis").exists)
@@ -48,12 +46,10 @@ def test_CSLogic():
     assert urlparse(driver.current_url).fragment == "/"
 
     driver.find_element_by_id("enable-model").click()
-    if driver.find_element_by_id("enable-model").is_selected():
-        assert True
+    assert driver.find_element_by_id("enable-model").is_selected()
 
     driver.find_element_by_name("frequentist_restricted-Hill").click()
-    if driver.find_element_by_name("frequentist_restricted-Hill").is_selected():
-        assert True
+    assert driver.find_element_by_name("frequentist_restricted-Hill").is_selected()
     h.click("Save Analysis")
 
     h.wait_until(h.Button("Run Analysis").exists)
@@ -77,30 +73,20 @@ def test_BMD_Missing_False():
     assert urlparse(driver.current_url).fragment == "/"
 
     driver.find_element_by_id("enable-model").click()
-    if driver.find_element_by_id("enable-model").is_selected():
-        assert True
+    assert driver.find_element_by_id("enable-model").is_selected()
 
     driver.find_element_by_name("frequentist_restricted-Hill").click()
-    if driver.find_element_by_name("frequentist_restricted-Hill").is_selected():
-        assert True
+    assert driver.find_element_by_name("frequentist_restricted-Hill").is_selected()
+
     payload = driver.find_element_by_name("payload").text
     payloadJson = json.loads(payload)
-    if payloadJson["data"]["logic"]["rules"]["bmd_missing"]["enabled_continuous"] is False:
-        assert True
+    assert payloadJson["data"]["logic"]["rules"]["bmd_missing"]["enabled_continuous"] is False
     h.click("Save Analysis")
 
     h.wait_until(h.Button("Run Analysis").exists)
     h.click("Run Analysis")
     h.click("Output")
     assert urlparse(driver.current_url).fragment == "/output"
-
-
-def test_gmail():
-    driver = h.start_chrome("https://gmail.com")
-    h.set_driver(driver)
-    h.write("bhanbish@gmail.com", into="Email or phone")
-    h.click("Next")
-    h.write("zlatan3725", into="password")
 
 
 def test_analysisName():
@@ -144,8 +130,7 @@ def test_analysisDescriptionFail():
     analysis_name.send_keys("this is a new description")
     payload = driver.find_element_by_name("payload").text
     payloadJson = json.loads(payload)
-    if payloadJson["data"]["analysis_description"] == "a different text":
-        raise AssertionError
+    assert payloadJson["data"]["analysis_description"] == "a different text"
 
 
 def test_dataPath():
@@ -161,8 +146,7 @@ def test_dataPathFailed():
     h.set_driver(driver)
     h.click("Create a new BMDS session")
     h.click("Data")
-    if urlparse(driver.current_url).fragment == "/logic":
-        raise AssertionError
+    assert urlparse(driver.current_url).fragment == "/logic"
 
 
 def test_logicPath():
@@ -198,8 +182,7 @@ def test_mainPathFailed():
     h.click("Logic")
     assert urlparse(driver.current_url).fragment == "/logic"
     h.click("Main")
-    if urlparse(driver.current_url).fragment == "/main":
-        raise AssertionError
+    assert urlparse(driver.current_url).fragment == "/main"
 
 
 def test_changeBMRType():
@@ -219,22 +202,4 @@ def test_changeBMRTypeFailed():
     driver.find_element_by_xpath("//select[@id='bmr_type']/option[text()='Rel. Dev.']").click()
     payload = driver.find_element_by_name("payload").text
     payloadJson = json.loads(payload)
-    if payloadJson["data"]["options"][0]["bmr_type"] != "Rel. Dev.":
-        raise AssertionError
-
-
-def test_changeBMRType():
-    driver = h.start_chrome("http://localhost:5550")
-    h.set_driver(driver)
-    h.click("Create a new BMDS session")
-    h.click("Data")
-    h.click("Add Dataset")
-    h.click("Main")
-    assert urlparse(driver.current_url).fragment == "/"
-
-    driver.find_element_by_id("enable-model").click()
-    if driver.find_element_by_id("enable-model").is_selected():
-        assert True
-    payload = driver.find_element_by_name("payload").text
-    payloadJson = json.loads(payload)
-    assert payloadJson["data"]["datasets"][0]["model_type"] == "CS"
+    assert payloadJson["data"]["options"][0]["bmr_type"] == "Rel. Dev."

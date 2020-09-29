@@ -95,14 +95,6 @@ def test_BMD_Missing_False():
     assert urlparse(driver.current_url).fragment == "/output"
 
 
-def test_gmail():
-    driver = h.start_chrome("https://gmail.com")
-    h.set_driver(driver)
-    h.write("bhanbish@gmail.com", into="Email or phone")
-    h.click("Next")
-    h.write("zlatan3725", into="password")
-
-
 def test_analysisName():
     driver = h.start_chrome("http://localhost:5550")
     h.set_driver(driver)

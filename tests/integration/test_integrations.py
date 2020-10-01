@@ -5,6 +5,7 @@ from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 from django.test import TestCase
 
 from . import tests
+from .tests import continuous, dichotomous
 
 SKIP_INTEGRATION = os.environ.get("BMDS_INTEGRATION_TESTS") is None
 BROWSER = os.environ.get("BROWSER", "firefox")  # default to firefox; seems more stable
@@ -25,3 +26,18 @@ class TestIntegration(StaticLiveServerTestCase, TestCase):
 
     def test_demo(self):
         tests.test_demo(self.driver, self.live_server_url)
+
+    def test_continuous(self):
+        continuous.test_continuous(self.driver, self.live_server_url)
+        continuous.test_Sufficiently_Close_BMDL_4(self.driver, self.live_server_url)
+        continuous.test_analysisName(self.driver, self.live_server_url)
+        continuous.test_analysisDescription(self.driver, self.live_server_url)
+        continuous.test_changeBMRType(self.driver, self.live_server_url)
+        continuous.test_dataPath(self.driver, self.live_server_url)
+        continuous.test_logicPath(self.driver, self.live_server_url)
+        continuous.test_mainPath(self.driver, self.live_server_url)
+        continuous.test_ouputPath(self.driver, self.live_server_url)
+
+    def test_dichotomous(self):
+        dichotomous.test_dichotomous(self.driver, self.live_server_url)
+        dichotomous.test_modelTypeDichotomous(self.driver, self.live_server_url)

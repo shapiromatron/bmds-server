@@ -4,10 +4,11 @@ from urllib.parse import urlparse
 import helium as h
 
 
-def test_dichotomous():
-    driver = h.start_chrome("http://localhost:5550")
+def test_dichotomous(driver, root_url):
     h.set_driver(driver)
+    h.go_to(root_url)
     h.click("Create a new BMDS session")
+    h.wait_until(h.Button("Save Analysis").exists)
     driver.find_element_by_xpath(
         "//select[@id='dataset-type']/option[text()='Dichotomous']"
     ).click()
@@ -31,10 +32,11 @@ def test_dichotomous():
     assert urlparse(driver.current_url).fragment == "/output"
 
 
-def test_modelTypeDichotomous():
-    driver = h.start_chrome("http://localhost:5550")
+def test_modelTypeDichotomous(driver, root_url):
     h.set_driver(driver)
+    h.go_to(root_url)
     h.click("Create a new BMDS session")
+    h.wait_until(h.Button("Save Analysis").exists)
     driver.find_element_by_xpath(
         "//select[@id='dataset-type']/option[text()='Dichotomous']"
     ).click()

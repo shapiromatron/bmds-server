@@ -126,6 +126,25 @@ Recommended workspace settings:
 Additional settings
 ~~~~~~~~~~~~~~~~~~~
 
+Building a test database
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+A test database is loaded to run unit tests. The database may need to be periodically updated as new feature are added. To load, make edits, and export the test database:
+
+.. code-block:: bash
+
+    # specify that we're using the unit-test settings
+    export "DJANGO_SETTINGS_MODULE=bmds_server.main.settings.testing"
+
+    # load existing test
+    createdb hawc-fixture-test
+    manage.py load_test_db
+
+    # now make edits to the database using the GUI or via command line
+
+    # export database
+    manage.py dump_test_db
+
 Running asynchronous worker threads
 -----------------------------------
 

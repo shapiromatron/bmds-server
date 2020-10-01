@@ -8,7 +8,7 @@
 .vscode/
 bmds_server/static/bundles/
 build/
-data/
+/data/
 dist/
 docs/_build/
 node_modules/

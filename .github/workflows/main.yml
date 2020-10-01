@@ -102,7 +102,7 @@ jobs:
     - name: setup web server
       run: |
         yarn --cwd ./frontend install
-        npm run --prefix ./frontend start  &
+        npm run --prefix ./frontend start &
     - name: run integration tests
       run: |
         py.test -s tests/integration/

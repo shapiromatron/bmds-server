@@ -1,0 +1,143 @@
+- model: contenttypes.contenttype
+  fields:
+    app_label: admin
+    model: logentry
+- model: contenttypes.contenttype
+  fields:
+    app_label: auth
+    model: permission
+- model: contenttypes.contenttype
+  fields:
+    app_label: auth
+    model: group
+- model: contenttypes.contenttype
+  fields:
+    app_label: auth
+    model: user
+- model: contenttypes.contenttype
+  fields:
+    app_label: contenttypes
+    model: contenttype
+- model: contenttypes.contenttype
+  fields:
+    app_label: sessions
+    model: session
+- model: contenttypes.contenttype
+  fields:
+    app_label: authtoken
+    model: token
+- model: contenttypes.contenttype
+  fields:
+    app_label: jobrunner
+    model: job
+- model: jobrunner.job
+  pk: 4d666094-543b-476b-a003-31e508c14688
+  fields:
+    password: password1
+    inputs: '{"bmds_version": "BMDS312", "analysis_name": "test-dichotomous", "analysis_description":
+      "demo", "dataset_type": "D", "models": {"frequentist_restricted": ["Dichotomous-Hill",
+      "Gamma", "LogLogistic", "LogProbit", "Multistage", "Weibull"]}, "datasets":
+      [{"doses": [0, 0.46, 1.39, 4.17, 12.5], "ns": [9, 9, 11, 10, 7], "incidences":
+      [0, 0, 3, 2, 3], "enabled": true, "model_type": "DM", "dataset_id": 0, "dataset_name":
+      "name 1", "column_names": {"doses": "Dose", "ns": "N", "incidences": "Incidence"}}],
+      "options": [{"bmr_type": "Extra", "bmr_value": 0.1, "confidence_level": 0.95,
+      "background": "Estimated"}], "logic": {"recommend_viable": true, "recommend_questionable":
+      false, "sufficiently_close_bmdl": 3, "rules": {"bmd_missing": {"enabled_continuous":
+      true, "enabled_dichotomous": true, "enabled_nested": true, "threshold": "",
+      "failure_bin": 2}, "bmdl_missing": {"enabled_continuous": true, "enabled_dichotomous":
+      true, "enabled_nested": true, "threshold": "", "failure_bin": 2}, "bmdu_missing":
+      {"enabled_continuous": false, "enabled_dichotomous": false, "enabled_nested":
+      false, "threshold": "", "failure_bin": 1}, "aic_missing": {"enabled_continuous":
+      true, "enabled_dichotomous": true, "enabled_nested": true, "threshold": "",
+      "failure_bin": 2}, "roi_missing": {"enabled_continuous": true, "enabled_dichotomous":
+      true, "enabled_nested": true, "threshold": "", "failure_bin": 2}, "variance_type":
+      {"enabled_continuous": true, "enabled_dichotomous": false, "enabled_nested":
+      false, "threshold": 0.05, "failure_bin": 1}, "variance_fit": {"enabled_continuous":
+      true, "enabled_dichotomous": false, "enabled_nested": false, "threshold": 0.05,
+      "failure_bin": 0}, "gof": {"enabled_continuous": true, "enabled_dichotomous":
+      true, "enabled_nested": true, "threshold": 0.1, "failure_bin": 0}, "gof_cancer":
+      {"enabled_continuous": false, "enabled_dichotomous": true, "enabled_nested":
+      false, "threshold": 0.05, "failure_bin": 0}, "bmd_bmdl_ratio_fail": {"enabled_continuous":
+      true, "enabled_dichotomous": true, "enabled_nested": true, "threshold": 20,
+      "failure_bin": 0}, "bmd_bmdl_ratio_warn": {"enabled_continuous": true, "enabled_dichotomous":
+      true, "enabled_nested": true, "threshold": 3, "failure_bin": 1}, "roi_large":
+      {"enabled_continuous": true, "enabled_dichotomous": true, "enabled_nested":
+      true, "threshold": 2, "failure_bin": 0}, "warnings": {"enabled_continuous":
+      false, "enabled_dichotomous": false, "enabled_nested": false, "threshold": "",
+      "failure_bin": 1}, "high_bmd": {"enabled_continuous": true, "enabled_dichotomous":
+      true, "enabled_nested": true, "threshold": 1, "failure_bin": 1}, "high_bmdl":
+      {"enabled_continuous": true, "enabled_dichotomous": true, "enabled_nested":
+      true, "threshold": 1, "failure_bin": 1}, "low_bmd_warn": {"enabled_continuous":
+      true, "enabled_dichotomous": true, "enabled_nested": true, "threshold": 3, "failure_bin":
+      1}, "low_bmdl_warn": {"enabled_continuous": true, "enabled_dichotomous": true,
+      "enabled_nested": true, "threshold": 3, "failure_bin": 1}, "low_bmd_fail": {"enabled_continuous":
+      true, "enabled_dichotomous": true, "enabled_nested": true, "threshold": 10,
+      "failure_bin": 0}, "low_bmdl_fail": {"enabled_continuous": true, "enabled_dichotomous":
+      true, "enabled_nested": true, "threshold": 10, "failure_bin": 0}, "control_residual_high":
+      {"enabled_continuous": true, "enabled_dichotomous": true, "enabled_nested":
+      true, "threshold": 2, "failure_bin": 1}, "control_stdev_fit": {"enabled_continuous":
+      true, "enabled_dichotomous": false, "enabled_nested": false, "threshold": 1.5,
+      "failure_bin": 1}, "dof_zero": {"enabled_continuous": true, "enabled_dichotomous":
+      true, "enabled_nested": true, "threshold": "", "failure_bin": 0}}}}'
+    outputs: ''
+    preferences: ''
+    errors: ''
+    created: 2020-10-01 21:37:40.219506+00:00
+    started: null
+    ended: null
+- model: jobrunner.job
+  pk: 54f8f207-5148-4535-b2a9-b4ba3c70f9bd
+  fields:
+    password: password2
+    inputs: '{"bmds_version": "BMDS312", "analysis_name": "continuous summary", "analysis_description":
+      "continuous summary test", "dataset_type": "C", "models": {}, "datasets": [{"doses":
+      [0, 7, 37, 186], "ns": [25, 25, 25, 24], "means": [55.8, 52.9, 64.8, 119.9],
+      "stdevs": [12.5, 15.4, 17.4, 32.5], "adverse_direction": "automatic", "enabled":
+      true, "model_type": "CS", "dataset_id": 0, "dataset_name": "DatasetName 0",
+      "column_names": {"doses": "Dose", "ns": "N", "means": "Mean", "stdevs": "St.
+      Dev."}}], "options": [{"bmr_type": "Std. Dev.", "bmr_value": 1, "tail_probability":
+      0.01, "confidence_level": 0.95, "distribution": "Normal", "variance": "Constant",
+      "polynomial_restriction": "Use dataset adverse direction", "background": "Estimated"}],
+      "logic": {"recommend_viable": true, "recommend_questionable": false, "sufficiently_close_bmdl":
+      3, "rules": {"bmd_missing": {"enabled_continuous": true, "enabled_dichotomous":
+      true, "enabled_nested": true, "threshold": "", "failure_bin": 2}, "bmdl_missing":
+      {"enabled_continuous": true, "enabled_dichotomous": true, "enabled_nested":
+      true, "threshold": "", "failure_bin": 2}, "bmdu_missing": {"enabled_continuous":
+      false, "enabled_dichotomous": false, "enabled_nested": false, "threshold": "",
+      "failure_bin": 1}, "aic_missing": {"enabled_continuous": true, "enabled_dichotomous":
+      true, "enabled_nested": true, "threshold": "", "failure_bin": 2}, "roi_missing":
+      {"enabled_continuous": true, "enabled_dichotomous": true, "enabled_nested":
+      true, "threshold": "", "failure_bin": 2}, "variance_type": {"enabled_continuous":
+      true, "enabled_dichotomous": false, "enabled_nested": false, "threshold": 0.05,
+      "failure_bin": 1}, "variance_fit": {"enabled_continuous": true, "enabled_dichotomous":
+      false, "enabled_nested": false, "threshold": 0.05, "failure_bin": 0}, "gof":
+      {"enabled_continuous": true, "enabled_dichotomous": true, "enabled_nested":
+      true, "threshold": 0.1, "failure_bin": 0}, "gof_cancer": {"enabled_continuous":
+      false, "enabled_dichotomous": true, "enabled_nested": false, "threshold": 0.05,
+      "failure_bin": 0}, "bmd_bmdl_ratio_fail": {"enabled_continuous": true, "enabled_dichotomous":
+      true, "enabled_nested": true, "threshold": 20, "failure_bin": 0}, "bmd_bmdl_ratio_warn":
+      {"enabled_continuous": true, "enabled_dichotomous": true, "enabled_nested":
+      true, "threshold": 3, "failure_bin": 1}, "roi_large": {"enabled_continuous":
+      true, "enabled_dichotomous": true, "enabled_nested": true, "threshold": 2, "failure_bin":
+      0}, "warnings": {"enabled_continuous": false, "enabled_dichotomous": false,
+      "enabled_nested": false, "threshold": "", "failure_bin": 1}, "high_bmd": {"enabled_continuous":
+      true, "enabled_dichotomous": true, "enabled_nested": true, "threshold": 1, "failure_bin":
+      1}, "high_bmdl": {"enabled_continuous": true, "enabled_dichotomous": true, "enabled_nested":
+      true, "threshold": 1, "failure_bin": 1}, "low_bmd_warn": {"enabled_continuous":
+      true, "enabled_dichotomous": true, "enabled_nested": true, "threshold": 3, "failure_bin":
+      1}, "low_bmdl_warn": {"enabled_continuous": true, "enabled_dichotomous": true,
+      "enabled_nested": true, "threshold": 3, "failure_bin": 1}, "low_bmd_fail": {"enabled_continuous":
+      true, "enabled_dichotomous": true, "enabled_nested": true, "threshold": 10,
+      "failure_bin": 0}, "low_bmdl_fail": {"enabled_continuous": true, "enabled_dichotomous":
+      true, "enabled_nested": true, "threshold": 10, "failure_bin": 0}, "control_residual_high":
+      {"enabled_continuous": true, "enabled_dichotomous": true, "enabled_nested":
+      true, "threshold": 2, "failure_bin": 1}, "control_stdev_fit": {"enabled_continuous":
+      true, "enabled_dichotomous": false, "enabled_nested": false, "threshold": 1.5,
+      "failure_bin": 1}, "dof_zero": {"enabled_continuous": true, "enabled_dichotomous":
+      true, "enabled_nested": true, "threshold": "", "failure_bin": 0}}}}'
+    outputs: ''
+    preferences: ''
+    errors: ''
+    created: 2020-10-01 21:38:27.154060+00:00
+    started: null
+    ended: null

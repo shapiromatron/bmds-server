@@ -11,6 +11,7 @@ SKIP_INTEGRATION = os.environ.get("BMDS_INTEGRATION_TESTS") is None
 BROWSER = os.environ.get("BROWSER", "firefox")  # default to firefox; seems more stable
 
 
+@pytest.mark.skipif(SKIP_INTEGRATION, reason="integration test")
 @pytest.mark.usefixtures("set_firefox_driver" if BROWSER == "firefox" else "set_chrome_driver")
 class TestIntegration(StaticLiveServerTestCase, TestCase):
     """
@@ -28,9 +29,9 @@ class TestIntegration(StaticLiveServerTestCase, TestCase):
 
     def test_continuous(self):
         continuous.test_continuous(self.driver, self.live_server_url)
-        continuous.test_changeLogic(self.driver, self.live_server_url)
+        continuous.test_Sufficiently_Close_BMDL_4(self.driver, self.live_server_url)
         continuous.test_analysisName(self.driver, self.live_server_url)
-        continuous.test_analysisDescription(self.driver, self.live_Server_url)
+        continuous.test_analysisDescription(self.driver, self.live_server_url)
         continuous.test_changeBMRType(self.driver, self.live_server_url)
         continuous.test_dataPath(self.driver, self.live_server_url)
         continuous.test_logicPath(self.driver, self.live_server_url)

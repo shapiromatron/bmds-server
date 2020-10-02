@@ -38,7 +38,7 @@ jobs:
         make lint-py
     - name: test
       env:
-        DJANGO_DB_HOST: postgres
+        DJANGO_DB_HOST: localhost
         DJANGO_DB_PORT: ${{ job.services.postgres.ports[5432] }} # get randomly assigned published port
         DJANGO_DB_USER: bmds-online
         DJANGO_DB_PW: password
@@ -98,7 +98,7 @@ jobs:
         - 4444:4444
 
     env:
-      DJANGO_DB_HOST: localhost
+      DJANGO_DB_HOST: postgres
       DJANGO_DB_PORT: 5432
       DJANGO_DB_USER: bmds-online
       DJANGO_DB_PW: password

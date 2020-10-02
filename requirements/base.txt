@@ -6,6 +6,9 @@ djangorestframework==3.11.0
 django_extensions==2.2.8
 python-decouple==3.3
 
+# db
+psycopg2-binary==2.8.4
+
 # celery
 celery==4.4.6
 kombu==4.6.11

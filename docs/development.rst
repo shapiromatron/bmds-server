@@ -137,7 +137,7 @@ A test database is loaded to run unit tests. The database may need to be periodi
     export "DJANGO_SETTINGS_MODULE=bmds_server.main.settings.testing"
 
     # load existing test
-    createdb hawc-fixture-test
+    createdb bmds-online-test
     manage.py load_test_db
 
     # now make edits to the database using the GUI or via command line

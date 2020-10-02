@@ -62,7 +62,15 @@ TEMPLATES = [
 WSGI_APPLICATION = "bmds_server.main.wsgi.application"
 
 DATABASES = {
-    "default": {"ENGINE": "django.db.backends.sqlite3", "NAME": str(ROOT_DIR / "db.sqlite3"),}
+    "default": {
+        "ENGINE": "django.db.backends.postgresql",
+        "NAME": os.getenv("DJANGO_DB_NAME", "bmds-online"),
+        "USER": os.getenv("DJANGO_DB_USER", "bmds-online"),
+        "PASSWORD": os.getenv("DJANGO_DB_PW", ""),
+        "HOST": os.getenv("DJANGO_DB_HOST", "localhost"),
+        "PORT": os.getenv("DJANGO_DB_PORT", ""),
+        "CONN_MAX_AGE": 300,
+    }
 }
 
 LOGIN_URL = "admin:login"

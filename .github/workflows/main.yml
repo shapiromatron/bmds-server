@@ -24,13 +24,6 @@ jobs:
         - 5432/tcp
         options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
 
-    env:
-      DJANGO_DB_HOST: postgres
-      DJANGO_DB_NAME: bmds-online-test
-      DJANGO_DB_PORT: ${{ job.services.postgres.ports[5432] }} # get randomly assigned published port
-      DJANGO_DB_PW: password
-      DJANGO_DB_USER: bmds-online
-
     steps:
     - uses: actions/checkout@v1
     - uses: actions/setup-python@v1
@@ -45,6 +38,11 @@ jobs:
         make lint-py
     - name: test
       env:
+        DJANGO_DB_HOST: postgres
+        DJANGO_DB_PORT: ${{ job.services.postgres.ports[5432] }} # get randomly assigned published port
+        DJANGO_DB_USER: bmds-online
+        DJANGO_DB_PW: password
+        DJANGO_DB_NAME: bmds-online-test
         BMDS_REQUEST_URL: ${{ secrets.BMDS_REQUEST_URL }}
         BMDS_TOKEN: ${{ secrets.BMDS_TOKEN }}
       run: |
@@ -101,10 +99,10 @@ jobs:
 
     env:
       DJANGO_DB_HOST: postgres
-      DJANGO_DB_NAME: bmds-online-test
       DJANGO_DB_PORT: 5432
-      DJANGO_DB_PW: password
       DJANGO_DB_USER: bmds-online
+      DJANGO_DB_PW: password
+      DJANGO_DB_NAME: bmds-online-test
       BMDS_INTEGRATION_TESTS: 1
       BROWSER: firefox
       LIVESERVER_HOST: container

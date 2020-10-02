@@ -98,7 +98,7 @@ jobs:
         - 4444:4444
 
     env:
-      DJANGO_DB_HOST: postgres
+      DJANGO_DB_HOST: localhost
       DJANGO_DB_PORT: 5432
       DJANGO_DB_USER: bmds-online
       DJANGO_DB_PW: password

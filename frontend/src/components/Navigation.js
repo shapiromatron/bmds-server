@@ -17,7 +17,7 @@ class Navigation extends Component {
                 <ul className="nav nav-tabs">
                     <li className="nav-item">
                         <NavLink className="nav-link" to="/">
-                            Main
+                            Settings
                         </NavLink>
                     </li>
                     <li className="nav-item">
@@ -35,28 +35,30 @@ class Navigation extends Component {
                             Logic
                         </NavLink>
                     </li>
+                    <li className="nav-item ml-auto">
+                        <div className="dropdown">
+                            <button
+                                className="btn btn-info dropdown-toggle"
+                                type="button"
+                                id="bmdSessionActions"
+                                data-toggle="dropdown"
+                                aria-haspopup="true"
+                                aria-expanded="false">
+                                Actions
+                            </button>
+                            <div
+                                className="dropdown-menu dropdown-menu-right"
+                                aria-labelledby="bmdSessionActions">
+                                <a className="dropdown-item" href={excelUrl}>
+                                    <i className="fa fa-file-excel-o"></i>&nbsp;Download dataset
+                                </a>
+                                <a className="dropdown-item" href={wordUrl}>
+                                    <i className="fa fa-file-word-o"></i>&nbsp;Download report
+                                </a>
+                            </div>
+                        </div>
+                    </li>
                 </ul>
-                <div className="float-right dropdown ">
-                    <button
-                        className="btn btn-info dropdown-toggle"
-                        type="button"
-                        id="bmdSessionActions"
-                        data-toggle="dropdown"
-                        aria-haspopup="true"
-                        aria-expanded="false">
-                        Actions
-                    </button>
-                    <div
-                        className="dropdown-menu dropdown-menu-right"
-                        aria-labelledby="bmdSessionActions">
-                        <a className="dropdown-item" href={excelUrl}>
-                            <i className="fa fa-file-excel-o"></i>&nbsp;Download dataset
-                        </a>
-                        <a className="dropdown-item" href={wordUrl}>
-                            <i className="fa fa-file-word-o"></i>&nbsp;Download report
-                        </a>
-                    </div>
-                </div>
 
                 <div className="content">
                     <Route exact path="/" component={Main} />

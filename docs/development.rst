@@ -42,6 +42,10 @@ Clone the repository and install all requirements into a virtual environment:
     # install requirements
     ./venv/bin/pip install -r ./requirements/dev.txt
 
+    # create the database
+    createuser --superuser --no-password bmds-online
+    createdb -E UTF-8 -U bmds-online bmds-online
+
 Running the application
 ~~~~~~~~~~~~~~~~~~~~~~~
 

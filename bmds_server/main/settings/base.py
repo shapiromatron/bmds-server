@@ -67,13 +67,20 @@ WSGI_APPLICATION = "bmds_server.main.wsgi.application"
 SECRET_KEY = "io^^q^q1))7*r0u@6i+6kx&ek!yxyf6^5vix_6io6k4kdn@@5t"
 
 DATABASES = {
-    "default": {"ENGINE": "django.db.backends.sqlite3", "NAME": str(ROOT_DIR / "db.sqlite3"),}
+    "default": dict(
+        ENGINE="django.db.backends.postgresql",
+        NAME="bmds-online",
+        USER="bmds-online",
+        PASSWORD="",
+        HOST="localhost",
+        PORT="5432",
+    )
 }
 
 LOGIN_URL = "admin:login"
 
 # add randomness to url prefix to prevent easy access
-ADMIN_URL_PREFIX = "f09ea0b8-c3d5-4ff9-86c4-27f00e8f643d"
+ADMIN_URL_PREFIX = None
 
 AUTH_PASSWORD_VALIDATORS = [
     {"NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator"},

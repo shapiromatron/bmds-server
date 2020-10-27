@@ -1,20 +1,7 @@
 -r base.txt
 
-supervisor==4.1.0
-
-# webserver
-pywin32==223; platform_system == "win32"
-gunicorn==20.0.4; platform_system != "win32"
-
-# db
-psycopg2-binary==2.8.4
-
-# cache/queue
-django-redis==4.12.1
-redis==3.4.1
-
-# email
-django-anymail==7.2
+supervisor==4.2.1
+gunicorn==20.0.4
 
 # vendored version of bbmd
 ./vendor/bmds-0.11.0-py3-none-any.whl

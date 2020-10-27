@@ -3,7 +3,6 @@ Django==3.1.2
 django-webpack-loader==0.7.0
 djangorestframework==3.12.1
 django_extensions==3.0.9
-python-decouple==3.3
 
 # db
 psycopg2-binary==2.8.4

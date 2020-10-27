@@ -54,7 +54,7 @@
   </div>
 </nav>
 
-<div>
+<div class="container-fluid">
 
 {% if messages %}
   {% for message in messages %}
@@ -68,6 +68,7 @@
 {% block content %}
 {% endblock content %}
 </div>
+
 {% if SKIN == 1 %}
   {% include "./includes/epa-footer.html" %}
 {% endif %}

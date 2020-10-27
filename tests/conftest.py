@@ -2,6 +2,7 @@ import json
 import os
 import time
 from pathlib import Path
+from typing import NamedTuple
 
 import helium
 import pytest
@@ -237,3 +238,30 @@ def set_chrome_driver(request, chrome_driver):
 @pytest.fixture
 def set_firefox_driver(request, firefox_driver):
     request.cls.driver = firefox_driver
+
+
+class Job(NamedTuple):
+    uuid: str
+    password: str
+
+    @property
+    def url(self) -> str:
+        return f"/job/{self.uuid}/"
+
+    @property
+    def edit_url(self) -> str:
+        return f"/job/{self.uuid}/{self.password}/"
+
+
+class Keys:
+    """
+    Lookup to test specific objects in the text-fixture.
+    """
+
+    dichotomous = Job("4d666094-543b-476b-a003-31e508c14688", "password1")
+    continuous = Job("54f8f207-5148-4535-b2a9-b4ba3c70f9bd", "password2")
+
+
+@pytest.fixture
+def set_db_keys(request):
+    request.cls.db_keys = Keys

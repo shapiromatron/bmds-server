@@ -12,7 +12,9 @@ BROWSER = os.environ.get("BROWSER", "firefox")  # default to firefox; seems more
 
 
 @pytest.mark.skipif(SKIP_INTEGRATION, reason="integration test")
-@pytest.mark.usefixtures("set_firefox_driver" if BROWSER == "firefox" else "set_chrome_driver")
+@pytest.mark.usefixtures(
+    "set_firefox_driver" if BROWSER == "firefox" else "set_chrome_driver", "set_db_keys"
+)
 class TestIntegration(StaticLiveServerTestCase, TestCase):
     """
     We use a single class that inherits from both StaticLiveServerTestCase and TestCase
@@ -25,7 +27,7 @@ class TestIntegration(StaticLiveServerTestCase, TestCase):
     port = int(os.environ.get("LIVESERVER_PORT", 0))
 
     def test_demo(self):
-        tests.test_demo(self.driver, self.live_server_url)
+        tests.test_demo(self.driver, self.live_server_url, self.db_keys)
 
     def test_continuous(self):
         continuous.test_continuous(self.driver, self.live_server_url)

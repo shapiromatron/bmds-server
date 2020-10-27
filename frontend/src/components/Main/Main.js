@@ -3,7 +3,6 @@ import React, {Component} from "react";
 import AnalysisForm from "./AnalysisForm/AnalysisForm";
 import ModelsCheckBoxList from "./ModelsForm/ModelsCheckBoxList";
 import OptionsFormList from "./OptionsForm/OptionsFormList";
-import MainModal from "./ErrorModal";
 import PropTypes from "prop-types";
 import "./main.css";
 
@@ -53,7 +52,6 @@ class Main extends Component {
                         </div>
                     </div>
                 ) : null}
-                <MainModal />
             </div>
         );
     }

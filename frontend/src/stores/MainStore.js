@@ -14,14 +14,10 @@ class MainStore {
     @observable analysis_description = "";
     @observable dataset_type = "C";
     @observable errorMessage = "";
-    @observable errorModal = false;
     @observable hasEditSettings = false;
     @observable executionOutputs = null;
     @observable isUpdateComplete = false;
 
-    @action hideModal() {
-        this.errorModal = !this.errorModal;
-    }
     @action setConfig = config => {
         this.config = config;
     };
@@ -71,6 +67,7 @@ class MainStore {
     @action
     async saveAnalysis() {
         const url = this.config.editSettings.patchInputUrl;
+        this.errorMessage = "";
         await fetch(url, {
             method: "PATCH",
             mode: "cors",
@@ -83,12 +80,10 @@ class MainStore {
                 if (response.ok) {
                     response.json().then(data => this.updateModelStateFromApi(data));
                 } else {
-                    this.errorModal = !this.errorModal;
                     response.json().then(data => (this.errorMessage = data));
                 }
             })
             .catch(error => {
-                this.errorModal = !this.errorModal;
                 this.errorMessage = error;
             });
     }
@@ -106,6 +101,7 @@ class MainStore {
             return;
         }
         this.isExecuting = true;
+        this.errorMessage = "";
         await fetch(this.config.editSettings.executeUrl, {
             method: "POST",
             mode: "cors",
@@ -122,6 +118,7 @@ class MainStore {
                 this.updateModelStateFromApi(data);
             })
             .catch(error => {
+                this.errorMessage = error;
                 console.error("error", error);
             });
     }
@@ -129,6 +126,7 @@ class MainStore {
     @action
     async fetchSavedAnalysis() {
         const apiUrl = this.config.apiUrl;
+        this.errorMessage = "";
         await fetch(apiUrl, {
             method: "GET",
             mode: "cors",
@@ -136,13 +134,13 @@ class MainStore {
             .then(response => response.json())
             .then(data => this.updateModelStateFromApi(data))
             .catch(error => {
+                this.errorMessage = error;
                 console.error("error", error);
             });
     }
     @action.bound
     updateModelStateFromApi(data) {
         if (data.errors.length > 2) {
-            this.errorModal = !this.errorModal;
             this.errorMessage = data.errors;
             this.isUpdateComplete = true;
         }

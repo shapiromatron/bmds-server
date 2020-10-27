@@ -69,8 +69,10 @@ class AnalysisForm extends Component {
                         Run Analysis
                     </button>
                 </div>
-
                 {mainStore.isExecuting ? <p>Executing... please wait....</p> : null}
+                {mainStore.errorMessage ? (
+                    <div className="alert alert-danger">{mainStore.errorMessage}</div>
+                ) : null}
             </form>
         );
     }

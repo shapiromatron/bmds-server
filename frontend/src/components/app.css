@@ -6,15 +6,16 @@
 .app-nav nav{
     padding: 0px 20px 0px 20px;
 }
+
 .dropdown{
-        right: 4px;
-        left: auto;
+    right: 4px;
+    left: auto;
 }
 
 .app-nav ul li {
-    position: relative; 
+    position: relative;
     display: inline-block;
-  }
+}
 
 a.dropdown-item{
     color: darkblue;
@@ -23,12 +24,14 @@ a.dropdown-item{
 .app-nav .dropdown a{
     cursor: pointer;
 }
+
 .app-nav .dropdown-menu{
     list-style-type: none;
     text-align: center;
 }
+
 .app-nav .dropdown a:hover{
-background-color: rgb(199, 200, 238);
+    background-color: rgb(199, 200, 238);
 }
 
 @media(max-width: 600px){

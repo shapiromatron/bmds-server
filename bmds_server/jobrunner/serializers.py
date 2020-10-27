@@ -1,6 +1,3 @@
-import json
-
-from django.conf import settings
 from rest_framework import serializers
 
 from . import models, tasks, validators

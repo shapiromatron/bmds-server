@@ -1,5 +1,4 @@
-import json
-from copy import deepcopy
+from typing import Any, Dict
 
 import bmds
 import pytest
@@ -10,7 +9,7 @@ from bmds_server.jobrunner import validators
 
 class TestInputValidation:
     def test_bmds3_partial(self):
-        data = {
+        data: Dict[str, Any] = {
             "bmds_version": bmds.constants.BMDS312,
             "dataset_type": bmds.constants.CONTINUOUS,
         }

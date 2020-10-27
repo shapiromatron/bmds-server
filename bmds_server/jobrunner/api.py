@@ -1,16 +1,13 @@
 import io
-import json
 
 import pandas as pd
 from django.core.exceptions import ValidationError
 from docx import Document
 from rest_framework import exceptions, mixins, status, viewsets
-from rest_framework.authentication import TokenAuthentication
 from rest_framework.decorators import action
-from rest_framework.permissions import IsAdminUser
 from rest_framework.response import Response
 
-from . import models, renderers, serializers, tasks, validators
+from . import models, renderers, serializers, validators
 
 
 class JobViewset(mixins.CreateModelMixin, mixins.RetrieveModelMixin, viewsets.GenericViewSet):

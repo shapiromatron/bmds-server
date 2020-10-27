@@ -21,7 +21,7 @@ class JobAdmin(admin.ModelAdmin):
         assert cache.get("foo") == "bar"
         assert cache.delete("foo") == 1
         assert cache.get("foo") is None
-        message = f"Cache test executed successfully"
+        message = "Cache test executed successfully"
         modeladmin.message_user(request, message)
 
     diagnostic_cache.short_description = "Diagnostic cache test"

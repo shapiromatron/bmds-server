@@ -10,7 +10,6 @@ os.environ.setdefault(
 
 from django.conf import settings  # noqa  # isort:skip
 
-
 app = Celery("bmds_server")
 app.config_from_object("django.conf:settings", namespace="CELERY")
 app.autodiscover_tasks()

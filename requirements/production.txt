@@ -10,11 +10,11 @@ gunicorn==20.0.4; platform_system != "win32"
 psycopg2-binary==2.8.4
 
 # cache/queue
-django-redis==4.11.0
+django-redis==4.12.1
 redis==3.4.1
 
 # email
-django-anymail==7.0
+django-anymail==7.2
 
 # vendored version of bbmd
 ./vendor/bmds-0.11.0-py3-none-any.whl

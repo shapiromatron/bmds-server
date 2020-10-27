@@ -19,7 +19,7 @@ class Main extends Component {
         return (
             <div>
                 {mainStore.isUpdateComplete ? (
-                    <div className="main container-fluid ">
+                    <div>
                         <div className="row">
                             <div className="col-sm-12 col-lg-3 analysis">
                                 {mainStore.getEditSettings ? (
@@ -46,7 +46,9 @@ class Main extends Component {
                                 </div>
                             </div>
                         </div>
-                        <div name="payload">
+                        <div
+                            name="payload"
+                            style={{color: "white", height: "1px", overflow: "hidden"}}>
                             {JSON.stringify(mainStore.getPayload, undefined, 2)}
                         </div>
                     </div>

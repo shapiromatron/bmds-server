@@ -8,7 +8,6 @@ from . import api, views
 
 router = DefaultRouter()
 router.register("job", api.JobViewset, basename="job")
-router.register("dfile", api.DfileExecutorViewset, basename="dfile")
 
 urlpatterns = [
     path("api/v1/", include((router.urls, "jobrunner"), namespace="api")),

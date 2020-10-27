@@ -54,14 +54,6 @@ class JobSerializer(serializers.ModelSerializer):
             "ended",
         )
 
-    def to_representation(self, obj):
-        obj = super(JobSerializer, self).to_representation(obj)
-        # TODO - revisit this
-        if not obj["inputs"]:
-            obj["inputs"] = "{}"
-        obj["inputs"] = json.loads(obj["inputs"])
-        return obj
-
     def create(self, validated_data):
         instance = super().create(validated_data)
 

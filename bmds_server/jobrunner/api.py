@@ -144,20 +144,3 @@ class JobViewset(mixins.CreateModelMixin, mixins.RetrieveModelMixin, viewsets.Ge
 
     def get_queryset(self):
         return models.Job.objects.all()
-
-
-class DfileExecutorViewset(viewsets.ViewSet):
-
-    permission_classes = (IsAdminUser,)
-    authentication_classes = (TokenAuthentication,)
-
-    def create(self, request):
-        """
-        Execute list of dfiles
-        """
-        payload = request.data.get("inputs", [])
-        try:
-            output = tasks.execute_dfile.delay(payload).get(timeout=120)
-        except TimeoutError:
-            output = {"timeout": True}
-        return Response(output)

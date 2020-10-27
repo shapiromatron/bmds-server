@@ -46,17 +46,6 @@ base_schema = {
     "required": ["bmds_version", "dataset_type"],
 }
 
-
-base2_schema_partial = deepcopy(base_schema)
-base2_schema_partial["properties"]["models"]["type"] = "array"
-base2_schema_partial["properties"]["bmr"] = {
-    "description": "A description of the BMR to use (BMDS 2 only)",
-    "type": "object",
-}
-
-base2_schema_complete = deepcopy(base2_schema_partial)
-base2_schema_complete["required"].extend(["datasets"])
-
 base3_schema_partial = deepcopy(base_schema)
 base3_schema_partial["properties"]["models"]["type"] = "object"
 base3_schema_partial["properties"]["optional"] = {
@@ -71,17 +60,14 @@ base3_schema_complete["required"].extend(["datasets", "models", "options"])
 def validate_session(data: Dict, partial: bool = False):
     bmds_version = data.get("bmds_version")
     if bmds_version in bmds.constants.BMDS_TWOS:
-        if partial:
-            schema = base2_schema_partial
-        else:
-            schema = base2_schema_complete
+        raise ValidationError(f"BMDS 2 not supported; got {bmds_version}")
     elif bmds_version in bmds.constants.BMDS_THREES:
         if partial:
             schema = base3_schema_partial
         else:
             schema = base3_schema_complete
     else:
-        raise ValidationError("Invalid `bmds_version` specification.")
+        raise ValidationError(f"Invalid bmds_version; got {bmds_version}")
 
     try:
         jsonschema.validate(data, schema)

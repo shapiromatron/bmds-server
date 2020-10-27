@@ -20,9 +20,9 @@ class Migration(migrations.Migration):
                         default=uuid.uuid4, editable=False, primary_key=True, serialize=False
                     ),
                 ),
-                ("inputs", models.TextField()),
-                ("outputs", models.TextField(blank=True)),
-                ("errors", models.TextField(blank=True)),
+                ("inputs", models.JSONField(default=dict)),
+                ("outputs", models.JSONField(blank=True, default=dict)),
+                ("errors", models.JSONField(blank=True, default=dict)),
                 ("created", models.DateTimeField(auto_now_add=True)),
                 ("started", models.DateTimeField(null=True)),
                 ("ended", models.DateTimeField(null=True)),

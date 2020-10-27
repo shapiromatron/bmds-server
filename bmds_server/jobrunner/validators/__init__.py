@@ -1,4 +1,5 @@
 import json
+from typing import Dict
 
 import bmds
 from django.core.exceptions import ValidationError
@@ -9,22 +10,19 @@ from .options import validate_bmrs, validate_options
 from .session import validate_session
 
 
-def validate_input(payload: str, partial: bool = False) -> None:
+def validate_input(payload: Dict, partial: bool = False) -> None:
     """
     Validate input payload.
 
     Args:
-        payload (str): a JSON str
+        payload (Dict): the data payload
         partial (bool): validate a partial input
 
     Raises:
         ValidationError: Raises validation error if any errors found
     """
 
-    try:
-        data = json.loads(payload)
-    except json.decoder.JSONDecodeError:
-        raise ValidationError("Invalid format - must be valid JSON.")
+    data = payload
 
     # check session
     validate_session(data, partial=partial)

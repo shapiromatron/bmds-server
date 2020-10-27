@@ -14,7 +14,7 @@ class Navigation extends Component {
     render() {
         const {excelUrl, wordUrl} = this.props.mainStore.config;
         return (
-            <div className="app-nav">
+            <div className="app-nav" style={{marginTop: "1em"}}>
                 <nav className="navbar navbar-expand-lg bg-primary navbar-dark">
                     <button
                         className="navbar-toggler"

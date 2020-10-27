@@ -21,26 +21,26 @@ class Main extends Component {
                 {mainStore.isUpdateComplete ? (
                     <div>
                         <div className="row">
-                            <div className="col-sm-12 col-lg-3 analysis">
+                            <div className="col-lg-4 analysis">
                                 {mainStore.getEditSettings ? (
                                     <AnalysisForm />
                                 ) : (
                                     <AnalysisFormReadOnly />
                                 )}
                             </div>
-                            <div className="col-sm-12 col-lg-8">
+                            <div className="col-lg-8">
                                 <div className="modelsCheckbox">
                                     <ModelsCheckBoxList />
                                 </div>
                             </div>
                         </div>
                         <div className="row second-row">
-                            <div className="col-sm-12 col-lg-3">
+                            <div className="col-lg-4">
                                 <div className="datasetlist">
                                     {mainStore.getDatasetLength ? <DatasetList /> : null}
                                 </div>
                             </div>
-                            <div className="col-sm-12 col-lg-8">
+                            <div className="col-lg-8">
                                 <div className="optionslist">
                                     <OptionsFormList />
                                 </div>

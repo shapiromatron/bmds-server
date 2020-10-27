@@ -56,15 +56,7 @@ class JobSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         instance = super().create(validated_data)
-
-        id_ = str(instance.id)
-        inputs = json.loads(instance.inputs)
-        immediate = inputs.get("immediate", False)
-        if settings.ALLOW_BLOCKING_BMDS_REQUESTS and immediate is True:
-            instance.try_execute()
-        else:
-            tasks.try_execute.delay(id_)
-
+        tasks.try_execute.delay(str(instance.id))
         return instance
 
     def validate_inputs(self, value):

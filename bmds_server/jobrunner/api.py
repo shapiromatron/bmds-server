@@ -39,14 +39,12 @@ class JobViewset(mixins.CreateModelMixin, mixins.RetrieveModelMixin, viewsets.Ge
         if not isinstance(data, dict):
             raise exceptions.ValidationError("A `data` object is required")
 
-        input_data = json.dumps(data)
-
         try:
-            validators.validate_input(input_data, partial=partial)
+            validators.validate_input(data, partial=partial)
         except ValidationError as err:
             raise exceptions.ValidationError(err.message)
 
-        instance.inputs = input_data
+        instance.inputs = data
         instance.save()
 
         serializer = self.get_serializer(instance)
@@ -84,7 +82,6 @@ class JobViewset(mixins.CreateModelMixin, mixins.RetrieveModelMixin, viewsets.Ge
         instance.start_execute()
 
         instance.refresh_from_db()
-
         serializer = self.get_serializer(instance)
         return Response(serializer.data)
 

@@ -6,24 +6,21 @@ from django.core.exceptions import ValidationError
 
 from .datasets import validate_datasets
 from .models import validate_models
-from .options import validate_bmrs, validate_options
+from .options import validate_options
 from .session import validate_session
 
 
-def validate_input(payload: Dict, partial: bool = False) -> None:
+def validate_input(data: Dict, partial: bool = False) -> None:
     """
     Validate input payload.
 
     Args:
-        payload (Dict): the data payload
+        data (Dict): the data payload
         partial (bool): validate a partial input
 
     Raises:
         ValidationError: Raises validation error if any errors found
     """
-
-    data = payload
-
     # check session
     validate_session(data, partial=partial)
     bmds_version = data["bmds_version"]
@@ -38,10 +35,6 @@ def validate_input(payload: Dict, partial: bool = False) -> None:
     models = data.get("models")
     if models or partial is False:
         validate_models(bmds_version, dataset_type, models)
-
-    bmr = data.get("bmr")
-    if bmr or (partial is False and bmds_version in bmds.constants.BMDS_TWOS):
-        validate_bmrs(dataset_type, bmr)
 
     options = data.get("options")
     if options or (partial is False and bmds_version in bmds.constants.BMDS_THREES):

@@ -1,6 +1,8 @@
 Development
 ===========
 
+TODO - update
+
 Make sure you have the following applications installed locally:
 
 - `Git`_
@@ -39,10 +41,6 @@ Clone the repository and install all requirements into a virtual environment:
 
     # install requirements
     ./venv/bin/pip install -r ./requirements/dev.txt
-
-    # for linux/mac running bmds==0.11.0 or lower
-    echo "export \"BMDS_REQUEST_URL=http://bmds-python.com/api/dfile/\"" >> venv/bin/activate
-    echo "export \"BMDS_TOKEN=abcdefghijklmnopqrstuvwxyz1234567890\"" >> venv/bin/activate
 
 Running the application
 ~~~~~~~~~~~~~~~~~~~~~~~

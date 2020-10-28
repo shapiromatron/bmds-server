@@ -80,7 +80,7 @@ DATABASES = {
 LOGIN_URL = "admin:login"
 
 # add randomness to url prefix to prevent easy access
-ADMIN_URL_PREFIX = None
+ADMIN_URL_PREFIX = "8v99wgnw7"
 
 AUTH_PASSWORD_VALIDATORS = [
     {"NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator"},

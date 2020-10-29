@@ -26,8 +26,8 @@ class Job(models.Model):
     preferences = models.JSONField(default=dict, blank=True)
     errors = models.JSONField(default=dict, blank=True)
     created = models.DateTimeField(auto_now_add=True)
-    started = models.DateTimeField(null=True)
-    ended = models.DateTimeField(null=True)
+    started = models.DateTimeField(null=True, blank=True)
+    ended = models.DateTimeField(null=True, blank=True)
 
     class Meta:
         ordering = ("created",)
@@ -212,9 +212,7 @@ class Job(models.Model):
         inputs_no_datasets = deepcopy(self.inputs)
         inputs_no_datasets.pop("datasets")
         obj = dict(job_id=str(self.id), inputs=inputs_no_datasets, outputs=outputs)
-
         errors = [out["error"] for out in outputs if "error" in out]
-
         self.outputs = json.dumps(obj)
         self.errors = json.dumps(errors)
         self.ended = now()

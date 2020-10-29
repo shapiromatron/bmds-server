@@ -3,6 +3,8 @@ import {inject, observer} from "mobx-react";
 import PropTypes from "prop-types";
 import {modelTypes} from "../../../constants/mainConstants";
 
+import Spinner from "../../common/Spinner";
+
 @inject("mainStore")
 @observer
 class AnalysisForm extends Component {
@@ -69,7 +71,7 @@ class AnalysisForm extends Component {
                         Run Analysis
                     </button>
                 </div>
-                {mainStore.isExecuting ? <p>Executing... please wait....</p> : null}
+                {mainStore.isExecuting ? <Spinner text="Executing, please wait..." /> : null}
                 {mainStore.errorMessage ? (
                     <div className="alert alert-danger">{mainStore.errorMessage}</div>
                 ) : null}

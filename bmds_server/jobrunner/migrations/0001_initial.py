@@ -23,8 +23,8 @@ class Migration(migrations.Migration):
                 ("outputs", models.JSONField(blank=True, default=dict)),
                 ("errors", models.JSONField(blank=True, default=dict)),
                 ("created", models.DateTimeField(auto_now_add=True)),
-                ("started", models.DateTimeField(null=True)),
-                ("ended", models.DateTimeField(null=True)),
+                ("started", models.DateTimeField(null=True, blank=True)),
+                ("ended", models.DateTimeField(null=True, blank=True)),
             ],
         )
     ]

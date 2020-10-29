@@ -52,7 +52,7 @@ class MainStore {
             editKey: this.config.editSettings.editKey,
             partial: true,
             data: {
-                bmds_version: "BMDS312",
+                bmds_version: "BMDS330",
                 analysis_name: this.analysis_name,
                 analysis_description: this.analysis_description,
                 dataset_type: this.dataset_type,

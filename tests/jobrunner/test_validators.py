@@ -10,7 +10,7 @@ from bmds_server.jobrunner import validators
 class TestInputValidation:
     def test_bmds3_partial(self):
         data: Dict[str, Any] = {
-            "bmds_version": bmds.constants.BMDS312,
+            "bmds_version": bmds.constants.BMDS330,
             "dataset_type": bmds.constants.CONTINUOUS,
         }
 
@@ -66,7 +66,7 @@ class TestInputValidation:
 class TestModelValidation:
     def test_bmds3_dichotomous(self):
         dtype = bmds.constants.DICHOTOMOUS
-        version = bmds.constants.BMDS312
+        version = bmds.constants.BMDS330
         probit = bmds.constants.M_Probit
         logprobit = bmds.constants.M_LogProbit
 
@@ -128,7 +128,7 @@ class TestModelValidation:
 
     def test_bmds3_continuous(self):
         dtype = bmds.constants.CONTINUOUS
-        version = bmds.constants.BMDS312
+        version = bmds.constants.BMDS330
         power = bmds.constants.M_Power
         linear = bmds.constants.M_Linear
 

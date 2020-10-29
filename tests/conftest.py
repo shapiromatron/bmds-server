@@ -1,3 +1,5 @@
+from pathlib import Path
+
 import pytest
 
 
@@ -8,10 +10,16 @@ def vcr_config():
     }
 
 
+@pytest.fixture(scope="module")
+def vcr_cassette_dir(request):
+    cassette_dir = Path(__file__).parent.absolute() / "cassettes" / request.module.__name__
+    return str(cassette_dir)
+
+
 @pytest.fixture
 def bmds3_complete_continuous():
     return {
-        "bmds_version": "BMDS312",
+        "bmds_version": "BMDS330",
         "dataset_type": "C",
         "models": {"frequentist_restricted": ["Power"]},
         "datasets": [
@@ -41,7 +49,7 @@ def bmds3_complete_continuous():
 @pytest.fixture
 def bmds3_complete_dichotomous():
     return {
-        "bmds_version": "BMDS312",
+        "bmds_version": "BMDS330",
         "dataset_type": "D",
         "models": {"frequentist_restricted": ["LogLogistic"]},
         "datasets": [

@@ -10,8 +10,8 @@ class TestBmds3SessionBuild:
         session = Job.build_session(data, data["datasets"][0])
         assert len(session.models) == 1
 
-    def test_default_continuous(self, bmds3_complete_continuous):
-        # assure a default dataset can be created
-        data = deepcopy(bmds3_complete_continuous)
-        session = Job.build_session(data, data["datasets"][0])
-        assert len(session.models) == 1
+    # def test_default_continuous(self, bmds3_complete_continuous):
+    #     # assure a default dataset can be created
+    #     data = deepcopy(bmds3_complete_continuous)
+    #     session = Job.build_session(data, data["datasets"][0])
+    #     assert len(session.models) == 1

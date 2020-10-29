@@ -4,7 +4,7 @@ import traceback
 import uuid
 from copy import deepcopy
 from datetime import timedelta
-from typing import Dict, Optional
+from typing import Dict, List, Optional
 
 import bmds
 from django.conf import settings
@@ -93,30 +93,30 @@ class Job(models.Model):
             cursor.execute("vacuum")
 
     @classmethod
-    def _build_dataset(cls, dataset_type: str, dataset: Dict) -> bmds.datasets.Dataset:
+    def _build_dataset(
+        cls, dataset_type: str, dataset: Dict[str, List[float]]
+    ) -> bmds.datasets.DatasetType:
         if dataset_type == bmds.constants.CONTINUOUS:
-            dataset = bmds.ContinuousDataset(
+            return bmds.ContinuousDataset(
                 doses=dataset["doses"],
                 ns=dataset["ns"],
                 means=dataset["means"],
                 stdevs=dataset["stdevs"],
             )
         elif dataset_type == bmds.constants.CONTINUOUS_INDIVIDUAL:
-            dataset = bmds.ContinuousIndividualDataset(
+            return bmds.ContinuousIndividualDataset(
                 doses=dataset["doses"], responses=dataset["responses"]
             )
         elif dataset_type == bmds.constants.DICHOTOMOUS:
-            dataset = bmds.DichotomousDataset(
+            return bmds.DichotomousDataset(
                 doses=dataset["doses"], ns=dataset["ns"], incidences=dataset["incidences"]
             )
         else:
             raise ValueError(f"unknown dataset type: {dataset_type}")
 
-        return dataset
-
     @classmethod
     def build_bmds3_session(
-        cls, bmds_version: str, dataset_type: str, dataset: bmds.datasets.Dataset, inputs: Dict
+        cls, bmds_version: str, dataset_type: str, dataset: bmds.datasets.DatasetType, inputs: Dict
     ) -> bmds.BMDS:
         """
         Puts all options and models into a single BMDS session.

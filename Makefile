@@ -30,7 +30,8 @@ help:
 build:  ## build application for containerization
 	rm -rf build/ dist/
 	npm --prefix ./frontend run build
-	manage.py bundle
+	python setup.py build
+	python setup.py sdist
 
 dev: ## Start developer environment.
 	./bin/dev.sh

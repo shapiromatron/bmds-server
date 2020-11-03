@@ -237,15 +237,6 @@ class JobViewset(mixins.CreateModelMixin, mixins.RetrieveModelMixin, viewsets.Ge
                 for e in range(len(str_i)):
                     cells[e].text = str_i[e]
         document.save(f)
-
-        # plot is created and saved in projects root directory but not added to document.
-        # todo add picture to document.
-        plt.plot([0, 1, 2, 3, 4], [0, 3, 5, 9, 11])
-        plt.xlabel("Months")
-        plt.ylabel("Books Read")
-        plt.savefig("picture.jpg")
-        document.add_picture("picture.jpg", width=Inches(1.25))
-
         data = renderers.BinaryFile(data=f, filename=str(instance.id))
         return Response(data)
 

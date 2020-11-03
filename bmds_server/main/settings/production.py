@@ -2,8 +2,8 @@
 
 from decouple import config
 
-from .base import *
 from ..constants import SkinStyle
+from .base import *
 
 DEBUG = False
 

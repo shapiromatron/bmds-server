@@ -19,7 +19,7 @@ base_schema = {
         },
         "bmds_version": {
             "description": "Version of BMDS run analysis with",
-            "enum": list(BMDS.versions.keys()),
+            "enum": list(BMDS.get_versions()),
         },
         "description": {"description": "Analysis description", "type": "string"},
         "dataset_type": {

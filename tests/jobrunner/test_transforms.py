@@ -1,5 +1,5 @@
 import pytest
-from bmds.bmds3.types33 import DichotomousRiskType
+from bmds.bmds3.types.dichotomous import DichotomousRiskType
 
 from bmds_server.jobrunner import transforms
 

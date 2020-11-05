@@ -1,8 +1,7 @@
 from typing import Dict
 
-from bmds.bmds3.types.dichotomous import DichotomousRiskType, DichotomousModelSettings
 from bmds.bmds3.types.continuous import BMRType_t, ContinuousModelSettings
-
+from bmds.bmds3.types.dichotomous import DichotomousModelSettings, DichotomousRiskType
 
 bmds3_d_bmr_type_map = {
     "Extra": DichotomousRiskType.eExtraRisk,

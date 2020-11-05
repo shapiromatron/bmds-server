@@ -121,7 +121,7 @@ class Job(models.Model):
         """
         Puts all options and models into a single BMDS session.
         """
-        session = bmds.BMDS.versions[bmds_version](dataset_type, dataset=dataset)
+        session = bmds.BMDS.version(bmds_version)(dataset_type, dataset=dataset)
         for options in inputs["options"]:
             for model_class, model_names in inputs["models"].items():
                 for model_name in model_names:

@@ -6,7 +6,6 @@ import Data from "./Data/Data";
 import Logic from "./Logic/Logic";
 import Output from "./Output/Output";
 import PropTypes from "prop-types";
-import "./app.css";
 
 @inject("mainStore")
 @observer
@@ -14,65 +13,52 @@ class Navigation extends Component {
     render() {
         const {excelUrl, wordUrl} = this.props.mainStore.config;
         return (
-            <div className="app-nav">
-                <nav className="navbar navbar-expand-lg bg-primary navbar-dark">
-                    <button
-                        className="navbar-toggler"
-                        type="button"
-                        data-toggle="collapse"
-                        data-target="#bmdsNavbar"
-                        aria-controls="bmdsNavbar"
-                        aria-expanded="false"
-                        aria-label="Toggle navigation">
-                        <span className="navbar-toggler-icon"></span>
-                    </button>
-
-                    <div className="collapse navbar-collapse" id="bmdsNavbar">
-                        <ul className="navbar-nav mr-auto">
-                            <li className=" nav-item">
-                                <NavLink className="nav-link" to="/">
-                                    Main
-                                </NavLink>
-                            </li>
-                            <li className="nav-item">
-                                <NavLink className="nav-link" to="/data">
-                                    Data
-                                </NavLink>
-                            </li>
-                            <li className="nav-item">
-                                <NavLink className="nav-link" to="/output">
-                                    Output
-                                </NavLink>
-                            </li>
-                            <li className="nav-item">
-                                <NavLink className="nav-link" to="/logic">
-                                    Logic
-                                </NavLink>
-                            </li>
-                        </ul>
-                        <div className="dropdown btn-group my-2 my-lg-0">
+            <div style={{marginTop: "1em"}}>
+                <ul className="nav nav-tabs">
+                    <li className="nav-item">
+                        <NavLink className="nav-link" to="/">
+                            Settings
+                        </NavLink>
+                    </li>
+                    <li className="nav-item">
+                        <NavLink className="nav-link" to="/data">
+                            Data
+                        </NavLink>
+                    </li>
+                    <li className="nav-item">
+                        <NavLink className="nav-link" to="/output">
+                            Output
+                        </NavLink>
+                    </li>
+                    <li className="nav-item">
+                        <NavLink className="nav-link" to="/logic">
+                            Logic
+                        </NavLink>
+                    </li>
+                    <li className="nav-item ml-auto">
+                        <div className="dropdown">
                             <button
-                                className="btn btn-primary"
+                                className="btn btn-info dropdown-toggle"
                                 type="button"
-                                id="dropdownMenuButton"
+                                id="bmdSessionActions"
                                 data-toggle="dropdown"
                                 aria-haspopup="true"
                                 aria-expanded="false">
-                                <i className="fa fa-bars" aria-hidden="true"></i>
+                                Actions
                             </button>
                             <div
                                 className="dropdown-menu dropdown-menu-right"
-                                aria-labelledby="dropdownMenuButton">
-                                <a className="text-left dropdown-item" href={excelUrl}>
+                                aria-labelledby="bmdSessionActions">
+                                <a className="dropdown-item" href={excelUrl}>
                                     <i className="fa fa-file-excel-o"></i>&nbsp;Download dataset
                                 </a>
-                                <a className="text-left dropdown-item" href={wordUrl}>
+                                <a className="dropdown-item" href={wordUrl}>
                                     <i className="fa fa-file-word-o"></i>&nbsp;Download report
                                 </a>
                             </div>
                         </div>
-                    </div>
-                </nav>
+                    </li>
+                </ul>
 
                 <div className="content">
                     <Route exact path="/" component={Main} />

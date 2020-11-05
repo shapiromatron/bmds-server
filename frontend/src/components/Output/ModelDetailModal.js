@@ -20,6 +20,9 @@ import CSTestofInterest from "./CSTestofInterest";
 class ModelDetailModal extends Component {
     render() {
         const {outputStore} = this.props;
+        if (outputStore.selectedModel === undefined) {
+            return null;
+        }
         return (
             <Modal
                 show={outputStore.modelDetailModal}
@@ -54,18 +57,17 @@ class ModelDetailModal extends Component {
                     </Row>
                     <Row>
                         <Col xs={4}>
-                            <BenchmarkDose />
+                            <BenchmarkDose store={outputStore} />
                         </Col>
                         <Col xs={4}>
-                            <ModelParameters />
+                            <ModelParameters store={outputStore} />
                         </Col>
                     </Row>
                     <Row>
                         <Col xs={12}>
-                            <GoodnessFit />
+                            <GoodnessFit store={outputStore} />
                         </Col>
                     </Row>
-
                     {outputStore.getCurrentOutput.dataset.model_type == "CS" ? (
                         <Row>
                             <Col xs={4}>
@@ -78,11 +80,11 @@ class ModelDetailModal extends Component {
                     ) : null}
                     <Row>
                         <Col xs={4}>
-                            <CDFTable />
+                            <CDFTable store={outputStore} />
                         </Col>
                         <Col>
                             <ResponsePlot />
-                            <CDFPlot />
+                            <CDFPlot store={outputStore} />
                         </Col>
                     </Row>
                 </Modal.Body>

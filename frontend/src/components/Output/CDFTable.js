@@ -1,12 +1,15 @@
+import _ from "lodash";
 import React, {Component} from "react";
-import {inject, observer} from "mobx-react";
+import {observer} from "mobx-react";
 import PropTypes from "prop-types";
+import {toJS} from "mobx";
 
-@inject("outputStore")
 @observer
 class CDFTable extends Component {
     render() {
-        const {outputStore} = this.props;
+        const {store} = this.props,
+            data = toJS(store.selectedModel.results.fit.bmd_dist);
+
         return (
             <table className="table table-bordered table-sm">
                 <thead>
@@ -19,11 +22,11 @@ class CDFTable extends Component {
                     </tr>
                 </thead>
                 <tbody>
-                    {outputStore.getCDFValues.map((value, i) => {
+                    {_.range(data[0].length).map(i => {
                         return (
                             <tr key={i}>
-                                <td>{value.pValue}</td>
-                                <td>{value.cdf}</td>
+                                <td>{data[1][i]}</td>
+                                <td>{data[0][i]}</td>
                             </tr>
                         );
                     })}
@@ -33,8 +36,7 @@ class CDFTable extends Component {
     }
 }
 CDFTable.propTypes = {
-    cdfValues: PropTypes.array,
-    outputStore: PropTypes.object,
+    store: PropTypes.object,
 };
 
 export default CDFTable;

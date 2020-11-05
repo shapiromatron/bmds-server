@@ -1,6 +1,8 @@
 Development
 ===========
 
+TODO - update
+
 Make sure you have the following applications installed locally:
 
 - `Git`_
@@ -28,6 +30,7 @@ Clone the repository and install all requirements into a virtual environment:
     # clone repository; we'll put in ~/dev but you can put anywhere
     mkdir -p ~/dev
     cd ~/dev
+    git clone https://github.com/shapiromatron/bmds
     git clone https://github.com/shapiromatron/bmds-server.git
 
     # create virtual environment and install requirements
@@ -40,9 +43,13 @@ Clone the repository and install all requirements into a virtual environment:
     # install requirements
     ./venv/bin/pip install -r ./requirements/dev.txt
 
-    # for linux/mac running bmds==0.11.0 or lower
-    echo "export \"BMDS_REQUEST_URL=http://bmds-python.com/api/dfile/\"" >> venv/bin/activate
-    echo "export \"BMDS_TOKEN=abcdefghijklmnopqrstuvwxyz1234567890\"" >> venv/bin/activate
+    # install package in developer mode and developer tools
+    pip install -e ../bmds
+    pip install -r requirements/dev.txt
+
+    # create the database
+    createuser --superuser --no-password bmds-online
+    createdb -E UTF-8 -U bmds-online bmds-online
 
 Running the application
 ~~~~~~~~~~~~~~~~~~~~~~~

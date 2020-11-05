@@ -1,6 +1,6 @@
 import {observable, action, computed} from "mobx";
 import _ from "lodash";
-import modelType from "../constants/mainConstants";
+import {modelTypes} from "../constants/mainConstants";
 
 class MainStore {
     constructor(rootStore) {
@@ -12,16 +12,12 @@ class MainStore {
 
     @observable analysis_name = "";
     @observable analysis_description = "";
-    @observable dataset_type = "C";
+    @observable dataset_type = modelTypes[0].value;
     @observable errorMessage = "";
-    @observable errorModal = false;
     @observable hasEditSettings = false;
     @observable executionOutputs = null;
     @observable isUpdateComplete = false;
 
-    @action hideModal() {
-        this.errorModal = !this.errorModal;
-    }
     @action setConfig = config => {
         this.config = config;
     };
@@ -50,13 +46,13 @@ class MainStore {
     @computed get getLogic() {
         return this.rootStore.logicStore.getLogic;
     }
-
     @computed get getPayload() {
+        const editKey = this.config.editSettings ? this.config.editSettings.editKey : null;
         return {
-            editKey: this.config.editSettings.editKey,
+            editKey,
             partial: true,
             data: {
-                bmds_version: "BMDS312",
+                bmds_version: "BMDS330",
                 analysis_name: this.analysis_name,
                 analysis_description: this.analysis_description,
                 dataset_type: this.dataset_type,
@@ -71,6 +67,7 @@ class MainStore {
     @action
     async saveAnalysis() {
         const url = this.config.editSettings.patchInputUrl;
+        this.errorMessage = "";
         await fetch(url, {
             method: "PATCH",
             mode: "cors",
@@ -83,18 +80,17 @@ class MainStore {
                 if (response.ok) {
                     response.json().then(data => this.updateModelStateFromApi(data));
                 } else {
-                    this.errorModal = !this.errorModal;
                     response.json().then(data => (this.errorMessage = data));
                 }
             })
             .catch(error => {
-                this.errorModal = !this.errorModal;
                 this.errorMessage = error;
             });
     }
 
     @observable isReadyToExecute = false;
     @observable isExecuting = false;
+
     @action
     async executeAnalysis() {
         if (!this.isReadyToExecute) {
@@ -106,6 +102,7 @@ class MainStore {
             return;
         }
         this.isExecuting = true;
+        this.errorMessage = "";
         await fetch(this.config.editSettings.executeUrl, {
             method: "POST",
             mode: "cors",
@@ -122,13 +119,14 @@ class MainStore {
                 this.updateModelStateFromApi(data);
             })
             .catch(error => {
+                this.errorMessage = error;
                 console.error("error", error);
             });
     }
-
     @action
     async fetchSavedAnalysis() {
         const apiUrl = this.config.apiUrl;
+        this.errorMessage = "";
         await fetch(apiUrl, {
             method: "GET",
             mode: "cors",
@@ -136,13 +134,13 @@ class MainStore {
             .then(response => response.json())
             .then(data => this.updateModelStateFromApi(data))
             .catch(error => {
+                this.errorMessage = error;
                 console.error("error", error);
             });
     }
     @action.bound
     updateModelStateFromApi(data) {
         if (data.errors.length > 2) {
-            this.errorModal = !this.errorModal;
             this.errorMessage = data.errors;
             this.isUpdateComplete = true;
         }
@@ -168,7 +166,6 @@ class MainStore {
         this.rootStore.logicStore.setLogic(inputs);
         this.isUpdateComplete = true;
     }
-
     @action.bound loadAnalysis(file) {
         let reader = new FileReader();
         reader.readAsText(file);
@@ -178,7 +175,6 @@ class MainStore {
             this.hydrateOutputs(settings);
         };
     }
-
     @action hydrateInputs(settings) {
         this.rootStore.dataStore.setDatasets(settings.inputs.datasets);
         this.rootStore.optionsStore.setOptions(settings.inputs.options);
@@ -198,20 +194,17 @@ class MainStore {
         }
         return editSettings;
     }
-
     @computed get getExecutionOutputs() {
         return this.executionOutputs;
     }
-
     @computed get getDatasets() {
         return this.rootStore.dataStore.getDatasets;
     }
     @computed get getDatasetLength() {
         return this.rootStore.dataStore.getDataLength;
     }
-
     @computed get getDatasetTypeName() {
-        return modelType.find(item => item.value == this.dataset_type);
+        return modelTypes.find(item => item.value == this.dataset_type);
     }
 }
 

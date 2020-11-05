@@ -16,8 +16,8 @@ class Data extends Component {
         const {dataStore} = this.props;
         return (
             <div className="container-fluid">
-                <div className="row justify-content-sm-around">
-                    <div className="col-xs-12 col-sm-12 col-md-2">
+                <div className="row">
+                    <div className="col-lg-3">
                         {dataStore.getEditSettings ? <SelecModelType /> : null}
                         {dataStore.getDataLength ? (
                             <div>
@@ -26,7 +26,7 @@ class Data extends Component {
                             </div>
                         ) : null}
                     </div>
-                    <div className="col-xs-12 col-sm-12 col-md-4">
+                    <div className="col-lg-5 p-2">
                         {dataStore.getDataLength ? (
                             <div>
                                 {dataStore.getEditSettings ? (
@@ -37,7 +37,7 @@ class Data extends Component {
                             </div>
                         ) : null}
                     </div>
-                    <div className="col-xs-12 col-sm-12 col-md-4">
+                    <div className="col-lg-4">
                         {dataStore.getDataLength ? <ScatterPlot /> : null}
                     </div>
                 </div>

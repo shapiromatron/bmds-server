@@ -9,16 +9,19 @@ class OutputStore {
     }
 
     @observable modelDetailModal = false;
-    @observable selectedModel = {};
+    @observable selectedModel = null;
     @observable selectedDatasetIndex = "";
     @observable plotData = [];
     @observable showBMDLine = false;
 
+    @action setSelectedModel(model) {
+        this.selectedModel = model;
+    }
     @action setCurrentDatasetIndex(dataset_id) {
         this.selectedDatasetIndex = dataset_id;
     }
     @action toggleModelDetailModal(model) {
-        this.selectedModel = model;
+        this.setSelectedModel(model);
         this.modelDetailModal = !this.modelDetailModal;
     }
 
@@ -31,9 +34,6 @@ class OutputStore {
             );
         }
         return current_output;
-    }
-    @computed get getModelType() {
-        return this.getCurrentOutput.dataset.model_type;
     }
 
     @computed get getLabels() {
@@ -92,39 +92,6 @@ class OutputStore {
         return modelData;
     }
 
-    @computed get getBenchmarkDose() {
-        let benchmarkDose = _.cloneDeep(constant.benchmarkDose);
-        benchmarkDose.bmd.value = this.selectedModel.results.bmd;
-        benchmarkDose.bmdl.value = this.selectedModel.results.bmdl;
-        benchmarkDose.bmdu.value = this.selectedModel.results.bmdu;
-        benchmarkDose.aic.value = this.selectedModel.results.aic;
-        benchmarkDose.p_value.value = this.selectedModel.results.gof.p_value;
-        benchmarkDose.df.value = this.selectedModel.results.gof.df;
-        if (this.getCurrentOutput.dataset.model_type === model_type.Dichotomous) {
-            benchmarkDose["chi_square"] = {
-                label: "Chi Square",
-                value: this.selectedModel.results.gof.chi_square,
-            };
-        }
-        return benchmarkDose;
-    }
-
-    @computed get getParameters() {
-        let parameters = _.zipWith(
-            constant.parameters[this.selectedModel.model_name],
-            this.selectedModel.results.parameters,
-            (p_variable, parameter) => ({p_variable, parameter})
-        );
-
-        return parameters;
-    }
-    @computed get getCDFValues() {
-        let cdf = this.selectedModel.results.cdf;
-        let pValue = this.getPValue;
-        let cdfValues = _.zipWith(pValue, cdf, (pValue, cdf) => ({pValue, cdf}));
-        return cdfValues;
-    }
-
     @computed get getLoglikelihoods() {
         return this.selectedModel.results.loglikelihoods;
     }
@@ -140,18 +107,6 @@ class OutputStore {
             return Number(each_element.toFixed(2));
         });
         return pValue;
-    }
-    @computed get getGoodnessFitHeaders() {
-        return constant.goodnessFitHeaders[this.getCurrentOutput.dataset.model_type];
-    }
-    @computed get getGoodnessFit() {
-        let goodnessFit = [];
-        if (this.getCurrentOutput.dataset.model_type === model_type.Continuous_Summarized) {
-            goodnessFit = this.selectedModel.results.gof;
-        } else if (this.this.getCurrentOutput.dataset.model_type === model_type.di) {
-            goodnessFit = this.selectedModel.results.gof.rows;
-        }
-        return goodnessFit;
     }
 
     @observable scatterPlotData = [];
@@ -179,20 +134,6 @@ class OutputStore {
         return layout;
     }
 
-    @computed get getCDFLayout() {
-        return constant.cdf_layout;
-    }
-    @computed get getCDFPlot() {
-        var trace1 = {
-            x: this.getPValue,
-            y: this.selectedModel.results.cdf,
-            mode: "markers",
-            type: "scatter",
-            name: "CDF",
-        };
-        let cdfPlot = [trace1];
-        return cdfPlot;
-    }
     @action setPlotData() {
         this.plotData = [];
         var trace1 = {
@@ -206,20 +147,15 @@ class OutputStore {
     }
 
     @action addBMDLine(model) {
-        let param_variables = constant.parameters[model.model_name];
-        let parameters = model.results.parameters;
-        let param = parameters.reduce(function(result, field, index) {
-            result[param_variables[index]] = field;
-            return result;
-        }, {});
-        let response = constant.generateLine[model.model_name](this.getDoseArray, param);
-        let bmdLine = {
-            x: this.getDoseArray,
-            y: response,
-            mode: "markers+line",
-            type: "line",
-            name: model.model_name,
-        };
+        const ys = constant.generateLine[model.model_name](this.doseArray, this.selectedParams),
+            bmdLine = {
+                x: this.doseArray,
+                y: ys,
+                mode: "markers+line",
+                type: "line",
+                name: model.model_name,
+            };
+
         this.plotData.push(bmdLine);
     }
 
@@ -229,7 +165,14 @@ class OutputStore {
         }
     }
 
-    @computed get getDoseArray() {
+    @computed get selectedParams() {
+        let names = constant.parameters[this.selectedModel.results.model_class],
+            values = this.selectedModel.results.fit.params.toJS();
+
+        return _.zipObject(names, values);
+    }
+
+    @computed get doseArray() {
         let maxDose = _.max(this.getCurrentOutput.dataset.doses);
         let minDose = _.min(this.getCurrentOutput.dataset.doses);
         let number_of_values = 100;

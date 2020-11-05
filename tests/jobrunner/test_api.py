@@ -35,7 +35,7 @@ class TestPatchInputs:
 
         payload = {
             "editKey": job.password,
-            "data": {"bmds_version": "BMDS312", "dataset_type": "C"},
+            "data": {"bmds_version": "BMDS330", "dataset_type": "C"},
         }
         response = client.patch(url, payload, format="json",)
         assert response.status_code == 400
@@ -43,7 +43,7 @@ class TestPatchInputs:
 
         payload = {
             "editKey": job.password,
-            "data": {"bmds_version": "BMDS312", "dataset_type": "C"},
+            "data": {"bmds_version": "BMDS330", "dataset_type": "C"},
             "partial": True,
         }
         response = client.patch(url, payload, format="json",)
@@ -51,7 +51,7 @@ class TestPatchInputs:
         assert response.json()["inputs"] == payload["data"]
 
         payload["data"] = {
-            "bmds_version": "BMDS312",
+            "bmds_version": "BMDS330",
             "dataset_type": "C",
             "models": {"frequentist_restricted": ["ZZZ"]},
         }
@@ -62,7 +62,7 @@ class TestPatchInputs:
         ]
 
         payload["data"] = {
-            "bmds_version": "BMDS312",
+            "bmds_version": "BMDS330",
             "dataset_type": "C",
             "models": {"frequentist_restricted": ["Power"]},
         }

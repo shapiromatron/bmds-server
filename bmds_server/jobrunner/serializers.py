@@ -8,7 +8,6 @@ class JobSerializer(serializers.ModelSerializer):
     is_finished = serializers.BooleanField(read_only=True)
     has_errors = serializers.BooleanField(read_only=True)
     inputs_valid = serializers.BooleanField(read_only=True)
-    outputs = serializers.DictField(source="get_outputs_json", read_only=True)
     api_url = serializers.URLField(source="get_api_url", read_only=True)
     input_url = serializers.URLField(source="get_input_url", read_only=True)
     output_url = serializers.URLField(source="get_output_url", read_only=True)

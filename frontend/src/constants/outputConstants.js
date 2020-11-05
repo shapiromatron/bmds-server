@@ -54,12 +54,12 @@ const generateLine = {
             return 1 / [1 + Math.exp(-param.a - param.b * dose)];
         });
     },
-    "Log-Logistic": (doses, param) => {
+    LogLogistic: (doses, param) => {
         return doses.map(dose => {
             return param.g + (1 - param.g) / [1 + Math.exp(-param.a - param.b * Math.Log(dose))];
         });
     },
-    "Log-Probit": (doses, param) => {
+    LogProbit: (doses, param) => {
         return doses.map(dose => {
             return param.g + (1 - param.g) * Math.sqrt(param.a + param.b * Math.Log(dose));
         });
@@ -104,8 +104,8 @@ const parameters = {
     "Dichotomous-Hill": ["g", "v", "a", "b"],
     Gamma: ["g", "a", "b"],
     Logistic: ["a", "b"],
-    "Log-Logistic": ["g", "a", "b"],
-    "Log-Probit": ["g", "a", "b"],
+    LogLogistic: ["g", "a", "b"],
+    LogProbit: ["g", "a", "b"],
     Multistage: ["g", "b1", "b2"],
     Probit: ["a", "b"],
     Quantal_Linear: ["g", "b"],
@@ -121,8 +121,8 @@ const dose_response_model = {
     "Dichotomous-Hill": "P[dose] = g +(v-v*g)/[1+exp(-a-b*Log(dose))]",
     Gamma: "P[dose]= g+(1-g)*CumGamma[b*dose,a]",
     Logistic: "P[dose] = 1/[1+exp(-a-b*dose)]",
-    "Log-Logistic": "P[dose] = g+(1-g)/[1+exp(-a-b*Log(dose))]",
-    "Log-Probit": "P[dose] = g+(1-g) * CumNorm(a+b*Log(Dose))",
+    LogLogistic: "P[dose] = g+(1-g)/[1+exp(-a-b*Log(dose))]",
+    LogProbit: "P[dose] = g+(1-g) * CumNorm(a+b*Log(Dose))",
     Multistage: "P[dose] = g + (1-g)*[1-exp(-b1*dose^1-b2*dose^2 - ...)",
     Probit: "P[dose] = CumNorm(a+b*Dose)",
     Quantal_Linear: "P[dose] = g + (1-g)*[1-exp(-b*dose)]",

@@ -25,11 +25,11 @@ class Output extends Component {
                     <div>
                         {!("error" in outputStore.getCurrentOutput) ? (
                             <div>
-                                <div className="row justify-content-lg-around">
-                                    <div className="col-xs-12 col-md-2">
+                                <div className="row">
+                                    <div className="col">
                                         <DatasetNames />
                                     </div>
-                                    <div className="col-xs-12 col-md-auto">
+                                    <div className="col px-3">
                                         <InputFormReadOnly />
                                         <Results
                                             onMouseOver={onMouseOver.bind(this)}
@@ -38,7 +38,7 @@ class Output extends Component {
                                             onClick={showModal.bind(this)}
                                         />
                                     </div>
-                                    <div className="col-xs-12 col-md-4">
+                                    <div className="col">
                                         <ResponsePlot />
                                     </div>
                                 </div>

@@ -18,13 +18,12 @@ const Results = props => {
                     return (
                         <tr
                             key={idx}
-                            className="result-row"
                             onMouseOver={e => props.onMouseOver(e, model)}
                             onMouseOut={e => props.onMouseOut(e)}>
                             <td className="button">
                                 <button
                                     onClick={e => props.onClick(e, model)}
-                                    className="btn btn-primary btn-sm">
+                                    className="btn btn-sm btn-link">
                                     {model.model_name}{" "}
                                 </button>
                             </td>

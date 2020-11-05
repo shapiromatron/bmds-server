@@ -206,20 +206,18 @@ class OutputStore {
     }
 
     @action addBMDLine(model) {
-        let param_variables = constant.parameters[model.model_name];
-        let parameters = model.results.parameters;
-        let param = parameters.reduce(function(result, field, index) {
-            result[param_variables[index]] = field;
-            return result;
-        }, {});
-        let response = constant.generateLine[model.model_name](this.getDoseArray, param);
-        let bmdLine = {
-            x: this.getDoseArray,
-            y: response,
-            mode: "markers+line",
-            type: "line",
-            name: model.model_name,
-        };
+        let names = constant.parameters[model.results.model_class],
+            values = model.results.fit.params.toJS(),
+            params = _.zipObject(names, values),
+            response = constant.generateLine[model.model_name](this.doseArray, params),
+            bmdLine = {
+                x: this.doseArray,
+                y: response,
+                mode: "markers+line",
+                type: "line",
+                name: model.model_name,
+            };
+
         this.plotData.push(bmdLine);
     }
 
@@ -229,7 +227,7 @@ class OutputStore {
         }
     }
 
-    @computed get getDoseArray() {
+    @computed get doseArray() {
         let maxDose = _.max(this.getCurrentOutput.dataset.doses);
         let minDose = _.min(this.getCurrentOutput.dataset.doses);
         let number_of_values = 100;

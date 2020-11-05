@@ -1,18 +1,18 @@
 from typing import Dict
 
-from bmds.bmds3.types.continuous import BMRType_t, ContinuousModelSettings
+from bmds.bmds3.types.continuous import ContinuousModelSettings, ContinuousRiskType
 from bmds.bmds3.types.dichotomous import DichotomousModelSettings, DichotomousRiskType
 
 bmds3_d_bmr_type_map = {
-    "Extra": DichotomousRiskType.eExtraRisk,
+    "Extra": DichotomousRiskType.eAddedRisk,
     "Added": DichotomousRiskType.eAddedRisk,
 }
 bmds3_c_bmr_type_map = {
-    "Abs. Dev.": BMRType_t.eAbsoluteDev,
-    "Std. Dev.": BMRType_t.eStandardDev,
-    "Rel. Dev.": BMRType_t.eRelativeDev,
-    "Point": BMRType_t.ePointEstimate,
-    "Extra": BMRType_t.eExtra,  # TODO - check is this the right one?
+    "Abs. Dev.": ContinuousRiskType.eAbsoluteDev,
+    "Std. Dev.": ContinuousRiskType.eStandardDev,
+    "Rel. Dev.": ContinuousRiskType.eRelativeDev,
+    "Point": ContinuousRiskType.ePointEstimate,
+    "Extra": ContinuousRiskType.eExtra,  # TODO - check is this the right one?
 }
 
 

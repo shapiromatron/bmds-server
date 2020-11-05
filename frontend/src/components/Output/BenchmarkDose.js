@@ -43,10 +43,7 @@ class BenchmarkDose extends Component {
 }
 
 BenchmarkDose.propTypes = {
-    outputStore: PropTypes.object,
-    getBenchmarkDose: PropTypes.func,
-    label: PropTypes.string,
-    value: PropTypes.number,
+    store: PropTypes.object,
 };
 
 export default BenchmarkDose;

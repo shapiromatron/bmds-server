@@ -12,7 +12,7 @@ class MainStore {
 
     @observable analysis_name = "";
     @observable analysis_description = "";
-    @observable dataset_type = "C";
+    @observable dataset_type = modelTypes[0].value;
     @observable errorMessage = "";
     @observable hasEditSettings = false;
     @observable executionOutputs = null;

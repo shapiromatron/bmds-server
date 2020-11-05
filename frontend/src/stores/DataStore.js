@@ -16,7 +16,7 @@ class DataStore {
         this.rootStore = rootStore;
     }
 
-    @observable model_type = "CS";
+    @observable model_type = "DM";
     @observable datasets = [];
     @observable selectedDatasetIndex = "";
     @observable selectedFile = {};
@@ -219,11 +219,9 @@ class DataStore {
     }
 
     @computed get getEnabledDatasets() {
-        let enabledDatasets = this.datasets.filter(item => item.enabled == true);
-        let datasetofModelType = enabledDatasets.filter(item =>
-            item.model_type.includes(this.getDatasetType)
+        return this.datasets.filter(
+            item => item.enabled == true && item.model_type.includes(this.getDatasetType)
         );
-        return datasetofModelType;
     }
 
     @computed get getDatasetNamesHeader() {

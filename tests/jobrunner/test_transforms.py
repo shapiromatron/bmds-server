@@ -17,7 +17,7 @@ class TestOptions:
     #         "background": "Estimated",
     #     }
     #     res = transforms.bmds3_c_model_options(options)
-    #     assert res.bmr_type is types.BMRType_t.eStandardDev  # noqa: E721
+    #     assert res.bmr_type is ContinuousRiskType.eStandardDev  # noqa: E721
     #     assert pytest.approx(res.bmr, 1.5)
     #     assert pytest.approx(res.alpha, 0.6)
     #     assert pytest.approx(res.tailProb, 0.4)

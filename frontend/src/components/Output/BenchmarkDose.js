@@ -1,12 +1,13 @@
 import React, {Component} from "react";
-import {inject, observer} from "mobx-react";
+import {observer} from "mobx-react";
 import PropTypes from "prop-types";
 
-@inject("outputStore")
 @observer
 class BenchmarkDose extends Component {
     render() {
-        const {outputStore} = this.props;
+        const {store} = this.props,
+            results = store.selectedModel.results;
+
         return (
             <table className="table table-bordered table-sm">
                 <thead>
@@ -15,14 +16,26 @@ class BenchmarkDose extends Component {
                     </tr>
                 </thead>
                 <tbody>
-                    {Object.keys(outputStore.getBenchmarkDose).map((dev, i) => {
-                        return (
-                            <tr key={i}>
-                                <td>{outputStore.getBenchmarkDose[dev].label}</td>
-                                <td>{outputStore.getBenchmarkDose[dev].value}</td>
-                            </tr>
-                        );
-                    })}
+                    <tr>
+                        <td>BMD</td>
+                        <td>{results.bmd}</td>
+                    </tr>
+                    <tr>
+                        <td>BMDL</td>
+                        <td>{results.bmdl}</td>
+                    </tr>
+                    <tr>
+                        <td>BMDU</td>
+                        <td>{results.bmdu}</td>
+                    </tr>
+                    <tr>
+                        <td>AIC</td>
+                        <td>{results.aic}</td>
+                    </tr>
+                    <tr>
+                        <td>P Value</td>
+                        <td>{results.gof.p_value}</td>
+                    </tr>
                 </tbody>
             </table>
         );

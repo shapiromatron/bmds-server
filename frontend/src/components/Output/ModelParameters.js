@@ -1,12 +1,12 @@
+import _ from "lodash";
 import React, {Component} from "react";
-import {inject, observer} from "mobx-react";
+import {observer} from "mobx-react";
 import PropTypes from "prop-types";
 
-@inject("outputStore")
 @observer
 class ModelParameters extends Component {
     render() {
-        const {outputStore} = this.props;
+        const {store} = this.props;
         return (
             <table className="table table-bordered table-sm">
                 <thead>
@@ -19,11 +19,11 @@ class ModelParameters extends Component {
                     </tr>
                 </thead>
                 <tbody>
-                    {outputStore.getParameters.map((value, i) => {
+                    {_.map(store.selectedParams, (value, key) => {
                         return (
-                            <tr key={i}>
-                                <td>{value.p_variable}</td>
-                                <td>{value.parameter}</td>
+                            <tr key={key}>
+                                <td>{key}</td>
+                                <td>{value}</td>
                             </tr>
                         );
                     })}
@@ -33,7 +33,6 @@ class ModelParameters extends Component {
     }
 }
 ModelParameters.propTypes = {
-    outputStore: PropTypes.object,
-    getParameters: PropTypes.func,
+    store: PropTypes.object,
 };
 export default ModelParameters;

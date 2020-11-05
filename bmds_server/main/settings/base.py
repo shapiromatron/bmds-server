@@ -66,17 +66,7 @@ TEMPLATES = [
 WSGI_APPLICATION = "bmds_server.main.wsgi.application"
 SECRET_KEY = "io^^q^q1))7*r0u@6i+6kx&ek!yxyf6^5vix_6io6k4kdn@@5t"
 
-DATABASES = {
-    "default": dict(
-        ENGINE="django.db.backends.postgresql",
-        NAME="bmds-online",
-        USER="bmds-online",
-        PASSWORD="",
-        HOST="localhost",
-        PORT="5432",
-    )
-}
-
+DATABASES = {"default": {"ENGINE": "django.db.backends.sqlite3", "NAME": ROOT_DIR / "db.sqlite3"}}
 LOGIN_URL = "admin:login"
 
 # add randomness to url prefix to prevent easy access

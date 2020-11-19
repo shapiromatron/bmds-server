@@ -31,6 +31,9 @@ class Main extends Component {
                                 <div className="modelsCheckbox">
                                     <ModelsCheckBoxList />
                                 </div>
+                                <div className="optionslist">
+                                    <OptionsFormList />
+                                </div>
                             </div>
                         </div>
                         <div className="row second-row">
@@ -40,9 +43,7 @@ class Main extends Component {
                                 </div>
                             </div>
                             <div className="col-lg-8">
-                                <div className="optionslist">
-                                    <OptionsFormList />
-                                </div>
+                                
                             </div>
                         </div>
                         <div

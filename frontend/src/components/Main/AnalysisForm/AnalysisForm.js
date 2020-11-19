@@ -60,7 +60,8 @@ class AnalysisForm extends Component {
                     <button
                         type="button"
                         className="btn btn-primary btn-sm mr-1"
-                        onClick={() => mainStore.saveAnalysis()}>
+                        onClick={() => mainStore.saveAnalysis()}
+                        disabled={!mainStore.isValid}>
                         Save Analysis
                     </button>
                     <button
@@ -75,6 +76,14 @@ class AnalysisForm extends Component {
                 {mainStore.errorMessage ? (
                     <div className="alert alert-danger">{mainStore.errorMessage}</div>
                 ) : null}
+
+                <div>
+                    <p>Steps Required: </p>
+                    <p style={{float:"left"}}>1. Select a Model</p>{mainStore.isModelSelected?<p>&#9989;</p>:<p>&#10060;</p>}
+                    <p style={{float:"left"}}>1. Select a Dataset</p>{mainStore.isDatasetSelected?<p>&#9989;</p>:<p>&#10060;</p>}
+                    <p style={{float:"left"}}>1. Select a Option set</p>{mainStore.isOptionSelected?<p>&#9989;</p>:<p>&#10060;</p>}
+                </div>
+
             </form>
         );
     }

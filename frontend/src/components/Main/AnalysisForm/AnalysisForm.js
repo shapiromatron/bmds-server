@@ -79,11 +79,13 @@ class AnalysisForm extends Component {
 
                 <div>
                     <p>Steps Required: </p>
-                    <p style={{float:"left"}}>1. Select a Model</p>{mainStore.isModelSelected?<p>&#9989;</p>:<p>&#10060;</p>}
-                    <p style={{float:"left"}}>1. Select a Dataset</p>{mainStore.isDatasetSelected?<p>&#9989;</p>:<p>&#10060;</p>}
-                    <p style={{float:"left"}}>1. Select a Option set</p>{mainStore.isOptionSelected?<p>&#9989;</p>:<p>&#10060;</p>}
+                    <p style={{float: "left"}}>1. Select a Model</p>
+                    {mainStore.isModelSelected ? <p>&#9989;</p> : <p>&#10060;</p>}
+                    <p style={{float: "left"}}>1. Select a Dataset</p>
+                    {mainStore.isDatasetSelected ? <p>&#9989;</p> : <p>&#10060;</p>}
+                    <p style={{float: "left"}}>1. Select a Option set</p>
+                    {mainStore.isOptionSelected ? <p>&#9989;</p> : <p>&#10060;</p>}
                 </div>
-
             </form>
         );
     }

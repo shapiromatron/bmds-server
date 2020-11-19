@@ -42,9 +42,6 @@ class Main extends Component {
                                     {mainStore.getDatasetLength ? <DatasetList /> : null}
                                 </div>
                             </div>
-                            <div className="col-lg-8">
-                                
-                            </div>
                         </div>
                         <div
                             name="payload"

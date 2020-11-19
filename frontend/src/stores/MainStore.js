@@ -207,29 +207,29 @@ class MainStore {
         return modelTypes.find(item => item.value == this.dataset_type);
     }
 
-    @computed get isModelSelected(){
-        if(!_.isEmpty(this.getEnabledModels)){
+    @computed get isModelSelected() {
+        if (!_.isEmpty(this.getEnabledModels)) {
             return true;
         }
         return false;
     }
 
-    @computed get isDatasetSelected(){
-        if(!_.isEmpty(this.getEnabledDatasets)){
+    @computed get isDatasetSelected() {
+        if (!_.isEmpty(this.getEnabledDatasets)) {
             return true;
         }
         return false;
     }
 
-    @computed get isOptionSelected(){
-        if(!_.isEmpty(this.getOptions)){
+    @computed get isOptionSelected() {
+        if (!_.isEmpty(this.getOptions)) {
             return true;
         }
         return false;
     }
 
-    @computed get isValid(){
-        if(this.isDatasetSelected && this.isModelSelected && this.isOptionSelected){
+    @computed get isValid() {
+        if (this.isDatasetSelected && this.isModelSelected && this.isOptionSelected) {
             return true;
         }
         return false;

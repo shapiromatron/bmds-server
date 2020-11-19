@@ -9,20 +9,23 @@ class DatasetNames extends Component {
         const {dataStore} = this.props;
         return (
             <div className="nav flex-column nav-pills nav-stacked mb-2 w-75 col-sm">
-                {this.props.dataStore.datasets.map((dataset,index)=>{
-                    return(
+                {this.props.dataStore.datasets.map((dataset, index) => {
+                    return (
                         <a
-                        key={index}
-                        className={dataset.dataset_id=== dataStore.selectedDatasetIndex ? "nav-link active":"nav-link"}
-                        data-toggle="pill"
-                        href="#"
-                        role="tab"
-                        aria-selected="true"
-                        onClick={()=> dataStore.setCurrentDatasetIndex(dataset.dataset_id)}>
-                        {dataset.dataset_name}
+                            key={index}
+                            className={
+                                dataset.dataset_id === dataStore.selectedDatasetIndex
+                                    ? "nav-link active"
+                                    : "nav-link"
+                            }
+                            data-toggle="pill"
+                            href="#"
+                            role="tab"
+                            aria-selected="true"
+                            onClick={() => dataStore.setCurrentDatasetIndex(dataset.dataset_id)}>
+                            {dataset.dataset_name}
                         </a>
-
-                    )
+                    );
                 })}
             </div>
         );

@@ -21,11 +21,14 @@ class Main extends Component {
                     <div>
                         <div className="row">
                             <div className="col-lg-4 analysis">
-                                {mainStore.getEditSettings ? (
-                                    <AnalysisForm />
-                                ) : (
-                                    <AnalysisFormReadOnly />
-                                )}
+                                <div className="mb-2">
+                                    {mainStore.getEditSettings ? (
+                                        <AnalysisForm />
+                                    ) : (
+                                        <AnalysisFormReadOnly />
+                                    )}
+                                </div>
+                                <div>{mainStore.getDatasetLength ? <DatasetList /> : null}</div>
                             </div>
                             <div className="col-lg-8">
                                 <div className="modelsCheckbox">
@@ -33,13 +36,6 @@ class Main extends Component {
                                 </div>
                                 <div className="optionslist">
                                     <OptionsFormList />
-                                </div>
-                            </div>
-                        </div>
-                        <div className="row second-row">
-                            <div className="col-lg-4">
-                                <div className="datasetlist">
-                                    {mainStore.getDatasetLength ? <DatasetList /> : null}
                                 </div>
                             </div>
                         </div>

@@ -41,6 +41,13 @@ class OptionsStore {
     @computed get getDatasetType() {
         return this.rootStore.mainStore.dataset_type;
     }
+
+    @computed get checkOptionsLength() {
+        if (this.optionsList.length > 2) {
+            return true;
+        }
+        return false;
+    }
 }
 
 export default OptionsStore;

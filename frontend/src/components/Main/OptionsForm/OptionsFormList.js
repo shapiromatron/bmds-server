@@ -29,7 +29,7 @@ class OptionsFormList extends Component {
                                                 data-placement="right"
                                                 title="Add New Option Set"
                                                 className="btn btn-primary "
-                                                disabled={optionsStore.canAddNewOption}
+                                                disabled={!optionsStore.canAddNewOption}
                                                 onClick={() => optionsStore.addOptions()}>
                                                 <i className="fa fa-plus"></i>{" "}
                                             </button>

@@ -42,11 +42,8 @@ class OptionsStore {
         return this.rootStore.mainStore.dataset_type;
     }
 
-    @computed get checkOptionsLength() {
-        if (this.optionsList.length > 2) {
-            return true;
-        }
-        return false;
+    @computed get canAddNewOption() {
+        return this.optionsList.length > 2;
     }
 }
 

@@ -10,10 +10,10 @@ RUN apt-get update -y && \
     apt-get install -y libgslcblas0 libgsl-dev
 
 COPY ./compose/app/entrypoint.sh /app/bin/entrypoint.sh
+COPY ./compose/app/sync.sh /app/bin/sync.sh
 COPY ./compose/app/gunicorn.sh /app/bin/gunicorn.sh
 COPY ./compose/app/celery.sh /app/bin/celery.sh
 COPY ./compose/app/celerybeat.sh /app/bin/celerybeat.sh
-COPY ./compose/app/supervisord.conf /app/bin/supervisord.conf
 
 # 1) install start-scripts
 # 2) install fonts

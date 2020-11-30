@@ -57,7 +57,7 @@ const headers = {
     };
 const bmr_type = [
     {value: "Std. Dev.", name: "Std. Dev."},
-    {value: "Rel. Dev.", name: "Rel. Dev."},
+    {value: "Rel. Dev.", name: "Re. Dev."},
     {value: "Abs. Dev.", name: "Abs. Dev."},
     {value: "Point", name: "Point"},
     {value: "Hybrid", name: "Hybrid-Extra Risk"},

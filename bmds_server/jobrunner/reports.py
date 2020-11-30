@@ -221,9 +221,9 @@ class Reports:
 
                     for k in range(len(deviance_list)):
                         row_cells = table.add_row().cells
-                        for l in range(len(deviance_list[k].keys())):
-                            row_cells[l].text = str(
-                                deviance_list[k][list(deviance_list[k].keys())[l]]
+                        for col in range(len(deviance_list[k].keys())):
+                            row_cells[col].text = str(
+                                deviance_list[k][list(deviance_list[k].keys())[col]]
                             )
 
                 cdf_values = outputs[i]["models"][j]["results"]["cdf"]

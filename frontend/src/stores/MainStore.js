@@ -206,6 +206,26 @@ class MainStore {
     @computed get getDatasetTypeName() {
         return modelTypes.find(item => item.value == this.dataset_type);
     }
+
+    @computed get hasAtLeastOneModelSelected() {
+        return !_.isEmpty(this.getEnabledModels);
+    }
+
+    @computed get hasAtLeastOneDatasetSelected() {
+        return !_.isEmpty(this.getEnabledDatasets);
+    }
+
+    @computed get hasAtLeastOneOptionSelected() {
+        return !_.isEmpty(this.getOptions);
+    }
+
+    @computed get isValid() {
+        return (
+            this.hasAtLeastOneModelSelected &&
+            this.hasAtLeastOneDatasetSelected &&
+            this.hasAtLeastOneOptionSelected
+        );
+    }
 }
 
 export default MainStore;

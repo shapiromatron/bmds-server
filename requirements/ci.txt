@@ -1,4 +1,4 @@
 -r dev.txt
 
-# grab latest from `latest` branch in bmds repo
-git+https://github.com/shapiromatron/bmds.git@latest#egg=bmds
+# grab from `next` branch in bmds repo
+git+https://github.com/shapiromatron/bmds.git@next#egg=bmds

@@ -3,11 +3,22 @@ import json
 from django.conf import settings
 from django.contrib import messages
 from django.core.exceptions import ValidationError
+from django.http.response import JsonResponse
 from django.shortcuts import get_object_or_404
 from django.urls import reverse
-from django.views.generic import CreateView, DetailView, RedirectView
+from django.views.generic import CreateView, DetailView, RedirectView, View
 
 from . import forms, models
+
+
+class Healthcheck(View):
+    """
+    Healthcheck view check; ensure django server can serve requests.
+    """
+
+    def get(self, request, *args, **kwargs):
+        # TODO - add cache check and celery worker check
+        return JsonResponse({"status": "ok"})
 
 
 class Home(CreateView):

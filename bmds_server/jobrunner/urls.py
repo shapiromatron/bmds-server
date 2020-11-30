@@ -8,7 +8,8 @@ from . import api, views
 
 router = DefaultRouter()
 router.register("job", api.JobViewset, basename="job")
-router.register("dfile", api.DfileExecutorViewset, basename="dfile")
+
+admin_url = f"{settings.ADMIN_URL_PREFIX}/admin/" if not settings.DEBUG else "admin/"
 
 urlpatterns = [
     path("api/v1/", include((router.urls, "jobrunner"), namespace="api")),
@@ -16,5 +17,6 @@ urlpatterns = [
     path("job/q/", views.JobQuery.as_view(), name="job_query"),
     path("job/<uuid:pk>/", views.JobDetail.as_view(), name="job"),
     path("job/<uuid:pk>/<str:password>/", views.JobDetail.as_view(), name="job_edit"),
-    path(f"{settings.ADMIN_URL_PREFIX}/admin/", admin.site.urls),
+    path(f"{admin_url}healthcheck/", views.Healthcheck.as_view(), name="healthcheck",),
+    path(admin_url, admin.site.urls),
 ]

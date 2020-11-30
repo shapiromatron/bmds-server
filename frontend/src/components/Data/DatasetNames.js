@@ -8,30 +8,26 @@ class DatasetNames extends Component {
     render() {
         const {dataStore} = this.props;
         return (
-            <table className="table table-bordered table-hover table-sm">
-                <thead>
-                    <tr className="table-primary">
-                        <th colSpan="2">Datasets</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {this.props.dataStore.datasets.map((item, index) => {
-                        return (
-                            <tr key={index} className="currentdataset">
-                                <td>{index + 1}</td>
-                                <td>
-                                    <a
-                                        onClick={() =>
-                                            dataStore.setCurrentDatasetIndex(item.dataset_id)
-                                        }>
-                                        {item.dataset_name}
-                                    </a>
-                                </td>
-                            </tr>
-                        );
-                    })}
-                </tbody>
-            </table>
+            <div className="nav flex-column nav-pills nav-stacked mb-2 w-75 col-sm">
+                {this.props.dataStore.datasets.map((dataset, index) => {
+                    return (
+                        <a
+                            key={index}
+                            className={
+                                dataset.dataset_id === dataStore.selectedDatasetIndex
+                                    ? "nav-link active"
+                                    : "nav-link"
+                            }
+                            data-toggle="pill"
+                            href="#"
+                            role="tab"
+                            aria-selected="true"
+                            onClick={() => dataStore.setCurrentDatasetIndex(dataset.dataset_id)}>
+                            {dataset.dataset_name}
+                        </a>
+                    );
+                })}
+            </div>
         );
     }
 }

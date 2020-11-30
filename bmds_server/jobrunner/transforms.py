@@ -1,24 +1,26 @@
 from typing import Dict
 
-from bmds.bmds3 import types
-from bmds.bmds3.models.continuous import ContinuousModelSettings
-from bmds.bmds3.models.dichotomous import DichotomousModelSettings
+from bmds.bmds3.types.continuous import ContinuousModelSettings, ContinuousRiskType
+from bmds.bmds3.types.dichotomous import DichotomousModelSettings, DichotomousRiskType
 
-bmds3_d_bmr_type_map = {"Extra": types.RiskType_t.eExtraRisk, "Added": types.RiskType_t.eAddedRisk}
+bmds3_d_bmr_type_map = {
+    "Extra": DichotomousRiskType.eAddedRisk,
+    "Added": DichotomousRiskType.eAddedRisk,
+}
 bmds3_c_bmr_type_map = {
-    "Abs. Dev.": types.BMRType_t.eAbsoluteDev,
-    "Std. Dev.": types.BMRType_t.eStandardDev,
-    "Rel. Dev.": types.BMRType_t.eRelativeDev,
-    "Point": types.BMRType_t.ePointEstimate,
-    "Extra": types.BMRType_t.eExtra,  # TODO - check is this the right one?
+    "Abs. Dev.": ContinuousRiskType.eAbsoluteDev,
+    "Std. Dev.": ContinuousRiskType.eStandardDev,
+    "Rel. Dev.": ContinuousRiskType.eRelativeDev,
+    "Point": ContinuousRiskType.ePointEstimate,
+    "Extra": ContinuousRiskType.eExtra,  # TODO - check is this the right one?
 }
 
 
 def bmds3_d_model_options(options: Dict) -> DichotomousModelSettings:
     return DichotomousModelSettings(
-        bmrType=bmds3_d_bmr_type_map[options["bmr_type"]],
         bmr=options["bmr_value"],
         alpha=options["confidence_level"],
+        bmr_type=bmds3_d_bmr_type_map[options["bmr_type"]],
     )
 
 
@@ -27,5 +29,5 @@ def bmds3_c_model_options(options: Dict) -> ContinuousModelSettings:
         bmr=options["bmr_value"],
         alpha=options["confidence_level"],
         tailProb=options["tail_probability"],
-        bmrType=bmds3_c_bmr_type_map[options["bmr_type"]],
+        bmr_type=bmds3_c_bmr_type_map[options["bmr_type"]],
     )

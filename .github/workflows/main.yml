@@ -5,12 +5,7 @@ on: [pull_request]
 jobs:
   backend:
     name: backend
-    runs-on: ${{ matrix.os }}
-    strategy:
-      max-parallel: 4
-      matrix:
-        python-version: [3.6]
-        os: ["ubuntu-18.04", "windows-2019"]
+    runs-on: ubuntu-18.04
 
     steps:
     - uses: actions/checkout@v1
@@ -20,14 +15,11 @@ jobs:
         architecture: 'x64'
     - name: install
       run: |
-        pip install -r requirements/dev.txt
+        pip install -r requirements/ci.txt
     - name: lint
       run: |
         make lint-py
     - name: test
-      env:
-        BMDS_REQUEST_URL: ${{ secrets.BMDS_REQUEST_URL }}
-        BMDS_TOKEN: ${{ secrets.BMDS_TOKEN }}
       run: |
         make test
 

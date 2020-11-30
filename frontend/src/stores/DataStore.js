@@ -16,7 +16,7 @@ class DataStore {
         this.rootStore = rootStore;
     }
 
-    @observable model_type = "CS";
+    @observable model_type = "DM";
     @observable datasets = [];
     @observable selectedDatasetIndex = "";
     @observable selectedFile = {};
@@ -54,7 +54,7 @@ class DataStore {
             form["degree"] = "auto-select";
             form["background"] = "Estimated";
         }
-        form["enabled"] = false;
+        form["enabled"] = true;
         form["model_type"] = this.model_type;
         form["dataset_id"] = this.datasets.length;
         form["dataset_name"] = "DatasetName " + form["dataset_id"];
@@ -219,15 +219,20 @@ class DataStore {
     }
 
     @computed get getEnabledDatasets() {
-        let enabledDatasets = this.datasets.filter(item => item.enabled == true);
-        let datasetofModelType = enabledDatasets.filter(item =>
-            item.model_type.includes(this.getDatasetType)
+        return this.datasets.filter(
+            item => item.enabled == true && item.model_type.includes(this.getDatasetType)
         );
-        return datasetofModelType;
     }
 
     @computed get getDatasetNamesHeader() {
         return datasetNamesHeaders[this.getDatasetType];
+    }
+
+    @computed get checkDatasetsLength() {
+        if (this.datasets.length > 9) {
+            return true;
+        }
+        return false;
     }
 }
 

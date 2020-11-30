@@ -13,7 +13,7 @@ class InputFormReadOnly extends Component {
                     <label style={{marginRight: "20px"}}>Dataset Name:</label>
                     {dataStore.getCurrentDatasets.dataset_name}
                 </div>
-                <div className="table-responsive-sm inputformreadonly">
+                <div className="table-responsive-sm">
                     <table className="table table-bordered table-stripped table-hover table-sm text-center">
                         <thead className="table-primary">
                             <tr>

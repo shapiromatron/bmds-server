@@ -68,7 +68,7 @@
   },
   "dependencies": {
     "autoprefixer": "^9.7.5",
-    "bootstrap": "^4.4.1",
+    "bootstrap": "^4.5.3",
     "font-awesome": "^4.7.0",
     "lodash": "^4.17.4",
     "mobx": "^5.15.4",

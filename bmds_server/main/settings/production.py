@@ -1,6 +1,6 @@
 # flake8: noqa
 
-from decouple import config
+import os
 
 from ..constants import SkinStyle
 from .base import *
@@ -13,29 +13,29 @@ SERVER_BANNER_COLOR = "#EE8416"
 SKIN = SkinStyle(int(os.environ["DJANGO_SKIN"]))
 
 ADMINS = []
-_admin_names = config("DJANGO_ADMIN_NAMES")
-_admin_emails = config("DJANGO_ADMIN_EMAILS")
-if len(_admin_names) > 0 and len(_admin_emails) > 0:
+_admin_names = os.environ["DJANGO_ADMIN_NAMES"]
+_admin_emails = os.environ["DJANGO_ADMIN_EMAILS"]
+if _admin_names and _admin_emails:
     ADMINS = list(zip(_admin_names.split("|"), _admin_emails.split("|")))
     MANAGERS = ADMINS
 else:
     raise ValueError("Invalid DJANGO_ADMIN_NAMES or DJANGO_ADMIN_EMAILS")
 
-SECRET_KEY = config("DJANGO_SECRET_KEY")
-ALLOWED_HOSTS = config("DJANGO_ALLOWED_HOSTS").split("|")
-if len(ALLOWED_HOSTS) < 1:
-    raise ValueError("DJANGO_ALLOWED_HOSTS is required")
+ALLOWED_HOSTS = os.environ["DJANGO_ALLOWED_HOSTS"].split("|")
+SECRET_KEY = os.environ["DJANGO_SECRET_KEY"]
+ADMIN_URL_PREFIX = os.environ["ADMIN_URL_PREFIX"]
 
 # Email settings
-DEFAULT_FROM_EMAIL = config("DJANGO_DEFAULT_FROM_EMAIL")
-if os.environ.get("DJANGO_EMAIL_BACKEND") == "SMTP":
+DEFAULT_FROM_EMAIL = os.environ["DJANGO_DEFAULT_FROM_EMAIL"]
+DJANGO_EMAIL_BACKEND = os.environ["DJANGO_EMAIL_BACKEND"]
+if DJANGO_EMAIL_BACKEND == "SMTP":
     EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
-    EMAIL_HOST = config("DJANGO_EMAIL_HOST")
-    EMAIL_HOST_USER = config("DJANGO_EMAIL_USER")
-    EMAIL_HOST_PASSWORD = config("DJANGO_EMAIL_PASSWORD")
-    EMAIL_PORT = config("DJANGO_EMAIL_PORT", cast=int)
-    EMAIL_USE_SSL = config("DJANGO_EMAIL_USE_SSL", cast=bool)
-elif os.environ.get("DJANGO_EMAIL_BACKEND") == "MAILGUN":
+    EMAIL_HOST = os.environ["DJANGO_EMAIL_HOST"]
+    EMAIL_HOST_USER = os.environ["DJANGO_EMAIL_USER"]
+    EMAIL_HOST_PASSWORD = os.environ["DJANGO_EMAIL_PASSWORD"]
+    EMAIL_PORT = int(os.environ["DJANGO_EMAIL_PORT"])
+    EMAIL_USE_SSL = os.environ["DJANGO_EMAIL_USE_SSL"].lower() == "true"
+elif DJANGO_EMAIL_BACKEND == "MAILGUN":
     INSTALLED_APPS += ("anymail",)
     EMAIL_BACKEND = "anymail.backends.mailgun.EmailBackend"
     ANYMAIL = dict(
@@ -43,26 +43,26 @@ elif os.environ.get("DJANGO_EMAIL_BACKEND") == "MAILGUN":
         MAILGUN_SENDER_DOMAIN=os.environ["MAILGUN_SERVER_NAME"],
     )
 else:
-    raise ValueError("Unknown email backend")
+    raise ValueError(f"Unknown email backend: {DJANGO_EMAIL_BACKEND}")
 
 # Database settings
 DATABASES["default"] = dict(
     ENGINE="django.db.backends.postgresql",
-    NAME=config("DJANGO_DB_NAME"),
-    USER=config("DJANGO_DB_USER"),
-    PASSWORD=config("DJANGO_DB_PW"),
-    HOST=config("DJANGO_DB_HOST"),
+    NAME=os.environ["DJANGO_DB_NAME"],
+    USER=os.environ["DJANGO_DB_USER"],
+    PASSWORD=os.environ["DJANGO_DB_PW"],
+    HOST=os.environ["DJANGO_DB_HOST"],
     CONN_MAX_AGE=300,
 )
 
 # Cache settings
 CACHES["default"] = dict(
     BACKEND="django_redis.cache.RedisCache",
-    LOCATION=config("DJANGO_CACHE_LOCATION"),
+    LOCATION=os.environ["DJANGO_CACHE_LOCATION"],
     OPTIONS={"CLIENT_CLASS": "django_redis.client.DefaultClient"},
     TIMEOUT=60 * 10,  # 10 minutes (in seconds)
 )
 
 # Celery settings
-CELERY_BROKER_URL = config("DJANGO_CELERY_BROKER_URL")
-CELERY_RESULT_BACKEND = config("DJANGO_CELERY_RESULT_BACKEND")
+CELERY_BROKER_URL = os.environ["DJANGO_CELERY_BROKER_URL"]
+CELERY_RESULT_BACKEND = os.environ["DJANGO_CELERY_RESULT_BACKEND"]

@@ -36,3 +36,6 @@ public/*
 !logs/.gitkeep
 !notebooks/.gitkeep
 !public/.gitkeep
+
+# until release
+vendor/*.so

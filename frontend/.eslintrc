@@ -6,7 +6,15 @@
             "unix"
         ],
         "no-await-in-loop": 1,
-        "no-console": 1,
+        "no-console": [
+            2,
+            {
+                "allow": [
+                    "warn",
+                    "error"
+                ]
+            }
+        ],
         "no-sparse-arrays": 2,
         "no-unused-vars": [
             2,

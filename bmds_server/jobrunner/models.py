@@ -4,7 +4,7 @@ import traceback
 import uuid
 from copy import deepcopy
 from datetime import timedelta
-from typing import Dict, Optional
+from typing import Dict, List, Optional
 
 import bmds
 from django.conf import settings
@@ -13,7 +13,7 @@ from django.db import connection, models
 from django.urls import reverse
 from django.utils.timezone import now
 
-from . import tasks, transforms, utils, validators, xlsx
+from . import tasks, transforms, utils, validators
 
 logger = logging.getLogger(__name__)
 
@@ -21,13 +21,13 @@ logger = logging.getLogger(__name__)
 class Job(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     password = models.CharField(max_length=12, default=utils.random_string, editable=False)
-    inputs = models.TextField()
-    outputs = models.TextField(blank=True)
-    preferences = models.TextField(blank=True)
-    errors = models.TextField(blank=True)
+    inputs = models.JSONField(default=dict)
+    outputs = models.JSONField(default=dict, blank=True)
+    preferences = models.JSONField(default=dict, blank=True)
+    errors = models.JSONField(default=dict, blank=True)
     created = models.DateTimeField(auto_now_add=True)
-    started = models.DateTimeField(null=True)
-    ended = models.DateTimeField(null=True)
+    started = models.DateTimeField(null=True, blank=True)
+    ended = models.DateTimeField(null=True, blank=True)
 
     class Meta:
         ordering = ("created",)
@@ -93,65 +93,35 @@ class Job(models.Model):
             cursor.execute("vacuum")
 
     @classmethod
-    def _build_dataset(cls, dataset_type: str, dataset: Dict) -> bmds.datasets.Dataset:
+    def _build_dataset(
+        cls, dataset_type: str, dataset: Dict[str, List[float]]
+    ) -> bmds.datasets.DatasetType:
         if dataset_type == bmds.constants.CONTINUOUS:
-            dataset = bmds.ContinuousDataset(
+            return bmds.ContinuousDataset(
                 doses=dataset["doses"],
                 ns=dataset["ns"],
                 means=dataset["means"],
                 stdevs=dataset["stdevs"],
             )
         elif dataset_type == bmds.constants.CONTINUOUS_INDIVIDUAL:
-            dataset = bmds.ContinuousIndividualDataset(
+            return bmds.ContinuousIndividualDataset(
                 doses=dataset["doses"], responses=dataset["responses"]
             )
         elif dataset_type == bmds.constants.DICHOTOMOUS:
-            dataset = bmds.DichotomousDataset(
+            return bmds.DichotomousDataset(
                 doses=dataset["doses"], ns=dataset["ns"], incidences=dataset["incidences"]
             )
         else:
             raise ValueError(f"unknown dataset type: {dataset_type}")
 
-        return dataset
-
-    @classmethod
-    def build_bmds2_session(
-        cls, bmds_version: str, dataset_type: str, dataset: bmds.datasets.Dataset, inputs: Dict
-    ) -> bmds.BMDS:
-
-        session = bmds.BMDS.versions[bmds_version](dataset_type, dataset=dataset)
-
-        models = inputs.get("models")
-        bmr = inputs.get("bmr")
-
-        # get BMR
-        global_settings = {}
-        if bmr is not None:
-            global_settings = {
-                "bmr": bmr["value"],
-                "bmr_type": bmds.constants.BMR_CROSSWALK[dataset_type][bmr["type"]],
-            }
-
-        # Add models to session
-        if models is None:
-            session.add_default_models(global_settings=global_settings)
-        else:
-            for model in models:
-                settings = deepcopy(global_settings)
-                if "settings" in model:
-                    settings.update(model["settings"])
-                session.add_model(model["name"], settings=settings)
-
-        return session
-
     @classmethod
     def build_bmds3_session(
-        cls, bmds_version: str, dataset_type: str, dataset: bmds.datasets.Dataset, inputs: Dict
+        cls, bmds_version: str, dataset_type: str, dataset: bmds.datasets.DatasetType, inputs: Dict
     ) -> bmds.BMDS:
         """
         Puts all options and models into a single BMDS session.
         """
-        session = bmds.BMDS.versions[bmds_version](dataset_type, dataset=dataset)
+        session = bmds.BMDS.version(bmds_version)(dataset_type, dataset=dataset)
         for options in inputs["options"]:
             for model_class, model_names in inputs["models"].items():
                 for model_name in model_names:
@@ -171,9 +141,7 @@ class Job(models.Model):
 
         dataset = cls._build_dataset(dataset_type, dataset)
 
-        if bmds_version in bmds.constants.BMDS_TWOS:
-            session = cls.build_bmds2_session(bmds_version, dataset_type, dataset, inputs)
-        elif bmds_version in bmds.constants.BMDS_THREES:
+        if bmds_version in bmds.constants.BMDS_THREES:
             session = cls.build_bmds3_session(bmds_version, dataset_type, dataset, inputs)
         else:
             raise ValueError(f"Unknown bmds_version: {bmds_version}s")
@@ -236,20 +204,16 @@ class Job(models.Model):
         # update start time to actual time started
         self.started = now()
 
-        inputs = json.loads(self.inputs)
-
         outputs = [
-            self.try_run_session(inputs, dataset, i) for i, dataset in enumerate(inputs["datasets"])
+            self.try_run_session(self.inputs, dataset, i)
+            for i, dataset in enumerate(self.inputs["datasets"])
         ]
 
-        inputs_no_datasets = deepcopy(inputs)
+        inputs_no_datasets = deepcopy(self.inputs)
         inputs_no_datasets.pop("datasets")
         obj = dict(job_id=str(self.id), inputs=inputs_no_datasets, outputs=outputs)
-
-        errors = [out["error"] for out in outputs if "error" in out]
-
-        self.outputs = json.dumps(obj)
-        self.errors = json.dumps(errors)
+        self.outputs = obj
+        self.errors = [out["error"] for out in outputs if "error" in out]
         self.ended = now()
         self.save()
 
@@ -268,7 +232,3 @@ class Job(models.Model):
             )
             return json.loads(outputs)
         return None
-
-    def get_excel(self):
-        generator = xlsx.BMDGenerator(self.outputs)
-        return generator.get_xlsx()

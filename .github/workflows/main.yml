@@ -48,16 +48,6 @@ jobs:
       options: --network-alias container
 
     services:
-      postgres:
-        image: postgres:9.6
-        env:
-          POSTGRES_USER: bmds-online
-          POSTGRES_PASSWORD: password
-          POSTGRES_DB: bmds-online-test
-        ports:
-        - 5432:5432
-        options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
-
       selenium-server:
         # ERR_INSUFFICIENT_RESOURCES is raised if Chrome is used,
         # so we use Firefox instead. Chrome can only handle so many
@@ -73,11 +63,6 @@ jobs:
         - 4444:4444
 
     env:
-      DJANGO_DB_HOST: postgres
-      DJANGO_DB_PORT: 5432
-      DJANGO_DB_USER: bmds-online
-      DJANGO_DB_PW: password
-      DJANGO_DB_NAME: bmds-online-test
       BMDS_INTEGRATION_TESTS: 1
       BROWSER: firefox
       LIVESERVER_HOST: container

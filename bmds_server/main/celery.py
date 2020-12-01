@@ -1,15 +1,13 @@
 import os
 
 from celery import Celery
-from decouple import config
 
 os.environ.setdefault(
     "DJANGO_SETTINGS_MODULE",
-    config("DJANGO_SETTINGS_MODULE", default="bmds_server.main.settings.dev"),
+    os.environ.get("DJANGO_SETTINGS_MODULE", "bmds_server.main.settings.dev"),
 )
 
 from django.conf import settings  # noqa  # isort:skip
-
 
 app = Celery("bmds_server")
 app.config_from_object("django.conf:settings", namespace="CELERY")

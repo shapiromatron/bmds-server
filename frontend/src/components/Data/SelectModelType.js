@@ -28,6 +28,7 @@ class SelectModelType extends Component {
                     <button
                         type="button"
                         className="adddataset btn btn-primary btn-sm mr-2"
+                        disabled={dataStore.checkDatasetsLength}
                         onClick={() => dataStore.addDataset()}>
                         Add Dataset
                     </button>

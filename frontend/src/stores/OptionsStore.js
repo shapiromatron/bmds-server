@@ -41,6 +41,10 @@ class OptionsStore {
     @computed get getDatasetType() {
         return this.rootStore.mainStore.dataset_type;
     }
+
+    @computed get canAddNewOption() {
+        return this.optionsList.length < 3;
+    }
 }
 
 export default OptionsStore;

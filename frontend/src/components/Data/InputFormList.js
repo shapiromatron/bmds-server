@@ -29,7 +29,7 @@ class InputFormList extends Component {
                                 <td>
                                     <button
                                         type="button"
-                                        className="btn btn-primary addrow"
+                                        className="btn btn-primary"
                                         onClick={() => dataStore.addRows()}>
                                         <i className="fa fa-plus-square" aria-hidden="true"></i>{" "}
                                     </button>

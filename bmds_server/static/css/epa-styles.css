@@ -1,8 +1,8 @@
-.navbar-nav li:hover .dropdown-menu {
+.app-header .navbar-nav li:hover .dropdown-menu {
     display: block;
 }
 
-.dropdown-menu>li>a:hover:after {
+.app-header .dropdown-menu>li>a:hover:after {
     text-decoration: underline;
     transform: rotate(-90deg);
 }
@@ -121,7 +121,7 @@ print and (min-width: 35em) {
     }
 }
 
-a.nav-link {
+.app-header a.nav-link {
     padding: 18px 24px;
     font-size: 16px;
     font-weight: bold;

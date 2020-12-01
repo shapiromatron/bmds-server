@@ -109,26 +109,6 @@ bmds3_c_option_set_schema = {
 }
 
 
-def validate_bmrs(dataset_type: str, data: Any):
-    # optional setting; can exit early if data is None
-    if data is None:
-        return
-
-    if dataset_type == bmds.constants.DICHOTOMOUS:
-        schema = d_bmr_schema
-    elif dataset_type == bmds.constants.DICHOTOMOUS_CANCER:
-        schema = dc_bmr_schema
-    elif dataset_type in bmds.constants.CONTINUOUS_DTYPES:
-        schema = c_bmr_schema
-    else:
-        ValidationError(f"Unknown `dataset_type`: {dataset_type}")
-
-    try:
-        jsonschema.validate(data, schema)
-    except jsonschema.ValidationError as err:
-        raise ValidationError(err.message)
-
-
 def validate_options(dataset_type: str, data: Any):
     if dataset_type == bmds.constants.DICHOTOMOUS:
         schema = bmds3_d_option_set_schema

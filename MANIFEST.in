@@ -1,0 +1,6 @@
+recursive-include bmds_server *
+
+include webpack-stats.json
+
+global-exclude __pycache__
+global-exclude *.egg-info

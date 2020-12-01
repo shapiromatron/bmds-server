@@ -3,7 +3,6 @@ import React, {Component} from "react";
 import AnalysisForm from "./AnalysisForm/AnalysisForm";
 import ModelsCheckBoxList from "./ModelsForm/ModelsCheckBoxList";
 import OptionsFormList from "./OptionsForm/OptionsFormList";
-import MainModal from "./ErrorModal";
 import PropTypes from "prop-types";
 import "./main.css";
 
@@ -19,39 +18,34 @@ class Main extends Component {
         return (
             <div>
                 {mainStore.isUpdateComplete ? (
-                    <div className="main container-fluid ">
+                    <div>
                         <div className="row">
-                            <div className="col-sm-12 col-lg-3 analysis">
-                                {mainStore.getEditSettings ? (
-                                    <AnalysisForm />
-                                ) : (
-                                    <AnalysisFormReadOnly />
-                                )}
+                            <div className="col-lg-4 analysis">
+                                <div className="mb-2">
+                                    {mainStore.getEditSettings ? (
+                                        <AnalysisForm />
+                                    ) : (
+                                        <AnalysisFormReadOnly />
+                                    )}
+                                </div>
+                                <div>{mainStore.getDatasetLength ? <DatasetList /> : null}</div>
                             </div>
-                            <div className="col-sm-12 col-lg-8">
+                            <div className="col-lg-8">
                                 <div className="modelsCheckbox">
                                     <ModelsCheckBoxList />
                                 </div>
-                            </div>
-                        </div>
-                        <div className="row second-row">
-                            <div className="col-sm-12 col-lg-3">
-                                <div className="datasetlist">
-                                    {mainStore.getDatasetLength ? <DatasetList /> : null}
-                                </div>
-                            </div>
-                            <div className="col-sm-12 col-lg-8">
                                 <div className="optionslist">
                                     <OptionsFormList />
                                 </div>
                             </div>
                         </div>
-                        <div name="payload">
+                        <div
+                            name="payload"
+                            style={{color: "white", height: "1px", overflow: "hidden"}}>
                             {JSON.stringify(mainStore.getPayload, undefined, 2)}
                         </div>
                     </div>
                 ) : null}
-                <MainModal />
             </div>
         );
     }

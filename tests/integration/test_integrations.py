@@ -1,14 +1,17 @@
 import os
+import platform
 
 import pytest
 from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 from django.test import TestCase
 
-from . import tests
-from .tests import continuous, dichotomous
+from .tests import dichotomous
 
 SKIP_INTEGRATION = os.environ.get("BMDS_INTEGRATION_TESTS") is None
 BROWSER = os.environ.get("BROWSER", "firefox")  # default to firefox; seems more stable
+
+# TODO remove this restriction
+can_execute = platform.system() == "Darwin" and os.getenv("CI") is None
 
 
 @pytest.mark.skipif(SKIP_INTEGRATION, reason="integration test")
@@ -38,4 +41,4 @@ class TestIntegration(StaticLiveServerTestCase, TestCase):
     #     continuous.test_ouputPath(self.driver, self.live_server_url)
 
     def test_dichotomous(self):
-        dichotomous.test_dichotomous(self.driver, self.live_server_url)
+        dichotomous.test_dichotomous(self.driver, self.live_server_url, can_execute)

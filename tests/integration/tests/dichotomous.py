@@ -1,10 +1,9 @@
-import time
 from urllib.parse import urlparse
 
 import helium as h
 
 
-def test_dichotomous(driver, root_url):
+def test_dichotomous(driver, root_url, can_execute: bool):
     h.set_driver(driver)
     h.go_to(root_url)
     h.click("Create a new BMDS session")
@@ -30,8 +29,9 @@ def test_dichotomous(driver, root_url):
     h.wait_until(h.Button("Run Analysis").exists)
     h.click("Run Analysis")
 
-    h.click("Output")
-    assert urlparse(driver.current_url).fragment == "/output"
-    h.wait_until(h.S("#results-table").exists)
-    h.click(h.Text("Gamma"))
-    h.wait_until(h.Text("Gamma - Details").exists)
+    if can_execute:
+        h.click("Output")
+        assert urlparse(driver.current_url).fragment == "/output"
+        h.wait_until(h.S("#results-table").exists)
+        h.click(h.Text("Gamma"))
+        h.wait_until(h.Text("Gamma - Details").exists)

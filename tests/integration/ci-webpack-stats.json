@@ -1,12 +1,12 @@
 {
     "status": "done",
-    "publicPath": "/static/bundles/",
+    "publicPath": "http://localhost:8001/dist/",
     "chunks": {
         "main": [
             {
-                "name": "main.5d72c3c3865e74a6440f.js",
-                "publicPath": "/static/bundles/main.5d72c3c3865e74a6440f.js",
-                "path": "/Users/shapiromatron/dev/bmds-server/bmds_server/static/bundles/main.5d72c3c3865e74a6440f.js"
+                "name": "main.ae112c688348c4dc5b2a.js",
+                "publicPath": "http://localhost:8001/dist/main.ae112c688348c4dc5b2a.js",
+                "path": "/__w/bmds-server/bmds-server/bmds_server/static/bundles/main.ae112c688348c4dc5b2a.js"
             }
         ]
     }

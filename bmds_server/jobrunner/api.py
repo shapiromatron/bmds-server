@@ -1,13 +1,11 @@
 import io
 
-import pandas as pd
 from django.core.exceptions import ValidationError
-from docx import Document
 from rest_framework import exceptions, mixins, status, viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
 
-from . import models, renderers, serializers, validators
+from . import models, renderers, reports, serializers, validators
 
 
 class JobViewset(mixins.CreateModelMixin, mixins.RetrieveModelMixin, viewsets.GenericViewSet):
@@ -104,12 +102,8 @@ class JobViewset(mixins.CreateModelMixin, mixins.RetrieveModelMixin, viewsets.Ge
         """
         instance = self.get_object()
 
-        # if not instance.is_finished:
-        #     return self.not_ready_yet()
-        # fn, wb = instance.get_excel()
-
-        # TODO - set to temporary file for building UI - change later
-        df = pd.DataFrame(data=dict(a=[1, 2, 3], b=[4, 5, 6]))
+        report_engine = reports.ExportEngine(instance)
+        df = report_engine.create_export()
         f = io.BytesIO()
         df.to_excel(f, index=False)
 
@@ -123,17 +117,9 @@ class JobViewset(mixins.CreateModelMixin, mixins.RetrieveModelMixin, viewsets.Ge
         """
         instance = self.get_object()
 
-        # if not instance.is_finished:
-        #     return self.not_ready_yet()
-        # fn, wb = instance.get_word()
-
-        # TODO - set to temporary file for building UI - change later
-        f = io.BytesIO()
-        document = Document()
-        document.add_heading("Hello world", 0)
-        document.save(f)
-
-        data = renderers.BinaryFile(data=f, filename=str(instance.id))
+        report_engine = reports.ReportEngine(instance)
+        document = report_engine.create_report()
+        data = renderers.BinaryFile(data=document, filename=str(instance.id))
         return Response(data)
 
     def get_queryset(self):

@@ -1,7 +1,41 @@
 import React, {Component} from "react";
 import {inject, observer} from "mobx-react";
-import InputForm from "./InputForm";
 import PropTypes from "prop-types";
+
+const DatasetFormRow = props => {
+    return (
+        <tr>
+            {Object.keys(props.row).map((key, index) => {
+                return (
+                    <td key={index} className="inputform">
+                        <input
+                            type="number"
+                            name={key}
+                            value={props.row[key]}
+                            onChange={e =>
+                                props.onChange(key, e.target.value, props.dataset_id, props.idx)
+                            }
+                        />
+                    </td>
+                );
+            })}
+            <td>
+                <button
+                    className="btn btn-danger btn-sm"
+                    onClick={e => props.delete(props.dataset_id, props.idx)}>
+                    <i className="fa fa-trash"></i>
+                </button>
+            </td>
+        </tr>
+    );
+};
+DatasetFormRow.propTypes = {
+    row: PropTypes.object,
+    onChange: PropTypes.func,
+    dataset_id: PropTypes.number,
+    idx: PropTypes.number,
+    delete: PropTypes.func,
+};
 
 @inject("dataStore")
 @observer
@@ -18,6 +52,13 @@ class InputFormList extends Component {
                         value={dataStore.getCurrentDatasets.dataset_name}
                         onChange={e => dataStore.saveDatasetName("dataset_name", e.target.value)}
                     />
+                    <button
+                        type="button"
+                        className="btn btn-danger btn-sm"
+                        onClick={dataStore.deleteDataset}>
+                        <i className="fa fa-fw fa-trash"></i>
+                        Delete
+                    </button>
                 </div>
                 <table className="inputformlist">
                     <thead>
@@ -66,7 +107,7 @@ class InputFormList extends Component {
                     <tbody>
                         {dataStore.getMappedArray.map((obj, i) => {
                             return (
-                                <InputForm
+                                <DatasetFormRow
                                     key={i}
                                     idx={i}
                                     row={obj}

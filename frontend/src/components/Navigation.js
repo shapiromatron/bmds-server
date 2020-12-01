@@ -11,7 +11,8 @@ import PropTypes from "prop-types";
 @observer
 class Navigation extends Component {
     render() {
-        const {excelUrl, wordUrl} = this.props.mainStore.config;
+        const {mainStore} = this.props,
+            {config} = mainStore;
         return (
             <div style={{marginTop: "1em"}}>
                 <ul className="nav nav-tabs">
@@ -49,12 +50,41 @@ class Navigation extends Component {
                             <div
                                 className="dropdown-menu dropdown-menu-right"
                                 aria-labelledby="bmdSessionActions">
-                                <a className="dropdown-item" href={excelUrl}>
-                                    <i className="fa fa-file-excel-o"></i>&nbsp;Download dataset
-                                </a>
-                                <a className="dropdown-item" href={wordUrl}>
-                                    <i className="fa fa-file-word-o"></i>&nbsp;Download report
-                                </a>
+                                {mainStore.getEditSettings ? (
+                                    <>
+                                        <h6 className="dropdown-header">Edit settings</h6>
+                                        <a className="dropdown-item" href="#">
+                                            <label
+                                                htmlFor="file"
+                                                className="loadAnalysisLabel"
+                                                role="button">
+                                                <i className="fa fa-fw fa-upload"></i>
+                                                &nbsp;Load analysis
+                                                <input
+                                                    type="file"
+                                                    id="file"
+                                                    onChange={e => {
+                                                        e.stopPropagation();
+                                                        mainStore.loadAnalysis(e.target.files[0]);
+                                                    }}
+                                                />
+                                            </label>
+                                        </a>
+                                    </>
+                                ) : null}
+                                {mainStore.hasOutputs ? (
+                                    <>
+                                        <h6 className="dropdown-header">Reporting</h6>
+                                        <a className="dropdown-item" href={config.excelUrl}>
+                                            <i className="fa fa-fw fa-file-excel-o"></i>
+                                            &nbsp;Download dataset
+                                        </a>
+                                        <a className="dropdown-item" href={config.wordUrl}>
+                                            <i className="fa fa-fw fa-file-word-o"></i>
+                                            &nbsp;Download report
+                                        </a>
+                                    </>
+                                ) : null}
                             </div>
                         </div>
                     </li>
@@ -65,6 +95,9 @@ class Navigation extends Component {
                     <Route path="/data" component={Data} />
                     <Route path="/logic" component={Logic} />
                     <Route path="/output" component={Output} />
+                </div>
+                <div id="payload" style={{color: "white", height: "1px", overflow: "hidden"}}>
+                    {JSON.stringify(mainStore.getPayload, undefined, 2)}
                 </div>
             </div>
         );

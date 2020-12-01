@@ -50,17 +50,9 @@ class AnalysisForm extends Component {
                         </select>
                     </div>
                     <div className="btn-toolbar btn-group form-group" role="toolbar">
-                        <label htmlFor="file" className="fileContainer btn btn-primary btn-sm">
-                            Load Analysis
-                            <input
-                                type="file"
-                                id="file"
-                                onChange={e => mainStore.loadAnalysis(e.target.files[0])}
-                            />
-                        </label>
                         <button
                             type="button"
-                            className="btn btn-primary btn-sm mr-1"
+                            className="btn btn-primary btn-sm mr-2"
                             onClick={() => mainStore.saveAnalysis()}
                             disabled={!mainStore.isValid}>
                             Save Analysis

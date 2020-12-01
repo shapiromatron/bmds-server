@@ -4,15 +4,15 @@ import PropTypes from "prop-types";
 
 @inject("dataStore")
 @observer
-class DatasetNames extends Component {
+class DatasetSelector extends Component {
     render() {
         const {dataStore} = this.props;
         return (
-            <div className="nav flex-column nav-pills nav-stacked mb-2 w-75 col-sm">
-                {this.props.dataStore.datasets.map((dataset, index) => {
+            <div className="nav flex-column nav-fill nav-pills nav-stacked">
+                {dataStore.datasets.map(dataset => {
                     return (
                         <a
-                            key={index}
+                            key={dataset.dataset_id}
                             className={
                                 dataset.dataset_id === dataStore.selectedDatasetIndex
                                     ? "nav-link active"
@@ -22,7 +22,10 @@ class DatasetNames extends Component {
                             href="#"
                             role="tab"
                             aria-selected="true"
-                            onClick={() => dataStore.setCurrentDatasetIndex(dataset.dataset_id)}>
+                            onClick={e => {
+                                e.preventDefault();
+                                dataStore.setCurrentDatasetIndex(dataset.dataset_id);
+                            }}>
                             {dataset.dataset_name}
                         </a>
                     );
@@ -31,10 +34,7 @@ class DatasetNames extends Component {
         );
     }
 }
-DatasetNames.propTypes = {
+DatasetSelector.propTypes = {
     dataStore: PropTypes.object,
-    datasets: PropTypes.array,
-    setCurrentDatasetIndex: PropTypes.func,
-    getEditSettings: PropTypes.func,
 };
-export default DatasetNames;
+export default DatasetSelector;

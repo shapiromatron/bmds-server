@@ -226,6 +226,9 @@ class MainStore {
             this.hasAtLeastOneOptionSelected
         );
     }
+    @computed get hasOutputs() {
+        return this.executionOutputs !== null;
+    }
 }
 
 export default MainStore;

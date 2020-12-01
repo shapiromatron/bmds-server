@@ -21,15 +21,6 @@ class DataStore {
     @observable selectedDatasetIndex = "";
     @observable selectedFile = {};
 
-    @action.bound importDatasets(file) {
-        let reader = new FileReader();
-        reader.readAsText(file);
-        reader.onload = e => {
-            let settings = JSON.parse(e.target.result);
-            this.datasets = settings.inputs.datasets;
-        };
-    }
-
     @action setDefaultsByDatasetType() {
         let modelTypes = this.getFilteredModelTypes;
         this.model_type = modelTypes[0].value;
@@ -57,7 +48,7 @@ class DataStore {
         form["enabled"] = true;
         form["model_type"] = this.model_type;
         form["dataset_id"] = this.datasets.length;
-        form["dataset_name"] = "DatasetName " + form["dataset_id"];
+        form["dataset_name"] = `Dataset #${this.datasets.length + 1}`;
         form["column_names"] = columnNames[this.model_type];
         this.selectedDatasetIndex = form["dataset_id"];
         this.datasets.push(form);

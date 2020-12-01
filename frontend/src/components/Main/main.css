@@ -174,20 +174,12 @@ div.col {
 	cursor: pointer; 
 }
 
-.fileContainer {
-    overflow: hidden;
-    position: relative;
-    margin:0px 4px 10px -1px;
-    text-overflow: inherit;
-    font-size: 12px;
-    padding: 6px 6px;
-    width: fit-content;
+.loadAnalysisLabel {
+    font-weight: normal;
 }
-
-.fileContainer [type=file] {
+.loadAnalysisLabel [type=file] {
     display: none;
 }
-
-.fileContainer [type=file] {
+.loadAnalysisLabel [type=file] {
     cursor: pointer;
 }

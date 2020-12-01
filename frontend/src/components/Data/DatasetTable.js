@@ -4,14 +4,15 @@ import PropTypes from "prop-types";
 
 @inject("dataStore")
 @observer
-class InputFormReadOnly extends Component {
+class DatasetTable extends Component {
     render() {
-        const {dataStore} = this.props;
+        const {dataStore} = this.props,
+            dataset = dataStore.getCurrentDatasets;
         return (
             <>
                 <div className="label">
                     <label style={{marginRight: "20px"}}>Dataset Name:</label>
-                    {dataStore.getCurrentDatasets.dataset_name}
+                    {dataset.dataset_name}
                 </div>
                 <div className="table-responsive-sm">
                     <table className="table table-bordered table-stripped table-hover table-sm text-center">
@@ -22,15 +23,9 @@ class InputFormReadOnly extends Component {
                                 })}
                             </tr>
                             <tr>
-                                {Object.keys(dataStore.getCurrentDatasets.column_names).map(
-                                    (item, i) => {
-                                        return (
-                                            <td key={i}>
-                                                {dataStore.getCurrentDatasets.column_names[item]}
-                                            </td>
-                                        );
-                                    }
-                                )}
+                                {Object.keys(dataset.column_names).map((item, i) => {
+                                    return <td key={i}>{dataset.column_names[item]}</td>;
+                                })}
                             </tr>
                         </thead>
                         <tbody>
@@ -50,7 +45,7 @@ class InputFormReadOnly extends Component {
         );
     }
 }
-InputFormReadOnly.propTypes = {
+DatasetTable.propTypes = {
     dataStore: PropTypes.object,
     currentDataset: PropTypes.object,
     dataset_name: PropTypes.string,
@@ -60,4 +55,4 @@ InputFormReadOnly.propTypes = {
     getCurrentDatasets: PropTypes.func,
     getLabels: PropTypes.func,
 };
-export default InputFormReadOnly;
+export default DatasetTable;

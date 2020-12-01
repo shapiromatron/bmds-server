@@ -79,7 +79,7 @@ div.col {
     margin-left: 30px;
     text-align: right;
     width: 70px;
-} 
+}
 
 .modelscheckbox td input[type=text] {
     -webkit-transition: all 0.30s ease-in-out;
@@ -111,9 +111,6 @@ div.col {
     cursor: not-allowed;
 }
 
-.datasetlist-table td select {
-    font-size: 12px;
-}
 
 .analysis {
     height: auto;
@@ -171,7 +168,7 @@ div.col {
     display: inline-block;
 }
 .inputfile + label {
-	cursor: pointer; 
+	cursor: pointer;
 }
 
 .loadAnalysisLabel {

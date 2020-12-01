@@ -8,6 +8,7 @@ def test_dichotomous(driver, root_url, can_execute: bool):
     h.go_to(root_url)
     h.click("Create a new BMDS session")
 
+    h.wait_until(h.Text("Settings").exists)
     h.click("Settings")
     assert urlparse(driver.current_url).fragment == "/"
     h.wait_until(h.Button("Save Analysis").exists)

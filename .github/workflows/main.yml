@@ -67,7 +67,6 @@ jobs:
       BROWSER: firefox
       LIVESERVER_HOST: container
       LIVESERVER_PORT: 8000
-      PUBMED_API_KEY: ${{ secrets.PUBMED_API_KEY }}
       SELENIUM_HOST: selenium-server
       SELENIUM_PORT: 4444
 

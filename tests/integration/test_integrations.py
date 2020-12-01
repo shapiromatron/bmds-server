@@ -26,20 +26,16 @@ class TestIntegration(StaticLiveServerTestCase, TestCase):
     host = os.environ.get("LIVESERVER_HOST", "localhost")
     port = int(os.environ.get("LIVESERVER_PORT", 0))
 
-    def test_demo(self):
-        tests.test_demo(self.driver, self.live_server_url, self.db_keys)
-
-    def test_continuous(self):
-        continuous.test_continuous(self.driver, self.live_server_url)
-        continuous.test_Sufficiently_Close_BMDL_4(self.driver, self.live_server_url)
-        continuous.test_analysisName(self.driver, self.live_server_url)
-        continuous.test_analysisDescription(self.driver, self.live_server_url)
-        continuous.test_changeBMRType(self.driver, self.live_server_url)
-        continuous.test_dataPath(self.driver, self.live_server_url)
-        continuous.test_logicPath(self.driver, self.live_server_url)
-        continuous.test_mainPath(self.driver, self.live_server_url)
-        continuous.test_ouputPath(self.driver, self.live_server_url)
+    # def test_continuous(self):
+    #     continuous.test_continuous(self.driver, self.live_server_url)
+    #     continuous.test_Sufficiently_Close_BMDL_4(self.driver, self.live_server_url)
+    #     continuous.test_analysisName(self.driver, self.live_server_url)
+    #     continuous.test_analysisDescription(self.driver, self.live_server_url)
+    #     continuous.test_changeBMRType(self.driver, self.live_server_url)
+    #     continuous.test_dataPath(self.driver, self.live_server_url)
+    #     continuous.test_logicPath(self.driver, self.live_server_url)
+    #     continuous.test_mainPath(self.driver, self.live_server_url)
+    #     continuous.test_ouputPath(self.driver, self.live_server_url)
 
     def test_dichotomous(self):
         dichotomous.test_dichotomous(self.driver, self.live_server_url)
-        dichotomous.test_modelTypeDichotomous(self.driver, self.live_server_url)

@@ -9,7 +9,7 @@ class ResultsTable extends Component {
     render() {
         const store = this.props.outputStore;
         return (
-            <table className="table table-bordered result table-sm">
+            <table id="results-table" className="table table-bordered result table-sm">
                 <thead>
                     <tr className="table-primary">
                         <th>Model</th>
@@ -30,12 +30,16 @@ class ResultsTable extends Component {
                                     store.addBMDLine(model);
                                 }}
                                 onMouseOut={e => store.removeBMDLine()}>
-                                <td className="button">
-                                    <button
-                                        onClick={e => store.toggleModelDetailModal(model)}
-                                        className="btn btn-sm btn-link">
+                                <td>
+                                    <a
+                                        onClick={e => {
+                                            e.preventDefault();
+                                            store.toggleModelDetailModal(model);
+                                        }}
+                                        role="button"
+                                        href="#">
                                         {model.model_name}
-                                    </button>
+                                    </a>
                                 </td>
                                 <td>{model.results.bmd}</td>
                                 <td>{model.results.bmdl}</td>

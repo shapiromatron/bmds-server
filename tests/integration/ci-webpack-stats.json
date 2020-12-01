@@ -1,0 +1,13 @@
+{
+    "status": "done",
+    "publicPath": "/static/bundles/",
+    "chunks": {
+        "main": [
+            {
+                "name": "main.5d72c3c3865e74a6440f.js",
+                "publicPath": "/static/bundles/main.5d72c3c3865e74a6440f.js",
+                "path": "/Users/shapiromatron/dev/bmds-server/bmds_server/static/bundles/main.5d72c3c3865e74a6440f.js"
+            }
+        ]
+    }
+}

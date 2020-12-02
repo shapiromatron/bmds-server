@@ -3,41 +3,41 @@ name: ci-checks
 on: [pull_request]
 
 jobs:
-  backend:
-    name: backend
-    runs-on: ubuntu-18.04
+  # backend:
+  #   name: backend
+  #   runs-on: ubuntu-18.04
 
-    steps:
-    - uses: actions/checkout@v1
-    - uses: actions/setup-python@v1
-      with:
-        python-version: '3.6'
-        architecture: 'x64'
-    - name: install
-      run: |
-        pip install -r requirements/ci.txt
-    - name: lint
-      run: |
-        make lint-py
-    - name: test
-      run: |
-        make test
+  #   steps:
+  #   - uses: actions/checkout@v1
+  #   - uses: actions/setup-python@v1
+  #     with:
+  #       python-version: '3.6'
+  #       architecture: 'x64'
+  #   - name: install
+  #     run: |
+  #       pip install -r requirements/ci.txt
+  #   - name: lint
+  #     run: |
+  #       make lint-py
+  #   - name: test
+  #     run: |
+  #       make test
 
-  frontend:
-    name: frontend
-    runs-on: ubuntu-18.04
-    steps:
-    - uses: actions/checkout@v1
-    - uses: actions/setup-node@v1
-      with:
-        node-version: '12.x'
-    - name: install
-      run: |
-        npm install -g yarn
-        yarn --cwd ./frontend install
-    - name: lint
-      run: |
-        make lint-js
+  # frontend:
+  #   name: frontend
+  #   runs-on: ubuntu-18.04
+  #   steps:
+  #   - uses: actions/checkout@v1
+  #   - uses: actions/setup-node@v1
+  #     with:
+  #       node-version: '12.x'
+  #   - name: install
+  #     run: |
+  #       npm install -g yarn
+  #       yarn --cwd ./frontend install
+  #   - name: lint
+  #     run: |
+  #       make lint-js
 
   integration:
     name: integration

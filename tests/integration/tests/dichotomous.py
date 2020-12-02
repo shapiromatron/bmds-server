@@ -1,4 +1,5 @@
 from urllib.parse import urlparse
+import time
 
 import helium as h
 
@@ -7,6 +8,9 @@ def test_dichotomous(driver, root_url, can_execute: bool):
     h.set_driver(driver)
     h.go_to(root_url)
     h.click("Create a new BMDS session")
+
+    time.sleep(10)
+    print(driver.page_source)
 
     h.wait_until(h.Text("Settings").exists)
     h.click("Settings")

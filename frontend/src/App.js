@@ -15,9 +15,7 @@ class App extends Component {
             <div>
                 {this.props.mainStore.isUpdateComplete ? (
                     <HashRouter>
-                        <div>
-                            <Navigation />
-                        </div>
+                        <Navigation />
                     </HashRouter>
                 ) : null}
             </div>

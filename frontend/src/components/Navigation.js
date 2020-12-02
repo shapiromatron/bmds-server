@@ -65,7 +65,9 @@ class Navigation extends Component {
                                                     id="file"
                                                     onChange={e => {
                                                         e.stopPropagation();
-                                                        mainStore.loadAnalysis(e.target.files[0]);
+                                                        mainStore.loadAnalysisFromFile(
+                                                            e.target.files[0]
+                                                        );
                                                     }}
                                                 />
                                             </label>
@@ -82,6 +84,16 @@ class Navigation extends Component {
                                         <a className="dropdown-item" href={config.wordUrl}>
                                             <i className="fa fa-fw fa-file-word-o"></i>
                                             &nbsp;Download report
+                                        </a>
+                                        <a
+                                            className="dropdown-item"
+                                            href="#"
+                                            onClick={e => {
+                                                e.preventDefault();
+                                                mainStore.saveAnalysisToFile();
+                                            }}>
+                                            <i className="fa fa-fw fa-file-code-o"></i>
+                                            &nbsp;Download session
                                         </a>
                                     </>
                                 ) : null}

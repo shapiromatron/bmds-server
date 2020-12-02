@@ -2,7 +2,6 @@ import json
 import os
 import time
 from pathlib import Path
-import requests
 from typing import NamedTuple
 
 import helium
@@ -99,9 +98,6 @@ def _wait_until_webpack_ready(max_wait_sec: int = 60):
     waited_for = 0
     while waited_for < max_wait_sec:
         if stats.exists() and json.loads(stats.read_text()).get("status") == "done":
-            d = json.loads(stats.read_text())
-            print(stats.read_text())
-            print(requests.get(d["chunks"]["main"][0]["publicPath"]).text[:1000])
             return
         time.sleep(1)
         waited_for += 1

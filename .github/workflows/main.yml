@@ -78,9 +78,11 @@ jobs:
     - name: Install frontend requirements; start server
       run: |
         yarn --cwd ./frontend install
-        yarn --cwd ./frontend start &
+        npm run --prefix ./frontend start  &
+        sleep 5
         pwd
-        ls -laht
+        ls -laht .
+        ls -laht ./frontend
         ps aux | grep devServer.js
     - name: Run integration tests
       run: |

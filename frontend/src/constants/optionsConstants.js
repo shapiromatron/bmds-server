@@ -1,6 +1,5 @@
 const headers = {
         C: [
-            "Option Set",
             "BMR Type",
             "BMRF",
             "Tail Probability",
@@ -10,10 +9,9 @@ const headers = {
             "Polynomial Restriction",
             "Background",
         ],
-        D: ["Option Set", "Risk Type", "BMR", "Confidence Level", "Background"],
-        DM: ["Option Set", "Risk Type", "BMR", "Confidence Level"],
+        D: ["Risk Type", "BMR", "Confidence Level", "Background"],
+        DM: ["Risk Type", "BMR", "Confidence Level"],
         N: [
-            "Option Set",
             "Risk Type",
             "BMR",
             "Confidence Level",

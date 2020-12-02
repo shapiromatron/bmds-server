@@ -1,5 +1,6 @@
 recursive-include bmds_server *
 
+include .gitcommit
 include webpack-stats.json
 
 global-exclude __pycache__

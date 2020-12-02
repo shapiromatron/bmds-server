@@ -24,6 +24,7 @@ celerybeat-schedule
 *.txt
 .env
 .eslintcache
+.gitcommit
 bmds_server/main/settings/local.py
 compose/nginx/conf/nginx.conf
 settings.ini

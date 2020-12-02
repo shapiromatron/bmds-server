@@ -28,6 +28,7 @@ help:
 	@python -c "$$PRINT_HELP_PYSCRIPT" < $(MAKEFILE_LIST)
 
 build:  ## build application for containerization
+	manage.py set_git_commit
 	rm -rf build/ dist/
 	npm --prefix ./frontend run build
 	python setup.py build

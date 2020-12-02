@@ -51,7 +51,7 @@
   </div>
 </nav>
 
-<div class="container-fluid">
+<div class="container-fluid" style="min-height: 70vh !important;">
 
 {% if messages %}
   {% for message in messages %}
@@ -66,6 +66,9 @@
 {% endblock content %}
 </div>
 
+<div class="col py-1 px-3 text-white text-right" style="background-color: #646D76">
+  <b>BMDS Online build {{commit.sha}} / {{commit.dt|date:"M d Y"}}</b>
+</div>
 {% if SKIN == 1 %}
   {% include "./includes/epa-footer.html" %}
 {% endif %}

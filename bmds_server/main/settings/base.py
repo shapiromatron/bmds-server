@@ -1,8 +1,10 @@
 # flake8: noqa
 
 import os
+from datetime import datetime
 from pathlib import Path
 
+from ...common.git import Commit
 from ..constants import SkinStyle
 
 PROJECT_NAME = "bmds-server"
@@ -167,3 +169,17 @@ WEBPACK_LOADER = {
 }
 
 DAYS_TO_KEEP_JOBS = 7
+
+
+# commit information
+def get_git_commit() -> Commit:
+    try:
+        return Commit.current(str(ROOT_DIR))
+    except FileNotFoundError:
+        if GIT_COMMIT_FILE.exists():
+            return Commit.parse_file(GIT_COMMIT_FILE)
+    return Commit(sha="<undefined>", dt=datetime.now())
+
+
+GIT_COMMIT_FILE = ROOT_DIR / ".gitcommit"
+COMMIT = get_git_commit()

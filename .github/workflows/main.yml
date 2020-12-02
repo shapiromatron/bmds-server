@@ -72,9 +72,9 @@ jobs:
 
     steps:
     - uses: actions/checkout@v1
-    # - name: Install python requirements
-    #   run: |
-    #     pip install -r requirements/ci.txt
+    - name: Install python requirements
+      run: |
+        pip install -r requirements/ci.txt
     - name: Install frontend requirements; start server
       run: |
         yarn --cwd ./frontend install

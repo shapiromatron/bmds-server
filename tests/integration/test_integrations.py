@@ -41,5 +41,5 @@ class TestIntegration(StaticLiveServerTestCase, TestCase):
     #     continuous.test_ouputPath(self.driver, self.live_server_url)
 
     def test_dichotomous(self):
-        print(self.host, self.port)
-        # dichotomous.test_dichotomous(self.driver, self.live_server_url, can_execute)
+        print(self.host, self.port, self.live_server_url, can_execute)
+        dichotomous.test_dichotomous(self.driver, self.live_server_url, can_execute)

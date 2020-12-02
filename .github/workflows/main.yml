@@ -72,14 +72,16 @@ jobs:
 
     steps:
     - uses: actions/checkout@v1
-    - name: Install python requirements
-      run: |
-        pip install -r requirements/ci.txt
+    # - name: Install python requirements
+    #   run: |
+    #     pip install -r requirements/ci.txt
     - name: Install frontend requirements; start server
       run: |
-        cp tests/integration/ci-webpack-stats.json webpack-stats.json
         yarn --cwd ./frontend install
         yarn --cwd ./frontend start &
+        pwd
+        ls -laht
+        ps aux | grep devServer.js
     - name: Run integration tests
       run: |
         py.test -s tests/integration/

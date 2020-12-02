@@ -9,4 +9,5 @@ def from_settings(request):
         SkinStyleEnum=SkinStyle,
         SERVER_ROLE=settings.SERVER_ROLE,
         SERVER_BANNER_COLOR=settings.SERVER_BANNER_COLOR,
+        commit=settings.COMMIT,
     )

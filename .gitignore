@@ -8,7 +8,7 @@
 .vscode/
 bmds_server/static/bundles/
 build/
-data/
+/data/
 dist/
 docs/_build/
 node_modules/
@@ -20,9 +20,11 @@ venv/
 *.py[cod]
 *.sqlite3
 celerybeat-schedule
-*log*.txt
+*log
+*.txt
 .env
 .eslintcache
+.gitcommit
 bmds_server/main/settings/local.py
 compose/nginx/conf/nginx.conf
 settings.ini

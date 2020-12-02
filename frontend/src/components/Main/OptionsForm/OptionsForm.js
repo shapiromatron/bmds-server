@@ -14,7 +14,6 @@ import {
 const OptionsForm = props => {
     return (
         <tr className="form-group">
-            <td>{props.idx}</td>
             {props.dataset_type === datasetType.Continuous ? (
                 <td>
                     <select

@@ -12,7 +12,7 @@ class DatasetList extends Component {
         const {dataStore} = this.props,
             datasets = toJS(dataStore.datasets);
         return (
-            <table className="table table-bordered table-sm  datasetlist-table">
+            <table className="table table-bordered table-sm">
                 <thead>
                     <tr className="table-primary">
                         {dataStore.getDatasetNamesHeader.map((item, i) => {

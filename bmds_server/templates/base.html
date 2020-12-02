@@ -1,3 +1,4 @@
+{% load cache %}
 {% load static %}
 {% load render_bundle from webpack_loader %}
 
@@ -51,7 +52,7 @@
   </div>
 </nav>
 
-<div class="container-fluid">
+<div class="container-fluid" style="min-height: 70vh !important;">
 
 {% if messages %}
   {% for message in messages %}
@@ -66,9 +67,15 @@
 {% endblock content %}
 </div>
 
+{% cache 3600 footer %}
+<div class="col py-1 px-3 text-white text-right" style="background-color: #646D76">
+  <b>BMDS Online build {{commit.sha}} / {{commit.dt|date:"M d Y"}}</b>
+</div>
 {% if SKIN == 1 %}
   {% include "./includes/epa-footer.html" %}
 {% endif %}
+{% endcache %}
+
 <script src="{% static 'vendor/jquery-3.5.1/jquery.min.js' %}"></script>
 <script src="{% static 'vendor/bootstrap-4.5.3/js/bootstrap.bundle.min.js' %}"></script>
 {% render_bundle 'main' %}

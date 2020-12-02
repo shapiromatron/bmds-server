@@ -39,11 +39,6 @@ class Main extends Component {
                                 </div>
                             </div>
                         </div>
-                        <div
-                            name="payload"
-                            style={{color: "white", height: "1px", overflow: "hidden"}}>
-                            {JSON.stringify(mainStore.getPayload, undefined, 2)}
-                        </div>
                     </div>
                 ) : null}
             </div>

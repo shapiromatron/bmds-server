@@ -1,13 +1,12 @@
 import React, {Component} from "react";
 import {inject, observer} from "mobx-react";
 import PropTypes from "prop-types";
-import InputFormList from "./InputFormList";
-import DatasetNames from "./DatasetNames";
+import DatasetForm from "./DatasetForm";
+import DatasetSelector from "./DatasetSelector";
 import SelecModelType from "./SelectModelType";
 import ScatterPlot from "./ScatterPlot";
-import DeleteButton from "./DeleteButton";
 import "./Data.css";
-import InputFormReadOnly from "./InputFormReadOnly";
+import DatasetTable from "./DatasetTable";
 
 @inject("dataStore")
 @observer
@@ -17,27 +16,18 @@ class Data extends Component {
         return (
             <div className="container-fluid">
                 <div className="row">
-                    <div className="col-lg-3">
+                    <div className="col-md-2">
                         {dataStore.getEditSettings ? <SelecModelType /> : null}
+                        {dataStore.getDataLength ? <DatasetSelector /> : null}
+                    </div>
+                    <div className="col-md-6">
                         {dataStore.getDataLength ? (
                             <div>
-                                <DatasetNames />
-                                {dataStore.getEditSettings ? <DeleteButton /> : null}
+                                {dataStore.getEditSettings ? <DatasetForm /> : <DatasetTable />}
                             </div>
                         ) : null}
                     </div>
-                    <div className="col-lg-5 p-2">
-                        {dataStore.getDataLength ? (
-                            <div>
-                                {dataStore.getEditSettings ? (
-                                    <InputFormList />
-                                ) : (
-                                    <InputFormReadOnly />
-                                )}
-                            </div>
-                        ) : null}
-                    </div>
-                    <div className="col-lg-4">
+                    <div className="col-md-4">
                         {dataStore.getDataLength ? <ScatterPlot /> : null}
                     </div>
                 </div>

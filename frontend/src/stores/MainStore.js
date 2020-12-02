@@ -4,6 +4,8 @@ import {observable, action, computed} from "mobx";
 import _ from "lodash";
 import {modelTypes} from "../constants/mainConstants";
 
+import {simulateClick} from "../common";
+
 class MainStore {
     constructor(rootStore) {
         this.rootStore = rootStore;
@@ -105,6 +107,28 @@ class MainStore {
         }
         this.isExecuting = true;
         this.errorMessage = "";
+
+        const apiUrl = this.config.apiUrl,
+            pollForResults = () => {
+                fetch(apiUrl, {
+                    method: "GET",
+                    mode: "cors",
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.is_executing) {
+                            setTimeout(pollForResults, 5000);
+                        } else {
+                            this.updateModelStateFromApi(data);
+                            simulateClick(document.getElementById("navlink-output"));
+                        }
+                    })
+                    .catch(error => {
+                        this.errorMessage = error;
+                        console.error("error", error);
+                    });
+            };
+
         await fetch(this.config.editSettings.executeUrl, {
             method: "POST",
             mode: "cors",
@@ -117,8 +141,12 @@ class MainStore {
         })
             .then(response => response.json())
             .then(data => {
-                // TODO - fix this when we don't block and execution doesn't complete immediately
-                this.updateModelStateFromApi(data);
+                if (data.is_executing) {
+                    setTimeout(pollForResults, 5000);
+                } else {
+                    this.updateModelStateFromApi(data);
+                    simulateClick(document.getElementById("navlink-output"));
+                }
             })
             .catch(error => {
                 this.errorMessage = error;

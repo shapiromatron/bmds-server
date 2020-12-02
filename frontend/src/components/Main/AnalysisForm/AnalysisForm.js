@@ -49,40 +49,46 @@ class AnalysisForm extends Component {
                             })}
                         </select>
                     </div>
-                    {mainStore.isExecuting ? <Spinner text="Executing, please wait..." /> : null}
                     {mainStore.errorMessage ? (
                         <div className="alert alert-danger">{mainStore.errorMessage}</div>
                     ) : null}
                     <div className="card bg-light">
-                        <div className="card-body">
-                            <p>
-                                <b>Steps required to save and/or execute:</b>
-                            </p>
-                            <p>
-                                {mainStore.hasAtLeastOneModelSelected ? (
-                                    <i className="fa fa-check-circle fa-lg text-success"></i>
-                                ) : (
-                                    <i className="fa fa-times-circle fa-lg text-danger"></i>
-                                )}
-                                &nbsp; At least one model is selected
-                            </p>
-                            <p>
-                                {mainStore.hasAtLeastOneDatasetSelected ? (
-                                    <i className="fa fa-check-circle fa-lg text-success"></i>
-                                ) : (
-                                    <i className="fa fa-times-circle fa-lg text-danger"></i>
-                                )}
-                                &nbsp; At least one dataset is selected
-                            </p>
-                            <p>
-                                {mainStore.hasAtLeastOneOptionSelected ? (
-                                    <i className="fa fa-check-circle fa-lg text-success"></i>
-                                ) : (
-                                    <i className="fa fa-times-circle fa-lg text-danger"></i>
-                                )}
-                                &nbsp; At least one option is selected
-                            </p>
-                        </div>
+                        {mainStore.isExecuting ? (
+                            <div className="card-body">
+                                <Spinner text="Executing, please wait..." />
+                            </div>
+                        ) : (
+                            <div className="card-body">
+                                <p>
+                                    <b>Steps required to save and/or execute:</b>
+                                </p>
+                                <p>
+                                    {mainStore.hasAtLeastOneModelSelected ? (
+                                        <i className="fa fa-check-circle fa-lg text-success"></i>
+                                    ) : (
+                                        <i className="fa fa-times-circle fa-lg text-danger"></i>
+                                    )}
+                                    &nbsp; At least one model is selected
+                                </p>
+                                <p>
+                                    {mainStore.hasAtLeastOneDatasetSelected ? (
+                                        <i className="fa fa-check-circle fa-lg text-success"></i>
+                                    ) : (
+                                        <i className="fa fa-times-circle fa-lg text-danger"></i>
+                                    )}
+                                    &nbsp; At least one dataset is selected
+                                </p>
+                                <p>
+                                    {mainStore.hasAtLeastOneOptionSelected ? (
+                                        <i className="fa fa-check-circle fa-lg text-success"></i>
+                                    ) : (
+                                        <i className="fa fa-times-circle fa-lg text-danger"></i>
+                                    )}
+                                    &nbsp; At least one option is selected
+                                </p>
+                            </div>
+                        )}
+
                         {mainStore.isValid ? (
                             <div className="card-footer btn-toolbar btn-group">
                                 <button

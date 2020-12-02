@@ -14,8 +14,8 @@ class Navigation extends Component {
         const {mainStore} = this.props,
             {config} = mainStore;
         return (
-            <div style={{marginTop: "1em"}}>
-                <ul className="nav nav-tabs">
+            <>
+                <ul className="nav nav-tabs mt-3">
                     <li className="nav-item">
                         <NavLink className="nav-link" to="/" exact={true}>
                             Settings
@@ -27,7 +27,7 @@ class Navigation extends Component {
                         </NavLink>
                     </li>
                     <li className="nav-item">
-                        <NavLink className="nav-link" to="/output">
+                        <NavLink id="navlink-output" className="nav-link" to="/output">
                             Output
                         </NavLink>
                     </li>
@@ -79,7 +79,7 @@ class Navigation extends Component {
                                         <h6 className="dropdown-header">Reporting</h6>
                                         <a className="dropdown-item" href={config.excelUrl}>
                                             <i className="fa fa-fw fa-file-excel-o"></i>
-                                            &nbsp;Download dataset
+                                            &nbsp;Download data
                                         </a>
                                         <a className="dropdown-item" href={config.wordUrl}>
                                             <i className="fa fa-fw fa-file-word-o"></i>
@@ -92,8 +92,8 @@ class Navigation extends Component {
                                                 e.preventDefault();
                                                 mainStore.saveAnalysisToFile();
                                             }}>
-                                            <i className="fa fa-fw fa-file-code-o"></i>
-                                            &nbsp;Download session
+                                            <i className="fa fa-fw fa-download"></i>
+                                            &nbsp;Download analysis
                                         </a>
                                     </>
                                 ) : null}
@@ -111,7 +111,7 @@ class Navigation extends Component {
                 <div id="payload" style={{color: "white", height: "1px", overflow: "hidden"}}>
                     {JSON.stringify(mainStore.getPayload, undefined, 2)}
                 </div>
-            </div>
+            </>
         );
     }
 }

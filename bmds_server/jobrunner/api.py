@@ -10,6 +10,7 @@ from . import models, renderers, reports, serializers, validators
 
 class JobViewset(mixins.CreateModelMixin, mixins.RetrieveModelMixin, viewsets.GenericViewSet):
     serializer_class = serializers.JobSerializer
+    queryset = models.Job.objects.all()
 
     def not_ready_yet(self):
         content = "Outputs processing; not ready yet."
@@ -45,17 +46,6 @@ class JobViewset(mixins.CreateModelMixin, mixins.RetrieveModelMixin, viewsets.Ge
         serializer = self.get_serializer(instance)
         return Response(serializer.data)
 
-    @action(detail=True, methods=("get",), renderer_classes=(renderers.TxtRenderer,))
-    def inputs(self, request, *args, **kwargs):
-        """
-        Return inputs for selected job.
-        """
-        instance = self.get_object()
-        fn = f"{instance.id}-inputs.json"
-        resp = Response(instance.inputs)
-        resp["Content-Disposition"] = f'attachment; filename="{fn}"'
-        return resp
-
     @action(detail=True, methods=("post",))
     def execute(self, request, *args, **kwargs):
         """
@@ -79,21 +69,6 @@ class JobViewset(mixins.CreateModelMixin, mixins.RetrieveModelMixin, viewsets.Ge
         instance.refresh_from_db()
         serializer = self.get_serializer(instance)
         return Response(serializer.data)
-
-    @action(detail=True, methods=("get",), renderer_classes=(renderers.TxtRenderer,))
-    def outputs(self, request, *args, **kwargs):
-        """
-        Return outputs for selected job
-        """
-        instance = self.get_object()
-
-        if not instance.is_finished:
-            return self.not_ready_yet()
-
-        fn = f"{instance.id}-outputs.json"
-        resp = Response(instance.outputs)
-        resp["Content-Disposition"] = f'attachment; filename="{fn}"'
-        return resp
 
     @action(detail=True, methods=("get",), renderer_classes=(renderers.XlsxRenderer,))
     def excel(self, request, *args, **kwargs):
@@ -121,6 +96,3 @@ class JobViewset(mixins.CreateModelMixin, mixins.RetrieveModelMixin, viewsets.Ge
         document = report_engine.create_report()
         data = renderers.BinaryFile(data=document, filename=str(instance.id))
         return Response(data)
-
-    def get_queryset(self):
-        return models.Job.objects.all()

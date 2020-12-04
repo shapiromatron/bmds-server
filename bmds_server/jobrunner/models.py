@@ -51,12 +51,6 @@ class Job(models.Model):
     def get_edit_url(self):
         return reverse("job_edit", args=(str(self.id), self.password))
 
-    def get_input_url(self):
-        return reverse("api:job-inputs", args=(str(self.id),))
-
-    def get_output_url(self):
-        return reverse("api:job-outputs", args=(str(self.id),))
-
     def get_excel_url(self):
         return reverse("api:job-excel", args=(str(self.id),))
 

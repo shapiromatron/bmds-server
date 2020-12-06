@@ -53,7 +53,6 @@ Output.propTypes = {
     outputStore: PropTypes.object,
     toggleModelDetailModal: PropTypes.func,
     getCurrentOutput: PropTypes.func,
-    getLabels: PropTypes.func,
     getMappedDatasets: PropTypes.func,
     dataset: PropTypes.object,
     removeBMDLine: PropTypes.func,

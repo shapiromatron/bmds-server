@@ -1,8 +1,8 @@
 import {observable, action, computed} from "mobx";
 import _ from "lodash";
 import {
-    labels,
     modelTypes,
+    columns,
     columnNames,
     datasetForm,
     datasetNamesHeaders,
@@ -18,28 +18,29 @@ class DataStore {
 
     @observable model_type = "DM";
     @observable datasets = [];
-    @observable selectedDatasetIndex = "";
+    @observable selectedDatasetIndex = null;
     @observable selectedFile = {};
 
-    @action setDefaultsByDatasetType() {
+    @action.bound setDefaultsByDatasetType() {
         let modelTypes = this.getFilteredModelTypes;
         this.model_type = modelTypes[0].value;
         this.datasets = [];
     }
 
-    @action setModelType(model_type) {
+    @action.bound setModelType(model_type) {
         this.model_type = model_type;
     }
-    @action setCurrentDatasetIndex(dataset_id) {
+
+    @action.bound setCurrentDatasetIndex(dataset_id) {
         this.selectedDatasetIndex = dataset_id;
         this.rootStore.outputStore.setCurrentDatasetIndex(this.selectedDatasetIndex);
     }
 
-    @action saveDatasetName(key, value) {
+    @action.bound saveDatasetName(key, value) {
         this.getCurrentDatasets[key] = value;
     }
 
-    @action addDataset() {
+    @action.bound addDataset() {
         let form = datasetForm[this.model_type];
         if (this.getDatasetType === "DM") {
             form["degree"] = "auto-select";
@@ -54,7 +55,7 @@ class DataStore {
         this.datasets.push(form);
     }
 
-    @action addRows() {
+    @action.bound addRows() {
         Object.keys(this.getCurrentDatasets).map((key, i) => {
             if (Array.isArray(this.getCurrentDatasets[key])) {
                 this.getCurrentDatasets[key].push("");
@@ -62,7 +63,7 @@ class DataStore {
         });
     }
 
-    @action deleteRow = (dataset_id, index) => {
+    @action.bound deleteRow = (dataset_id, index) => {
         let dataset = this.datasets[dataset_id];
         Object.keys(dataset).map(key => {
             if (Array.isArray(dataset[key])) {
@@ -98,6 +99,7 @@ class DataStore {
             this.selectedDatasetIndex = idArray[0];
         }
     }
+
     @action.bound toggleDataset(key, value, dataset_id) {
         this.datasets.find(dataset => dataset.dataset_id == dataset_id)[key] = value;
     }
@@ -108,6 +110,7 @@ class DataStore {
             this.selectedDatasetIndex = item.dataset_id;
         });
     }
+
     @computed get getCurrentDatasets() {
         return this.datasets.find(item => item.dataset_id == this.selectedDatasetIndex);
     }
@@ -141,6 +144,7 @@ class DataStore {
         plotData.push(trace1);
         return plotData;
     }
+
     @computed get getResponse() {
         let responses = [];
         let dataset = this.getCurrentDatasets;
@@ -165,6 +169,7 @@ class DataStore {
         }
         return responses;
     }
+
     @computed get getLayout() {
         let model_type = this.getCurrentDatasets.model_type;
         let layout = _.cloneDeep(scatter_plot_layout);
@@ -186,6 +191,7 @@ class DataStore {
     @computed get getEditSettings() {
         return this.rootStore.mainStore.getEditSettings;
     }
+
     @computed get getExecutionOutputs() {
         return this.rootStore.mainStore.getExecutionOutputs;
     }
@@ -197,6 +203,7 @@ class DataStore {
     @computed get getFilteredModelTypes() {
         return modelTypes.filter(model => model.value.includes(this.getDatasetType));
     }
+
     @computed get getModelTypesName() {
         return modelTypes.find(item => item.value === this.model_type);
     }
@@ -205,8 +212,8 @@ class DataStore {
         return this.rootStore.mainStore.dataset_type;
     }
 
-    @computed get getLabels() {
-        return labels[this.getCurrentDatasets.model_type];
+    @computed get getDatasetColumns() {
+        return columns[this.model_type];
     }
 
     @computed get getEnabledDatasets() {
@@ -224,6 +231,10 @@ class DataStore {
             return true;
         }
         return false;
+    }
+
+    @computed get hasSelectedDataset() {
+        return this.selectedDatasetIndex !== null;
     }
 }
 

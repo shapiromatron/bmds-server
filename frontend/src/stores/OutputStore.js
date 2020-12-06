@@ -36,10 +36,6 @@ class OutputStore {
         return current_output;
     }
 
-    @computed get getLabels() {
-        return this.rootStore.dataStore.getLabels;
-    }
-
     @computed get getMappedDatasets() {
         let datasetInputForm = [];
         Object.keys(this.getCurrentOutput.dataset).map(key => {

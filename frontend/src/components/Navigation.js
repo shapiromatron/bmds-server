@@ -2,7 +2,7 @@ import React, {Component} from "react";
 import {Route, NavLink} from "react-router-dom";
 import {inject, observer} from "mobx-react";
 import Main from "./Main/Main";
-import Data from "./Data/Data";
+import DataTab from "./Data/DataTab";
 import Logic from "./Logic/Logic";
 import Output from "./Output/Output";
 import PropTypes from "prop-types";
@@ -104,7 +104,7 @@ class Navigation extends Component {
 
                 <div className="content">
                     <Route exact path="/" component={Main} />
-                    <Route path="/data" component={Data} />
+                    <Route path="/data" component={DataTab} />
                     <Route path="/logic" component={Logic} />
                     <Route path="/output" component={Output} />
                 </div>

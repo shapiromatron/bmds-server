@@ -401,7 +401,7 @@ const modelHeaders = {
     second: {
         model: "",
         values: [
-            {name: "Frequntist Restricted", colspan: "1"},
+            {name: "Frequentist Restricted", colspan: "1"},
             {name: "Frequentist Unrestricted", colspan: "1"},
             {name: "Bayesian", colspan: "1"},
             {name: "Bayesian Model Average", colspan: "1"},
@@ -447,7 +447,7 @@ const nestedHeaders = {
     second: {
         model: "",
         values: [
-            {name: "Frequntist Restricted", colspan: "1"},
+            {name: "Frequentist Restricted", colspan: "1"},
             {name: "Frequentist Unrestricted", colspan: "1"},
         ],
     },

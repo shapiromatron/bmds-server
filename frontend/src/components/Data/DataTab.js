@@ -5,8 +5,8 @@ import DatasetForm from "./DatasetForm";
 import DatasetSelector from "./DatasetSelector";
 import SelecModelType from "./SelectModelType";
 import ScatterPlot from "./ScatterPlot";
-import "./Data.css";
 import DatasetTable from "./DatasetTable";
+import "./DataTab.css";
 
 @inject("dataStore")
 @observer
@@ -21,14 +21,14 @@ class Data extends Component {
                         {dataStore.getDataLength ? <DatasetSelector /> : null}
                     </div>
                     <div className="col-md-6">
-                        {dataStore.getDataLength ? (
+                        {dataStore.hasSelectedDataset ? (
                             <div>
                                 {dataStore.getEditSettings ? <DatasetForm /> : <DatasetTable />}
                             </div>
                         ) : null}
                     </div>
                     <div className="col-md-4">
-                        {dataStore.getDataLength ? <ScatterPlot /> : null}
+                        {dataStore.hasSelectedDataset ? <ScatterPlot /> : null}
                     </div>
                 </div>
             </div>
@@ -37,6 +37,5 @@ class Data extends Component {
 }
 Data.propTypes = {
     dataStore: PropTypes.object,
-    getDataLength: PropTypes.func,
 };
 export default Data;

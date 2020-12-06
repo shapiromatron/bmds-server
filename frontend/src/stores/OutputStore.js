@@ -17,7 +17,7 @@ class OutputStore {
     @action setSelectedModel(model) {
         this.selectedModel = model;
     }
-    @action setCurrentDatasetIndex(dataset_id) {
+    @action setSelectedDatasetIndex(dataset_id) {
         this.selectedDatasetIndex = dataset_id;
     }
     @action toggleModelDetailModal(model) {
@@ -105,8 +105,6 @@ class OutputStore {
         return pValue;
     }
 
-    @observable scatterPlotData = [];
-
     @computed get getResponse() {
         let responses = [];
         let dataset = this.getCurrentOutput.dataset;
@@ -125,7 +123,7 @@ class OutputStore {
 
     @computed get getLayout() {
         let layout = _.cloneDeep(constant.layout);
-        let currentDataset = this.rootStore.dataStore.getCurrentDatasets;
+        let currentDataset = this.rootStore.dataStore.selectedDataset;
         layout.title.text = currentDataset.dataset_name;
         return layout;
     }

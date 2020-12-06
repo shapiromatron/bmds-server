@@ -8,7 +8,7 @@ class DatasetTable extends Component {
     render() {
         const {dataStore} = this.props,
             columns = dataStore.getDatasetColumns,
-            dataset = dataStore.getCurrentDatasets,
+            dataset = dataStore.selectedDataset,
             width = `${100 / columns.length}%`;
         return (
             <>
@@ -49,11 +49,5 @@ class DatasetTable extends Component {
 }
 DatasetTable.propTypes = {
     dataStore: PropTypes.object,
-    currentDataset: PropTypes.object,
-    dataset_name: PropTypes.string,
-    column_names: PropTypes.array,
-    mappedDatasets: PropTypes.array,
-    labels: PropTypes.array,
-    getCurrentDatasets: PropTypes.func,
 };
 export default DatasetTable;

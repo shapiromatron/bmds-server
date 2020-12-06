@@ -46,7 +46,7 @@ class DatasetForm extends Component {
     render() {
         const {dataStore} = this.props,
             columns = dataStore.getDatasetColumns,
-            dataset = dataStore.getCurrentDatasets;
+            dataset = dataStore.selectedDataset;
         return (
             <>
                 <div className="label">

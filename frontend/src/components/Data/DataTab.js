@@ -4,7 +4,7 @@ import PropTypes from "prop-types";
 import DatasetForm from "./DatasetForm";
 import DatasetSelector from "./DatasetSelector";
 import SelecModelType from "./SelectModelType";
-import ScatterPlot from "./ScatterPlot";
+import DoseResponsePlot from "./DoseResponsePlot";
 import DatasetTable from "./DatasetTable";
 import "./DataTab.css";
 
@@ -28,7 +28,7 @@ class Data extends Component {
                         ) : null}
                     </div>
                     <div className="col-md-4">
-                        {dataStore.hasSelectedDataset ? <ScatterPlot /> : null}
+                        {dataStore.hasSelectedDataset ? <DoseResponsePlot /> : null}
                     </div>
                 </div>
             </div>

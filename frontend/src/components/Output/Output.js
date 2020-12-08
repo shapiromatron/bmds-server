@@ -25,7 +25,7 @@ class Output extends Component {
         if ("error" in outputStore.getCurrentOutput) {
             return (
                 <div className="container-fluid">
-                    <p>{outputStore.getCurrentOutput.error}</p>
+                    <pre>{outputStore.getCurrentOutput.error}</pre>
                 </div>
             );
         }

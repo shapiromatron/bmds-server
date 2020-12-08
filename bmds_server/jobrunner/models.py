@@ -142,10 +142,6 @@ class Job(models.Model):
 
         return session
 
-    @staticmethod
-    def get_model_output(model_index, model):
-        return
-
     @property
     def deletion_date(self):
         return self.created + timedelta(days=settings.DAYS_TO_KEEP_JOBS)

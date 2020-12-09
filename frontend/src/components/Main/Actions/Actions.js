@@ -6,7 +6,8 @@ import PropTypes from "prop-types";
 @observer
 class Actions extends Component {
     render() {
-        const {mainStore} = this.props;
+        const {mainStore} = this.props,
+            {config} = mainStore;
         return (
             <div className="dropdown">
                 <button

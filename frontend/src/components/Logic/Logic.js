@@ -13,7 +13,7 @@ class Logic extends Component {
     }
     render() {
         return (
-            <div className="container-fluid logic">
+            <div className="container-fluid mt-2 logic">
                 <DecisionLogic />
                 <RuleList />
             </div>

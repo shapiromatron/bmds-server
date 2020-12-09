@@ -50,7 +50,7 @@ const OptionsForm = props => {
             <td>
                 <input
                     type="number"
-                    className="form-control"
+                    className="form-control text-center"
                     value={props.options.bmr_value}
                     onChange={e =>
                         props.saveOptions("bmr_value", parseFloat(e.target.value), props.idx)
@@ -61,7 +61,7 @@ const OptionsForm = props => {
                 <td>
                     <input
                         type="number"
-                        className="form-control"
+                        className="form-control text-center"
                         value={props.options.tail_probability}
                         onChange={e =>
                             props.saveOptions(
@@ -75,7 +75,7 @@ const OptionsForm = props => {
             ) : null}
             <td>
                 <input
-                    className="form-control"
+                    className="form-control text-center"
                     type="number"
                     value={props.options.confidence_level}
                     onChange={e =>

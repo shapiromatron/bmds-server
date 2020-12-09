@@ -15,19 +15,19 @@ class Data extends Component {
         const {dataStore} = this.props;
         return (
             <div className="container-fluid">
-                <div className="row">
+                <div className="row mt-2">
                     <div className="col-md-2">
                         {dataStore.getEditSettings ? <SelecModelType /> : null}
                         {dataStore.getDataLength ? <DatasetSelector /> : null}
                     </div>
-                    <div className="col-md-6">
+                    <div className="col-md-5">
                         {dataStore.getDataLength ? (
                             <div>
                                 {dataStore.getEditSettings ? <DatasetForm /> : <DatasetTable />}
                             </div>
                         ) : null}
                     </div>
-                    <div className="col-md-4">
+                    <div className="col-md-5">
                         {dataStore.getDataLength ? <ScatterPlot /> : null}
                     </div>
                 </div>

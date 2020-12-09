@@ -31,10 +31,10 @@ class Main extends Component {
                                 <div>{mainStore.getDatasetLength ? <DatasetList /> : null}</div>
                             </div>
                             <div className="col-lg-8">
-                                <div className="modelsCheckbox">
+                                <div>
                                     <ModelsCheckBoxList />
                                 </div>
-                                <div className="optionslist">
+                                <div>
                                     <OptionsFormList />
                                 </div>
                             </div>

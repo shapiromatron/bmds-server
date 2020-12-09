@@ -12,10 +12,10 @@ class OptionsFormList extends Component {
         const {optionsStore} = this.props,
             optionsList = toJS(optionsStore.optionsList);
         return (
-            <div className="options-div">
+            <div>
                 <div className="panel panel-default">
                     <form className="form-horizontal">
-                        <table className="options-table table table-bordered table-sm">
+                        <table className="options-table table table-bordered table-sm text-center">
                             <thead className="table-primary">
                                 <tr>
                                     {optionsStore.headers.map((item, index) => {

@@ -8,15 +8,15 @@ class DatasetSelector extends Component {
     render() {
         const {dataStore} = this.props;
         return (
-            <div className="nav flex-column nav-fill nav-pills nav-stacked">
+            <div className="nav flex-column nav-fill nav-pills nav-stacked mt-2">
                 {dataStore.datasets.map(dataset => {
                     return (
                         <a
                             key={dataset.dataset_id}
                             className={
                                 dataset.dataset_id === dataStore.selectedDatasetIndex
-                                    ? "nav-link active"
-                                    : "nav-link"
+                                    ? "nav-link btn-sm active"
+                                    : "nav-link btn-sm"
                             }
                             data-toggle="pill"
                             href="#"

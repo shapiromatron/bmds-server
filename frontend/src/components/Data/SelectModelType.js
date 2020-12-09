@@ -9,10 +9,10 @@ class SelectModelType extends Component {
         const {dataStore} = this.props;
         return (
             <div className="model-type">
-                <label htmlFor="selectmodel">Select Model Type</label>
+                <label>Select Model Type</label>
                 <div className="input-group">
                     <select
-                        className="form-control mr-1"
+                        className="form-control mr-1 p-0"
                         id="selectmodel"
                         onChange={e => dataStore.setModelType(e.target.value)}>
                         {dataStore.getFilteredModelTypes.map((item, i) => {

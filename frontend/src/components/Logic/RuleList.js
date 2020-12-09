@@ -13,9 +13,9 @@ class RuleList extends Component {
         let rules = toJS(logicStore.logic.rules);
 
         return (
-            <div className=" row">
+            <div className="row">
                 <div className="col col-sm-8 table-responsive ">
-                    <table className="table table-bordered table-sm rule-list">
+                    <table className="table table-bordered table-sm">
                         <thead className="table-primary">
                             <tr>
                                 <th colSpan="7" className="text-center">

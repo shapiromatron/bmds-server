@@ -25,7 +25,7 @@ const ModelsCheckBox = props => {
 
                                     {dev.name.includes(model.Bayesian_Model_Average) ? (
                                         <input
-                                            className="text-center"
+                                            className="text-center form-control col-sm-3 float-right p-0 mr-5"
                                             type="number"
                                             value={dev.prior_weight}
                                             onChange={e =>
@@ -52,7 +52,7 @@ const ModelsCheckBox = props => {
                         Total Weights{" "}
                         <input
                             type="number"
-                            className="text-center"
+                            className="text-center form-control float-right col-sm-3 p-0 mr-5 ml-5"
                             readOnly
                             value={props.total_weight}
                         />

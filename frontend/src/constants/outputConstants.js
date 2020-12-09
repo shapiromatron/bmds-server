@@ -211,7 +211,7 @@ const dose_response_model = {
     LogProbit: "P[dose] = g+(1-g) * CumNorm(a+b*Log(Dose))",
     Multistage: "P[dose] = g + (1-g)*[1-exp(-b1*dose^1-b2*dose^2 - ...)",
     Probit: "P[dose] = CumNorm(a+b*Dose)",
-    Quantal_Linear: "P[dose] = g + (1-g)*[1-exp(-b*dose)]",
+    ["Quantal Linear"]: "P[dose] = g + (1-g)*[1-exp(-b*dose)]",
     Weibull: "P[dose] = g + (1-g)*[1-exp(-b*dose^a)]",
 };
 

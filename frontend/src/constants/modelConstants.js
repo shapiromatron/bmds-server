@@ -307,22 +307,22 @@ const modelsList = {
             model: "Quantal Linear",
             values: [
                 {
-                    name: "frequentist_restricted-QuantalLinear",
+                    name: "frequentist_restricted-Quantal Linear",
                     isChecked: false,
                     isDisabled: true,
                 },
                 {
-                    name: "frequentist_unrestricted-QuantalLinear",
+                    name: "frequentist_unrestricted-Quantal Linear",
+                    isChecked: false,
+                    isDisabled: false,
+                },
+                {
+                    name: "bayesian-Quantal Linear",
                     isChecked: false,
                     isDisabled: true,
                 },
                 {
-                    name: "bayesian-QuantalLinear",
-                    isChecked: false,
-                    isDisabled: true,
-                },
-                {
-                    name: "bayesian_model_average-QuantalLinear",
+                    name: "bayesian_model_average-Quantal Linear",
                     isChecked: false,
                     isDisabled: true,
                     prior_weight: 0,

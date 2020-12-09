@@ -7,15 +7,17 @@ import Logic from "./Logic/Logic";
 import Output from "./Output/Output";
 import PropTypes from "prop-types";
 
+import Actions from "./Main/Actions/Actions";
+import ShareActions from "./Main/Actions/ShareActions";
+
 @inject("mainStore")
 @observer
 class Navigation extends Component {
     render() {
-        const {mainStore} = this.props,
-            {config} = mainStore;
+        const {mainStore} = this.props;
         return (
             <>
-                <ul className="nav nav-tabs mt-3">
+                <ul className="nav nav-tabs d-flex mt-3">
                     <li className="nav-item">
                         <NavLink className="nav-link" to="/" exact={true}>
                             Settings
@@ -36,72 +38,15 @@ class Navigation extends Component {
                             Logic
                         </NavLink>
                     </li>
-                    <li className="nav-item ml-auto">
-                        <div className="dropdown">
-                            <button
-                                className="btn btn-info dropdown-toggle"
-                                type="button"
-                                id="bmdSessionActions"
-                                data-toggle="dropdown"
-                                aria-haspopup="true"
-                                aria-expanded="false">
-                                Actions
-                            </button>
-                            <div
-                                className="dropdown-menu dropdown-menu-right"
-                                aria-labelledby="bmdSessionActions">
-                                {mainStore.getEditSettings ? (
-                                    <>
-                                        <h6 className="dropdown-header">Edit settings</h6>
-                                        <a className="dropdown-item" href="#">
-                                            <label
-                                                htmlFor="file"
-                                                className="loadAnalysisLabel"
-                                                role="button">
-                                                <i className="fa fa-fw fa-upload"></i>
-                                                &nbsp;Load analysis
-                                                <input
-                                                    type="file"
-                                                    id="file"
-                                                    onChange={e => {
-                                                        e.stopPropagation();
-                                                        mainStore.loadAnalysisFromFile(
-                                                            e.target.files[0]
-                                                        );
-                                                    }}
-                                                />
-                                            </label>
-                                        </a>
-                                    </>
-                                ) : null}
-                                {mainStore.hasOutputs ? (
-                                    <>
-                                        <h6 className="dropdown-header">Reporting</h6>
-                                        <a className="dropdown-item" href={config.excelUrl}>
-                                            <i className="fa fa-fw fa-file-excel-o"></i>
-                                            &nbsp;Download data
-                                        </a>
-                                        <a className="dropdown-item" href={config.wordUrl}>
-                                            <i className="fa fa-fw fa-file-word-o"></i>
-                                            &nbsp;Download report
-                                        </a>
-                                        <a
-                                            className="dropdown-item"
-                                            href="#"
-                                            onClick={e => {
-                                                e.preventDefault();
-                                                mainStore.saveAnalysisToFile();
-                                            }}>
-                                            <i className="fa fa-fw fa-download"></i>
-                                            &nbsp;Download analysis
-                                        </a>
-                                    </>
-                                ) : null}
-                            </div>
-                        </div>
+                    {mainStore.getEditSettings ? (
+                        <li className="nav-item ml-auto mr-1">
+                            <ShareActions />
+                        </li>
+                    ) : null}
+                    <li className={mainStore.getEditSettings ? "nav-item" : "nav-item ml-auto"}>
+                        <Actions />
                     </li>
                 </ul>
-
                 <div className="content">
                     <Route exact path="/" component={Main} />
                     <Route path="/data" component={DataTab} />

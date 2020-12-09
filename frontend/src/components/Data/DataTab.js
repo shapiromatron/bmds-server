@@ -3,7 +3,7 @@ import {inject, observer} from "mobx-react";
 import PropTypes from "prop-types";
 import DatasetForm from "./DatasetForm";
 import DatasetSelector from "./DatasetSelector";
-import SelecModelType from "./SelectModelType";
+import SelectModelType from "./SelectModelType";
 import DoseResponsePlot from "./DoseResponsePlot";
 import DatasetTable from "./DatasetTable";
 import "./DataTab.css";
@@ -17,7 +17,7 @@ class Data extends Component {
             <div className="container-fluid">
                 <div className="row">
                     <div className="col-md-2">
-                        {dataStore.getEditSettings ? <SelecModelType /> : null}
+                        {dataStore.getEditSettings ? <SelectModelType /> : null}
                         {dataStore.getDataLength ? <DatasetSelector /> : null}
                     </div>
                     <div className="col-md-6">

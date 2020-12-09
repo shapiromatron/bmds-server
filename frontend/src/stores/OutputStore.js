@@ -1,4 +1,4 @@
-import {observable, action, computed} from "mobx";
+import {observable, action, toJS, computed} from "mobx";
 import _ from "lodash";
 import * as constant from "../constants/outputConstants";
 import {model_type} from "../constants/dataConstants";
@@ -141,14 +141,15 @@ class OutputStore {
     }
 
     @action addBMDLine(model) {
-        const ys = constant.generateLine[model.model_name](this.doseArray, this.selectedParams),
-            bmdLine = {
-                x: this.doseArray,
-                y: ys,
-                mode: "markers+line",
-                type: "line",
-                name: model.model_name,
-            };
+        const bmdLine = {
+            x: model.results.dr_x,
+            y: model.results.dr_y,
+            mode: "lines",
+            name: model.model_name,
+            line: {
+                width: 4,
+            },
+        };
 
         this.plotData.push(bmdLine);
     }

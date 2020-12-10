@@ -24,5 +24,8 @@ class LogicStore {
     @action setLogic(inputs) {
         this.logic = inputs.logic;
     }
+    @computed get getEditSettings() {
+        return this.rootStore.mainStore.getEditSettings;
+    }
 }
 export default LogicStore;

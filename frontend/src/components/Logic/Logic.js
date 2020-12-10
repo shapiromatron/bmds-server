@@ -1,5 +1,6 @@
 import React, {Component} from "react";
 import DecisionLogic from "./DecisionLogic";
+import DecisionLogicReadOnly from "./DecisionLogicReadOnly";
 import RuleList from "./RuleList";
 import {inject, observer} from "mobx-react";
 import PropTypes from "prop-types";
@@ -12,9 +13,10 @@ class Logic extends Component {
         super(props);
     }
     render() {
+        const {logicStore} = this.props;
         return (
             <div className="container-fluid mt-2 logic">
-                <DecisionLogic />
+                {logicStore.getEditSettings ? <DecisionLogic /> : <DecisionLogicReadOnly />}
                 <RuleList />
             </div>
         );

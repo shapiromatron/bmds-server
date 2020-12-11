@@ -1,4 +1,4 @@
-import {observable, action, toJS, computed} from "mobx";
+import {observable, action, computed} from "mobx";
 import _ from "lodash";
 import * as constant from "../constants/outputConstants";
 import {model_type} from "../constants/dataConstants";
@@ -56,8 +56,7 @@ class OutputStore {
         let infoTable = _.cloneDeep(constant.infoTable);
         infoTable.model_name.value = this.selectedModel.model_name;
         infoTable.dataset_name.value = this.getCurrentOutput.dataset.dataset_name;
-        infoTable.dose_response_model.value =
-            constant.dose_response_model[this.selectedModel.model_name];
+        infoTable.dose_response_model.value = this.selectedModel.results.fit.model.model_form_str;
         return infoTable;
     }
 
@@ -161,9 +160,8 @@ class OutputStore {
     }
 
     @computed get selectedParams() {
-        let names = constant.parameters[this.selectedModel.results.model_class],
+        let names = this.selectedModel.results.fit.model.params,
             values = this.selectedModel.results.fit.params.toJS();
-
         return _.zipObject(names, values);
     }
 

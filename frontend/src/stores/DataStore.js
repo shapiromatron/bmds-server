@@ -83,7 +83,7 @@ class DataStore {
     }
 
     @action.bound changeColumnName(name, value) {
-        this.selectedDataset.dataset_id["column_names"][name] = value;
+        this.selectedDataset.column_names[name] = value;
     }
 
     @action.bound deleteDataset() {

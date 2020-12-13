@@ -25,20 +25,23 @@ class Actions extends Component {
                     {mainStore.getEditSettings ? (
                         <>
                             <h6 className="dropdown-header">Edit settings</h6>
-                            <a className="dropdown-item" href="#">
-                                <label htmlFor="file" className="loadAnalysisLabel" role="button">
+                            <div className="dropdown-item form-group">
+                                <label
+                                    htmlFor="loadAnalysisFile"
+                                    style={{fontWeight: "normal", cursor: "pointer"}}>
                                     <i className="fa fa-fw fa-upload"></i>
                                     &nbsp;Load analysis
-                                    <input
-                                        type="file"
-                                        id="file"
-                                        onChange={e => {
-                                            e.stopPropagation();
-                                            mainStore.loadAnalysisFromFile(e.target.files[0]);
-                                        }}
-                                    />
                                 </label>
-                            </a>
+                                <input
+                                    id="loadAnalysisFile"
+                                    type="file"
+                                    className="hiddenInputFile"
+                                    onChange={e => {
+                                        mainStore.loadAnalysisFromFile(e.target.files[0]);
+                                        e.target.value = "";
+                                    }}
+                                />
+                            </div>
                         </>
                     ) : null}
                     {mainStore.hasOutputs ? (

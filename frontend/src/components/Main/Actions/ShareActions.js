@@ -26,7 +26,8 @@ class ShareActions extends Component {
                     aria-labelledby="bmdSessionShare">
                     <form className="px-3">
                         <p className="text-muted py-2">
-                            Analyses are kept for six months; current deletion date:&nbsp;
+                            Analyses are kept for six months; current deletion date:
+                            <br />
                             <b>{editSettings.deleteDateStr}</b>
                         </p>
                         <div className="form-group">

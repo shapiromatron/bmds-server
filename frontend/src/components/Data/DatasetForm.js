@@ -9,8 +9,9 @@ const DatasetFormRow = props => {
         <tr>
             {props.columns.map((column, index) => {
                 return (
-                    <td key={index} className="inputform">
+                    <td key={index}>
                         <input
+                            className="text-center form-control"
                             type="number"
                             name={column}
                             value={props.row[column]}
@@ -49,28 +50,38 @@ class DatasetForm extends Component {
             dataset = dataStore.selectedDataset;
         return (
             <>
-                <div className="label">
-                    <label>Dataset Name:</label>
-                    <input
-                        type="text"
-                        name="dataset_name"
-                        value={dataset.dataset_name}
-                        onChange={e => dataStore.saveDatasetName("dataset_name", e.target.value)}
-                    />
-                    <button
-                        type="button"
-                        className="btn btn-danger btn-sm float-right ml-1"
-                        onClick={dataStore.deleteDataset}>
-                        <i className="fa fa-fw fa-trash"></i>
-                        Delete
-                    </button>
+                <div className="form-group mt-2">
+                    <label className="col-sm-3 col-form-label col-form-label-sm">
+                        Dataset Name:
+                    </label>
+                    <div className="input-group">
+                        <input
+                            type="text"
+                            className="form-control form-control-sm"
+                            name="dataset_name"
+                            value={dataset.dataset_name}
+                            onChange={e =>
+                                dataStore.saveDatasetName("dataset_name", e.target.value)
+                            }
+                        />
+                        <div className="input-group-append">
+                            <button
+                                type="button"
+                                className="btn btn-danger btn-sm float-right ml-1"
+                                onClick={dataStore.deleteDataset}>
+                                <i className="fa fa-fw fa-trash"></i>
+                                Delete
+                            </button>
+                        </div>
+                    </div>
                 </div>
-                <table className="inputformlist">
+
+                <table className="table table-sm text-center">
                     <thead>
                         <tr className="table-primary text-center">
-                            {columns.map((item, index) => {
-                                return <th key={index}>{columnHeaders[item]}</th>;
-                            })}
+                            {columns.map((item, index) => (
+                                <th key={index}>{columnHeaders[item]}</th>
+                            ))}
                             <td>
                                 <button
                                     type="button"
@@ -85,7 +96,7 @@ class DatasetForm extends Component {
                                 return (
                                     <td key={i}>
                                         <input
-                                            className="column-names"
+                                            className="text-center form-control"
                                             name={column}
                                             value={dataset.column_names[column]}
                                             onChange={e =>

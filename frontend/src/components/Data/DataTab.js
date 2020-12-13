@@ -6,8 +6,6 @@ import DatasetSelector from "./DatasetSelector";
 import SelectModelType from "./SelectModelType";
 import DoseResponsePlot from "./DoseResponsePlot";
 import DatasetTable from "./DatasetTable";
-import "./DataTab.css";
-
 @inject("dataStore")
 @observer
 class Data extends Component {
@@ -15,16 +13,18 @@ class Data extends Component {
         const {dataStore} = this.props;
         return (
             <div className="container-fluid">
-                <div className="row">
+                <div className="row mt-2">
                     <div className="col-md-2">
                         {dataStore.getEditSettings ? <SelectModelType /> : null}
                         {dataStore.getDataLength ? <DatasetSelector /> : null}
                     </div>
                     <div className="col-md-6">
                         {dataStore.hasSelectedDataset ? (
-                            <div>
-                                {dataStore.getEditSettings ? <DatasetForm /> : <DatasetTable />}
-                            </div>
+                            dataStore.getEditSettings ? (
+                                <DatasetForm />
+                            ) : (
+                                <DatasetTable />
+                            )
                         ) : null}
                     </div>
                     <div className="col-md-4">

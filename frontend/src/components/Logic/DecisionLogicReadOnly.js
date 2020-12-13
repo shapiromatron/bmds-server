@@ -11,7 +11,7 @@ class DecisionLogic extends Component {
         return (
             <div>
                 <div className="row mt-2">
-                    <div className="col col-xs-12 col-md-5 table-responsive">
+                    <div className="col-lg-6">
                         <table className="table table-bordered table-sm">
                             <thead>
                                 <tr className="table-primary">
@@ -21,7 +21,7 @@ class DecisionLogic extends Component {
                             <tbody>
                                 <tr>
                                     <td>{decision_logic.recommend_viable}</td>
-                                    <td className="text-center">
+                                    <td className="text-center" style={{minWidth: 50}}>
                                         {logicStore.logic.recommend_viable ? (
                                             <i className="fa fa-check-square-o"></i>
                                         ) : (

@@ -15,8 +15,8 @@ class RuleList extends Component {
 
         return (
             <div className="row">
-                <div className="col col-sm-8 table-responsive ">
-                    <table className="table table-bordered table-sm">
+                <div className="col">
+                    <table className="table table-bordered">
                         <thead className="table-primary">
                             <tr>
                                 <th colSpan="7" className="text-center">
@@ -33,7 +33,7 @@ class RuleList extends Component {
                                 })}
                             </tr>
                         </thead>
-                        {logicStore.getEdditSettings ? (
+                        {logicStore.getEditSettings ? (
                             <tbody>
                                 {Object.keys(rules).map((rule, i) => {
                                     return (

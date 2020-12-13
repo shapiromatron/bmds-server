@@ -20,9 +20,11 @@ class Data extends Component {
                     </div>
                     <div className="col-md-6">
                         {dataStore.hasSelectedDataset ? (
-                            <div>
-                                {dataStore.getEditSettings ? <DatasetForm /> : <DatasetTable />}
-                            </div>
+                            dataStore.getEditSettings ? (
+                                <DatasetForm />
+                            ) : (
+                                <DatasetTable />
+                            )
                         ) : null}
                     </div>
                     <div className="col-md-4">

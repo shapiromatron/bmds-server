@@ -47,7 +47,7 @@ const Rule = props => {
                     disabled={props.disableList.includes(props.rule_name + "-nested")}
                 />
             </td>
-            <td className="text-center">
+            <td>
                 <input
                     className="text-center form-control"
                     type="number"
@@ -62,7 +62,7 @@ const Rule = props => {
                     disabled={props.disableList.includes(props.rule_name + "-threshold")}
                 />
             </td>
-            <td className="text-center">
+            <td>
                 <select
                     className="form-control bin_failure"
                     value={props.rule.failure_bin}
@@ -79,7 +79,7 @@ const Rule = props => {
                     <option value="0">Questionable Bin</option>
                 </select>
             </td>
-            <td className="text-center">
+            <td>
                 {props.notes !== undefined ? (
                     props.notes(props.rule.threshold)
                 ) : (

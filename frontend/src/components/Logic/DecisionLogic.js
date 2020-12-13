@@ -11,7 +11,7 @@ class DecisionLogic extends Component {
         return (
             <div>
                 <div className="row">
-                    <div className="col col-xs-12 col-md-3">
+                    <div className="col col-md-6">
                         <button
                             className="btn btn-info btn-sm"
                             onClick={e => logicStore.setDefaultState()}>
@@ -21,7 +21,7 @@ class DecisionLogic extends Component {
                 </div>
 
                 <div className="row mt-2">
-                    <div className="col col-xs-12 col-md-5 table-responsive">
+                    <div className="col col-lg-6">
                         <table className="table table-bordered table-sm">
                             <thead>
                                 <tr className="table-primary">
@@ -31,7 +31,7 @@ class DecisionLogic extends Component {
                             <tbody>
                                 <tr>
                                     <td>{decision_logic.recommend_viable}</td>
-                                    <td className="text-center">
+                                    <td className="text-center" style={{minWidth: 50}}>
                                         <input
                                             type="checkbox"
                                             id="recommend_viable"

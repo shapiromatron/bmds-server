@@ -8,9 +8,6 @@ import PropTypes from "prop-types";
 @inject("logicStore")
 @observer
 class Logic extends Component {
-    constructor(props) {
-        super(props);
-    }
     render() {
         const {logicStore} = this.props;
         return (
@@ -24,6 +21,5 @@ class Logic extends Component {
 
 Logic.propTypes = {
     logicStore: PropTypes.object,
-    setDefaultState: PropTypes.func,
 };
 export default Logic;

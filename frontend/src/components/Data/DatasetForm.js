@@ -50,7 +50,7 @@ class DatasetForm extends Component {
             dataset = dataStore.selectedDataset;
         return (
             <>
-                <div className="form-group row mt-2">
+                <div className="form-group mt-2">
                     <label className="col-sm-3 col-form-label col-form-label-sm">
                         Dataset Name:
                     </label>
@@ -76,7 +76,7 @@ class DatasetForm extends Component {
                     </div>
                 </div>
 
-                <table className="text-center">
+                <table className="table table-sm text-center">
                     <thead>
                         <tr className="table-primary text-center">
                             {columns.map((item, index) => (

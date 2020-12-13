@@ -17,7 +17,7 @@ class OutputStore {
     @action setSelectedModel(model) {
         this.selectedModel = model;
     }
-    @action setCurrentDatasetIndex(dataset_id) {
+    @action setSelectedDatasetIndex(dataset_id) {
         this.selectedDatasetIndex = dataset_id;
     }
     @action toggleModelDetailModal(model) {
@@ -34,10 +34,6 @@ class OutputStore {
             );
         }
         return current_output;
-    }
-
-    @computed get getLabels() {
-        return this.rootStore.dataStore.getLabels;
     }
 
     @computed get getMappedDatasets() {
@@ -60,8 +56,7 @@ class OutputStore {
         let infoTable = _.cloneDeep(constant.infoTable);
         infoTable.model_name.value = this.selectedModel.model_name;
         infoTable.dataset_name.value = this.getCurrentOutput.dataset.dataset_name;
-        infoTable.dose_response_model.value =
-            constant.dose_response_model[this.selectedModel.model_name];
+        infoTable.dose_response_model.value = this.selectedModel.results.fit.model.model_form_str;
         return infoTable;
     }
 
@@ -109,8 +104,6 @@ class OutputStore {
         return pValue;
     }
 
-    @observable scatterPlotData = [];
-
     @computed get getResponse() {
         let responses = [];
         let dataset = this.getCurrentOutput.dataset;
@@ -129,7 +122,7 @@ class OutputStore {
 
     @computed get getLayout() {
         let layout = _.cloneDeep(constant.layout);
-        let currentDataset = this.rootStore.dataStore.getCurrentDatasets;
+        let currentDataset = this.rootStore.dataStore.selectedDataset;
         layout.title.text = currentDataset.dataset_name;
         return layout;
     }
@@ -147,14 +140,15 @@ class OutputStore {
     }
 
     @action addBMDLine(model) {
-        const ys = constant.generateLine[model.model_name](this.doseArray, this.selectedParams),
-            bmdLine = {
-                x: this.doseArray,
-                y: ys,
-                mode: "markers+line",
-                type: "line",
-                name: model.model_name,
-            };
+        const bmdLine = {
+            x: model.results.dr_x,
+            y: model.results.dr_y,
+            mode: "lines",
+            name: model.model_name,
+            line: {
+                width: 4,
+            },
+        };
 
         this.plotData.push(bmdLine);
     }
@@ -166,9 +160,8 @@ class OutputStore {
     }
 
     @computed get selectedParams() {
-        let names = constant.parameters[this.selectedModel.results.model_class],
+        let names = this.selectedModel.results.fit.model.params,
             values = this.selectedModel.results.fit.params.toJS();
-
         return _.zipObject(names, values);
     }
 

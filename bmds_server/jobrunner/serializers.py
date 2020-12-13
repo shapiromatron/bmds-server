@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from . import models, tasks, validators
+from . import models, validators
 
 
 class JobSerializer(serializers.ModelSerializer):
@@ -9,9 +9,8 @@ class JobSerializer(serializers.ModelSerializer):
     has_errors = serializers.BooleanField(read_only=True)
     inputs_valid = serializers.BooleanField(read_only=True)
     api_url = serializers.URLField(source="get_api_url", read_only=True)
-    input_url = serializers.URLField(source="get_input_url", read_only=True)
-    output_url = serializers.URLField(source="get_output_url", read_only=True)
     excel_url = serializers.URLField(source="get_excel_url", read_only=True)
+    word_url = serializers.URLField(source="get_word_url", read_only=True)
 
     class Meta:
         model = models.Job
@@ -26,9 +25,8 @@ class JobSerializer(serializers.ModelSerializer):
             "has_errors",
             "inputs_valid",
             "api_url",
-            "input_url",
-            "output_url",
             "excel_url",
+            "word_url",
             "created",
             "started",
             "ended",
@@ -42,9 +40,8 @@ class JobSerializer(serializers.ModelSerializer):
             "has_errors",
             "inputs_valid",
             "api_url",
-            "input_url",
-            "output_url",
             "excel_url",
+            "word_url",
             "created",
             "started",
             "ended",
@@ -52,7 +49,7 @@ class JobSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         instance = super().create(validated_data)
-        tasks.try_execute.delay(str(instance.id))
+        instance.start_execute()
         return instance
 
     def validate_inputs(self, value):

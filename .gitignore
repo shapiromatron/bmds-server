@@ -12,6 +12,7 @@ build/
 dist/
 docs/_build/
 node_modules/
+scripts/private/
 vendor/*.whl
 venv/
 
@@ -33,10 +34,8 @@ yarn.lock
 
 # keep folders, ignore contents
 logs/*
-notebooks/*
 public/*
 !logs/.gitkeep
-!notebooks/.gitkeep
 !public/.gitkeep
 
 # until release

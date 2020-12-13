@@ -3,11 +3,9 @@ import {inject, observer} from "mobx-react";
 import PropTypes from "prop-types";
 import DatasetForm from "./DatasetForm";
 import DatasetSelector from "./DatasetSelector";
-import SelecModelType from "./SelectModelType";
-import ScatterPlot from "./ScatterPlot";
-import "./Data.css";
+import SelectModelType from "./SelectModelType";
+import DoseResponsePlot from "./DoseResponsePlot";
 import DatasetTable from "./DatasetTable";
-
 @inject("dataStore")
 @observer
 class Data extends Component {
@@ -17,18 +15,18 @@ class Data extends Component {
             <div className="container-fluid">
                 <div className="row mt-2">
                     <div className="col-md-2">
-                        {dataStore.getEditSettings ? <SelecModelType /> : null}
+                        {dataStore.getEditSettings ? <SelectModelType /> : null}
                         {dataStore.getDataLength ? <DatasetSelector /> : null}
                     </div>
-                    <div className="col-md-5">
-                        {dataStore.getDataLength ? (
+                    <div className="col-md-6">
+                        {dataStore.hasSelectedDataset ? (
                             <div>
                                 {dataStore.getEditSettings ? <DatasetForm /> : <DatasetTable />}
                             </div>
                         ) : null}
                     </div>
-                    <div className="col-md-5">
-                        {dataStore.getDataLength ? <ScatterPlot /> : null}
+                    <div className="col-md-4">
+                        {dataStore.hasSelectedDataset ? <DoseResponsePlot /> : null}
                     </div>
                 </div>
             </div>
@@ -37,6 +35,5 @@ class Data extends Component {
 }
 Data.propTypes = {
     dataStore: PropTypes.object,
-    getDataLength: PropTypes.func,
 };
 export default Data;

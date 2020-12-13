@@ -12,7 +12,7 @@ class AnalysisForm extends Component {
         const {mainStore} = this.props;
         return (
             <div>
-                <form className="analysis-form table-primary p-1 mt-2">
+                <form className="table-primary p-3 mt-2">
                     <div className="form-group">
                         <label>Analysis Name</label>
                         <input

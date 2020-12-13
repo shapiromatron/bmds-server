@@ -5,15 +5,13 @@ import PropTypes from "prop-types";
 
 @inject("dataStore")
 @observer
-class ScatterPlot extends Component {
+class DoseResponsePlot extends Component {
     render() {
         const {dataStore} = this.props;
-        return <Plot data={dataStore.getScatterPlotData} layout={dataStore.getLayout} />;
+        return <Plot data={dataStore.getDoseResponseData} layout={dataStore.getLayout} />;
     }
 }
-ScatterPlot.propTypes = {
+DoseResponsePlot.propTypes = {
     dataStore: PropTypes.object,
-    getScatterPlotData: PropTypes.func,
-    getLayout: PropTypes.func,
 };
-export default ScatterPlot;
+export default DoseResponsePlot;

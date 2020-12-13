@@ -7,7 +7,9 @@ import PropTypes from "prop-types";
 class DatasetTable extends Component {
     render() {
         const {dataStore} = this.props,
-            dataset = dataStore.getCurrentDatasets;
+            columns = dataStore.getDatasetColumns,
+            dataset = dataStore.selectedDataset,
+            width = `${100 / columns.length}%`;
         return (
             <>
                 <div className="label">
@@ -15,16 +17,16 @@ class DatasetTable extends Component {
                     {dataset.dataset_name}
                 </div>
                 <div className="table-responsive-sm">
-                    <table className="table table-bordered table-stripped table-hover table-sm text-center">
+                    <table className="table table-bordered table-sm">
+                        <colgroup>
+                            {columns.map((_, i) => {
+                                return <col key={i} width={width}></col>;
+                            })}
+                        </colgroup>
                         <thead className="table-primary">
                             <tr>
-                                {dataStore.getLabels.map((item, index) => {
-                                    return <th key={index}>{item}</th>;
-                                })}
-                            </tr>
-                            <tr>
-                                {Object.keys(dataset.column_names).map((item, i) => {
-                                    return <td key={i}>{dataset.column_names[item]}</td>;
+                                {columns.map((column, i) => {
+                                    return <th key={i}>{dataset.column_names[column]}</th>;
                                 })}
                             </tr>
                         </thead>
@@ -32,8 +34,8 @@ class DatasetTable extends Component {
                             {dataStore.getMappedArray.map((row, i) => {
                                 return (
                                     <tr key={i}>
-                                        {Object.keys(row).map((key, index) => {
-                                            return <td key={index}>{row[key]}</td>;
+                                        {columns.map((column, index) => {
+                                            return <td key={index}>{row[column]}</td>;
                                         })}
                                     </tr>
                                 );
@@ -47,12 +49,5 @@ class DatasetTable extends Component {
 }
 DatasetTable.propTypes = {
     dataStore: PropTypes.object,
-    currentDataset: PropTypes.object,
-    dataset_name: PropTypes.string,
-    column_names: PropTypes.array,
-    mappedDatasets: PropTypes.array,
-    labels: PropTypes.array,
-    getCurrentDatasets: PropTypes.func,
-    getLabels: PropTypes.func,
 };
 export default DatasetTable;

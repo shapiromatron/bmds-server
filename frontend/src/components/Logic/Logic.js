@@ -4,7 +4,6 @@ import DecisionLogicReadOnly from "./DecisionLogicReadOnly";
 import RuleList from "./RuleList";
 import {inject, observer} from "mobx-react";
 import PropTypes from "prop-types";
-import "./Logic.css";
 
 @inject("logicStore")
 @observer

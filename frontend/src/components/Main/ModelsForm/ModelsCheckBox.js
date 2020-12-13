@@ -8,13 +8,13 @@ const ModelsCheckBox = props => {
             {props.models.map((item, index) => {
                 return (
                     <tr key={index}>
-                        <td>{item.model}</td>
+                        <td className="text-left align-middle">{item.model}</td>
                         {item.values.map((dev, index) => {
                             return (
                                 <td key={index}>
                                     <input
                                         name={dev.name}
-                                        className="checkbox"
+                                        className="align-middle"
                                         type="checkbox"
                                         onChange={e =>
                                             props.toggleModelsCheckBox(dev.name, e.target.checked)
@@ -25,7 +25,7 @@ const ModelsCheckBox = props => {
 
                                     {dev.name.includes(model.Bayesian_Model_Average) ? (
                                         <input
-                                            className="text-center form-control col-sm-3 float-right p-0 mr-5"
+                                            className="form-control form-control-sm align-middle col-sm-3 pl-1 float-right"
                                             type="number"
                                             value={dev.prior_weight}
                                             onChange={e =>
@@ -52,7 +52,7 @@ const ModelsCheckBox = props => {
                         Total Weights{" "}
                         <input
                             type="number"
-                            className="text-center form-control float-right col-sm-3 p-0 mr-5 ml-5"
+                            className="form-control form-control-sm align-middle col-sm-3 pl-1 float-right"
                             readOnly
                             value={props.total_weight}
                         />

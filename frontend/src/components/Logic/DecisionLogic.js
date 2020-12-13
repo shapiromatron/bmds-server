@@ -11,18 +11,18 @@ class DecisionLogic extends Component {
         return (
             <div>
                 <div className="row">
-                    <div className="col col-xs-12 col-md-2">
+                    <div className="col col-md-6">
                         <button
-                            className="btn btn-info"
+                            className="btn btn-info btn-sm"
                             onClick={e => logicStore.setDefaultState()}>
                             Reset to Default Logic
                         </button>
                     </div>
                 </div>
 
-                <div className="row">
-                    <div className="col col-xs-12 col-md-3 table-responsive">
-                        <table className="table table-bordered table-sm decision-logic">
+                <div className="row mt-2">
+                    <div className="col col-lg-6">
+                        <table className="table table-bordered table-sm">
                             <thead>
                                 <tr className="table-primary">
                                     <th colSpan="2">Decision-Logic</th>
@@ -31,7 +31,7 @@ class DecisionLogic extends Component {
                             <tbody>
                                 <tr>
                                     <td>{decision_logic.recommend_viable}</td>
-                                    <td className="text-center">
+                                    <td className="text-center" style={{minWidth: 50}}>
                                         <input
                                             type="checkbox"
                                             id="recommend_viable"
@@ -64,7 +64,7 @@ class DecisionLogic extends Component {
                                     <td>{decision_logic.sufficiently_close_bmdl}</td>
                                     <td className="text-center">
                                         <input
-                                            className=" text-center form-control"
+                                            className=" text-center form-control p-0"
                                             type="number"
                                             id="sufficiently_close_bmdl"
                                             value={logicStore.logic.sufficiently_close_bmdl}

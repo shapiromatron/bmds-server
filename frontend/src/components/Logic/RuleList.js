@@ -3,6 +3,7 @@ import {inject, observer} from "mobx-react";
 import PropTypes from "prop-types";
 import {toJS} from "mobx";
 import Rule from "./Rule";
+import RuleReadOnly from "./RuleReadOnly";
 import {headers, disabled_properties, long_name} from "../../constants/logicConstants";
 
 @inject("logicStore")
@@ -13,9 +14,9 @@ class RuleList extends Component {
         let rules = toJS(logicStore.logic.rules);
 
         return (
-            <div className=" row">
-                <div className="col col-sm-8 table-responsive ">
-                    <table className="table table-bordered table-sm rule-list">
+            <div className="row">
+                <div className="col">
+                    <table className="table table-bordered">
                         <thead className="table-primary">
                             <tr>
                                 <th colSpan="7" className="text-center">
@@ -32,21 +33,37 @@ class RuleList extends Component {
                                 })}
                             </tr>
                         </thead>
-                        <tbody>
-                            {Object.keys(rules).map((rule, i) => {
-                                return (
-                                    <Rule
-                                        key={i}
-                                        rule={rules[rule]}
-                                        rule_name={rule}
-                                        long_name={long_name[rule].name}
-                                        notes={long_name[rule].notes}
-                                        changeLogicValues={logicStore.changeLogicValues}
-                                        disableList={disabled_properties}
-                                    />
-                                );
-                            })}
-                        </tbody>
+                        {logicStore.getEditSettings ? (
+                            <tbody>
+                                {Object.keys(rules).map((rule, i) => {
+                                    return (
+                                        <Rule
+                                            key={i}
+                                            rule={rules[rule]}
+                                            rule_name={rule}
+                                            long_name={long_name[rule].name}
+                                            notes={long_name[rule].notes}
+                                            changeLogicValues={logicStore.changeLogicValues}
+                                            disableList={disabled_properties}
+                                        />
+                                    );
+                                })}
+                            </tbody>
+                        ) : (
+                            <tbody>
+                                {Object.keys(rules).map((rule, i) => {
+                                    return (
+                                        <RuleReadOnly
+                                            key={i}
+                                            rule={rules[rule]}
+                                            rule_name={rule}
+                                            long_name={long_name[rule].name}
+                                            notes={long_name[rule].notes}
+                                        />
+                                    );
+                                })}
+                            </tbody>
+                        )}
                     </table>
                 </div>
             </div>

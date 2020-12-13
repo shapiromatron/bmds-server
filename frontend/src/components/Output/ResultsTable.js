@@ -32,12 +32,11 @@ class ResultsTable extends Component {
                                 onMouseOut={e => store.removeBMDLine()}>
                                 <td>
                                     <a
+                                        href="#"
                                         onClick={e => {
                                             e.preventDefault();
                                             store.toggleModelDetailModal(model);
-                                        }}
-                                        role="button"
-                                        href="#">
+                                        }}>
                                         {model.model_name}
                                     </a>
                                 </td>

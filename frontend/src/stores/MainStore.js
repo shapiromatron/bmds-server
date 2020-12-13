@@ -1,6 +1,10 @@
+import {saveAs} from "file-saver";
+import slugify from "slugify";
 import {observable, action, computed} from "mobx";
 import _ from "lodash";
 import {modelTypes} from "../constants/mainConstants";
+
+import {simulateClick} from "../common";
 
 class MainStore {
     constructor(rootStore) {
@@ -18,9 +22,9 @@ class MainStore {
     @observable executionOutputs = null;
     @observable isUpdateComplete = false;
 
-    @action setConfig = config => {
+    @action.bound setConfig(config) {
         this.config = config;
-    };
+    }
     @action changeAnalysisName(value) {
         this.analysis_name = value;
     }
@@ -103,6 +107,28 @@ class MainStore {
         }
         this.isExecuting = true;
         this.errorMessage = "";
+
+        const apiUrl = this.config.apiUrl,
+            pollForResults = () => {
+                fetch(apiUrl, {
+                    method: "GET",
+                    mode: "cors",
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.is_executing) {
+                            setTimeout(pollForResults, 5000);
+                        } else {
+                            this.updateModelStateFromApi(data);
+                            simulateClick(document.getElementById("navlink-output"));
+                        }
+                    })
+                    .catch(error => {
+                        this.errorMessage = error;
+                        console.error("error", error);
+                    });
+            };
+
         await fetch(this.config.editSettings.executeUrl, {
             method: "POST",
             mode: "cors",
@@ -115,8 +141,12 @@ class MainStore {
         })
             .then(response => response.json())
             .then(data => {
-                // TODO - fix this when we don't block and execution doesn't complete immediately
-                this.updateModelStateFromApi(data);
+                if (data.is_executing) {
+                    setTimeout(pollForResults, 5000);
+                } else {
+                    this.updateModelStateFromApi(data);
+                    simulateClick(document.getElementById("navlink-output"));
+                }
             })
             .catch(error => {
                 this.errorMessage = error;
@@ -166,25 +196,28 @@ class MainStore {
         this.rootStore.logicStore.setLogic(inputs);
         this.isUpdateComplete = true;
     }
-    @action.bound loadAnalysis(file) {
+    @action.bound loadAnalysisFromFile(file) {
         let reader = new FileReader();
         reader.readAsText(file);
         reader.onload = e => {
             let settings = JSON.parse(e.target.result);
-            this.hydrateInputs(settings);
-            this.hydrateOutputs(settings);
+            this.updateModelStateFromApi(settings);
         };
     }
-    @action hydrateInputs(settings) {
-        this.rootStore.dataStore.setDatasets(settings.inputs.datasets);
-        this.rootStore.optionsStore.setOptions(settings.inputs.options);
-        this.rootStore.modelsStore.setModels(settings.inputs.models);
-    }
-    @action hydrateOutputs(settings) {
-        if (!settings.outputs) {
-            return;
-        }
-        this.executionOutputs = settings.outputs.outputs;
+    @action.bound async saveAnalysisToFile() {
+        const apiUrl = this.config.apiUrl;
+        await fetch(apiUrl, {
+            method: "GET",
+            mode: "cors",
+        })
+            .then(response => response.json())
+            .then(json => {
+                const fn = json.inputs.analysis_name ? slugify(json.inputs.analysis_name) : json.id,
+                    file = new File([JSON.stringify(json, null, 2)], `${fn}.json`, {
+                        type: "application/json",
+                    });
+                saveAs(file);
+            });
     }
 
     @computed get getEditSettings() {
@@ -225,6 +258,9 @@ class MainStore {
             this.hasAtLeastOneDatasetSelected &&
             this.hasAtLeastOneOptionSelected
         );
+    }
+    @computed get hasOutputs() {
+        return this.executionOutputs !== null;
     }
 }
 

@@ -3,8 +3,8 @@ import {inject, observer} from "mobx-react";
 import PropTypes from "prop-types";
 import ModelDetailModal from "./ModelDetailModal";
 import ResultsTable from "./ResultsTable";
-import InputFormReadOnly from "../Data/InputFormReadOnly";
-import DatasetNames from "../Data/DatasetNames";
+import DatasetTable from "../Data/DatasetTable";
+import DatasetSelector from "../Data/DatasetSelector";
 import ResponsePlot from "./ResponsePlot";
 import "./Output.css";
 
@@ -25,7 +25,7 @@ class Output extends Component {
         if ("error" in outputStore.getCurrentOutput) {
             return (
                 <div className="container-fluid">
-                    <p>{outputStore.getCurrentOutput.error}</p>
+                    <pre>{outputStore.getCurrentOutput.error}</pre>
                 </div>
             );
         }
@@ -33,14 +33,14 @@ class Output extends Component {
         return (
             <div className="container-fluid">
                 <div className="row">
-                    <div className="col">
-                        <DatasetNames />
+                    <div className="col-md-2">
+                        <DatasetSelector />
                     </div>
-                    <div className="col px-3">
-                        <InputFormReadOnly />
+                    <div className="col-md-6">
+                        <DatasetTable />
                         <ResultsTable />
                     </div>
-                    <div className="col">
+                    <div className="col-md-4">
                         <ResponsePlot />
                     </div>
                 </div>
@@ -53,7 +53,6 @@ Output.propTypes = {
     outputStore: PropTypes.object,
     toggleModelDetailModal: PropTypes.func,
     getCurrentOutput: PropTypes.func,
-    getLabels: PropTypes.func,
     getMappedDatasets: PropTypes.func,
     dataset: PropTypes.object,
     removeBMDLine: PropTypes.func,

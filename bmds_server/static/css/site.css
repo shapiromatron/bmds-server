@@ -1,17 +1,27 @@
+/* bootstrap4 overrides */
 label {
   font-weight: bold;
 }
-
-textarea {
-  font-family: Consolas, monaco, monospace;
-  height: 25em;
-}
-
-.big-example {
-  cursor: pointer;
-  font-size: 1.1rem;
-}
-
 .container-fluid {
   min-height: 450px !important;
+}
+
+/* hide arrows spinners on number forms */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+input[type=number] {
+    -moz-appearance:textfield;
+}
+
+/* hidden input file */
+.hiddenInputFile {
+  width: 0.1px;
+  height: 0.1px;
+  opacity: 0;
+  overflow: hidden;
+  position: absolute;
+  z-index: -1;
 }

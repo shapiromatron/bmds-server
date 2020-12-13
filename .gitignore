@@ -12,6 +12,7 @@ build/
 dist/
 docs/_build/
 node_modules/
+scripts/private/
 vendor/*.whl
 venv/
 
@@ -20,9 +21,11 @@ venv/
 *.py[cod]
 *.sqlite3
 celerybeat-schedule
-*log*.txt
+*log
+*.txt
 .env
 .eslintcache
+.gitcommit
 bmds_server/main/settings/local.py
 compose/nginx/conf/nginx.conf
 settings.ini
@@ -31,10 +34,8 @@ yarn.lock
 
 # keep folders, ignore contents
 logs/*
-notebooks/*
 public/*
 !logs/.gitkeep
-!notebooks/.gitkeep
 !public/.gitkeep
 
 # until release

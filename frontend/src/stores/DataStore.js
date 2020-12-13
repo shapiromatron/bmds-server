@@ -1,8 +1,8 @@
 import {observable, action, computed} from "mobx";
 import _ from "lodash";
 import {
-    labels,
     modelTypes,
+    columns,
     columnNames,
     datasetForm,
     datasetNamesHeaders,
@@ -18,37 +18,29 @@ class DataStore {
 
     @observable model_type = "DM";
     @observable datasets = [];
-    @observable selectedDatasetIndex = "";
+    @observable selectedDatasetIndex = null;
     @observable selectedFile = {};
 
-    @action.bound importDatasets(file) {
-        let reader = new FileReader();
-        reader.readAsText(file);
-        reader.onload = e => {
-            let settings = JSON.parse(e.target.result);
-            this.datasets = settings.inputs.datasets;
-        };
-    }
-
-    @action setDefaultsByDatasetType() {
+    @action.bound setDefaultsByDatasetType() {
         let modelTypes = this.getFilteredModelTypes;
         this.model_type = modelTypes[0].value;
         this.datasets = [];
     }
 
-    @action setModelType(model_type) {
+    @action.bound setModelType(model_type) {
         this.model_type = model_type;
     }
-    @action setCurrentDatasetIndex(dataset_id) {
+
+    @action.bound setSelectedDatasetIndex(dataset_id) {
         this.selectedDatasetIndex = dataset_id;
-        this.rootStore.outputStore.setCurrentDatasetIndex(this.selectedDatasetIndex);
+        this.rootStore.outputStore.setSelectedDatasetIndex(this.selectedDatasetIndex);
     }
 
-    @action saveDatasetName(key, value) {
-        this.getCurrentDatasets[key] = value;
+    @action.bound saveDatasetName(key, value) {
+        this.selectedDataset[key] = value;
     }
 
-    @action addDataset() {
+    @action.bound addDataset() {
         let form = datasetForm[this.model_type];
         if (this.getDatasetType === "DM") {
             form["degree"] = "auto-select";
@@ -57,21 +49,21 @@ class DataStore {
         form["enabled"] = true;
         form["model_type"] = this.model_type;
         form["dataset_id"] = this.datasets.length;
-        form["dataset_name"] = "DatasetName " + form["dataset_id"];
+        form["dataset_name"] = `Dataset #${this.datasets.length + 1}`;
         form["column_names"] = columnNames[this.model_type];
         this.selectedDatasetIndex = form["dataset_id"];
         this.datasets.push(form);
     }
 
-    @action addRows() {
-        Object.keys(this.getCurrentDatasets).map((key, i) => {
-            if (Array.isArray(this.getCurrentDatasets[key])) {
-                this.getCurrentDatasets[key].push("");
+    @action.bound addRows() {
+        Object.keys(this.selectedDataset).map((key, i) => {
+            if (Array.isArray(this.selectedDataset[key])) {
+                this.selectedDataset[key].push("");
             }
         });
     }
 
-    @action deleteRow = (dataset_id, index) => {
+    @action.bound deleteRow = (dataset_id, index) => {
         let dataset = this.datasets[dataset_id];
         Object.keys(dataset).map(key => {
             if (Array.isArray(dataset[key])) {
@@ -91,7 +83,7 @@ class DataStore {
     }
 
     @action.bound changeColumnName(name, value) {
-        this.datasets[this.getCurrentDatasets.dataset_id]["column_names"][name] = value;
+        this.selectedDataset.column_names[name] = value;
     }
 
     @action.bound deleteDataset() {
@@ -107,6 +99,7 @@ class DataStore {
             this.selectedDatasetIndex = idArray[0];
         }
     }
+
     @action.bound toggleDataset(key, value, dataset_id) {
         this.datasets.find(dataset => dataset.dataset_id == dataset_id)[key] = value;
     }
@@ -117,15 +110,17 @@ class DataStore {
             this.selectedDatasetIndex = item.dataset_id;
         });
     }
-    @computed get getCurrentDatasets() {
+
+    @computed get selectedDataset() {
         return this.datasets.find(item => item.dataset_id == this.selectedDatasetIndex);
     }
 
     @computed get getMappedArray() {
-        let datasetInputForm = [];
-        Object.keys(this.getCurrentDatasets).map(key => {
-            if (Array.isArray(this.getCurrentDatasets[key])) {
-                this.getCurrentDatasets[key].map((val, i) => {
+        let datasetInputForm = [],
+            dataset = this.selectedDataset;
+        Object.keys(dataset).map(key => {
+            if (Array.isArray(dataset[key])) {
+                dataset[key].map((val, i) => {
                     if (!datasetInputForm[i]) {
                         datasetInputForm.push({[key]: val});
                     } else {
@@ -137,9 +132,9 @@ class DataStore {
         return datasetInputForm;
     }
 
-    @computed get getScatterPlotData() {
+    @computed get getDoseResponseData() {
         let plotData = [];
-        let dataset = this.getCurrentDatasets;
+        let dataset = this.selectedDataset;
         var trace1 = {
             x: dataset.doses.slice(),
             y: this.getResponse.slice(),
@@ -150,9 +145,10 @@ class DataStore {
         plotData.push(trace1);
         return plotData;
     }
+
     @computed get getResponse() {
         let responses = [];
-        let dataset = this.getCurrentDatasets;
+        let dataset = this.selectedDataset;
         if (dataset.model_type === model_type.Continuous_Summarized) {
             responses = dataset.means;
         } else if (dataset.model_type === model_type.Continuous_Individual) {
@@ -174,13 +170,17 @@ class DataStore {
         }
         return responses;
     }
+
     @computed get getLayout() {
-        let model_type = this.getCurrentDatasets.model_type;
-        let layout = _.cloneDeep(scatter_plot_layout);
-        let ylabel = yAxisTitle[model_type];
-        layout.title.text = this.getCurrentDatasets.dataset_name;
-        layout.xaxis.title.text = this.getCurrentDatasets.column_names["doses"];
-        layout.yaxis.title.text = this.getCurrentDatasets.column_names[ylabel];
+        let dataset = this.selectedDataset,
+            model_type = this.selectedDataset.model_type,
+            layout = _.cloneDeep(scatter_plot_layout),
+            ylabel = yAxisTitle[model_type];
+
+        layout.title.text = dataset.dataset_name;
+        layout.xaxis.title.text = dataset.column_names["doses"];
+        layout.yaxis.title.text = dataset.column_names[ylabel];
+
         return layout;
     }
 
@@ -195,6 +195,7 @@ class DataStore {
     @computed get getEditSettings() {
         return this.rootStore.mainStore.getEditSettings;
     }
+
     @computed get getExecutionOutputs() {
         return this.rootStore.mainStore.getExecutionOutputs;
     }
@@ -206,6 +207,7 @@ class DataStore {
     @computed get getFilteredModelTypes() {
         return modelTypes.filter(model => model.value.includes(this.getDatasetType));
     }
+
     @computed get getModelTypesName() {
         return modelTypes.find(item => item.value === this.model_type);
     }
@@ -214,8 +216,8 @@ class DataStore {
         return this.rootStore.mainStore.dataset_type;
     }
 
-    @computed get getLabels() {
-        return labels[this.getCurrentDatasets.model_type];
+    @computed get getDatasetColumns() {
+        return columns[this.model_type];
     }
 
     @computed get getEnabledDatasets() {
@@ -233,6 +235,10 @@ class DataStore {
             return true;
         }
         return false;
+    }
+
+    @computed get hasSelectedDataset() {
+        return this.selectedDatasetIndex !== null;
     }
 }
 

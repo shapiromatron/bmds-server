@@ -8,11 +8,11 @@ class SelectModelType extends Component {
     render() {
         const {dataStore} = this.props;
         return (
-            <form className="model-type">
-                <div className="form-group">
-                    <label htmlFor="selectmodel">Select Model Type</label>
+            <div className="model-type">
+                <label>Select Model Type</label>
+                <div className="input-group">
                     <select
-                        className="form-control"
+                        className="form-control mr-1 p-0"
                         id="selectmodel"
                         onChange={e => dataStore.setModelType(e.target.value)}>
                         {dataStore.getFilteredModelTypes.map((item, i) => {
@@ -23,25 +23,18 @@ class SelectModelType extends Component {
                             );
                         })}
                     </select>
+                    <div className="input-group-append">
+                        <button
+                            type="button"
+                            className="btn btn-primary btn-sm float-right"
+                            disabled={dataStore.checkDatasetsLength}
+                            onClick={() => dataStore.addDataset()}>
+                            <i className="fa fa-fw fa-plus" />
+                            Create
+                        </button>
+                    </div>
                 </div>
-                <div className="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
-                    <button
-                        type="button"
-                        className="adddataset btn btn-primary btn-sm mr-2"
-                        disabled={dataStore.checkDatasetsLength}
-                        onClick={() => dataStore.addDataset()}>
-                        Add Dataset
-                    </button>
-                    <label htmlFor="file" className="fileContainer btn btn-primary">
-                        Import Datasets
-                        <input
-                            type="file"
-                            id="file"
-                            onChange={e => dataStore.importDatasets(e.target.files[0])}
-                        />
-                    </label>
-                </div>
-            </form>
+            </div>
         );
     }
 }

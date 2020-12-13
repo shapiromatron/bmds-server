@@ -15,7 +15,7 @@ class ModelsCheckBoxList extends Component {
         let models = toJS(modelsStore.models),
             model_headers = toJS(modelsStore.model_headers);
         return (
-            <div>
+            <div className="mt-2 text-center">
                 {!(typeof models === "undefined") ? (
                     <table className="modelscheckbox table table-bordered table-sm">
                         <ModelsCheckBoxHeader

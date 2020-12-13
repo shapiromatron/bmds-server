@@ -14,7 +14,6 @@ import {
 const OptionsForm = props => {
     return (
         <tr className="form-group">
-            <td>{props.idx}</td>
             {props.dataset_type === datasetType.Continuous ? (
                 <td>
                     <select
@@ -54,7 +53,7 @@ const OptionsForm = props => {
                 <input
                     id="bmr_value"
                     type="number"
-                    className="form-control"
+                    className="form-control text-center"
                     value={props.options.bmr_value}
                     onChange={e =>
                         props.saveOptions("bmr_value", parseFloat(e.target.value), props.idx)
@@ -66,7 +65,7 @@ const OptionsForm = props => {
                     <input
                         id="tail_probability"
                         type="number"
-                        className="form-control"
+                        className="form-control text-center"
                         value={props.options.tail_probability}
                         onChange={e =>
                             props.saveOptions(
@@ -80,8 +79,7 @@ const OptionsForm = props => {
             ) : null}
             <td>
                 <input
-                    id="confidence_level"
-                    className="form-control"
+                    className="form-control text-center"
                     type="number"
                     value={props.options.confidence_level}
                     onChange={e =>

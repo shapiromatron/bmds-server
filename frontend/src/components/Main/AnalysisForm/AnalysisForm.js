@@ -12,7 +12,7 @@ class AnalysisForm extends Component {
         const {mainStore} = this.props;
         return (
             <div>
-                <form className="analysis-form table-primary ">
+                <form className="table-primary p-3 mt-2">
                     <div className="form-group">
                         <label>Analysis Name</label>
                         <input
@@ -51,62 +51,65 @@ class AnalysisForm extends Component {
                             })}
                         </select>
                     </div>
-                    <div className="btn-toolbar btn-group form-group" role="toolbar">
-                        <label htmlFor="file" className="fileContainer btn btn-primary btn-sm">
-                            Load Analysis
-                            <input
-                                type="file"
-                                id="file"
-                                onChange={e => mainStore.loadAnalysis(e.target.files[0])}
-                            />
-                        </label>
-                        <button
-                            type="button"
-                            className="btn btn-primary btn-sm mr-1"
-                            onClick={() => mainStore.saveAnalysis()}
-                            disabled={!mainStore.isValid}>
-                            Save Analysis
-                        </button>
-                        <button
-                            type="button"
-                            className="btn btn-primary btn-sm"
-                            disabled={!mainStore.isReadyToExecute}
-                            onClick={() => mainStore.executeAnalysis()}>
-                            Run Analysis
-                        </button>
-                    </div>
-                    {mainStore.isExecuting ? <Spinner text="Executing, please wait..." /> : null}
                     {mainStore.errorMessage ? (
                         <div className="alert alert-danger">{mainStore.errorMessage}</div>
                     ) : null}
+                    <div className="card bg-light">
+                        {mainStore.isExecuting ? (
+                            <div className="card-body">
+                                <Spinner text="Executing, please wait..." />
+                            </div>
+                        ) : (
+                            <div className="card-body">
+                                <p>
+                                    <b>Steps required to save and/or execute:</b>
+                                </p>
+                                <p>
+                                    {mainStore.hasAtLeastOneModelSelected ? (
+                                        <i className="fa fa-check-circle fa-lg text-success"></i>
+                                    ) : (
+                                        <i className="fa fa-times-circle fa-lg text-danger"></i>
+                                    )}
+                                    &nbsp; At least one model is selected
+                                </p>
+                                <p>
+                                    {mainStore.hasAtLeastOneDatasetSelected ? (
+                                        <i className="fa fa-check-circle fa-lg text-success"></i>
+                                    ) : (
+                                        <i className="fa fa-times-circle fa-lg text-danger"></i>
+                                    )}
+                                    &nbsp; At least one dataset is selected
+                                </p>
+                                <p>
+                                    {mainStore.hasAtLeastOneOptionSelected ? (
+                                        <i className="fa fa-check-circle fa-lg text-success"></i>
+                                    ) : (
+                                        <i className="fa fa-times-circle fa-lg text-danger"></i>
+                                    )}
+                                    &nbsp; At least one option is selected
+                                </p>
+                            </div>
+                        )}
+
+                        {mainStore.isValid ? (
+                            <div className="card-footer btn-toolbar btn-group">
+                                <button
+                                    type="button"
+                                    className="btn btn-primary mr-2"
+                                    onClick={() => mainStore.saveAnalysis()}>
+                                    Save Analysis
+                                </button>
+                                <button
+                                    type="button"
+                                    className="btn btn-primary"
+                                    disabled={!mainStore.isReadyToExecute}
+                                    onClick={() => mainStore.executeAnalysis()}>
+                                    Run Analysis
+                                </button>
+                            </div>
+                        ) : null}
+                    </div>
                 </form>
-                <div className="mt-2">
-                    <p>Steps required to save and/or execute:</p>
-                    <p>
-                        {mainStore.hasAtLeastOneModelSelected ? (
-                            <i className="fa fa-check-circle fa-lg text-primary"></i>
-                        ) : (
-                            <i className="fa fa-times-circle fa-lg text-danger"></i>
-                        )}
-                        &nbsp; At least one model is selected
-                    </p>
-                    <p>
-                        {mainStore.hasAtLeastOneDatasetSelected ? (
-                            <i className="fa fa-check-circle fa-lg text-primary"></i>
-                        ) : (
-                            <i className="fa fa-times-circle fa-lg text-danger"></i>
-                        )}
-                        &nbsp; At least one dataset is selected
-                    </p>
-                    <p>
-                        {mainStore.hasAtLeastOneOptionSelected ? (
-                            <i className="fa fa-check-circle fa-lg text-primary"></i>
-                        ) : (
-                            <i className="fa fa-times-circle fa-lg text-danger"></i>
-                        )}
-                        &nbsp; At least one option is selected
-                    </p>
-                </div>
             </div>
         );
     }

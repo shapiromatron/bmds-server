@@ -2,19 +2,22 @@ import React, {Component} from "react";
 import {Route, NavLink} from "react-router-dom";
 import {inject, observer} from "mobx-react";
 import Main from "./Main/Main";
-import Data from "./Data/Data";
+import DataTab from "./Data/DataTab";
 import Logic from "./Logic/Logic";
 import Output from "./Output/Output";
 import PropTypes from "prop-types";
+
+import Actions from "./Main/Actions/Actions";
+import ShareActions from "./Main/Actions/ShareActions";
 
 @inject("mainStore")
 @observer
 class Navigation extends Component {
     render() {
-        const {excelUrl, wordUrl} = this.props.mainStore.config;
+        const {mainStore} = this.props;
         return (
-            <div style={{marginTop: "1em"}}>
-                <ul className="nav nav-tabs">
+            <>
+                <ul className="nav nav-tabs d-flex mt-3">
                     <li className="nav-item">
                         <NavLink className="nav-link" to="/" exact={true}>
                             Settings
@@ -26,7 +29,7 @@ class Navigation extends Component {
                         </NavLink>
                     </li>
                     <li className="nav-item">
-                        <NavLink className="nav-link" to="/output">
+                        <NavLink id="navlink-output" className="nav-link" to="/output">
                             Output
                         </NavLink>
                     </li>
@@ -35,38 +38,25 @@ class Navigation extends Component {
                             Logic
                         </NavLink>
                     </li>
-                    <li className="nav-item ml-auto">
-                        <div className="dropdown">
-                            <button
-                                className="btn btn-info dropdown-toggle"
-                                type="button"
-                                id="bmdSessionActions"
-                                data-toggle="dropdown"
-                                aria-haspopup="true"
-                                aria-expanded="false">
-                                Actions
-                            </button>
-                            <div
-                                className="dropdown-menu dropdown-menu-right"
-                                aria-labelledby="bmdSessionActions">
-                                <a className="dropdown-item" href={excelUrl}>
-                                    <i className="fa fa-file-excel-o"></i>&nbsp;Download dataset
-                                </a>
-                                <a className="dropdown-item" href={wordUrl}>
-                                    <i className="fa fa-file-word-o"></i>&nbsp;Download report
-                                </a>
-                            </div>
-                        </div>
+                    {mainStore.getEditSettings ? (
+                        <li className="nav-item ml-auto mr-1">
+                            <ShareActions />
+                        </li>
+                    ) : null}
+                    <li className={mainStore.getEditSettings ? "nav-item" : "nav-item ml-auto"}>
+                        <Actions />
                     </li>
                 </ul>
-
                 <div className="content">
                     <Route exact path="/" component={Main} />
-                    <Route path="/data" component={Data} />
+                    <Route path="/data" component={DataTab} />
                     <Route path="/logic" component={Logic} />
                     <Route path="/output" component={Output} />
                 </div>
-            </div>
+                <div id="payload" style={{color: "white", height: "1px", overflow: "hidden"}}>
+                    {JSON.stringify(mainStore.getPayload, undefined, 2)}
+                </div>
+            </>
         );
     }
 }

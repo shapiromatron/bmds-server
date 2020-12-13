@@ -51,12 +51,6 @@ class Job(models.Model):
     def get_edit_url(self):
         return reverse("job_edit", args=(str(self.id), self.password))
 
-    def get_input_url(self):
-        return reverse("api:job-inputs", args=(str(self.id),))
-
-    def get_output_url(self):
-        return reverse("api:job-outputs", args=(str(self.id),))
-
     def get_excel_url(self):
         return reverse("api:job-excel", args=(str(self.id),))
 
@@ -147,10 +141,6 @@ class Job(models.Model):
             raise ValueError(f"Unknown bmds_version: {bmds_version}s")
 
         return session
-
-    @staticmethod
-    def get_model_output(model_index, model):
-        return
 
     @property
     def deletion_date(self):

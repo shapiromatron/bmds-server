@@ -25,7 +25,7 @@ class Output extends Component {
         if ("error" in outputStore.getCurrentOutput) {
             return (
                 <div className="container-fluid">
-                    <p>{outputStore.getCurrentOutput.error}</p>
+                    <pre>{outputStore.getCurrentOutput.error}</pre>
                 </div>
             );
         }
@@ -53,7 +53,6 @@ Output.propTypes = {
     outputStore: PropTypes.object,
     toggleModelDetailModal: PropTypes.func,
     getCurrentOutput: PropTypes.func,
-    getLabels: PropTypes.func,
     getMappedDatasets: PropTypes.func,
     dataset: PropTypes.object,
     removeBMDLine: PropTypes.func,

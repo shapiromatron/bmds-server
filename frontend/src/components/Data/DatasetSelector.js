@@ -24,7 +24,7 @@ class DatasetSelector extends Component {
                             aria-selected="true"
                             onClick={e => {
                                 e.preventDefault();
-                                dataStore.setCurrentDatasetIndex(dataset.dataset_id);
+                                dataStore.setSelectedDatasetIndex(dataset.dataset_id);
                             }}>
                             {dataset.dataset_name}
                         </a>

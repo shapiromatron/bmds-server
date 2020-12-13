@@ -70,9 +70,11 @@ class JobDetail(DetailView):
         if self.edit_mode:
             config["editSettings"] = {
                 "editKey": self.object.password,
-                "editUrl": self.object.get_edit_url(),
+                "viewUrl": self.request.build_absolute_uri(self.object.get_absolute_url()),
+                "editUrl": self.request.build_absolute_uri(self.object.get_edit_url()),
                 "patchInputUrl": self.object.get_api_patch_inputs(),
                 "executeUrl": self.object.get_api_execute_url(),
+                "deleteDateStr": self.object.deletion_date.strftime("%Y-%b-%d"),
                 "allowDatasetEditing": True,
                 "allowBmdsVersionEditing": True,
             }

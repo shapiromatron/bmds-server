@@ -2,6 +2,7 @@
 
 import os
 from datetime import datetime
+from subprocess import CalledProcessError
 from pathlib import Path
 
 from ...common.git import Commit
@@ -120,7 +121,11 @@ LOGGING = {
     },
     "loggers": {
         "django.security.DisallowedHost": {"handlers": ["null"], "propagate": False},
-        "django.request": {"handlers": ["mail_admins"], "level": "ERROR", "propagate": True},
+        "django.request": {
+            "handlers": ["console", "mail_admins"],
+            "level": "ERROR",
+            "propagate": True,
+        },
         "": {"handlers": ["file"], "level": "DEBUG"},
     },
 }
@@ -175,7 +180,7 @@ DAYS_TO_KEEP_JOBS = 7
 def get_git_commit() -> Commit:
     try:
         return Commit.current(str(ROOT_DIR))
-    except FileNotFoundError:
+    except (CalledProcessError, FileNotFoundError):
         if GIT_COMMIT_FILE.exists():
             return Commit.parse_file(GIT_COMMIT_FILE)
     return Commit(sha="<undefined>", dt=datetime.now())

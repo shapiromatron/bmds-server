@@ -1,16 +1,12 @@
 import React from "react";
 import PropTypes from "prop-types";
 
+import {readOnlyCheckbox} from "../../../common";
+
 const DatasetsReadOnly = props => {
     return (
         <tr>
-            <td>
-                {props.dataset.enabled ? (
-                    <i className="fa fa-check-square-o"></i>
-                ) : (
-                    <i className="fa fa-square-o"></i>
-                )}
-            </td>
+            <td>{readOnlyCheckbox(props.dataset.enabled)}</td>
             <td>{props.dataset.dataset_name}</td>
             {props.dataset_type === "C" ? (
                 <td>

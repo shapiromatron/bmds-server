@@ -15,6 +15,31 @@ const decision_logic = {
         'BMDL range deemed "sufficiently close" to use lowest AIC instead of lowest BMDL in viable models',
 };
 
+const ruleOrder = [
+    "bmd_missing",
+    "bmdl_missing",
+    "bmdu_missing",
+    "aic_missing",
+    "roi_missing",
+    "variance_type",
+    "variance_fit",
+    "gof",
+    "gof_cancer",
+    "bmd_bmdl_ratio_fail",
+    "bmd_bmdl_ratio_warn",
+    "roi_large",
+    "warnings",
+    "high_bmd",
+    "high_bmdl",
+    "low_bmd_warn",
+    "low_bmdl_warn",
+    "low_bmd_fail",
+    "low_bmdl_fail",
+    "control_residual_high",
+    "control_stdev_fit",
+    "dof_zero",
+];
+
 const long_name = {
     bmd_missing: {
         notes: val => "BMD not estimated",
@@ -76,7 +101,6 @@ const long_name = {
         name: "BMDL higher than highest dose",
         notes: val => `BMDL ${val}x higher than maximum dose`,
     },
-
     low_bmd_warn: {
         name: "BMD lower than lowest dose (warning)",
         notes: val => `BMD ${val}x lower than lowest non-zero dose`,
@@ -133,6 +157,11 @@ const BINS = Object.freeze({
         WARNING: 1,
         FAILURE: 2,
     }),
+    BIN_NAMES = {
+        [BINS.NO_CHANGE]: "No bin change (warning)",
+        [BINS.WARNING]: "Questionable bin",
+        [BINS.FAILURE]: "Unusable bin",
+    },
     RULE_NAMES = Object.freeze({
         BMD_MISSING: "bmd_missing",
         BMDL_MISSING: "bmdl_missing",
@@ -320,4 +349,4 @@ const logic = {
     },
 };
 
-export {headers, logic, decision_logic, disabled_properties, long_name};
+export {headers, ruleOrder, logic, decision_logic, disabled_properties, long_name, BIN_NAMES};

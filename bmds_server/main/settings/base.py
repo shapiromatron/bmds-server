@@ -76,6 +76,7 @@ DATABASES = {
         "USER": os.getenv("DJANGO_DB_USER", "bmds-online"),
         "PASSWORD": os.getenv("DJANGO_DB_PW", "password"),
         "HOST": os.getenv("DJANGO_DB_HOST", "localhost"),
+        "PORT": os.getenv("DJANGO_DB_PORT", "5432"),
     }
 }
 LOGIN_URL = "admin:login"

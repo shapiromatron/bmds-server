@@ -66,9 +66,9 @@ jobs:
       postgres:
         image: postgres:9.6
         env:
-          POSTGRES_USER: hawc
+          POSTGRES_USER: bmds-online
           POSTGRES_PASSWORD: password
-          POSTGRES_DB: hawc-test
+          POSTGRES_DB: bmds-online-test
         ports:
         - 5432:5432
         options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
@@ -106,7 +106,9 @@ jobs:
         # SELENIUM_HOST: selenium-server
         # SELENIUM_PORT: 4444
         DJANGO_DB_NAME: bmds-online-test
-        DJANGO_DB_PORT: ${{ job.services.postgres.ports[5432] }} # get randomly assigned published port
+        DJANGO_DB_HOST: postgres
+        DJANGO_DB_PORT: 5432
+
       run: |
         py.test
-        # py.test -s tests/integration/
+        # py.test -s tests/integration/  # run everything except the integration

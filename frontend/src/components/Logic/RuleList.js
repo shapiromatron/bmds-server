@@ -4,7 +4,7 @@ import PropTypes from "prop-types";
 import {toJS} from "mobx";
 import Rule from "./Rule";
 import RuleReadOnly from "./RuleReadOnly";
-import {headers, disabled_properties, long_name} from "../../constants/logicConstants";
+import {headers, ruleOrder, disabled_properties, long_name} from "../../constants/logicConstants";
 
 @inject("logicStore")
 @observer
@@ -35,14 +35,15 @@ class RuleList extends Component {
                         </thead>
                         {logicStore.getEditSettings ? (
                             <tbody>
-                                {Object.keys(rules).map((rule, i) => {
+                                {ruleOrder.map(ruleName => {
+                                    const rule = rules[ruleName];
                                     return (
                                         <Rule
-                                            key={i}
-                                            rule={rules[rule]}
-                                            rule_name={rule}
-                                            long_name={long_name[rule].name}
-                                            notes={long_name[rule].notes}
+                                            key={ruleName}
+                                            rule={rule}
+                                            rule_name={ruleName}
+                                            long_name={long_name[ruleName].name}
+                                            notes={long_name[ruleName].notes}
                                             changeLogicValues={logicStore.changeLogicValues}
                                             disableList={disabled_properties}
                                         />
@@ -51,14 +52,15 @@ class RuleList extends Component {
                             </tbody>
                         ) : (
                             <tbody>
-                                {Object.keys(rules).map((rule, i) => {
+                                {ruleOrder.map(ruleName => {
+                                    const rule = rules[ruleName];
                                     return (
                                         <RuleReadOnly
-                                            key={i}
-                                            rule={rules[rule]}
-                                            rule_name={rule}
-                                            long_name={long_name[rule].name}
-                                            notes={long_name[rule].notes}
+                                            key={ruleName}
+                                            rule={rule}
+                                            rule_name={ruleName}
+                                            long_name={long_name[ruleName].name}
+                                            notes={long_name[ruleName].notes}
                                         />
                                     );
                                 })}

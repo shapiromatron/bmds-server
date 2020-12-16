@@ -38,6 +38,7 @@ jobs:
         DJANGO_DB_PORT: ${{ job.services.postgres.ports[5432] }} # get randomly assigned published port
       run: |
         make test
+
   frontend:
     name: frontend
     runs-on: ubuntu-18.04
@@ -91,7 +92,6 @@ jobs:
     - uses: actions/checkout@v1
     - name: Install python requirements
       run: |
-        mv tests/data/ci-webpack-stats.json webpack-stats.json
         pip install -r requirements/ci.txt
     - name: Install frontend requirements; start server
       run: |
@@ -110,5 +110,7 @@ jobs:
         DJANGO_DB_PORT: 5432
 
       run: |
+        mv tests/data/ci-webpack-stats.json webpack-stats.json
         py.test
+        # TODO swap these
         # py.test -s tests/integration/  # run everything except the integration

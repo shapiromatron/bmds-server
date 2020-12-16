@@ -15,9 +15,7 @@ can_execute = platform.system() == "Darwin" and os.getenv("CI") is None
 
 
 @pytest.mark.skipif(SKIP_INTEGRATION, reason="integration test")
-@pytest.mark.usefixtures(
-    "set_firefox_driver" if BROWSER == "firefox" else "set_chrome_driver", "set_db_keys"
-)
+@pytest.mark.usefixtures("set_firefox_driver" if BROWSER == "firefox" else "set_chrome_driver")
 class TestIntegration(StaticLiveServerTestCase, TestCase):
     """
     We use a single class that inherits from both StaticLiveServerTestCase and TestCase

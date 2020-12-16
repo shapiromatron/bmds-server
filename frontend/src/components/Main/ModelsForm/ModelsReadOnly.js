@@ -1,6 +1,9 @@
 import React from "react";
 import PropTypes from "prop-types";
 import {model} from "../../../constants/modelConstants";
+
+import {readOnlyCheckbox} from "../../../common";
+
 const ModelsReadOnly = props => {
     return (
         <tbody>
@@ -11,15 +14,10 @@ const ModelsReadOnly = props => {
                         {item.values.map((dev, index) => {
                             return (
                                 <td key={index}>
-                                    {dev.isChecked ? (
-                                        <i className="fa fa-check-square-o"></i>
-                                    ) : (
-                                        <i className="fa fa-square-o"></i>
-                                    )}
-                                    &emsp;&emsp;
-                                    {dev.name.includes(model.Bayesian_Model_Average)
-                                        ? dev.prior_weight + "%"
-                                        : null}
+                                    {readOnlyCheckbox(dev.isChecked)}
+                                    {dev.name.includes(model.Bayesian_Model_Average) ? (
+                                        <span>&emsp;&emsp;{dev.prior_weight}%</span>
+                                    ) : null}
                                 </td>
                             );
                         })}

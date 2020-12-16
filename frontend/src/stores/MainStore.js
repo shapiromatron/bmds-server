@@ -4,7 +4,7 @@ import {observable, action, computed} from "mobx";
 import _ from "lodash";
 import {modelTypes} from "../constants/mainConstants";
 
-import {simulateClick} from "../common";
+import {simulateClick, getHeaders} from "../common";
 
 class MainStore {
     constructor(rootStore) {
@@ -70,14 +70,13 @@ class MainStore {
 
     @action
     async saveAnalysis() {
-        const url = this.config.editSettings.patchInputUrl;
+        const url = this.config.editSettings.patchInputUrl,
+            {csrfToken} = this.config.editSettings;
         this.errorMessage = "";
         await fetch(url, {
             method: "PATCH",
             mode: "cors",
-            headers: {
-                "Content-Type": "application/json",
-            },
+            headers: getHeaders(csrfToken),
             body: JSON.stringify(this.getPayload),
         })
             .then(response => {
@@ -109,6 +108,7 @@ class MainStore {
         this.errorMessage = "";
 
         const apiUrl = this.config.apiUrl,
+            {csrfToken} = this.config.editSettings,
             pollForResults = () => {
                 fetch(apiUrl, {
                     method: "GET",
@@ -132,9 +132,7 @@ class MainStore {
         await fetch(this.config.editSettings.executeUrl, {
             method: "POST",
             mode: "cors",
-            headers: {
-                "Content-Type": "application/json",
-            },
+            headers: getHeaders(csrfToken),
             body: JSON.stringify({
                 editKey: this.config.editSettings.editKey,
             }),

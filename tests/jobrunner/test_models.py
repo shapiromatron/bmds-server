@@ -35,4 +35,4 @@ class TestBmds3Execution:
         assert len(job.outputs["outputs"]) == 1
         assert len(job.outputs["outputs"][0]["models"]) == 1
 
-        assert job.outputs["outputs"][0]["models"][0]["results"]["bmd"] == pytest.approx(2.0)
+        assert job.outputs["outputs"][0]["models"][0]["results"]["bmd"] == pytest.approx(89.0251)

@@ -24,7 +24,8 @@ class Command(BaseCommand):
             db_name = settings.DATABASES["default"]["NAME"]
             message = dedent(
                 f"""
-                Loading test database into {db_name}. Are you sure you want to do this? This will overwrite the existing database.
+                Loading test database into {db_name}. Are you sure you want to do this? This will
+                overwrite the existing database.
 
                 Type 'yes' to continue, or 'no' to cancel:
                 """

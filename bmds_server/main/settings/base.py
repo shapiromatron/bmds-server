@@ -2,8 +2,8 @@
 
 import os
 from datetime import datetime
-from subprocess import CalledProcessError
 from pathlib import Path
+from subprocess import CalledProcessError
 
 from ...common.git import Commit
 from ..constants import SkinStyle
@@ -158,7 +158,6 @@ REST_FRAMEWORK = {
     ),
     "DEFAULT_THROTTLE_RATES": {"anon": "120/minute", "user": "120/minute"},
     "DEFAULT_AUTHENTICATION_CLASSES": (
-        "rest_framework.authentication.BasicAuthentication",
         "rest_framework.authentication.SessionAuthentication",
         "rest_framework.authentication.TokenAuthentication",
     ),

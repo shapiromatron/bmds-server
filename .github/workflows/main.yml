@@ -64,6 +64,7 @@ jobs:
       options: --network-alias container
 
     services:
+
       postgres:
         image: postgres:9.6
         env:
@@ -108,7 +109,5 @@ jobs:
         DJANGO_DB_NAME: bmds-online-test
         DJANGO_DB_HOST: postgres
         DJANGO_DB_PORT: 5432
-
       run: |
-        mv tests/data/ci-webpack-stats.json webpack-stats.json
         py.test -s tests/integration/

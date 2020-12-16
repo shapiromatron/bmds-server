@@ -1,7 +1,7 @@
 import json
 
-from django.test import Client
 import pytest
+from django.test import Client
 
 from bmds_server.jobrunner.models import Job
 
@@ -33,7 +33,7 @@ class TestJobDetail:
             "editSettings": {
                 "editKey": "641515anrub7",
                 "viewUrl": "http://testserver/job/cc3ca355-a57a-4fba-9dc3-99657562df68/",
-                "editUrl": "http://testserver/job/cc3ca355-a57a-4fba-9dc3-99657562df68/641515anrub7/",
+                "editUrl": "http://testserver/job/cc3ca355-a57a-4fba-9dc3-99657562df68/641515anrub7/",  # noqa: E501
                 "patchInputUrl": "/api/v1/job/cc3ca355-a57a-4fba-9dc3-99657562df68/patch-inputs/",
                 "executeUrl": "/api/v1/job/cc3ca355-a57a-4fba-9dc3-99657562df68/execute/",
                 "deleteDateStr": "2020-Dec-22",

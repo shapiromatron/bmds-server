@@ -33,6 +33,9 @@ jobs:
       run: |
         make lint-py
     - name: test
+      env:
+        DJANGO_DB_NAME: bmds-online-test
+        DJANGO_DB_PORT: ${{ job.services.postgres.ports[5432] }} # get randomly assigned published port
       run: |
         make test
 

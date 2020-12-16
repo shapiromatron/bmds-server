@@ -99,17 +99,16 @@ jobs:
         npm run --prefix ./frontend start &
     - name: Run integration tests
       env:
-        # BMDS_INTEGRATION_TESTS: 1
-        # BROWSER: firefox
-        # LIVESERVER_HOST: container
-        # LIVESERVER_PORT: 8000
-        # SELENIUM_HOST: selenium-server
-        # SELENIUM_PORT: 4444
+        BMDS_INTEGRATION_TESTS: 1
+        BROWSER: firefox
+        LIVESERVER_HOST: container
+        LIVESERVER_PORT: 8000
+        SELENIUM_HOST: selenium-server
+        SELENIUM_PORT: 4444
         DJANGO_DB_NAME: bmds-online-test
         DJANGO_DB_HOST: postgres
         DJANGO_DB_PORT: 5432
 
       run: |
         mv tests/data/ci-webpack-stats.json webpack-stats.json
-        py.test  # TODO - remove this; tested elsewhere
         py.test -s tests/integration/

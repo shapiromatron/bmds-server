@@ -3,41 +3,56 @@ name: ci-checks
 on: [pull_request]
 
 jobs:
-  # backend:
-  #   name: backend
-  #   runs-on: ubuntu-18.04
+  backend:
+    name: backend
+    runs-on: ubuntu-18.04
 
-  #   steps:
-  #   - uses: actions/checkout@v1
-  #   - uses: actions/setup-python@v1
-  #     with:
-  #       python-version: '3.6'
-  #       architecture: 'x64'
-  #   - name: install
-  #     run: |
-  #       pip install -r requirements/ci.txt
-  #   - name: lint
-  #     run: |
-  #       make lint-py
-  #   - name: test
-  #     run: |
-  #       make test
+    services:
+      postgres:
+        image: postgres:9.6
+        env:
+          POSTGRES_USER: bmds-online
+          POSTGRES_PASSWORD: password
+          POSTGRES_DB: bmds-online-test
+        ports:
+        # will assign a random free host port
+        - 5432/tcp
+        options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
 
-  # frontend:
-  #   name: frontend
-  #   runs-on: ubuntu-18.04
-  #   steps:
-  #   - uses: actions/checkout@v1
-  #   - uses: actions/setup-node@v1
-  #     with:
-  #       node-version: '12.x'
-  #   - name: install
-  #     run: |
-  #       npm install -g yarn
-  #       yarn --cwd ./frontend install
-  #   - name: lint
-  #     run: |
-  #       make lint-js
+    steps:
+    - uses: actions/checkout@v1
+    - uses: actions/setup-python@v1
+      with:
+        python-version: '3.6'
+        architecture: 'x64'
+    - name: install
+      run: |
+        mv tests/data/ci-webpack-stats.json webpack-stats.json
+        pip install -r requirements/ci.txt
+    - name: lint
+      run: |
+        make lint-py
+    - name: test
+      env:
+        DJANGO_DB_NAME: bmds-online-test
+        DJANGO_DB_PORT: ${{ job.services.postgres.ports[5432] }} # get randomly assigned published port
+      run: |
+        make test
+  frontend:
+    name: frontend
+    runs-on: ubuntu-18.04
+    steps:
+    - uses: actions/checkout@v1
+    - uses: actions/setup-node@v1
+      with:
+        node-version: '12.x'
+    - name: install
+      run: |
+        npm install -g yarn
+        yarn --cwd ./frontend install
+    - name: lint
+      run: |
+        make lint-js
 
   integration:
     name: integration
@@ -48,6 +63,16 @@ jobs:
       options: --network-alias container
 
     services:
+      postgres:
+        image: postgres:9.6
+        env:
+          POSTGRES_USER: hawc
+          POSTGRES_PASSWORD: password
+          POSTGRES_DB: hawc-test
+        ports:
+        - 5432:5432
+        options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
+
       selenium-server:
         # ERR_INSUFFICIENT_RESOURCES is raised if Chrome is used,
         # so we use Firefox instead. Chrome can only handle so many
@@ -62,28 +87,26 @@ jobs:
         ports:
         - 4444:4444
 
-    env:
-      BMDS_INTEGRATION_TESTS: 1
-      BROWSER: firefox
-      LIVESERVER_HOST: container
-      LIVESERVER_PORT: 8000
-      SELENIUM_HOST: selenium-server
-      SELENIUM_PORT: 4444
-
     steps:
     - uses: actions/checkout@v1
     - name: Install python requirements
       run: |
+        mv tests/data/ci-webpack-stats.json webpack-stats.json
         pip install -r requirements/ci.txt
     - name: Install frontend requirements; start server
       run: |
         yarn --cwd ./frontend install
-        npm run --prefix ./frontend start  &
-        sleep 5
-        pwd
-        ls -laht .
-        ls -laht ./frontend
-        ps aux | grep devServer.js
+        npm run --prefix ./frontend start &
     - name: Run integration tests
+      env:
+        # BMDS_INTEGRATION_TESTS: 1
+        # BROWSER: firefox
+        # LIVESERVER_HOST: container
+        # LIVESERVER_PORT: 8000
+        # SELENIUM_HOST: selenium-server
+        # SELENIUM_PORT: 4444
+        DJANGO_DB_NAME: bmds-online-test
+        DJANGO_DB_PORT: ${{ job.services.postgres.ports[5432] }} # get randomly assigned published port
       run: |
-        py.test -s tests/integration/
+        py.test
+        # py.test -s tests/integration/

@@ -3,6 +3,7 @@
 import os
 from datetime import datetime
 from pathlib import Path
+from subprocess import CalledProcessError
 
 from ...common.git import Commit
 from ..constants import SkinStyle
@@ -68,7 +69,16 @@ TEMPLATES = [
 WSGI_APPLICATION = "bmds_server.main.wsgi.application"
 SECRET_KEY = "io^^q^q1))7*r0u@6i+6kx&ek!yxyf6^5vix_6io6k4kdn@@5t"
 
-DATABASES = {"default": {"ENGINE": "django.db.backends.sqlite3", "NAME": ROOT_DIR / "db.sqlite3"}}
+DATABASES = {
+    "default": {
+        "ENGINE": "django.db.backends.postgresql",
+        "NAME": os.getenv("DJANGO_DB_NAME", "bmds-online"),
+        "USER": os.getenv("DJANGO_DB_USER", "bmds-online"),
+        "PASSWORD": os.getenv("DJANGO_DB_PW", "password"),
+        "HOST": os.getenv("DJANGO_DB_HOST", "localhost"),
+        "PORT": os.getenv("DJANGO_DB_PORT", "5432"),
+    }
+}
 LOGIN_URL = "admin:login"
 
 # add randomness to url prefix to prevent easy access
@@ -120,7 +130,11 @@ LOGGING = {
     },
     "loggers": {
         "django.security.DisallowedHost": {"handlers": ["null"], "propagate": False},
-        "django.request": {"handlers": ["mail_admins"], "level": "ERROR", "propagate": True},
+        "django.request": {
+            "handlers": ["console", "mail_admins"],
+            "level": "ERROR",
+            "propagate": True,
+        },
         "": {"handlers": ["file"], "level": "DEBUG"},
     },
 }
@@ -153,7 +167,6 @@ REST_FRAMEWORK = {
     ),
     "DEFAULT_THROTTLE_RATES": {"anon": "120/minute", "user": "120/minute"},
     "DEFAULT_AUTHENTICATION_CLASSES": (
-        "rest_framework.authentication.BasicAuthentication",
         "rest_framework.authentication.SessionAuthentication",
         "rest_framework.authentication.TokenAuthentication",
     ),
@@ -175,7 +188,7 @@ DAYS_TO_KEEP_JOBS = 7
 def get_git_commit() -> Commit:
     try:
         return Commit.current(str(ROOT_DIR))
-    except FileNotFoundError:
+    except (CalledProcessError, FileNotFoundError):
         if GIT_COMMIT_FILE.exists():
             return Commit.parse_file(GIT_COMMIT_FILE)
     return Commit(sha="<undefined>", dt=datetime.now())
@@ -183,3 +196,5 @@ def get_git_commit() -> Commit:
 
 GIT_COMMIT_FILE = ROOT_DIR / ".gitcommit"
 COMMIT = get_git_commit()
+
+TEST_DB_FIXTURE = ROOT_DIR / "tests/data/db.yaml"

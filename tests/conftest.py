@@ -18,7 +18,7 @@ SHOW_BROWSER = bool(os.environ.get("SHOW_BROWSER", None))
 @pytest.fixture(scope="session", autouse=True)
 def test_db(django_db_setup, django_db_blocker):
     with django_db_blocker.unblock():
-        call_command("load_test_db")
+        call_command("load_test_db", interactive=False)
 
 
 @pytest.fixture(scope="session")

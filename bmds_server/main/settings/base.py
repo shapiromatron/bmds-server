@@ -188,3 +188,5 @@ def get_git_commit() -> Commit:
 
 GIT_COMMIT_FILE = ROOT_DIR / ".gitcommit"
 COMMIT = get_git_commit()
+
+TEST_DB_FIXTURE = ROOT_DIR / "tests/data/db.yaml"

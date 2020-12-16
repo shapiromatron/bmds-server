@@ -4,6 +4,7 @@ from django.conf import settings
 from django.contrib import messages
 from django.core.exceptions import ValidationError
 from django.http.response import JsonResponse
+from django.middleware.csrf import get_token
 from django.shortcuts import get_object_or_404
 from django.urls import reverse
 from django.views.generic import CreateView, DetailView, RedirectView, View
@@ -69,6 +70,7 @@ class JobDetail(DetailView):
         }
         if self.edit_mode:
             config["editSettings"] = {
+                "csrfToken": get_token(self.request),
                 "editKey": self.object.password,
                 "viewUrl": self.request.build_absolute_uri(self.object.get_absolute_url()),
                 "editUrl": self.request.build_absolute_uri(self.object.get_edit_url()),

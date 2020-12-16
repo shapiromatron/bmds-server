@@ -9,8 +9,14 @@ const simulateClick = function(el) {
         });
         !el.dispatchEvent(evt);
     },
+    getHeaders = function(csrfToken) {
+        return {
+            "X-CSRFToken": csrfToken,
+            "Content-Type": "application/json",
+        };
+    },
     readOnlyCheckbox = bool => {
         return <i className={bool ? "fa fa-check-square-o" : "fa fa-square-o"}></i>;
     };
 
-export {simulateClick, readOnlyCheckbox};
+export {simulateClick, getHeaders, readOnlyCheckbox};

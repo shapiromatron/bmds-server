@@ -42,6 +42,8 @@ elif DJANGO_EMAIL_BACKEND == "MAILGUN":
         MAILGUN_API_KEY=os.environ["MAILGUN_ACCESS_KEY"],
         MAILGUN_SENDER_DOMAIN=os.environ["MAILGUN_SERVER_NAME"],
     )
+elif DJANGO_EMAIL_BACKEND == "CONSOLE":
+    EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 else:
     raise ValueError(f"Unknown email backend: {DJANGO_EMAIL_BACKEND}")
 

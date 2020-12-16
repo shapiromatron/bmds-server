@@ -7,6 +7,18 @@ jobs:
     name: backend
     runs-on: ubuntu-18.04
 
+    services:
+      postgres:
+        image: postgres:9.6
+        env:
+          POSTGRES_USER: bmds-online
+          POSTGRES_PASSWORD: password
+          POSTGRES_DB: bmds-online-test
+        ports:
+        # will assign a random free host port
+        - 5432/tcp
+        options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
+
     steps:
     - uses: actions/checkout@v1
     - uses: actions/setup-python@v1
@@ -15,6 +27,7 @@ jobs:
         architecture: 'x64'
     - name: install
       run: |
+        mv tests/data/ci-webpack-stats.json webpack-stats.json
         pip install -r requirements/ci.txt
     - name: lint
       run: |

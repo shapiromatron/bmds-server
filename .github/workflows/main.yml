@@ -111,6 +111,5 @@ jobs:
 
       run: |
         mv tests/data/ci-webpack-stats.json webpack-stats.json
-        py.test
-        # TODO swap these
-        # py.test -s tests/integration/  # run everything except the integration
+        py.test  # TODO - remove this; tested elsewhere
+        py.test -s tests/integration/

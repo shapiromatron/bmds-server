@@ -48,23 +48,24 @@ const Rule = props => {
                 />
             </td>
             <td>
-                <input
-                    className="text-center form-control"
-                    type="number"
-                    value={props.rule.threshold}
-                    onChange={e =>
-                        props.changeLogicValues(
-                            props.rule_name,
-                            "threshold",
-                            parseFloat(e.target.value)
-                        )
-                    }
-                    disabled={props.disableList.includes(props.rule_name + "-threshold")}
-                />
+                {props.disableList.includes(props.rule_name + "-threshold") ? null : (
+                    <input
+                        className="form-control form-control-sm"
+                        type="number"
+                        value={props.rule.threshold}
+                        onChange={e =>
+                            props.changeLogicValues(
+                                props.rule_name,
+                                "threshold",
+                                parseFloat(e.target.value)
+                            )
+                        }
+                    />
+                )}
             </td>
             <td>
                 <select
-                    className="form-control bin_failure"
+                    className="form-control form-control-sm"
                     value={props.rule.failure_bin}
                     onChange={e =>
                         props.changeLogicValues(

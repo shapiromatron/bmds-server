@@ -2,6 +2,7 @@ import React, {Component} from "react";
 import {inject, observer} from "mobx-react";
 import PropTypes from "prop-types";
 import {decision_logic} from "../../constants/logicConstants";
+import {readOnlyCheckbox} from "../../common";
 
 @inject("logicStore")
 @observer
@@ -22,21 +23,13 @@ class DecisionLogic extends Component {
                                 <tr>
                                     <td>{decision_logic.recommend_viable}</td>
                                     <td className="text-center" style={{minWidth: 50}}>
-                                        {logicStore.logic.recommend_viable ? (
-                                            <i className="fa fa-check-square-o"></i>
-                                        ) : (
-                                            <i className="fa fa-square-o"></i>
-                                        )}
+                                        {readOnlyCheckbox(logicStore.logic.recommend_viable)}
                                     </td>
                                 </tr>
                                 <tr>
                                     <td>{decision_logic.recommend_questionable}</td>
                                     <td className="text-center">
-                                        {logicStore.logic.recommend_questionable ? (
-                                            <i className="fa fa-check-square-o"></i>
-                                        ) : (
-                                            <i className="fa fa-square-o"></i>
-                                        )}
+                                        {readOnlyCheckbox(logicStore.logic.recommend_questionable)}
                                     </td>
                                 </tr>
                                 <tr>

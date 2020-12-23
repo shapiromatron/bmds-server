@@ -1,13 +1,32 @@
 from django.contrib import admin
 from django.core.cache import cache
+from django.utils.html import format_html
 
 from . import models, tasks
 
 
 @admin.register(models.Job)
 class JobAdmin(admin.ModelAdmin):
-    list_display = ("id", "password", "created", "started", "ended", "is_finished")
+    list_display = (
+        "id",
+        "view_url",
+        "edit_url",
+        "created",
+        "started",
+        "ended",
+        "is_finished",
+    )
     readonly_fields = ("password",)
+
+    def view_url(self, obj):
+        return format_html(f"<a href='{obj.get_absolute_url()}'>View</a>")
+
+    view_url.short_description = "View"
+
+    def edit_url(self, obj):
+        return format_html(f"<a href='{obj.get_edit_url()}'>Edit</a>")
+
+    edit_url.short_description = "Edit"
 
     def diagnostic_celery_task(modeladmin, request, queryset):
         response = tasks.diagnostic_celery_task.delay(request.user.id).get()

@@ -9,6 +9,8 @@ DEBUG = True
 SERVER_ROLE = "development environment"
 SERVER_BANNER_COLOR = "#318d50"
 
+EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+
 LOGGING["loggers"][""]["handlers"] = ["console"]
 LOGGING["loggers"][""]["level"] = "INFO"
 

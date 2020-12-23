@@ -6,15 +6,15 @@ import PropTypes from "prop-types";
 @observer
 class DatasetTable extends Component {
     render() {
-        const {dataStore} = this.props,
-            columns = dataStore.getDatasetColumns,
-            dataset = dataStore.selectedDataset,
+        const {store} = this.props,
+            columns = store.getDatasetColumns,
             width = `${100 / columns.length}%`;
+
         return (
             <>
                 <div className="label">
                     <label style={{marginRight: "20px"}}>Dataset Name:</label>
-                    {dataset.dataset_name}
+                    {store.selectedDataset.dataset_name}
                 </div>
 
                 <table className="table table-bordered table-sm">
@@ -26,12 +26,14 @@ class DatasetTable extends Component {
                     <thead className="table-primary">
                         <tr>
                             {columns.map((column, i) => {
-                                return <th key={i}>{dataset.column_names[column]}</th>;
+                                return (
+                                    <th key={i}>{store.selectedDataset.column_names[column]}</th>
+                                );
                             })}
                         </tr>
                     </thead>
                     <tbody>
-                        {dataStore.getMappedArray.map((row, i) => {
+                        {store.getMappedArray.map((row, i) => {
                             return (
                                 <tr key={i}>
                                     {columns.map((column, index) => {

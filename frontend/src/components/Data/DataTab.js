@@ -16,14 +16,14 @@ class Data extends Component {
                 <div className="row mt-2">
                     <div className="col-md-2">
                         {dataStore.getEditSettings ? <SelectModelType /> : null}
-                        {dataStore.getDataLength ? <DatasetSelector /> : null}
+                        {dataStore.getDataLength ? <DatasetSelector store={dataStore} /> : null}
                     </div>
                     <div className="col-md-6">
                         {dataStore.hasSelectedDataset ? (
                             dataStore.getEditSettings ? (
                                 <DatasetForm />
                             ) : (
-                                <DatasetTable />
+                                <DatasetTable store={dataStore} />
                             )
                         ) : null}
                     </div>

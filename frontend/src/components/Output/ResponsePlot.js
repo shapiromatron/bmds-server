@@ -13,7 +13,7 @@ class ResponsePlot extends Component {
     }
     render() {
         const {outputStore} = this.props;
-        let plotData = toJS(outputStore.plotData);
+        let plotData = toJS(outputStore.getPlotData);
         return <Plot data={plotData} layout={outputStore.getLayout} />;
     }
 }

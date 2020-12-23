@@ -26,7 +26,7 @@ class ResultsTable extends Component {
                             <tr
                                 key={idx}
                                 onMouseOver={e => {
-                                    store.setSelectedModel(model);
+                                    // store.setSelectedModel(model);
                                     store.addBMDLine(model);
                                 }}
                                 onMouseOut={e => store.removeBMDLine()}>

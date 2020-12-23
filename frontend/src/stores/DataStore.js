@@ -33,7 +33,6 @@ class DataStore {
 
     @action.bound setSelectedDatasetIndex(dataset_id) {
         this.selectedDatasetIndex = dataset_id;
-        this.rootStore.outputStore.setSelectedDatasetIndex(this.selectedDatasetIndex);
     }
 
     @action.bound saveDatasetName(key, value) {

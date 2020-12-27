@@ -50,12 +50,5 @@ class Output extends Component {
 }
 Output.propTypes = {
     outputStore: PropTypes.object,
-    toggleModelDetailModal: PropTypes.func,
-    getCurrentOutput: PropTypes.func,
-    getMappedArray: PropTypes.func,
-    dataset: PropTypes.object,
-    removeBMDLine: PropTypes.func,
-    error: PropTypes.string,
-    modelDetailModal: PropTypes.bool,
 };
 export default Output;

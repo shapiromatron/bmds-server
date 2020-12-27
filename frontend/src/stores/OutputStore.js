@@ -48,22 +48,6 @@ class OutputStore {
         return this.rootStore.dataStore.getDatasetColumns;
     }
 
-    @computed get getMappedArray() {
-        let datasetInputForm = [];
-        Object.keys(this.getCurrentOutput.dataset).map(key => {
-            if (Array.isArray(this.getCurrentOutput.dataset[key])) {
-                this.getCurrentOutput.dataset[key].map((val, i) => {
-                    if (!datasetInputForm[i]) {
-                        datasetInputForm.push({[key]: val});
-                    } else {
-                        datasetInputForm[i][key] = val;
-                    }
-                });
-            }
-        });
-        return datasetInputForm;
-    }
-
     @computed get getInfoTable() {
         let infoTable = _.cloneDeep(constant.infoTable);
         infoTable.model_name.value = this.selectedModel.model_name;

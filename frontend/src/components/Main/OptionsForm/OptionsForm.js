@@ -15,7 +15,7 @@ import {
 const OptionsForm = props => {
     return (
         <tr className="form-group">
-            {props.dataset_type === mc.MODEL_CONTINUOUS ? (
+            {props.modelType === mc.MODEL_CONTINUOUS ? (
                 <td>
                     <select
                         className="form-control"
@@ -31,7 +31,7 @@ const OptionsForm = props => {
                     </select>
                 </td>
             ) : null}
-            {props.dataset_type != mc.MODEL_CONTINUOUS ? (
+            {props.modelType != mc.MODEL_CONTINUOUS ? (
                 <td>
                     <select
                         className="form-control"
@@ -58,7 +58,7 @@ const OptionsForm = props => {
                     }
                 />
             </td>
-            {props.dataset_type === mc.MODEL_CONTINUOUS ? (
+            {props.modelType === mc.MODEL_CONTINUOUS ? (
                 <td>
                     <input
                         type="number"
@@ -84,7 +84,7 @@ const OptionsForm = props => {
                     }
                 />
             </td>
-            {props.dataset_type === mc.MODEL_NESTED ? (
+            {props.modelType === mc.MODEL_NESTED ? (
                 <td>
                     <select
                         className="form-control"
@@ -107,7 +107,7 @@ const OptionsForm = props => {
                 </td>
             ) : null}
 
-            {props.dataset_type === mc.MODEL_CONTINUOUS ? (
+            {props.modelType === mc.MODEL_CONTINUOUS ? (
                 <td>
                     <select
                         className="form-control"
@@ -125,7 +125,7 @@ const OptionsForm = props => {
                     </select>
                 </td>
             ) : null}
-            {props.dataset_type === mc.MODEL_CONTINUOUS ? (
+            {props.modelType === mc.MODEL_CONTINUOUS ? (
                 <td>
                     <select
                         className="form-control"
@@ -141,7 +141,7 @@ const OptionsForm = props => {
                     </select>
                 </td>
             ) : null}
-            {props.dataset_type === mc.MODEL_CONTINUOUS ? (
+            {props.modelType === mc.MODEL_CONTINUOUS ? (
                 <td>
                     <select
                         className="form-control"
@@ -159,7 +159,7 @@ const OptionsForm = props => {
                     </select>
                 </td>
             ) : null}
-            {props.dataset_type != mc.MODEL_DICHOTOMOUS ? (
+            {props.modelType == mc.MODEL_DICHOTOMOUS ? (
                 <td>
                     <select
                         className="form-control"
@@ -169,7 +169,7 @@ const OptionsForm = props => {
                     </select>
                 </td>
             ) : null}
-            {props.dataset_type === mc.MODEL_NESTED ? (
+            {props.modelType === mc.MODEL_NESTED ? (
                 <td>
                     <input
                         type="number"
@@ -181,7 +181,7 @@ const OptionsForm = props => {
                     />
                 </td>
             ) : null}
-            {props.dataset_type === mc.MODEL_NESTED ? (
+            {props.modelType === mc.MODEL_NESTED ? (
                 <td>
                     <select
                         className="form-control"
@@ -216,13 +216,12 @@ const OptionsForm = props => {
 
 OptionsForm.propTypes = {
     optionsStore: PropTypes.string,
-    optionsLis: PropTypes.array,
-    idx: PropTypes.number,
-    dataset_type: PropTypes.string,
+    idx: PropTypes.number.isRequired,
+    modelType: PropTypes.string.isRequired,
     onChange: PropTypes.func,
-    saveOptions: PropTypes.func,
-    deleteOptions: PropTypes.func,
-    options: PropTypes.object,
+    saveOptions: PropTypes.func.isRequired,
+    deleteOptions: PropTypes.func.isRequired,
+    options: PropTypes.object.isRequired,
     bmr_value: PropTypes.number,
     tail_probability: PropTypes.number,
     litter_specific_covariate: PropTypes.string,

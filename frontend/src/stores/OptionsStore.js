@@ -16,13 +16,13 @@ class OptionsStore {
     }
 
     @action.bound setDefaultsByDatasetType() {
-        const option = _.cloneDeep(constant.options[this.getDatasetType]);
+        const option = _.cloneDeep(constant.options[this.getModelType]);
         this.optionsList = [option];
-        this.headers = constant.headers[this.getDatasetType];
+        this.headers = constant.headers[this.getModelType];
     }
 
     @action.bound addOptions() {
-        const option = _.cloneDeep(constant.options[this.getDatasetType]);
+        const option = _.cloneDeep(constant.options[this.getModelType]);
         this.optionsList.push(option);
     }
 
@@ -35,10 +35,10 @@ class OptionsStore {
     }
     @action setOptions(options) {
         this.optionsList = options;
-        this.headers = constant.headers[this.getDatasetType];
+        this.headers = constant.headers[this.getModelType];
     }
 
-    @computed get getDatasetType() {
+    @computed get getModelType() {
         return this.rootStore.mainStore.model_type;
     }
 

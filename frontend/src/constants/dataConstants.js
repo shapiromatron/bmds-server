@@ -1,6 +1,6 @@
 const modelTypes = [
-        {value: "CS", name: "Continuous Summarized"},
-        {value: "CI", name: "Continuous Individual"},
+        {value: "CS", name: "Summarized"},
+        {value: "CI", name: "Individual"},
         {value: "DM", name: "Dichotomous"},
         {value: "N", name: "Nested"},
     ],

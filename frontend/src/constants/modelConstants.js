@@ -476,8 +476,4 @@ const model = {
     DichotomousHill: "DichotomousHill",
 };
 
-const datasetType = {
-    Nested: "N",
-};
-
-export {modelsList, modelHeaders, nestedHeaders, model, datasetType};
+export {modelsList, modelHeaders, nestedHeaders, model};

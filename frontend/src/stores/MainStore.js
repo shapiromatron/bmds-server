@@ -2,8 +2,8 @@ import {saveAs} from "file-saver";
 import slugify from "slugify";
 import {observable, action, computed} from "mobx";
 import _ from "lodash";
-import {modelTypes} from "../constants/mainConstants";
 
+import * as mc from "../constants/mainConstants";
 import {simulateClick, getHeaders} from "../common";
 
 class MainStore {
@@ -16,7 +16,7 @@ class MainStore {
 
     @observable analysis_name = "";
     @observable analysis_description = "";
-    @observable dataset_type = modelTypes[0].value;
+    @observable dataset_type = mc.MODEL_CONTINUOUS;
     @observable errorMessage = "";
     @observable hasEditSettings = false;
     @observable executionOutputs = null;
@@ -235,7 +235,7 @@ class MainStore {
         return this.rootStore.dataStore.getDataLength;
     }
     @computed get getDatasetTypeName() {
-        return modelTypes.find(item => item.value == this.dataset_type);
+        return mc.modelTypes.find(item => item.value == this.dataset_type);
     }
 
     @computed get hasAtLeastOneModelSelected() {

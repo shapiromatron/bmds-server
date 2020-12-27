@@ -1,5 +1,6 @@
 import {observable, action, computed} from "mobx";
 import _ from "lodash";
+
 import {
     modelTypes,
     columns,
@@ -22,7 +23,7 @@ class DataStore {
     @observable selectedFile = {};
 
     @action.bound setDefaultsByDatasetType() {
-        let modelTypes = this.getFilteredModelTypes;
+        let modelTypes = this.getFilteredDatasetTypes;
         this.model_type = modelTypes[0].value;
         this.datasets = [];
     }
@@ -205,7 +206,7 @@ class DataStore {
         return this.datasets.filter(item => item.model_type.includes(this.getDatasetType));
     }
 
-    @computed get getFilteredModelTypes() {
+    @computed get getFilteredDatasetTypes() {
         return modelTypes.filter(model => model.value.includes(this.getDatasetType));
     }
 

@@ -85,11 +85,6 @@ const bootstrap_seed = [
     {value: "Automatic", name: "Automatic"},
     {value: "User_Specified", name: "User Specified"},
 ];
-const datasetType = {
-    Nested: "N",
-    Continuous: "C",
-    Dichotomous: "DM",
-};
 export {
     headers,
     options,
@@ -100,5 +95,4 @@ export {
     variance,
     polynomial_restriction,
     bootstrap_seed,
-    datasetType,
 };

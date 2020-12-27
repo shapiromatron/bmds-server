@@ -1,5 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
+
+import * as mc from "../../../constants/mainConstants";
 import {
     bmr_type,
     other_bmr_type,
@@ -8,13 +10,12 @@ import {
     variance,
     polynomial_restriction,
     bootstrap_seed,
-    datasetType,
 } from "../../../constants/optionsConstants";
 
 const OptionsForm = props => {
     return (
         <tr className="form-group">
-            {props.dataset_type === datasetType.Continuous ? (
+            {props.dataset_type === mc.MODEL_CONTINUOUS ? (
                 <td>
                     <select
                         className="form-control"
@@ -30,7 +31,7 @@ const OptionsForm = props => {
                     </select>
                 </td>
             ) : null}
-            {props.dataset_type != datasetType.Continuous ? (
+            {props.dataset_type != mc.MODEL_CONTINUOUS ? (
                 <td>
                     <select
                         className="form-control"
@@ -57,7 +58,7 @@ const OptionsForm = props => {
                     }
                 />
             </td>
-            {props.dataset_type === datasetType.Continuous ? (
+            {props.dataset_type === mc.MODEL_CONTINUOUS ? (
                 <td>
                     <input
                         type="number"
@@ -83,7 +84,7 @@ const OptionsForm = props => {
                     }
                 />
             </td>
-            {props.dataset_type === datasetType.Nested ? (
+            {props.dataset_type === mc.MODEL_NESTED ? (
                 <td>
                     <select
                         className="form-control"
@@ -106,7 +107,7 @@ const OptionsForm = props => {
                 </td>
             ) : null}
 
-            {props.dataset_type === datasetType.Continuous ? (
+            {props.dataset_type === mc.MODEL_CONTINUOUS ? (
                 <td>
                     <select
                         className="form-control"
@@ -124,7 +125,7 @@ const OptionsForm = props => {
                     </select>
                 </td>
             ) : null}
-            {props.dataset_type === datasetType.Continuous ? (
+            {props.dataset_type === mc.MODEL_CONTINUOUS ? (
                 <td>
                     <select
                         className="form-control"
@@ -140,7 +141,7 @@ const OptionsForm = props => {
                     </select>
                 </td>
             ) : null}
-            {props.dataset_type === datasetType.Continuous ? (
+            {props.dataset_type === mc.MODEL_CONTINUOUS ? (
                 <td>
                     <select
                         className="form-control"
@@ -158,7 +159,7 @@ const OptionsForm = props => {
                     </select>
                 </td>
             ) : null}
-            {props.dataset_type != datasetType.Dichotomous ? (
+            {props.dataset_type != mc.MODEL_DICHOTOMOUS ? (
                 <td>
                     <select
                         className="form-control"
@@ -168,7 +169,7 @@ const OptionsForm = props => {
                     </select>
                 </td>
             ) : null}
-            {props.dataset_type === datasetType.Nested ? (
+            {props.dataset_type === mc.MODEL_NESTED ? (
                 <td>
                     <input
                         type="number"
@@ -180,7 +181,7 @@ const OptionsForm = props => {
                     />
                 </td>
             ) : null}
-            {props.dataset_type === datasetType.Nested ? (
+            {props.dataset_type === mc.MODEL_NESTED ? (
                 <td>
                     <select
                         className="form-control"

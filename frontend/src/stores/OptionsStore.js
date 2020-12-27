@@ -39,7 +39,7 @@ class OptionsStore {
     }
 
     @computed get getDatasetType() {
-        return this.rootStore.mainStore.dataset_type;
+        return this.rootStore.mainStore.model_type;
     }
 
     @computed get canAddNewOption() {

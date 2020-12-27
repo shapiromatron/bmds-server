@@ -1,12 +1,12 @@
 import {observable, action, computed} from "mobx";
 import _ from "lodash";
 
+import {datasetNamesHeaders} from "../constants/mainConstants";
 import {
-    modelTypes,
+    datasetTypes,
     columns,
     columnNames,
     datasetForm,
-    datasetNamesHeaders,
     scatter_plot_layout,
     yAxisTitle,
     model_type,
@@ -23,8 +23,8 @@ class DataStore {
     @observable selectedFile = {};
 
     @action.bound setDefaultsByDatasetType() {
-        let modelTypes = this.getFilteredDatasetTypes;
-        this.model_type = modelTypes[0].value;
+        let datasetTypes = this.getFilteredDatasetTypes;
+        this.model_type = datasetTypes[0].value;
         this.datasets = [];
     }
 
@@ -207,15 +207,15 @@ class DataStore {
     }
 
     @computed get getFilteredDatasetTypes() {
-        return modelTypes.filter(model => model.value.includes(this.getDatasetType));
+        return datasetTypes.filter(model => model.value.includes(this.getDatasetType));
     }
 
-    @computed get getModelTypesName() {
-        return modelTypes.find(item => item.value === this.model_type);
+    @computed get getModelType() {
+        return this.rootStore.mainStore.model_type;
     }
 
     @computed get getDatasetType() {
-        return this.rootStore.mainStore.dataset_type;
+        return this.rootStore.mainStore.model_type;
     }
 
     @computed get getDatasetColumns() {

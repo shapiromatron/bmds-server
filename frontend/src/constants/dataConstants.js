@@ -1,34 +1,40 @@
-const modelTypes = [
-        {value: "CS", name: "Summarized"},
-        {value: "CI", name: "Individual"},
-        {value: "DM", name: "Dichotomous"},
-        {value: "N", name: "Nested"},
+import * as mc from "./mainConstants";
+
+const DATA_CONTINUOUS_SUMMARY = "CS",
+    DATA_CONTINUOUS_INDIVIDUAL = "I",
+    DATA_DICHOTOMOUS = "DM",
+    DATA_NESTED = "N",
+    datasetTypes = [
+        {value: DATA_CONTINUOUS_SUMMARY, name: "Summarized"},
+        {value: DATA_CONTINUOUS_INDIVIDUAL, name: "Individual"},
+        {value: DATA_DICHOTOMOUS, name: "Dichotomous"},
+        {value: DATA_NESTED, name: "Nested"},
     ],
     columns = {
-        CS: ["doses", "ns", "means", "stdevs"],
-        CI: ["doses", "responses"],
-        DM: ["doses", "ns", "incidences"],
-        N: ["doses", "litter_sizes", "incidences", "litter_specific_covariates"],
+        [DATA_CONTINUOUS_SUMMARY]: ["doses", "ns", "means", "stdevs"],
+        [DATA_CONTINUOUS_INDIVIDUAL]: ["doses", "responses"],
+        [DATA_DICHOTOMOUS]: ["doses", "ns", "incidences"],
+        [DATA_NESTED]: ["doses", "litter_sizes", "incidences", "litter_specific_covariates"],
     },
     columnNames = {
-        CS: {
+        [DATA_CONTINUOUS_SUMMARY]: {
             doses: "Dose",
             ns: "N",
             means: "Mean",
-            stdevs: "St. Dev.",
+            stdevs: "Std. Dev.",
         },
-        CI: {
+        [DATA_CONTINUOUS_INDIVIDUAL]: {
             doses: "Dose",
             responses: "Response",
         },
-        DM: {
+        [DATA_DICHOTOMOUS]: {
             doses: "Dose",
             ns: "N",
             incidences: "Incidence",
         },
-        N: {
+        [DATA_NESTED]: {
             doses: "Dose",
-            litter_sizes: "LItter Size",
+            litter_sizes: "Litter Size",
             incidences: "Incidence",
             litter_specific_covariates: "Litter Specific Covariate",
         },
@@ -37,41 +43,35 @@ const modelTypes = [
         doses: "Dose",
         ns: "N",
         means: "Mean",
-        stdevs: "St. Dev.",
+        stdevs: "Std. Dev.",
         responses: "Response",
         incidences: "Incidence",
         litter_sizes: "Litter Size",
         litter_specific_covariates: "Litter Specific Covariate",
     },
     datasetForm = {
-        CS: {
+        [DATA_CONTINUOUS_SUMMARY]: {
             doses: [0, 7, 37, 186],
             ns: [25, 25, 25, 24],
             means: [55.8, 52.9, 64.8, 119.9],
             stdevs: [12.5, 15.4, 17.4, 32.5],
             adverse_direction: "automatic",
         },
-        CI: {
+        [DATA_CONTINUOUS_INDIVIDUAL]: {
             doses: ["", "", "", "", ""],
             responses: ["", "", "", "", ""],
         },
-        DM: {
+        [DATA_DICHOTOMOUS]: {
             doses: [0, 0.46, 1.39, 4.17, 12.5],
             ns: [9, 9, 11, 10, 7],
             incidences: [0, 0, 3, 2, 3],
         },
-        N: {
+        [DATA_NESTED]: {
             doses: ["", "", "", "", ""],
             litter_sizes: ["", "", "", "", ""],
             incidences: ["", "", "", "", ""],
             litter_specific_covariates: ["", "", "", "", ""],
         },
-    },
-    datasetNamesHeaders = {
-        C: ["Enable", "Datasets", "Adverse Direction"],
-        D: ["Enable", "Datasets"],
-        DM: ["Enable", "Datasets", "Degree", "Background"],
-        N: ["Enable", "Datasets"],
     },
     AdverseDirectionList = [
         {value: "automatic", name: "Automatic"},
@@ -131,10 +131,10 @@ const modelTypes = [
         autosize: true,
     },
     yAxisTitle = {
-        CI: "responses",
-        CS: "means",
-        DM: "incidences",
-        N: "incidences",
+        [DATA_CONTINUOUS_SUMMARY]: "responses",
+        [DATA_CONTINUOUS_INDIVIDUAL]: "means",
+        [DATA_DICHOTOMOUS]: "incidences",
+        [DATA_NESTED]: "incidences",
     },
     model_type = {
         Continuous_Summarized: "CS",
@@ -144,12 +144,11 @@ const modelTypes = [
     };
 
 export {
-    modelTypes,
+    datasetTypes,
     columns,
     columnNames,
     columnHeaders,
     datasetForm,
-    datasetNamesHeaders,
     AdverseDirectionList,
     degree,
     background,

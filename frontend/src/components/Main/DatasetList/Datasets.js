@@ -1,6 +1,8 @@
 import React from "react";
 import PropTypes from "prop-types";
+
 import {AdverseDirectionList, degree, background} from "../../../constants/dataConstants";
+import * as mc from "../../../constants/mainConstants";
 
 const Datasets = props => {
     return (
@@ -16,9 +18,8 @@ const Datasets = props => {
                 />
             </td>
             <td>{props.dataset.dataset_name}</td>
-            {props.dataset_type == "C" ? (
+            {props.model_type === mc.MODEL_CONTINUOUS ? (
                 <td>
-                    {" "}
                     <select
                         className="form-control"
                         onChange={e =>
@@ -38,9 +39,8 @@ const Datasets = props => {
                     </select>
                 </td>
             ) : null}
-            {props.dataset_type == "DM" ? (
+            {props.model_type === mc.MODEL_MULTI_TUMOR ? (
                 <td>
-                    {" "}
                     <select
                         as="select"
                         onChange={e =>
@@ -56,7 +56,7 @@ const Datasets = props => {
                     </select>
                 </td>
             ) : null}
-            {props.dataset_type == "DM" ? (
+            {props.model_type === mc.MODEL_MULTI_TUMOR ? (
                 <td>
                     <select
                         as="select"
@@ -82,15 +82,12 @@ const Datasets = props => {
 };
 
 Datasets.propTypes = {
-    dataStore: PropTypes.object,
     saveAdverseDirection: PropTypes.func,
-    toggleDataset: PropTypes.func,
+    toggleDataset: PropTypes.func.isRequired,
     datasets: PropTypes.array,
-    getDatasetType: PropTypes.func,
-    adverseList: PropTypes.array,
     degree: PropTypes.array,
     background: PropTypes.array,
-    dataset: PropTypes.object,
-    dataset_type: PropTypes.string,
+    dataset: PropTypes.object.isRequired,
+    model_type: PropTypes.string.isRequired,
 };
 export default Datasets;

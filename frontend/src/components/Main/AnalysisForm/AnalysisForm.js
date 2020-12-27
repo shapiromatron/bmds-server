@@ -39,7 +39,7 @@ class AnalysisForm extends Component {
                             id="dataset-type"
                             className="form-control"
                             onChange={e => mainStore.changeDatasetType(e.target.value)}
-                            value={mainStore.dataset_type}>
+                            value={mainStore.model_type}>
                             {modelTypes.map((item, i) => {
                                 return (
                                     <option key={i} value={item.value}>

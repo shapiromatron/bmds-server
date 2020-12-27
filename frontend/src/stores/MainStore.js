@@ -16,7 +16,7 @@ class MainStore {
 
     @observable analysis_name = "";
     @observable analysis_description = "";
-    @observable dataset_type = mc.MODEL_CONTINUOUS;
+    @observable model_type = mc.MODEL_CONTINUOUS;
     @observable errorMessage = "";
     @observable hasEditSettings = false;
     @observable executionOutputs = null;
@@ -32,7 +32,7 @@ class MainStore {
         this.analysis_description = value;
     }
     @action changeDatasetType(value) {
-        this.dataset_type = value;
+        this.model_type = value;
         this.rootStore.modelsStore.setDefaultsByDatasetType();
         this.rootStore.optionsStore.setDefaultsByDatasetType();
         this.rootStore.dataStore.setDefaultsByDatasetType();
@@ -56,10 +56,10 @@ class MainStore {
             editKey,
             partial: true,
             data: {
-                bmds_version: "BMDS330",
+                bmds_version: mc.VERSION_330,
                 analysis_name: this.analysis_name,
                 analysis_description: this.analysis_description,
-                dataset_type: this.dataset_type,
+                dataset_type: this.model_type,
                 models: this.getEnabledModels,
                 datasets: this.getEnabledDatasets,
                 options: this.getOptions,
@@ -187,7 +187,7 @@ class MainStore {
         // unpack general settings
         this.analysis_name = inputs.analysis_name;
         this.analysis_description = inputs.analysis_description;
-        this.dataset_type = inputs.dataset_type;
+        this.model_type = inputs.dataset_type;
         this.rootStore.optionsStore.setOptions(inputs.options);
         this.rootStore.dataStore.setDatasets(inputs.datasets);
         this.rootStore.modelsStore.setModels(inputs.models);
@@ -234,8 +234,8 @@ class MainStore {
     @computed get getDatasetLength() {
         return this.rootStore.dataStore.getDataLength;
     }
-    @computed get getDatasetTypeName() {
-        return mc.modelTypes.find(item => item.value == this.dataset_type);
+    @computed get getModelTypeName() {
+        return mc.modelTypes.find(item => item.value == this.model_type).name;
     }
 
     @computed get hasAtLeastOneModelSelected() {

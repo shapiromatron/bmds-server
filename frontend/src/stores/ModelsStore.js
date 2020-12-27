@@ -20,7 +20,7 @@ class ModelsStore {
     }
 
     @action setDefaultsByDatasetType() {
-        let modelType = this.rootStore.mainStore.dataset_type;
+        let modelType = this.rootStore.mainStore.model_type;
         this.models = _.cloneDeep(modelsList[modelType]);
         if (modelType === mc.MODEL_NESTED) {
             this.model_headers = nestedHeaders;

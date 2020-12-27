@@ -122,10 +122,6 @@ class OutputStore {
         return layout;
     }
 
-    @computed get getPlotData() {
-        return this.plotData;
-    }
-
     @action setPlotData() {
         this.plotData = [];
         var trace1 = {

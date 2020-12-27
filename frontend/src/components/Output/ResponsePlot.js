@@ -13,14 +13,11 @@ class ResponsePlot extends Component {
     }
     render() {
         const {outputStore} = this.props;
-        let plotData = toJS(outputStore.getPlotData);
+        let plotData = toJS(outputStore.plotData);
         return <Plot data={plotData} layout={outputStore.getLayout} />;
     }
 }
 ResponsePlot.propTypes = {
     outputStore: PropTypes.object,
-    getPlotData: PropTypes.func,
-    getBMDLine: PropTypes.func,
-    getLayout: PropTypes.func,
 };
 export default ResponsePlot;

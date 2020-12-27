@@ -25,11 +25,8 @@ class ResultsTable extends Component {
                         return (
                             <tr
                                 key={idx}
-                                onMouseOver={e => {
-                                    // store.setSelectedModel(model);
-                                    store.addBMDLine(model);
-                                }}
-                                onMouseOut={e => store.removeBMDLine()}>
+                                onMouseEnter={() => store.addBMDLine(model)}
+                                onMouseLeave={() => store.removeBMDLine()}>
                                 <td>
                                     <a
                                         href="#"

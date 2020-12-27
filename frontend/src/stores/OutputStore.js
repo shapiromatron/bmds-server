@@ -11,7 +11,6 @@ class OutputStore {
     @observable modelDetailModal = false;
     @observable selectedModel = null;
     @observable currentOutput = {};
-    @observable outputs = [];
     @observable selectedDatasetIndex = 0;
     @observable plotData = [];
     @observable showBMDLine = false;
@@ -22,11 +21,6 @@ class OutputStore {
     @action setSelectedDatasetIndex(dataset_id) {
         this.selectedDatasetIndex = dataset_id;
         this.setPlotData();
-    }
-
-    @action setOutputs() {
-        this.outputs = this.rootStore.mainStore.getExecutionOutputs;
-        this.currentOutput = this.outputs[0];
     }
     @action toggleModelDetailModal(model) {
         this.setSelectedModel(model);
@@ -39,6 +33,11 @@ class OutputStore {
 
     @computed get getCurrentOutput() {
         let outputs = this.rootStore.mainStore.getExecutionOutputs;
+
+        if (outputs === null) {
+            return null;
+        }
+
         let current_output = outputs.find(
             item => item.dataset.dataset_id == this.selectedDatasetIndex
         );

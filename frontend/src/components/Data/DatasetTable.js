@@ -50,5 +50,6 @@ class DatasetTable extends Component {
 }
 DatasetTable.propTypes = {
     dataStore: PropTypes.object,
+    store: PropTypes.object,
 };
 export default DatasetTable;

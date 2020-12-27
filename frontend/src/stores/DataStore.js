@@ -1,7 +1,7 @@
 import {observable, action, computed} from "mobx";
 import _ from "lodash";
 
-import {datasetNamesHeaders} from "../constants/mainConstants";
+import * as mc from "../constants/mainConstants";
 import {
     datasetTypes,
     columns,
@@ -42,7 +42,7 @@ class DataStore {
 
     @action.bound addDataset() {
         let form = datasetForm[this.model_type];
-        if (this.getDatasetType === "DM") {
+        if (this.getModelType === mc.MODEL_DICHOTOMOUS) {
             form["degree"] = "auto-select";
             form["background"] = "Estimated";
         }
@@ -203,18 +203,14 @@ class DataStore {
     }
 
     @computed get getModelTypeDatasets() {
-        return this.datasets.filter(item => item.model_type.includes(this.getDatasetType));
+        return this.datasets.filter(item => item.model_type.includes(this.getModelType));
     }
 
     @computed get getFilteredDatasetTypes() {
-        return datasetTypes.filter(model => model.value.includes(this.getDatasetType));
+        return datasetTypes.filter(model => model.value.includes(this.getModelType));
     }
 
     @computed get getModelType() {
-        return this.rootStore.mainStore.model_type;
-    }
-
-    @computed get getDatasetType() {
         return this.rootStore.mainStore.model_type;
     }
 
@@ -224,12 +220,12 @@ class DataStore {
 
     @computed get getEnabledDatasets() {
         return this.datasets.filter(
-            item => item.enabled == true && item.model_type.includes(this.getDatasetType)
+            item => item.enabled == true && item.model_type.includes(this.getModelType)
         );
     }
 
     @computed get getDatasetNamesHeader() {
-        return datasetNamesHeaders[this.getDatasetType];
+        return mc.datasetNamesHeaders[this.getModelType];
     }
 
     @computed get checkDatasetsLength() {

@@ -1,15 +1,25 @@
 import * as mc from "./mainConstants";
 
-const DATA_CONTINUOUS_SUMMARY = "CS",
+export const DATA_CONTINUOUS_SUMMARY = "CS",
     DATA_CONTINUOUS_INDIVIDUAL = "I",
     DATA_DICHOTOMOUS = "DM",
     DATA_NESTED = "N",
-    datasetTypes = [
-        {value: DATA_CONTINUOUS_SUMMARY, name: "Summarized"},
-        {value: DATA_CONTINUOUS_INDIVIDUAL, name: "Individual"},
-        {value: DATA_DICHOTOMOUS, name: "Dichotomous"},
-        {value: DATA_NESTED, name: "Nested"},
-    ],
+    datasetTypesByModelType = function(modelType) {
+        switch (modelType) {
+            case mc.MODEL_DICHOTOMOUS:
+            case mc.MODEL_MULTI_TUMOR:
+                return [{value: DATA_DICHOTOMOUS, name: "Dichotomous"}];
+            case mc.MODEL_CONTINUOUS:
+                return [
+                    {value: DATA_CONTINUOUS_SUMMARY, name: "Summarized"},
+                    {value: DATA_CONTINUOUS_INDIVIDUAL, name: "Individual"},
+                ];
+            case mc.MODEL_NESTED:
+                return [{value: DATA_NESTED, name: "Nested"}];
+            default:
+                throw `Unknown modelType: ${modelType}`;
+        }
+    },
     columns = {
         [DATA_CONTINUOUS_SUMMARY]: ["doses", "ns", "means", "stdevs"],
         [DATA_CONTINUOUS_INDIVIDUAL]: ["doses", "responses"],
@@ -135,24 +145,4 @@ const DATA_CONTINUOUS_SUMMARY = "CS",
         [DATA_CONTINUOUS_INDIVIDUAL]: "means",
         [DATA_DICHOTOMOUS]: "incidences",
         [DATA_NESTED]: "incidences",
-    },
-    model_type = {
-        Continuous_Summarized: "CS",
-        Continuous_Individual: "CI",
-        Dichotomous: "DM",
-        Nested: "N",
     };
-
-export {
-    datasetTypes,
-    columns,
-    columnNames,
-    columnHeaders,
-    datasetForm,
-    AdverseDirectionList,
-    degree,
-    background,
-    scatter_plot_layout,
-    yAxisTitle,
-    model_type,
-};

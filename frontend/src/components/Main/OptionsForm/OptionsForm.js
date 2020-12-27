@@ -159,7 +159,7 @@ const OptionsForm = props => {
                     </select>
                 </td>
             ) : null}
-            {props.modelType == mc.MODEL_DICHOTOMOUS ? (
+            {props.modelType == mc.MODEL_DICHOTOMOUS || props.modelType == mc.MODEL_CONTINUOUS ? (
                 <td>
                     <select
                         className="form-control"

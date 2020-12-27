@@ -1,7 +1,8 @@
 import {observable, action, computed} from "mobx";
 import _ from "lodash";
+
+import * as dc from "../constants/dataConstants";
 import * as constant from "../constants/outputConstants";
-import {model_type} from "../constants/dataConstants";
 
 class OutputStore {
     constructor(rootStore) {
@@ -105,9 +106,9 @@ class OutputStore {
         let dataset = this.getCurrentOutput.dataset;
         let ns = dataset.ns;
         let incidences = dataset.incidences;
-        if (dataset.model_type === model_type.Continuous_Summarized) {
+        if (dataset.model_type === dc.DATA_CONTINUOUS_SUMMARY) {
             responses = dataset.means;
-        } else if (dataset.model_type === model_type.Dichotomous) {
+        } else if (dataset.model_type === dc.DATA_DICHOTOMOUS) {
             for (var i = 0; i < ns.length; i++) {
                 var response = incidences[i] / ns[i];
                 responses.push(response);

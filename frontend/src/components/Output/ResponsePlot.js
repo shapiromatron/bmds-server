@@ -19,8 +19,5 @@ class ResponsePlot extends Component {
 }
 ResponsePlot.propTypes = {
     outputStore: PropTypes.object,
-    getPlotData: PropTypes.func,
-    getBMDLine: PropTypes.func,
-    getLayout: PropTypes.func,
 };
 export default ResponsePlot;

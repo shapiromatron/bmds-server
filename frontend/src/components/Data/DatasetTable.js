@@ -1,3 +1,4 @@
+import _ from "lodash";
 import React, {Component} from "react";
 import {inject, observer} from "mobx-react";
 import PropTypes from "prop-types";
@@ -6,15 +7,16 @@ import PropTypes from "prop-types";
 @observer
 class DatasetTable extends Component {
     render() {
-        const {dataStore} = this.props,
-            columns = dataStore.getDatasetColumns,
-            dataset = dataStore.selectedDataset,
+        const {store} = this.props,
+            dataset = store.selectedDataset,
+            columns = store.getDatasetColumns,
             width = `${100 / columns.length}%`;
+
         return (
             <>
                 <div className="label">
                     <label style={{marginRight: "20px"}}>Dataset Name:</label>
-                    {dataset.dataset_name}
+                    {store.selectedDataset.dataset_name}
                 </div>
 
                 <table className="table table-bordered table-sm">
@@ -26,16 +28,18 @@ class DatasetTable extends Component {
                     <thead className="table-primary">
                         <tr>
                             {columns.map((column, i) => {
-                                return <th key={i}>{dataset.column_names[column]}</th>;
+                                return (
+                                    <th key={i}>{store.selectedDataset.column_names[column]}</th>
+                                );
                             })}
                         </tr>
                     </thead>
                     <tbody>
-                        {dataStore.getMappedArray.map((row, i) => {
+                        {_.range(dataset.doses.length).map(rowIdx => {
                             return (
-                                <tr key={i}>
-                                    {columns.map((column, index) => {
-                                        return <td key={index}>{row[column]}</td>;
+                                <tr key={rowIdx}>
+                                    {columns.map((column, colIdx) => {
+                                        return <td key={colIdx}>{dataset[column][rowIdx]}</td>;
                                     })}
                                 </tr>
                             );
@@ -48,5 +52,6 @@ class DatasetTable extends Component {
 }
 DatasetTable.propTypes = {
     dataStore: PropTypes.object,
+    store: PropTypes.object,
 };
 export default DatasetTable;

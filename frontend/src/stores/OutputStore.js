@@ -10,7 +10,8 @@ class OutputStore {
 
     @observable modelDetailModal = false;
     @observable selectedModel = null;
-    @observable selectedDatasetIndex = "";
+    @observable currentOutput = {};
+    @observable selectedDatasetIndex = 0;
     @observable plotData = [];
     @observable showBMDLine = false;
 
@@ -19,37 +20,32 @@ class OutputStore {
     }
     @action setSelectedDatasetIndex(dataset_id) {
         this.selectedDatasetIndex = dataset_id;
+        this.setPlotData();
     }
     @action toggleModelDetailModal(model) {
         this.setSelectedModel(model);
         this.modelDetailModal = !this.modelDetailModal;
     }
 
+    @computed get selectedDataset() {
+        return this.getCurrentOutput.dataset;
+    }
+
     @computed get getCurrentOutput() {
         let outputs = this.rootStore.mainStore.getExecutionOutputs;
-        let current_output = null;
-        if (outputs) {
-            current_output = outputs.find(
-                item => item.dataset.dataset_id == this.selectedDatasetIndex
-            );
+
+        if (outputs === null) {
+            return null;
         }
+
+        let current_output = outputs.find(
+            item => item.dataset.dataset_id == this.selectedDatasetIndex
+        );
         return current_output;
     }
 
-    @computed get getMappedDatasets() {
-        let datasetInputForm = [];
-        Object.keys(this.getCurrentOutput.dataset).map(key => {
-            if (Array.isArray(this.getCurrentOutput.dataset[key])) {
-                this.getCurrentOutput.dataset[key].map((val, i) => {
-                    if (!datasetInputForm[i]) {
-                        datasetInputForm.push({[key]: val});
-                    } else {
-                        datasetInputForm[i][key] = val;
-                    }
-                });
-            }
-        });
-        return datasetInputForm;
+    @computed get getDatasetColumns() {
+        return this.rootStore.dataStore.getDatasetColumns;
     }
 
     @computed get getInfoTable() {
@@ -122,8 +118,7 @@ class OutputStore {
 
     @computed get getLayout() {
         let layout = _.cloneDeep(constant.layout);
-        let currentDataset = this.rootStore.dataStore.selectedDataset;
-        layout.title.text = currentDataset.dataset_name;
+        layout.title.text = this.getCurrentOutput.dataset.dataset_name;
         return layout;
     }
 

@@ -118,7 +118,7 @@ class DatasetForm extends Component {
                                     columns={columns}
                                     row={obj}
                                     dataset_id={dataset.dataset_id}
-                                    onChange={dataStore.saveDataset}
+                                    onChange={dataStore.saveDatasetCellItem}
                                     delete={dataStore.deleteRow}
                                 />
                             );

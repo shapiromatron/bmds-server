@@ -6,7 +6,7 @@ import PropTypes from "prop-types";
 @observer
 class DatasetSelector extends Component {
     render() {
-        const {dataStore} = this.props;
+        const {dataStore, store} = this.props;
         return (
             <div className="nav flex-column nav-fill nav-pills nav-stacked mt-2">
                 {dataStore.datasets.map(dataset => {
@@ -14,7 +14,7 @@ class DatasetSelector extends Component {
                         <a
                             key={dataset.dataset_id}
                             className={
-                                dataset.dataset_id === dataStore.selectedDatasetIndex
+                                dataset.dataset_id === store.selectedDatasetIndex
                                     ? "nav-link btn-sm active"
                                     : "nav-link btn-sm"
                             }
@@ -24,7 +24,7 @@ class DatasetSelector extends Component {
                             aria-selected="true"
                             onClick={e => {
                                 e.preventDefault();
-                                dataStore.setSelectedDatasetIndex(dataset.dataset_id);
+                                store.setSelectedDatasetIndex(dataset.dataset_id);
                             }}>
                             {dataset.dataset_name}
                         </a>
@@ -36,5 +36,6 @@ class DatasetSelector extends Component {
 }
 DatasetSelector.propTypes = {
     dataStore: PropTypes.object,
+    store: PropTypes.object,
 };
 export default DatasetSelector;

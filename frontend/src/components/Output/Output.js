@@ -13,7 +13,6 @@ import "./Output.css";
 class Output extends Component {
     render() {
         const {outputStore} = this.props;
-
         if (outputStore.getCurrentOutput === null) {
             return (
                 <div className="container-fluid">
@@ -33,14 +32,14 @@ class Output extends Component {
         return (
             <div className="container-fluid">
                 <div className="row">
-                    <div className="col-md-2">
-                        <DatasetSelector />
+                    <div className="col col-lg-2">
+                        <DatasetSelector store={outputStore} />
                     </div>
-                    <div className="col-md-6">
-                        <DatasetTable />
+                    <div className="col col-lg-6">
+                        <DatasetTable store={outputStore} />
                         <ResultsTable />
                     </div>
-                    <div className="col-md-4">
+                    <div className="col col-lg-4">
                         <ResponsePlot />
                     </div>
                 </div>
@@ -51,12 +50,5 @@ class Output extends Component {
 }
 Output.propTypes = {
     outputStore: PropTypes.object,
-    toggleModelDetailModal: PropTypes.func,
-    getCurrentOutput: PropTypes.func,
-    getMappedDatasets: PropTypes.func,
-    dataset: PropTypes.object,
-    removeBMDLine: PropTypes.func,
-    error: PropTypes.string,
-    modelDetailModal: PropTypes.bool,
 };
 export default Output;

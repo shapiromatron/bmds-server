@@ -16,6 +16,7 @@ class AnalysisForm extends Component {
                     <div className="form-group">
                         <label>Analysis Name</label>
                         <input
+                            id="analysis_name"
                             className="form-control"
                             type="text"
                             value={mainStore.analysis_name}
@@ -25,6 +26,7 @@ class AnalysisForm extends Component {
                     <div className="form-group">
                         <label>Analysis Description</label>
                         <textarea
+                            id="analysis_description"
                             className="form-control"
                             type="textarea"
                             rows="3"

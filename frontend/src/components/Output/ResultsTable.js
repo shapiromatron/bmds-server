@@ -9,7 +9,7 @@ class ResultsTable extends Component {
     render() {
         const store = this.props.outputStore;
         return (
-            <table className="table table-bordered result table-sm">
+            <table id="results-table" className="table table-bordered result table-sm">
                 <thead>
                     <tr className="table-primary">
                         <th>Model</th>

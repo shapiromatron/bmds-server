@@ -17,6 +17,7 @@ const OptionsForm = props => {
             {props.dataset_type === datasetType.Continuous ? (
                 <td>
                     <select
+                        id="bmr_type"
                         className="form-control"
                         value={props.options.bmr_type}
                         onChange={e => props.saveOptions("bmr_type", e.target.value, props.idx)}>
@@ -33,6 +34,7 @@ const OptionsForm = props => {
             {props.dataset_type != datasetType.Continuous ? (
                 <td>
                     <select
+                        id="bmr_type"
                         className="form-control"
                         value={props.options.bmr_type}
                         onChange={e => props.saveOptions("bmr_type", e.target.value, props.idx)}>
@@ -49,6 +51,7 @@ const OptionsForm = props => {
 
             <td>
                 <input
+                    id="bmr_value"
                     type="number"
                     className="form-control text-center"
                     value={props.options.bmr_value}
@@ -60,6 +63,7 @@ const OptionsForm = props => {
             {props.dataset_type === datasetType.Continuous ? (
                 <td>
                     <input
+                        id="tail_probability"
                         type="number"
                         className="form-control text-center"
                         value={props.options.tail_probability}
@@ -86,6 +90,7 @@ const OptionsForm = props => {
             {props.dataset_type === datasetType.Nested ? (
                 <td>
                     <select
+                        id="litter_sepecific_covariate"
                         className="form-control"
                         value={props.options.litter_specific_covariate}
                         onChange={e =>
@@ -109,6 +114,7 @@ const OptionsForm = props => {
             {props.dataset_type === datasetType.Continuous ? (
                 <td>
                     <select
+                        id="distribution"
                         className="form-control"
                         value={props.options.distribution}
                         onChange={e =>
@@ -127,6 +133,7 @@ const OptionsForm = props => {
             {props.dataset_type === datasetType.Continuous ? (
                 <td>
                     <select
+                        id="variance"
                         className="form-control"
                         value={props.options.variance}
                         onChange={e => props.saveOptions("variance", e.target.value, props.idx)}>
@@ -143,6 +150,7 @@ const OptionsForm = props => {
             {props.dataset_type === datasetType.Continuous ? (
                 <td>
                     <select
+                        id="polynomial_restriction"
                         className="form-control"
                         value={props.options.polynomial_restriction}
                         onChange={e =>
@@ -161,6 +169,7 @@ const OptionsForm = props => {
             {props.dataset_type != datasetType.Dichotomous ? (
                 <td>
                     <select
+                        id="background"
                         className="form-control"
                         value={props.options.background}
                         onChange={e => props.saveOptions("background", e.target.value, props.idx)}>

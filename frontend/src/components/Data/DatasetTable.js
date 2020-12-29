@@ -1,3 +1,4 @@
+import _ from "lodash";
 import React, {Component} from "react";
 import {inject, observer} from "mobx-react";
 import PropTypes from "prop-types";
@@ -7,6 +8,7 @@ import PropTypes from "prop-types";
 class DatasetTable extends Component {
     render() {
         const {store} = this.props,
+            dataset = store.selectedDataset,
             columns = store.getDatasetColumns,
             width = `${100 / columns.length}%`;
 
@@ -33,11 +35,11 @@ class DatasetTable extends Component {
                         </tr>
                     </thead>
                     <tbody>
-                        {store.getMappedArray.map((row, i) => {
+                        {_.range(dataset.doses.length).map(rowIdx => {
                             return (
-                                <tr key={i}>
-                                    {columns.map((column, index) => {
-                                        return <td key={index}>{row[column]}</td>;
+                                <tr key={rowIdx}>
+                                    {columns.map((column, colIdx) => {
+                                        return <td key={colIdx}>{dataset[column][rowIdx]}</td>;
                                     })}
                                 </tr>
                             );
@@ -50,5 +52,6 @@ class DatasetTable extends Component {
 }
 DatasetTable.propTypes = {
     dataStore: PropTypes.object,
+    store: PropTypes.object,
 };
 export default DatasetTable;

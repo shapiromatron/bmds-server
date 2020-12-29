@@ -36,5 +36,6 @@ class DatasetSelector extends Component {
 }
 DatasetSelector.propTypes = {
     dataStore: PropTypes.object,
+    store: PropTypes.object,
 };
 export default DatasetSelector;

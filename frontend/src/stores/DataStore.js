@@ -71,14 +71,16 @@ class DataStore {
         });
     };
 
-    @action.bound saveDataset(key, value, dataset_id, index) {
+    @action.bound saveDatasetCellItem(key, value, dataset_id, index) {
         let parsedValue = "";
         if (key === "ns") {
             parsedValue = parseInt(value);
         } else {
             parsedValue = parseFloat(value);
         }
-        this.datasets[dataset_id][key][index] = parsedValue;
+        if (_.isNumber(parsedValue)) {
+            this.datasets[dataset_id][key][index] = parsedValue;
+        }
     }
 
     @action.bound changeColumnName(name, value) {

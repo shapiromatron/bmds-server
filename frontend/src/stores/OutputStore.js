@@ -11,7 +11,6 @@ class OutputStore {
     @observable modelDetailModal = false;
     @observable selectedModel = null;
     @observable currentOutput = {};
-    @observable outputs = [];
     @observable selectedDatasetIndex = 0;
     @observable plotData = [];
     @observable showBMDLine = false;
@@ -39,6 +38,11 @@ class OutputStore {
 
     @computed get getCurrentOutput() {
         let outputs = this.rootStore.mainStore.getExecutionOutputs;
+
+        if (outputs === null) {
+            return null;
+        }
+
         let current_output = outputs.find(
             item => item.dataset.dataset_id == this.selectedDatasetIndex
         );
@@ -47,22 +51,6 @@ class OutputStore {
 
     @computed get getDatasetColumns() {
         return this.rootStore.dataStore.getDatasetColumns;
-    }
-
-    @computed get getMappedArray() {
-        let datasetInputForm = [];
-        Object.keys(this.getCurrentOutput.dataset).map(key => {
-            if (Array.isArray(this.getCurrentOutput.dataset[key])) {
-                this.getCurrentOutput.dataset[key].map((val, i) => {
-                    if (!datasetInputForm[i]) {
-                        datasetInputForm.push({[key]: val});
-                    } else {
-                        datasetInputForm[i][key] = val;
-                    }
-                });
-            }
-        });
-        return datasetInputForm;
     }
 
     @computed get getInfoTable() {

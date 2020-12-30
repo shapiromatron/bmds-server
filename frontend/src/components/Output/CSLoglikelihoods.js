@@ -1,12 +1,11 @@
 import React, {Component} from "react";
-import {inject, observer} from "mobx-react";
+import {observer} from "mobx-react";
 import PropTypes from "prop-types";
 
-@inject("outputStore")
 @observer
 class CSLoglikelihoods extends Component {
     render() {
-        const {outputStore} = this.props;
+        const {results} = this.props;
         return (
             <table className="table table-bordered table-sm">
                 <thead className="table-primary">
@@ -21,24 +20,16 @@ class CSLoglikelihoods extends Component {
                     </tr>
                 </thead>
                 <tbody>
-                    {outputStore.getLoglikelihoods.map((row, index) => {
-                        return (
-                            <tr key={index}>
-                                <td>{row.model}</td>
-                                <td>{row.loglikelihood}</td>
-                                <td>{row.n_parms}</td>
-                                <td>{row.aic}</td>
-                            </tr>
-                        );
-                    })}
+                    <tr>
+                        <td colSpan={4}>ADD - {results.aic}</td>
+                    </tr>
                 </tbody>
             </table>
         );
     }
 }
 CSLoglikelihoods.propTypes = {
-    outputStore: PropTypes.object,
-    getLoglikelihoods: PropTypes.func,
+    results: PropTypes.object,
 };
 
 export default CSLoglikelihoods;

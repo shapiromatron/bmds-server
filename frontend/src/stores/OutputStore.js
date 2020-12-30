@@ -84,15 +84,6 @@ class OutputStore {
         return modelData;
     }
 
-    @computed get getLoglikelihoods() {
-        return this.selectedModel.results.loglikelihoods;
-    }
-
-    @computed get getTestofInterest() {
-        let rows = this.selectedModel.results.test_rows;
-        return rows;
-    }
-
     @computed get getPValue() {
         let percentileValue = _.range(0.01, 1, 0.01);
         let pValue = percentileValue.map(function(each_element) {

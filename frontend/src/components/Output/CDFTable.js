@@ -2,13 +2,11 @@ import _ from "lodash";
 import React, {Component} from "react";
 import {observer} from "mobx-react";
 import PropTypes from "prop-types";
-import {toJS} from "mobx";
 
 @observer
 class CDFTable extends Component {
     render() {
-        const {store} = this.props,
-            data = toJS(store.selectedModel.results.fit.bmd_dist);
+        const {bmd_dist} = this.props;
 
         return (
             <table className="table table-bordered table-sm">
@@ -22,11 +20,11 @@ class CDFTable extends Component {
                     </tr>
                 </thead>
                 <tbody>
-                    {_.range(data[0].length).map(i => {
+                    {_.range(bmd_dist[0].length).map(i => {
                         return (
                             <tr key={i}>
-                                <td>{data[1][i]}</td>
-                                <td>{data[0][i]}</td>
+                                <td>{bmd_dist[1][i]}</td>
+                                <td>{bmd_dist[0][i]}</td>
                             </tr>
                         );
                     })}
@@ -36,7 +34,7 @@ class CDFTable extends Component {
     }
 }
 CDFTable.propTypes = {
-    store: PropTypes.object,
+    bmd_dist: PropTypes.array,
 };
 
 export default CDFTable;

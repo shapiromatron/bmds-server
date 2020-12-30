@@ -175,6 +175,7 @@ class MainStore {
 
         const inputs = data.inputs;
         if (_.isEmpty(inputs)) {
+            this.changeDatasetType(this.model_type);
             this.isUpdateComplete = true;
             return;
         }
@@ -188,6 +189,7 @@ class MainStore {
         this.analysis_name = inputs.analysis_name;
         this.analysis_description = inputs.analysis_description;
         this.model_type = inputs.dataset_type;
+        this.changeDatasetType(this.model_type);
         this.rootStore.optionsStore.setOptions(inputs.options);
         this.rootStore.dataStore.setDatasets(inputs.datasets);
         this.rootStore.modelsStore.setModels(inputs.models);

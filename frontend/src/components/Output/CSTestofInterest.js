@@ -1,12 +1,11 @@
 import React, {Component} from "react";
-import {inject, observer} from "mobx-react";
+import {observer} from "mobx-react";
 import PropTypes from "prop-types";
 
-@inject("outputStore")
 @observer
 class CSTestofInterest extends Component {
     render() {
-        const {outputStore} = this.props;
+        const {results} = this.props;
         return (
             <table className="table table-bordered table-sm">
                 <thead className="table-primary">
@@ -21,23 +20,15 @@ class CSTestofInterest extends Component {
                     </tr>
                 </thead>
                 <tbody>
-                    {outputStore.getTestofInterest.map((row, index) => {
-                        return (
-                            <tr key={index}>
-                                <td>{row.test_number}</td>
-                                <td>{row.deviance}</td>
-                                <td>{row.df}</td>
-                                <td>{row.p_value}</td>
-                            </tr>
-                        );
-                    })}
+                    <tr>
+                        <td colSpan={4}>ADD - {results.aic}</td>
+                    </tr>
                 </tbody>
             </table>
         );
     }
 }
 CSTestofInterest.propTypes = {
-    outputStore: PropTypes.object,
-    getTestofInterest: PropTypes.func,
+    results: PropTypes.object,
 };
 export default CSTestofInterest;

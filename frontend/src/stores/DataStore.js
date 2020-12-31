@@ -18,7 +18,7 @@ class DataStore {
         this.rootStore = rootStore;
     }
 
-    @observable model_type = "DM";
+    @observable model_type = dc.DATA_CONTINUOUS_SUMMARY;
     @observable datasets = [];
     @observable selectedDatasetIndex = null;
     @observable selectedFile = {};

@@ -42,7 +42,7 @@ class Job(models.Model):
     def get_api_url(self):
         return reverse("api:job-detail", args=(str(self.id),))
 
-    def get_api_patch_inputs(self):
+    def get_api_patch_inputs_url(self):
         return reverse("api:job-patch-inputs", args=(str(self.id),))
 
     def get_api_execute_url(self):

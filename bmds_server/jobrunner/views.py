@@ -74,7 +74,7 @@ class JobDetail(DetailView):
                 "editKey": self.object.password,
                 "viewUrl": self.request.build_absolute_uri(self.object.get_absolute_url()),
                 "editUrl": self.request.build_absolute_uri(self.object.get_edit_url()),
-                "patchInputUrl": self.object.get_api_patch_inputs(),
+                "patchInputUrl": self.object.get_api_patch_inputs_url(),
                 "executeUrl": self.object.get_api_execute_url(),
                 "executeResetUrl": self.object.get_api_execute_reset_url(),
                 "deleteDateStr": self.object.deletion_date.strftime("%Y-%b-%d"),

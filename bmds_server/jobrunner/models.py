@@ -48,6 +48,9 @@ class Job(models.Model):
     def get_api_execute_url(self):
         return reverse("api:job-execute", args=(str(self.id),))
 
+    def get_api_execute_reset_url(self):
+        return reverse("api:job-execute-reset", args=(str(self.id),))
+
     def get_edit_url(self):
         return reverse("job_edit", args=(str(self.id), self.password))
 
@@ -205,6 +208,13 @@ class Job(models.Model):
         self.outputs = obj
         self.errors = [out["error"] for out in outputs if "error" in out]
         self.ended = now()
+        self.save()
+
+    def reset_execution(self):
+        self.started = None
+        self.ended = None
+        self.outputs = {}
+        self.errors = {}
         self.save()
 
     def handle_execution_error(self, err):

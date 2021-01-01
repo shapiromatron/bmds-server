@@ -152,6 +152,28 @@ class MainStore {
             });
     }
     @action
+    async executeResetAnalysis() {
+        const {csrfToken, executeResetUrl} = this.config.editSettings;
+        await fetch(executeResetUrl, {
+            method: "POST",
+            mode: "cors",
+            headers: getHeaders(csrfToken),
+            body: JSON.stringify({
+                editKey: this.config.editSettings.editKey,
+            }),
+        })
+            .then(response => response.json())
+            .then(data => {
+                this.isExecuting = false;
+                this.errorMessage = "";
+                this.updateModelStateFromApi(data);
+            })
+            .catch(error => {
+                this.errorMessage = error;
+                console.error("error", error);
+            });
+    }
+    @action
     async fetchSavedAnalysis() {
         const apiUrl = this.config.apiUrl;
         this.errorMessage = "";

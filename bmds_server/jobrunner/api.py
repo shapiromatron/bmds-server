@@ -70,6 +70,25 @@ class JobViewset(mixins.CreateModelMixin, mixins.RetrieveModelMixin, viewsets.Ge
         serializer = self.get_serializer(instance)
         return Response(serializer.data)
 
+    @action(detail=True, methods=("post",), url_path="execute-reset")
+    def execute_reset(self, request, *args, **kwargs):
+        """
+        Attempt to execute the model.
+        """
+        instance = self.get_object()
+
+        # permissions check
+        if instance.password != request.data.get("editKey", ""):
+            raise exceptions.PermissionDenied()
+
+        # reset instance
+        instance.reset_execution()
+
+        # fetch from db and get the latest
+        instance.refresh_from_db()
+        serializer = self.get_serializer(instance)
+        return Response(serializer.data)
+
     @action(detail=True, methods=("get",), renderer_classes=(renderers.XlsxRenderer,))
     def excel(self, request, *args, **kwargs):
         """

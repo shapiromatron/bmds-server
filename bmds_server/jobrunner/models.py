@@ -120,12 +120,12 @@ class Job(models.Model):
         """
         session = bmds.BMDS.version(bmds_version)(dataset_type, dataset=dataset)
         for options in inputs["options"]:
-            for model_class, model_names in inputs["models"].items():
+            for prior_class, model_names in inputs["models"].items():
                 for model_name in model_names:
                     if dataset_type in bmds.constants.DICHOTOMOUS_DTYPES:
-                        model_options = transforms.bmds3_d_model_options(options)
+                        model_options = transforms.bmds3_d_model_options(prior_class, options)
                     elif dataset_type in bmds.constants.CONTINUOUS_DTYPES:
-                        model_options = transforms.bmds3_c_model_options(options)
+                        model_options = transforms.bmds3_c_model_options(prior_class, options)
                     else:
                         raise ValueError(f"Unknown dataset_type: {dataset_type}")
                     session.add_model(model_name, settings=model_options)

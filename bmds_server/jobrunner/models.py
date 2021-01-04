@@ -128,7 +128,14 @@ class Job(models.Model):
                         model_options = transforms.bmds3_c_model_options(prior_class, options)
                     else:
                         raise ValueError(f"Unknown dataset_type: {dataset_type}")
-                    session.add_model(model_name, settings=model_options)
+
+                    if model_name == bmds.constants.M_Exponential:
+                        session.add_model(bmds.constants.M_ExponentialM2, settings=model_options)
+                        session.add_model(bmds.constants.M_ExponentialM3, settings=model_options)
+                        session.add_model(bmds.constants.M_ExponentialM4, settings=model_options)
+                        session.add_model(bmds.constants.M_ExponentialM5, settings=model_options)
+                    else:
+                        session.add_model(model_name, settings=model_options)
         return session
 
     @classmethod

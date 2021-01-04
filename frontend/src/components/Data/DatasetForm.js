@@ -2,7 +2,7 @@ import React, {Component} from "react";
 import {inject, observer} from "mobx-react";
 import PropTypes from "prop-types";
 
-import {columnHeaders} from "../../constants/dataConstants";
+import {columnHeaders, columns} from "../../constants/dataConstants";
 
 const DatasetFormRow = props => {
     return (
@@ -46,8 +46,9 @@ DatasetFormRow.propTypes = {
 class DatasetForm extends Component {
     render() {
         const {dataStore} = this.props,
-            columns = dataStore.getDatasetColumns,
-            dataset = dataStore.selectedDataset;
+            dataset = dataStore.selectedDataset,
+            columnNames = columns[dataset.model_type];
+
         return (
             <>
                 <div className="form-group mt-2">
@@ -79,7 +80,7 @@ class DatasetForm extends Component {
                 <table className="table table-sm text-center">
                     <thead>
                         <tr className="table-primary text-center">
-                            {columns.map((item, index) => (
+                            {columnNames.map((item, index) => (
                                 <th key={index}>{columnHeaders[item]}</th>
                             ))}
                             <td>
@@ -92,7 +93,7 @@ class DatasetForm extends Component {
                             </td>
                         </tr>
                         <tr>
-                            {columns.map((column, i) => {
+                            {columnNames.map((column, i) => {
                                 return (
                                     <td key={i}>
                                         <input
@@ -115,7 +116,7 @@ class DatasetForm extends Component {
                                 <DatasetFormRow
                                     key={i}
                                     idx={i}
-                                    columns={columns}
+                                    columns={columnNames}
                                     row={obj}
                                     dataset_id={dataset.dataset_id}
                                     onChange={dataStore.saveDatasetCellItem}

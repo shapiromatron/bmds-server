@@ -4,7 +4,7 @@ import PropTypes from "prop-types";
 import ModelDetailModal from "./ModelDetailModal";
 import ResultsTable from "./ResultsTable";
 import DatasetTable from "../Data/DatasetTable";
-import DatasetSelector from "../Data/DatasetSelector";
+import OutputSelector from "./OutputSelector";
 import ResponsePlot from "./ResponsePlot";
 import "./Output.css";
 
@@ -13,7 +13,7 @@ import "./Output.css";
 class Output extends Component {
     render() {
         const {outputStore} = this.props;
-        if (outputStore.getCurrentOutput === null) {
+        if (outputStore.selectedOutput === null) {
             return (
                 <div className="container-fluid">
                     <p>No results available.</p>
@@ -21,10 +21,10 @@ class Output extends Component {
             );
         }
 
-        if ("error" in outputStore.getCurrentOutput) {
+        if ("error" in outputStore.selectedOutput) {
             return (
                 <div className="container-fluid">
-                    <pre>{outputStore.getCurrentOutput.error}</pre>
+                    <pre>{outputStore.selectedOutput.error}</pre>
                 </div>
             );
         }
@@ -33,10 +33,10 @@ class Output extends Component {
             <div className="container-fluid">
                 <div className="row">
                     <div className="col col-lg-2">
-                        <DatasetSelector store={outputStore} />
+                        <OutputSelector />
                     </div>
                     <div className="col col-lg-6">
-                        <DatasetTable store={outputStore} />
+                        <DatasetTable dataset={outputStore.selectedDataset} />
                         <ResultsTable />
                     </div>
                     <div className="col col-lg-4">

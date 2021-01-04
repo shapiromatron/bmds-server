@@ -1,3 +1,4 @@
+import itertools
 import json
 import logging
 import traceback
@@ -112,43 +113,29 @@ class Job(models.Model):
             raise ValueError(f"unknown dataset type: {dataset_type}")
 
     @classmethod
-    def build_bmds3_session(
-        cls, bmds_version: str, dataset_type: str, dataset: bmds.datasets.DatasetType, inputs: Dict
-    ) -> bmds.BMDS:
-        """
-        Puts all options and models into a single BMDS session.
-        """
-        session = bmds.BMDS.version(bmds_version)(dataset_type, dataset=dataset)
-        for options in inputs["options"]:
-            for prior_class, model_names in inputs["models"].items():
-                for model_name in model_names:
-                    if dataset_type in bmds.constants.DICHOTOMOUS_DTYPES:
-                        model_options = transforms.bmds3_d_model_options(prior_class, options)
-                    elif dataset_type in bmds.constants.CONTINUOUS_DTYPES:
-                        model_options = transforms.bmds3_c_model_options(prior_class, options)
-                    else:
-                        raise ValueError(f"Unknown dataset_type: {dataset_type}")
-
-                    if model_name == bmds.constants.M_Exponential:
-                        session.add_model(bmds.constants.M_ExponentialM2, settings=model_options)
-                        session.add_model(bmds.constants.M_ExponentialM3, settings=model_options)
-                        session.add_model(bmds.constants.M_ExponentialM4, settings=model_options)
-                        session.add_model(bmds.constants.M_ExponentialM5, settings=model_options)
-                    else:
-                        session.add_model(model_name, settings=model_options)
-        return session
-
-    @classmethod
-    def build_session(cls, inputs: Dict, dataset: Dict) -> bmds.BMDS:
+    def build_session(cls, inputs: Dict, dataset_index: int, option_index: int) -> bmds.BMDS:
         bmds_version = inputs["bmds_version"]
         dataset_type = inputs["dataset_type"]
+        dataset = cls._build_dataset(dataset_type, inputs["datasets"][dataset_index])
+        options = inputs["options"][option_index]
 
-        dataset = cls._build_dataset(dataset_type, dataset)
+        session = bmds.BMDS.version(bmds_version)(dataset_type, dataset=dataset)
+        for prior_class, model_names in inputs["models"].items():
+            for model_name in model_names:
+                if dataset_type in bmds.constants.DICHOTOMOUS_DTYPES:
+                    model_options = transforms.bmds3_d_model_options(prior_class, options)
+                elif dataset_type in bmds.constants.CONTINUOUS_DTYPES:
+                    model_options = transforms.bmds3_c_model_options(prior_class, options)
+                else:
+                    raise ValueError(f"Unknown dataset_type: {dataset_type}")
 
-        if bmds_version in bmds.constants.BMDS_THREES:
-            session = cls.build_bmds3_session(bmds_version, dataset_type, dataset, inputs)
-        else:
-            raise ValueError(f"Unknown bmds_version: {bmds_version}s")
+                if model_name == bmds.constants.M_Exponential:
+                    session.add_model(bmds.constants.M_ExponentialM2, settings=model_options)
+                    session.add_model(bmds.constants.M_ExponentialM3, settings=model_options)
+                    session.add_model(bmds.constants.M_ExponentialM4, settings=model_options)
+                    session.add_model(bmds.constants.M_ExponentialM5, settings=model_options)
+                else:
+                    session.add_model(model_name, settings=model_options)
 
         return session
 
@@ -163,10 +150,10 @@ class Job(models.Model):
             err = traceback.format_exc()
             self.handle_execution_error(err)
 
-    def run_session(self, inputs: Dict, dataset: Dict, i: int):
+    def run_session(self, inputs: Dict, dataset_index: int, option_index: int):
 
         # build session
-        session = self.build_session(inputs, dataset)
+        session = self.build_session(inputs, dataset_index, option_index)
 
         # execute
         session.execute()
@@ -176,18 +163,16 @@ class Job(models.Model):
         if inputs.get("recommend", default_recommend):
             session.recommend()
 
-        # save output; override default dataset export to optionally
-        # include additional metadata in the dataset specified over JSON.
-        output = session.to_dict(i)
-        output["dataset"] = dataset
+        output = session.to_dict()
+        output.update(dataset_index=dataset_index, option_index=option_index)
 
         return output
 
-    def try_run_session(self, inputs: Dict, dataset: Dict, i: int) -> Dict:
+    def try_run_session(self, inputs: Dict, dataset_index: int, option_index: int) -> Dict:
         try:
-            return self.run_session(inputs, dataset, i)
+            return self.run_session(inputs, dataset_index, option_index)
         except Exception:
-            exception = dict(dataset=dataset, error=traceback.format_exc())
+            exception = dict(dataset_index=dataset_index, error=traceback.format_exc())
             logger.error(exception)
             return exception
 
@@ -204,14 +189,15 @@ class Job(models.Model):
         # update start time to actual time started
         self.started = now()
 
+        combinations = itertools.product(
+            *[range(len(self.inputs["datasets"])), range(len(self.inputs["options"]))]
+        )
         outputs = [
-            self.try_run_session(self.inputs, dataset, i)
-            for i, dataset in enumerate(self.inputs["datasets"])
+            self.try_run_session(self.inputs, dataset_index, option_index)
+            for dataset_index, option_index in combinations
         ]
 
-        inputs_no_datasets = deepcopy(self.inputs)
-        inputs_no_datasets.pop("datasets")
-        obj = dict(job_id=str(self.id), inputs=inputs_no_datasets, outputs=outputs)
+        obj = dict(job_id=str(self.id), outputs=outputs)
         self.outputs = obj
         self.errors = [out["error"] for out in outputs if "error" in out]
         self.ended = now()

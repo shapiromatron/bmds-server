@@ -3,7 +3,6 @@ import json
 import logging
 import traceback
 import uuid
-from copy import deepcopy
 from datetime import timedelta
 from typing import Dict, List, Optional
 

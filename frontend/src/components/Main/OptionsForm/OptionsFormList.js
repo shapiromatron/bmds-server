@@ -44,7 +44,7 @@ class OptionsFormList extends Component {
                                             key={id}
                                             idx={id}
                                             options={options}
-                                            dataset_type={optionsStore.getDatasetType}
+                                            modelType={optionsStore.getModelType}
                                             deleteOptions={optionsStore.deleteOptions}
                                             saveOptions={optionsStore.saveOptions}
                                         />

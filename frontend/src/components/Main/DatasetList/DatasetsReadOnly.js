@@ -1,6 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 
+import * as mc from "../../../constants/mainConstants";
 import {readOnlyCheckbox} from "../../../common";
 
 const DatasetsReadOnly = props => {
@@ -8,17 +9,17 @@ const DatasetsReadOnly = props => {
         <tr>
             <td>{readOnlyCheckbox(props.dataset.enabled)}</td>
             <td>{props.dataset.dataset_name}</td>
-            {props.dataset_type === "C" ? (
+            {props.model_type === mc.MODEL_CONTINUOUS ? (
                 <td>
                     <p>{props.dataset.adverse_direction}</p>
                 </td>
             ) : null}
-            {props.dataset_type === "DM" ? (
+            {props.model_type === mc.MODEL_MULTI_TUMOR ? (
                 <td>
                     <p>{props.dataset.degree}</p>
                 </td>
             ) : null}
-            {props.dataset_type === "DM" ? (
+            {props.model_type === mc.MODEL_MULTI_TUMOR ? (
                 <td>
                     <p>{props.dataset.background}</p>
                 </td>
@@ -27,7 +28,7 @@ const DatasetsReadOnly = props => {
     );
 };
 DatasetsReadOnly.propTypes = {
-    dataset: PropTypes.object,
-    dataset_type: PropTypes.string,
+    dataset: PropTypes.object.isRequired,
+    model_type: PropTypes.string.isRequired,
 };
 export default DatasetsReadOnly;

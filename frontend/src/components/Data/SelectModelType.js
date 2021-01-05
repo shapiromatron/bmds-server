@@ -15,7 +15,7 @@ class SelectModelType extends Component {
                         className="form-control mr-1 p-0"
                         id="selectmodel"
                         onChange={e => dataStore.setModelType(e.target.value)}>
-                        {dataStore.getFilteredModelTypes.map((item, i) => {
+                        {dataStore.getFilteredDatasetTypes.map((item, i) => {
                             return (
                                 <option key={i} value={item.value}>
                                     {item.name}
@@ -40,9 +40,5 @@ class SelectModelType extends Component {
 }
 SelectModelType.propTypes = {
     dataStore: PropTypes.object,
-    setModelType: PropTypes.func,
-    getEditSettings: PropTypes.func,
-    getFilteredModelTypes: PropTypes.func,
-    addDataset: PropTypes.func,
 };
 export default SelectModelType;

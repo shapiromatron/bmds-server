@@ -11,6 +11,7 @@ class DatasetList extends Component {
     render() {
         const {dataStore} = this.props,
             datasets = toJS(dataStore.datasets);
+
         return (
             <table className="table table-bordered table-sm">
                 <thead>
@@ -29,7 +30,7 @@ class DatasetList extends Component {
                                     dataset={dataset}
                                     toggleDataset={dataStore.toggleDataset}
                                     changeDatasetProperties={dataStore.changeDatasetProperties}
-                                    dataset_type={dataStore.getDatasetType}
+                                    model_type={dataStore.getModelType}
                                 />
                             );
                         })}
@@ -41,7 +42,7 @@ class DatasetList extends Component {
                                 <DatasetsReadOnly
                                     key={index}
                                     dataset={dataset}
-                                    dataset_type={dataStore.getDatasetType}
+                                    model_type={dataStore.getModelType}
                                 />
                             );
                         })}

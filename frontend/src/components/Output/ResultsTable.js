@@ -1,13 +1,15 @@
+import {inject, observer} from "mobx-react";
 import React, {Component} from "react";
 import PropTypes from "prop-types";
 
-import {inject, observer} from "mobx-react";
+import {getPValue} from "../../constants/outputConstants";
 
 @inject("outputStore")
 @observer
 class ResultsTable extends Component {
     render() {
-        const store = this.props.outputStore;
+        const store = this.props.outputStore,
+            dataset = store.selectedDataset;
         return (
             <table className="table table-bordered result table-sm">
                 <thead>
@@ -41,7 +43,7 @@ class ResultsTable extends Component {
                                 <td>{model.results.bmdl}</td>
                                 <td>{model.results.bmdu}</td>
                                 <td>{model.results.aic}</td>
-                                <td>{model.results.gof.p_value}</td>
+                                <td>{getPValue(dataset.model_type, model.results)}</td>
                             </tr>
                         );
                     })}

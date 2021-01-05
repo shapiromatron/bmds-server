@@ -2,10 +2,13 @@ import React, {Component} from "react";
 import {observer} from "mobx-react";
 import PropTypes from "prop-types";
 
+import {getPValue} from "../../constants/outputConstants";
+
 @observer
 class BenchmarkDose extends Component {
     render() {
         const {store} = this.props,
+            dataset = store.selectedDataset,
             results = store.selectedModel.results;
 
         return (
@@ -34,7 +37,7 @@ class BenchmarkDose extends Component {
                     </tr>
                     <tr>
                         <td>P Value</td>
-                        <td>{results.gof.p_value}</td>
+                        <td>{getPValue(dataset.model_type, results)}</td>
                     </tr>
                 </tbody>
             </table>

@@ -1,5 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
+
+import * as mc from "../../../constants/mainConstants";
 import {
     bmr_type,
     other_bmr_type,
@@ -8,13 +10,12 @@ import {
     variance,
     polynomial_restriction,
     bootstrap_seed,
-    datasetType,
 } from "../../../constants/optionsConstants";
 
 const OptionsForm = props => {
     return (
         <tr className="form-group">
-            {props.dataset_type === datasetType.Continuous ? (
+            {props.modelType === mc.MODEL_CONTINUOUS ? (
                 <td>
                     <select
                         className="form-control"
@@ -30,7 +31,7 @@ const OptionsForm = props => {
                     </select>
                 </td>
             ) : null}
-            {props.dataset_type != datasetType.Continuous ? (
+            {props.modelType != mc.MODEL_CONTINUOUS ? (
                 <td>
                     <select
                         className="form-control"
@@ -57,7 +58,7 @@ const OptionsForm = props => {
                     }
                 />
             </td>
-            {props.dataset_type === datasetType.Continuous ? (
+            {props.modelType === mc.MODEL_CONTINUOUS ? (
                 <td>
                     <input
                         type="number"
@@ -83,7 +84,7 @@ const OptionsForm = props => {
                     }
                 />
             </td>
-            {props.dataset_type === datasetType.Nested ? (
+            {props.modelType === mc.MODEL_NESTED ? (
                 <td>
                     <select
                         className="form-control"
@@ -106,7 +107,7 @@ const OptionsForm = props => {
                 </td>
             ) : null}
 
-            {props.dataset_type === datasetType.Continuous ? (
+            {props.modelType === mc.MODEL_CONTINUOUS ? (
                 <td>
                     <select
                         className="form-control"
@@ -124,7 +125,7 @@ const OptionsForm = props => {
                     </select>
                 </td>
             ) : null}
-            {props.dataset_type === datasetType.Continuous ? (
+            {props.modelType === mc.MODEL_CONTINUOUS ? (
                 <td>
                     <select
                         className="form-control"
@@ -140,7 +141,7 @@ const OptionsForm = props => {
                     </select>
                 </td>
             ) : null}
-            {props.dataset_type === datasetType.Continuous ? (
+            {props.modelType === mc.MODEL_CONTINUOUS ? (
                 <td>
                     <select
                         className="form-control"
@@ -158,7 +159,7 @@ const OptionsForm = props => {
                     </select>
                 </td>
             ) : null}
-            {props.dataset_type != datasetType.Dichotomous ? (
+            {props.modelType == mc.MODEL_DICHOTOMOUS || props.modelType == mc.MODEL_CONTINUOUS ? (
                 <td>
                     <select
                         className="form-control"
@@ -168,7 +169,7 @@ const OptionsForm = props => {
                     </select>
                 </td>
             ) : null}
-            {props.dataset_type === datasetType.Nested ? (
+            {props.modelType === mc.MODEL_NESTED ? (
                 <td>
                     <input
                         type="number"
@@ -180,7 +181,7 @@ const OptionsForm = props => {
                     />
                 </td>
             ) : null}
-            {props.dataset_type === datasetType.Nested ? (
+            {props.modelType === mc.MODEL_NESTED ? (
                 <td>
                     <select
                         className="form-control"
@@ -215,13 +216,12 @@ const OptionsForm = props => {
 
 OptionsForm.propTypes = {
     optionsStore: PropTypes.string,
-    optionsLis: PropTypes.array,
-    idx: PropTypes.number,
-    dataset_type: PropTypes.string,
+    idx: PropTypes.number.isRequired,
+    modelType: PropTypes.string.isRequired,
     onChange: PropTypes.func,
-    saveOptions: PropTypes.func,
-    deleteOptions: PropTypes.func,
-    options: PropTypes.object,
+    saveOptions: PropTypes.func.isRequired,
+    deleteOptions: PropTypes.func.isRequired,
+    options: PropTypes.object.isRequired,
     bmr_value: PropTypes.number,
     tail_probability: PropTypes.number,
     litter_specific_covariate: PropTypes.string,

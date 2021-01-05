@@ -1,11 +1,13 @@
-import {observable, action, computed} from "mobx";
+import {observable, action, computed, toJS} from "mobx";
 import _ from "lodash";
+
+import * as mc from "../constants/mainConstants";
+import * as dc from "../constants/dataConstants";
 import {
-    modelTypes,
+    datasetTypesByModelType,
     columns,
     columnNames,
     datasetForm,
-    datasetNamesHeaders,
     scatter_plot_layout,
     yAxisTitle,
     model_type,
@@ -16,14 +18,14 @@ class DataStore {
         this.rootStore = rootStore;
     }
 
-    @observable model_type = "DM";
+    @observable model_type = dc.DATA_CONTINUOUS_SUMMARY;
     @observable datasets = [];
     @observable selectedDatasetIndex = null;
     @observable selectedFile = {};
 
     @action.bound setDefaultsByDatasetType() {
-        let modelTypes = this.getFilteredModelTypes;
-        this.model_type = modelTypes[0].value;
+        let datasetTypes = this.getFilteredDatasetTypes;
+        this.model_type = datasetTypes[0].value;
         this.datasets = [];
     }
 
@@ -41,7 +43,7 @@ class DataStore {
 
     @action.bound addDataset() {
         let form = datasetForm[this.model_type];
-        if (this.getDatasetType === "DM") {
+        if (this.getModelType === mc.MODEL_DICHOTOMOUS) {
             form["degree"] = "auto-select";
             form["background"] = "Estimated";
         }
@@ -150,11 +152,11 @@ class DataStore {
     @computed get getResponse() {
         let responses = [];
         let dataset = this.selectedDataset;
-        if (dataset.model_type === model_type.Continuous_Summarized) {
+        if (dataset.model_type === dc.DATA_CONTINUOUS_SUMMARY) {
             responses = dataset.means;
-        } else if (dataset.model_type === model_type.Continuous_Individual) {
+        } else if (dataset.model_type === dc.DATA_CONTINUOUS_INDIVIDUAL) {
             responses = dataset.responses;
-        } else if (dataset.model_type === model_type.Dichotomous) {
+        } else if (dataset.model_type === dc.DATA_DICHOTOMOUS) {
             let ns = dataset.ns;
             let incidences = dataset.incidences;
             for (var i = 0; i < ns.length; i++) {
@@ -202,19 +204,15 @@ class DataStore {
     }
 
     @computed get getModelTypeDatasets() {
-        return this.datasets.filter(item => item.model_type.includes(this.getDatasetType));
+        return this.datasets.filter(item => item.model_type.includes(this.getModelType));
     }
 
-    @computed get getFilteredModelTypes() {
-        return modelTypes.filter(model => model.value.includes(this.getDatasetType));
+    @computed get getFilteredDatasetTypes() {
+        return datasetTypesByModelType(toJS(this.getModelType));
     }
 
-    @computed get getModelTypesName() {
-        return modelTypes.find(item => item.value === this.model_type);
-    }
-
-    @computed get getDatasetType() {
-        return this.rootStore.mainStore.dataset_type;
+    @computed get getModelType() {
+        return this.rootStore.mainStore.model_type;
     }
 
     @computed get getDatasetColumns() {
@@ -223,12 +221,12 @@ class DataStore {
 
     @computed get getEnabledDatasets() {
         return this.datasets.filter(
-            item => item.enabled == true && item.model_type.includes(this.getDatasetType)
+            item => item.enabled == true && item.model_type.includes(this.getModelType)
         );
     }
 
     @computed get getDatasetNamesHeader() {
-        return datasetNamesHeaders[this.getDatasetType];
+        return mc.datasetNamesHeaders[this.getModelType];
     }
 
     @computed get checkDatasetsLength() {

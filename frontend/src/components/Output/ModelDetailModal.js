@@ -15,12 +15,18 @@ import CSLoglikelihoods from "./CSLoglikelihoods";
 import ResponsePlot from "./ResponsePlot";
 import CSTestofInterest from "./CSTestofInterest";
 
+import * as dc from "../../constants/dataConstants";
+
 @inject("outputStore")
 @observer
 class ModelDetailModal extends Component {
     render() {
-        const {outputStore} = this.props;
-        if (outputStore.selectedModel === undefined) {
+        const {outputStore} = this.props,
+            output = outputStore.getCurrentOutput,
+            dataset = output.dataset,
+            model = outputStore.selectedModel;
+
+        if (model === undefined) {
             return null;
         }
         return (
@@ -31,10 +37,7 @@ class ModelDetailModal extends Component {
                 aria-labelledby="contained-modal-title-vcenter"
                 centered>
                 <Modal.Header>
-                    <Modal.Title id="contained-modal-title-vcenter">
-                        {" "}
-                        {outputStore.selectedModel.model_name} - Details
-                    </Modal.Title>
+                    <Modal.Title id="contained-modal-title-vcenter">{model.model_name}</Modal.Title>
                     <button
                         className="btn btn-danger"
                         style={{float: "right"}}
@@ -63,28 +66,30 @@ class ModelDetailModal extends Component {
                             <ModelParameters store={outputStore} />
                         </Col>
                     </Row>
-                    <Row>
-                        <Col xs={12}>
-                            <GoodnessFit store={outputStore} />
-                        </Col>
-                    </Row>
-                    {outputStore.getCurrentOutput.dataset.model_type == "CS" ? (
+                    {dataset.model_type == dc.DATA_DICHOTOMOUS ? (
+                        <Row>
+                            <Col xs={12}>
+                                <GoodnessFit store={outputStore} />
+                            </Col>
+                        </Row>
+                    ) : null}
+                    {dataset.model_type == dc.DATA_CONTINUOUS_SUMMARY ? (
                         <Row>
                             <Col xs={4}>
-                                <CSLoglikelihoods />
+                                <CSLoglikelihoods results={model.results} />
                             </Col>
                             <Col xs={4}>
-                                <CSTestofInterest />
+                                <CSTestofInterest results={model.results} />
                             </Col>
                         </Row>
                     ) : null}
                     <Row>
                         <Col xs={4}>
-                            <CDFTable store={outputStore} />
+                            <CDFTable bmd_dist={model.results.fit.bmd_dist} />
                         </Col>
                         <Col>
                             <ResponsePlot />
-                            <CDFPlot store={outputStore} />
+                            <CDFPlot cdf={model.results.fit.bmd_dist} />
                         </Col>
                     </Row>
                 </Modal.Body>

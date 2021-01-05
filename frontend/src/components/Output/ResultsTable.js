@@ -23,7 +23,7 @@ class ResultsTable extends Component {
                     </tr>
                 </thead>
                 <tbody>
-                    {store.getCurrentOutput.models.map((model, idx) => {
+                    {store.selectedOutput.models.map((model, idx) => {
                         return (
                             <tr
                                 key={idx}

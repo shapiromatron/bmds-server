@@ -5,6 +5,9 @@ import * as dc from "../constants/dataConstants";
 import * as constant from "../constants/outputConstants";
 
 class OutputStore {
+    /*
+    An `Output` are the modeling results that are a permutation of a dataset and an option-set.
+    */
     constructor(rootStore) {
         this.rootStore = rootStore;
     }
@@ -12,15 +15,15 @@ class OutputStore {
     @observable modelDetailModal = false;
     @observable selectedModel = null;
     @observable currentOutput = {};
-    @observable selectedDatasetIndex = 0;
+    @observable selectedOutputIndex = 0;
     @observable plotData = [];
     @observable showBMDLine = false;
 
     @action setSelectedModel(model) {
         this.selectedModel = model;
     }
-    @action setSelectedDatasetIndex(dataset_id) {
-        this.selectedDatasetIndex = dataset_id;
+    @action setSelectedOutputIndex(output_index) {
+        this.selectedOutputIndex = output_index;
         this.setPlotData();
     }
     @action toggleModelDetailModal(model) {
@@ -28,39 +31,30 @@ class OutputStore {
         this.modelDetailModal = !this.modelDetailModal;
     }
 
-    @computed get selectedDataset() {
-        return this.getCurrentOutput.dataset;
+    @computed get outputs() {
+        return this.rootStore.mainStore.getExecutionOutputs;
     }
-
-    @computed get getCurrentOutput() {
-        let outputs = this.rootStore.mainStore.getExecutionOutputs;
-
-        if (outputs === null) {
+    @computed get selectedOutput() {
+        if (this.outputs === null) {
             return null;
         }
-
-        let current_output = outputs.find(
-            item => item.dataset.dataset_id == this.selectedDatasetIndex
-        );
-        return current_output;
+        return this.outputs[this.selectedOutputIndex];
     }
-
-    @computed get getDatasetColumns() {
-        return this.rootStore.dataStore.getDatasetColumns;
+    @computed get selectedDataset() {
+        const dataset_index = this.selectedOutput.dataset_index;
+        return this.rootStore.dataStore.datasets[dataset_index];
     }
 
     @computed get getInfoTable() {
         let infoTable = _.cloneDeep(constant.infoTable);
         infoTable.model_name.value = this.selectedModel.model_name;
-        infoTable.dataset_name.value = this.getCurrentOutput.dataset.dataset_name;
+        infoTable.dataset_name.value = this.selectedDataset.dataset_name;
         infoTable.dose_response_model.value = this.selectedModel.results.fit.model.model_form_str;
         return infoTable;
     }
 
     @computed get getModelOptions() {
-        let modelOptions = _.cloneDeep(
-            constant.model_options[this.getCurrentOutput.dataset.model_type]
-        );
+        let modelOptions = _.cloneDeep(constant.model_options[this.selectedDataset.model_type]);
         modelOptions.map(option => {
             option.value = this.selectedModel.settings[option.name];
             if (option.name == "bmrType") {
@@ -78,7 +72,7 @@ class OutputStore {
 
     @computed get getModelData() {
         let modelData = _.cloneDeep(constant.modelData);
-        modelData.number_of_observations.value = this.getCurrentOutput.dataset.doses.length;
+        modelData.number_of_observations.value = this.selectedDataset.doses.length;
         modelData.adverse_direction.value =
             constant.adverse_direction[this.selectedModel.settings.adverseDirection];
         return modelData;
@@ -94,7 +88,7 @@ class OutputStore {
 
     @computed get getResponse() {
         let responses = [];
-        let dataset = this.getCurrentOutput.dataset;
+        let dataset = this.selectedDataset;
         let ns = dataset.ns;
         let incidences = dataset.incidences;
         if (dataset.model_type === dc.DATA_CONTINUOUS_SUMMARY) {
@@ -110,14 +104,14 @@ class OutputStore {
 
     @computed get getLayout() {
         let layout = _.cloneDeep(constant.layout);
-        layout.title.text = this.getCurrentOutput.dataset.dataset_name;
+        layout.title.text = this.selectedDataset.dataset_name;
         return layout;
     }
 
     @action setPlotData() {
         this.plotData = [];
         var trace1 = {
-            x: this.getCurrentOutput.dataset.doses.slice(),
+            x: this.selectedDataset.doses.slice(),
             y: this.getResponse.slice(),
             mode: "markers",
             type: "scatter",
@@ -153,8 +147,8 @@ class OutputStore {
     }
 
     @computed get doseArray() {
-        let maxDose = _.max(this.getCurrentOutput.dataset.doses);
-        let minDose = _.min(this.getCurrentOutput.dataset.doses);
+        let maxDose = _.max(this.selectedDataset.doses);
+        let minDose = _.min(this.selectedDataset.doses);
         let number_of_values = 100;
         var doseArr = [];
         var step = (maxDose - minDose) / (number_of_values - 1);
@@ -162,6 +156,21 @@ class OutputStore {
             doseArr.push(minDose + step * i);
         }
         return doseArr;
+    }
+
+    getOutputName(idx) {
+        /*
+        Not @computed because it has a parameter, this is still observable; prevents caching;
+        source: https://mobx.js.org/computeds-with-args.html
+        */
+        const output = this.outputs[idx],
+            dataset = this.rootStore.dataStore.datasets[output.dataset_index];
+
+        if (this.rootStore.optionsStore.optionsList.length > 1) {
+            return `${dataset.dataset_name}: Option Set ${output.option_index + 1}`;
+        } else {
+            return dataset.dataset_name;
+        }
     }
 }
 

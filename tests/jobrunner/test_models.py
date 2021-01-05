@@ -31,8 +31,11 @@ class TestBmds3Execution:
         assert job.is_finished is True
         assert job.has_errors is False
 
-        assert job.inputs["datasets"][0] == job.outputs["outputs"][0]["dataset"]
+        assert job.outputs["outputs"][0]["dataset_index"] == 0
+        assert job.outputs["outputs"][0]["option_index"] == 0
         assert len(job.outputs["outputs"]) == 1
         assert len(job.outputs["outputs"][0]["models"]) == 1
 
-        assert job.outputs["outputs"][0]["models"][0]["results"]["bmd"] == pytest.approx(89.0251)
+        assert job.outputs["outputs"][0]["models"][0]["results"]["bmd"] == pytest.approx(
+            89.0251, abs=0.1
+        )

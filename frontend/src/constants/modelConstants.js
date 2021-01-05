@@ -6,7 +6,7 @@ const modelsList = {
                 {
                     name: "frequentist_restricted-Exponential",
                     isChecked: false,
-                    isDisabled: true,
+                    isDisabled: false,
                 },
                 {
                     name: "frequentist_unrestricted-Exponential",
@@ -16,7 +16,7 @@ const modelsList = {
                 {
                     name: "bayesian-Exponential",
                     isChecked: false,
-                    isDisabled: true,
+                    isDisabled: false,
                 },
                 {
                     name: "bayesian_model_average-Exponential",

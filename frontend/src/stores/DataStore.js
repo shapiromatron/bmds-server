@@ -5,7 +5,6 @@ import * as mc from "../constants/mainConstants";
 import * as dc from "../constants/dataConstants";
 import {
     datasetTypesByModelType,
-    columns,
     columnNames,
     datasetForm,
     scatter_plot_layout,
@@ -213,10 +212,6 @@ class DataStore {
 
     @computed get getModelType() {
         return this.rootStore.mainStore.model_type;
-    }
-
-    @computed get getDatasetColumns() {
-        return columns[this.model_type];
     }
 
     @computed get getEnabledDatasets() {

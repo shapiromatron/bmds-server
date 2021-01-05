@@ -22,7 +22,7 @@ import * as dc from "../../constants/dataConstants";
 class ModelDetailModal extends Component {
     render() {
         const {outputStore} = this.props,
-            output = outputStore.getCurrentOutput,
+            output = outputStore.selectedOutput,
             dataset = output.dataset,
             model = outputStore.selectedModel;
 
@@ -103,7 +103,7 @@ ModelDetailModal.propTypes = {
     toggleModelDetailModal: PropTypes.func,
     selectedModel: PropTypes.object,
     model_name: PropTypes.string,
-    getCurrentOutput: PropTypes.func,
+    selectedOutput: PropTypes.func,
     dataset: PropTypes.object,
     model_type: PropTypes.string,
 };

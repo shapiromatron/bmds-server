@@ -91,7 +91,7 @@ const continuousRow = function(row, index) {
 class GoodnessFit extends Component {
     render() {
         const {store} = this.props,
-            output = store.getCurrentOutput,
+            output = store.selectedOutput,
             model = store.selectedModel,
             headers = goodnessFitHeaders[output.dataset.model_type],
             rows = getRows(output, model),

@@ -21,7 +21,7 @@ class AnalysisFormReadOnly extends Component {
                         </tr>
                         <tr>
                             <th>Model Type:</th>
-                            <td>{mainStore.getModelTypeName.name}</td>
+                            <td>{mainStore.getModelTypeName}</td>
                         </tr>
                     </tbody>
                 </table>

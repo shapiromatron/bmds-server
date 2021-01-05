@@ -42,11 +42,14 @@ class Job(models.Model):
     def get_api_url(self):
         return reverse("api:job-detail", args=(str(self.id),))
 
-    def get_api_patch_inputs(self):
+    def get_api_patch_inputs_url(self):
         return reverse("api:job-patch-inputs", args=(str(self.id),))
 
     def get_api_execute_url(self):
         return reverse("api:job-execute", args=(str(self.id),))
+
+    def get_api_execute_reset_url(self):
+        return reverse("api:job-execute-reset", args=(str(self.id),))
 
     def get_edit_url(self):
         return reverse("job_edit", args=(str(self.id), self.password))
@@ -117,12 +120,12 @@ class Job(models.Model):
         """
         session = bmds.BMDS.version(bmds_version)(dataset_type, dataset=dataset)
         for options in inputs["options"]:
-            for model_class, model_names in inputs["models"].items():
+            for prior_class, model_names in inputs["models"].items():
                 for model_name in model_names:
                     if dataset_type in bmds.constants.DICHOTOMOUS_DTYPES:
-                        model_options = transforms.bmds3_d_model_options(options)
+                        model_options = transforms.bmds3_d_model_options(prior_class, options)
                     elif dataset_type in bmds.constants.CONTINUOUS_DTYPES:
-                        model_options = transforms.bmds3_c_model_options(options)
+                        model_options = transforms.bmds3_c_model_options(prior_class, options)
                     else:
                         raise ValueError(f"Unknown dataset_type: {dataset_type}")
                     session.add_model(model_name, settings=model_options)
@@ -205,6 +208,13 @@ class Job(models.Model):
         self.outputs = obj
         self.errors = [out["error"] for out in outputs if "error" in out]
         self.ended = now()
+        self.save()
+
+    def reset_execution(self):
+        self.started = None
+        self.ended = None
+        self.outputs = {}
+        self.errors = {}
         self.save()
 
     def handle_execution_error(self, err):

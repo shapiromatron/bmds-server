@@ -55,6 +55,12 @@ class AnalysisForm extends Component {
                     <div className="card bg-light">
                         {mainStore.isExecuting ? (
                             <div className="card-body">
+                                <button
+                                    type="button"
+                                    className="btn btn-warning float-right"
+                                    onClick={() => mainStore.executeResetAnalysis()}>
+                                    Cancel execution
+                                </button>
                                 <Spinner text="Executing, please wait..." />
                             </div>
                         ) : (

@@ -188,23 +188,22 @@ class ExportEngine:
             raise NotImplementedError()
 
         if self.model_type == bmds.constants.DICHOTOMOUS:
-            datasets: List[Dict] = [output["dataset"] for output in self.job.outputs["outputs"]]
-            data = [
+            datasets: List[Dict] = [
                 dict(
                     analysis_name=inputs["analysis_name"],
                     analysis_description=inputs["analysis_description"],
                     dataset_type=inputs["dataset_type"],
                     bmds_version=inputs["bmds_version"] + "-ALPHA",
                     created=created_time,
-                    dataset_id=ds["dataset_id"],
+                    dataset_index=i,
                     dataset_name=ds.get("dataset_name", ""),
                     doses=",".join([str(d) for d in ds["doses"]]),
                     ns=",".join([str(d) for d in ds["ns"]]),
                     incidences=",".join([str(d) for d in ds["incidences"]]),
                 )
-                for ds in datasets
+                for i, ds in enumerate(self.job.inputs["datasets"])
             ]
-            return pd.DataFrame(data)
+            return pd.DataFrame(datasets)
 
     def _get_model_df(self) -> pd.DataFrame:
         if self.model_type == bmds.constants.CONTINUOUS:
@@ -220,7 +219,8 @@ class ExportEngine:
                     results = model["results"]
                     data.append(
                         dict(
-                            dataset_id=output["dataset"]["dataset_id"],
+                            dataset_index=output["dataset_index"],
+                            option_index=output["option_index"],
                             settings_bmr=model["settings"]["bmr"],
                             settings_bmr_type=bmrType[model["settings"]["bmr_type"]],
                             model_name=model["model_name"],
@@ -242,6 +242,6 @@ class ExportEngine:
 
         datasets = self._get_dataset_df()
         models = self._get_model_df()
-        df = datasets.merge(models, on="dataset_id")
+        df = datasets.merge(models, on="dataset_index")
 
         return df

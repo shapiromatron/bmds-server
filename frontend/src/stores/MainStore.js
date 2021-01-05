@@ -259,7 +259,7 @@ class MainStore {
         return this.rootStore.dataStore.getDataLength;
     }
     @computed get getModelTypeName() {
-        return mc.modelTypes.find(item => item.value == this.model_type).name;
+        return _.find(mc.modelTypes, {value: this.model_type}).name;
     }
 
     @computed get hasAtLeastOneModelSelected() {

@@ -162,8 +162,9 @@ class ReportEngine:
             document.add_paragraph("Execution generated errors; no report can be generated")
         else:
             outputs: List[Dict] = self.job.outputs["outputs"]
+            datasets: List[Dict] = self.job.inputs["datasets"]
             for output in outputs:
-                dataset = output["dataset"]
+                dataset = datasets[output["dataset_index"]]
                 self._build_dataset(document, dataset)
                 for model in output["models"]:
                     self._build_model(document, dataset, model)

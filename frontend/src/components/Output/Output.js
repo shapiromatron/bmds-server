@@ -7,6 +7,7 @@ import DatasetTable from "../Data/DatasetTable";
 import DatasetSelector from "../Data/DatasetSelector";
 import ResponsePlot from "./ResponsePlot";
 import "./Output.css";
+import SelectModelIndex from "./SelectModelIndex";
 
 @inject("outputStore")
 @observer
@@ -41,6 +42,7 @@ class Output extends Component {
                     </div>
                     <div className="col col-lg-4">
                         <ResponsePlot />
+                        <SelectModelIndex />
                     </div>
                 </div>
                 <div>{outputStore.modelDetailModal ? <ModelDetailModal /> : null}</div>

@@ -7,14 +7,24 @@ import {toJS} from "mobx";
 @inject("outputStore")
 @observer
 class ResponsePlot extends Component {
-    constructor(props) {
-        super(props);
+    componentDidMount() {
         this.props.outputStore.setPlotData();
     }
+
     render() {
         const {outputStore} = this.props;
-        let plotData = toJS(outputStore.getPlotData);
-        return <Plot data={plotData} layout={outputStore.getLayout} />;
+        let plotData = toJS(outputStore.plotData);
+        var config = {responsive: true, staticPlot: true};
+        return (
+            <div>
+                <Plot
+                    data={plotData}
+                    layout={outputStore.getLayout}
+                    config={config}
+                    useResizeHandler
+                />
+            </div>
+        );
     }
 }
 ResponsePlot.propTypes = {

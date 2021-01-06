@@ -49,23 +49,15 @@ const adverse_direction = {
     1: "Up",
     2: "Down",
 };
-
 const layout = {
     showlegend: true,
-    title: {
-        text: "Response Plot",
-        font: {
-            family: "Courier New, monospace",
-            size: 12,
-        },
-        xref: "paper",
-    },
+    autosize: true,
+    margin: {l: 50, r: 5, t: 50, b: 50},
+    legend: {yanchor: "top", y: 0.99, xanchor: "left", x: 0.01},
+    displayModeBar: false,
     xaxis: {
-        linecolor: "black",
-        linewidth: 1,
-        mirror: true,
         title: {
-            text: "Dose (mg/kg-day)",
+            text: "",
             font: {
                 family: "Courier New, monospace",
                 size: 12,
@@ -74,11 +66,8 @@ const layout = {
         },
     },
     yaxis: {
-        linecolor: "black",
-        linewidth: 1,
-        mirror: true,
         title: {
-            text: "Response (mg/dL)",
+            text: "",
             font: {
                 family: "Courier New, monospace",
                 size: 12,
@@ -86,11 +75,14 @@ const layout = {
             },
         },
     },
-    plot_bgcolor: "",
-    paper_bgcolor: "#eee",
-    width: 400,
-    height: 400,
-    autosize: true,
+    title: {
+        text: "Response Plot",
+        font: {
+            family: "Courier New, monospace",
+            size: 12,
+        },
+        xref: "paper",
+    },
 };
 
 export {infoTable, model_options, bmrType, distType, varType, modelData, adverse_direction, layout};

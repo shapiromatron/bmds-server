@@ -20,16 +20,16 @@ class OutputStore {
     }
     @action setSelectedDatasetIndex(dataset_id) {
         this.selectedDatasetIndex = dataset_id;
-        this.setPlotData();
     }
 
-    @action setOutputs() {
-        this.outputs = this.rootStore.mainStore.getExecutionOutputs;
-        this.currentOutput = this.outputs[0];
-    }
     @action toggleModelDetailModal(model) {
-        this.setSelectedModel(model);
         this.modelDetailModal = !this.modelDetailModal;
+        if (this.modelDetailModal) {
+            this.selectedModel = model;
+        } else {
+            this.selectedModel = null;
+            this.plotData.pop();
+        }
     }
 
     @computed get selectedDataset() {
@@ -123,16 +123,16 @@ class OutputStore {
 
     @computed get getLayout() {
         let layout = _.cloneDeep(constant.layout);
-        layout.title.text = this.getCurrentOutput.dataset.dataset_name;
+        layout.xaxis.title.text = this.getCurrentOutput.dataset.column_names.doses;
+        layout.yaxis.title.text = this.getCurrentOutput.dataset.column_names.incidences;
         return layout;
     }
 
-    @computed get getPlotData() {
-        return this.plotData;
-    }
-
     @action setPlotData() {
-        this.plotData = [];
+        //check if output exist
+        if (this.getCurrentOutput == undefined) {
+            return;
+        }
         var trace1 = {
             x: this.getCurrentOutput.dataset.doses.slice(),
             y: this.getResponse.slice(),
@@ -140,20 +140,20 @@ class OutputStore {
             type: "scatter",
             name: "Response",
         };
+
         this.plotData.push(trace1);
     }
 
-    @action addBMDLine(model) {
+    @action addBMDLine(model, value) {
         const bmdLine = {
             x: model.results.dr_x,
             y: model.results.dr_y,
             mode: "lines",
             name: model.model_name,
-            line: {
-                width: 4,
+            marker: {
+                color: value,
             },
         };
-
         this.plotData.push(bmdLine);
     }
 
@@ -179,6 +179,25 @@ class OutputStore {
             doseArr.push(minDose + step * i);
         }
         return doseArr;
+    }
+    @action saveSelectedModelIndex(index) {
+        this.getCurrentOutput["selected_model_index"] = index;
+
+        if (this.plotData.length > 1) {
+            this.plotData.pop();
+        }
+        if (index > -1) {
+            let model = this.getCurrentOutput.models.find(model => model.model_index == index);
+            this.addBMDLine(model, "#0000FF");
+        }
+    }
+
+    @action saveSelectedIndexNotes(value) {
+        this.getCurrentOutput["selected_model_notes"] = value;
+    }
+
+    @action saveSelectedModel() {
+        //api call to udpate
     }
 }
 

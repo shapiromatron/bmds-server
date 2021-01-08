@@ -12,9 +12,9 @@ class DatasetSelector extends Component {
                 {dataStore.datasets.map(dataset => {
                     return (
                         <a
-                            key={dataset.dataset_id}
+                            key={dataset.metadata.id}
                             className={
-                                dataset.dataset_id === store.selectedDatasetIndex
+                                dataset.metadata.id === store.selectedDatasetId
                                     ? "nav-link btn-sm active"
                                     : "nav-link btn-sm"
                             }
@@ -24,9 +24,9 @@ class DatasetSelector extends Component {
                             aria-selected="true"
                             onClick={e => {
                                 e.preventDefault();
-                                store.setSelectedDatasetIndex(dataset.dataset_id);
+                                store.setSelectedDataset(dataset);
                             }}>
-                            {dataset.dataset_name}
+                            {dataset.metadata.name}
                         </a>
                     );
                 })}

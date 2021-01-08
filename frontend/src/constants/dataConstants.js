@@ -59,29 +59,68 @@ export const DATA_CONTINUOUS_SUMMARY = "CS",
         litter_sizes: "Litter Size",
         litter_specific_covariates: "Litter Specific Covariate",
     },
-    datasetForm = {
-        [DATA_CONTINUOUS_SUMMARY]: {
-            doses: [0, 7, 37, 186],
-            ns: [25, 25, 25, 24],
-            means: [55.8, 52.9, 64.8, 119.9],
-            stdevs: [12.5, 15.4, 17.4, 32.5],
-            adverse_direction: "automatic",
-        },
-        [DATA_CONTINUOUS_INDIVIDUAL]: {
-            doses: ["", "", "", "", ""],
-            responses: ["", "", "", "", ""],
-        },
-        [DATA_DICHOTOMOUS]: {
-            doses: [0, 0.46, 1.39, 4.17, 12.5],
-            ns: [9, 9, 11, 10, 7],
-            incidences: [0, 0, 3, 2, 3],
-        },
-        [DATA_NESTED]: {
-            doses: ["", "", "", "", ""],
-            litter_sizes: ["", "", "", "", ""],
-            incidences: ["", "", "", "", ""],
-            litter_specific_covariates: ["", "", "", "", ""],
-        },
+    getDefaultDataset = function(dtype) {
+        switch (dtype) {
+            case DATA_CONTINUOUS_SUMMARY:
+                return {
+                    metadata: {
+                        id: null,
+                        name: "",
+                        dose_units: "",
+                        response_units: "",
+                        dose_name: "Dose",
+                        response_name: "Response",
+                    },
+                    doses: [0, 7, 37, 186],
+                    ns: [25, 25, 25, 24],
+                    means: [55.8, 52.9, 64.8, 119.9],
+                    stdevs: [12.5, 15.4, 17.4, 32.5],
+                };
+            case DATA_CONTINUOUS_INDIVIDUAL:
+                return {
+                    metadata: {
+                        id: null,
+                        name: "",
+                        dose_units: "",
+                        response_units: "",
+                        dose_name: "Dose",
+                        response_name: "Response",
+                    },
+                    doses: [0, 0, 0, 0, 5, 5, 5, 5],
+                    responses: [1, 1, 2, 3, 4, 5, 6, 7],
+                };
+            case DATA_DICHOTOMOUS:
+                return {
+                    metadata: {
+                        id: null,
+                        name: "",
+                        dose_units: "",
+                        response_units: "",
+                        dose_name: "Dose",
+                        response_name: "Response",
+                    },
+                    doses: [0, 0.46, 1.39, 4.17, 12.5],
+                    ns: [9, 9, 11, 10, 7],
+                    incidences: [0, 0, 3, 2, 3],
+                };
+            case DATA_NESTED:
+                return {
+                    metadata: {
+                        id: null,
+                        name: "",
+                        dose_units: "",
+                        response_units: "",
+                        dose_name: "Dose",
+                        response_name: "Response",
+                    },
+                    doses: ["", "", "", "", ""],
+                    litter_sizes: ["", "", "", "", ""],
+                    incidences: ["", "", "", "", ""],
+                    litter_specific_covariates: ["", "", "", "", ""],
+                };
+            default:
+                throw `Unknown dataset type ${dtype}`;
+        }
     },
     AdverseDirectionList = [
         {value: "automatic", name: "Automatic"},
@@ -99,7 +138,7 @@ export const DATA_CONTINUOUS_SUMMARY = "CS",
         {value: "0", name: "Zero"},
     ],
     scatter_plot_layout = {
-        showlegend: true,
+        showlegend: false,
         title: {
             text: "Scatter Plot",
             font: {
@@ -140,9 +179,17 @@ export const DATA_CONTINUOUS_SUMMARY = "CS",
         height: 400,
         autosize: true,
     },
-    yAxisTitle = {
-        [DATA_CONTINUOUS_SUMMARY]: "responses",
-        [DATA_CONTINUOUS_INDIVIDUAL]: "means",
-        [DATA_DICHOTOMOUS]: "incidences",
-        [DATA_NESTED]: "incidences",
+    getDoseLabel = function(dataset) {
+        let label = dataset.metadata.dose_name;
+        if (dataset.metadata.dose_units) {
+            label = `${label} (${dataset.metadata.dose_units})`;
+        }
+        return label;
+    },
+    getResponseLabel = function(dataset) {
+        let label = dataset.metadata.response_name;
+        if (dataset.metadata.response_units) {
+            label = `${label} (${dataset.metadata.response_units})`;
+        }
+        return label;
     };

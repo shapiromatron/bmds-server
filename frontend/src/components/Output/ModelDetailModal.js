@@ -37,7 +37,7 @@ class ModelDetailModal extends Component {
                 aria-labelledby="contained-modal-title-vcenter"
                 centered>
                 <Modal.Header>
-                    <Modal.Title id="contained-modal-title-vcenter">{model.model_name}</Modal.Title>
+                    <Modal.Title id="contained-modal-title-vcenter">{model.name}</Modal.Title>
                     <button
                         className="btn btn-danger"
                         style={{float: "right"}}

@@ -6,7 +6,7 @@ import OptionsFormList from "./OptionsForm/OptionsFormList";
 import PropTypes from "prop-types";
 
 import {inject, observer} from "mobx-react";
-import DatasetList from "./DatasetList/DatasetList";
+import DatasetModelOptionList from "./DatasetModelOptionList/DatasetModelOptionList";
 import AnalysisFormReadOnly from "./AnalysisForm/AnalysisFormReadOnly";
 
 @inject("mainStore")
@@ -27,7 +27,9 @@ class Main extends Component {
                                         <AnalysisFormReadOnly />
                                     )}
                                 </div>
-                                <div>{mainStore.getDatasetLength ? <DatasetList /> : null}</div>
+                                <div>
+                                    {mainStore.getDatasetLength ? <DatasetModelOptionList /> : null}
+                                </div>
                             </div>
                             <div className="col-lg-8">
                                 <div>

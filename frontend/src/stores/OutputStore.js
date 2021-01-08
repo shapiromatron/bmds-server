@@ -45,14 +45,6 @@ class OutputStore {
         return this.rootStore.dataStore.datasets[dataset_index];
     }
 
-    @computed get getInfoTable() {
-        let infoTable = _.cloneDeep(constant.infoTable);
-        infoTable.model_name.value = this.selectedModel.model_name;
-        infoTable.dataset_name.value = this.selectedDataset.dataset_name;
-        infoTable.dose_response_model.value = this.selectedModel.results.fit.model.model_form_str;
-        return infoTable;
-    }
-
     @computed get getModelOptions() {
         let modelOptions = _.cloneDeep(constant.model_options[this.selectedDataset.model_type]);
         modelOptions.map(option => {
@@ -104,7 +96,7 @@ class OutputStore {
 
     @computed get getLayout() {
         let layout = _.cloneDeep(constant.layout);
-        layout.title.text = this.selectedDataset.dataset_name;
+        layout.title.text = this.selectedDataset.metadata.name;
         return layout;
     }
 
@@ -125,7 +117,7 @@ class OutputStore {
             x: model.results.dr_x,
             y: model.results.dr_y,
             mode: "lines",
-            name: model.model_name,
+            name: model.name,
             line: {
                 width: 4,
             },
@@ -141,7 +133,7 @@ class OutputStore {
     }
 
     @computed get selectedParams() {
-        let names = this.selectedModel.results.fit.model.params,
+        let names = this.selectedModel.model_class.params,
             values = this.selectedModel.results.fit.params.toJS();
         return _.zipObject(names, values);
     }
@@ -167,9 +159,9 @@ class OutputStore {
             dataset = this.rootStore.dataStore.datasets[output.dataset_index];
 
         if (this.rootStore.optionsStore.optionsList.length > 1) {
-            return `${dataset.dataset_name}: Option Set ${output.option_index + 1}`;
+            return `${dataset.metadata.name}: Option Set ${output.option_index + 1}`;
         } else {
-            return dataset.dataset_name;
+            return dataset.metadata.name;
         }
     }
 }

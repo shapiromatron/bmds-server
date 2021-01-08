@@ -1,11 +1,6 @@
 import * as dc from "./dataConstants";
 
-export const infoTable = {
-        model_name: {label: "Model Name", value: ""},
-        dataset_name: {label: "Dataset Name", value: ""},
-        dose_response_model: {label: "Dose Response Model", value: ""},
-    },
-    model_options = {
+export const model_options = {
         CS: [
             {label: "BMR Type", name: "bmrType", value: ""},
             {label: "BMRF", name: "bmr", value: ""},

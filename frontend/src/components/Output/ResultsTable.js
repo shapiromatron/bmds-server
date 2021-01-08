@@ -36,7 +36,7 @@ class ResultsTable extends Component {
                                             e.preventDefault();
                                             store.toggleModelDetailModal(model);
                                         }}>
-                                        {model.model_name}
+                                        {model.name}
                                     </a>
                                 </td>
                                 <td>{model.results.bmd}</td>

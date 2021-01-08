@@ -213,7 +213,7 @@ class ExportEngine:
         data = []
         for output in self.job.outputs["outputs"]:
             for model in output["models"]:
-                if not model["has_output"]:
+                if not model["has_results"]:
                     # TODO handle this case
                     pass
                 else:

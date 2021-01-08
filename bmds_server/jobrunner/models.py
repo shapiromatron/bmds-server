@@ -93,23 +93,15 @@ class Job(models.Model):
     def _build_dataset(
         cls, dataset_type: str, dataset: Dict[str, List[float]]
     ) -> bmds.datasets.DatasetType:
-        if dataset_type == bmds.constants.CONTINUOUS:
-            return bmds.ContinuousDataset(
-                doses=dataset["doses"],
-                ns=dataset["ns"],
-                means=dataset["means"],
-                stdevs=dataset["stdevs"],
-            )
-        elif dataset_type == bmds.constants.CONTINUOUS_INDIVIDUAL:
-            return bmds.ContinuousIndividualDataset(
-                doses=dataset["doses"], responses=dataset["responses"]
-            )
-        elif dataset_type == bmds.constants.DICHOTOMOUS:
-            return bmds.DichotomousDataset(
-                doses=dataset["doses"], ns=dataset["ns"], incidences=dataset["incidences"]
-            )
+        if dataset_type == bmds.constants.Dtype.CONTINUOUS:
+            schema = bmds.datasets.ContinuousDatasetSchema
+        elif dataset_type == bmds.constants.Dtype.CONTINUOUS_INDIVIDUAL:
+            schema = bmds.datasets.ContinuousIndividualDatasetSchema
+        elif dataset_type == bmds.constants.Dtype.DICHOTOMOUS:
+            schema = bmds.datasets.DichotomousDatasetSchema
         else:
-            raise ValueError(f"unknown dataset type: {dataset_type}")
+            raise ValueError(f"Unknown dataset type: {dataset_type}")
+        return schema.parse_obj(dataset).deserialize()
 
     @classmethod
     def build_session(cls, inputs: Dict, dataset_index: int, option_index: int) -> bmds.BMDS:
@@ -118,7 +110,7 @@ class Job(models.Model):
         dataset = cls._build_dataset(dataset_type, inputs["datasets"][dataset_index])
         options = inputs["options"][option_index]
 
-        session = bmds.BMDS.version(bmds_version)(dataset_type, dataset=dataset)
+        session = bmds.BMDS.version(bmds_version)(dataset=dataset)
         for prior_class, model_names in inputs["models"].items():
             for model_name in model_names:
                 if dataset_type in bmds.constants.DICHOTOMOUS_DTYPES:

@@ -1,11 +1,13 @@
 import React, {Component} from "react";
 import {inject, observer} from "mobx-react";
 import PropTypes from "prop-types";
+
 import DatasetForm from "./DatasetForm";
 import DatasetSelector from "./DatasetSelector";
 import SelectModelType from "./SelectModelType";
 import DoseResponsePlot from "./DoseResponsePlot";
 import DatasetTable from "./DatasetTable";
+
 @inject("dataStore")
 @observer
 class Data extends Component {
@@ -23,7 +25,7 @@ class Data extends Component {
                             dataStore.getEditSettings ? (
                                 <DatasetForm />
                             ) : (
-                                <DatasetTable store={dataStore} />
+                                <DatasetTable dataset={dataStore.selectedDataset} />
                             )
                         ) : null}
                     </div>

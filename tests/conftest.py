@@ -31,7 +31,7 @@ def bmds3_complete_continuous():
         "models": {"frequentist_restricted": ["Power"]},
         "datasets": [
             {
-                "id": 123,
+                "metadata": {"id": 123},
                 "doses": [0, 10, 50, 150, 400],
                 "ns": [111, 142, 143, 93, 42],
                 "means": [2.112, 2.095, 1.956, 1.587, 1.254],
@@ -61,7 +61,7 @@ def bmds3_complete_dichotomous():
         "models": {"frequentist_restricted": ["LogLogistic"]},
         "datasets": [
             {
-                "id": 123,
+                "metadata": {"id": 123},
                 "doses": [0, 10, 50, 150, 400],
                 "ns": [20, 20, 20, 20, 20],
                 "incidences": [0, 0, 1, 4, 11],

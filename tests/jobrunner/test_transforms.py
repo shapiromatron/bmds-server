@@ -23,13 +23,14 @@ class TestOptions:
     #     assert pytest.approx(res.tailProb, 0.4)
 
     def test_bmds3_options_d(self, bmds3_complete_dichotomous):
+        prior_class = "frequentist_unrestricted"
         options = {
             "bmr_type": "Added",
             "bmr_value": 0.15,
             "confidence_level": 0.95,
             "background": "Estimated",
         }
-        res = transforms.bmds3_d_model_options(options)
+        res = transforms.bmds3_d_model_options(prior_class, options)
         assert res.bmr_type is DichotomousRiskType.eAddedRisk
         assert pytest.approx(res.bmr, 0.15)
         assert pytest.approx(res.alpha, 0.95)

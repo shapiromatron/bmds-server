@@ -2,19 +2,19 @@ import React, {Component} from "react";
 import {inject, observer} from "mobx-react";
 import PropTypes from "prop-types";
 
-@inject("dataStore")
+@inject("outputStore")
 @observer
-class DatasetSelector extends Component {
+class OutputSelector extends Component {
     render() {
-        const {dataStore, store} = this.props;
+        const store = this.props.outputStore;
         return (
             <div className="nav flex-column nav-fill nav-pills nav-stacked mt-2">
-                {dataStore.datasets.map(dataset => {
+                {store.outputs.map((output, idx) => {
                     return (
                         <a
-                            key={dataset.metadata.id}
+                            key={idx}
                             className={
-                                dataset.metadata.id === store.selectedDatasetId
+                                idx === store.selectedOutputIndex
                                     ? "nav-link btn-sm active"
                                     : "nav-link btn-sm"
                             }
@@ -24,9 +24,9 @@ class DatasetSelector extends Component {
                             aria-selected="true"
                             onClick={e => {
                                 e.preventDefault();
-                                store.setSelectedDataset(dataset);
+                                store.setSelectedOutputIndex(idx);
                             }}>
-                            {dataset.metadata.name}
+                            {store.getOutputName(idx)}
                         </a>
                     );
                 })}
@@ -34,8 +34,7 @@ class DatasetSelector extends Component {
         );
     }
 }
-DatasetSelector.propTypes = {
-    dataStore: PropTypes.object,
-    store: PropTypes.object,
+OutputSelector.propTypes = {
+    outputStore: PropTypes.object,
 };
-export default DatasetSelector;
+export default OutputSelector;

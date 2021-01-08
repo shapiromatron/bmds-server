@@ -1,7 +1,7 @@
 import React, {Component} from "react";
 import {inject, observer} from "mobx-react";
-import Datasets from "./Datasets";
-import DatasetsReadOnly from "./DatasetsReadOnly";
+import DatasetModelOption from "./DatasetModelOption";
+import DatasetModelOptionReadOnly from "./DatasetModelOptionReadOnly";
 import PropTypes from "prop-types";
 import {toJS} from "mobx";
 
@@ -11,6 +11,7 @@ class DatasetList extends Component {
     render() {
         const {dataStore} = this.props,
             datasets = toJS(dataStore.datasets);
+
         return (
             <table className="table table-bordered table-sm">
                 <thead>
@@ -22,26 +23,25 @@ class DatasetList extends Component {
                 </thead>
                 {dataStore.getEditSettings ? (
                     <tbody>
-                        {datasets.map((dataset, index) => {
+                        {datasets.map(dataset => {
                             return (
-                                <Datasets
-                                    key={index}
+                                <DatasetModelOption
+                                    key={dataset.metadata.id}
                                     dataset={dataset}
-                                    toggleDataset={dataStore.toggleDataset}
-                                    changeDatasetProperties={dataStore.changeDatasetProperties}
-                                    dataset_type={dataStore.getDatasetType}
+                                    handleChange={dataStore.changeDatasetAttribute}
+                                    model_type={dataStore.getModelType}
                                 />
                             );
                         })}
                     </tbody>
                 ) : (
                     <tbody>
-                        {dataStore.datasets.map((dataset, index) => {
+                        {dataStore.datasets.map(dataset => {
                             return (
-                                <DatasetsReadOnly
-                                    key={index}
+                                <DatasetModelOptionReadOnly
+                                    key={dataset.metadata.id}
                                     dataset={dataset}
-                                    dataset_type={dataStore.getDatasetType}
+                                    model_type={dataStore.getModelType}
                                 />
                             );
                         })}

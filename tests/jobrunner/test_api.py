@@ -9,7 +9,7 @@ class TestPatchInputs:
     def test_auth(self):
         client = APIClient()
         job = Job.objects.create()
-        url = job.get_api_patch_inputs()
+        url = job.get_api_patch_inputs_url()
 
         # check HTTP verbs
         response = client.post(url, {}, format="json")
@@ -31,7 +31,7 @@ class TestPatchInputs:
     def test_partial(self):
         client = APIClient()
         job = Job.objects.create()
-        url = job.get_api_patch_inputs()
+        url = job.get_api_patch_inputs_url()
 
         payload = {
             "editKey": job.password,
@@ -73,7 +73,7 @@ class TestPatchInputs:
     def test_complete(self, bmds3_complete_continuous, bmds3_complete_dichotomous):
         client = APIClient()
         job = Job.objects.create()
-        url = job.get_api_patch_inputs()
+        url = job.get_api_patch_inputs_url()
 
         # complete bmds3 continuous
         payload = {

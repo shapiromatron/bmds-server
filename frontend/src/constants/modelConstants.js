@@ -21,7 +21,7 @@ const modelsList = {
                 {
                     name: "bayesian_model_average-Exponential",
                     isChecked: false,
-                    isDisabled: false,
+                    isDisabled: true,
                     prior_weight: 0,
                 },
             ],
@@ -43,7 +43,7 @@ const modelsList = {
                 {
                     name: "bayesian_model_average-Hill",
                     isChecked: false,
-                    isDisabled: false,
+                    isDisabled: true,
                     prior_weight: 0,
                 },
             ],
@@ -59,17 +59,17 @@ const modelsList = {
                 {
                     name: "frequentist_unrestricted-Linear",
                     isChecked: false,
-                    isDisabled: false,
+                    isDisabled: true,
                 },
                 {
                     name: "bayesian-Linear",
                     isChecked: false,
-                    isDisabled: false,
+                    isDisabled: true,
                 },
                 {
                     name: "bayesian_model_average-Linear",
                     isChecked: false,
-                    isDisabled: false,
+                    isDisabled: true,
                     prior_weight: 0,
                 },
             ],
@@ -80,22 +80,22 @@ const modelsList = {
                 {
                     name: "frequentist_restricted-Polynomial",
                     isChecked: false,
-                    isDisabled: false,
+                    isDisabled: true,
                 },
                 {
                     name: "frequentist_unrestricted-Polynomial",
                     isChecked: false,
-                    isDisabled: false,
+                    isDisabled: true,
                 },
                 {
                     name: "bayesian-Polynomial",
                     isChecked: false,
-                    isDisabled: false,
+                    isDisabled: true,
                 },
                 {
                     name: "bayesian_model_average-Polynomial",
                     isChecked: false,
-                    isDisabled: false,
+                    isDisabled: true,
                     prior_weight: 0,
                 },
             ],
@@ -141,7 +141,7 @@ const modelsList = {
                 {
                     name: "bayesian-DichotomousHill",
                     isChecked: false,
-                    isDisabled: true,
+                    isDisabled: false,
                 },
                 {
                     name: "bayesian_model_average-DichotomousHill",
@@ -164,7 +164,7 @@ const modelsList = {
                     isChecked: false,
                     isDisabled: false,
                 },
-                {name: "bayesian-Gamma", isChecked: false, isDisabled: true},
+                {name: "bayesian-Gamma", isChecked: false, isDisabled: false},
                 {
                     name: "bayesian_model_average-Gamma",
                     isChecked: false,
@@ -189,7 +189,7 @@ const modelsList = {
                 {
                     name: "bayesian-Logistic",
                     isChecked: false,
-                    isDisabled: true,
+                    isDisabled: false,
                 },
                 {
                     name: "bayesian_model_average-Logistic",
@@ -215,7 +215,7 @@ const modelsList = {
                 {
                     name: "bayesian-LogLogistic",
                     isChecked: false,
-                    isDisabled: true,
+                    isDisabled: false,
                 },
                 {
                     name: "bayesian_model_average-LogLogistic",
@@ -241,7 +241,7 @@ const modelsList = {
                 {
                     name: "bayesian-LogProbit",
                     isChecked: false,
-                    isDisabled: true,
+                    isDisabled: false,
                 },
                 {
                     name: "bayesian_model_average-LogProbit",
@@ -293,7 +293,7 @@ const modelsList = {
                 {
                     name: "bayesian-Probit",
                     isChecked: false,
-                    isDisabled: true,
+                    isDisabled: false,
                 },
                 {
                     name: "bayesian_model_average-Probit",
@@ -319,7 +319,7 @@ const modelsList = {
                 {
                     name: "bayesian-Quantal Linear",
                     isChecked: false,
-                    isDisabled: true,
+                    isDisabled: false,
                 },
                 {
                     name: "bayesian_model_average-Quantal Linear",
@@ -345,7 +345,7 @@ const modelsList = {
                 {
                     name: "bayesian-Weibull",
                     isChecked: false,
-                    isDisabled: true,
+                    isDisabled: false,
                 },
                 {
                     name: "bayesian_model_average-Weibull",
@@ -476,8 +476,4 @@ const model = {
     DichotomousHill: "DichotomousHill",
 };
 
-const datasetType = {
-    Nested: "N",
-};
-
-export {modelsList, modelHeaders, nestedHeaders, model, datasetType};
+export {modelsList, modelHeaders, nestedHeaders, model};

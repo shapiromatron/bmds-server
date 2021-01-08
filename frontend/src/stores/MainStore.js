@@ -2,8 +2,8 @@ import {saveAs} from "file-saver";
 import slugify from "slugify";
 import {observable, action, computed} from "mobx";
 import _ from "lodash";
-import {modelTypes} from "../constants/mainConstants";
 
+import * as mc from "../constants/mainConstants";
 import {simulateClick, getHeaders} from "../common";
 
 class MainStore {
@@ -16,7 +16,7 @@ class MainStore {
 
     @observable analysis_name = "";
     @observable analysis_description = "";
-    @observable dataset_type = modelTypes[0].value;
+    @observable model_type = mc.MODEL_CONTINUOUS;
     @observable errorMessage = "";
     @observable hasEditSettings = false;
     @observable executionOutputs = null;
@@ -32,7 +32,7 @@ class MainStore {
         this.analysis_description = value;
     }
     @action changeDatasetType(value) {
-        this.dataset_type = value;
+        this.model_type = value;
         this.rootStore.modelsStore.setDefaultsByDatasetType();
         this.rootStore.optionsStore.setDefaultsByDatasetType();
         this.rootStore.dataStore.setDefaultsByDatasetType();
@@ -56,10 +56,10 @@ class MainStore {
             editKey,
             partial: true,
             data: {
-                bmds_version: "BMDS330",
+                bmds_version: mc.VERSION_330,
                 analysis_name: this.analysis_name,
                 analysis_description: this.analysis_description,
-                dataset_type: this.dataset_type,
+                dataset_type: this.model_type,
                 models: this.getEnabledModels,
                 datasets: this.getEnabledDatasets,
                 options: this.getOptions,
@@ -152,6 +152,28 @@ class MainStore {
             });
     }
     @action
+    async executeResetAnalysis() {
+        const {csrfToken, executeResetUrl} = this.config.editSettings;
+        await fetch(executeResetUrl, {
+            method: "POST",
+            mode: "cors",
+            headers: getHeaders(csrfToken),
+            body: JSON.stringify({
+                editKey: this.config.editSettings.editKey,
+            }),
+        })
+            .then(response => response.json())
+            .then(data => {
+                this.isExecuting = false;
+                this.errorMessage = "";
+                this.updateModelStateFromApi(data);
+            })
+            .catch(error => {
+                this.errorMessage = error;
+                console.error("error", error);
+            });
+    }
+    @action
     async fetchSavedAnalysis() {
         const apiUrl = this.config.apiUrl;
         this.errorMessage = "";
@@ -175,6 +197,7 @@ class MainStore {
 
         const inputs = data.inputs;
         if (_.isEmpty(inputs)) {
+            this.changeDatasetType(this.model_type);
             this.isUpdateComplete = true;
             return;
         }
@@ -187,7 +210,8 @@ class MainStore {
         // unpack general settings
         this.analysis_name = inputs.analysis_name;
         this.analysis_description = inputs.analysis_description;
-        this.dataset_type = inputs.dataset_type;
+        this.model_type = inputs.dataset_type;
+        this.changeDatasetType(this.model_type);
         this.rootStore.optionsStore.setOptions(inputs.options);
         this.rootStore.dataStore.setDatasets(inputs.datasets);
         this.rootStore.modelsStore.setModels(inputs.models);
@@ -234,8 +258,8 @@ class MainStore {
     @computed get getDatasetLength() {
         return this.rootStore.dataStore.getDataLength;
     }
-    @computed get getDatasetTypeName() {
-        return modelTypes.find(item => item.value == this.dataset_type);
+    @computed get getModelTypeName() {
+        return _.find(mc.modelTypes, {value: this.model_type}).name;
     }
 
     @computed get hasAtLeastOneModelSelected() {

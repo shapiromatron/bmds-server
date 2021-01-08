@@ -39,7 +39,7 @@ class AnalysisForm extends Component {
                             id="dataset-type"
                             className="form-control"
                             onChange={e => mainStore.changeDatasetType(e.target.value)}
-                            value={mainStore.dataset_type}>
+                            value={mainStore.model_type}>
                             {modelTypes.map((item, i) => {
                                 return (
                                     <option key={i} value={item.value}>
@@ -55,6 +55,12 @@ class AnalysisForm extends Component {
                     <div className="card bg-light">
                         {mainStore.isExecuting ? (
                             <div className="card-body">
+                                <button
+                                    type="button"
+                                    className="btn btn-warning float-right"
+                                    onClick={() => mainStore.executeResetAnalysis()}>
+                                    Cancel execution
+                                </button>
                                 <Spinner text="Executing, please wait..." />
                             </div>
                         ) : (

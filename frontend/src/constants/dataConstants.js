@@ -1,34 +1,50 @@
-const modelTypes = [
-        {value: "CS", name: "Continuous Summarized"},
-        {value: "CI", name: "Continuous Individual"},
-        {value: "DM", name: "Dichotomous"},
-        {value: "N", name: "Nested"},
-    ],
+import * as mc from "./mainConstants";
+
+export const DATA_CONTINUOUS_SUMMARY = "CS",
+    DATA_CONTINUOUS_INDIVIDUAL = "I",
+    DATA_DICHOTOMOUS = "DM",
+    DATA_NESTED = "N",
+    datasetTypesByModelType = function(modelType) {
+        switch (modelType) {
+            case mc.MODEL_DICHOTOMOUS:
+            case mc.MODEL_MULTI_TUMOR:
+                return [{value: DATA_DICHOTOMOUS, name: "Dichotomous"}];
+            case mc.MODEL_CONTINUOUS:
+                return [
+                    {value: DATA_CONTINUOUS_SUMMARY, name: "Summarized"},
+                    {value: DATA_CONTINUOUS_INDIVIDUAL, name: "Individual"},
+                ];
+            case mc.MODEL_NESTED:
+                return [{value: DATA_NESTED, name: "Nested"}];
+            default:
+                throw `Unknown modelType: ${modelType}`;
+        }
+    },
     columns = {
-        CS: ["doses", "ns", "means", "stdevs"],
-        CI: ["doses", "responses"],
-        DM: ["doses", "ns", "incidences"],
-        N: ["doses", "litter_sizes", "incidences", "litter_specific_covariates"],
+        [DATA_CONTINUOUS_SUMMARY]: ["doses", "ns", "means", "stdevs"],
+        [DATA_CONTINUOUS_INDIVIDUAL]: ["doses", "responses"],
+        [DATA_DICHOTOMOUS]: ["doses", "ns", "incidences"],
+        [DATA_NESTED]: ["doses", "litter_sizes", "incidences", "litter_specific_covariates"],
     },
     columnNames = {
-        CS: {
+        [DATA_CONTINUOUS_SUMMARY]: {
             doses: "Dose",
             ns: "N",
             means: "Mean",
-            stdevs: "St. Dev.",
+            stdevs: "Std. Dev.",
         },
-        CI: {
+        [DATA_CONTINUOUS_INDIVIDUAL]: {
             doses: "Dose",
             responses: "Response",
         },
-        DM: {
+        [DATA_DICHOTOMOUS]: {
             doses: "Dose",
             ns: "N",
             incidences: "Incidence",
         },
-        N: {
+        [DATA_NESTED]: {
             doses: "Dose",
-            litter_sizes: "LItter Size",
+            litter_sizes: "Litter Size",
             incidences: "Incidence",
             litter_specific_covariates: "Litter Specific Covariate",
         },
@@ -37,41 +53,74 @@ const modelTypes = [
         doses: "Dose",
         ns: "N",
         means: "Mean",
-        stdevs: "St. Dev.",
+        stdevs: "Std. Dev.",
         responses: "Response",
         incidences: "Incidence",
         litter_sizes: "Litter Size",
         litter_specific_covariates: "Litter Specific Covariate",
     },
-    datasetForm = {
-        CS: {
-            doses: [0, 7, 37, 186],
-            ns: [25, 25, 25, 24],
-            means: [55.8, 52.9, 64.8, 119.9],
-            stdevs: [12.5, 15.4, 17.4, 32.5],
-            adverse_direction: "automatic",
-        },
-        CI: {
-            doses: ["", "", "", "", ""],
-            responses: ["", "", "", "", ""],
-        },
-        DM: {
-            doses: [0, 0.46, 1.39, 4.17, 12.5],
-            ns: [9, 9, 11, 10, 7],
-            incidences: [0, 0, 3, 2, 3],
-        },
-        N: {
-            doses: ["", "", "", "", ""],
-            litter_sizes: ["", "", "", "", ""],
-            incidences: ["", "", "", "", ""],
-            litter_specific_covariates: ["", "", "", "", ""],
-        },
-    },
-    datasetNamesHeaders = {
-        C: ["Enable", "Datasets", "Adverse Direction"],
-        D: ["Enable", "Datasets"],
-        DM: ["Enable", "Datasets", "Degree", "Background"],
-        N: ["Enable", "Datasets"],
+    getDefaultDataset = function(dtype) {
+        switch (dtype) {
+            case DATA_CONTINUOUS_SUMMARY:
+                return {
+                    metadata: {
+                        id: null,
+                        name: "",
+                        dose_units: "",
+                        response_units: "",
+                        dose_name: "Dose",
+                        response_name: "Response",
+                    },
+                    doses: [0, 7, 37, 186],
+                    ns: [25, 25, 25, 24],
+                    means: [55.8, 52.9, 64.8, 119.9],
+                    stdevs: [12.5, 15.4, 17.4, 32.5],
+                };
+            case DATA_CONTINUOUS_INDIVIDUAL:
+                return {
+                    metadata: {
+                        id: null,
+                        name: "",
+                        dose_units: "",
+                        response_units: "",
+                        dose_name: "Dose",
+                        response_name: "Response",
+                    },
+                    doses: [0, 0, 0, 0, 5, 5, 5, 5],
+                    responses: [1, 1, 2, 3, 4, 5, 6, 7],
+                };
+            case DATA_DICHOTOMOUS:
+                return {
+                    metadata: {
+                        id: null,
+                        name: "",
+                        dose_units: "",
+                        response_units: "",
+                        dose_name: "Dose",
+                        response_name: "Response",
+                    },
+                    doses: [0, 0.46, 1.39, 4.17, 12.5],
+                    ns: [9, 9, 11, 10, 7],
+                    incidences: [0, 0, 3, 2, 3],
+                };
+            case DATA_NESTED:
+                return {
+                    metadata: {
+                        id: null,
+                        name: "",
+                        dose_units: "",
+                        response_units: "",
+                        dose_name: "Dose",
+                        response_name: "Response",
+                    },
+                    doses: ["", "", "", "", ""],
+                    litter_sizes: ["", "", "", "", ""],
+                    incidences: ["", "", "", "", ""],
+                    litter_specific_covariates: ["", "", "", "", ""],
+                };
+            default:
+                throw `Unknown dataset type ${dtype}`;
+        }
     },
     AdverseDirectionList = [
         {value: "automatic", name: "Automatic"},
@@ -89,71 +138,36 @@ const modelTypes = [
         {value: "0", name: "Zero"},
     ],
     scatter_plot_layout = {
-        showlegend: true,
+        autosize: true,
+        displayModeBar: false,
+        legend: {yanchor: "top", y: 0.99, xanchor: "left", x: 0.01},
+        margin: {l: 50, r: 5, t: 50, b: 50},
+        showlegend: false,
         title: {
-            text: "Scatter Plot",
-            font: {
-                family: "Courier New, monospace",
-                size: 12,
-            },
-            xref: "paper",
+            text: "ADD",
         },
         xaxis: {
-            linecolor: "black",
-            linewidth: 1,
-            mirror: true,
             title: {
-                text: "",
-                font: {
-                    family: "Courier New, monospace",
-                    size: 12,
-                    color: "#7f7f7f",
-                },
+                text: "ADD",
             },
         },
         yaxis: {
-            linecolor: "black",
-            linewidth: 1,
-            mirror: true,
             title: {
-                text: "",
-                font: {
-                    family: "Courier New, monospace",
-                    size: 12,
-                    color: "#7f7f7f",
-                },
+                text: "ADD",
             },
         },
-        plot_bgcolor: "",
-        paper_bgcolor: "#eee",
-        width: 400,
-        height: 400,
-        autosize: true,
     },
-    yAxisTitle = {
-        CI: "responses",
-        CS: "means",
-        DM: "incidences",
-        N: "incidences",
+    getDoseLabel = function(dataset) {
+        let label = dataset.metadata.dose_name;
+        if (dataset.metadata.dose_units) {
+            label = `${label} (${dataset.metadata.dose_units})`;
+        }
+        return label;
     },
-    model_type = {
-        Continuous_Summarized: "CS",
-        Continuous_Individual: "CI",
-        Dichotomous: "DM",
-        Nested: "N",
+    getResponseLabel = function(dataset) {
+        let label = dataset.metadata.response_name;
+        if (dataset.metadata.response_units) {
+            label = `${label} (${dataset.metadata.response_units})`;
+        }
+        return label;
     };
-
-export {
-    modelTypes,
-    columns,
-    columnNames,
-    columnHeaders,
-    datasetForm,
-    datasetNamesHeaders,
-    AdverseDirectionList,
-    degree,
-    background,
-    scatter_plot_layout,
-    yAxisTitle,
-    model_type,
-};

@@ -1,32 +1,29 @@
 import React from "react";
 import PropTypes from "prop-types";
-import {AdverseDirectionList, degree, background} from "../../../constants/dataConstants";
 
-const Datasets = props => {
+import {AdverseDirectionList, degree, background} from "../../../constants/dataConstants";
+import * as mc from "../../../constants/mainConstants";
+
+const DatasetModelOption = props => {
+    const {dataset, handleChange, model_type} = props,
+        datasetId = dataset.metadata.id;
     return (
         <tr>
             <td>
                 <input
                     id="enable-model"
                     type="checkbox"
-                    checked={props.dataset.enabled}
-                    onChange={e =>
-                        props.toggleDataset("enabled", e.target.checked, props.dataset.dataset_id)
-                    }
+                    checked={dataset.enabled}
+                    onChange={e => handleChange(datasetId, "enabled", e.target.checked)}
                 />
             </td>
-            <td>{props.dataset.dataset_name}</td>
-            {props.dataset_type == "C" ? (
+            <td>{dataset.metadata.name}</td>
+            {model_type === mc.MODEL_CONTINUOUS ? (
                 <td>
-                    {" "}
                     <select
                         className="form-control"
                         onChange={e =>
-                            props.toggleDataset(
-                                "adverse_direction",
-                                e.target.value,
-                                props.dataset.dataset_id
-                            )
+                            handleChange(datasetId, "adverse_direction", e.target.value)
                         }>
                         {AdverseDirectionList.map((adverse, i) => {
                             return (
@@ -38,14 +35,9 @@ const Datasets = props => {
                     </select>
                 </td>
             ) : null}
-            {props.dataset_type == "DM" ? (
+            {model_type === mc.MODEL_MULTI_TUMOR ? (
                 <td>
-                    {" "}
-                    <select
-                        as="select"
-                        onChange={e =>
-                            props.toggleDataset("degree", e.target.value, props.dataset.dataset_id)
-                        }>
+                    <select onChange={e => handleChange(datasetId, "degree", e.target.value)}>
                         {degree.map((dataset, i) => {
                             return (
                                 <option key={i} value={dataset.value}>
@@ -56,17 +48,9 @@ const Datasets = props => {
                     </select>
                 </td>
             ) : null}
-            {props.dataset_type == "DM" ? (
+            {model_type === mc.MODEL_MULTI_TUMOR ? (
                 <td>
-                    <select
-                        as="select"
-                        onChange={e =>
-                            props.toggleDataset(
-                                "background",
-                                e.target.value,
-                                props.dataset.dataset_id
-                            )
-                        }>
+                    <select onChange={e => handleChange(datasetId, "background", e.target.value)}>
                         {background.map((dataset, i) => {
                             return (
                                 <option key={i} value={dataset.value}>
@@ -81,16 +65,9 @@ const Datasets = props => {
     );
 };
 
-Datasets.propTypes = {
-    dataStore: PropTypes.object,
-    saveAdverseDirection: PropTypes.func,
-    toggleDataset: PropTypes.func,
-    datasets: PropTypes.array,
-    getDatasetType: PropTypes.func,
-    adverseList: PropTypes.array,
-    degree: PropTypes.array,
-    background: PropTypes.array,
-    dataset: PropTypes.object,
-    dataset_type: PropTypes.string,
+DatasetModelOption.propTypes = {
+    dataset: PropTypes.object.isRequired,
+    handleChange: PropTypes.func.isRequired,
+    model_type: PropTypes.string.isRequired,
 };
-export default Datasets;
+export default DatasetModelOption;

@@ -25,7 +25,7 @@ class ReportEngine:
         self.model_type = self.job.inputs["dataset_type"]
 
     def _build_dataset(self, document, dataset):
-        document.add_heading(dataset["dataset_name"], 1)
+        document.add_heading(dataset["metadata"]["name"], 1)
         document.add_paragraph("TODO - add table")
         document.add_paragraph("TODO - build plot")
 
@@ -162,8 +162,9 @@ class ReportEngine:
             document.add_paragraph("Execution generated errors; no report can be generated")
         else:
             outputs: List[Dict] = self.job.outputs["outputs"]
+            datasets: List[Dict] = self.job.inputs["datasets"]
             for output in outputs:
-                dataset = output["dataset"]
+                dataset = datasets[output["dataset_index"]]
                 self._build_dataset(document, dataset)
                 for model in output["models"]:
                     self._build_model(document, dataset, model)
@@ -188,23 +189,22 @@ class ExportEngine:
             raise NotImplementedError()
 
         if self.model_type == bmds.constants.DICHOTOMOUS:
-            datasets: List[Dict] = [output["dataset"] for output in self.job.outputs["outputs"]]
-            data = [
+            datasets: List[Dict] = [
                 dict(
                     analysis_name=inputs["analysis_name"],
                     analysis_description=inputs["analysis_description"],
                     dataset_type=inputs["dataset_type"],
                     bmds_version=inputs["bmds_version"] + "-ALPHA",
                     created=created_time,
-                    dataset_id=ds["dataset_id"],
-                    dataset_name=ds.get("dataset_name", ""),
+                    dataset_index=i,
+                    dataset_name=ds["metadata"]["name"],
                     doses=",".join([str(d) for d in ds["doses"]]),
                     ns=",".join([str(d) for d in ds["ns"]]),
                     incidences=",".join([str(d) for d in ds["incidences"]]),
                 )
-                for ds in datasets
+                for i, ds in enumerate(self.job.inputs["datasets"])
             ]
-            return pd.DataFrame(data)
+            return pd.DataFrame(datasets)
 
     def _get_model_df(self) -> pd.DataFrame:
         if self.model_type == bmds.constants.CONTINUOUS:
@@ -213,14 +213,15 @@ class ExportEngine:
         data = []
         for output in self.job.outputs["outputs"]:
             for model in output["models"]:
-                if not model["has_output"]:
+                if not model["has_results"]:
                     # TODO handle this case
                     pass
                 else:
                     results = model["results"]
                     data.append(
                         dict(
-                            dataset_id=output["dataset"]["dataset_id"],
+                            dataset_index=output["dataset_index"],
+                            option_index=output["option_index"],
                             settings_bmr=model["settings"]["bmr"],
                             settings_bmr_type=bmrType[model["settings"]["bmr_type"]],
                             model_name=model["model_name"],
@@ -242,6 +243,6 @@ class ExportEngine:
 
         datasets = self._get_dataset_df()
         models = self._get_model_df()
-        df = datasets.merge(models, on="dataset_id")
+        df = datasets.merge(models, on="dataset_index")
 
         return df

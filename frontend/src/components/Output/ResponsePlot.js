@@ -12,18 +12,12 @@ class ResponsePlot extends Component {
     }
 
     render() {
-        const {outputStore} = this.props;
-        let plotData = toJS(outputStore.plotData);
-        var config = {responsive: true, staticPlot: true};
+        const {outputStore} = this.props,
+            plotData = toJS(outputStore.plotData),
+            config = {responsive: true, staticPlot: true};
+
         return (
-            <div>
-                <Plot
-                    data={plotData}
-                    layout={outputStore.getLayout}
-                    config={config}
-                    useResizeHandler
-                />
-            </div>
+            <Plot data={plotData} layout={outputStore.getLayout} config={config} useResizeHandler />
         );
     }
 }

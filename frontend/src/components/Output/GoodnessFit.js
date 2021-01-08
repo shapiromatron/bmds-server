@@ -3,7 +3,7 @@ import React, {Component} from "react";
 import {observer} from "mobx-react";
 import PropTypes from "prop-types";
 
-import {model_type} from "../../constants/dataConstants";
+import * as dc from "../../constants/dataConstants";
 
 const continuousRow = function(row, index) {
         return (
@@ -33,10 +33,10 @@ const continuousRow = function(row, index) {
         );
     },
     getRows = function(output, model) {
-        if (output.dataset.model_type === model_type.Continuous_Summarized) {
+        if (output.dataset.model_type === dc.DATA_CONTINUOUS_SUMMARY) {
             // TODO - fix
             return output.results.gof;
-        } else if (output.dataset.model_type === model_type.Dichotomous) {
+        } else if (output.dataset.model_type === dc.DATA_DICHOTOMOUS) {
             return _.zip(
                 output.dataset.doses,
                 output.dataset.ns,
@@ -57,16 +57,16 @@ const continuousRow = function(row, index) {
         }
     },
     getRowFunc = function(output) {
-        if (output.dataset.model_type === model_type.Continuous_Summarized) {
+        if (output.dataset.model_type === dc.DATA_CONTINUOUS_SUMMARY) {
             return continuousRow;
-        } else if (output.dataset.model_type === model_type.Dichotomous) {
+        } else if (output.dataset.model_type === dc.DATA_DICHOTOMOUS) {
             return dichotomousRow;
         } else {
-            throw `Unknown model type ${model_type}`;
+            throw `Unknown model type ${output.dataset.model_type}`;
         }
     },
     goodnessFitHeaders = {
-        [model_type.Continuous_Summarized]: [
+        [dc.DATA_CONTINUOUS_SUMMARY]: [
             "Dose",
             "Observed Mean",
             "Observed SD",
@@ -77,7 +77,7 @@ const continuousRow = function(row, index) {
             "Size",
             "Scaled Residual",
         ],
-        [model_type.Dichotomous]: [
+        [dc.DATA_DICHOTOMOUS]: [
             "Dose",
             "Estimated probability",
             "Expected",
@@ -91,7 +91,7 @@ const continuousRow = function(row, index) {
 class GoodnessFit extends Component {
     render() {
         const {store} = this.props,
-            output = store.getCurrentOutput,
+            output = store.selectedOutput,
             model = store.selectedModel,
             headers = goodnessFitHeaders[output.dataset.model_type],
             rows = getRows(output, model),

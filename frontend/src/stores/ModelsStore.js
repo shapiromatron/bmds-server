@@ -1,11 +1,7 @@
 import {observable, action, computed} from "mobx";
-import {
-    modelsList,
-    modelHeaders,
-    nestedHeaders,
-    model,
-    datasetType,
-} from "../constants/modelConstants";
+
+import * as mc from "../constants/mainConstants";
+import {modelsList, modelHeaders, nestedHeaders, model} from "../constants/modelConstants";
 import _ from "lodash";
 
 class ModelsStore {
@@ -24,9 +20,9 @@ class ModelsStore {
     }
 
     @action setDefaultsByDatasetType() {
-        let dataset_type = this.rootStore.mainStore.dataset_type;
-        this.models = _.cloneDeep(modelsList[dataset_type]);
-        if (dataset_type === datasetType.Nested) {
+        let modelType = this.rootStore.mainStore.model_type;
+        this.models = _.cloneDeep(modelsList[modelType]);
+        if (modelType === mc.MODEL_NESTED) {
             this.model_headers = nestedHeaders;
         } else {
             this.model_headers = modelHeaders;

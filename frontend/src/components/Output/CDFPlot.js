@@ -45,8 +45,7 @@ const layout = {
 @observer
 class CDFPlot extends Component {
     render() {
-        const {store} = this.props,
-            cdf = toJS(store.selectedModel.results.fit.bmd_dist),
+        const cdf = toJS(this.props.cdf),
             data = {
                 x: cdf[0],
                 y: cdf[1],
@@ -59,7 +58,7 @@ class CDFPlot extends Component {
 }
 
 CDFPlot.propTypes = {
-    store: PropTypes.object,
+    cdf: PropTypes.array,
 };
 
 export default CDFPlot;

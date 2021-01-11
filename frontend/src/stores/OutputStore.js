@@ -106,9 +106,9 @@ class OutputStore {
         return layout;
     }
 
-    @action setPlotData() {
+    @action.bound setPlotData() {
         //check if output exist
-        if (this.getCurrentOutput == undefined) {
+        if (!this.selectedOutput) {
             return;
         }
         var trace1 = {
@@ -122,7 +122,7 @@ class OutputStore {
         this.plotData.push(trace1);
     }
 
-    @action addBMDLine(model, value) {
+    @action.bound addBmdLine(model, value) {
         const bmdLine = {
             x: model.results.dr_x,
             y: model.results.dr_y,
@@ -135,7 +135,14 @@ class OutputStore {
         this.plotData.push(bmdLine);
     }
 
-    @action removeBMDLine() {
+    @action.bound addBmdHoverLine(model, idx) {
+        if (idx === this.selectedOutput.selected_model_index) {
+            return;
+        }
+        this.addBmdLine(model);
+    }
+
+    @action.bound removeBmdHoverLine(model) {
         if (this.plotData.length > 1) {
             this.plotData.pop();
         }
@@ -159,24 +166,25 @@ class OutputStore {
         return doseArr;
     }
 
-    @action.bound saveSelectedModelIndex(index) {
-        this.getCurrentOutput.selected_model_index = index;
+    @action.bound saveSelectedModelIndex(idx) {
+        this.selectedOutput.selected_model_index = idx;
 
         if (this.plotData.length > 1) {
             this.plotData.pop();
         }
-        if (index > -1) {
-            let model = this.getCurrentOutput.models.find(model => model.model_index == index);
-            this.addBMDLine(model, "#0000FF");
+        if (idx > -1) {
+            let model = this.selectedOutput.models[idx];
+            this.addBmdLine(model, "#0000FF");
         }
     }
 
     @action.bound saveSelectedIndexNotes(value) {
-        this.getCurrentOutput["selected_model_notes"] = value;
+        this.selectedOutput.selected_model_notes = value;
     }
 
     @action.bound saveSelectedModel() {
-        //api call to update
+        // api call to update
+        console.warn("implement!");
     }
 
     getOutputName(idx) {

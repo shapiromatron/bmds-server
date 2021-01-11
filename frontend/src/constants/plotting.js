@@ -63,13 +63,22 @@ export const getDrLayout = function(dataset) {
         return layout;
     },
     getDrDatasetPlotData = function(dataset) {
-        return [
-            {
-                x: dataset.doses.slice(),
-                y: getResponse(dataset).slice(),
-                mode: "markers",
-                type: "scatter",
-                name: "Response",
+        return {
+            x: dataset.doses.slice(),
+            y: getResponse(dataset).slice(),
+            mode: "markers",
+            type: "scatter",
+            name: "Response",
+        };
+    },
+    getDrBmdLine = function(model, hexColor) {
+        return {
+            x: model.results.dr_x,
+            y: model.results.dr_y,
+            mode: "lines",
+            name: model.name,
+            marker: {
+                color: hexColor,
             },
-        ];
+        };
     };

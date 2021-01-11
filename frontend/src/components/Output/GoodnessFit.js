@@ -92,7 +92,7 @@ class GoodnessFit extends Component {
     render() {
         const {store} = this.props,
             output = store.selectedOutput,
-            model = store.selectedModel,
+            model = store.modalModel,
             headers = goodnessFitHeaders[output.dataset.model_type],
             rows = getRows(output, model),
             rowFunc = getRowFunc(output);

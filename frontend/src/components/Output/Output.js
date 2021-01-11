@@ -48,7 +48,7 @@ class Output extends Component {
                         />
                     </div>
                 </div>
-                <div>{outputStore.modelDetailModal ? <ModelDetailModal /> : null}</div>
+                <div>{outputStore.showModelModal ? <ModelDetailModal /> : null}</div>
             </div>
         );
     }

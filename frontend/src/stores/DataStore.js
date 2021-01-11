@@ -141,7 +141,7 @@ class DataStore {
 
     @computed get drPlotData() {
         const dataset = this.selectedDataset;
-        return getDrDatasetPlotData(dataset);
+        return [getDrDatasetPlotData(dataset)];
     }
 
     @computed get getDatasets() {

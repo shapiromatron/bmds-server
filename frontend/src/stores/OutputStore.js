@@ -1,7 +1,7 @@
 import {observable, action, computed} from "mobx";
 import _ from "lodash";
 
-import {getDrLayout, getDrDatasetPlotData} from "../constants/plotting";
+import {getDrLayout, getDrDatasetPlotData, getDrBmdLine} from "../constants/plotting";
 import * as constant from "../constants/outputConstants";
 
 class OutputStore {
@@ -12,28 +12,18 @@ class OutputStore {
         this.rootStore = rootStore;
     }
 
-    @observable modelDetailModal = false;
-    @observable selectedModel = null;
+    @observable showModelModal = false;
+    @observable modalModel = null;
     @observable currentOutput = {};
     @observable selectedOutputIndex = 0;
-    @observable plotData = [];
+    @observable drModelHover = null;
+    @observable drModelModal = null;
+    @observable drModelSelected = null;
+
     @observable showBMDLine = false;
 
-    @action setSelectedModel(model) {
-        this.selectedModel = model;
-    }
     @action setSelectedDatasetIndex(dataset_id) {
         this.selectedDatasetIndex = dataset_id;
-    }
-
-    @action toggleModelDetailModal(model) {
-        this.modelDetailModal = !this.modelDetailModal;
-        if (this.modelDetailModal) {
-            this.selectedModel = model;
-        } else {
-            this.selectedModel = null;
-            this.plotData.pop();
-        }
     }
 
     @computed get outputs() {
@@ -53,7 +43,7 @@ class OutputStore {
     @computed get getModelOptions() {
         let modelOptions = _.cloneDeep(constant.model_options[this.selectedDataset.model_type]);
         modelOptions.map(option => {
-            option.value = this.selectedModel.settings[option.name];
+            option.value = this.modalModel.settings[option.name];
             if (option.name == "bmrType") {
                 option.value = constant.bmrType[option.value];
             }
@@ -71,7 +61,7 @@ class OutputStore {
         let modelData = _.cloneDeep(constant.modelData);
         modelData.number_of_observations.value = this.selectedDataset.doses.length;
         modelData.adverse_direction.value =
-            constant.adverse_direction[this.selectedModel.settings.adverseDirection];
+            constant.adverse_direction[this.modalModel.settings.adverseDirection];
         return modelData;
     }
 
@@ -83,17 +73,9 @@ class OutputStore {
         return pValue;
     }
 
-    @computed get drPlotLayout() {
-        return getDrLayout(this.selectedDataset);
-    }
-
-    @computed get drPlotData() {
-        return getDrDatasetPlotData(this.selectedDataset);
-    }
-
     @computed get selectedParams() {
-        let names = this.selectedModel.model_class.params,
-            values = this.selectedModel.results.fit.params.toJS();
+        let names = this.modalModel.model_class.params,
+            values = this.modalModel.results.fit.params.toJS();
         return _.zipObject(names, values);
     }
 
@@ -109,26 +91,63 @@ class OutputStore {
         return doseArr;
     }
 
+    // start modal methods
+    @action.bound showModalDetail(model) {
+        this.modalModel = model;
+        this.drModelModal = getDrBmdLine(model, "#0000FF");
+        this.showModelModal = true;
+    }
+    @action.bound closeModal() {
+        this.modalModel = null;
+        this.drModelModal = null;
+        this.showModelModal = false;
+    }
+    // end modal methods
+
+    // start dose-response plotting data methods
+    @computed get drPlotLayout() {
+        return getDrLayout(this.selectedDataset);
+    }
+    @computed get drPlotData() {
+        const data = [getDrDatasetPlotData(this.selectedDataset)];
+        if (this.drModelHover) {
+            data.push(this.drModelHover);
+        }
+        if (this.drModelModal) {
+            data.push(this.drModelModal);
+        }
+        if (this.drModelSelected) {
+            data.push(this.drModelSelected);
+        }
+        return data;
+    }
+    @action.bound drPlotAddHover(model) {
+        this.drModelHover = getDrBmdLine(model, "#DA2CDA");
+    }
+    @action.bound drPlotRemoveHover() {
+        this.drModelHover = null;
+    }
+    // end dose-response plotting data methods
+
+    // start model selection methods
     @action.bound saveSelectedModelIndex(idx) {
         this.selectedOutput.selected_model_index = idx;
 
-        if (this.plotData.length > 1) {
-            this.plotData.pop();
-        }
         if (idx > -1) {
             let model = this.selectedOutput.models[idx];
-            this.addBmdLine(model, "#0000FF");
+            this.drModelSelected = getDrBmdLine(model, "#4a9f2f");
+        } else {
+            this.drModelSelected = null;
         }
     }
-
     @action.bound saveSelectedIndexNotes(value) {
         this.selectedOutput.selected_model_notes = value;
     }
-
     @action.bound saveSelectedModel() {
         // api call to update
         console.warn("implement!");
     }
+    // end model selection methods
 
     getOutputName(idx) {
         /*

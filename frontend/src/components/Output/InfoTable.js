@@ -7,7 +7,7 @@ import PropTypes from "prop-types";
 class InfoTable extends Component {
     render() {
         const {outputStore} = this.props,
-            model = outputStore.selectedModel,
+            model = outputStore.modalModel,
             dataset = outputStore.selectedDataset;
         return (
             <table className="table table-bordered table-sm">

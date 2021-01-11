@@ -1,7 +1,6 @@
 import {inject, observer} from "mobx-react";
 import React, {Component} from "react";
 import PropTypes from "prop-types";
-import _ from "lodash";
 
 import {getPValue} from "../../constants/outputConstants";
 
@@ -30,15 +29,15 @@ class ResultsTable extends Component {
                         return (
                             <tr
                                 key={idx}
-                                onMouseEnter={() => store.addBmdHoverLine(model, idx)}
-                                onMouseLeave={() => store.removeBmdHoverLine(model)}
+                                onMouseEnter={() => store.drPlotAddHover(model)}
+                                onMouseLeave={() => store.drPlotRemoveHover()}
                                 className={selected_model_index == idx ? "table-success" : ""}>
                                 <td>
                                     <a
                                         href="#"
                                         onClick={e => {
                                             e.preventDefault();
-                                            store.toggleModelDetailModal(model, idx);
+                                            store.showModalDetail(model);
                                         }}>
                                         {model.name}
                                     </a>

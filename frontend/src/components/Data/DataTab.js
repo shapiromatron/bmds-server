@@ -5,7 +5,7 @@ import PropTypes from "prop-types";
 import DatasetForm from "./DatasetForm";
 import DatasetSelector from "./DatasetSelector";
 import SelectModelType from "./SelectModelType";
-import DoseResponsePlot from "./DoseResponsePlot";
+import DoseResponsePlot from "../common/DoseResponsePlot";
 import DatasetTable from "./DatasetTable";
 
 @inject("dataStore")
@@ -30,7 +30,12 @@ class Data extends Component {
                         ) : null}
                     </div>
                     <div className="col-md-4">
-                        {dataStore.hasSelectedDataset ? <DoseResponsePlot /> : null}
+                        {dataStore.hasSelectedDataset ? (
+                            <DoseResponsePlot
+                                layout={dataStore.drPlotLayout}
+                                data={dataStore.drPlotData}
+                            />
+                        ) : null}
                     </div>
                 </div>
             </div>

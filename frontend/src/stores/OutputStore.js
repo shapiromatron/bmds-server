@@ -1,7 +1,7 @@
 import {observable, action, computed} from "mobx";
 import _ from "lodash";
 
-import * as dc from "../constants/dataConstants";
+import {getDrLayout, getDrDatasetPlotData} from "../constants/plotting";
 import * as constant from "../constants/outputConstants";
 
 class OutputStore {
@@ -24,7 +24,6 @@ class OutputStore {
     }
     @action setSelectedDatasetIndex(dataset_id) {
         this.selectedDatasetIndex = dataset_id;
-        this.setPlotData();
     }
 
     @action toggleModelDetailModal(model) {
@@ -84,68 +83,12 @@ class OutputStore {
         return pValue;
     }
 
-    @computed get getResponse() {
-        let responses = [];
-        let dataset = this.selectedDataset;
-        let ns = dataset.ns;
-        let incidences = dataset.incidences;
-        if (dataset.model_type === dc.DATA_CONTINUOUS_SUMMARY) {
-            responses = dataset.means;
-        } else if (dataset.model_type === dc.DATA_DICHOTOMOUS) {
-            for (var i = 0; i < ns.length; i++) {
-                var response = incidences[i] / ns[i];
-                responses.push(response);
-            }
-        }
-        return responses;
+    @computed get drPlotLayout() {
+        return getDrLayout(this.selectedDataset);
     }
 
-    @computed get getLayout() {
-        let layout = _.cloneDeep(constant.layout);
-        layout.title.text = this.selectedDataset.metadata.name;
-        return layout;
-    }
-
-    @action.bound setPlotData() {
-        //check if output exist
-        if (!this.selectedOutput) {
-            return;
-        }
-        var trace1 = {
-            x: this.selectedDataset.doses.slice(),
-            y: this.getResponse.slice(),
-            mode: "markers",
-            type: "scatter",
-            name: "Response",
-        };
-
-        this.plotData.push(trace1);
-    }
-
-    @action.bound addBmdLine(model, value) {
-        const bmdLine = {
-            x: model.results.dr_x,
-            y: model.results.dr_y,
-            mode: "lines",
-            name: model.name,
-            marker: {
-                color: value,
-            },
-        };
-        this.plotData.push(bmdLine);
-    }
-
-    @action.bound addBmdHoverLine(model, idx) {
-        if (idx === this.selectedOutput.selected_model_index) {
-            return;
-        }
-        this.addBmdLine(model);
-    }
-
-    @action.bound removeBmdHoverLine(model) {
-        if (this.plotData.length > 1) {
-            this.plotData.pop();
-        }
+    @computed get drPlotData() {
+        return getDrDatasetPlotData(this.selectedDataset);
     }
 
     @computed get selectedParams() {

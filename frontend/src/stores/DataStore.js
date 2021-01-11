@@ -3,14 +3,8 @@ import _ from "lodash";
 
 import * as mc from "../constants/mainConstants";
 import * as dc from "../constants/dataConstants";
-import {
-    datasetTypesByModelType,
-    getDefaultDataset,
-    scatter_plot_layout,
-    model_type,
-    getDoseLabel,
-    getResponseLabel,
-} from "../constants/dataConstants";
+import {getDrLayout, getDrDatasetPlotData} from "../constants/plotting";
+import {datasetTypesByModelType, getDefaultDataset} from "../constants/dataConstants";
 
 class DataStore {
     constructor(rootStore) {
@@ -141,51 +135,13 @@ class DataStore {
         return datasetInputForm;
     }
 
-    @computed get getDoseResponseData() {
+    @computed get drPlotLayout() {
+        return getDrLayout(this.selectedDataset);
+    }
+
+    @computed get drPlotData() {
         const dataset = this.selectedDataset;
-        return [
-            {
-                x: dataset.doses.slice(),
-                y: this.getResponse.slice(),
-                mode: "markers",
-                type: "scatter",
-                name: "Response",
-            },
-        ];
-    }
-
-    @computed get getResponse() {
-        let dataset = this.selectedDataset,
-            incidences,
-            ns;
-
-        switch (dataset.model_type) {
-            case dc.DATA_CONTINUOUS_SUMMARY:
-                return dataset.means;
-            case dc.DATA_CONTINUOUS_INDIVIDUAL:
-                return dataset.responses;
-            case dc.DATA_DICHOTOMOUS:
-                ns = dataset.ns;
-                incidences = dataset.incidences;
-                return _.range(ns.length).map(idx => incidences[idx] / ns[idx]);
-            case model_type.Nested:
-                incidences = dataset.incidences;
-                ns = dataset.litter_sizes;
-                return _.range(ns.length).map(idx => incidences[idx] / ns[idx]);
-            default:
-                throw "Unknown model_type";
-        }
-    }
-
-    @computed get getLayout() {
-        let dataset = this.selectedDataset,
-            layout = _.cloneDeep(scatter_plot_layout);
-
-        layout.title.text = dataset.metadata.name;
-        layout.xaxis.title.text = getDoseLabel(dataset);
-        layout.yaxis.title.text = getResponseLabel(dataset);
-
-        return layout;
+        return getDrDatasetPlotData(dataset);
     }
 
     @computed get getDatasets() {

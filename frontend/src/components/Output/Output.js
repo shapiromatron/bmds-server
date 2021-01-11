@@ -5,7 +5,7 @@ import ModelDetailModal from "./ModelDetailModal";
 import ResultsTable from "./ResultsTable";
 import DatasetTable from "../Data/DatasetTable";
 import OutputSelector from "./OutputSelector";
-import ResponsePlot from "./ResponsePlot";
+import DoseResponsePlot from "../common/DoseResponsePlot";
 import SelectModel from "./SelectModel";
 import "./Output.css";
 
@@ -42,7 +42,10 @@ class Output extends Component {
                         <SelectModel />
                     </div>
                     <div className="col col-lg-4">
-                        <ResponsePlot />
+                        <DoseResponsePlot
+                            layout={outputStore.drPlotLayout}
+                            data={outputStore.drPlotData}
+                        />
                     </div>
                 </div>
                 <div>{outputStore.modelDetailModal ? <ModelDetailModal /> : null}</div>

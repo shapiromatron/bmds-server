@@ -136,38 +136,4 @@ export const DATA_CONTINUOUS_SUMMARY = "CS",
     background = [
         {value: "Estimated", name: "Esimated"},
         {value: "0", name: "Zero"},
-    ],
-    scatter_plot_layout = {
-        autosize: true,
-        displayModeBar: false,
-        legend: {yanchor: "top", y: 0.99, xanchor: "left", x: 0.01},
-        margin: {l: 50, r: 5, t: 50, b: 50},
-        showlegend: false,
-        title: {
-            text: "ADD",
-        },
-        xaxis: {
-            title: {
-                text: "ADD",
-            },
-        },
-        yaxis: {
-            title: {
-                text: "ADD",
-            },
-        },
-    },
-    getDoseLabel = function(dataset) {
-        let label = dataset.metadata.dose_name;
-        if (dataset.metadata.dose_units) {
-            label = `${label} (${dataset.metadata.dose_units})`;
-        }
-        return label;
-    },
-    getResponseLabel = function(dataset) {
-        let label = dataset.metadata.response_name;
-        if (dataset.metadata.response_units) {
-            label = `${label} (${dataset.metadata.response_units})`;
-        }
-        return label;
-    };
+    ];

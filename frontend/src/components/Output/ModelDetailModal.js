@@ -12,7 +12,7 @@ import GoodnessFit from "./GoodnessFit";
 import CDFTable from "./CDFTable";
 import CDFPlot from "./CDFPlot";
 import CSLoglikelihoods from "./CSLoglikelihoods";
-import ResponsePlot from "./ResponsePlot";
+import DoseResponsePlot from "../common/DoseResponsePlot";
 import CSTestofInterest from "./CSTestofInterest";
 
 import * as dc from "../../constants/dataConstants";
@@ -88,7 +88,10 @@ class ModelDetailModal extends Component {
                             <CDFTable bmd_dist={model.results.fit.bmd_dist} />
                         </Col>
                         <Col>
-                            <ResponsePlot />
+                            <DoseResponsePlot
+                                layout={outputStore.drPlotLayout}
+                                data={outputStore.drPlotData}
+                            />
                             <CDFPlot cdf={model.results.fit.bmd_dist} />
                         </Col>
                     </Row>

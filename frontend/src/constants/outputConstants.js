@@ -42,26 +42,6 @@ export const model_options = {
         1: "Up",
         2: "Down",
     },
-    layout = {
-        autosize: true,
-        displayModeBar: false,
-        legend: {yanchor: "top", y: 0.99, xanchor: "left", x: 0.01},
-        margin: {l: 50, r: 5, t: 50, b: 50},
-        showlegend: true,
-        title: {
-            text: "ADD",
-        },
-        xaxis: {
-            title: {
-                text: "ADD",
-            },
-        },
-        yaxis: {
-            title: {
-                text: "ADD",
-            },
-        },
-    },
     getPValue = function(dataType, results) {
         if (dataType === dc.DATA_DICHOTOMOUS) {
             return results.gof.p_value;

@@ -222,11 +222,14 @@ class Job(models.Model):
         self.save()
 
     def reset_execution(self):
+        """
+        Update all modeling results and execution fields to a state where the job has not yet been
+        executed.
+        """
         self.started = None
         self.ended = None
         self.outputs = {}
         self.errors = {}
-        self.save()
 
     def handle_execution_error(self, err):
         self.errors = err

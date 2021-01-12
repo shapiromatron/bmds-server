@@ -41,6 +41,7 @@ class JobViewset(mixins.CreateModelMixin, mixins.RetrieveModelMixin, viewsets.Ge
         except ValidationError as err:
             raise exceptions.ValidationError(err.message)
 
+        instance.reset_execution()
         instance.inputs = data
         instance.save()
 
@@ -65,6 +66,7 @@ class JobViewset(mixins.CreateModelMixin, mixins.RetrieveModelMixin, viewsets.Ge
             return Response("Execution already started", status_code=400)
 
         # start job execution
+        instance.reset_execution()
         instance.start_execute()
 
         instance.refresh_from_db()
@@ -105,6 +107,7 @@ class JobViewset(mixins.CreateModelMixin, mixins.RetrieveModelMixin, viewsets.Ge
 
         # reset instance
         instance.reset_execution()
+        instance.save()
 
         # fetch from db and get the latest
         instance.refresh_from_db()

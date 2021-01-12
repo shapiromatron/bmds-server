@@ -5,6 +5,7 @@ from rest_framework import exceptions, mixins, status, viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
 
+from ..common.validation import pydantic_validate
 from . import models, renderers, reports, serializers, validators
 
 
@@ -66,6 +67,27 @@ class JobViewset(mixins.CreateModelMixin, mixins.RetrieveModelMixin, viewsets.Ge
         # start job execution
         instance.start_execute()
 
+        instance.refresh_from_db()
+        serializer = self.get_serializer(instance)
+        return Response(serializer.data)
+
+    @action(detail=True, methods=("post",), url_path="select-model")
+    def select_model(self, request, *args, **kwargs):
+        instance = self.get_object()
+
+        # permissions check
+        if instance.password != request.data.get("editKey", ""):
+            raise exceptions.PermissionDenied()
+
+        # validate data
+        data = request.data.get("data")
+        if not isinstance(data, dict):
+            raise exceptions.ValidationError("A `data` object is required")
+
+        selection = pydantic_validate(data, validators.JobSelectedSchema)
+        instance.update_selection(selection)
+
+        # fetch from db and get the latest
         instance.refresh_from_db()
         serializer = self.get_serializer(instance)
         return Response(serializer.data)

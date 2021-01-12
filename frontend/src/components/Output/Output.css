@@ -3,8 +3,3 @@
   background-color:#0275d8;
   color:white;
 }
-.js-plotly-plot,
-.plot-container {
-    min-width: 65vh !important;
-    min-height: 50vh !important
-          }

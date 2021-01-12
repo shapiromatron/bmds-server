@@ -10,7 +10,8 @@ class ResultsTable extends Component {
     render() {
         const store = this.props.outputStore,
             dataset = store.selectedDataset,
-            {models, selected_model_index} = store.selectedOutput;
+            {models} = store.selectedOutput,
+            selectedModelIndex = store.selectedOutput.selected.model_index;
 
         return (
             <table className="table table-bordered result table-sm">
@@ -31,7 +32,7 @@ class ResultsTable extends Component {
                                 key={idx}
                                 onMouseEnter={() => store.drPlotAddHover(model)}
                                 onMouseLeave={() => store.drPlotRemoveHover()}
-                                className={selected_model_index == idx ? "table-success" : ""}>
+                                className={selectedModelIndex == idx ? "table-success" : ""}>
                                 <td>
                                     <a
                                         href="#"

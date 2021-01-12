@@ -1,6 +1,12 @@
 import * as mc from "./mainConstants";
 
-export const DATA_CONTINUOUS_SUMMARY = "CS",
+export const Dtype = {
+        DICHOTOMOUS: "D",
+        DICHOTOMOUS_CANCER: "DC",
+        CONTINUOUS: "C",
+        CONTINUOUS_INDIVIDUAL: "CI",
+    },
+    DATA_CONTINUOUS_SUMMARY = "CS",
     DATA_CONTINUOUS_INDIVIDUAL = "I",
     DATA_DICHOTOMOUS = "DM",
     DATA_NESTED = "N",
@@ -63,6 +69,7 @@ export const DATA_CONTINUOUS_SUMMARY = "CS",
         switch (dtype) {
             case DATA_CONTINUOUS_SUMMARY:
                 return {
+                    dtype: Dtype.CONTINUOUS,
                     metadata: {
                         id: null,
                         name: "",
@@ -78,6 +85,7 @@ export const DATA_CONTINUOUS_SUMMARY = "CS",
                 };
             case DATA_CONTINUOUS_INDIVIDUAL:
                 return {
+                    dtype: Dtype.CONTINUOUS_INDIVIDUAL,
                     metadata: {
                         id: null,
                         name: "",
@@ -91,6 +99,7 @@ export const DATA_CONTINUOUS_SUMMARY = "CS",
                 };
             case DATA_DICHOTOMOUS:
                 return {
+                    dtype: Dtype.DICHOTOMOUS,
                     metadata: {
                         id: null,
                         name: "",
@@ -105,6 +114,7 @@ export const DATA_CONTINUOUS_SUMMARY = "CS",
                 };
             case DATA_NESTED:
                 return {
+                    dtype: "...",
                     metadata: {
                         id: null,
                         name: "",

@@ -7,6 +7,7 @@ from datetime import timedelta
 from typing import Dict, List, Optional
 
 import bmds
+from bmds.bmds3.sessions import BmdsSession
 from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.db import connection, models
@@ -130,6 +131,30 @@ class Job(models.Model):
 
         return session
 
+    def get_session(self, index: int) -> BmdsSession:
+        if not self.is_finished or self.has_errors:
+            raise ValueError("Session cannot be returned")
+        return BmdsSession.from_serialized(self.outputs["outputs"][index])
+
+    def update_selection(self, selection: validators.JobSelectedSchema):
+        """Given a new selection data schema; update outputs and save instance
+
+        Args:
+            selection (validators.JobSelectedSchema): The selection to update
+        """
+        for idx, output in enumerate(self.outputs["outputs"]):
+            if (
+                output["metadata"]["dataset_index"] == selection.dataset_index
+                and output["metadata"]["option_index"] == selection.option_index
+            ):
+                session = self.get_session(idx)
+                session.selected = selection.selected.deserialize(session)
+                self.outputs["outputs"][idx] = self.session_to_output(
+                    session, selection.dataset_index, selection.option_index
+                )
+                self.save()
+                break
+
     @property
     def deletion_date(self):
         return self.created + timedelta(days=settings.DAYS_TO_KEEP_JOBS)
@@ -141,7 +166,7 @@ class Job(models.Model):
             err = traceback.format_exc()
             self.handle_execution_error(err)
 
-    def run_session(self, inputs: Dict, dataset_index: int, option_index: int):
+    def run_session(self, inputs: Dict, dataset_index: int, option_index: int) -> Dict:
 
         # build session
         session = self.build_session(inputs, dataset_index, option_index)
@@ -154,9 +179,11 @@ class Job(models.Model):
         if inputs.get("recommend", default_recommend):
             session.recommend()
 
-        output = session.to_dict()
-        output.update(dataset_index=dataset_index, option_index=option_index)
+        return self.session_to_output(session, dataset_index, option_index)
 
+    def session_to_output(self, session, dataset_index: int, option_index: int) -> Dict:
+        output = session.to_dict()
+        output["metadata"] = dict(dataset_index=dataset_index, option_index=option_index)
         return output
 
     def try_run_session(self, inputs: Dict, dataset_index: int, option_index: int) -> Dict:

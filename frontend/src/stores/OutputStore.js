@@ -1,5 +1,6 @@
-import {observable, action, computed} from "mobx";
+import {observable, action, computed, toJS} from "mobx";
 import _ from "lodash";
+import {getHeaders} from "../common";
 
 import {getDrLayout, getDrDatasetPlotData, getDrBmdLine} from "../constants/plotting";
 import * as constant from "../constants/outputConstants";
@@ -18,7 +19,6 @@ class OutputStore {
     @observable selectedOutputIndex = 0;
     @observable drModelHover = null;
     @observable drModelModal = null;
-    @observable drModelSelected = null;
 
     @observable showBMDLine = false;
 
@@ -36,7 +36,7 @@ class OutputStore {
         return this.outputs[this.selectedOutputIndex];
     }
     @computed get selectedDataset() {
-        const dataset_index = this.selectedOutput.dataset_index;
+        const dataset_index = this.selectedOutput.metadata.dataset_index;
         return this.rootStore.dataStore.datasets[dataset_index];
     }
 
@@ -91,6 +91,15 @@ class OutputStore {
         return doseArr;
     }
 
+    @computed get drModelSelected() {
+        const output = this.selectedOutput;
+        if (output && _.isNumber(output.selected.model_index)) {
+            const model = output.models[output.selected.model_index];
+            return getDrBmdLine(model, "#4a9f2f");
+        }
+        return null;
+    }
+
     // start modal methods
     @action.bound showModalDetail(model) {
         this.modalModel = model;
@@ -131,21 +140,41 @@ class OutputStore {
 
     // start model selection methods
     @action.bound saveSelectedModelIndex(idx) {
-        this.selectedOutput.selected_model_index = idx;
-
-        if (idx > -1) {
-            let model = this.selectedOutput.models[idx];
-            this.drModelSelected = getDrBmdLine(model, "#4a9f2f");
-        } else {
-            this.drModelSelected = null;
-        }
+        this.selectedOutput.selected.model_index = idx === -1 ? null : idx;
     }
     @action.bound saveSelectedIndexNotes(value) {
-        this.selectedOutput.selected_model_notes = value;
+        this.selectedOutput.selected.notes = value.length > 0 ? value : null;
     }
     @action.bound saveSelectedModel() {
-        // api call to update
-        console.warn("implement!");
+        const output = this.selectedOutput,
+            {csrfToken, editKey} = this.rootStore.mainStore.config.editSettings,
+            payload = toJS({
+                editKey,
+                data: {
+                    dataset_index: output.metadata.dataset_index,
+                    option_index: output.metadata.option_index,
+                    selected: {
+                        model_index: output.selected.model_index,
+                        notes: output.selected.notes,
+                    },
+                },
+            }),
+            url = `${this.rootStore.mainStore.config.apiUrl}select-model/`;
+
+        fetch(url, {
+            method: "POST",
+            mode: "cors",
+            headers: getHeaders(csrfToken),
+            body: JSON.stringify(payload),
+        })
+            .then(response => {
+                if (!response.ok) {
+                    console.error(response.text());
+                }
+            })
+            .catch(error => {
+                console.error(error);
+            });
     }
     // end model selection methods
 
@@ -155,10 +184,10 @@ class OutputStore {
         source: https://mobx.js.org/computeds-with-args.html
         */
         const output = this.outputs[idx],
-            dataset = this.rootStore.dataStore.datasets[output.dataset_index];
+            dataset = this.rootStore.dataStore.datasets[output.metadata.dataset_index];
 
         if (this.rootStore.optionsStore.optionsList.length > 1) {
-            return `${dataset.metadata.name}: Option Set ${output.option_index + 1}`;
+            return `${dataset.metadata.name}: Option Set ${output.metadata.option_index + 1}`;
         } else {
             return dataset.metadata.name;
         }

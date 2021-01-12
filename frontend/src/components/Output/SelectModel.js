@@ -1,3 +1,4 @@
+import _ from "lodash";
 import React, {Component} from "react";
 import {inject, observer} from "mobx-react";
 import PropTypes from "prop-types";
@@ -7,8 +8,10 @@ class SelectModelIndex extends Component {
     render() {
         const {outputStore} = this.props,
             {selectedOutput} = outputStore,
-            {selected_model_index, selected_model_notes, models} = selectedOutput,
-            selectValue = selected_model_index === undefined ? -1 : selected_model_index;
+            {models} = selectedOutput,
+            {model_index, notes} = selectedOutput.selected,
+            selectValue = _.isNumber(model_index) ? model_index : -1,
+            textValue = _.isNull(notes) ? "" : notes;
 
         return (
             <form>
@@ -40,7 +43,7 @@ class SelectModelIndex extends Component {
                             className="form-control"
                             type="textarea"
                             rows="2"
-                            value={selected_model_notes}
+                            value={textValue}
                             onChange={e =>
                                 outputStore.saveSelectedIndexNotes(e.target.value)
                             }></textarea>

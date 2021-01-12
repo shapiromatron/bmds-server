@@ -94,3 +94,13 @@ class TestPatchInputs:
         response = client.patch(url, payload, format="json")
         assert response.status_code == 200
         assert response.json()["inputs"] == payload["data"]
+
+
+class TestExecute:
+    # TODO - add
+    pass
+
+
+class TestModelSelection:
+    # TODO - add
+    pass

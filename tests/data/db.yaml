@@ -306,11 +306,11 @@
     password: pyz355cp9hwp
     inputs: {}
     outputs: {}
-    preferences: {}
     errors: {}
     created: 2020-12-15 23:30:41.255584+00:00
     started: null
     ended: null
+    deletion_date: null
 - model: jobrunner.job
   pk: cc3ca355-a57a-4fba-9dc3-99657562df68
   fields:
@@ -6783,8 +6783,8 @@
         dataset_index: 1
         bmds_python_version: 1.0.0
         recommended_model_index: null
-    preferences: {}
     errors: []
     created: 2020-12-15 23:28:36.947965+00:00
     started: 2020-12-15 23:30:20.926326+00:00
     ended: 2020-12-15 23:30:22.052659+00:00
+    deletion_date: 2021-12-15 23:30:22.052659+00:00

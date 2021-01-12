@@ -26,6 +26,10 @@ class OutputStore {
         this.selectedDatasetIndex = dataset_id;
     }
 
+    @computed get canEdit() {
+        return this.rootStore.mainStore.canEdit;
+    }
+
     @computed get outputs() {
         return this.rootStore.mainStore.getExecutionOutputs;
     }

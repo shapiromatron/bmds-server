@@ -37,7 +37,7 @@ class TestJobDetail:
                 "patchInputUrl": "/api/v1/job/cc3ca355-a57a-4fba-9dc3-99657562df68/patch-inputs/",
                 "executeUrl": "/api/v1/job/cc3ca355-a57a-4fba-9dc3-99657562df68/execute/",
                 "executeResetUrl": "/api/v1/job/cc3ca355-a57a-4fba-9dc3-99657562df68/execute-reset/",  # noqa: E501
-                "deleteDateStr": "2020-Dec-22",
+                "deleteDateStr": "2021-Dec-15",
                 "allowDatasetEditing": True,
                 "allowBmdsVersionEditing": True,
             },

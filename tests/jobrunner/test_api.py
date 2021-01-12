@@ -1,4 +1,5 @@
 import pytest
+from bmds.bmds3.recommender import RecommenderSettings
 from rest_framework.test import APIClient
 
 from bmds_server.jobrunner.models import Job
@@ -65,6 +66,7 @@ class TestPatchInputs:
             "bmds_version": "BMDS330",
             "dataset_type": "C",
             "models": {"frequentist_restricted": ["Power"]},
+            "recommender": RecommenderSettings.build_default().dict(),
         }
         response = client.patch(url, payload, format="json",)
         assert response.status_code == 200

@@ -19,7 +19,6 @@ class JobSerializer(serializers.ModelSerializer):
             "inputs",
             "errors",
             "outputs",
-            "preferences",
             "is_executing",
             "is_finished",
             "has_errors",
@@ -55,13 +54,6 @@ class JobSerializer(serializers.ModelSerializer):
     def validate_inputs(self, value):
         try:
             validators.validate_input(value)
-        except ValueError as err:
-            raise serializers.ValidationError(err)
-        return value
-
-    def validate_preferences(self, value):
-        try:
-            validators.validate_preferences(value)
         except ValueError as err:
             raise serializers.ValidationError(err)
         return value

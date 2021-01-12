@@ -7,11 +7,11 @@ from datetime import timedelta
 from typing import Dict, List, Optional
 
 import bmds
-from bmds.bmds3.sessions import BmdsSession
 from bmds.bmds3.recommender.recommender import RecommenderSettings
+from bmds.bmds3.sessions import BmdsSession
 from django.conf import settings
 from django.core.exceptions import ValidationError
-from django.db import connection, models
+from django.db import models
 from django.urls import reverse
 from django.utils.timezone import now
 
@@ -20,16 +20,20 @@ from . import tasks, transforms, utils, validators
 logger = logging.getLogger(__name__)
 
 
+def get_deletion_date():
+    return now() + timedelta(days=settings.DAYS_TO_KEEP_JOBS)
+
+
 class Job(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     password = models.CharField(max_length=12, default=utils.random_string, editable=False)
     inputs = models.JSONField(default=dict)
     outputs = models.JSONField(default=dict, blank=True)
-    preferences = models.JSONField(default=dict, blank=True)
     errors = models.JSONField(default=dict, blank=True)
     created = models.DateTimeField(auto_now_add=True)
     started = models.DateTimeField(null=True, blank=True)
     ended = models.DateTimeField(null=True, blank=True)
+    deletion_date = models.DateTimeField(null=True, blank=True, default=get_deletion_date)
 
     class Meta:
         ordering = ("created",)
@@ -83,13 +87,9 @@ class Job(models.Model):
 
     @classmethod
     def delete_old_jobs(cls):
-        oldest_to_keep = now() - timedelta(days=settings.DAYS_TO_KEEP_JOBS)
-        qs = cls.objects.filter(created__lt=oldest_to_keep)
+        qs = cls.objects.filter(deletion_date=now())
         logger.info(f"Removing {qs.count()} old BMDS jobs")
         qs.delete()
-        with connection.cursor() as cursor:
-            # required for sqlite3 to actually delete data
-            cursor.execute("vacuum")
 
     @classmethod
     def _build_dataset(
@@ -156,10 +156,6 @@ class Job(models.Model):
                 self.save()
                 break
 
-    @property
-    def deletion_date(self):
-        return self.created + timedelta(days=settings.DAYS_TO_KEEP_JOBS)
-
     def try_execute(self):
         try:
             self.execute()
@@ -220,6 +216,7 @@ class Job(models.Model):
         self.outputs = obj
         self.errors = [out["error"] for out in outputs if "error" in out]
         self.ended = now()
+        self.deletion_date = get_deletion_date()
         self.save()
 
     def reset_execution(self):
@@ -235,6 +232,7 @@ class Job(models.Model):
     def handle_execution_error(self, err):
         self.errors = err
         self.ended = now()
+        self.deletion_date = None  # don't delete; save for troubleshooting
         self.save()
 
     def get_outputs_json(self) -> Optional[Dict]:

@@ -1,14 +1,14 @@
 from typing import Dict
 
 import bmds
-from bmds.bmds3.recommender.recommender import RecommenderSettings
+from bmds.bmds3.recommender import RecommenderSettings
 
+from ...common.validation import pydantic_validate
 from .datasets import validate_datasets
 from .models import validate_models
 from .options import validate_options
 from .selectors import JobSelectedSchema  # noqa: F401
 from .session import validate_session
-from ...common.validation import pydantic_validate
 
 
 def validate_input(data: Dict, partial: bool = False) -> None:
@@ -44,7 +44,3 @@ def validate_input(data: Dict, partial: bool = False) -> None:
     recommender = data.get("recommender", {})
     if recommender or partial is False:
         pydantic_validate(recommender, RecommenderSettings)
-
-
-def validate_preferences(data) -> None:
-    pass

@@ -2,6 +2,7 @@ from typing import Any, Dict
 
 import bmds
 import pytest
+from bmds.bmds3.recommender import RecommenderSettings
 from django.core.exceptions import ValidationError
 
 from bmds_server.jobrunner import validators
@@ -60,6 +61,11 @@ class TestInputValidation:
                 "background": "Estimated",
             }
         ]
+        with pytest.raises(ValidationError) as err:
+            validators.validate_input(data)
+        assert "rules" in str(err) and "field required" in str(err)
+
+        data["recommender"] = RecommenderSettings.build_default().dict()
         assert validators.validate_input(data, partial=True) is None
         assert validators.validate_input(data) is None
 

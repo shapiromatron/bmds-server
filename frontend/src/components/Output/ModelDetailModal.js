@@ -12,7 +12,7 @@ import GoodnessFit from "./GoodnessFit";
 import CDFTable from "./CDFTable";
 import CDFPlot from "./CDFPlot";
 import CSLoglikelihoods from "./CSLoglikelihoods";
-import ResponsePlot from "./ResponsePlot";
+import DoseResponsePlot from "../common/DoseResponsePlot";
 import CSTestofInterest from "./CSTestofInterest";
 
 import * as dc from "../../constants/dataConstants";
@@ -24,24 +24,25 @@ class ModelDetailModal extends Component {
         const {outputStore} = this.props,
             output = outputStore.selectedOutput,
             dataset = output.dataset,
-            model = outputStore.selectedModel;
+            model = outputStore.modalModel;
 
-        if (model === undefined) {
+        if (!model) {
             return null;
         }
+
         return (
             <Modal
-                show={outputStore.modelDetailModal}
-                onHide={() => outputStore.toggleModelDetailModal()}
+                show={outputStore.showModelModal}
+                onHide={() => outputStore.closeModal()}
                 size="xl"
                 aria-labelledby="contained-modal-title-vcenter"
                 centered>
                 <Modal.Header>
-                    <Modal.Title id="contained-modal-title-vcenter">{model.model_name}</Modal.Title>
+                    <Modal.Title id="contained-modal-title-vcenter">{model.name}</Modal.Title>
                     <button
                         className="btn btn-danger"
                         style={{float: "right"}}
-                        onClick={() => outputStore.toggleModelDetailModal()}>
+                        onClick={() => outputStore.closeModal()}>
                         <i className="fa fa-times" aria-hidden="true"></i>
                     </button>
                 </Modal.Header>
@@ -88,7 +89,10 @@ class ModelDetailModal extends Component {
                             <CDFTable bmd_dist={model.results.fit.bmd_dist} />
                         </Col>
                         <Col>
-                            <ResponsePlot />
+                            <DoseResponsePlot
+                                layout={outputStore.drPlotLayout}
+                                data={outputStore.drPlotData}
+                            />
                             <CDFPlot cdf={model.results.fit.bmd_dist} />
                         </Col>
                     </Row>
@@ -99,12 +103,5 @@ class ModelDetailModal extends Component {
 }
 ModelDetailModal.propTypes = {
     outputStore: PropTypes.object,
-    modelDetailModal: PropTypes.bool,
-    toggleModelDetailModal: PropTypes.func,
-    selectedModel: PropTypes.object,
-    model_name: PropTypes.string,
-    selectedOutput: PropTypes.func,
-    dataset: PropTypes.object,
-    model_type: PropTypes.string,
 };
 export default ModelDetailModal;

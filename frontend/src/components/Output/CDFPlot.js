@@ -40,11 +40,6 @@ const layout = {
             },
         },
     },
-    plot_bgcolor: "",
-    paper_bgcolor: "#eee",
-    width: 400,
-    height: 400,
-    autosize: true,
 };
 
 @observer
@@ -54,11 +49,11 @@ class CDFPlot extends Component {
             data = {
                 x: cdf[0],
                 y: cdf[1],
-                mode: "markers",
+                mode: "lines+markers",
                 type: "scatter",
                 name: "CDF",
             };
-        return <Plot data={[data]} layout={layout} />;
+        return <Plot data={[data]} layout={layout} useResizeHandler />;
     }
 }
 

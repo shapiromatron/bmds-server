@@ -1,7 +1,8 @@
-import {observable, action, computed} from "mobx";
+import {observable, action, computed, toJS} from "mobx";
 import _ from "lodash";
+import {getHeaders} from "../common";
 
-import * as dc from "../constants/dataConstants";
+import {getDrLayout, getDrDatasetPlotData, getDrBmdLine} from "../constants/plotting";
 import * as constant from "../constants/outputConstants";
 
 class OutputStore {
@@ -12,23 +13,17 @@ class OutputStore {
         this.rootStore = rootStore;
     }
 
-    @observable modelDetailModal = false;
-    @observable selectedModel = null;
+    @observable showModelModal = false;
+    @observable modalModel = null;
     @observable currentOutput = {};
     @observable selectedOutputIndex = 0;
-    @observable plotData = [];
+    @observable drModelHover = null;
+    @observable drModelModal = null;
+
     @observable showBMDLine = false;
 
-    @action setSelectedModel(model) {
-        this.selectedModel = model;
-    }
-    @action setSelectedOutputIndex(output_index) {
-        this.selectedOutputIndex = output_index;
-        this.setPlotData();
-    }
-    @action toggleModelDetailModal(model) {
-        this.setSelectedModel(model);
-        this.modelDetailModal = !this.modelDetailModal;
+    @action setSelectedDatasetIndex(dataset_id) {
+        this.selectedDatasetIndex = dataset_id;
     }
 
     @computed get outputs() {
@@ -41,22 +36,14 @@ class OutputStore {
         return this.outputs[this.selectedOutputIndex];
     }
     @computed get selectedDataset() {
-        const dataset_index = this.selectedOutput.dataset_index;
+        const dataset_index = this.selectedOutput.metadata.dataset_index;
         return this.rootStore.dataStore.datasets[dataset_index];
-    }
-
-    @computed get getInfoTable() {
-        let infoTable = _.cloneDeep(constant.infoTable);
-        infoTable.model_name.value = this.selectedModel.model_name;
-        infoTable.dataset_name.value = this.selectedDataset.dataset_name;
-        infoTable.dose_response_model.value = this.selectedModel.results.fit.model.model_form_str;
-        return infoTable;
     }
 
     @computed get getModelOptions() {
         let modelOptions = _.cloneDeep(constant.model_options[this.selectedDataset.model_type]);
         modelOptions.map(option => {
-            option.value = this.selectedModel.settings[option.name];
+            option.value = this.modalModel.settings[option.name];
             if (option.name == "bmrType") {
                 option.value = constant.bmrType[option.value];
             }
@@ -74,7 +61,7 @@ class OutputStore {
         let modelData = _.cloneDeep(constant.modelData);
         modelData.number_of_observations.value = this.selectedDataset.doses.length;
         modelData.adverse_direction.value =
-            constant.adverse_direction[this.selectedModel.settings.adverseDirection];
+            constant.adverse_direction[this.modalModel.settings.adverseDirection];
         return modelData;
     }
 
@@ -86,63 +73,9 @@ class OutputStore {
         return pValue;
     }
 
-    @computed get getResponse() {
-        let responses = [];
-        let dataset = this.selectedDataset;
-        let ns = dataset.ns;
-        let incidences = dataset.incidences;
-        if (dataset.model_type === dc.DATA_CONTINUOUS_SUMMARY) {
-            responses = dataset.means;
-        } else if (dataset.model_type === dc.DATA_DICHOTOMOUS) {
-            for (var i = 0; i < ns.length; i++) {
-                var response = incidences[i] / ns[i];
-                responses.push(response);
-            }
-        }
-        return responses;
-    }
-
-    @computed get getLayout() {
-        let layout = _.cloneDeep(constant.layout);
-        layout.title.text = this.selectedDataset.dataset_name;
-        return layout;
-    }
-
-    @action setPlotData() {
-        this.plotData = [];
-        var trace1 = {
-            x: this.selectedDataset.doses.slice(),
-            y: this.getResponse.slice(),
-            mode: "markers",
-            type: "scatter",
-            name: "Response",
-        };
-        this.plotData.push(trace1);
-    }
-
-    @action addBMDLine(model) {
-        const bmdLine = {
-            x: model.results.dr_x,
-            y: model.results.dr_y,
-            mode: "lines",
-            name: model.model_name,
-            line: {
-                width: 4,
-            },
-        };
-
-        this.plotData.push(bmdLine);
-    }
-
-    @action removeBMDLine() {
-        if (this.plotData.length > 1) {
-            this.plotData.pop();
-        }
-    }
-
     @computed get selectedParams() {
-        let names = this.selectedModel.results.fit.model.params,
-            values = this.selectedModel.results.fit.params.toJS();
+        let names = this.modalModel.model_class.params,
+            values = this.modalModel.results.fit.params.toJS();
         return _.zipObject(names, values);
     }
 
@@ -158,18 +91,105 @@ class OutputStore {
         return doseArr;
     }
 
+    @computed get drModelSelected() {
+        const output = this.selectedOutput;
+        if (output && _.isNumber(output.selected.model_index)) {
+            const model = output.models[output.selected.model_index];
+            return getDrBmdLine(model, "#4a9f2f");
+        }
+        return null;
+    }
+
+    // start modal methods
+    @action.bound showModalDetail(model) {
+        this.modalModel = model;
+        this.drModelModal = getDrBmdLine(model, "#0000FF");
+        this.showModelModal = true;
+    }
+    @action.bound closeModal() {
+        this.modalModel = null;
+        this.drModelModal = null;
+        this.showModelModal = false;
+    }
+    // end modal methods
+
+    // start dose-response plotting data methods
+    @computed get drPlotLayout() {
+        return getDrLayout(this.selectedDataset);
+    }
+    @computed get drPlotData() {
+        const data = [getDrDatasetPlotData(this.selectedDataset)];
+        if (this.drModelHover) {
+            data.push(this.drModelHover);
+        }
+        if (this.drModelModal) {
+            data.push(this.drModelModal);
+        }
+        if (this.drModelSelected) {
+            data.push(this.drModelSelected);
+        }
+        return data;
+    }
+    @action.bound drPlotAddHover(model) {
+        this.drModelHover = getDrBmdLine(model, "#DA2CDA");
+    }
+    @action.bound drPlotRemoveHover() {
+        this.drModelHover = null;
+    }
+    // end dose-response plotting data methods
+
+    // start model selection methods
+    @action.bound saveSelectedModelIndex(idx) {
+        this.selectedOutput.selected.model_index = idx === -1 ? null : idx;
+    }
+    @action.bound saveSelectedIndexNotes(value) {
+        this.selectedOutput.selected.notes = value.length > 0 ? value : null;
+    }
+    @action.bound saveSelectedModel() {
+        const output = this.selectedOutput,
+            {csrfToken, editKey} = this.rootStore.mainStore.config.editSettings,
+            payload = toJS({
+                editKey,
+                data: {
+                    dataset_index: output.metadata.dataset_index,
+                    option_index: output.metadata.option_index,
+                    selected: {
+                        model_index: output.selected.model_index,
+                        notes: output.selected.notes,
+                    },
+                },
+            }),
+            url = `${this.rootStore.mainStore.config.apiUrl}select-model/`;
+
+        fetch(url, {
+            method: "POST",
+            mode: "cors",
+            headers: getHeaders(csrfToken),
+            body: JSON.stringify(payload),
+        })
+            .then(response => {
+                if (!response.ok) {
+                    console.error(response.text());
+                }
+            })
+            .catch(error => {
+                console.error(error);
+            });
+    }
+    // end model selection methods
+
     getOutputName(idx) {
         /*
         Not @computed because it has a parameter, this is still observable; prevents caching;
         source: https://mobx.js.org/computeds-with-args.html
         */
         const output = this.outputs[idx],
-            dataset = this.rootStore.dataStore.datasets[output.dataset_index];
+            dataset = this.rootStore.dataStore.datasets[output.metadata.dataset_index];
 
         if (this.rootStore.optionsStore.optionsList.length > 1) {
-            return `${dataset.dataset_name}: Option Set ${output.option_index + 1}`;
+            return `${dataset.metadata.name}: Option Set ${output.metadata.option_index + 1}`;
         } else {
-            return dataset.dataset_name;
+            return dataset.metadata.name;
         }
     }
 }

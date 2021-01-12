@@ -5,6 +5,7 @@ import bmds
 from .datasets import validate_datasets
 from .models import validate_models
 from .options import validate_options
+from .selectors import JobSelectedSchema  # noqa: F401
 from .session import validate_session
 
 

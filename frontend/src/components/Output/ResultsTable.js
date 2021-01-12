@@ -9,7 +9,10 @@ import {getPValue} from "../../constants/outputConstants";
 class ResultsTable extends Component {
     render() {
         const store = this.props.outputStore,
-            dataset = store.selectedDataset;
+            dataset = store.selectedDataset,
+            {models} = store.selectedOutput,
+            selectedModelIndex = store.selectedOutput.selected.model_index;
+
         return (
             <table className="table table-bordered result table-sm">
                 <thead>
@@ -23,20 +26,21 @@ class ResultsTable extends Component {
                     </tr>
                 </thead>
                 <tbody>
-                    {store.selectedOutput.models.map((model, idx) => {
+                    {models.map((model, idx) => {
                         return (
                             <tr
                                 key={idx}
-                                onMouseEnter={() => store.addBMDLine(model)}
-                                onMouseLeave={() => store.removeBMDLine()}>
+                                onMouseEnter={() => store.drPlotAddHover(model)}
+                                onMouseLeave={() => store.drPlotRemoveHover()}
+                                className={selectedModelIndex == idx ? "table-success" : ""}>
                                 <td>
                                     <a
                                         href="#"
                                         onClick={e => {
                                             e.preventDefault();
-                                            store.toggleModelDetailModal(model);
+                                            store.showModalDetail(model);
                                         }}>
-                                        {model.model_name}
+                                        {model.name}
                                     </a>
                                 </td>
                                 <td>{model.results.bmd}</td>

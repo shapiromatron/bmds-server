@@ -9,7 +9,7 @@ class BenchmarkDose extends Component {
     render() {
         const {store} = this.props,
             dataset = store.selectedDataset,
-            results = store.selectedModel.results;
+            results = store.modalModel.results;
 
         return (
             <table className="table table-bordered table-sm">

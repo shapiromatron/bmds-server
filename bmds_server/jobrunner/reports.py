@@ -25,7 +25,7 @@ class ReportEngine:
         self.model_type = self.job.inputs["dataset_type"]
 
     def _build_dataset(self, document, dataset):
-        document.add_heading(dataset["dataset_name"], 1)
+        document.add_heading(dataset["metadata"]["name"], 1)
         document.add_paragraph("TODO - add table")
         document.add_paragraph("TODO - build plot")
 
@@ -197,7 +197,7 @@ class ExportEngine:
                     bmds_version=inputs["bmds_version"] + "-ALPHA",
                     created=created_time,
                     dataset_index=i,
-                    dataset_name=ds.get("dataset_name", ""),
+                    dataset_name=ds["metadata"]["name"],
                     doses=",".join([str(d) for d in ds["doses"]]),
                     ns=",".join([str(d) for d in ds["ns"]]),
                     incidences=",".join([str(d) for d in ds["incidences"]]),
@@ -213,7 +213,7 @@ class ExportEngine:
         data = []
         for output in self.job.outputs["outputs"]:
             for model in output["models"]:
-                if not model["has_output"]:
+                if not model["has_results"]:
                     # TODO handle this case
                     pass
                 else:

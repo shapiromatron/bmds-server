@@ -3,14 +3,8 @@ import _ from "lodash";
 
 import * as mc from "../constants/mainConstants";
 import * as dc from "../constants/dataConstants";
-import {
-    datasetTypesByModelType,
-    columnNames,
-    datasetForm,
-    scatter_plot_layout,
-    yAxisTitle,
-    model_type,
-} from "../constants/dataConstants";
+import {getDrLayout, getDrDatasetPlotData} from "../constants/plotting";
+import {datasetTypesByModelType, getDefaultDataset} from "../constants/dataConstants";
 
 class DataStore {
     constructor(rootStore) {
@@ -19,8 +13,7 @@ class DataStore {
 
     @observable model_type = dc.DATA_CONTINUOUS_SUMMARY;
     @observable datasets = [];
-    @observable selectedDatasetIndex = null;
-    @observable selectedFile = {};
+    @observable selectedDatasetId = null;
 
     @action.bound setDefaultsByDatasetType() {
         let datasetTypes = this.getFilteredDatasetTypes;
@@ -32,39 +25,50 @@ class DataStore {
         this.model_type = model_type;
     }
 
-    @action.bound setSelectedDatasetIndex(dataset_id) {
-        this.selectedDatasetIndex = dataset_id;
+    @action.bound setSelectedDataset(dataset) {
+        this.selectedDatasetId = dataset.metadata.id;
     }
 
-    @action.bound saveDatasetName(key, value) {
-        this.selectedDataset[key] = value;
+    @action.bound setDatasetMetadata(key, value) {
+        this.selectedDataset.metadata[key] = value;
     }
 
     @action.bound addDataset() {
-        let form = datasetForm[this.model_type];
+        const dataset = getDefaultDataset(this.model_type),
+            id =
+                _.chain(this.datasets)
+                    .map(d => d.metadata.id)
+                    .max()
+                    .defaultTo(-1)
+                    .value() + 1;
+
+        dataset.metadata.id = id;
+        dataset.metadata.name = `Dataset #${id + 1}`;
+
+        // TODO - remove this stuff or put somewhere else?
         if (this.getModelType === mc.MODEL_DICHOTOMOUS) {
-            form["degree"] = "auto-select";
-            form["background"] = "Estimated";
+            dataset["degree"] = "auto-select";
+            dataset["background"] = "Estimated";
         }
-        form["enabled"] = true;
-        form["model_type"] = this.model_type;
-        form["dataset_id"] = this.datasets.length;
-        form["dataset_name"] = `Dataset #${this.datasets.length + 1}`;
-        form["column_names"] = columnNames[this.model_type];
-        this.selectedDatasetIndex = form["dataset_id"];
-        this.datasets.push(form);
+        dataset["enabled"] = true;
+        dataset["model_type"] = this.model_type;
+        // end TODO
+
+        this.datasets.push(dataset);
+        this.selectedDatasetId = id;
     }
 
-    @action.bound addRows() {
-        Object.keys(this.selectedDataset).map((key, i) => {
-            if (Array.isArray(this.selectedDataset[key])) {
-                this.selectedDataset[key].push("");
+    @action.bound addRow() {
+        const dataset = this.selectedDataset;
+        Object.keys(dataset).map((key, i) => {
+            if (Array.isArray(dataset[key])) {
+                dataset[key].push("");
             }
         });
     }
 
-    @action.bound deleteRow = (dataset_id, index) => {
-        let dataset = this.datasets[dataset_id];
+    @action.bound deleteRow = index => {
+        const dataset = this.selectedDataset;
         Object.keys(dataset).map(key => {
             if (Array.isArray(dataset[key])) {
                 dataset[key].splice(index, 1);
@@ -72,15 +76,16 @@ class DataStore {
         });
     };
 
-    @action.bound saveDatasetCellItem(key, value, dataset_id, index) {
-        let parsedValue = "";
+    @action.bound saveDatasetCellItem(key, value, rowIdx) {
+        let dataset = this.selectedDataset,
+            parsedValue = "";
         if (key === "ns") {
             parsedValue = parseInt(value);
         } else {
             parsedValue = parseFloat(value);
         }
         if (_.isNumber(parsedValue)) {
-            this.datasets[dataset_id][key][index] = parsedValue;
+            dataset[key][rowIdx] = parsedValue;
         }
     }
 
@@ -89,32 +94,28 @@ class DataStore {
     }
 
     @action.bound deleteDataset() {
-        var index = this.datasets.findIndex(item => item.dataset_id == this.selectedDatasetIndex);
+        var index = this.datasets.findIndex(item => item.metadata.id == this.selectedDatasetId);
         if (index > -1) {
             this.datasets.splice(index, 1);
         }
-        if (this.datasets.length) {
-            let idArray = [];
-            this.datasets.map(dataset => {
-                idArray.push(dataset.dataset_id);
-            });
-            this.selectedDatasetIndex = idArray[0];
+        this.selectedDatasetId = null;
+        if (this.datasets.length > 0) {
+            this.selectedDatasetId = this.datasets[this.datasets.length - 1].metadata.id;
         }
     }
 
-    @action.bound toggleDataset(key, value, dataset_id) {
-        this.datasets.find(dataset => dataset.dataset_id == dataset_id)[key] = value;
+    @action.bound changeDatasetAttribute(dataset_id, key, value) {
+        let dataset = this.datasets.find(dataset => dataset.metadata.id == dataset_id);
+        dataset[key] = value;
     }
 
     @action setDatasets(datasets) {
         this.datasets = datasets;
-        this.datasets.map(item => {
-            this.selectedDatasetIndex = item.dataset_id;
-        });
+        this.selectedDatasetId = datasets.length > 0 ? datasets[0].metadata.id : null;
     }
 
     @computed get selectedDataset() {
-        return this.datasets.find(item => item.dataset_id == this.selectedDatasetIndex);
+        return this.datasets.find(item => item.metadata.id === this.selectedDatasetId);
     }
 
     @computed get getMappedArray() {
@@ -134,56 +135,13 @@ class DataStore {
         return datasetInputForm;
     }
 
-    @computed get getDoseResponseData() {
-        let plotData = [];
-        let dataset = this.selectedDataset;
-        var trace1 = {
-            x: dataset.doses.slice(),
-            y: this.getResponse.slice(),
-            mode: "markers",
-            type: "scatter",
-            name: "Response",
-        };
-        plotData.push(trace1);
-        return plotData;
+    @computed get drPlotLayout() {
+        return getDrLayout(this.selectedDataset);
     }
 
-    @computed get getResponse() {
-        let responses = [];
-        let dataset = this.selectedDataset;
-        if (dataset.model_type === dc.DATA_CONTINUOUS_SUMMARY) {
-            responses = dataset.means;
-        } else if (dataset.model_type === dc.DATA_CONTINUOUS_INDIVIDUAL) {
-            responses = dataset.responses;
-        } else if (dataset.model_type === dc.DATA_DICHOTOMOUS) {
-            let ns = dataset.ns;
-            let incidences = dataset.incidences;
-            for (var i = 0; i < ns.length; i++) {
-                let response = incidences[i] / ns[i];
-                responses.push(response);
-            }
-        } else if (dataset.model_type === model_type.Nested) {
-            let incidences = dataset.incidences;
-            let litter_sizes = dataset.litter_sizes;
-            for (var j = 0; j < litter_sizes.length; j++) {
-                let response = incidences[j] / litter_sizes[j];
-                responses.push(response);
-            }
-        }
-        return responses;
-    }
-
-    @computed get getLayout() {
-        let dataset = this.selectedDataset,
-            model_type = this.selectedDataset.model_type,
-            layout = _.cloneDeep(scatter_plot_layout),
-            ylabel = yAxisTitle[model_type];
-
-        layout.title.text = dataset.dataset_name;
-        layout.xaxis.title.text = dataset.column_names["doses"];
-        layout.yaxis.title.text = dataset.column_names[ylabel];
-
-        return layout;
+    @computed get drPlotData() {
+        const dataset = this.selectedDataset;
+        return [getDrDatasetPlotData(dataset)];
     }
 
     @computed get getDatasets() {
@@ -232,7 +190,7 @@ class DataStore {
     }
 
     @computed get hasSelectedDataset() {
-        return this.selectedDatasetIndex !== null;
+        return this.selectedDatasetId !== null;
     }
 }
 

@@ -1,11 +1,6 @@
 import * as dc from "./dataConstants";
 
-export const infoTable = {
-        model_name: {label: "Model Name", value: ""},
-        dataset_name: {label: "Dataset Name", value: ""},
-        dose_response_model: {label: "Dose Response Model", value: ""},
-    },
-    model_options = {
+export const model_options = {
         CS: [
             {label: "BMR Type", name: "bmrType", value: ""},
             {label: "BMRF", name: "bmr", value: ""},
@@ -46,48 +41,6 @@ export const infoTable = {
         0: "Automatic",
         1: "Up",
         2: "Down",
-    },
-    layout = {
-        showlegend: true,
-        title: {
-            text: "Response Plot",
-            font: {
-                family: "Courier New, monospace",
-                size: 12,
-            },
-            xref: "paper",
-        },
-        xaxis: {
-            linecolor: "black",
-            linewidth: 1,
-            mirror: true,
-            title: {
-                text: "Dose (mg/kg-day)",
-                font: {
-                    family: "Courier New, monospace",
-                    size: 12,
-                    color: "#7f7f7f",
-                },
-            },
-        },
-        yaxis: {
-            linecolor: "black",
-            linewidth: 1,
-            mirror: true,
-            title: {
-                text: "Response (mg/dL)",
-                font: {
-                    family: "Courier New, monospace",
-                    size: 12,
-                    color: "#7f7f7f",
-                },
-            },
-        },
-        plot_bgcolor: "",
-        paper_bgcolor: "#eee",
-        width: 400,
-        height: 400,
-        autosize: true,
     },
     getPValue = function(dataType, results) {
         if (dataType === dc.DATA_DICHOTOMOUS) {

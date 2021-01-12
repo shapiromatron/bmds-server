@@ -25,6 +25,7 @@ class TestInputValidation:
         # add datasets, try again
         data["datasets"] = [
             {
+                "dtype": "C",
                 "metadata": {"id": 123},
                 "doses": [0, 10, 50, 150, 400],
                 "ns": [111, 142, 143, 93, 42],

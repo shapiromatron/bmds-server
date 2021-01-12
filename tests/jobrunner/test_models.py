@@ -22,8 +22,8 @@ class TestBmds3Execution:
 
         assert job.is_finished is True
         assert job.has_errors is False
-        assert job.outputs["outputs"][0]["dataset_index"] == 0
-        assert job.outputs["outputs"][0]["option_index"] == 0
+        assert job.outputs["outputs"][0]["metadata"]["dataset_index"] == 0
+        assert job.outputs["outputs"][0]["metadata"]["option_index"] == 0
         assert len(job.outputs["outputs"]) == 1
         assert len(job.outputs["outputs"][0]["models"]) == 1
         assert job.errors == []
@@ -38,8 +38,8 @@ class TestBmds3Execution:
 
         assert job.is_finished is True
         assert job.has_errors is False
-        assert job.outputs["outputs"][0]["dataset_index"] == 0
-        assert job.outputs["outputs"][0]["option_index"] == 0
+        assert job.outputs["outputs"][0]["metadata"]["dataset_index"] == 0
+        assert job.outputs["outputs"][0]["metadata"]["option_index"] == 0
         assert len(job.outputs["outputs"]) == 1
         assert len(job.outputs["outputs"][0]["models"]) == 1
         assert job.errors == []

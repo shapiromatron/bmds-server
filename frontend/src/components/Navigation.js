@@ -38,12 +38,12 @@ class Navigation extends Component {
                             Logic
                         </NavLink>
                     </li>
-                    {mainStore.getEditSettings ? (
+                    {mainStore.canEdit ? (
                         <li className="nav-item ml-auto mr-1">
                             <ShareActions />
                         </li>
                     ) : null}
-                    <li className={mainStore.getEditSettings ? "nav-item" : "nav-item ml-auto"}>
+                    <li className={mainStore.canEdit ? "nav-item" : "nav-item ml-auto"}>
                         <Actions />
                     </li>
                 </ul>

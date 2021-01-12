@@ -20,10 +20,10 @@ class ModelsCheckBoxList extends Component {
                     <table className="modelscheckbox table table-bordered table-sm">
                         <ModelsCheckBoxHeader
                             model_headers={model_headers}
-                            isEditSettings={modelsStore.getEditSettings}
+                            isEditSettings={modelsStore.canEdit}
                             enableAll={modelsStore.enableAllModels}
                         />
-                        {modelsStore.getEditSettings ? (
+                        {modelsStore.canEdit ? (
                             <ModelsCheckBox
                                 models={models}
                                 toggleModelsCheckBox={modelsStore.toggleModelsCheckBox}
@@ -44,7 +44,7 @@ ModelsCheckBoxList.propTypes = {
     toggleModelsCheckBox: PropTypes.func,
     models: PropTypes.array,
     model_headers: PropTypes.object,
-    getEditSettings: PropTypes.bool,
+    canEdit: PropTypes.bool,
     onChange: PropTypes.func,
 };
 export default ModelsCheckBoxList;

@@ -120,7 +120,7 @@ class AnalysisForm extends Component {
 }
 AnalysisForm.propTypes = {
     mainStore: PropTypes.object,
-    getEditSettings: PropTypes.func,
+    canEdit: PropTypes.func,
     analysis_name: PropTypes.string,
     changeAnalysisName: PropTypes.func,
     analysis_description: PropTypes.string,

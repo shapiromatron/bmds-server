@@ -21,7 +21,7 @@ class DatasetList extends Component {
                         })}
                     </tr>
                 </thead>
-                {dataStore.getEditSettings ? (
+                {dataStore.canEdit ? (
                     <tbody>
                         {datasets.map(dataset => {
                             return (
@@ -55,7 +55,7 @@ DatasetList.propTypes = {
     dataStore: PropTypes.object,
     getDataLength: PropTypes.func,
     getDatasetNamesHeader: PropTypes.string,
-    getEditSettings: PropTypes.func,
+    canEdit: PropTypes.func,
     getDatasets: PropTypes.string,
 };
 export default DatasetList;

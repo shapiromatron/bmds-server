@@ -152,8 +152,8 @@ class DataStore {
         return this.datasets.length;
     }
 
-    @computed get getEditSettings() {
-        return this.rootStore.mainStore.getEditSettings;
+    @computed get canEdit() {
+        return this.rootStore.mainStore.canEdit;
     }
 
     @computed get getExecutionOutputs() {

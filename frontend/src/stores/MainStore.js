@@ -242,12 +242,8 @@ class MainStore {
             });
     }
 
-    @computed get getEditSettings() {
-        let editSettings = false;
-        if ("editSettings" in this.config) {
-            editSettings = true;
-        }
-        return editSettings;
+    @computed get canEdit() {
+        return this.config.editSettings !== undefined;
     }
     @computed get getExecutionOutputs() {
         return this.executionOutputs;

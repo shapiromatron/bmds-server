@@ -17,12 +17,12 @@ class Data extends Component {
             <div className="container-fluid">
                 <div className="row mt-2">
                     <div className="col-md-2">
-                        {dataStore.getEditSettings ? <SelectModelType /> : null}
+                        {dataStore.canEdit ? <SelectModelType /> : null}
                         {dataStore.getDataLength ? <DatasetSelector store={dataStore} /> : null}
                     </div>
                     <div className="col-md-6">
                         {dataStore.hasSelectedDataset ? (
-                            dataStore.getEditSettings ? (
+                            dataStore.canEdit ? (
                                 <DatasetForm />
                             ) : (
                                 <DatasetTable dataset={dataStore.selectedDataset} />

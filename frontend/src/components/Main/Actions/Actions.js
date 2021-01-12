@@ -22,7 +22,7 @@ class Actions extends Component {
                 <div
                     className="dropdown-menu dropdown-menu-right"
                     aria-labelledby="bmdSessionActions">
-                    {mainStore.getEditSettings ? (
+                    {mainStore.canEdit ? (
                         <>
                             <h6 className="dropdown-header">Edit settings</h6>
                             <div className="dropdown-item form-group">

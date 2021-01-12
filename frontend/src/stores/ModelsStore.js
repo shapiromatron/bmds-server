@@ -15,8 +15,8 @@ class ModelsStore {
     @observable total_weight = 100;
     @observable prior_weight_models = [];
 
-    @computed get getEditSettings() {
-        return this.rootStore.mainStore.getEditSettings;
+    @computed get canEdit() {
+        return this.rootStore.mainStore.canEdit;
     }
 
     @action setDefaultsByDatasetType() {

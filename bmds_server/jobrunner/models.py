@@ -8,6 +8,7 @@ from typing import Dict, List, Optional
 
 import bmds
 from bmds.bmds3.sessions import BmdsSession
+from bmds.bmds3.recommender.recommender import RecommenderSettings
 from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.db import connection, models
@@ -246,3 +247,13 @@ class Job(models.Model):
             )
             return json.loads(outputs)
         return None
+
+    def default_input(self) -> Dict:
+        return {
+            "bmds_version": "BMDS330",
+            "dataset_type": "D",
+            "logic": RecommenderSettings.build_default().dict(),
+            "models": {},
+            "options": [],
+            "datasets": [],
+        }

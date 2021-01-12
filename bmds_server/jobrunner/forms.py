@@ -10,6 +10,10 @@ class CreateJobForm(forms.ModelForm):
         model = models.Job
         fields: Tuple[str, ...] = ()
 
+    def save(self, commit=True):
+        self.instance.inputs = self.instance.default_input()
+        return super().save(commit=commit)
+
 
 class JobStatusForm(forms.Form):
     id = forms.CharField()

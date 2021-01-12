@@ -17,6 +17,11 @@ class JobViewset(mixins.CreateModelMixin, mixins.RetrieveModelMixin, viewsets.Ge
         content = "Outputs processing; not ready yet."
         return Response(content, status=status.HTTP_204_NO_CONTENT)
 
+    @action(detail=False, url_path="default")
+    def default(self, request, *args, **kwargs):
+        data = models.Job().default_input()
+        return Response(data)
+
     @action(
         detail=True, methods=("patch",), url_path="patch-inputs",
     )

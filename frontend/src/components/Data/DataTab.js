@@ -15,7 +15,7 @@ class Data extends Component {
         const {dataStore} = this.props;
         return (
             <div className="container-fluid">
-                <div className="row mt-2">
+                <div className="row">
                     <div className="col-md-2">
                         {dataStore.canEdit ? <SelectModelType /> : null}
                         {dataStore.getDataLength ? <DatasetSelector store={dataStore} /> : null}

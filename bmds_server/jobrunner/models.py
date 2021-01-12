@@ -252,8 +252,8 @@ class Job(models.Model):
         return {
             "bmds_version": "BMDS330",
             "dataset_type": "D",
-            "logic": RecommenderSettings.build_default().dict(),
+            "datasets": [],
             "models": {},
             "options": [],
-            "datasets": [],
+            "recommender": RecommenderSettings.build_default().dict(),
         }

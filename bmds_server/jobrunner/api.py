@@ -17,6 +17,11 @@ class JobViewset(mixins.CreateModelMixin, mixins.RetrieveModelMixin, viewsets.Ge
         content = "Outputs processing; not ready yet."
         return Response(content, status=status.HTTP_204_NO_CONTENT)
 
+    @action(detail=False, url_path="default")
+    def default(self, request, *args, **kwargs):
+        data = models.Job().default_input()
+        return Response(data)
+
     @action(
         detail=True, methods=("patch",), url_path="patch-inputs",
     )
@@ -41,6 +46,7 @@ class JobViewset(mixins.CreateModelMixin, mixins.RetrieveModelMixin, viewsets.Ge
         except ValidationError as err:
             raise exceptions.ValidationError(err.message)
 
+        instance.reset_execution()
         instance.inputs = data
         instance.save()
 
@@ -65,6 +71,7 @@ class JobViewset(mixins.CreateModelMixin, mixins.RetrieveModelMixin, viewsets.Ge
             return Response("Execution already started", status_code=400)
 
         # start job execution
+        instance.reset_execution()
         instance.start_execute()
 
         instance.refresh_from_db()
@@ -105,6 +112,7 @@ class JobViewset(mixins.CreateModelMixin, mixins.RetrieveModelMixin, viewsets.Ge
 
         # reset instance
         instance.reset_execution()
+        instance.save()
 
         # fetch from db and get the latest
         instance.refresh_from_db()

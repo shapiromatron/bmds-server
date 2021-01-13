@@ -26,14 +26,19 @@ class OutputStore {
         this.selectedDatasetIndex = dataset_id;
     }
 
+    @computed get canEdit() {
+        return this.rootStore.mainStore.canEdit;
+    }
+
     @computed get outputs() {
         return this.rootStore.mainStore.getExecutionOutputs;
     }
     @computed get selectedOutput() {
-        if (this.outputs === null) {
+        const outputs = this.outputs;
+        if (!_.isObject(outputs)) {
             return null;
         }
-        return this.outputs[this.selectedOutputIndex];
+        return outputs[this.selectedOutputIndex];
     }
     @computed get selectedDataset() {
         const dataset_index = this.selectedOutput.metadata.dataset_index;

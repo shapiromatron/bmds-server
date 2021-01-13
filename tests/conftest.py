@@ -1,6 +1,7 @@
 from pathlib import Path
 
 import pytest
+from bmds.bmds3.recommender import RecommenderSettings
 from django.core.management import call_command
 
 
@@ -31,12 +32,12 @@ def bmds3_complete_continuous():
         "models": {"frequentist_restricted": ["Power"]},
         "datasets": [
             {
-                "dtype": "D",
+                "dtype": "C",
                 "metadata": {"id": 123},
-                "doses": [0, 10, 50, 150, 400],
-                "ns": [111, 142, 143, 93, 42],
-                "means": [2.112, 2.095, 1.956, 1.587, 1.254],
-                "stdevs": [0.235, 0.209, 0.231, 0.263, 0.159],
+                "doses": [0, 50, 100, 150, 200],
+                "ns": [100, 100, 100, 100, 100],
+                "means": [10, 20, 30, 40, 50],
+                "stdevs": [3, 4, 5, 6, 7],
             }
         ],
         "options": [
@@ -51,6 +52,7 @@ def bmds3_complete_continuous():
                 "background": "Estimated",
             }
         ],
+        "recommender": RecommenderSettings.build_default().dict(),
     }
 
 
@@ -77,4 +79,5 @@ def bmds3_complete_dichotomous():
                 "background": "Estimated",
             }
         ],
+        "recommender": RecommenderSettings.build_default().dict(),
     }

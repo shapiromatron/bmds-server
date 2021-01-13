@@ -34,7 +34,7 @@ class AnalysisForm extends Component {
                             }></textarea>
                     </div>
                     <div className="form-group">
-                        <label>Select Model Type</label>
+                        <label>Model Type</label>
                         <select
                             id="dataset-type"
                             className="form-control"
@@ -120,17 +120,5 @@ class AnalysisForm extends Component {
 }
 AnalysisForm.propTypes = {
     mainStore: PropTypes.object,
-    getEditSettings: PropTypes.func,
-    analysis_name: PropTypes.string,
-    changeAnalysisName: PropTypes.func,
-    analysis_description: PropTypes.string,
-    changeAnalysisDescription: PropTypes.func,
-    changeDatasetType: PropTypes.func,
-    dataset_type: PropTypes.string,
-    getModelTypes: PropTypes.func,
-    saveAnalysis: PropTypes.func,
-    isReadyToExecute: PropTypes.bool,
-    executeAnalysis: PropTypes.func,
-    isExecuting: PropTypes.bool,
 };
 export default AnalysisForm;

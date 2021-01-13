@@ -17,6 +17,7 @@ urlpatterns = [
     path("job/q/", views.JobQuery.as_view(), name="job_query"),
     path("job/<uuid:pk>/", views.JobDetail.as_view(), name="job"),
     path("job/<uuid:pk>/<str:password>/", views.JobDetail.as_view(), name="job_edit"),
+    path("job/<uuid:pk>/<str:password>/renew/", views.JobRenew.as_view(), name="job_renew"),
     path(f"{admin_url}healthcheck/", views.Healthcheck.as_view(), name="healthcheck",),
     path(admin_url, admin.site.urls),
 ]

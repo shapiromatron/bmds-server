@@ -7,10 +7,11 @@ from datetime import timedelta
 from typing import Dict, List, Optional
 
 import bmds
+from bmds.bmds3.recommender.recommender import RecommenderSettings
 from bmds.bmds3.sessions import BmdsSession
 from django.conf import settings
 from django.core.exceptions import ValidationError
-from django.db import connection, models
+from django.db import models
 from django.urls import reverse
 from django.utils.timezone import now
 
@@ -19,16 +20,23 @@ from . import tasks, transforms, utils, validators
 logger = logging.getLogger(__name__)
 
 
+def get_deletion_date(current_deletion_date=None):
+    date = now() + timedelta(days=settings.DAYS_TO_KEEP_JOBS)
+    if current_deletion_date:
+        return max(current_deletion_date, date)
+    return date
+
+
 class Job(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     password = models.CharField(max_length=12, default=utils.random_string, editable=False)
     inputs = models.JSONField(default=dict)
     outputs = models.JSONField(default=dict, blank=True)
-    preferences = models.JSONField(default=dict, blank=True)
     errors = models.JSONField(default=dict, blank=True)
     created = models.DateTimeField(auto_now_add=True)
     started = models.DateTimeField(null=True, blank=True)
     ended = models.DateTimeField(null=True, blank=True)
+    deletion_date = models.DateTimeField(null=True, blank=True, default=get_deletion_date)
 
     class Meta:
         ordering = ("created",)
@@ -54,6 +62,9 @@ class Job(models.Model):
 
     def get_edit_url(self):
         return reverse("job_edit", args=(str(self.id), self.password))
+
+    def get_renew_url(self):
+        return reverse("job_renew", args=(str(self.id), self.password))
 
     def get_excel_url(self):
         return reverse("api:job-excel", args=(str(self.id),))
@@ -82,13 +93,9 @@ class Job(models.Model):
 
     @classmethod
     def delete_old_jobs(cls):
-        oldest_to_keep = now() - timedelta(days=settings.DAYS_TO_KEEP_JOBS)
-        qs = cls.objects.filter(created__lt=oldest_to_keep)
+        qs = cls.objects.filter(deletion_date=now())
         logger.info(f"Removing {qs.count()} old BMDS jobs")
         qs.delete()
-        with connection.cursor() as cursor:
-            # required for sqlite3 to actually delete data
-            cursor.execute("vacuum")
 
     @classmethod
     def _build_dataset(
@@ -155,10 +162,6 @@ class Job(models.Model):
                 self.save()
                 break
 
-    @property
-    def deletion_date(self):
-        return self.created + timedelta(days=settings.DAYS_TO_KEEP_JOBS)
-
     def try_execute(self):
         try:
             self.execute()
@@ -219,18 +222,23 @@ class Job(models.Model):
         self.outputs = obj
         self.errors = [out["error"] for out in outputs if "error" in out]
         self.ended = now()
+        self.deletion_date = get_deletion_date()
         self.save()
 
     def reset_execution(self):
+        """
+        Update all modeling results and execution fields to a state where the job has not yet been
+        executed.
+        """
         self.started = None
         self.ended = None
         self.outputs = {}
         self.errors = {}
-        self.save()
 
     def handle_execution_error(self, err):
         self.errors = err
         self.ended = now()
+        self.deletion_date = None  # don't delete; save for troubleshooting
         self.save()
 
     def get_outputs_json(self) -> Optional[Dict]:
@@ -243,3 +251,28 @@ class Job(models.Model):
             )
             return json.loads(outputs)
         return None
+
+    def default_input(self) -> Dict:
+        return {
+            "bmds_version": "BMDS330",
+            "dataset_type": "D",
+            "datasets": [],
+            "models": {},
+            "options": [],
+            "recommender": RecommenderSettings.build_default().dict(),
+        }
+
+    def renew(self):
+        self.deletion_date = get_deletion_date(self.deletion_date)
+
+    @property
+    def deletion_date_str(self) -> Optional[str]:
+        if self.deletion_date is None:
+            return None
+        return self.deletion_date.strftime("%B %d, %Y")
+
+    @property
+    def days_until_deletion(self) -> Optional[int]:
+        if self.deletion_date is None:
+            return None
+        return (self.deletion_date - now()).days

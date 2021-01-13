@@ -11,11 +11,11 @@ class ResultsTable extends Component {
         const store = this.props.outputStore,
             dataset = store.selectedDataset,
             {models} = store.selectedOutput,
-            selectedModelIndex = store.selectedOutput.selected.model_index;
+            {model_index, notes} = store.selectedOutput.selected;
 
         return (
-            <table className="table table-bordered result table-sm">
-                <thead>
+            <table className="table result table-sm">
+                <thead className="table-bordered">
                     <tr className="table-primary">
                         <th>Model</th>
                         <th>BMD</th>
@@ -25,14 +25,14 @@ class ResultsTable extends Component {
                         <th>p-value</th>
                     </tr>
                 </thead>
-                <tbody>
+                <tbody className="table-bordered">
                     {models.map((model, idx) => {
                         return (
                             <tr
                                 key={idx}
                                 onMouseEnter={() => store.drPlotAddHover(model)}
                                 onMouseLeave={() => store.drPlotRemoveHover()}
-                                className={selectedModelIndex == idx ? "table-success" : ""}>
+                                className={model_index == idx ? "table-success" : ""}>
                                 <td>
                                     <a
                                         href="#"
@@ -52,6 +52,15 @@ class ResultsTable extends Component {
                         );
                     })}
                 </tbody>
+                {notes ? (
+                    <tfoot>
+                        <tr>
+                            <td colSpan="7" className="text-muted">
+                                {notes}
+                            </td>
+                        </tr>
+                    </tfoot>
+                ) : null}
             </table>
         );
     }

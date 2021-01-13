@@ -11,8 +11,8 @@ class OptionsStore {
     @observable optionsList = [];
     @observable headers = [];
 
-    @computed get getEditSettings() {
-        return this.rootStore.mainStore.getEditSettings;
+    @computed get canEdit() {
+        return this.rootStore.mainStore.canEdit;
     }
 
     @action.bound setDefaultsByDatasetType() {

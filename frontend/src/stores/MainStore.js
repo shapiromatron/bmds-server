@@ -47,9 +47,6 @@ class MainStore {
     @computed get getEnabledDatasets() {
         return this.rootStore.dataStore.getEnabledDatasets;
     }
-    @computed get getLogic() {
-        return this.rootStore.logicStore.getLogic;
-    }
     @computed get getPayload() {
         const editKey = this.config.editSettings ? this.config.editSettings.editKey : null;
         return {
@@ -63,7 +60,7 @@ class MainStore {
                 models: this.getEnabledModels,
                 datasets: this.getEnabledDatasets,
                 options: this.getOptions,
-                logic: this.getLogic,
+                recommender: this.rootStore.logicStore.logic,
             },
         };
     }
@@ -215,7 +212,7 @@ class MainStore {
         this.rootStore.optionsStore.setOptions(inputs.options);
         this.rootStore.dataStore.setDatasets(inputs.datasets);
         this.rootStore.modelsStore.setModels(inputs.models);
-        this.rootStore.logicStore.setLogic(inputs);
+        this.rootStore.logicStore.setLogic(inputs.recommender);
         this.isUpdateComplete = true;
     }
     @action.bound loadAnalysisFromFile(file) {
@@ -242,12 +239,8 @@ class MainStore {
             });
     }
 
-    @computed get getEditSettings() {
-        let editSettings = false;
-        if ("editSettings" in this.config) {
-            editSettings = true;
-        }
-        return editSettings;
+    @computed get canEdit() {
+        return this.config.editSettings !== undefined;
     }
     @computed get getExecutionOutputs() {
         return this.executionOutputs;

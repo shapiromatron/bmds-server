@@ -13,8 +13,10 @@ import "./Output.css";
 @observer
 class Output extends Component {
     render() {
-        const {outputStore} = this.props;
-        if (outputStore.selectedOutput === null) {
+        const {outputStore} = this.props,
+            {canEdit, selectedOutput} = outputStore;
+
+        if (selectedOutput === null) {
             return (
                 <div className="container-fluid">
                     <p>No results available.</p>
@@ -22,10 +24,10 @@ class Output extends Component {
             );
         }
 
-        if ("error" in outputStore.selectedOutput) {
+        if ("error" in selectedOutput) {
             return (
                 <div className="container-fluid">
-                    <pre>{outputStore.selectedOutput.error}</pre>
+                    <pre>{selectedOutput.error}</pre>
                 </div>
             );
         }
@@ -39,7 +41,7 @@ class Output extends Component {
                     <div className="col col-lg-6">
                         <DatasetTable dataset={outputStore.selectedDataset} />
                         <ResultsTable />
-                        <SelectModel />
+                        {canEdit ? <SelectModel /> : null}
                     </div>
                     <div className="col col-lg-4">
                         <DoseResponsePlot

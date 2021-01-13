@@ -1,7 +1,9 @@
 from typing import Dict
 
 import bmds
+from bmds.bmds3.recommender import RecommenderSettings
 
+from ...common.validation import pydantic_validate
 from .datasets import validate_datasets
 from .models import validate_models
 from .options import validate_options
@@ -39,6 +41,6 @@ def validate_input(data: Dict, partial: bool = False) -> None:
     if options or (partial is False and bmds_version in bmds.constants.BMDS_THREES):
         validate_options(dataset_type, data.get("options"))
 
-
-def validate_preferences(data) -> None:
-    pass
+    recommender = data.get("recommender", {})
+    if recommender or partial is False:
+        pydantic_validate(recommender, RecommenderSettings)

@@ -21,7 +21,7 @@ class Main extends Component {
                         <div className="row">
                             <div className="col-lg-4 analysis">
                                 <div className="mb-2">
-                                    {mainStore.getEditSettings ? (
+                                    {mainStore.canEdit ? (
                                         <AnalysisForm />
                                     ) : (
                                         <AnalysisFormReadOnly />

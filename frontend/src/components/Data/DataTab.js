@@ -15,14 +15,14 @@ class Data extends Component {
         const {dataStore} = this.props;
         return (
             <div className="container-fluid">
-                <div className="row mt-2">
+                <div className="row">
                     <div className="col-md-2">
-                        {dataStore.getEditSettings ? <SelectModelType /> : null}
+                        {dataStore.canEdit ? <SelectModelType /> : null}
                         {dataStore.getDataLength ? <DatasetSelector store={dataStore} /> : null}
                     </div>
                     <div className="col-md-6">
                         {dataStore.hasSelectedDataset ? (
-                            dataStore.getEditSettings ? (
+                            dataStore.canEdit ? (
                                 <DatasetForm />
                             ) : (
                                 <DatasetTable dataset={dataStore.selectedDataset} />

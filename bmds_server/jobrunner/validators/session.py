@@ -32,16 +32,6 @@ base_schema = {
             "type": "array",
         },
         "models": {"description": "An array of models which should be used"},
-        "immediate": {
-            "description": "Should execution start immediately (and potentially block other requests)",  # noqa: E501
-            "type": "boolean",
-            "default": False,
-        },
-        "recommend": {
-            "description": "Should best fitting model be recommended?",
-            "type": "boolean",
-            "default": True,
-        },
     },
     "required": ["bmds_version", "dataset_type"],
 }

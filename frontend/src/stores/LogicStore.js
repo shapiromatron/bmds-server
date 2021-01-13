@@ -1,31 +1,35 @@
 import {observable, action, computed} from "mobx";
-import {logic} from "../constants/logicConstants";
-import _ from "lodash";
 
 class LogicStore {
+    @observable logic = null;
+
     constructor(rootStore) {
         this.rootStore = rootStore;
-        this.setDefaultState();
     }
-    @observable logic = {};
 
-    @action.bound setDefaultState() {
-        this.logic = _.cloneDeep(logic);
+    @computed get canEdit() {
+        return this.rootStore.mainStore.canEdit;
     }
-    @computed get getLogic() {
-        return this.logic;
+
+    @action.bound setLogic(data) {
+        this.logic = data;
     }
-    @action.bound changeDecisionLogicValues(key, value) {
+    @action.bound async resetLogic() {
+        const url = "/api/v1/job/default/";
+        await fetch(url, {
+            method: "GET",
+            mode: "cors",
+        })
+            .then(response => response.json())
+            .then(json => {
+                this.logic = json.recommender;
+            });
+    }
+    @action.bound updateLogic(key, value) {
         this.logic[key] = value;
     }
-    @action.bound changeLogicValues(rule, key, value) {
-        this.logic.rules[rule][key] = value;
-    }
-    @action setLogic(inputs) {
-        this.logic = inputs.logic;
-    }
-    @computed get getEditSettings() {
-        return this.rootStore.mainStore.getEditSettings;
+    @action.bound updateRule(ruleIndex, key, value) {
+        this.logic.rules[ruleIndex][key] = value;
     }
 }
 export default LogicStore;

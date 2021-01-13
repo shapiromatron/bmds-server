@@ -7,16 +7,13 @@ from . import models, tasks
 
 @admin.register(models.Job)
 class JobAdmin(admin.ModelAdmin):
-    list_display = (
-        "id",
-        "view_url",
-        "edit_url",
-        "created",
+    list_display = ("id", "view_url", "edit_url", "created", "is_finished", "deletion_date")
+    readonly_fields = ("password",)
+    list_filter = (
         "started",
         "ended",
-        "is_finished",
+        "deletion_date",
     )
-    readonly_fields = ("password",)
 
     def view_url(self, obj):
         return format_html(f"<a href='{obj.get_absolute_url()}'>View</a>")

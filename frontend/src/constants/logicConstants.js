@@ -1,168 +1,4 @@
-const headers = [
-    "Test Description",
-    "Continuous",
-    "Dichotomous",
-    "Nested",
-    "Test Threshold",
-    "Bin Placement if Test is Failed",
-    "Notes to Show",
-];
-
-const decision_logic = {
-    recommend_viable: "Recommend model in viable Bin",
-    recommend_questionable: "Recommended model in Questionable Bin",
-    sufficiently_close_bmdl:
-        'BMDL range deemed "sufficiently close" to use lowest AIC instead of lowest BMDL in viable models',
-};
-
-const ruleOrder = [
-    "bmd_missing",
-    "bmdl_missing",
-    "bmdu_missing",
-    "aic_missing",
-    "roi_missing",
-    "variance_type",
-    "variance_fit",
-    "gof",
-    "gof_cancer",
-    "bmd_bmdl_ratio_fail",
-    "bmd_bmdl_ratio_warn",
-    "roi_large",
-    "warnings",
-    "high_bmd",
-    "high_bmdl",
-    "low_bmd_warn",
-    "low_bmdl_warn",
-    "low_bmd_fail",
-    "low_bmdl_fail",
-    "control_residual_high",
-    "control_stdev_fit",
-    "dof_zero",
-];
-
-const long_name = {
-    bmd_missing: {
-        notes: val => "BMD not estimated",
-        name: "BMD calculated",
-    },
-    bmdl_missing: {
-        name: "BMDL calculated",
-        notes: val => "BMDL not estimated",
-    },
-    bmdu_missing: {
-        name: "BMDU calculated",
-        notes: val => "BMDU not estimated",
-    },
-    aic_missing: {
-        name: "AIC calculated",
-        notes: val => "AIC not estimated",
-    },
-    roi_missing: {
-        name: "Residual of Interest calculated",
-        notes: val => "To Do",
-    },
-    variance_type: {
-        notes: val => `Constant variance test failed (Test 2 p-value < ${val})`,
-        name: "Constant Variance",
-    },
-    variance_fit: {
-        name: "Non-Constant Variance",
-        notes: val => `Non-Constant variance test failed (Test 3 p-value < ${val})`,
-    },
-    gof: {
-        name: "Goodness of fit p-test",
-        notes: val => `Goodness of fit p-value < ${val} `,
-    },
-    gof_cancer: {
-        name: "Goodness of fit p-test (cancer)",
-        notes: val => `BGoodness of fit p-value < ${val}`,
-    },
-    bmd_bmdl_ratio_fail: {
-        name: "Ratio of BMD/BMDL (serious)",
-        notes: val => `BMD/BMDL ratio > ${val}`,
-    },
-    bmd_bmdl_ratio_warn: {
-        name: `Ratio of BMD/BMDL (caution)`,
-        notes: val => `BMD/BMDL ratio > ${val}`,
-    },
-    roi_large: {
-        name: "Abs(Residual of interest) too large",
-        notes: val => `|Residual for Dose Group Near BMD| > ${val}`,
-    },
-    warnings: {
-        name: "BMDS model Warning",
-        notes: val => "BMD output file included warning",
-    },
-    high_bmd: {
-        name: "BMD higher than higher dose",
-        notes: val => `BMD ${val}x higher than maximum dose`,
-    },
-    high_bmdl: {
-        name: "BMDL higher than highest dose",
-        notes: val => `BMDL ${val}x higher than maximum dose`,
-    },
-    low_bmd_warn: {
-        name: "BMD lower than lowest dose (warning)",
-        notes: val => `BMD ${val}x lower than lowest non-zero dose`,
-    },
-    low_bmdl_warn: {
-        name: "BMDL lower than lowest dose (warning)",
-        notes: val => `BMDL ${val}x lower than lowest non-zero dose`,
-    },
-    low_bmd_fail: {
-        name: "BMD lower than lowest dose (serious)",
-        notes: val => `BMD ${val}x lower than lowest non-zero dose`,
-    },
-    low_bmdl_fail: {
-        name: "BMDL lower than lowest dose (serious)",
-        notes: val => `BMDL ${val}x lower than lowest non-zero dose`,
-    },
-    control_residual_high: {
-        name: "Abs(Residual at control) too large",
-        notes: val => `|Residual at control| > ${val}`,
-    },
-    control_stdev_fit: {
-        name: "Poor control dose std. dev.",
-        notes: val => `Modeled control response std. dev. > |${val}| actual response std. dev`,
-    },
-    dof_zero: {
-        name: "D.O.F equal 0",
-        notes: val => "d.f=0, saturated model (Goodness of fit test cannot be calculated)",
-    },
-};
-
-const disabled_properties = [
-    "bmd_missing-threshold",
-    "bmdl_missing-threshold",
-    "bmdu_missing-threshold",
-    "aic_missing-threshold",
-    "variance_type-dichotomous",
-    "variance_type-nested",
-    "variance_fit-dichotomous",
-    "variance_fit-nested",
-    "gof_cancer-continuous",
-    "gof_cancer-nested",
-    "control_stdev_fit-dichotomous",
-    "control_stdev_fit-nested",
-    "warnings-continuous",
-    "warnings-dichotomous",
-    "warnings-nested",
-    "warnings-threshold",
-    "warnings-failure_bin",
-    "dof_zero-threshold",
-];
-
-const BINS = Object.freeze({
-        NO_CHANGE: 0,
-        WARNING: 1,
-        FAILURE: 2,
-    }),
-    BIN_NAMES = {
-        [BINS.NO_CHANGE]: "No bin change (warning)",
-        [BINS.WARNING]: "Questionable bin",
-        [BINS.FAILURE]: "Unusable bin",
-    },
-    RULE_NAMES = Object.freeze({
+export const RULES = Object.freeze({
         BMD_MISSING: "bmd_missing",
         BMDL_MISSING: "bmdl_missing",
         BMDU_MISSING: "bmdu_missing",
@@ -185,168 +21,216 @@ const BINS = Object.freeze({
         CONTROL_RESIDUAL_HIGH: "control_residual_high",
         CONTROL_STDEV_FIT: "control_stdev_fit",
         DOF_ZERO: "dof_zero",
-    });
-
-const logic = {
-    recommend_viable: true,
-    recommend_questionable: false,
-    sufficiently_close_bmdl: 3,
-    rules: {
-        [RULE_NAMES.BMD_MISSING]: {
-            enabled_continuous: true,
-            enabled_dichotomous: true,
-            enabled_nested: true,
-            threshold: "", // "" or float
-            failure_bin: BINS.FAILURE,
+    }),
+    ruleOrder = [
+        RULES.BMD_MISSING,
+        RULES.BMDL_MISSING,
+        RULES.BMDU_MISSING,
+        RULES.AIC_MISSING,
+        RULES.ROI_MISSING,
+        RULES.VARIANCE_TYPE,
+        RULES.VARIANCE_FIT,
+        RULES.GOF,
+        RULES.GOF_CANCER,
+        RULES.BMD_BMDL_RATIO_FAIL,
+        RULES.BMD_BMDL_RATIO_WARN,
+        RULES.ROI_LARGE,
+        RULES.WARNINGS,
+        RULES.HIGH_BMD,
+        RULES.HIGH_BMDL,
+        RULES.LOW_BMD_WARN,
+        RULES.LOW_BMDL_WARN,
+        RULES.LOW_BMD_FAIL,
+        RULES.LOW_BMDL_FAIL,
+        RULES.CONTROL_RESIDUAL_HIGH,
+        RULES.CONTROL_STDEV_FIT,
+        RULES.DOF_ZERO,
+    ],
+    ruleLookups = {
+        [RULES.BMD_MISSING]: {
+            notes: val => "BMD not estimated",
+            name: "BMD calculated",
+            hasThreshold: false,
+            enabledContinuous: true,
+            enabledDichotomous: true,
+            enabledNested: true,
         },
-        [RULE_NAMES.BMDL_MISSING]: {
-            enabled_continuous: true,
-            enabled_dichotomous: true,
-            enabled_nested: true,
-            threshold: "", // "" or float
-            failure_bin: BINS.FAILURE,
+        [RULES.BMDL_MISSING]: {
+            name: "BMDL calculated",
+            notes: val => "BMDL not estimated",
+            hasThreshold: false,
+            enabledContinuous: true,
+            enabledDichotomous: true,
+            enabledNested: true,
         },
-        [RULE_NAMES.BMDU_MISSING]: {
-            enabled_continuous: false,
-            enabled_dichotomous: false,
-            enabled_nested: false,
-            threshold: "", // "" or float
-            failure_bin: BINS.WARNING,
+        [RULES.BMDU_MISSING]: {
+            name: "BMDU calculated",
+            notes: val => "BMDU not estimated",
+            hasThreshold: false,
+            enabledContinuous: true,
+            enabledDichotomous: true,
+            enabledNested: true,
         },
-        [RULE_NAMES.AIC_MISSING]: {
-            enabled_continuous: true,
-            enabled_dichotomous: true,
-            enabled_nested: true,
-            threshold: "", // "" or float
-            failure_bin: BINS.FAILURE,
+        [RULES.AIC_MISSING]: {
+            name: "AIC calculated",
+            notes: val => "AIC not estimated",
+            hasThreshold: false,
+            enabledContinuous: true,
+            enabledDichotomous: true,
+            enabledNested: true,
         },
-        [RULE_NAMES.ROI_MISSING]: {
-            enabled_continuous: true,
-            enabled_dichotomous: true,
-            enabled_nested: true,
-            threshold: "", // "" or float
-            failure_bin: BINS.FAILURE,
+        [RULES.ROI_MISSING]: {
+            name: "Residual of Interest calculated",
+            notes: val => "To Do",
+            hasThreshold: false,
+            enabledContinuous: true,
+            enabledDichotomous: true,
+            enabledNested: true,
         },
-        [RULE_NAMES.VARIANCE_TYPE]: {
-            enabled_continuous: true,
-            enabled_dichotomous: false,
-            enabled_nested: false,
-            threshold: 0.05, // "" or float
-            failure_bin: BINS.WARNING,
+        [RULES.VARIANCE_TYPE]: {
+            notes: val => `Constant variance test failed (Test 2 p-value < ${val})`,
+            name: "Constant Variance",
+            hasThreshold: true,
+            enabledContinuous: true,
+            enabledDichotomous: false,
+            enabledNested: false,
         },
-        [RULE_NAMES.VARIANCE_FIT]: {
-            enabled_continuous: true,
-            enabled_dichotomous: false,
-            enabled_nested: false,
-            threshold: 0.05, // "" or float
-            failure_bin: BINS.NO_CHANGE,
+        [RULES.VARIANCE_FIT]: {
+            name: "Non-Constant Variance",
+            notes: val => `Non-Constant variance test failed (Test 3 p-value < ${val})`,
+            hasThreshold: true,
+            enabledContinuous: true,
+            enabledDichotomous: false,
+            enabledNested: false,
         },
-        [RULE_NAMES.GOF]: {
-            enabled_continuous: true,
-            enabled_dichotomous: true,
-            enabled_nested: true,
-            threshold: 0.1, // "" or float
-            failure_bin: BINS.NO_CHANGE,
+        [RULES.GOF]: {
+            name: "Goodness of fit p-test",
+            notes: val => `Goodness of fit p-value < ${val} `,
+            hasThreshold: true,
+            enabledContinuous: true,
+            enabledDichotomous: true,
+            enabledNested: true,
         },
-        [RULE_NAMES.GOF_CANCER]: {
-            enabled_continuous: false,
-            enabled_dichotomous: true,
-            enabled_nested: false,
-            threshold: 0.05, // "" or float
-            failure_bin: BINS.NO_CHANGE,
+        [RULES.GOF_CANCER]: {
+            name: "Goodness of fit p-test (cancer)",
+            notes: val => `BGoodness of fit p-value < ${val}`,
+            hasThreshold: true,
+            enabledContinuous: false,
+            enabledDichotomous: true,
+            enabledNested: false,
         },
-        [RULE_NAMES.BMD_BMDL_RATIO_FAIL]: {
-            enabled_continuous: true,
-            enabled_dichotomous: true,
-            enabled_nested: true,
-            threshold: 20, // "" or float
-            failure_bin: BINS.NO_CHANGE,
+        [RULES.BMD_BMDL_RATIO_FAIL]: {
+            name: "Ratio of BMD/BMDL (serious)",
+            notes: val => `BMD/BMDL ratio > ${val}`,
+            hasThreshold: true,
+            enabledContinuous: true,
+            enabledDichotomous: true,
+            enabledNested: true,
         },
-        [RULE_NAMES.BMD_BMDL_RATIO_WARN]: {
-            enabled_continuous: true,
-            enabled_dichotomous: true,
-            enabled_nested: true,
-            threshold: 3, // "" or float
-            failure_bin: BINS.WARNING,
+        [RULES.BMD_BMDL_RATIO_WARN]: {
+            name: `Ratio of BMD/BMDL (caution)`,
+            notes: val => `BMD/BMDL ratio > ${val}`,
+            hasThreshold: true,
+            enabledContinuous: true,
+            enabledDichotomous: true,
+            enabledNested: true,
         },
-        [RULE_NAMES.ROI_LARGE]: {
-            enabled_continuous: true,
-            enabled_dichotomous: true,
-            enabled_nested: true,
-            threshold: 2, // "" or float
-            failure_bin: BINS.NO_CHANGE,
+        [RULES.ROI_LARGE]: {
+            name: "Abs(Residual of interest) too large",
+            notes: val => `|Residual for Dose Group Near BMD| > ${val}`,
+            hasThreshold: true,
+            enabledContinuous: true,
+            enabledDichotomous: true,
+            enabledNested: true,
         },
-        [RULE_NAMES.WARNINGS]: {
-            enabled_continuous: false,
-            enabled_dichotomous: false,
-            enabled_nested: false,
-            threshold: "", // "" or float
-            failure_bin: BINS.WARNING,
+        [RULES.WARNINGS]: {
+            name: "BMDS model Warning",
+            notes: val => "BMD output file included warning",
+            hasThreshold: false,
+            enabledContinuous: false,
+            enabledDichotomous: false,
+            enabledNested: false,
         },
-        [RULE_NAMES.HIGH_BMD]: {
-            enabled_continuous: true,
-            enabled_dichotomous: true,
-            enabled_nested: true,
-            threshold: 1, // "" or float
-            failure_bin: BINS.WARNING,
+        [RULES.HIGH_BMD]: {
+            name: "BMD higher than higher dose",
+            notes: val => `BMD ${val}x higher than maximum dose`,
+            hasThreshold: true,
+            enabledContinuous: true,
+            enabledDichotomous: true,
+            enabledNested: true,
         },
-        [RULE_NAMES.HIGH_BMDL]: {
-            enabled_continuous: true,
-            enabled_dichotomous: true,
-            enabled_nested: true,
-            threshold: 1, // "" or float
-            failure_bin: BINS.WARNING,
+        [RULES.HIGH_BMDL]: {
+            name: "BMDL higher than highest dose",
+            notes: val => `BMDL ${val}x higher than maximum dose`,
+            hasThreshold: true,
+            enabledContinuous: true,
+            enabledDichotomous: true,
+            enabledNested: true,
         },
-        [RULE_NAMES.LOW_BMD_WARN]: {
-            enabled_continuous: true,
-            enabled_dichotomous: true,
-            enabled_nested: true,
-            threshold: 3, // "" or float
-            failure_bin: BINS.WARNING,
+        [RULES.LOW_BMD_WARN]: {
+            name: "BMD lower than lowest dose (warning)",
+            notes: val => `BMD ${val}x lower than lowest non-zero dose`,
+            hasThreshold: true,
+            enabledContinuous: true,
+            enabledDichotomous: true,
+            enabledNested: true,
         },
-        [RULE_NAMES.LOW_BMDL_WARN]: {
-            enabled_continuous: true,
-            enabled_dichotomous: true,
-            enabled_nested: true,
-            threshold: 3, // "" or float
-            failure_bin: BINS.WARNING,
+        [RULES.LOW_BMDL_WARN]: {
+            name: "BMDL lower than lowest dose (warning)",
+            notes: val => `BMDL ${val}x lower than lowest non-zero dose`,
+            hasThreshold: true,
+            enabledContinuous: true,
+            enabledDichotomous: true,
+            enabledNested: true,
         },
-        [RULE_NAMES.LOW_BMD_FAIL]: {
-            enabled_continuous: true,
-            enabled_dichotomous: true,
-            enabled_nested: true,
-            threshold: 10, // "" or float
-            failure_bin: BINS.NO_CHANGE,
+        [RULES.LOW_BMD_FAIL]: {
+            name: "BMD lower than lowest dose (serious)",
+            notes: val => `BMD ${val}x lower than lowest non-zero dose`,
+            hasThreshold: true,
+            enabledContinuous: true,
+            enabledDichotomous: true,
+            enabledNested: true,
         },
-        [RULE_NAMES.LOW_BMDL_FAIL]: {
-            enabled_continuous: true,
-            enabled_dichotomous: true,
-            enabled_nested: true,
-            threshold: 10, // "" or float
-            failure_bin: BINS.NO_CHANGE,
+        [RULES.LOW_BMDL_FAIL]: {
+            name: "BMDL lower than lowest dose (serious)",
+            notes: val => `BMDL ${val}x lower than lowest non-zero dose`,
+            hasThreshold: true,
+            enabledContinuous: true,
+            enabledDichotomous: true,
+            enabledNested: true,
         },
-        [RULE_NAMES.CONTROL_RESIDUAL_HIGH]: {
-            enabled_continuous: true,
-            enabled_dichotomous: true,
-            enabled_nested: true,
-            threshold: 2, // "" or float
-            failure_bin: BINS.WARNING,
+        [RULES.CONTROL_RESIDUAL_HIGH]: {
+            name: "Abs(Residual at control) too large",
+            notes: val => `|Residual at control| > ${val}`,
+            hasThreshold: true,
+            enabledContinuous: true,
+            enabledDichotomous: true,
+            enabledNested: true,
         },
-        [RULE_NAMES.CONTROL_STDEV_FIT]: {
-            enabled_continuous: true,
-            enabled_dichotomous: false,
-            enabled_nested: false,
-            threshold: 1.5, // "" or float
-            failure_bin: BINS.WARNING,
+        [RULES.CONTROL_STDEV_FIT]: {
+            name: "Poor control dose std. dev.",
+            notes: val => `Modeled control response std. dev. > |${val}| actual response std. dev`,
+            hasThreshold: true,
+            enabledContinuous: true,
+            enabledDichotomous: false,
+            enabledNested: false,
         },
-        [RULE_NAMES.DOF_ZERO]: {
-            enabled_continuous: true,
-            enabled_dichotomous: true,
-            enabled_nested: true,
-            threshold: "", // "" or float
-            failure_bin: BINS.NO_CHANGE,
+        [RULES.DOF_ZERO]: {
+            name: "D.O.F equal 0",
+            notes: val => "d.f=0, saturated model (Goodness of fit test cannot be calculated)",
+            hasThreshold: false,
+            enabledContinuous: true,
+            enabledDichotomous: true,
+            enabledNested: true,
         },
     },
-};
-
-export {headers, ruleOrder, logic, decision_logic, disabled_properties, long_name, BIN_NAMES};
+    BINS = Object.freeze({
+        NO_CHANGE: 0,
+        WARNING: 1,
+        FAILURE: 2,
+    }),
+    BIN_NAMES = {
+        [BINS.NO_CHANGE]: "No bin change (warning)",
+        [BINS.WARNING]: "Questionable bin",
+        [BINS.FAILURE]: "Unusable bin",
+    };

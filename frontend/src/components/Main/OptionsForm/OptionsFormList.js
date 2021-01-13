@@ -21,7 +21,7 @@ class OptionsFormList extends Component {
                                     {optionsStore.headers.map((item, index) => {
                                         return <th key={index}>{item}</th>;
                                     })}
-                                    {optionsStore.getEditSettings ? (
+                                    {optionsStore.canEdit ? (
                                         <th>
                                             <button
                                                 type="button"
@@ -37,7 +37,7 @@ class OptionsFormList extends Component {
                                     ) : null}
                                 </tr>
                             </thead>
-                            {optionsStore.getEditSettings ? (
+                            {optionsStore.canEdit ? (
                                 <tbody>
                                     {optionsList.map((options, id) => (
                                         <OptionsForm
@@ -70,7 +70,7 @@ OptionsFormList.propTypes = {
     saveOptions: PropTypes.func,
     deleteOptions: PropTypes.func,
     headers: PropTypes.array,
-    getEditSettings: PropTypes.func,
+    canEdit: PropTypes.func,
     addOptions: PropTypes.func,
     optionsList: PropTypes.array,
 };

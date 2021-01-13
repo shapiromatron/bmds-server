@@ -20,8 +20,11 @@ from . import tasks, transforms, utils, validators
 logger = logging.getLogger(__name__)
 
 
-def get_deletion_date():
-    return now() + timedelta(days=settings.DAYS_TO_KEEP_JOBS)
+def get_deletion_date(current_deletion_date=None):
+    date = now() + timedelta(days=settings.DAYS_TO_KEEP_JOBS)
+    if current_deletion_date:
+        return max(current_deletion_date, date)
+    return date
 
 
 class Job(models.Model):
@@ -59,6 +62,9 @@ class Job(models.Model):
 
     def get_edit_url(self):
         return reverse("job_edit", args=(str(self.id), self.password))
+
+    def get_renew_url(self):
+        return reverse("job_renew", args=(str(self.id), self.password))
 
     def get_excel_url(self):
         return reverse("api:job-excel", args=(str(self.id),))
@@ -255,3 +261,18 @@ class Job(models.Model):
             "options": [],
             "recommender": RecommenderSettings.build_default().dict(),
         }
+
+    def renew(self):
+        self.deletion_date = get_deletion_date(self.deletion_date)
+
+    @property
+    def deletion_date_str(self) -> Optional[str]:
+        if self.deletion_date is None:
+            return None
+        return self.deletion_date.strftime("%B %d, %Y")
+
+    @property
+    def days_until_deletion(self) -> Optional[int]:
+        if self.deletion_date is None:
+            return None
+        return (self.deletion_date - now()).days

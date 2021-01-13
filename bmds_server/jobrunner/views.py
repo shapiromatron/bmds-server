@@ -74,12 +74,22 @@ class JobDetail(DetailView):
                 "editKey": self.object.password,
                 "viewUrl": self.request.build_absolute_uri(self.object.get_absolute_url()),
                 "editUrl": self.request.build_absolute_uri(self.object.get_edit_url()),
+                "renewUrl": self.request.build_absolute_uri(self.object.get_renew_url()),
                 "patchInputUrl": self.object.get_api_patch_inputs_url(),
                 "executeUrl": self.object.get_api_execute_url(),
                 "executeResetUrl": self.object.get_api_execute_reset_url(),
-                "deleteDateStr": self.object.deletion_date.strftime("%Y-%b-%d"),
-                "allowDatasetEditing": True,
-                "allowBmdsVersionEditing": True,
+                "deleteDateStr": self.object.deletion_date_str,
+                "deletionDaysUntilDeletion": self.object.days_until_deletion,
             }
         context["config"] = json.dumps(config, indent=2)
         return context
+
+
+class JobRenew(RedirectView):
+    """Renew the current job and redirect back to editing"""
+
+    def get_redirect_url(self, *args, **kwargs):
+        job = get_object_or_404(models.Job, **kwargs)
+        job.renew()
+        job.save()
+        return job.get_edit_url()

@@ -181,7 +181,7 @@ WEBPACK_LOADER = {
     }
 }
 
-DAYS_TO_KEEP_JOBS = 7
+DAYS_TO_KEEP_JOBS = 180
 
 
 # commit information

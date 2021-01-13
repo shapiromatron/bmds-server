@@ -9,7 +9,7 @@ class SelectModelType extends Component {
         const {dataStore} = this.props;
         return (
             <div className="model-type">
-                <label>Select Model Type</label>
+                <label>Model Type</label>
                 <div className="input-group">
                     <select
                         className="form-control mr-1 p-0"

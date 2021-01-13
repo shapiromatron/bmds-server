@@ -1,3 +1,4 @@
+import _ from "lodash";
 import React, {Component} from "react";
 import {inject, observer} from "mobx-react";
 import PropTypes from "prop-types";
@@ -25,60 +26,51 @@ class ShareActions extends Component {
                     className="dropdown-menu dropdown-menu-right"
                     aria-labelledby="bmdSessionShare">
                     <form className="px-3">
-                        <p className="text-muted py-2">
-                            Analyses are kept for six months; current deletion date:
-                            <br />
-                            <b>{editSettings.deleteDateStr}</b>
+                        {/* READ ONLY LINK */}
+                        <h6 className="dropdown-header">Read-only link</h6>
+                        <div
+                            className="btn-group btn-block"
+                            role="group"
+                            aria-label="Basic example">
+                            <ClipboardButton
+                                text="Copy link"
+                                textToCopy={editSettings.viewUrl}
+                                className="btn btn-secondary mr-1"
+                            />
+                            <a
+                                href={editSettings.viewUrl}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="btn btn-secondary">
+                                <i className="fa fa-fw fa-external-link"></i>
+                                &nbsp;Open
+                            </a>
+                        </div>
+                        <p className="text-muted">
+                            Anyone with this link can view the analysis and download reports.
                         </p>
-                        <div className="form-group">
-                            <label>Read-only link</label>
-                            <div
-                                className="btn-group btn-block"
-                                role="group"
-                                aria-label="Basic example">
-                                <ClipboardButton
-                                    text="Copy link"
-                                    textToCopy={editSettings.viewUrl}
-                                    className="btn btn-secondary mr-1"
-                                />
-                                <a
-                                    href={editSettings.viewUrl}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="btn btn-secondary">
-                                    <i className="fa fa-fw fa-external-link"></i>
-                                    &nbsp;Open
-                                </a>
-                            </div>
-                            <p className="text-muted">
-                                Anyone with this link can view the analysis, download reports, but
-                                not edit it.
-                            </p>
+                        {/* EDIT LINK */}
+                        <div className="dropdown-divider"></div>
+                        <h5 className="dropdown-header">Edit link</h5>
+                        <div
+                            className="btn-group btn-block"
+                            role="group"
+                            aria-label="Basic example">
+                            <ClipboardButton
+                                text="Copy link"
+                                textToCopy={editSettings.editUrl}
+                                className="btn btn-warning mr-1"
+                            />
+                            <a
+                                href={editSettings.editUrl}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="btn btn-warning">
+                                <i className="fa fa-fw fa-external-link"></i>
+                                &nbsp;Open
+                            </a>
                         </div>
-                        <div className="form-group">
-                            <label>Edit link</label>
-                            <div
-                                className="btn-group btn-block"
-                                role="group"
-                                aria-label="Basic example">
-                                <ClipboardButton
-                                    text="Copy link"
-                                    textToCopy={editSettings.editUrl}
-                                    className="btn btn-warning mr-1"
-                                />
-                                <a
-                                    href={editSettings.editUrl}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="btn btn-warning">
-                                    <i className="fa fa-fw fa-external-link"></i>
-                                    &nbsp;Open
-                                </a>
-                            </div>
-                            <p className="text-muted">
-                                Anyone with this link can edit the analysis.
-                            </p>
-                        </div>
+                        <p className="text-muted">Anyone with this link can edit the analysis.</p>
                     </form>
                 </div>
             </div>

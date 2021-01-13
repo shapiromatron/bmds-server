@@ -1,4 +1,4 @@
 -r dev.txt
 
 # grab from `main` branch in bmds repo
-git+https://github.com/shapiromatron/bmds.git@validation#egg=bmds
+git+https://github.com/shapiromatron/bmds.git@main#egg=bmds

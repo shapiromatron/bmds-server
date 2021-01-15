@@ -4,11 +4,15 @@ import logging
 import traceback
 import uuid
 from datetime import timedelta
+from io import BytesIO
 from typing import Dict, List, Optional
 
 import bmds
+import pandas as pd
+from bmds.bmds3.batch import BmdsSessionBatch
 from bmds.bmds3.recommender.recommender import RecommenderSettings
 from bmds.bmds3.sessions import BmdsSession
+from bmds.reporting.styling import Report
 from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.db import models
@@ -142,6 +146,40 @@ class Job(models.Model):
         if not self.is_finished or self.has_errors:
             raise ValueError("Session cannot be returned")
         return BmdsSession.from_serialized(self.outputs["outputs"][index])
+
+    def get_sessions(self) -> List[BmdsSession]:
+        if not self.is_finished or self.has_errors:
+            raise ValueError("Session cannot be returned")
+        return [BmdsSession.from_serialized(output) for output in self.outputs["outputs"]]
+
+    def to_word(self) -> BytesIO:
+        f = BytesIO()
+
+        report = Report.build_default()
+        report.document.add_heading(self.inputs.get("analysis_name", str(self.pk)), 1)
+
+        if not self.is_finished:
+            report.document.add_paragraph("Execution is incomplete; no report could be generated")
+        elif self.has_errors:
+            report.document.add_paragraph("Execution generated errors; no report can be generated")
+        else:
+            batch = BmdsSessionBatch(sessions=self.get_sessions())
+            batch.to_docx(report=report)
+
+        report.document.save(f)
+        return f
+
+    def to_excel(self) -> pd.DataFrame:
+        # exit early if we don't have data for a report
+        if not self.is_finished or self.has_errors:
+            return pd.Series(
+                data=["Job not finished or error occurred - cannot create report"], name="Status"
+            ).to_frame()
+
+        batch = BmdsSessionBatch(sessions=self.get_sessions())
+        df = batch.to_df()
+
+        return df
 
     def update_selection(self, selection: validators.JobSelectedSchema):
         """Given a new selection data schema; update outputs and save instance

@@ -1,20 +1,24 @@
-import * as dc from "./dataConstants";
+import {Dtype, DATA_DICHOTOMOUS} from "./dataConstants";
+
+const model_option_c = [
+        {label: "BMR Type", name: "bmrType", value: ""},
+        {label: "BMRF", name: "bmr", value: ""},
+        {label: "Tail Probability", name: "tailProb", value: ""},
+        {label: "Confidence Level", name: "alpha", value: ""},
+        {label: "Distribution Type", name: "distType", value: ""},
+        {label: "Variance Type", name: "varType", value: ""},
+    ],
+    model_option_d = [
+        {label: "Risk Type", name: "bmrType", value: ""},
+        {label: "BMR", name: "bmr", value: ""},
+        {label: "Confidence Level", name: "alpha", value: ""},
+        {label: "Background", name: "background", value: ""},
+    ];
 
 export const model_options = {
-        CS: [
-            {label: "BMR Type", name: "bmrType", value: ""},
-            {label: "BMRF", name: "bmr", value: ""},
-            {label: "Tail Probability", name: "tailProb", value: ""},
-            {label: "Confidence Level", name: "alpha", value: ""},
-            {label: "Distribution Type", name: "distType", value: ""},
-            {label: "Variance Type", name: "varType", value: ""},
-        ],
-        DM: [
-            {label: "Risk Type", name: "bmrType", value: ""},
-            {label: "BMR", name: "bmr", value: ""},
-            {label: "Confidence Level", name: "alpha", value: ""},
-            {label: "Background", name: "background", value: ""},
-        ],
+        [Dtype.CONTINUOUS]: model_option_c,
+        [Dtype.CONTINUOUS_INDIVIDUAL]: model_option_c,
+        [Dtype.DICHOTOMOUS]: model_option_d,
     },
     bmrType = {
         1: "Abs. Dev",
@@ -43,7 +47,7 @@ export const model_options = {
         2: "Down",
     },
     getPValue = function(dataType, results) {
-        if (dataType === dc.DATA_DICHOTOMOUS) {
+        if (dataType === DATA_DICHOTOMOUS) {
             return results.gof.p_value;
         } else {
             return -999;

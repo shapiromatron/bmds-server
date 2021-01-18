@@ -44,7 +44,7 @@ class DataStore {
         dataset.metadata.id = id;
         dataset.metadata.name = `Dataset #${id + 1}`;
         this.datasets.push(dataset);
-        this.rootStore.dataOptionStore.createOption(dataset.metadata.id, dataset.dtype);
+        this.rootStore.dataOptionStore.createOption(dataset);
         this.selectedDatasetId = id;
     }
 

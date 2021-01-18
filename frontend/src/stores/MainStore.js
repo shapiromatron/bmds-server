@@ -59,7 +59,8 @@ class MainStore {
                 analysis_description: this.analysis_description,
                 dataset_type: this.model_type,
                 models: this.getEnabledModels,
-                datasets: this.getEnabledDatasets,
+                datasets: this.rootStore.dataStore.datasets,
+                datasetOptions: this.rootStore.dataOptionStore.options,
                 options: this.getOptions,
                 recommender: this.rootStore.logicStore.logic,
             },
@@ -212,6 +213,7 @@ class MainStore {
         this.changeDatasetType(this.model_type);
         this.rootStore.optionsStore.setOptions(inputs.options);
         this.rootStore.dataStore.setDatasets(inputs.datasets);
+        this.rootStore.dataOptionStore.setOptions(inputs.datasetOptions);
         this.rootStore.modelsStore.setModels(inputs.models);
         this.rootStore.logicStore.setLogic(inputs.recommender);
         this.isUpdateComplete = true;

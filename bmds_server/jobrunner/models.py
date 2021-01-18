@@ -296,6 +296,7 @@ class Job(models.Model):
             "dataset_type": "D",
             "datasets": [],
             "models": {},
+            "datasetOptions": [],
             "options": [],
             "recommender": RecommenderSettings.build_default().dict(),
         }

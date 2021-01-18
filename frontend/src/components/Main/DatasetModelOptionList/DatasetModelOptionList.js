@@ -1,3 +1,4 @@
+import {toJS} from "mobx";
 import React, {Component} from "react";
 import {inject, observer} from "mobx-react";
 import DatasetModelOption from "./DatasetModelOption";
@@ -8,16 +9,15 @@ import {datasetOptionColumnNames} from "../../../constants/dataConstants";
 
 @inject("dataOptionStore")
 @observer
-class DatasetList extends Component {
+class DatasetModelOptionList extends Component {
     render() {
         const {dataOptionStore} = this.props,
             {canEdit, getDataset, options, updateOption} = dataOptionStore;
 
-        if (options.length < 1) {
+        if (options.length == 0) {
             return null;
         }
-
-        const headers = datasetOptionColumnNames[options[0].dtype];
+        const headers = datasetOptionColumnNames[getDataset(options[0]).dtype];
 
         return (
             <table className="table table-bordered table-sm">
@@ -54,7 +54,7 @@ class DatasetList extends Component {
         );
     }
 }
-DatasetList.propTypes = {
+DatasetModelOptionList.propTypes = {
     dataOptionStore: PropTypes.object,
 };
-export default DatasetList;
+export default DatasetModelOptionList;

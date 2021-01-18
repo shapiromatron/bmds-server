@@ -12,7 +12,9 @@ class DatasetModelOptionReadOnly extends Component {
             <tr>
                 <td>{readOnlyCheckbox(option.enabled)}</td>
                 <td>{dataset.metadata.name}</td>
-                {option.adverse_direction ? <td>{option.adverse_direction}</td> : null}
+                {option.adverse_direction !== undefined ? (
+                    <td>{option.adverse_direction}</td>
+                ) : null}
             </tr>
         );
     }

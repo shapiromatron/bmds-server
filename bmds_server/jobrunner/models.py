@@ -1,4 +1,3 @@
-import itertools
 import json
 import logging
 import traceback
@@ -248,9 +247,13 @@ class Job(models.Model):
         # update start time to actual time started
         self.started = now()
 
-        combinations = itertools.product(
-            *[range(len(self.inputs["datasets"])), range(len(self.inputs["options"]))]
-        )
+        # build combinations based on enabled datasets
+        combinations = []
+        for dataset_index in range(len(self.inputs["datasets"])):
+            for option_index in range(len(self.inputs["options"])):
+                if self.inputs["dataset_options"][dataset_index]["enabled"]:
+                    combinations.append((dataset_index, option_index))
+
         outputs = [
             self.try_run_session(self.inputs, dataset_index, option_index)
             for dataset_index, option_index in combinations
@@ -296,7 +299,7 @@ class Job(models.Model):
             "dataset_type": "D",
             "datasets": [],
             "models": {},
-            "datasetOptions": [],
+            "dataset_options": [],
             "options": [],
             "recommender": RecommenderSettings.build_default().dict(),
         }

@@ -1,4 +1,3 @@
-import {toJS} from "mobx";
 import React, {Component} from "react";
 import {inject, observer} from "mobx-react";
 import DatasetModelOption from "./DatasetModelOption";

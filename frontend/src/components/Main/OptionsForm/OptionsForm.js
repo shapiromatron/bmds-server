@@ -5,11 +5,9 @@ import * as mc from "../../../constants/mainConstants";
 import {
     bmr_type,
     other_bmr_type,
-    litter_specific_covariate,
     distribution,
     variance,
     polynomial_restriction,
-    bootstrap_seed,
 } from "../../../constants/optionsConstants";
 
 const OptionsForm = props => {
@@ -171,12 +169,9 @@ OptionsForm.propTypes = {
     options: PropTypes.object.isRequired,
     bmr_value: PropTypes.number,
     tail_probability: PropTypes.number,
-    litter_specific_covariate: PropTypes.string,
     distribution: PropTypes.string,
     variance: PropTypes.string,
     background: PropTypes.string,
-    bootstrap_iterations: PropTypes.string,
-    bootstrap_seed: PropTypes.string,
     delete: PropTypes.func,
 };
 export default OptionsForm;

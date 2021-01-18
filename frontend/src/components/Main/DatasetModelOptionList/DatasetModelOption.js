@@ -3,7 +3,6 @@ import {observer} from "mobx-react";
 import PropTypes from "prop-types";
 
 import {adverseDirectionOptions} from "../../../constants/dataConstants";
-import {Dtype} from "../../../constants/dataConstants";
 
 @observer
 class DatasetModelOption extends Component {

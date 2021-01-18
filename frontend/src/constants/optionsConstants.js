@@ -64,10 +64,6 @@ export const headers = {
         {value: "Extra", name: "Extra Risk"},
         {value: "Added", name: "Added Risk"},
     ],
-    litter_specific_covariate = [
-        {value: "Overall_Mean", name: "Overall Mean"},
-        {value: "Control_Group_Mean", name: "Control Group Mean"},
-    ],
     distribution = [
         {value: "Normal.", name: "Normal"},
         {value: "log normal.", name: "Log normal"},
@@ -80,8 +76,4 @@ export const headers = {
         {value: "Use dataset adverse direction", name: "Use dataset adverse direction"},
         {value: "Non-Negative", name: "Non-Negative"},
         {value: "Non-Positive", name: "Non-Positive"},
-    ],
-    bootstrap_seed = [
-        {value: "Automatic", name: "Automatic"},
-        {value: "User_Specified", name: "User Specified"},
     ];

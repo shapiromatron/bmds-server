@@ -42,7 +42,7 @@ class DatasetForm extends Component {
     render() {
         const {dataStore} = this.props,
             dataset = dataStore.selectedDataset,
-            columnNames = columns[dataset.model_type];
+            columnNames = columns[dataset.dtype];
 
         return (
             <div className="container-fluid">

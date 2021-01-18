@@ -84,29 +84,6 @@ const OptionsForm = props => {
                     }
                 />
             </td>
-            {props.modelType === mc.MODEL_NESTED ? (
-                <td>
-                    <select
-                        className="form-control"
-                        value={props.options.litter_specific_covariate}
-                        onChange={e =>
-                            props.saveOptions(
-                                "litter_specific_covariate",
-                                e.target.value,
-                                props.idx
-                            )
-                        }>
-                        {litter_specific_covariate.map((item, i) => {
-                            return (
-                                <option key={i} value={item.value}>
-                                    {item.name}
-                                </option>
-                            );
-                        })}
-                    </select>
-                </td>
-            ) : null}
-
             {props.modelType === mc.MODEL_CONTINUOUS ? (
                 <td>
                     <select
@@ -166,36 +143,6 @@ const OptionsForm = props => {
                         value={props.options.background}
                         onChange={e => props.saveOptions("background", e.target.value, props.idx)}>
                         <option value="Estimated">Estimated</option>
-                    </select>
-                </td>
-            ) : null}
-            {props.modelType === mc.MODEL_NESTED ? (
-                <td>
-                    <input
-                        type="number"
-                        className="form-control"
-                        value={props.options.bootstrap_iterations}
-                        onChange={e =>
-                            props.saveOptions("bootstrap_iterations", e.target.value, props.idx)
-                        }
-                    />
-                </td>
-            ) : null}
-            {props.modelType === mc.MODEL_NESTED ? (
-                <td>
-                    <select
-                        className="form-control"
-                        value={props.options.bootstrap_seed}
-                        onChange={e =>
-                            props.saveOptions("bootstrap_seed", e.target.value, props.idx)
-                        }>
-                        {bootstrap_seed.map((item, i) => {
-                            return (
-                                <option key={i} value={item.value}>
-                                    {item.name}
-                                </option>
-                            );
-                        })}
                     </select>
                 </td>
             ) : null}

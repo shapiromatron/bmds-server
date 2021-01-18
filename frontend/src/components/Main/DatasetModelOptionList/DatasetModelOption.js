@@ -1,73 +1,50 @@
-import React from "react";
+import React, {Component} from "react";
+import {observer} from "mobx-react";
 import PropTypes from "prop-types";
 
-import {AdverseDirectionList, degree, background} from "../../../constants/dataConstants";
-import * as mc from "../../../constants/mainConstants";
+import {adverseDirectionOptions} from "../../../constants/dataConstants";
+import {Dtype} from "../../../constants/dataConstants";
 
-const DatasetModelOption = props => {
-    const {dataset, handleChange, model_type} = props,
-        datasetId = dataset.metadata.id;
-    return (
-        <tr>
-            <td>
-                <input
-                    id="enable-model"
-                    type="checkbox"
-                    checked={dataset.enabled}
-                    onChange={e => handleChange(datasetId, "enabled", e.target.checked)}
-                />
-            </td>
-            <td>{dataset.metadata.name}</td>
-            {model_type === mc.MODEL_CONTINUOUS ? (
+@observer
+class DatasetModelOption extends Component {
+    render() {
+        const {dataset, option, handleChange} = this.props;
+        return (
+            <tr>
                 <td>
-                    <select
-                        className="form-control"
-                        onChange={e =>
-                            handleChange(datasetId, "adverse_direction", e.target.value)
-                        }>
-                        {AdverseDirectionList.map((adverse, i) => {
-                            return (
-                                <option key={i} value={adverse.value}>
-                                    {adverse.name}
-                                </option>
-                            );
-                        })}
-                    </select>
+                    <input
+                        id="enable-model"
+                        type="checkbox"
+                        checked={option.enabled}
+                        onChange={e => handleChange(option.datasetId, "enabled", e.target.checked)}
+                    />
                 </td>
-            ) : null}
-            {model_type === mc.MODEL_MULTI_TUMOR ? (
-                <td>
-                    <select onChange={e => handleChange(datasetId, "degree", e.target.value)}>
-                        {degree.map((dataset, i) => {
-                            return (
-                                <option key={i} value={dataset.value}>
-                                    {dataset.name}
+                <td>{dataset.metadata.name}</td>
+                {dataset.dtype === Dtype.CONTINUOUS ||
+                dataset.dtype === Dtype.CONTINUOUS_INDIVIDUAL ? (
+                    <td>
+                        <select
+                            className="form-control"
+                            value={option.adverse_direction}
+                            onChange={e =>
+                                handleChange(option.datasetId, "adverse_direction", e.target.value)
+                            }>
+                            {adverseDirectionOptions.map(item => (
+                                <option key={item.value} value={item.value}>
+                                    {item.name}
                                 </option>
-                            );
-                        })}
-                    </select>
-                </td>
-            ) : null}
-            {model_type === mc.MODEL_MULTI_TUMOR ? (
-                <td>
-                    <select onChange={e => handleChange(datasetId, "background", e.target.value)}>
-                        {background.map((dataset, i) => {
-                            return (
-                                <option key={i} value={dataset.value}>
-                                    {dataset.name}
-                                </option>
-                            );
-                        })}
-                    </select>
-                </td>
-            ) : null}
-        </tr>
-    );
-};
+                            ))}
+                        </select>
+                    </td>
+                ) : null}
+            </tr>
+        );
+    }
+}
 
 DatasetModelOption.propTypes = {
     dataset: PropTypes.object.isRequired,
+    option: PropTypes.object.isRequired,
     handleChange: PropTypes.func.isRequired,
-    model_type: PropTypes.string.isRequired,
 };
 export default DatasetModelOption;

@@ -11,6 +11,7 @@ const Root = (
     <Provider
         store={rootStore}
         dataStore={rootStore.dataStore}
+        dataOptionStore={rootStore.dataOptionStore}
         mainStore={rootStore.mainStore}
         outputStore={rootStore.outputStore}
         optionsStore={rootStore.optionsStore}

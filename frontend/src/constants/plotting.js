@@ -1,6 +1,6 @@
 import _ from "lodash";
 
-import * as dc from "./dataConstants";
+import {Dtype} from "./dataConstants";
 
 const doseResponseLayout = {
         autosize: true,
@@ -25,21 +25,17 @@ const doseResponseLayout = {
     getResponse = dataset => {
         let incidences, ns;
 
-        switch (dataset.model_type) {
-            case dc.DATA_CONTINUOUS_SUMMARY:
+        switch (dataset.dtype) {
+            case Dtype.CONTINUOUS:
                 return dataset.means;
-            case dc.DATA_CONTINUOUS_INDIVIDUAL:
+            case Dtype.CONTINUOUS_INDIVIDUAL:
                 return dataset.responses;
-            case dc.DATA_DICHOTOMOUS:
+            case Dtype.DICHOTOMOUS:
                 ns = dataset.ns;
                 incidences = dataset.incidences;
                 return _.range(ns.length).map(idx => incidences[idx] / ns[idx]);
-            case dc.model_type.Nested: // TODO ?
-                incidences = dataset.incidences;
-                ns = dataset.litter_sizes;
-                return _.range(ns.length).map(idx => incidences[idx] / ns[idx]);
             default:
-                throw "Unknown model_type";
+                throw `Unknown dtype: ${dataset.dtype}`;
         }
     };
 

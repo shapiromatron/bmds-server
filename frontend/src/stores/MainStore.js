@@ -36,6 +36,7 @@ class MainStore {
         this.rootStore.modelsStore.setDefaultsByDatasetType();
         this.rootStore.optionsStore.setDefaultsByDatasetType();
         this.rootStore.dataStore.setDefaultsByDatasetType();
+        this.rootStore.dataOptionStore.options = [];
     }
 
     @computed get getOptions() {

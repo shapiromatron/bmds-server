@@ -1,36 +1,32 @@
 import * as mc from "./mainConstants";
 
-export const Dtype = {
-        DICHOTOMOUS: "D",
-        DICHOTOMOUS_CANCER: "DC",
-        CONTINUOUS: "C",
-        CONTINUOUS_INDIVIDUAL: "CI",
-    },
-    DATA_CONTINUOUS_SUMMARY = "CS",
+const Dtype = {
+    DICHOTOMOUS: "D",
+    CONTINUOUS: "C",
+    CONTINUOUS_INDIVIDUAL: "CI",
+};
+
+export {Dtype};
+export const DATA_CONTINUOUS_SUMMARY = "CS",
     DATA_CONTINUOUS_INDIVIDUAL = "I",
     DATA_DICHOTOMOUS = "DM",
-    DATA_NESTED = "N",
     datasetTypesByModelType = function(modelType) {
         switch (modelType) {
             case mc.MODEL_DICHOTOMOUS:
-            case mc.MODEL_MULTI_TUMOR:
                 return [{value: DATA_DICHOTOMOUS, name: "Dichotomous"}];
             case mc.MODEL_CONTINUOUS:
                 return [
                     {value: DATA_CONTINUOUS_SUMMARY, name: "Summarized"},
                     {value: DATA_CONTINUOUS_INDIVIDUAL, name: "Individual"},
                 ];
-            case mc.MODEL_NESTED:
-                return [{value: DATA_NESTED, name: "Nested"}];
             default:
                 throw `Unknown modelType: ${modelType}`;
         }
     },
     columns = {
-        [DATA_CONTINUOUS_SUMMARY]: ["doses", "ns", "means", "stdevs"],
-        [DATA_CONTINUOUS_INDIVIDUAL]: ["doses", "responses"],
-        [DATA_DICHOTOMOUS]: ["doses", "ns", "incidences"],
-        [DATA_NESTED]: ["doses", "litter_sizes", "incidences", "litter_specific_covariates"],
+        [Dtype.CONTINUOUS]: ["doses", "ns", "means", "stdevs"],
+        [Dtype.CONTINUOUS_INDIVIDUAL]: ["doses", "responses"],
+        [Dtype.DICHOTOMOUS]: ["doses", "ns", "incidences"],
     },
     columnNames = {
         [DATA_CONTINUOUS_SUMMARY]: {
@@ -47,12 +43,6 @@ export const Dtype = {
             doses: "Dose",
             ns: "N",
             incidences: "Incidence",
-        },
-        [DATA_NESTED]: {
-            doses: "Dose",
-            litter_sizes: "Litter Size",
-            incidences: "Incidence",
-            litter_specific_covariates: "Litter Specific Covariate",
         },
     },
     columnHeaders = {
@@ -112,38 +102,17 @@ export const Dtype = {
                     ns: [9, 9, 11, 10, 7],
                     incidences: [0, 0, 3, 2, 3],
                 };
-            case DATA_NESTED:
-                return {
-                    dtype: "...",
-                    metadata: {
-                        id: null,
-                        name: "",
-                        dose_units: "",
-                        response_units: "",
-                        dose_name: "Dose",
-                        response_name: "Response",
-                    },
-                    doses: ["", "", "", "", ""],
-                    litter_sizes: ["", "", "", "", ""],
-                    incidences: ["", "", "", "", ""],
-                    litter_specific_covariates: ["", "", "", "", ""],
-                };
             default:
                 throw `Unknown dataset type ${dtype}`;
         }
     },
-    AdverseDirectionList = [
+    datasetOptionColumnNames = {
+        [Dtype.CONTINUOUS]: ["Enabled", "Dataset", "Adverse Direction"],
+        [Dtype.CONTINUOUS_INDIVIDUAL]: ["Enabled", "Dataset", "Adverse Direction"],
+        [Dtype.DICHOTOMOUS]: ["Enabled", "Dataset"],
+    },
+    adverseDirectionOptions = [
         {value: "automatic", name: "Automatic"},
         {value: "up", name: "Up"},
         {value: "down", name: "Down"},
-    ],
-    degree = [
-        {value: "auto-select", name: "auto-select"},
-        {value: "1", name: "1"},
-        {value: "2", name: "2"},
-        {value: "3", name: "3"},
-    ],
-    background = [
-        {value: "Estimated", name: "Esimated"},
-        {value: "0", name: "Zero"},
     ];

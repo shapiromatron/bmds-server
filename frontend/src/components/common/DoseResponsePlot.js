@@ -10,7 +10,15 @@ class DoseResponsePlot extends Component {
         const {layout, data} = this.props,
             config = {responsive: true, staticPlot: true};
 
-        return <Plot layout={toJS(layout)} data={toJS(data)} config={config} useResizeHandler />;
+        return (
+            <Plot
+                layout={toJS(layout)}
+                data={toJS(data)}
+                config={config}
+                style={{width: "100%"}}
+                useResizeHandler={true}
+            />
+        );
     }
 }
 DoseResponsePlot.propTypes = {

@@ -4,17 +4,18 @@ import Plot from "react-plotly.js";
 import PropTypes from "prop-types";
 import {toJS} from "mobx";
 
+import {getConfig} from "../../constants/plotting";
+
 @observer
 class DoseResponsePlot extends Component {
     render() {
-        const {layout, data} = this.props,
-            config = {responsive: true, staticPlot: true};
+        const {layout, data} = this.props;
 
         return (
             <Plot
                 layout={toJS(layout)}
                 data={toJS(data)}
-                config={config}
+                config={getConfig()}
                 style={{width: "100%"}}
                 useResizeHandler={true}
             />

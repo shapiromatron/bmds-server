@@ -4,7 +4,6 @@ import {Dtype} from "./dataConstants";
 
 const doseResponseLayout = {
         autosize: true,
-        displayModeBar: false,
         legend: {yanchor: "top", y: 0.99, xanchor: "left", x: 0.01},
         margin: {l: 50, r: 5, t: 50, b: 50},
         showlegend: true,
@@ -58,6 +57,20 @@ export const getDrLayout = function(dataset) {
 
         return layout;
     },
+    getCdfLayout = function(dataset) {
+        let layout = _.cloneDeep(doseResponseLayout),
+            xlabel = dataset.metadata.dose_name;
+
+        if (dataset.metadata.dose_units) {
+            xlabel = `${xlabel} (${dataset.metadata.dose_units})`;
+        }
+        layout.title.text = "BMD Cumulative distribution function";
+        layout.xaxis.title.text = xlabel;
+        layout.yaxis.title.text = "Percentile";
+        layout.yaxis.range = [0, 1];
+
+        return layout;
+    },
     getDrDatasetPlotData = function(dataset) {
         return {
             x: dataset.doses.slice(),
@@ -76,5 +89,20 @@ export const getDrLayout = function(dataset) {
             marker: {
                 color: hexColor,
             },
+        };
+    },
+    getConfig = function() {
+        return {
+            modeBarButtonsToRemove: [
+                "pan2d",
+                "select2d",
+                "lasso2d",
+                "zoomIn2d",
+                "zoomOut2d",
+                "autoScale2d",
+                "hoverClosestCartesian",
+                "hoverCompareCartesian",
+                "toggleSpikelines",
+            ],
         };
     };

@@ -135,6 +135,16 @@ class OutputStore {
         }
         return data;
     }
+    @computed get drPlotModalData() {
+        const data = [getDrDatasetPlotData(this.selectedDataset)];
+        if (this.drModelModal) {
+            data.push(this.drModelModal);
+        }
+        if (this.drModelSelected) {
+            data.push(this.drModelSelected);
+        }
+        return data;
+    }
     @action.bound drPlotAddHover(model) {
         this.drModelHover = getDrBmdLine(model, "#DA2CDA");
     }

@@ -19,7 +19,7 @@ class DatasetModelOption extends Component {
                     />
                 </td>
                 <td>{dataset.metadata.name}</td>
-                {dataset.adverse_direction !== undefined ? (
+                {option.adverse_direction !== undefined ? (
                     <td>
                         <select
                             className="form-control"

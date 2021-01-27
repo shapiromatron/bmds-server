@@ -20,21 +20,21 @@ class AdverseDirection(str, Enum):
 
 
 class DichotomousModelOptions(BaseModel):
-    datasetId: int
+    dataset_id: int
     enabled: bool = True
 
 
 class ContinuousModelOptions(BaseModel):
-    datasetId: int
+    dataset_id: int
     enabled: bool = True
     adverse_direction: AdverseDirection = AdverseDirection.AUTOMATIC
 
 
 class DatasetValidator(BaseModel):
-    @root_validator
+    @root_validator(skip_on_failure=True)
     def check_id_matches(cls, values):
         dataset_ids = [dataset.metadata.id for dataset in values["datasets"]]
-        ds_option_ids = [opt.datasetId for opt in values["dataset_options"]]
+        ds_option_ids = [opt.dataset_id for opt in values["dataset_options"]]
         if len(set(dataset_ids)) != len(dataset_ids):
             raise ValueError("Dataset IDs are not unique")
         if set(dataset_ids) != set(ds_option_ids):

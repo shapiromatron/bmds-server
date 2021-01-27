@@ -17,16 +17,16 @@ class DatasetModelOptionStore {
     @action.bound setOptions(options) {
         this.options = options;
     }
-    @action.bound updateOption(datasetId, key, value) {
-        const index = _.findIndex(this.options, d => d.datasetId === datasetId);
+    @action.bound updateOption(dataset_id, key, value) {
+        const index = _.findIndex(this.options, d => d.dataset_id === dataset_id);
         this.options[index][key] = value;
     }
-    @action.bound deleteOption(datasetId) {
-        const index = _.findIndex(this.options, d => d.datasetId === datasetId);
+    @action.bound deleteOption(dataset_id) {
+        const index = _.findIndex(this.options, d => d.dataset_id === dataset_id);
         this.options.splice(index, 1);
     }
     @action.bound createOption(dataset) {
-        const opts = {datasetId: dataset.metadata.id, enabled: true};
+        const opts = {dataset_id: dataset.metadata.id, enabled: true};
         if (dataset.dtype === Dtype.CONTINUOUS || dataset.dtype === Dtype.CONTINUOUS_INDIVIDUAL) {
             opts.adverse_direction = adverseDirectionOptions[0].value;
         }
@@ -34,7 +34,7 @@ class DatasetModelOptionStore {
     }
 
     @action.bound getDataset(option) {
-        return _.find(this.rootStore.dataStore.datasets, d => d.metadata.id === option.datasetId);
+        return _.find(this.rootStore.dataStore.datasets, d => d.metadata.id === option.dataset_id);
     }
 }
 

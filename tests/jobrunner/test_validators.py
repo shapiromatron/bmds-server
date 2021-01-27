@@ -34,6 +34,9 @@ class TestInputValidation:
                 "stdevs": [0.235, 0.209, 0.231, 0.263, 0.159],
             }
         ]
+        data["dataset_options"] = [
+            {"dataset_id": 123, "enabled": True, "adverse_direction": "automatic"}
+        ]
         assert validators.validate_input(data, partial=True) is None
 
         with pytest.raises(ValidationError) as err:

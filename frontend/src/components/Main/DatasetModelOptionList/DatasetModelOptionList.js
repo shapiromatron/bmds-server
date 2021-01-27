@@ -32,7 +32,7 @@ class DatasetModelOptionList extends Component {
                         if (canEdit) {
                             return (
                                 <DatasetModelOption
-                                    key={option.datasetId}
+                                    key={option.dataset_id}
                                     dataset={getDataset(option)}
                                     option={option}
                                     handleChange={updateOption}
@@ -41,7 +41,7 @@ class DatasetModelOptionList extends Component {
                         } else {
                             return (
                                 <DatasetModelOptionReadOnly
-                                    key={option.datasetId}
+                                    key={option.dataset_id}
                                     dataset={getDataset(option)}
                                     option={option}
                                 />

@@ -15,7 +15,7 @@ class DatasetModelOption extends Component {
                         id="enable-model"
                         type="checkbox"
                         checked={option.enabled}
-                        onChange={e => handleChange(option.datasetId, "enabled", e.target.checked)}
+                        onChange={e => handleChange(option.dataset_id, "enabled", e.target.checked)}
                     />
                 </td>
                 <td>{dataset.metadata.name}</td>
@@ -25,7 +25,7 @@ class DatasetModelOption extends Component {
                             className="form-control"
                             value={option.adverse_direction}
                             onChange={e =>
-                                handleChange(option.datasetId, "adverse_direction", e.target.value)
+                                handleChange(option.dataset_id, "adverse_direction", e.target.value)
                             }>
                             {adverseDirectionOptions.map(item => (
                                 <option key={item.value} value={item.value}>

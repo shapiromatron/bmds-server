@@ -6,7 +6,7 @@ from rest_framework.decorators import action
 from rest_framework.response import Response
 
 from ..common.validation import pydantic_validate
-from . import models, renderers, reports, serializers, validators
+from . import models, renderers, serializers, validators
 
 
 class JobViewset(mixins.CreateModelMixin, mixins.RetrieveModelMixin, viewsets.GenericViewSet):
@@ -125,12 +125,9 @@ class JobViewset(mixins.CreateModelMixin, mixins.RetrieveModelMixin, viewsets.Ge
         Return Excel export of outputs for selected job
         """
         instance = self.get_object()
-
-        report_engine = reports.ExportEngine(instance)
-        df = report_engine.create_export()
+        df = instance.to_excel()
         f = io.BytesIO()
         df.to_excel(f, index=False)
-
         data = renderers.BinaryFile(data=f, filename=str(instance.id))
         return Response(data)
 
@@ -140,8 +137,6 @@ class JobViewset(mixins.CreateModelMixin, mixins.RetrieveModelMixin, viewsets.Ge
         Return Word report for the selected job
         """
         instance = self.get_object()
-
-        report_engine = reports.ReportEngine(instance)
-        document = report_engine.create_report()
+        document = instance.to_word()
         data = renderers.BinaryFile(data=document, filename=str(instance.id))
         return Response(data)

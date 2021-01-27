@@ -1,7 +1,6 @@
 import {observable, action, computed} from "mobx";
 
-import * as mc from "../constants/mainConstants";
-import {modelsList, modelHeaders, nestedHeaders, model} from "../constants/modelConstants";
+import {modelsList, modelHeaders, model} from "../constants/modelConstants";
 import _ from "lodash";
 
 class ModelsStore {
@@ -22,11 +21,7 @@ class ModelsStore {
     @action setDefaultsByDatasetType() {
         let modelType = this.rootStore.mainStore.model_type;
         this.models = _.cloneDeep(modelsList[modelType]);
-        if (modelType === mc.MODEL_NESTED) {
-            this.model_headers = nestedHeaders;
-        } else {
-            this.model_headers = modelHeaders;
-        }
+        this.model_headers = modelHeaders;
     }
 
     @action.bound toggleModelsCheckBox(selectedModel, checked) {

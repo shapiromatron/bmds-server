@@ -1,4 +1,4 @@
-const headers = {
+export const headers = {
         C: [
             "BMR Type",
             "BMRF",
@@ -52,47 +52,28 @@ const headers = {
             bootstrap_iterations: 1000,
             bootstrap_speed: "Automatic",
         },
-    };
-const bmr_type = [
-    {value: "Std. Dev.", name: "Std. Dev."},
-    {value: "Rel. Dev.", name: "Re. Dev."},
-    {value: "Abs. Dev.", name: "Abs. Dev."},
-    {value: "Point", name: "Point"},
-    {value: "Hybrid", name: "Hybrid-Extra Risk"},
-];
-const other_bmr_type = [
-    {value: "Extra", name: "Extra Risk"},
-    {value: "Added", name: "Added Risk"},
-];
-const litter_specific_covariate = [
-    {value: "Overall_Mean", name: "Overall Mean"},
-    {value: "Control_Group_Mean", name: "Control Group Mean"},
-];
-const distribution = [
-    {value: "Normal.", name: "Normal"},
-    {value: "log normal.", name: "Log normal"},
-];
-const variance = [
-    {value: "Constant", name: "Constant"},
-    {value: "Non-constant.", name: "Non-Constant"},
-];
-const polynomial_restriction = [
-    {value: "Use dataset adverse direction", name: "Use dataset adverse direction"},
-    {value: "Non-Negative", name: "Non-Negative"},
-    {value: "Non-Positive", name: "Non-Positive"},
-];
-const bootstrap_seed = [
-    {value: "Automatic", name: "Automatic"},
-    {value: "User_Specified", name: "User Specified"},
-];
-export {
-    headers,
-    options,
-    bmr_type,
-    other_bmr_type,
-    litter_specific_covariate,
-    distribution,
-    variance,
-    polynomial_restriction,
-    bootstrap_seed,
-};
+    },
+    bmr_type = [
+        {value: "Std. Dev.", name: "Std. Dev."},
+        {value: "Rel. Dev.", name: "Re. Dev."},
+        {value: "Abs. Dev.", name: "Abs. Dev."},
+        {value: "Point", name: "Point"},
+        {value: "Hybrid", name: "Hybrid-Extra Risk"},
+    ],
+    other_bmr_type = [
+        {value: "Extra", name: "Extra Risk"},
+        {value: "Added", name: "Added Risk"},
+    ],
+    distribution = [
+        {value: "Normal.", name: "Normal"},
+        {value: "log normal.", name: "Log normal"},
+    ],
+    variance = [
+        {value: "Constant", name: "Constant"},
+        {value: "Non-constant.", name: "Non-Constant"},
+    ],
+    polynomial_restriction = [
+        {value: "Use dataset adverse direction", name: "Use dataset adverse direction"},
+        {value: "Non-Negative", name: "Non-Negative"},
+        {value: "Non-Positive", name: "Non-Positive"},
+    ];

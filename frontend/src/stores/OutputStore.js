@@ -22,8 +22,8 @@ class OutputStore {
 
     @observable showBMDLine = false;
 
-    @action setSelectedDatasetIndex(dataset_id) {
-        this.selectedDatasetIndex = dataset_id;
+    @action setSelectedOutputIndex(output_id) {
+        this.selectedOutputIndex = output_id;
     }
 
     @computed get canEdit() {
@@ -46,7 +46,7 @@ class OutputStore {
     }
 
     @computed get getModelOptions() {
-        let modelOptions = _.cloneDeep(constant.model_options[this.selectedDataset.model_type]);
+        let modelOptions = _.cloneDeep(constant.model_options[this.selectedDataset.dtype]);
         modelOptions.map(option => {
             option.value = this.modalModel.settings[option.name];
             if (option.name == "bmrType") {
@@ -127,6 +127,16 @@ class OutputStore {
         if (this.drModelHover) {
             data.push(this.drModelHover);
         }
+        if (this.drModelModal) {
+            data.push(this.drModelModal);
+        }
+        if (this.drModelSelected) {
+            data.push(this.drModelSelected);
+        }
+        return data;
+    }
+    @computed get drPlotModalData() {
+        const data = [getDrDatasetPlotData(this.selectedDataset)];
         if (this.drModelModal) {
             data.push(this.drModelModal);
         }

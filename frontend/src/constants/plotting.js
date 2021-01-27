@@ -1,10 +1,9 @@
 import _ from "lodash";
 
-import * as dc from "./dataConstants";
+import {Dtype} from "./dataConstants";
 
 const doseResponseLayout = {
         autosize: true,
-        displayModeBar: false,
         legend: {yanchor: "top", y: 0.99, xanchor: "left", x: 0.01},
         margin: {l: 50, r: 5, t: 50, b: 50},
         showlegend: true,
@@ -25,21 +24,17 @@ const doseResponseLayout = {
     getResponse = dataset => {
         let incidences, ns;
 
-        switch (dataset.model_type) {
-            case dc.DATA_CONTINUOUS_SUMMARY:
+        switch (dataset.dtype) {
+            case Dtype.CONTINUOUS:
                 return dataset.means;
-            case dc.DATA_CONTINUOUS_INDIVIDUAL:
+            case Dtype.CONTINUOUS_INDIVIDUAL:
                 return dataset.responses;
-            case dc.DATA_DICHOTOMOUS:
+            case Dtype.DICHOTOMOUS:
                 ns = dataset.ns;
                 incidences = dataset.incidences;
                 return _.range(ns.length).map(idx => incidences[idx] / ns[idx]);
-            case dc.model_type.Nested: // TODO ?
-                incidences = dataset.incidences;
-                ns = dataset.litter_sizes;
-                return _.range(ns.length).map(idx => incidences[idx] / ns[idx]);
             default:
-                throw "Unknown model_type";
+                throw `Unknown dtype: ${dataset.dtype}`;
         }
     };
 
@@ -62,6 +57,20 @@ export const getDrLayout = function(dataset) {
 
         return layout;
     },
+    getCdfLayout = function(dataset) {
+        let layout = _.cloneDeep(doseResponseLayout),
+            xlabel = dataset.metadata.dose_name;
+
+        if (dataset.metadata.dose_units) {
+            xlabel = `${xlabel} (${dataset.metadata.dose_units})`;
+        }
+        layout.title.text = "BMD Cumulative distribution function";
+        layout.xaxis.title.text = xlabel;
+        layout.yaxis.title.text = "Percentile";
+        layout.yaxis.range = [0, 1];
+
+        return layout;
+    },
     getDrDatasetPlotData = function(dataset) {
         return {
             x: dataset.doses.slice(),
@@ -80,5 +89,20 @@ export const getDrLayout = function(dataset) {
             marker: {
                 color: hexColor,
             },
+        };
+    },
+    getConfig = function() {
+        return {
+            modeBarButtonsToRemove: [
+                "pan2d",
+                "select2d",
+                "lasso2d",
+                "zoomIn2d",
+                "zoomOut2d",
+                "autoScale2d",
+                "hoverClosestCartesian",
+                "hoverCompareCartesian",
+                "toggleSpikelines",
+            ],
         };
     };

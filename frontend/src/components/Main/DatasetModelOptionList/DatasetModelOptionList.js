@@ -3,59 +3,57 @@ import {inject, observer} from "mobx-react";
 import DatasetModelOption from "./DatasetModelOption";
 import DatasetModelOptionReadOnly from "./DatasetModelOptionReadOnly";
 import PropTypes from "prop-types";
-import {toJS} from "mobx";
 
-@inject("dataStore")
+import {datasetOptionColumnNames} from "../../../constants/dataConstants";
+
+@inject("dataOptionStore")
 @observer
-class DatasetList extends Component {
+class DatasetModelOptionList extends Component {
     render() {
-        const {dataStore} = this.props,
-            datasets = toJS(dataStore.datasets);
+        const {dataOptionStore} = this.props,
+            {canEdit, getDataset, options, updateOption} = dataOptionStore;
+
+        if (options.length == 0) {
+            return null;
+        }
+        const headers = datasetOptionColumnNames[getDataset(options[0]).dtype];
 
         return (
             <table className="table table-bordered table-sm">
                 <thead>
                     <tr className="table-primary">
-                        {dataStore.getDatasetNamesHeader.map((item, i) => {
-                            return <th key={i}>{item}</th>;
-                        })}
+                        {headers.map(text => (
+                            <th key={text}>{text}</th>
+                        ))}
                     </tr>
                 </thead>
-                {dataStore.canEdit ? (
-                    <tbody>
-                        {datasets.map(dataset => {
+                <tbody>
+                    {options.map(option => {
+                        if (canEdit) {
                             return (
                                 <DatasetModelOption
-                                    key={dataset.metadata.id}
-                                    dataset={dataset}
-                                    handleChange={dataStore.changeDatasetAttribute}
-                                    model_type={dataStore.getModelType}
+                                    key={option.dataset_id}
+                                    dataset={getDataset(option)}
+                                    option={option}
+                                    handleChange={updateOption}
                                 />
                             );
-                        })}
-                    </tbody>
-                ) : (
-                    <tbody>
-                        {dataStore.datasets.map(dataset => {
+                        } else {
                             return (
                                 <DatasetModelOptionReadOnly
-                                    key={dataset.metadata.id}
-                                    dataset={dataset}
-                                    model_type={dataStore.getModelType}
+                                    key={option.dataset_id}
+                                    dataset={getDataset(option)}
+                                    option={option}
                                 />
                             );
-                        })}
-                    </tbody>
-                )}
+                        }
+                    })}
+                </tbody>
             </table>
         );
     }
 }
-DatasetList.propTypes = {
-    dataStore: PropTypes.object,
-    getDataLength: PropTypes.func,
-    getDatasetNamesHeader: PropTypes.string,
-    canEdit: PropTypes.func,
-    getDatasets: PropTypes.string,
+DatasetModelOptionList.propTypes = {
+    dataOptionStore: PropTypes.object,
 };
-export default DatasetList;
+export default DatasetModelOptionList;

@@ -9,7 +9,7 @@ import {columns, columnHeaders} from "../../constants/dataConstants";
 class DatasetTable extends Component {
     render() {
         const {dataset} = this.props,
-            columnNames = columns[dataset.model_type],
+            columnNames = columns[dataset.dtype],
             width = `${100 / columnNames.length}%`;
 
         return (

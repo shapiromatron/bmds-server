@@ -29,8 +29,9 @@ def validate_input(data: Dict, partial: bool = False) -> None:
 
     # check dataset schema
     datasets = data.get("datasets")
+    dataset_options = data.get("dataset_options")
     if datasets or partial is False:
-        validate_datasets(dataset_type, datasets)
+        validate_datasets(dataset_type, datasets, dataset_options)
 
     # check model schema
     models = data.get("models")

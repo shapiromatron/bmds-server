@@ -439,41 +439,10 @@ const modelHeaders = {
     },
 };
 
-const nestedHeaders = {
-    first: {
-        model: "",
-        values: [{name: "MLE", colspan: "2"}],
-    },
-    second: {
-        model: "",
-        values: [
-            {name: "Frequentist Restricted", colspan: "1"},
-            {name: "Frequentist Unrestricted", colspan: "1"},
-        ],
-    },
-    third: {
-        model: "Model Name",
-        values: [
-            {
-                name: "Enable",
-                model_name: "frequentist_restricted",
-                colspan: "1",
-                isChecked: false,
-            },
-            {
-                name: "Enable",
-                model_name: "frequentist_unrestricted",
-                colspan: "1",
-                isChecked: false,
-            },
-        ],
-    },
-};
-
 const model = {
     Bayesian_Model_Average: "bayesian_model_average",
     Dichotomous_Hill: "Dichotomous-Hill",
     DichotomousHill: "DichotomousHill",
 };
 
-export {modelsList, modelHeaders, nestedHeaders, model};
+export {modelsList, modelHeaders, model};

@@ -91,9 +91,9 @@ class ModelDetailModal extends Component {
                         <Col>
                             <DoseResponsePlot
                                 layout={outputStore.drPlotLayout}
-                                data={outputStore.drPlotData}
+                                data={outputStore.drPlotModalData}
                             />
-                            <CDFPlot cdf={model.results.fit.bmd_dist} />
+                            <CDFPlot dataset={dataset} cdf={model.results.fit.bmd_dist} />
                         </Col>
                     </Row>
                 </Modal.Body>

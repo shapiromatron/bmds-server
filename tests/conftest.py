@@ -52,6 +52,7 @@ def bmds3_complete_continuous():
                 "background": "Estimated",
             }
         ],
+        "dataset_options": [{"dataset_id": 123, "enabled": True, "adverse_direction": "automatic"}],
         "recommender": RecommenderSettings.build_default().dict(),
     }
 
@@ -64,7 +65,7 @@ def bmds3_complete_dichotomous():
         "models": {"frequentist_restricted": ["LogLogistic"]},
         "datasets": [
             {
-                "dtype": "C",
+                "dtype": "D",
                 "metadata": {"id": 123},
                 "doses": [0, 10, 50, 150, 400],
                 "ns": [20, 20, 20, 20, 20],
@@ -79,5 +80,6 @@ def bmds3_complete_dichotomous():
                 "background": "Estimated",
             }
         ],
+        "dataset_options": [{"dataset_id": 123, "enabled": True}],
         "recommender": RecommenderSettings.build_default().dict(),
     }

@@ -1,7 +1,6 @@
 import {observable, action, computed, toJS} from "mobx";
 import _ from "lodash";
 
-import * as mc from "../constants/mainConstants";
 import * as dc from "../constants/dataConstants";
 import {getDrLayout, getDrDatasetPlotData} from "../constants/plotting";
 import {datasetTypesByModelType, getDefaultDataset} from "../constants/dataConstants";
@@ -16,9 +15,9 @@ class DataStore {
     @observable selectedDatasetId = null;
 
     @action.bound setDefaultsByDatasetType() {
-        let datasetTypes = this.getFilteredDatasetTypes;
-        this.model_type = datasetTypes[0].value;
+        this.selectedDatasetId = null;
         this.datasets = [];
+        this.model_type = this.getFilteredDatasetTypes[0].value;
     }
 
     @action.bound setModelType(model_type) {
@@ -44,17 +43,8 @@ class DataStore {
 
         dataset.metadata.id = id;
         dataset.metadata.name = `Dataset #${id + 1}`;
-
-        // TODO - remove this stuff or put somewhere else?
-        if (this.getModelType === mc.MODEL_DICHOTOMOUS) {
-            dataset["degree"] = "auto-select";
-            dataset["background"] = "Estimated";
-        }
-        dataset["enabled"] = true;
-        dataset["model_type"] = this.model_type;
-        // end TODO
-
         this.datasets.push(dataset);
+        this.rootStore.dataOptionStore.createOption(dataset);
         this.selectedDatasetId = id;
     }
 
@@ -94,19 +84,16 @@ class DataStore {
     }
 
     @action.bound deleteDataset() {
-        var index = this.datasets.findIndex(item => item.metadata.id == this.selectedDatasetId);
+        var index = this.datasets.findIndex(item => item.metadata.id == this.selectedDatasetId),
+            datasetId = toJS(this.selectedDatasetId);
         if (index > -1) {
             this.datasets.splice(index, 1);
+            this.rootStore.dataOptionStore.deleteOption(datasetId);
         }
         this.selectedDatasetId = null;
         if (this.datasets.length > 0) {
             this.selectedDatasetId = this.datasets[this.datasets.length - 1].metadata.id;
         }
-    }
-
-    @action.bound changeDatasetAttribute(dataset_id, key, value) {
-        let dataset = this.datasets.find(dataset => dataset.metadata.id == dataset_id);
-        dataset[key] = value;
     }
 
     @action setDatasets(datasets) {
@@ -173,13 +160,9 @@ class DataStore {
     }
 
     @computed get getEnabledDatasets() {
-        return this.datasets.filter(
-            item => item.enabled == true && item.model_type.includes(this.getModelType)
-        );
-    }
-
-    @computed get getDatasetNamesHeader() {
-        return mc.datasetNamesHeaders[this.getModelType];
+        return this.rootStore.dataOptionStore.options
+            .filter(d => d.enabled === true)
+            .map(d => d.dataset);
     }
 
     @computed get checkDatasetsLength() {

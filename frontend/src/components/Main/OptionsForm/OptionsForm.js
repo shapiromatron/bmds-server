@@ -5,11 +5,9 @@ import * as mc from "../../../constants/mainConstants";
 import {
     bmr_type,
     other_bmr_type,
-    litter_specific_covariate,
     distribution,
     variance,
     polynomial_restriction,
-    bootstrap_seed,
 } from "../../../constants/optionsConstants";
 
 const OptionsForm = props => {
@@ -84,29 +82,6 @@ const OptionsForm = props => {
                     }
                 />
             </td>
-            {props.modelType === mc.MODEL_NESTED ? (
-                <td>
-                    <select
-                        className="form-control"
-                        value={props.options.litter_specific_covariate}
-                        onChange={e =>
-                            props.saveOptions(
-                                "litter_specific_covariate",
-                                e.target.value,
-                                props.idx
-                            )
-                        }>
-                        {litter_specific_covariate.map((item, i) => {
-                            return (
-                                <option key={i} value={item.value}>
-                                    {item.name}
-                                </option>
-                            );
-                        })}
-                    </select>
-                </td>
-            ) : null}
-
             {props.modelType === mc.MODEL_CONTINUOUS ? (
                 <td>
                     <select
@@ -169,36 +144,6 @@ const OptionsForm = props => {
                     </select>
                 </td>
             ) : null}
-            {props.modelType === mc.MODEL_NESTED ? (
-                <td>
-                    <input
-                        type="number"
-                        className="form-control"
-                        value={props.options.bootstrap_iterations}
-                        onChange={e =>
-                            props.saveOptions("bootstrap_iterations", e.target.value, props.idx)
-                        }
-                    />
-                </td>
-            ) : null}
-            {props.modelType === mc.MODEL_NESTED ? (
-                <td>
-                    <select
-                        className="form-control"
-                        value={props.options.bootstrap_seed}
-                        onChange={e =>
-                            props.saveOptions("bootstrap_seed", e.target.value, props.idx)
-                        }>
-                        {bootstrap_seed.map((item, i) => {
-                            return (
-                                <option key={i} value={item.value}>
-                                    {item.name}
-                                </option>
-                            );
-                        })}
-                    </select>
-                </td>
-            ) : null}
             <td>
                 <button
                     type="button"
@@ -224,12 +169,9 @@ OptionsForm.propTypes = {
     options: PropTypes.object.isRequired,
     bmr_value: PropTypes.number,
     tail_probability: PropTypes.number,
-    litter_specific_covariate: PropTypes.string,
     distribution: PropTypes.string,
     variance: PropTypes.string,
     background: PropTypes.string,
-    bootstrap_iterations: PropTypes.string,
-    bootstrap_seed: PropTypes.string,
     delete: PropTypes.func,
 };
 export default OptionsForm;

@@ -119,7 +119,7 @@ class JobViewset(mixins.CreateModelMixin, mixins.RetrieveModelMixin, viewsets.Ge
         serializer = self.get_serializer(instance)
         return Response(serializer.data)
 
-    @action(detail=True, methods=("get",), renderer_classes=(renderers.XlsxRenderer,))
+    @action(detail=True, renderer_classes=(renderers.XlsxRenderer,))
     def excel(self, request, *args, **kwargs):
         """
         Return Excel export of outputs for selected job
@@ -128,15 +128,15 @@ class JobViewset(mixins.CreateModelMixin, mixins.RetrieveModelMixin, viewsets.Ge
         df = instance.to_excel()
         f = io.BytesIO()
         df.to_excel(f, index=False)
-        data = renderers.BinaryFile(data=f, filename=str(instance.id))
+        data = renderers.BinaryFile(data=f, filename=instance.slug)
         return Response(data)
 
-    @action(detail=True, methods=("get",), renderer_classes=(renderers.DocxRenderer,))
+    @action(detail=True, renderer_classes=(renderers.DocxRenderer,))
     def word(self, request, *args, **kwargs):
         """
         Return Word report for the selected job
         """
         instance = self.get_object()
         document = instance.to_word()
-        data = renderers.BinaryFile(data=document, filename=str(instance.id))
+        data = renderers.BinaryFile(data=document, filename=instance.slug)
         return Response(data)

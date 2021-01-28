@@ -17,6 +17,7 @@ from django.core.exceptions import ValidationError
 from django.db import models
 from django.urls import reverse
 from django.utils.timezone import now
+from django.utils.text import slugify
 
 from . import tasks, transforms, utils, validators
 
@@ -46,7 +47,14 @@ class Job(models.Model):
         get_latest_by = ("created",)
 
     def __str__(self):
-        return str(self.id)
+        return str(self.inputs.get("analysis_name", self.id))
+
+    @property
+    def slug(self) -> str:
+        if "analysis_name" in self.inputs:
+            return slugify(self.inputs["analysis_name"])
+        else:
+            return str(self.id)
 
     def get_absolute_url(self):
         return reverse("job", args=(str(self.id),))

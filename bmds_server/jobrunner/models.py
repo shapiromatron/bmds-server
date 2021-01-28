@@ -16,8 +16,8 @@ from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.db import models
 from django.urls import reverse
-from django.utils.timezone import now
 from django.utils.text import slugify
+from django.utils.timezone import now
 
 from . import tasks, transforms, utils, validators
 

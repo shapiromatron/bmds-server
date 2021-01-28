@@ -1,4 +1,5 @@
 import io
+import random
 
 from django.core.exceptions import ValidationError
 from rest_framework import exceptions, mixins, status, viewsets
@@ -124,6 +125,16 @@ class JobViewset(mixins.CreateModelMixin, mixins.RetrieveModelMixin, viewsets.Ge
         """
         Return Excel export of outputs for selected job
         """
+        # TODO - change from random number generator to a queue to checks diskcache
+        if random.random() < 0.9:
+            return Response(
+                {
+                    "status": "queued",
+                    "message": "Export requested... please wait until results are complete.",
+                },
+                content_type="application/json",
+            )
+
         instance = self.get_object()
         df = instance.to_excel()
         f = io.BytesIO()
@@ -136,6 +147,16 @@ class JobViewset(mixins.CreateModelMixin, mixins.RetrieveModelMixin, viewsets.Ge
         """
         Return Word report for the selected job
         """
+        # TODO - change from random number generator to a queue to checks diskcache
+        if random.random() < 0.9:
+            return Response(
+                {
+                    "status": "queued",
+                    "message": "Report requested... please wait until results are complete.",
+                },
+                content_type="application/json",
+            )
+
         instance = self.get_object()
         document = instance.to_word()
         data = renderers.BinaryFile(data=document, filename=instance.slug)

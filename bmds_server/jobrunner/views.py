@@ -1,12 +1,9 @@
 import json
 
 from django.conf import settings
-from django.contrib import messages
-from django.core.exceptions import ValidationError
 from django.http.response import JsonResponse
 from django.middleware.csrf import get_token
 from django.shortcuts import get_object_or_404
-from django.urls import reverse
 from django.views.generic import CreateView, DetailView, RedirectView, View
 
 from . import forms, models
@@ -25,29 +22,18 @@ class Healthcheck(View):
 class Home(CreateView):
     model = models.Job
     form_class = forms.CreateJobForm
+    template_name = "jobrunner/home.html"
 
     def get_success_url(self):
         return self.object.get_edit_url()
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["status_form"] = forms.JobStatusForm()
+        context["frontmatter"] = models.Content.objects.get(
+            content_type=models.ContentType.HOMEPAGE
+        )
         context["days_to_keep_jobs"] = settings.DAYS_TO_KEEP_JOBS
         return context
-
-
-class JobQuery(RedirectView):
-    def get_redirect_url(self, *args, **kwargs):
-        id_ = self.request.GET.get("id")
-        try:
-            return models.Job.objects.get(id=id_).get_absolute_url()
-        except (models.Job.DoesNotExist, ValidationError):
-            messages.info(
-                self.request,
-                "BMDS session not found; ID may be invalid or may have been deleted.",
-                extra_tags="alert alert-warning",
-            )
-            return reverse("home")
 
 
 class JobDetail(DetailView):

@@ -318,3 +318,21 @@ class Job(models.Model):
         if self.deletion_date is None:
             return None
         return (self.deletion_date - now()).days
+
+
+class ContentType(models.IntegerChoices):
+    HOMEPAGE = 1
+
+
+class Content(models.Model):
+    content_type = models.PositiveIntegerField(choices=ContentType.choices)
+    subject = models.CharField(max_length=128)
+    content = models.JSONField(null=False)
+    created = models.DateTimeField(auto_now_add=True)
+    last_updated = models.DateTimeField(auto_now=True)
+
+    def __str__(self) -> str:
+        return self.subject
+
+    class Meta:
+        ordering = ("-created",)

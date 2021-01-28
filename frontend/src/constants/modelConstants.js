@@ -257,17 +257,17 @@ const modelsList = {
                 {
                     name: "frequentist_restricted-Multistage",
                     isChecked: false,
-                    isDisabled: true,
+                    isDisabled: false,
                 },
                 {
                     name: "frequentist_unrestricted-Multistage",
                     isChecked: false,
-                    isDisabled: true,
+                    isDisabled: false,
                 },
                 {
                     name: "bayesian-Multistage",
                     isChecked: false,
-                    isDisabled: true,
+                    isDisabled: false,
                 },
                 {
                     name: "bayesian_model_average-Multistage",

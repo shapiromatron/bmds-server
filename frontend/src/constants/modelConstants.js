@@ -59,12 +59,12 @@ const modelsList = {
                 {
                     name: "frequentist_unrestricted-Linear",
                     isChecked: false,
-                    isDisabled: true,
+                    isDisabled: false,
                 },
                 {
                     name: "bayesian-Linear",
                     isChecked: false,
-                    isDisabled: true,
+                    isDisabled: false,
                 },
                 {
                     name: "bayesian_model_average-Linear",
@@ -80,17 +80,17 @@ const modelsList = {
                 {
                     name: "frequentist_restricted-Polynomial",
                     isChecked: false,
-                    isDisabled: true,
+                    isDisabled: false,
                 },
                 {
                     name: "frequentist_unrestricted-Polynomial",
                     isChecked: false,
-                    isDisabled: true,
+                    isDisabled: false,
                 },
                 {
                     name: "bayesian-Polynomial",
                     isChecked: false,
-                    isDisabled: true,
+                    isDisabled: false,
                 },
                 {
                     name: "bayesian_model_average-Polynomial",

@@ -7,7 +7,6 @@ import {
     other_bmr_type,
     distribution,
     variance,
-    polynomial_restriction,
 } from "../../../constants/optionsConstants";
 
 const OptionsForm = props => {
@@ -107,24 +106,6 @@ const OptionsForm = props => {
                         value={props.options.variance}
                         onChange={e => props.saveOptions("variance", e.target.value, props.idx)}>
                         {variance.map((item, i) => {
-                            return (
-                                <option key={i} value={item.value}>
-                                    {item.name}
-                                </option>
-                            );
-                        })}
-                    </select>
-                </td>
-            ) : null}
-            {props.modelType === mc.MODEL_CONTINUOUS ? (
-                <td>
-                    <select
-                        className="form-control"
-                        value={props.options.polynomial_restriction}
-                        onChange={e =>
-                            props.saveOptions("polynomial_restriction", e.target.value, props.idx)
-                        }>
-                        {polynomial_restriction.map((item, i) => {
                             return (
                                 <option key={i} value={item.value}>
                                     {item.name}

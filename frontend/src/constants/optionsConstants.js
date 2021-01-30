@@ -6,7 +6,6 @@ export const headers = {
             "Confidence Level",
             "Distribution",
             "Variance",
-            "Polynomial Restriction",
             "Background",
         ],
         D: ["Risk Type", "BMR", "Confidence Level", "Background"],
@@ -29,7 +28,6 @@ export const headers = {
             confidence_level: 0.95,
             distribution: "Normal",
             variance: "Constant",
-            polynomial_restriction: "Use dataset adverse direction",
             background: "Estimated",
         },
         D: {
@@ -71,9 +69,4 @@ export const headers = {
     variance = [
         {value: "Constant", name: "Constant"},
         {value: "Non-constant.", name: "Non-Constant"},
-    ],
-    polynomial_restriction = [
-        {value: "Use dataset adverse direction", name: "Use dataset adverse direction"},
-        {value: "Non-Negative", name: "Non-Negative"},
-        {value: "Non-Positive", name: "Non-Positive"},
     ];

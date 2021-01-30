@@ -48,7 +48,6 @@ def bmds3_complete_continuous():
                 "confidence_level": 0.05,
                 "distribution": "Normal",
                 "variance": "Calculated",
-                "polynomial_restriction": "Use dataset adverse direction",
                 "background": "Estimated",
             }
         ],

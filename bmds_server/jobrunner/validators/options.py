@@ -72,7 +72,6 @@ bmds3_c_option_set_schema = {
             "confidence_level",
             "distribution",
             "variance",
-            "polynomial_restriction",
             "background",
         ],
         "properties": {
@@ -97,10 +96,6 @@ bmds3_c_option_set_schema = {
             "variance": {
                 "description": "Variance",
                 "enum": ["Calculated", "Constant", "Non-constant"],
-            },
-            "polynomial_restriction": {
-                "description": "Polynomial restriction",
-                "enum": ["Use dataset adverse direction", "Non-negative", "Non-positive"],
             },
             "background": {"description": "Background", "enum": ["Estimated", "Zero"]},
         },

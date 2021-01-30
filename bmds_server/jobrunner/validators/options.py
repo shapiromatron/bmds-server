@@ -70,8 +70,7 @@ bmds3_c_option_set_schema = {
             "bmr_value",
             "tail_probability",
             "confidence_level",
-            "distribution",
-            "variance",
+            "dist_type",
             "background",
         ],
         "properties": {
@@ -92,10 +91,9 @@ bmds3_c_option_set_schema = {
                 "minimum": 0,
                 "maximum": 1,
             },
-            "distribution": {"description": "Distribution", "enum": ["Normal", "Log-normal"]},
-            "variance": {
-                "description": "Variance",
-                "enum": ["Calculated", "Constant", "Non-constant"],
+            "dist_type": {
+                "description": "Distribution + Variance",
+                "enum": ["normal", "normal_ncv", "log_normal"],
             },
             "background": {"description": "Background", "enum": ["Estimated", "Zero"]},
         },

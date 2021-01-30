@@ -3,6 +3,7 @@ from typing import Dict
 from bmds.bmds3.types.continuous import ContinuousModelSettings, ContinuousRiskType
 from bmds.bmds3.types.dichotomous import DichotomousModelSettings, DichotomousRiskType
 from bmds.bmds3.types.priors import PriorClass
+from bmds.bmds3.constants import DistType
 
 bmds3_d_bmr_type_map = {
     "Extra": DichotomousRiskType.eAddedRisk,
@@ -21,6 +22,11 @@ bmd3_prior_map = {
     "bayesian": PriorClass.bayesian,
     "bayesian_model_average": PriorClass.bayesian,
 }
+dist_type_map = {
+    "normal": DistType.normal,
+    "normal_ncv": DistType.normal_ncv,
+    "log_normal": DistType.log_normal,
+}
 
 
 def bmds3_d_model_options(prior_class: str, options: Dict) -> DichotomousModelSettings:
@@ -38,5 +44,6 @@ def bmds3_c_model_options(prior_class: str, options: Dict) -> ContinuousModelSet
         alpha=1.0 - options["confidence_level"],
         tailProb=options["tail_probability"],
         bmr_type=bmds3_c_bmr_type_map[options["bmr_type"]],
+        disttype=dist_type_map[options["dist_type"]],
         prior=bmd3_prior_map[prior_class],
     )

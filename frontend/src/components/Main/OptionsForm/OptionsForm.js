@@ -5,8 +5,7 @@ import * as mc from "../../../constants/mainConstants";
 import {
     bmr_type,
     other_bmr_type,
-    distribution,
-    variance,
+    distTypes,
 } from "../../../constants/optionsConstants";
 
 const OptionsForm = props => {
@@ -85,27 +84,11 @@ const OptionsForm = props => {
                 <td>
                     <select
                         className="form-control"
-                        value={props.options.distribution}
+                        value={props.options.dist_type}
                         onChange={e =>
-                            props.saveOptions("distribution", e.target.value, props.idx)
+                            props.saveOptions("dist_type", e.target.value, props.idx)
                         }>
-                        {distribution.map((item, i) => {
-                            return (
-                                <option key={i} value={item.value}>
-                                    {item.name}
-                                </option>
-                            );
-                        })}
-                    </select>
-                </td>
-            ) : null}
-            {props.modelType === mc.MODEL_CONTINUOUS ? (
-                <td>
-                    <select
-                        className="form-control"
-                        value={props.options.variance}
-                        onChange={e => props.saveOptions("variance", e.target.value, props.idx)}>
-                        {variance.map((item, i) => {
+                        {distTypes.map((item, i) => {
                             return (
                                 <option key={i} value={item.value}>
                                     {item.name}

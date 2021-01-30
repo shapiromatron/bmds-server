@@ -1,9 +1,10 @@
 import React, {Component} from "react";
 import {inject, observer} from "mobx-react";
-import OptionsForm from "./OptionsForm";
-import OptionsReadOnly from "./OptionsReadOnly";
 import PropTypes from "prop-types";
 import {toJS} from "mobx";
+
+import OptionsForm from "./OptionsForm";
+import OptionsReadOnly from "./OptionsReadOnly";
 
 @inject("optionsStore")
 @observer
@@ -19,21 +20,21 @@ class OptionsFormList extends Component {
                             <thead className="table-primary">
                                 <tr>
                                     {optionsStore.headers.map((item, index) => {
-                                        return <th key={index}>{item}</th>;
-                                    })}
+                                    return <th key={index}>{item}</th>;
+                                })}
                                     {optionsStore.canEdit ? (
-                                        <th>
-                                            <button
-                                                type="button"
-                                                data-toggle="tooltip"
-                                                data-placement="right"
-                                                title="Add New Option Set"
-                                                className="btn btn-primary "
-                                                disabled={!optionsStore.canAddNewOption}
-                                                onClick={() => optionsStore.addOptions()}>
-                                                <i className="fa fa-plus"></i>{" "}
-                                            </button>
-                                        </th>
+                                    <th>
+                                        <button
+                                            type="button"
+                                            data-toggle="tooltip"
+                                            data-placement="right"
+                                            title="Add New Option Set"
+                                            className="btn btn-primary "
+                                            disabled={!optionsStore.canAddNewOption}
+                                            onClick={() => optionsStore.addOptions()}>
+                                            <i className="fa fa-plus"></i>{" "}
+                                        </button>
+                                    </th>
                                     ) : null}
                                 </tr>
                             </thead>

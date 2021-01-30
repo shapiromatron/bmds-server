@@ -4,21 +4,10 @@ export const headers = {
             "BMRF",
             "Tail Probability",
             "Confidence Level",
-            "Distribution",
-            "Variance",
+            "Distribution + Variance",
             "Background",
         ],
         D: ["Risk Type", "BMR", "Confidence Level", "Background"],
-        DM: ["Risk Type", "BMR", "Confidence Level"],
-        N: [
-            "Risk Type",
-            "BMR",
-            "Confidence Level",
-            "Litter Specific Covariate",
-            "Background",
-            "Bootstrap Iterations",
-            "Bootstrap Seed",
-        ],
     },
     options = {
         C: {
@@ -26,8 +15,7 @@ export const headers = {
             bmr_value: 1,
             tail_probability: 0.01,
             confidence_level: 0.95,
-            distribution: "Normal",
-            variance: "Constant",
+            dist_type: "normal",
             background: "Estimated",
         },
         D: {
@@ -35,20 +23,6 @@ export const headers = {
             bmr_value: 0.1,
             confidence_level: 0.95,
             background: "Estimated",
-        },
-        DM: {
-            bmr_type: "Extra",
-            bmr_value: 0.1,
-            confidence_level: 0.95,
-        },
-        N: {
-            bmr_type: "Extra",
-            bmr_value: 0.1,
-            confidence_level: 0.95,
-            litter_sepcific_covariate: "Overall Mean",
-            background: "Estimated",
-            bootstrap_iterations: 1000,
-            bootstrap_speed: "Automatic",
         },
     },
     bmr_type = [
@@ -62,11 +36,8 @@ export const headers = {
         {value: "Extra", name: "Extra Risk"},
         {value: "Added", name: "Added Risk"},
     ],
-    distribution = [
-        {value: "Normal.", name: "Normal"},
-        {value: "log normal.", name: "Log normal"},
-    ],
-    variance = [
-        {value: "Constant", name: "Constant"},
-        {value: "Non-constant.", name: "Non-Constant"},
+    distTypes = [
+        {value: "normal", name: "Normal + Constant"},
+        {value: "normal_ncv", name: "Normal + Non-constant"},
+        // {value: "log_normal", name: "Log normal"}  // TODO - add back once not broken.
     ];

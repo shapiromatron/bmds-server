@@ -120,14 +120,19 @@ class Job(models.Model):
         dataset_type = inputs["dataset_type"]
         dataset = cls._build_dataset(dataset_type, inputs["datasets"][dataset_index])
         options = inputs["options"][option_index]
+        dataset_options = inputs["dataset_options"][dataset_index]
 
         session = bmds.BMDS.version(bmds_version)(dataset=dataset)
         for prior_class, model_names in inputs["models"].items():
             for model_name in model_names:
                 if dataset_type in bmds.constants.DICHOTOMOUS_DTYPES:
-                    model_options = transforms.bmds3_d_model_options(prior_class, options)
+                    model_options = transforms.bmds3_d_model_options(
+                        prior_class, options, dataset_options
+                    )
                 elif dataset_type in bmds.constants.CONTINUOUS_DTYPES:
-                    model_options = transforms.bmds3_c_model_options(prior_class, options)
+                    model_options = transforms.bmds3_c_model_options(
+                        prior_class, options, dataset_options
+                    )
                 else:
                     raise ValueError(f"Unknown dataset_type: {dataset_type}")
 

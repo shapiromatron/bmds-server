@@ -52,8 +52,6 @@ export const DATA_CONTINUOUS_SUMMARY = "CS",
         stdevs: "Std. Dev.",
         responses: "Response",
         incidences: "Incidence",
-        litter_sizes: "Litter Size",
-        litter_specific_covariates: "Litter Specific Covariate",
     },
     getDefaultDataset = function(dtype) {
         switch (dtype) {
@@ -68,10 +66,10 @@ export const DATA_CONTINUOUS_SUMMARY = "CS",
                         dose_name: "Dose",
                         response_name: "Response",
                     },
-                    doses: [0, 7, 37, 186],
-                    ns: [25, 25, 25, 24],
-                    means: [55.8, 52.9, 64.8, 119.9],
-                    stdevs: [12.5, 15.4, 17.4, 32.5],
+                    doses: [0, 50, 100, 150, 200],
+                    ns: [100, 100, 100, 100, 100],
+                    means: [10, 18, 32, 38, 70],
+                    stdevs: [3.2, 4.8, 6.5, 7.2, 8.4],
                 };
             case DATA_CONTINUOUS_INDIVIDUAL:
                 return {
@@ -107,12 +105,23 @@ export const DATA_CONTINUOUS_SUMMARY = "CS",
         }
     },
     datasetOptionColumnNames = {
-        [Dtype.CONTINUOUS]: ["Enabled", "Dataset", "Adverse Direction"],
-        [Dtype.CONTINUOUS_INDIVIDUAL]: ["Enabled", "Dataset", "Adverse Direction"],
-        [Dtype.DICHOTOMOUS]: ["Enabled", "Dataset"],
+        [Dtype.CONTINUOUS]: ["Enabled", "Dataset", "Degree", "Adverse Direction"],
+        [Dtype.CONTINUOUS_INDIVIDUAL]: ["Enabled", "Dataset", "Degree", "Adverse Direction"],
+        [Dtype.DICHOTOMOUS]: ["Enabled", "Dataset", "Degree"],
     },
     adverseDirectionOptions = [
-        {value: "automatic", name: "Automatic"},
-        {value: "up", name: "Up"},
-        {value: "down", name: "Down"},
+        {value: -1, name: "Automatic"},
+        {value: 1, name: "Up"},
+        {value: 0, name: "Down"},
+    ],
+    degreeOptions = [
+        {value: 0, name: "N-1"},
+        {value: 1, name: "1"},
+        {value: 2, name: "2"},
+        {value: 3, name: "3"},
+        {value: 4, name: "4"},
+        {value: 5, name: "5"},
+        {value: 6, name: "6"},
+        {value: 7, name: "7"},
+        {value: 8, name: "8"},
     ];

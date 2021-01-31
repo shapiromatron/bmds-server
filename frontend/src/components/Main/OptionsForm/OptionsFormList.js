@@ -5,12 +5,14 @@ import {toJS} from "mobx";
 
 import OptionsForm from "./OptionsForm";
 import OptionsReadOnly from "./OptionsReadOnly";
+import {MODEL_CONTINUOUS, MODEL_DICHOTOMOUS} from "../../../constants/mainConstants";
 
 @inject("optionsStore")
 @observer
 class OptionsFormList extends Component {
     render() {
         const {optionsStore} = this.props,
+            modelType = optionsStore.getModelType,
             optionsList = toJS(optionsStore.optionsList);
         return (
             <div>
@@ -19,22 +21,35 @@ class OptionsFormList extends Component {
                         <table className="options-table table table-bordered table-sm text-center">
                             <thead className="table-primary">
                                 <tr>
-                                    {optionsStore.headers.map((item, index) => {
-                                    return <th key={index}>{item}</th>;
-                                })}
+                                    {modelType === MODEL_CONTINUOUS ? (
+                                        <>
+                                            <td>BMR Type</td>
+                                            <td>BMRF</td>
+                                            <td>Tail Probability</td>
+                                            <td>Confidence Level</td>
+                                            <td>Distribution + Variance</td>
+                                        </>
+                                    ) : null}
+                                    {modelType === MODEL_DICHOTOMOUS ? (
+                                        <>
+                                            <td>Risk Type</td>
+                                            <td>BMR</td>
+                                            <td>Confidence Level</td>
+                                        </>
+                                    ) : null}
                                     {optionsStore.canEdit ? (
-                                    <th>
-                                        <button
-                                            type="button"
-                                            data-toggle="tooltip"
-                                            data-placement="right"
-                                            title="Add New Option Set"
-                                            className="btn btn-primary "
-                                            disabled={!optionsStore.canAddNewOption}
-                                            onClick={() => optionsStore.addOptions()}>
-                                            <i className="fa fa-plus"></i>{" "}
-                                        </button>
-                                    </th>
+                                        <th>
+                                            <button
+                                                type="button"
+                                                data-toggle="tooltip"
+                                                data-placement="right"
+                                                title="Add New Option Set"
+                                                className="btn btn-primary "
+                                                disabled={!optionsStore.canAddNewOption}
+                                                onClick={() => optionsStore.addOptions()}>
+                                                <i className="fa fa-plus"></i>{" "}
+                                            </button>
+                                        </th>
                                     ) : null}
                                 </tr>
                             </thead>
@@ -45,7 +60,7 @@ class OptionsFormList extends Component {
                                             key={id}
                                             idx={id}
                                             options={options}
-                                            modelType={optionsStore.getModelType}
+                                            modelType={modelType}
                                             deleteOptions={optionsStore.deleteOptions}
                                             saveOptions={optionsStore.saveOptions}
                                         />
@@ -54,7 +69,12 @@ class OptionsFormList extends Component {
                             ) : (
                                 <tbody>
                                     {optionsList.map((options, id) => (
-                                        <OptionsReadOnly key={id} idx={id} options={options} />
+                                        <OptionsReadOnly
+                                            key={id}
+                                            idx={id}
+                                            options={options}
+                                            modelType={modelType}
+                                        />
                                     ))}
                                 </tbody>
                             )}
@@ -68,11 +88,6 @@ class OptionsFormList extends Component {
 
 OptionsFormList.propTypes = {
     optionsStore: PropTypes.object,
-    saveOptions: PropTypes.func,
-    deleteOptions: PropTypes.func,
-    headers: PropTypes.array,
-    canEdit: PropTypes.func,
-    addOptions: PropTypes.func,
-    optionsList: PropTypes.array,
 };
+
 export default OptionsFormList;

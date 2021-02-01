@@ -108,7 +108,9 @@ class OutputStore {
     // start modal methods
     @action.bound showModalDetail(model) {
         this.modalModel = model;
-        this.drModelModal = getDrBmdLine(model, "#0000FF");
+        if (this.drModelSelected.name !== model.name) {
+            this.drModelModal = getDrBmdLine(model, "#0000FF");
+        }
         this.showModelModal = true;
     }
     @action.bound closeModal() {
@@ -120,7 +122,12 @@ class OutputStore {
 
     // start dose-response plotting data methods
     @computed get drPlotLayout() {
-        return getDrLayout(this.selectedDataset);
+        return getDrLayout(
+            this.selectedDataset,
+            this.drModelSelected,
+            this.drModelModal,
+            this.drModelHover
+        );
     }
     @computed get drPlotData() {
         const data = [getDrDatasetPlotData(this.selectedDataset)];
@@ -146,6 +153,9 @@ class OutputStore {
         return data;
     }
     @action.bound drPlotAddHover(model) {
+        if (this.drModelSelected && this.drModelSelected.name === model.name) {
+            return;
+        }
         this.drModelHover = getDrBmdLine(model, "#DA2CDA");
     }
     @action.bound drPlotRemoveHover() {

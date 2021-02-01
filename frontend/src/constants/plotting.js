@@ -39,7 +39,7 @@ const doseResponseLayout = {
         }
     };
 
-export const getDrLayout = function(dataset) {
+export const getDrLayout = function(dataset, selected, modal, hover) {
         let layout = _.cloneDeep(doseResponseLayout),
             xlabel = dataset.metadata.dose_name,
             ylabel = dataset.metadata.response_name;
@@ -51,6 +51,18 @@ export const getDrLayout = function(dataset) {
         if (dataset.metadata.response_units) {
             ylabel = `${ylabel} (${dataset.metadata.response_units})`;
         }
+
+        const annotations = [];
+        if (selected && selected.annotations) {
+            annotations.push(selected.annotations);
+        }
+        if (modal && modal.annotations) {
+            annotations.push(modal.annotations);
+        }
+        if (hover && hover.annotations) {
+            annotations.push(hover.annotations);
+        }
+        layout.annotations = _.flatten(annotations);
 
         layout.title.text = dataset.metadata.name;
         layout.xaxis.title.text = xlabel;
@@ -85,19 +97,57 @@ export const getDrLayout = function(dataset) {
             y: getResponse(dataset).slice(),
             mode: "markers",
             type: "scatter",
+            marker: {
+                size: 10,
+            },
             error_y: errorBars,
             name: "Response",
         };
     },
     getDrBmdLine = function(model, hexColor) {
+        const annotations = [];
+        if (model.results.bmd) {
+            // https://plotly.com/javascript/reference/layout/annotations/#layout-annotations
+            annotations.push({
+                x: model.results.bmd,
+                y: model.results.bmd_y,
+                text: "BMD",
+                showarrow: true,
+                arrowhead: 6,
+                arrowsize: 1.5,
+                arrowcolor: hexColor,
+                ay: 0,
+                ax: 0,
+                ayref: "y",
+                bgcolor: "white",
+            });
+        }
+        if (model.results.bmdl) {
+            annotations.push({
+                x: model.results.bmdl,
+                y: model.results.bmdl_y,
+                text: "BMDL",
+                showarrow: true,
+                arrowhead: 6,
+                arrowsize: 1.5,
+                arrowcolor: hexColor,
+                ay: 0,
+                ax: 0,
+                ayref: "y",
+                bgcolor: "white",
+            });
+        }
+
         return {
             x: model.results.dr_x,
             y: model.results.dr_y,
             mode: "lines",
             name: model.name,
-            marker: {
+            line: {
                 color: hexColor,
+                width: 4,
             },
+            annotations,
         };
     },
     getConfig = function() {

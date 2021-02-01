@@ -132,9 +132,7 @@ class Job(models.Model):
                     raise ValueError(f"Unknown dataset_type: {dataset_type}")
 
                 if model_name == bmds.constants.M_Exponential:
-                    session.add_model(bmds.constants.M_ExponentialM2, settings=model_options)
                     session.add_model(bmds.constants.M_ExponentialM3, settings=model_options)
-                    session.add_model(bmds.constants.M_ExponentialM4, settings=model_options)
                     session.add_model(bmds.constants.M_ExponentialM5, settings=model_options)
                 else:
                     session.add_model(model_name, settings=model_options)

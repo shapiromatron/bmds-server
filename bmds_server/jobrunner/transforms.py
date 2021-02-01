@@ -26,7 +26,7 @@ bmd3_prior_map = {
 def bmds3_d_model_options(prior_class: str, options: Dict) -> DichotomousModelSettings:
     return DichotomousModelSettings(
         bmr=options["bmr_value"],
-        alpha=options["confidence_level"],
+        alpha=1.0 - options["confidence_level"],
         bmr_type=bmds3_d_bmr_type_map[options["bmr_type"]],
         prior=bmd3_prior_map[prior_class],
     )
@@ -35,7 +35,7 @@ def bmds3_d_model_options(prior_class: str, options: Dict) -> DichotomousModelSe
 def bmds3_c_model_options(prior_class: str, options: Dict) -> ContinuousModelSettings:
     return ContinuousModelSettings(
         bmr=options["bmr_value"],
-        alpha=options["confidence_level"],
+        alpha=1.0 - options["confidence_level"],
         tailProb=options["tail_probability"],
         bmr_type=bmds3_c_bmr_type_map[options["bmr_type"]],
         prior=bmd3_prior_map[prior_class],

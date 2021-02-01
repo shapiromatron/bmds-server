@@ -1,6 +1,7 @@
 import _ from "lodash";
 
 import {Dtype} from "./dataConstants";
+import {continuousErrorBars, dichotomousErrorBars} from "../utils/errorBars";
 
 const doseResponseLayout = {
         autosize: true,
@@ -72,11 +73,19 @@ export const getDrLayout = function(dataset) {
         return layout;
     },
     getDrDatasetPlotData = function(dataset) {
+        let errorBars = undefined;
+        if (dataset.dtype == Dtype.CONTINUOUS) {
+            errorBars = continuousErrorBars(dataset);
+        }
+        if (dataset.dtype == Dtype.DICHOTOMOUS) {
+            errorBars = dichotomousErrorBars(dataset);
+        }
         return {
             x: dataset.doses.slice(),
             y: getResponse(dataset).slice(),
             mode: "markers",
             type: "scatter",
+            error_y: errorBars,
             name: "Response",
         };
     },

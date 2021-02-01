@@ -23,18 +23,18 @@ class OptionsFormList extends Component {
                                 <tr>
                                     {modelType === MODEL_CONTINUOUS ? (
                                         <>
-                                            <td>BMR Type</td>
-                                            <td>BMRF</td>
-                                            <td>Tail Probability</td>
-                                            <td>Confidence Level</td>
-                                            <td>Distribution + Variance</td>
+                                            <th>BMR Type</th>
+                                            <th>BMRF</th>
+                                            <th>Tail Probability</th>
+                                            <th>Confidence Level</th>
+                                            <th>Distribution + Variance</th>
                                         </>
                                     ) : null}
                                     {modelType === MODEL_DICHOTOMOUS ? (
                                         <>
-                                            <td>Risk Type</td>
-                                            <td>BMR</td>
-                                            <td>Confidence Level</td>
+                                            <th>Risk Type</th>
+                                            <th>BMR</th>
+                                            <th>Confidence Level</th>
                                         </>
                                     ) : null}
                                     {optionsStore.canEdit ? (

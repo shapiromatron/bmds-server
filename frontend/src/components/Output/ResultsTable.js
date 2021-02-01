@@ -34,8 +34,8 @@ class ResultsTable extends Component {
                 <thead className="table-bordered">
                     <tr className="table-primary">
                         <th>Model</th>
-                        <th>BMD</th>
                         <th>BMDL</th>
+                        <th>BMD</th>
                         <th>BMDU</th>
                         <th>AIC</th>
                         <th>p-value</th>
@@ -65,8 +65,8 @@ class ResultsTable extends Component {
                                         {model.name}
                                     </a>
                                 </td>
-                                <td>{ff(model.results.bmd)}</td>
                                 <td>{ff(model.results.bmdl)}</td>
+                                <td>{ff(model.results.bmd)}</td>
                                 <td>{ff(model.results.bmdu)}</td>
                                 <td>{ff(model.results.aic)}</td>
                                 <td>{ff(getPValue(dataset.dtype, model.results))}</td>

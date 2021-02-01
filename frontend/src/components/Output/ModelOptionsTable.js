@@ -1,12 +1,19 @@
 import React, {Component} from "react";
-import {inject, observer} from "mobx-react";
+import {observer} from "mobx-react";
 import PropTypes from "prop-types";
 
-@inject("outputStore")
+import {Dtype} from "../../constants/dataConstants";
+import {
+    dichotomousBmrOptions,
+    continuousBmrOptions,
+    distTypeOptions,
+} from "../../constants/optionsConstants";
+import {ff, getLabel} from "../../common";
+
 @observer
 class ModelOptionsTable extends Component {
     render() {
-        const {outputStore} = this.props;
+        const {dtype, model} = this.props;
         return (
             <table className="table table-bordered table-sm">
                 <thead>
@@ -15,21 +22,53 @@ class ModelOptionsTable extends Component {
                     </tr>
                 </thead>
                 <tbody>
-                    {outputStore.getModelOptions.map((dev, i) => {
-                        return (
-                            <tr key={i}>
-                                <td>{dev.label}</td>
-                                <td>{dev.value}</td>
+                    {dtype == Dtype.DICHOTOMOUS ? (
+                        <>
+                            <tr>
+                                <td>Risk Type</td>
+                                <td>{getLabel(model.settings.bmr_type, dichotomousBmrOptions)}</td>
                             </tr>
-                        );
-                    })}
+                            <tr>
+                                <td>BMR</td>
+                                <td>{ff(model.settings.bmr)}</td>
+                            </tr>
+                            <tr>
+                                <td>Confidence Level</td>
+                                <td>{ff(1 - model.settings.alpha)}</td>
+                            </tr>
+                        </>
+                    ) : null}
+                    {dtype == Dtype.CONTINUOUS || dtype == Dtype.CONTINUOUS_INDIVIDUAL ? (
+                        <>
+                            <tr>
+                                <td>BMR Type</td>
+                                <td>{getLabel(model.settings.bmr_type, continuousBmrOptions)}</td>
+                            </tr>
+                            <tr>
+                                <td>BMRF</td>
+                                <td>{ff(model.settings.bmr)}</td>
+                            </tr>
+                            <tr>
+                                <td>Tail Probability</td>
+                                <td>{ff(model.settings.tail_prob)}</td>
+                            </tr>
+                            <tr>
+                                <td>Confidence Level</td>
+                                <td>{ff(1 - model.settings.alpha)}</td>
+                            </tr>
+                            <tr>
+                                <td>Distribution + Variance</td>
+                                <td>{getLabel(model.settings.disttype, distTypeOptions)}</td>
+                            </tr>
+                        </>
+                    ) : null}
                 </tbody>
             </table>
         );
     }
 }
 ModelOptionsTable.propTypes = {
-    outputStore: PropTypes.object,
-    getModelOptions: PropTypes.func,
+    dtype: PropTypes.string.isRequired,
+    model: PropTypes.object.isRequired,
 };
 export default ModelOptionsTable;

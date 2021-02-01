@@ -1,4 +1,4 @@
-from enum import Enum
+from enum import IntEnum
 from typing import Any, Union
 
 import bmds
@@ -13,21 +13,35 @@ from pydantic import BaseModel, conlist, root_validator
 from ...common.validation import pydantic_validate
 
 
-class AdverseDirection(str, Enum):
-    AUTOMATIC = "automatic"
-    UP = "up"
-    DOWN = "down"
+class MaxDegree(IntEnum):
+    N_MINUS_ONE = 0
+    ONE = 1
+    TWO = 2
+    THREE = 3
+    FOUR = 4
+    FIVE = 5
+    SIX = 6
+    SEVEN = 7
+    EIGHT = 8
+
+
+class AdverseDirection(IntEnum):
+    AUTOMATIC = -1
+    UP = 1
+    DOWN = 0
 
 
 class DichotomousModelOptions(BaseModel):
     dataset_id: int
     enabled: bool = True
+    degree: MaxDegree = MaxDegree.N_MINUS_ONE
 
 
 class ContinuousModelOptions(BaseModel):
     dataset_id: int
     enabled: bool = True
     adverse_direction: AdverseDirection = AdverseDirection.AUTOMATIC
+    degree: MaxDegree = MaxDegree.N_MINUS_ONE
 
 
 class DatasetValidator(BaseModel):

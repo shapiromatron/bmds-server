@@ -24,7 +24,8 @@ class ModelDetailModal extends Component {
         const {outputStore} = this.props,
             output = outputStore.selectedOutput,
             dataset = output.dataset,
-            model = outputStore.modalModel;
+            model = outputStore.modalModel,
+            dtype = dataset.dtype;
 
         if (!model) {
             return null;
@@ -53,28 +54,32 @@ class ModelDetailModal extends Component {
                             <InfoTable />
                         </Col>
                         <Col xs={4}>
-                            <ModelOptionsTable />
+                            <ModelOptionsTable dtype={dtype} model={model} />
                         </Col>
                         <Col xs={4}>
-                            <ModelData />
+                            <ModelData dtype={dtype} dataset={dataset} />
                         </Col>
                     </Row>
                     <Row>
                         <Col xs={4}>
                             <BenchmarkDose store={outputStore} />
-                        </Col>
-                        <Col xs={4}>
                             <ModelParameters store={outputStore} />
                         </Col>
+                        <Col xs={8}>
+                            <DoseResponsePlot
+                                layout={outputStore.drPlotLayout}
+                                data={outputStore.drPlotModalData}
+                            />
+                        </Col>
                     </Row>
-                    {dataset.model_type == dc.DATA_DICHOTOMOUS ? (
+                    {dtype == dc.Dtype.DICHOTOMOUS ? (
                         <Row>
                             <Col xs={12}>
                                 <GoodnessFit store={outputStore} />
                             </Col>
                         </Row>
                     ) : null}
-                    {dataset.model_type == dc.DATA_CONTINUOUS_SUMMARY ? (
+                    {dtype.model_type == dc.Dtype.CONTINUOUS ? (
                         <Row>
                             <Col xs={4}>
                                 <CSLoglikelihoods results={model.results} />
@@ -85,14 +90,10 @@ class ModelDetailModal extends Component {
                         </Row>
                     ) : null}
                     <Row>
-                        <Col xs={4}>
+                        <Col xs={4} style={{maxHeight: "50vh", overflowY: "scroll"}}>
                             <CDFTable bmd_dist={model.results.fit.bmd_dist} />
                         </Col>
-                        <Col>
-                            <DoseResponsePlot
-                                layout={outputStore.drPlotLayout}
-                                data={outputStore.drPlotModalData}
-                            />
+                        <Col xs={8}>
                             <CDFPlot dataset={dataset} cdf={model.results.fit.bmd_dist} />
                         </Col>
                     </Row>

@@ -16,6 +16,9 @@ class CDFPlot extends Component {
                 y: cdf[1],
                 mode: "lines",
                 type: "line",
+                line: {
+                    width: 4,
+                },
                 name: "BMD",
             };
         return (

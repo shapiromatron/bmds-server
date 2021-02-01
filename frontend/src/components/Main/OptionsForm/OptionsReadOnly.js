@@ -2,6 +2,12 @@ import React from "react";
 import PropTypes from "prop-types";
 
 import {MODEL_CONTINUOUS, MODEL_DICHOTOMOUS} from "../../../constants/mainConstants";
+import {
+    dichotomousBmrOptions,
+    continuousBmrOptions,
+    distTypeOptions,
+} from "../../../constants/optionsConstants";
+import {ff, getLabel} from "../../../common";
 
 const OptionsReadOnly = props => {
     const {options, modelType} = props;
@@ -9,18 +15,18 @@ const OptionsReadOnly = props => {
         <tr>
             {modelType === MODEL_CONTINUOUS ? (
                 <>
-                    <td>{options.bmr_type}</td>
-                    <td>{options.bmr_value}</td>
-                    <td>{options.tail_probability}</td>
-                    <td>{options.confidence_level}</td>
-                    <td>{options.dist_type}</td>
+                    <td>{getLabel(options.bmr_type, continuousBmrOptions)}</td>
+                    <td>{ff(options.bmr_value)}</td>
+                    <td>{ff(options.tail_probability)}</td>
+                    <td>{ff(options.confidence_level * 100)}%</td>
+                    <td>{getLabel(options.dist_type, distTypeOptions)}</td>
                 </>
             ) : null}
             {modelType === MODEL_DICHOTOMOUS ? (
                 <>
-                    <td>{options.bmr_type}</td>
-                    <td>{options.bmr_value}</td>
-                    <td>{options.confidence_level}%</td>
+                    <td>{getLabel(options.bmr_type, dichotomousBmrOptions)}</td>
+                    <td>{ff(options.bmr_value)}</td>
+                    <td>{ff(options.confidence_level * 100)}%</td>
                 </>
             ) : null}
         </tr>

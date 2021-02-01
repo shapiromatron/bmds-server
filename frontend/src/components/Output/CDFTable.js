@@ -3,11 +3,12 @@ import React, {Component} from "react";
 import {observer} from "mobx-react";
 import PropTypes from "prop-types";
 
+import {ff} from "../../common";
+
 @observer
 class CDFTable extends Component {
     render() {
         const {bmd_dist} = this.props;
-
         return (
             <table className="table table-bordered table-sm">
                 <thead>
@@ -24,7 +25,7 @@ class CDFTable extends Component {
                         return (
                             <tr key={i}>
                                 <td>{bmd_dist[1][i]}</td>
-                                <td>{bmd_dist[0][i]}</td>
+                                <td>{ff(bmd_dist[0][i])}</td>
                             </tr>
                         );
                     })}

@@ -3,6 +3,7 @@ import {observer} from "mobx-react";
 import PropTypes from "prop-types";
 
 import {getPValue} from "../../constants/outputConstants";
+import {ff} from "../../common";
 
 @observer
 class BenchmarkDose extends Component {
@@ -21,23 +22,23 @@ class BenchmarkDose extends Component {
                 <tbody>
                     <tr>
                         <td>BMD</td>
-                        <td>{results.bmd}</td>
+                        <td>{ff(results.bmd)}</td>
                     </tr>
                     <tr>
                         <td>BMDL</td>
-                        <td>{results.bmdl}</td>
+                        <td>{ff(results.bmdl)}</td>
                     </tr>
                     <tr>
                         <td>BMDU</td>
-                        <td>{results.bmdu}</td>
+                        <td>{ff(results.bmdu)}</td>
                     </tr>
                     <tr>
                         <td>AIC</td>
-                        <td>{results.aic}</td>
+                        <td>{ff(results.aic)}</td>
                     </tr>
                     <tr>
                         <td>P Value</td>
-                        <td>{getPValue(dataset.model_type, results)}</td>
+                        <td>{ff(getPValue(dataset.dtype, results))}</td>
                     </tr>
                 </tbody>
             </table>

@@ -1,12 +1,13 @@
 import React, {Component} from "react";
-import {inject, observer} from "mobx-react";
+import {observer} from "mobx-react";
 import PropTypes from "prop-types";
 
-@inject("outputStore")
+import {Dtype} from "../../constants/dataConstants";
+
 @observer
 class ModelData extends Component {
     render() {
-        const {outputStore} = this.props;
+        const {dtype, dataset} = this.props;
         return (
             <table className="table table-bordered table-sm">
                 <thead>
@@ -15,23 +16,59 @@ class ModelData extends Component {
                     </tr>
                 </thead>
                 <tbody>
-                    {Object.keys(outputStore.getModelData).map((dev, i) => {
-                        return (
-                            <tr key={i}>
-                                <td>{outputStore.getModelData[dev].label}</td>
-                                <td>{outputStore.getModelData[dev].value}</td>
+                    {dtype == Dtype.DICHOTOMOUS ? (
+                        <>
+                            <tr>
+                                {/* TODO - pull from data */}
+                                <td>Dependent Variable</td>
+                                <td>Dose</td>
                             </tr>
-                        );
-                    })}
+                            <tr>
+                                {/* TODO - pull from data */}
+                                <td>Independent Variable</td>
+                                <td>Fraction affected</td>
+                            </tr>
+                            <tr>
+                                <td>Number of Observations</td>
+                                <td>{dataset.doses.length}</td>
+                            </tr>
+                            <tr>
+                                <td>Adverse Direction</td>
+                                <td>Up</td>
+                            </tr>
+                        </>
+                    ) : null}
+                    {dtype == Dtype.CONTINUOUS || dtype == Dtype.CONTINUOUS_INDIVIDUAL ? (
+                        <>
+                            <tr>
+                                {/* TODO - pull from data */}
+                                <td>Dependent Variable</td>
+                                <td>Dose</td>
+                            </tr>
+                            <tr>
+                                {/* TODO - pull from data */}
+                                <td>Independent Variable</td>
+                                <td>Mean</td>
+                            </tr>
+                            <tr>
+                                <td>Number of Observations</td>
+                                <td>{dataset.doses.length}</td>
+                            </tr>
+                            <tr>
+                                {/* TODO - pull from data */}
+                                <td>Adverse Direction</td>
+                                <td>Up</td>
+                            </tr>
+                        </>
+                    ) : null}
                 </tbody>
             </table>
         );
     }
 }
+
 ModelData.propTypes = {
-    outputStore: PropTypes.object,
-    getModelData: PropTypes.func,
-    label: PropTypes.string,
-    value: PropTypes.number,
+    dtype: PropTypes.string.isRequired,
+    dataset: PropTypes.object.isRequired,
 };
 export default ModelData;

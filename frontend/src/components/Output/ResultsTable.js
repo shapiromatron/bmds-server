@@ -3,6 +3,7 @@ import React, {Component} from "react";
 import PropTypes from "prop-types";
 
 import {getPValue} from "../../constants/outputConstants";
+import {ff} from "../../common";
 
 @inject("outputStore")
 @observer
@@ -43,11 +44,11 @@ class ResultsTable extends Component {
                                         {model.name}
                                     </a>
                                 </td>
-                                <td>{model.results.bmd}</td>
-                                <td>{model.results.bmdl}</td>
-                                <td>{model.results.bmdu}</td>
-                                <td>{model.results.aic}</td>
-                                <td>{getPValue(dataset.model_type, model.results)}</td>
+                                <td>{ff(model.results.bmd)}</td>
+                                <td>{ff(model.results.bmdl)}</td>
+                                <td>{ff(model.results.bmdu)}</td>
+                                <td>{ff(model.results.aic)}</td>
+                                <td>{ff(getPValue(dataset.dtype, model.results))}</td>
                             </tr>
                         );
                     })}

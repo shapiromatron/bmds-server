@@ -29,7 +29,7 @@ class DatasetModelOption extends Component {
                             }>
                             {degreeOptions.map(item => (
                                 <option key={item.value} value={item.value}>
-                                    {item.name}
+                                    {item.label}
                                 </option>
                             ))}
                         </select>
@@ -49,7 +49,7 @@ class DatasetModelOption extends Component {
                             }>
                             {adverseDirectionOptions.map(item => (
                                 <option key={item.value} value={item.value}>
-                                    {item.name}
+                                    {item.label}
                                 </option>
                             ))}
                         </select>

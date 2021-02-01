@@ -45,31 +45,6 @@ class OutputStore {
         return this.rootStore.dataStore.datasets[dataset_index];
     }
 
-    @computed get getModelOptions() {
-        let modelOptions = _.cloneDeep(constant.model_options[this.selectedDataset.dtype]);
-        modelOptions.map(option => {
-            option.value = this.modalModel.settings[option.name];
-            if (option.name == "bmrType") {
-                option.value = constant.bmrType[option.value];
-            }
-            if (option.name == "distType") {
-                option.value = constant.distType[option.value];
-            }
-            if (option.name == "varType") {
-                option.value = constant.varType[option.value];
-            }
-        });
-        return modelOptions;
-    }
-
-    @computed get getModelData() {
-        let modelData = _.cloneDeep(constant.modelData);
-        modelData.number_of_observations.value = this.selectedDataset.doses.length;
-        modelData.adverse_direction.value =
-            constant.adverse_direction[this.modalModel.settings.adverseDirection];
-        return modelData;
-    }
-
     @computed get getPValue() {
         let percentileValue = _.range(0.01, 1, 0.01);
         let pValue = percentileValue.map(function(each_element) {
@@ -108,7 +83,7 @@ class OutputStore {
     // start modal methods
     @action.bound showModalDetail(model) {
         this.modalModel = model;
-        if (this.drModelSelected.name !== model.name) {
+        if (!this.drModelSelected || this.drModelSelected.name !== model.name) {
             this.drModelModal = getDrBmdLine(model, "#0000FF");
         }
         this.showModelModal = true;
@@ -131,14 +106,14 @@ class OutputStore {
     }
     @computed get drPlotData() {
         const data = [getDrDatasetPlotData(this.selectedDataset)];
-        if (this.drModelHover) {
-            data.push(this.drModelHover);
+        if (this.drModelSelected) {
+            data.push(this.drModelSelected);
         }
         if (this.drModelModal) {
             data.push(this.drModelModal);
         }
-        if (this.drModelSelected) {
-            data.push(this.drModelSelected);
+        if (this.drModelHover) {
+            data.push(this.drModelHover);
         }
         return data;
     }

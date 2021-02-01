@@ -2,6 +2,11 @@ import React from "react";
 import PropTypes from "prop-types";
 
 import * as mc from "../../../constants/mainConstants";
+import {
+    dichotomousBmrOptions,
+    continuousBmrOptions,
+    distTypeOptions,
+} from "../../../constants/optionsConstants";
 
 const OptionsForm = props => {
     return (
@@ -14,12 +19,13 @@ const OptionsForm = props => {
                         onChange={e =>
                             props.saveOptions("bmr_type", parseInt(e.target.value), props.idx)
                         }>
-                        <option value="2">Std. Dev.</option>
-                        <option value="3">Rel. Dev.</option>
-                        <option value="1">Abs. Dev</option>
-                        <option value="4">Point</option>
-                        <option value="6">Hybrid-Extra Risk</option>
-                        <option value="7">Hybrid-Added Risk</option>
+                        {continuousBmrOptions.map(d => {
+                            return (
+                                <option key={d.value} value={d.value}>
+                                    {d.label}
+                                </option>
+                            );
+                        })}
                     </select>
                 </td>
             ) : null}
@@ -31,8 +37,13 @@ const OptionsForm = props => {
                         onChange={e =>
                             props.saveOptions("bmr_type", parseInt(e.target.value), props.idx)
                         }>
-                        <option value="1">Extra Risk</option>
-                        <option value="2">Added Risk</option>
+                        {dichotomousBmrOptions.map(d => {
+                            return (
+                                <option key={d.value} value={d.value}>
+                                    {d.label}
+                                </option>
+                            );
+                        })}
                     </select>
                 </td>
             ) : null}
@@ -81,9 +92,13 @@ const OptionsForm = props => {
                         onChange={e =>
                             props.saveOptions("dist_type", parseInt(e.target.value), props.idx)
                         }>
-                        <option value="1">Normal + Constant</option>
-                        <option value="2">Normal + Non-constant</option>
-                        {/* <option value="3">Log-normal</option>  TODO - add back */}
+                        {distTypeOptions.map(d => {
+                            return (
+                                <option key={d.value} value={d.value}>
+                                    {d.label}
+                                </option>
+                            );
+                        })}
                     </select>
                 </td>
             ) : null}

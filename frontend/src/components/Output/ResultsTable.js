@@ -3,7 +3,22 @@ import React, {Component} from "react";
 import PropTypes from "prop-types";
 
 import {getPValue} from "../../constants/outputConstants";
+import {getModelBinLabel, getModelBinText} from "../../constants/logicConstants";
 import {ff} from "../../common";
+
+const getRecommenderText = function(output, index) {
+    let items = getModelBinText(output, index);
+    if (items.length === 0) {
+        return null;
+    }
+    return (
+        <ul className="list-unstyled">
+            {items.map((d, idx) => (
+                <li key={idx}>{d}</li>
+            ))}
+        </ul>
+    );
+};
 
 @inject("outputStore")
 @observer
@@ -24,6 +39,12 @@ class ResultsTable extends Component {
                         <th>BMDU</th>
                         <th>AIC</th>
                         <th>p-value</th>
+                        {store.recommendationEnabled ? (
+                            <>
+                                <th>Recommendation bin</th>
+                                <th>Recommendation notes</th>
+                            </>
+                        ) : null}
                     </tr>
                 </thead>
                 <tbody className="table-bordered">
@@ -49,6 +70,12 @@ class ResultsTable extends Component {
                                 <td>{ff(model.results.bmdu)}</td>
                                 <td>{ff(model.results.aic)}</td>
                                 <td>{ff(getPValue(dataset.dtype, model.results))}</td>
+                                {store.recommendationEnabled ? (
+                                    <>
+                                        <td>{getModelBinLabel(store.selectedOutput, idx)}</td>
+                                        <td>{getRecommenderText(store.selectedOutput, idx)}</td>
+                                    </>
+                                ) : null}
                             </tr>
                         );
                     })}

@@ -37,4 +37,3 @@ class TestOptions:
         assert pytest.approx(res.bmr, 0.15)
         assert pytest.approx(res.alpha, 0.05)
         assert res.degree == 1
-

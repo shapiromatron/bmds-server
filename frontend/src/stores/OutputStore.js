@@ -3,7 +3,6 @@ import _ from "lodash";
 import {getHeaders} from "../common";
 
 import {getDrLayout, getDrDatasetPlotData, getDrBmdLine} from "../constants/plotting";
-import * as constant from "../constants/outputConstants";
 
 class OutputStore {
     /*
@@ -43,6 +42,10 @@ class OutputStore {
     @computed get selectedDataset() {
         const dataset_index = this.selectedOutput.metadata.dataset_index;
         return this.rootStore.dataStore.datasets[dataset_index];
+    }
+
+    @computed get recommendationEnabled() {
+        return this.selectedOutput.recommender.settings.enabled;
     }
 
     @computed get getPValue() {

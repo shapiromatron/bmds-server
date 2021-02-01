@@ -1,9 +1,6 @@
-import _ from "lodash";
 import React, {Component} from "react";
 import {observer} from "mobx-react";
 import PropTypes from "prop-types";
-
-import * as dc from "../../constants/dataConstants";
 
 @observer
 class GoodnessFit extends Component {

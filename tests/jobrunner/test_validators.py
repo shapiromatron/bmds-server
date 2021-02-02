@@ -35,7 +35,7 @@ class TestInputValidation:
             }
         ]
         data["dataset_options"] = [
-            {"dataset_id": 123, "enabled": True, "adverse_direction": "automatic"}
+            {"dataset_id": 123, "enabled": True, "degree": 0, "adverse_direction": -1}
         ]
         assert validators.validate_input(data, partial=True) is None
 
@@ -54,14 +54,11 @@ class TestInputValidation:
         # add options, try again
         data["options"] = [
             {
-                "bmr_type": "Std. Dev.",
+                "bmr_type": 2,
                 "bmr_value": 1.0,
                 "tail_probability": 0.95,
-                "confidence_level": 0.05,
-                "distribution": "Normal",
-                "variance": "Calculated",
-                "polynomial_restriction": "Use dataset adverse direction",
-                "background": "Estimated",
+                "confidence_level": 0.95,
+                "dist_type": 1,
             }
         ]
         with pytest.raises(ValidationError) as err:
@@ -201,27 +198,24 @@ class TestModelValidation:
 class TestOptionSetValidation:
     def test_dichotomous(self):
         # test success
-        data = [dict(bmr_type="Extra", bmr_value=0.1, confidence_level=0.05, background="Zero")]
+        data = [dict(bmr_type=1, bmr_value=0.1, confidence_level=0.95)]
         assert validators.validate_options(bmds.constants.DICHOTOMOUS, data) is None
 
         # must have at least one option
         data = []
         with pytest.raises(ValidationError) as err:
             validators.validate_options(bmds.constants.DICHOTOMOUS, data)
-        assert "[] is too short" in str(err)
+        assert "ensure this value has at least 1 items" in str(err)
 
     def test_continuous(self):
         # test success
         data = [
             {
-                "bmr_type": "Std. Dev.",
+                "bmr_type": 2,
                 "bmr_value": 1.0,
                 "tail_probability": 0.95,
-                "confidence_level": 0.05,
-                "distribution": "Normal",
-                "variance": "Calculated",
-                "polynomial_restriction": "Use dataset adverse direction",
-                "background": "Estimated",
+                "confidence_level": 0.95,
+                "dist_type": 1,
             }
         ]
         assert validators.validate_options(bmds.constants.CONTINUOUS, data) is None
@@ -230,4 +224,4 @@ class TestOptionSetValidation:
         data = []
         with pytest.raises(ValidationError) as err:
             validators.validate_options(bmds.constants.CONTINUOUS, data)
-        assert "[] is too short" in str(err)
+        assert "ensure this value has at least 1 items" in str(err)

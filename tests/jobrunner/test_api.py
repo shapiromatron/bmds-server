@@ -72,7 +72,7 @@ class TestPatchInputs:
         assert response.status_code == 200
         assert response.json()["inputs"] == payload["data"]
 
-    def test_complete(self, bmds3_complete_continuous, bmds3_complete_dichotomous):
+    def test_complete_continuous(self, bmds3_complete_continuous):
         client = APIClient()
         job = Job.objects.create()
         url = job.get_api_patch_inputs_url()
@@ -86,6 +86,11 @@ class TestPatchInputs:
         response = client.patch(url, payload, format="json")
         assert response.status_code == 200
         assert response.json()["inputs"] == payload["data"]
+
+    def test_complete_dichotomous(self, bmds3_complete_dichotomous):
+        client = APIClient()
+        job = Job.objects.create()
+        url = job.get_api_patch_inputs_url()
 
         # complete bmds3 dichotomous
         payload = {

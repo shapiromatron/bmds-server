@@ -3,11 +3,9 @@ import PropTypes from "prop-types";
 
 import * as mc from "../../../constants/mainConstants";
 import {
-    bmr_type,
-    other_bmr_type,
-    distribution,
-    variance,
-    polynomial_restriction,
+    dichotomousBmrOptions,
+    continuousBmrOptions,
+    distTypeOptions,
 } from "../../../constants/optionsConstants";
 
 const OptionsForm = props => {
@@ -18,27 +16,31 @@ const OptionsForm = props => {
                     <select
                         className="form-control"
                         value={props.options.bmr_type}
-                        onChange={e => props.saveOptions("bmr_type", e.target.value, props.idx)}>
-                        {bmr_type.map((item, i) => {
+                        onChange={e =>
+                            props.saveOptions("bmr_type", parseInt(e.target.value), props.idx)
+                        }>
+                        {continuousBmrOptions.map(d => {
                             return (
-                                <option key={i} value={item.value}>
-                                    {item.name}
+                                <option key={d.value} value={d.value}>
+                                    {d.label}
                                 </option>
                             );
                         })}
                     </select>
                 </td>
             ) : null}
-            {props.modelType != mc.MODEL_CONTINUOUS ? (
+            {props.modelType == mc.MODEL_DICHOTOMOUS ? (
                 <td>
                     <select
                         className="form-control"
                         value={props.options.bmr_type}
-                        onChange={e => props.saveOptions("bmr_type", e.target.value, props.idx)}>
-                        {other_bmr_type.map((item, i) => {
+                        onChange={e =>
+                            props.saveOptions("bmr_type", parseInt(e.target.value), props.idx)
+                        }>
+                        {dichotomousBmrOptions.map(d => {
                             return (
-                                <option key={i} value={item.value}>
-                                    {item.name}
+                                <option key={d.value} value={d.value}>
+                                    {d.label}
                                 </option>
                             );
                         })}
@@ -86,61 +88,17 @@ const OptionsForm = props => {
                 <td>
                     <select
                         className="form-control"
-                        value={props.options.distribution}
+                        value={props.options.dist_type}
                         onChange={e =>
-                            props.saveOptions("distribution", e.target.value, props.idx)
+                            props.saveOptions("dist_type", parseInt(e.target.value), props.idx)
                         }>
-                        {distribution.map((item, i) => {
+                        {distTypeOptions.map(d => {
                             return (
-                                <option key={i} value={item.value}>
-                                    {item.name}
+                                <option key={d.value} value={d.value}>
+                                    {d.label}
                                 </option>
                             );
                         })}
-                    </select>
-                </td>
-            ) : null}
-            {props.modelType === mc.MODEL_CONTINUOUS ? (
-                <td>
-                    <select
-                        className="form-control"
-                        value={props.options.variance}
-                        onChange={e => props.saveOptions("variance", e.target.value, props.idx)}>
-                        {variance.map((item, i) => {
-                            return (
-                                <option key={i} value={item.value}>
-                                    {item.name}
-                                </option>
-                            );
-                        })}
-                    </select>
-                </td>
-            ) : null}
-            {props.modelType === mc.MODEL_CONTINUOUS ? (
-                <td>
-                    <select
-                        className="form-control"
-                        value={props.options.polynomial_restriction}
-                        onChange={e =>
-                            props.saveOptions("polynomial_restriction", e.target.value, props.idx)
-                        }>
-                        {polynomial_restriction.map((item, i) => {
-                            return (
-                                <option key={i} value={item.value}>
-                                    {item.name}
-                                </option>
-                            );
-                        })}
-                    </select>
-                </td>
-            ) : null}
-            {props.modelType == mc.MODEL_DICHOTOMOUS || props.modelType == mc.MODEL_CONTINUOUS ? (
-                <td>
-                    <select
-                        className="form-control"
-                        value={props.options.background}
-                        onChange={e => props.saveOptions("background", e.target.value, props.idx)}>
-                        <option value="Estimated">Estimated</option>
                     </select>
                 </td>
             ) : null}

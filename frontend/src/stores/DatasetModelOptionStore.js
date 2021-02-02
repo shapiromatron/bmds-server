@@ -26,7 +26,7 @@ class DatasetModelOptionStore {
         this.options.splice(index, 1);
     }
     @action.bound createOption(dataset) {
-        const opts = {dataset_id: dataset.metadata.id, enabled: true};
+        const opts = {dataset_id: dataset.metadata.id, enabled: true, degree: 0};
         if (dataset.dtype === Dtype.CONTINUOUS || dataset.dtype === Dtype.CONTINUOUS_INDIVIDUAL) {
             opts.adverse_direction = adverseDirectionOptions[0].value;
         }

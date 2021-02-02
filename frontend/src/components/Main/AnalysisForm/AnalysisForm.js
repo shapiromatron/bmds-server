@@ -95,7 +95,7 @@ class AnalysisForm extends Component {
                             </div>
                         )}
 
-                        {mainStore.isValid ? (
+                        {mainStore.isValid && !mainStore.isExecuting ? (
                             <div className="card-footer btn-toolbar btn-group">
                                 <button
                                     type="button"

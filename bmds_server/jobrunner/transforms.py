@@ -1,42 +1,46 @@
 from typing import Dict
 
-from bmds.bmds3.types.continuous import ContinuousModelSettings, ContinuousRiskType
-from bmds.bmds3.types.dichotomous import DichotomousModelSettings, DichotomousRiskType
+from bmds.bmds3.types.continuous import ContinuousModelSettings
+from bmds.bmds3.types.dichotomous import DichotomousModelSettings
 from bmds.bmds3.types.priors import PriorClass
 
-bmds3_d_bmr_type_map = {
-    "Extra": DichotomousRiskType.eAddedRisk,
-    "Added": DichotomousRiskType.eAddedRisk,
-}
-bmds3_c_bmr_type_map = {
-    "Abs. Dev.": ContinuousRiskType.eAbsoluteDev,
-    "Std. Dev.": ContinuousRiskType.eStandardDev,
-    "Rel. Dev.": ContinuousRiskType.eRelativeDev,
-    "Point": ContinuousRiskType.ePointEstimate,
-    "Extra": ContinuousRiskType.eExtra,  # TODO - check is this the right one?
-}
+from .validators.datasets import AdverseDirection
+
 bmd3_prior_map = {
     "frequentist_restricted": PriorClass.frequentist_restricted,
     "frequentist_unrestricted": PriorClass.frequentist_unrestricted,
     "bayesian": PriorClass.bayesian,
     "bayesian_model_average": PriorClass.bayesian,
 }
+is_increasing_map = {
+    AdverseDirection.AUTOMATIC: None,
+    AdverseDirection.UP: True,
+    AdverseDirection.DOWN: False,
+}
 
 
-def bmds3_d_model_options(prior_class: str, options: Dict) -> DichotomousModelSettings:
+def bmds3_d_model_options(
+    prior_class: str, options: Dict, dataset_options: Dict
+) -> DichotomousModelSettings:
     return DichotomousModelSettings(
         bmr=options["bmr_value"],
         alpha=1.0 - options["confidence_level"],
-        bmr_type=bmds3_d_bmr_type_map[options["bmr_type"]],
+        bmr_type=options["bmr_type"],
         prior=bmd3_prior_map[prior_class],
+        degree=dataset_options["degree"],
     )
 
 
-def bmds3_c_model_options(prior_class: str, options: Dict) -> ContinuousModelSettings:
+def bmds3_c_model_options(
+    prior_class: str, options: Dict, dataset_options: Dict
+) -> ContinuousModelSettings:
     return ContinuousModelSettings(
         bmr=options["bmr_value"],
         alpha=1.0 - options["confidence_level"],
         tailProb=options["tail_probability"],
-        bmr_type=bmds3_c_bmr_type_map[options["bmr_type"]],
+        bmr_type=options["bmr_type"],
+        disttype=options["dist_type"],
         prior=bmd3_prior_map[prior_class],
+        degree=dataset_options["degree"],
+        is_increasing=is_increasing_map[dataset_options["adverse_direction"]],
     )

@@ -3,7 +3,6 @@ import _ from "lodash";
 import {getHeaders} from "../common";
 
 import {getDrLayout, getDrDatasetPlotData, getDrBmdLine} from "../constants/plotting";
-import * as constant from "../constants/outputConstants";
 
 class OutputStore {
     /*
@@ -45,29 +44,8 @@ class OutputStore {
         return this.rootStore.dataStore.datasets[dataset_index];
     }
 
-    @computed get getModelOptions() {
-        let modelOptions = _.cloneDeep(constant.model_options[this.selectedDataset.dtype]);
-        modelOptions.map(option => {
-            option.value = this.modalModel.settings[option.name];
-            if (option.name == "bmrType") {
-                option.value = constant.bmrType[option.value];
-            }
-            if (option.name == "distType") {
-                option.value = constant.distType[option.value];
-            }
-            if (option.name == "varType") {
-                option.value = constant.varType[option.value];
-            }
-        });
-        return modelOptions;
-    }
-
-    @computed get getModelData() {
-        let modelData = _.cloneDeep(constant.modelData);
-        modelData.number_of_observations.value = this.selectedDataset.doses.length;
-        modelData.adverse_direction.value =
-            constant.adverse_direction[this.modalModel.settings.adverseDirection];
-        return modelData;
+    @computed get recommendationEnabled() {
+        return this.selectedOutput.recommender.settings.enabled;
     }
 
     @computed get getPValue() {
@@ -108,7 +86,9 @@ class OutputStore {
     // start modal methods
     @action.bound showModalDetail(model) {
         this.modalModel = model;
-        this.drModelModal = getDrBmdLine(model, "#0000FF");
+        if (!this.drModelSelected || this.drModelSelected.name !== model.name) {
+            this.drModelModal = getDrBmdLine(model, "#0000FF");
+        }
         this.showModelModal = true;
     }
     @action.bound closeModal() {
@@ -120,18 +100,23 @@ class OutputStore {
 
     // start dose-response plotting data methods
     @computed get drPlotLayout() {
-        return getDrLayout(this.selectedDataset);
+        return getDrLayout(
+            this.selectedDataset,
+            this.drModelSelected,
+            this.drModelModal,
+            this.drModelHover
+        );
     }
     @computed get drPlotData() {
         const data = [getDrDatasetPlotData(this.selectedDataset)];
-        if (this.drModelHover) {
-            data.push(this.drModelHover);
+        if (this.drModelSelected) {
+            data.push(this.drModelSelected);
         }
         if (this.drModelModal) {
             data.push(this.drModelModal);
         }
-        if (this.drModelSelected) {
-            data.push(this.drModelSelected);
+        if (this.drModelHover) {
+            data.push(this.drModelHover);
         }
         return data;
     }
@@ -146,6 +131,9 @@ class OutputStore {
         return data;
     }
     @action.bound drPlotAddHover(model) {
+        if (this.drModelSelected && this.drModelSelected.name === model.name) {
+            return;
+        }
         this.drModelHover = getDrBmdLine(model, "#DA2CDA");
     }
     @action.bound drPlotRemoveHover() {

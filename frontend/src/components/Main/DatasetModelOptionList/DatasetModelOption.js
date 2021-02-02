@@ -2,7 +2,7 @@ import React, {Component} from "react";
 import {observer} from "mobx-react";
 import PropTypes from "prop-types";
 
-import {adverseDirectionOptions} from "../../../constants/dataConstants";
+import {adverseDirectionOptions, degreeOptions} from "../../../constants/dataConstants";
 
 @observer
 class DatasetModelOption extends Component {
@@ -19,17 +19,37 @@ class DatasetModelOption extends Component {
                     />
                 </td>
                 <td>{dataset.metadata.name}</td>
+                {option.degree !== undefined ? (
+                    <td>
+                        <select
+                            className="form-control"
+                            value={option.degree}
+                            onChange={e =>
+                                handleChange(option.dataset_id, "degree", parseInt(e.target.value))
+                            }>
+                            {degreeOptions.map(item => (
+                                <option key={item.value} value={item.value}>
+                                    {item.label}
+                                </option>
+                            ))}
+                        </select>
+                    </td>
+                ) : null}
                 {option.adverse_direction !== undefined ? (
                     <td>
                         <select
                             className="form-control"
                             value={option.adverse_direction}
                             onChange={e =>
-                                handleChange(option.dataset_id, "adverse_direction", e.target.value)
+                                handleChange(
+                                    option.dataset_id,
+                                    "adverse_direction",
+                                    parseInt(e.target.value)
+                                )
                             }>
                             {adverseDirectionOptions.map(item => (
                                 <option key={item.value} value={item.value}>
-                                    {item.name}
+                                    {item.label}
                                 </option>
                             ))}
                         </select>

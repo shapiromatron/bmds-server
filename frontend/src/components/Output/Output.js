@@ -35,19 +35,27 @@ class Output extends Component {
         return (
             <div className="container-fluid">
                 <div className="row">
-                    <div className="col col-lg-2">
+                    <div className="col-lg-2">
                         <OutputSelector />
                     </div>
-                    <div className="col col-lg-6">
-                        <DatasetTable dataset={outputStore.selectedDataset} />
-                        <ResultsTable />
-                        {canEdit ? <SelectModel /> : null}
-                    </div>
-                    <div className="col col-lg-4">
-                        <DoseResponsePlot
-                            layout={outputStore.drPlotLayout}
-                            data={outputStore.drPlotData}
-                        />
+                    <div className="col-lg-10 container-fluid">
+                        <div className="row">
+                            <div className="col-lg-6">
+                                <DatasetTable dataset={outputStore.selectedDataset} />
+                            </div>
+                            <div className="col-lg-6">
+                                <DoseResponsePlot
+                                    layout={outputStore.drPlotLayout}
+                                    data={outputStore.drPlotData}
+                                />
+                            </div>
+                        </div>
+                        <div className="row">
+                            <div className="col-lg-12">
+                                <ResultsTable />
+                                {canEdit ? <SelectModel /> : null}
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <div>{outputStore.showModelModal ? <ModelDetailModal /> : null}</div>

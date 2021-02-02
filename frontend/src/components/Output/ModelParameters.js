@@ -3,6 +3,8 @@ import React, {Component} from "react";
 import {observer} from "mobx-react";
 import PropTypes from "prop-types";
 
+import {ff} from "../../common";
+
 @observer
 class ModelParameters extends Component {
     render() {
@@ -23,7 +25,7 @@ class ModelParameters extends Component {
                         return (
                             <tr key={key}>
                                 <td>{key}</td>
-                                <td>{value}</td>
+                                <td>{ff(value)}</td>
                             </tr>
                         );
                     })}

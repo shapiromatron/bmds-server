@@ -3,6 +3,8 @@ import {observer} from "mobx-react";
 import PropTypes from "prop-types";
 
 import {readOnlyCheckbox} from "../../../common";
+import {degreeOptions, adverseDirectionOptions} from "../../../constants/dataConstants";
+import {getLabel} from "../../../common";
 
 @observer
 class DatasetModelOptionReadOnly extends Component {
@@ -12,8 +14,11 @@ class DatasetModelOptionReadOnly extends Component {
             <tr>
                 <td>{readOnlyCheckbox(option.enabled)}</td>
                 <td>{dataset.metadata.name}</td>
+                {option.degree !== undefined ? (
+                    <td>{getLabel(option.degree, degreeOptions)}</td>
+                ) : null}
                 {option.adverse_direction !== undefined ? (
-                    <td>{option.adverse_direction}</td>
+                    <td>{getLabel(option.adverse_direction, adverseDirectionOptions)}</td>
                 ) : null}
             </tr>
         );

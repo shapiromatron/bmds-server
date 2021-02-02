@@ -115,4 +115,14 @@ export const DATA_CONTINUOUS_SUMMARY = "CS",
         {value: "automatic", name: "Automatic"},
         {value: "up", name: "Up"},
         {value: "down", name: "Down"},
-    ];
+    ],
+    datasetColumnLength = {
+        [DATA_CONTINUOUS_SUMMARY]: 4,
+        [DATA_CONTINUOUS_INDIVIDUAL]: 2,
+        [DATA_DICHOTOMOUS]: 3,
+    },
+    datasetTypes = {
+        [DATA_CONTINUOUS_SUMMARY]: "Continuous Summarized",
+        [DATA_CONTINUOUS_INDIVIDUAL]: "Continuous Individual",
+        [DATA_DICHOTOMOUS]: "Dichotomous",
+    };

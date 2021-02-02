@@ -2,7 +2,6 @@ import React, {Component} from "react";
 import {inject, observer} from "mobx-react";
 import PropTypes from "prop-types";
 import {Modal} from "react-bootstrap";
-import {propTypes} from "react-bootstrap/esm/Image";
 
 @inject("dataStore")
 @observer
@@ -10,7 +9,7 @@ class CopyTableModal extends Component {
     render() {
         const {dataStore} = this.props;
         return (
-            <Modal show={dataStore.showDatasetModal} onHide={() => dataStore.toggleDatasetModal()}>
+            <Modal show={dataStore.showModal} onHide={() => dataStore.toggleDatasetModal()}>
                 <Modal.Header closeButton>
                     <Modal.Title>Save Dataset</Modal.Title>
                 </Modal.Header>
@@ -57,8 +56,8 @@ class CopyTableModal extends Component {
 CopyTableModal.propTypes = {
     dataStore: PropTypes.object,
     toggleDatasetModal: PropTypes.func,
-    modalError: propTypes.string,
-    isModalDataValidated: propTypes.func,
-    saveDatasetFromModal: propTypes.func,
+    modalError: PropTypes.string,
+    isModalDataValidated: PropTypes.func,
+    saveDatasetFromModal: PropTypes.func,
 };
 export default CopyTableModal;

@@ -27,7 +27,7 @@ class ModelsCheckBoxList extends Component {
                             <ModelsCheckBox
                                 models={models}
                                 toggleModelsCheckBox={modelsStore.toggleModelsCheckBox}
-                                savePriorWeght={modelsStore.savePriorWeght}
+                                savePriorWeight={modelsStore.savePriorWeight}
                                 total_weight={modelsStore.total_weight}
                             />
                         ) : (

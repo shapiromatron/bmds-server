@@ -29,7 +29,7 @@ const ModelsCheckBox = props => {
                                             type="number"
                                             value={dev.prior_weight}
                                             onChange={e =>
-                                                props.savePriorWeght(
+                                                props.savePriorWeight(
                                                     dev.name,
                                                     parseFloat(e.target.value)
                                                 )
@@ -67,7 +67,7 @@ ModelsCheckBox.propTypes = {
     onChange: PropTypes.func,
     length: PropTypes.number,
     toggleModelsCheckBox: PropTypes.func,
-    savePriorWeght: PropTypes.func,
+    savePriorWeight: PropTypes.func,
     total_weight: PropTypes.number,
 };
 export default ModelsCheckBox;

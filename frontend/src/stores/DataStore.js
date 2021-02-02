@@ -13,6 +13,11 @@ class DataStore {
     @observable model_type = dc.DATA_CONTINUOUS_SUMMARY;
     @observable datasets = [];
     @observable selectedDatasetId = null;
+    @observable showModal = false;
+    @observable modalDatasets = "";
+    @observable modalValidatedDatasets = [];
+    @observable modalError = "";
+    @observable modalDataValidated = false;
 
     @action.bound setDefaultsByDatasetType() {
         this.selectedDatasetId = null;
@@ -101,6 +106,80 @@ class DataStore {
         this.selectedDatasetId = datasets.length > 0 ? datasets[0].metadata.id : null;
     }
 
+    @action toggleDatasetModal() {
+        this.showModal = !this.showModal;
+        this.modalError = "";
+    }
+    @action closeDatasetModal() {
+        this.showModal = false;
+    }
+
+    @action changeDatasetFromModal(dataset) {
+        this.modalDataValidated = false;
+        this.modalDatasets = dataset;
+    }
+
+    @action validateModalDataset() {
+        this.modalValidatedDatasets = [];
+        let modalDataset = this.modalDatasets.split("\n");
+
+        //remove any empty lines
+        _.remove(modalDataset, function(n) {
+            return n.length <= 1;
+        });
+        modalDataset.map(item => {
+            let line = item.split("\t");
+            if (line.length != dc.datasetColumnLength[this.model_type]) {
+                this.modalError =
+                    dc.datasetTypes[this.model_type] +
+                    " datasets must have exactly " +
+                    dc.datasetColumnLength[this.model_type] +
+                    " columns of data.";
+                return;
+            }
+            let result = line.map(function(e) {
+                return isNaN(e);
+            });
+            if (result.includes(true)) {
+                this.modalError =
+                    "Copy/paste data from Excel into the box below. Data must be all numeric with no headers or descriptive columns.";
+                return;
+            }
+
+            this.modalValidatedDatasets.push(line);
+            this.modalError = "";
+            this.modalDataValidated = true;
+        });
+    }
+    @action saveDatasetFromModal() {
+        //make array  as per columns
+        let dataset_columns = _.zip(...this.modalValidatedDatasets);
+
+        let dataset = getDefaultDataset(this.model_type);
+        Object.keys(dataset).map((key, index) => {
+            if (Array.isArray(dataset[key])) {
+                dataset[key] = dataset_columns[index - 2];
+            }
+        });
+        let id =
+            _.chain(this.datasets)
+                .map(d => d.metadata.id)
+                .max()
+                .defaultTo(-1)
+                .value() + 1;
+
+        dataset.metadata.id = id;
+        dataset.metadata.name = `Dataset #${id + 1}`;
+        this.datasets.push(dataset);
+        this.rootStore.dataOptionStore.createOption(dataset);
+        this.selectedDatasetId = id;
+        this.toggleDatasetModal();
+    }
+
+    @computed get isModalDataValidated() {
+        return this.modalDataValidated;
+    }
+
     @computed get selectedDataset() {
         return this.datasets.find(item => item.metadata.id === this.selectedDatasetId);
     }
@@ -174,6 +253,10 @@ class DataStore {
 
     @computed get hasSelectedDataset() {
         return this.selectedDatasetId !== null;
+    }
+
+    @computed get openDatasetModal() {
+        return this.openModal;
     }
 }
 

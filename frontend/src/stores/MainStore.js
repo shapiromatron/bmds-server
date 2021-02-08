@@ -21,6 +21,9 @@ class MainStore {
     @observable hasEditSettings = false;
     @observable executionOutputs = null;
     @observable isUpdateComplete = false;
+    @observable showToast = false;
+    @observable toastStatus = "";
+    @observable toastMessage = "";
 
     @action.bound setConfig(config) {
         this.config = config;
@@ -240,6 +243,46 @@ class MainStore {
                     });
                 saveAs(file);
             });
+    }
+
+    @action async downloadReport(url) {
+        const apiUrl = this.config[url];
+        await fetch(apiUrl).then(response => {
+            let contentType = response.headers.get("content-type");
+            if (contentType.includes("application/json")) {
+                response.json().then(json => {
+                    this.toastStatus = json.status;
+                    this.toastMessage = json.message;
+                });
+                this.showToast = true;
+                var interval = setInterval(() => {
+                    fetch(apiUrl).then(res => {
+                        let contentType = res.headers.get("content-type");
+                        if (contentType.includes("application/json")) {
+                            this.showToast = true;
+                        } else {
+                            this.showToast = false;
+                            clearInterval(interval);
+                            saveAs(res.url);
+                        }
+                    });
+                }, 10000);
+            } else {
+                saveAs(response.url);
+            }
+        });
+    }
+
+    @action async fetchReport(url) {
+        let fileUrl = this.config[url];
+        return await fetch(fileUrl, {
+            method: "GET",
+            mode: "cors",
+        });
+    }
+
+    @action.bound closeToast() {
+        this.showToast = false;
     }
 
     @computed get canEdit() {

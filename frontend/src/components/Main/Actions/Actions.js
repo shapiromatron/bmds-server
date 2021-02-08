@@ -72,11 +72,21 @@ class Actions extends Component {
                     {mainStore.hasOutputs ? (
                         <>
                             <h6 className="dropdown-header">Reporting</h6>
-                            <a className="dropdown-item" href={config.excelUrl}>
+                            <a
+                                className="dropdown-item"
+                                onClick={e => {
+                                    e.preventDefault();
+                                    mainStore.downloadReport("excelUrl");
+                                }}>
                                 <i className="fa fa-fw fa-file-excel-o"></i>
                                 &nbsp;Download data
                             </a>
-                            <a className="dropdown-item" href={config.wordUrl}>
+                            <a
+                                className="dropdown-item"
+                                onClick={e => {
+                                    e.preventDefault();
+                                    mainStore.downloadReport("wordUrl");
+                                }}>
                                 <i className="fa fa-fw fa-file-word-o"></i>
                                 &nbsp;Download report
                             </a>

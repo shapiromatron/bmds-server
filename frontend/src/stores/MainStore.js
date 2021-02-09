@@ -266,7 +266,7 @@ class MainStore {
                             saveAs(apiUrl);
                         }
                     });
-                });
+                }, 10000);
             } else {
                 saveAs(apiUrl);
             }

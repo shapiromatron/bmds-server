@@ -261,23 +261,15 @@ class MainStore {
                         if (contentType.includes("application/json")) {
                             this.showToast = true;
                         } else {
-                            this.showToast = false;
                             clearInterval(interval);
-                            saveAs(res.url);
+                            this.showToast = false;
+                            saveAs(apiUrl);
                         }
                     });
-                }, 10000);
+                });
             } else {
-                saveAs(response.url);
+                saveAs(apiUrl);
             }
-        });
-    }
-
-    @action async fetchReport(url) {
-        let fileUrl = this.config[url];
-        return await fetch(fileUrl, {
-            method: "GET",
-            mode: "cors",
         });
     }
 

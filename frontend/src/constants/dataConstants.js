@@ -110,20 +110,10 @@ export const DATA_CONTINUOUS_SUMMARY = "CS",
         [Dtype.DICHOTOMOUS]: ["Enabled", "Dataset", "Degree"],
     },
     adverseDirectionOptions = [
-        {value: "automatic", name: "Automatic"},
-        {value: "up", name: "Up"},
-        {value: "down", name: "Down"},
+        {value: -1, label: "Automatic"},
+        {value: 1, label: "Up"},
+        {value: 0, label: "Down"},
     ],
-    datasetColumnLength = {
-        [DATA_CONTINUOUS_SUMMARY]: 4,
-        [DATA_CONTINUOUS_INDIVIDUAL]: 2,
-        [DATA_DICHOTOMOUS]: 3,
-    },
-    datasetTypes = {
-        [DATA_CONTINUOUS_SUMMARY]: "Continuous Summarized",
-        [DATA_CONTINUOUS_INDIVIDUAL]: "Continuous Individual",
-        [DATA_DICHOTOMOUS]: "Dichotomous",
-    },
     degreeOptions = [
         {value: 0, label: "N-1"},
         {value: 1, label: "1"},

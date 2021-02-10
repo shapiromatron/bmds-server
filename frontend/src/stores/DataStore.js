@@ -224,10 +224,6 @@ class DataStore {
         return this.selectedDatasetId !== null;
     }
 
-    @computed get openDatasetModal() {
-        return this.openModal;
-    }
-
     // ---------------------------------------------------------------------------------------------
     // TABULAR MODAL DATASET
     @observable showModal = false;
@@ -279,6 +275,8 @@ class DataStore {
         this.datasets[index] = dataset;
         this.toggleDatasetModal();
     }
+    // END TABULAR MODAL DATASET
+    // ---------------------------------------------------------------------------------------------
 }
 
 export default DataStore;

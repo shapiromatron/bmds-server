@@ -9,16 +9,16 @@ class TabularDatasetModal extends Component {
     render() {
         const {dataStore} = this.props;
         return (
-            <Modal show={dataStore.showModal} onHide={dataStore.toggleDatasetModal}>
+            <Modal show={dataStore.showTabularModal} onHide={dataStore.toggleDatasetModal}>
                 <Modal.Header closeButton>
                     <Modal.Title>Paste from Excel</Modal.Title>
                 </Modal.Header>
 
                 <Modal.Body>
                     <div className="form-group">
-                        {dataStore.modalError ? (
+                        {dataStore.tabularModalError ? (
                             <div className="alert alert-warning mb-2" role="alert">
-                                {dataStore.modalError}
+                                {dataStore.tabularModalError}
                             </div>
                         ) : null}
 

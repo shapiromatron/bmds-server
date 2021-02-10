@@ -226,19 +226,18 @@ class DataStore {
 
     // ---------------------------------------------------------------------------------------------
     // TABULAR MODAL DATASET
-    @observable showModal = false;
-    @observable modalError = "";
+    @observable showTabularModal = false;
+    @observable tabularModalError = "";
     @observable tabularModalText = "";
     @observable tabularModalData = null;
     @observable tabularModalDataValidated = false;
-    @action toggleDatasetModal() {
-        this.showModal = !this.showModal;
-        this.modalError = "";
+    @action.bound toggleDatasetModal() {
+        this.showTabularModal = !this.showTabularModal;
+        this.tabularModalDataValidated = false;
+        this.tabularModalText = "";
+        this.tabularModalError = "";
+        this.tabularModalData = null;
     }
-    @action closeDatasetModal() {
-        this.showModal = false;
-    }
-
     @action.bound changeDatasetFromModal(text) {
         text = text.trim();
         this.tabularModalDataValidated = false;
@@ -252,10 +251,10 @@ class DataStore {
             results = validateTabularData(text, expectedColumns);
 
         if (results.errors.length > 0) {
-            this.modalError = results.errors.join("\n");
+            this.tabularModalError = results.errors.join("\n");
             this.tabularModalData = null;
         } else {
-            this.modalError = "";
+            this.tabularModalError = "";
             this.tabularModalData = results.data;
         }
 

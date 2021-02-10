@@ -26,7 +26,7 @@ class SelectModelType extends Component {
                     <div className="input-group-append">
                         <button
                             type="button"
-                            className="btn btn-info btn-sm float-right"
+                            className="btn btn-primary btn-sm float-right"
                             disabled={dataStore.checkDatasetsLength}
                             onClick={() => dataStore.addDataset()}>
                             <i className="fa fa-fw fa-plus" />

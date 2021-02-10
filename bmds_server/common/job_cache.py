@@ -23,7 +23,7 @@ class ReportCache:
     A cache designed for long-running report jobs.
     """
 
-    cache_prefix: str = ""
+    cache_prefix: str = ""  # should be unique for each subclass
     status = ReportStatus
 
     def __init__(self, job):
@@ -46,17 +46,19 @@ class ReportCache:
         """
         The expensive method which does all the work.
 
-        Raises:
-            NotImplementedError: [description]
-
         Returns:
-            Any: [description]
+            Any: The content to be returned, and cached
         """
-        # The slow, expensive method that does the work. Returns the object to cache/return
         raise NotImplementedError("Subclass requires implementation")
 
     def request_content(self) -> ReportResponse:
-        # method used to try to get content if it exists, or schedule a task to create if it doesnt
+        """
+        Request the content if it exists; otherwise return teh current status and optionally kick
+        off a job to create it. To be called from an HTTP request lifecycle.
+
+        Returns:
+            ReportResponse:
+        """
 
         # try to get content
         key = self.cache_key
@@ -75,8 +77,10 @@ class ReportCache:
         self.invoke_celery_task()
         return response
 
-    def create_content(self):
-        # method used to create content; generally an async task on worker queue
+    def create_content(self) -> None:
+        """
+        Generate and cache the content.
+        """
         key = self.cache_key
         content = self.create()
         response = ReportResponse(

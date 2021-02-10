@@ -1,5 +1,3 @@
-import io
-
 from django.core.exceptions import ValidationError
 from rest_framework import exceptions, mixins, status, viewsets
 from rest_framework.decorators import action
@@ -7,6 +5,7 @@ from rest_framework.response import Response
 
 from ..common.validation import pydantic_validate
 from . import models, renderers, serializers, validators
+from .cache import DocxReportCache, ExcelReportCache
 
 
 class JobViewset(mixins.CreateModelMixin, mixins.RetrieveModelMixin, viewsets.GenericViewSet):
@@ -119,24 +118,32 @@ class JobViewset(mixins.CreateModelMixin, mixins.RetrieveModelMixin, viewsets.Ge
         serializer = self.get_serializer(instance)
         return Response(serializer.data)
 
-    @action(detail=True, methods=("get",), renderer_classes=(renderers.XlsxRenderer,))
+    @action(detail=True, renderer_classes=(renderers.XlsxRenderer,))
     def excel(self, request, *args, **kwargs):
         """
         Return Excel export of outputs for selected job
         """
         instance = self.get_object()
-        df = instance.to_excel()
-        f = io.BytesIO()
-        df.to_excel(f, index=False)
-        data = renderers.BinaryFile(data=f, filename=str(instance.id))
-        return Response(data)
+        cache = ExcelReportCache(job=instance)
+        response = cache.request_content()
 
-    @action(detail=True, methods=("get",), renderer_classes=(renderers.DocxRenderer,))
+        if response.status is cache.status.COMPLETE:
+            data = renderers.BinaryFile(data=response.content, filename=instance.slug)
+            return Response(data)
+
+        return Response(response.dict(), content_type="application/json")
+
+    @action(detail=True, renderer_classes=(renderers.DocxRenderer,))
     def word(self, request, *args, **kwargs):
         """
         Return Word report for the selected job
         """
         instance = self.get_object()
-        document = instance.to_word()
-        data = renderers.BinaryFile(data=document, filename=str(instance.id))
-        return Response(data)
+        cache = DocxReportCache(job=instance)
+        response = cache.request_content()
+
+        if response.status is cache.status.COMPLETE:
+            data = renderers.BinaryFile(data=response.content, filename=instance.slug)
+            return Response(data)
+
+        return Response(response.dict(), content_type="application/json")

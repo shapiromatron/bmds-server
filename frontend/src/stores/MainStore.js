@@ -293,6 +293,41 @@ class MainStore {
     @computed get hasOutputs() {
         return this.executionOutputs !== null;
     }
+
+    // *** TOAST ***
+    @observable showToast = false;
+    @observable toastHeader = "";
+    @observable toastMessage = "";
+    @action.bound downloadReport(url) {
+        const apiUrl = this.config[url],
+            fetchReport = () => {
+                fetch(apiUrl).then(processResponse);
+            },
+            processResponse = response => {
+                let contentType = response.headers.get("content-type");
+                if (contentType.includes("application/json")) {
+                    response.json().then(json => {
+                        this.toastHeader = json.header;
+                        this.toastMessage = json.message;
+                    });
+                    this.showToast = true;
+                    setTimeout(fetchReport, 5000);
+                } else {
+                    const filename = response.headers
+                        .get("content-disposition")
+                        .match(/filename="(.*)"/)[1];
+                    response.blob().then(blob => {
+                        saveAs(blob, filename);
+                        this.showToast = false;
+                    });
+                }
+            };
+        fetchReport();
+    }
+    @action.bound closeToast() {
+        this.showToast = false;
+    }
+    // *** END TOAST ***
 }
 
 export default MainStore;

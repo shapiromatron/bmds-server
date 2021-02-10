@@ -9,6 +9,7 @@ import PropTypes from "prop-types";
 
 import Actions from "./Main/Actions/Actions";
 import ShareActions from "./Main/Actions/ShareActions";
+import DownloadToast from "./Main/Actions/DownloadToast";
 
 @inject("mainStore")
 @observer
@@ -43,8 +44,11 @@ class Navigation extends Component {
                             <ShareActions />
                         </li>
                     ) : null}
-                    <li className={mainStore.canEdit ? "nav-item" : "nav-item ml-auto"}>
+                    <li
+                        className={mainStore.canEdit ? "nav-item" : "nav-item ml-auto"}
+                        style={{position: "relative"}}>
                         <Actions />
+                        <DownloadToast />
                     </li>
                 </ul>
                 <div className="content mt-2">

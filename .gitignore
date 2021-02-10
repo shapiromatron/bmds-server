@@ -13,6 +13,8 @@ dist/
 docs/_build/
 node_modules/
 scripts/private/
+/public/
+/private/
 vendor/*.whl
 venv/
 

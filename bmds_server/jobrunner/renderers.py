@@ -1,5 +1,6 @@
+import json
 from io import BytesIO
-from typing import NamedTuple
+from typing import Dict, NamedTuple, Union
 
 from rest_framework.renderers import BaseRenderer
 
@@ -22,7 +23,10 @@ class XlsxRenderer(BaseRenderer):
     media_type = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
     format = "xlsx"
 
-    def render(self, dataset: BinaryFile, media_type=None, renderer_context=None):
+    def render(self, dataset: Union[Dict, BinaryFile], media_type=None, renderer_context=None):
+        if isinstance(dataset, dict):
+            return json.dumps(dataset).encode()
+
         response = renderer_context["response"]
         response["Content-Disposition"] = f'attachment; filename="{dataset.filename}.xlsx"'
         return dataset.data.getvalue()
@@ -32,7 +36,10 @@ class DocxRenderer(BaseRenderer):
     media_type = "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
     format = "docx"
 
-    def render(self, dataset: BinaryFile, media_type=None, renderer_context=None):
+    def render(self, dataset: Union[Dict, BinaryFile], media_type=None, renderer_context=None):
+        if isinstance(dataset, dict):
+            return json.dumps(dataset).encode()
+
         response = renderer_context["response"]
         response["Content-Disposition"] = f'attachment; filename="{dataset.filename}.docx"'
         return dataset.data.getvalue()

@@ -3,7 +3,51 @@ import _ from "lodash";
 
 import * as dc from "../constants/dataConstants";
 import {getDrLayout, getDrDatasetPlotData} from "../constants/plotting";
-import {datasetTypesByModelType, getDefaultDataset} from "../constants/dataConstants";
+import {datasetTypesByModelType, getDefaultDataset, columns} from "../constants/dataConstants";
+
+let validateTabularData = function(text, columns) {
+    let data = [],
+        errors = [];
+
+    data = _.chain(text)
+        .split("\n")
+        .filter(line => line.length > 0)
+        .map(line =>
+            _.chain(line)
+                .split("\t")
+                .map(parseFloat)
+                .filter(d => _.isFinite(d))
+                .value()
+        )
+        .compact()
+        .value();
+
+    if (
+        data.length > 0 &&
+        _.chain(data)
+            .map(d => d.length)
+            .uniq()
+            .value().length !== 1
+    ) {
+        errors.push("Data are not of equal length or contain non-numeric values.");
+    }
+
+    data = _.zip(...data);
+
+    if (data.length !== columns.length) {
+        errors.push(`Expecting ${columns.length} columns; got ${data.length} columns`);
+    }
+
+    if (data[0].length < 3) {
+        errors.push(`Expecting 3+ rows; got ${data[0].length} rows`);
+    }
+
+    if (errors.length == 0) {
+        data = _.zipObject(columns, data);
+    }
+
+    return {data, errors};
+};
 
 class DataStore {
     constructor(rootStore) {
@@ -84,7 +128,7 @@ class DataStore {
     }
 
     @action.bound deleteDataset() {
-        var index = this.datasets.findIndex(item => item.metadata.id == this.selectedDatasetId),
+        var index = this.selectedDatasetIndex,
             datasetId = toJS(this.selectedDatasetId);
         if (index > -1) {
             this.datasets.splice(index, 1);
@@ -103,6 +147,10 @@ class DataStore {
 
     @computed get selectedDataset() {
         return this.datasets.find(item => item.metadata.id === this.selectedDatasetId);
+    }
+
+    @computed get selectedDatasetIndex() {
+        return _.findIndex(this.datasets, item => item.metadata.id === this.selectedDatasetId);
     }
 
     @computed get getMappedArray() {
@@ -175,6 +223,57 @@ class DataStore {
     @computed get hasSelectedDataset() {
         return this.selectedDatasetId !== null;
     }
+
+    // *** TABULAR MODAL DATASET ***
+    @observable showTabularModal = false;
+    @observable tabularModalError = "";
+    @observable tabularModalText = "";
+    @observable tabularModalData = null;
+    @observable tabularModalDataValidated = false;
+    @action.bound toggleDatasetModal() {
+        this.showTabularModal = !this.showTabularModal;
+        this.tabularModalDataValidated = false;
+        this.tabularModalText = "";
+        this.tabularModalError = "";
+        this.tabularModalData = null;
+    }
+    @action.bound changeDatasetFromModal(text) {
+        text = text.trim();
+        this.tabularModalDataValidated = false;
+        this.tabularModalText = text;
+
+        if (text == "") {
+            return;
+        }
+
+        let expectedColumns = columns[this.selectedDataset.dtype],
+            results = validateTabularData(text, expectedColumns);
+
+        if (results.errors.length > 0) {
+            this.tabularModalError = results.errors.join("\n");
+            this.tabularModalData = null;
+        } else {
+            this.tabularModalError = "";
+            this.tabularModalData = results.data;
+        }
+
+        this.tabularModalDataValidated = results.errors.length === 0;
+    }
+    @action.bound updateDatasetFromModal() {
+        if (!this.tabularModalData) {
+            return;
+        }
+
+        const dataset = _.cloneDeep(this.selectedDataset),
+            index = this.selectedDatasetIndex;
+
+        _.each(this.tabularModalData, (value, key) => {
+            dataset[key] = value;
+        });
+        this.datasets[index] = dataset;
+        this.toggleDatasetModal();
+    }
+    // *** END TABULAR MODAL DATASET ***
 }
 
 export default DataStore;

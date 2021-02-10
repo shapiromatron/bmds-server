@@ -130,6 +130,7 @@ class JobViewset(mixins.CreateModelMixin, mixins.RetrieveModelMixin, viewsets.Ge
             return Response(
                 {
                     "status": "queued",
+                    "header": "Export being created",
                     "message": "Export requested... please wait until results are complete.",
                 },
                 content_type="application/json",
@@ -152,6 +153,7 @@ class JobViewset(mixins.CreateModelMixin, mixins.RetrieveModelMixin, viewsets.Ge
             return Response(
                 {
                     "status": "queued",
+                    "header": "Report being created",
                     "message": "Report requested... please wait until results are complete.",
                 },
                 content_type="application/json",

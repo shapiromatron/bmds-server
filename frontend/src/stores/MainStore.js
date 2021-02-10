@@ -21,9 +21,6 @@ class MainStore {
     @observable hasEditSettings = false;
     @observable executionOutputs = null;
     @observable isUpdateComplete = false;
-    @observable showToast = false;
-    @observable toastStatus = "";
-    @observable toastMessage = "";
 
     @action.bound setConfig(config) {
         this.config = config;
@@ -258,38 +255,6 @@ class MainStore {
             });
     }
 
-    @action async downloadReport(url) {
-        const apiUrl = this.config[url];
-        await fetch(apiUrl).then(response => {
-            let contentType = response.headers.get("content-type");
-            if (contentType.includes("application/json")) {
-                response.json().then(json => {
-                    this.toastStatus = json.status;
-                    this.toastMessage = json.message;
-                });
-                this.showToast = true;
-                var interval = setInterval(() => {
-                    fetch(apiUrl).then(res => {
-                        let contentType = res.headers.get("content-type");
-                        if (contentType.includes("application/json")) {
-                            this.showToast = true;
-                        } else {
-                            clearInterval(interval);
-                            this.showToast = false;
-                            saveAs(apiUrl);
-                        }
-                    });
-                }, 10000);
-            } else {
-                saveAs(apiUrl);
-            }
-        });
-    }
-
-    @action.bound closeToast() {
-        this.showToast = false;
-    }
-
     @computed get canEdit() {
         return this.config.editSettings !== undefined;
     }
@@ -328,6 +293,41 @@ class MainStore {
     @computed get hasOutputs() {
         return this.executionOutputs !== null;
     }
+
+    // *** TOAST ***
+    @observable showToast = false;
+    @observable toastHeader = "";
+    @observable toastMessage = "";
+    @action.bound downloadReport(url) {
+        const apiUrl = this.config[url],
+            fetchReport = () => {
+                fetch(apiUrl).then(processResponse);
+            },
+            processResponse = response => {
+                let contentType = response.headers.get("content-type");
+                if (contentType.includes("application/json")) {
+                    response.json().then(json => {
+                        this.toastHeader = json.header;
+                        this.toastMessage = json.message;
+                    });
+                    this.showToast = true;
+                    setTimeout(fetchReport, 5000);
+                } else {
+                    const filename = response.headers
+                        .get("content-disposition")
+                        .match(/filename="(.*)"/)[1];
+                    response.blob().then(blob => {
+                        saveAs(blob, filename);
+                        this.showToast = false;
+                    });
+                }
+            };
+        fetchReport();
+    }
+    @action.bound closeToast() {
+        this.showToast = false;
+    }
+    // *** END TOAST ***
 }
 
 export default MainStore;

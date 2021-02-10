@@ -1,6 +1,3 @@
-import io
-import random
-
 from django.core.exceptions import ValidationError
 from rest_framework import exceptions, mixins, status, viewsets
 from rest_framework.decorators import action
@@ -8,6 +5,7 @@ from rest_framework.response import Response
 
 from ..common.validation import pydantic_validate
 from . import models, renderers, serializers, validators
+from .cache import DocxReportCache, ExcelReportCache
 
 
 class JobViewset(mixins.CreateModelMixin, mixins.RetrieveModelMixin, viewsets.GenericViewSet):
@@ -125,41 +123,27 @@ class JobViewset(mixins.CreateModelMixin, mixins.RetrieveModelMixin, viewsets.Ge
         """
         Return Excel export of outputs for selected job
         """
-        # TODO - change from random number generator to a queue to checks diskcache
-        if random.random() < 0.9:
-            return Response(
-                {
-                    "status": "queued",
-                    "header": "Export being created",
-                    "message": "Export requested... please wait until results are complete.",
-                },
-                content_type="application/json",
-            )
-
         instance = self.get_object()
-        df = instance.to_excel()
-        f = io.BytesIO()
-        df.to_excel(f, index=False)
-        data = renderers.BinaryFile(data=f, filename=instance.slug)
-        return Response(data)
+        cache = ExcelReportCache(job=instance)
+        response = cache.request_content()
+
+        if response.status is cache.status.COMPLETE:
+            data = renderers.BinaryFile(data=response.content, filename=instance.slug)
+            return Response(data)
+
+        return Response(response.dict(), content_type="application/json")
 
     @action(detail=True, renderer_classes=(renderers.DocxRenderer,))
     def word(self, request, *args, **kwargs):
         """
         Return Word report for the selected job
         """
-        # TODO - change from random number generator to a queue to checks diskcache
-        if random.random() < 0.9:
-            return Response(
-                {
-                    "status": "queued",
-                    "header": "Report being created",
-                    "message": "Report requested... please wait until results are complete.",
-                },
-                content_type="application/json",
-            )
-
         instance = self.get_object()
-        document = instance.to_word()
-        data = renderers.BinaryFile(data=document, filename=instance.slug)
-        return Response(data)
+        cache = DocxReportCache(job=instance)
+        response = cache.request_content()
+
+        if response.status is cache.status.COMPLETE:
+            data = renderers.BinaryFile(data=response.content, filename=instance.slug)
+            return Response(data)
+
+        return Response(response.dict(), content_type="application/json")

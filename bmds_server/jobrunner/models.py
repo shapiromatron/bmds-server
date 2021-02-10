@@ -182,7 +182,7 @@ class Job(models.Model):
         report.document.save(f)
         return f
 
-    def to_excel(self) -> pd.DataFrame:
+    def to_df(self) -> pd.DataFrame:
         # exit early if we don't have data for a report
         if not self.is_finished or self.has_errors:
             return pd.Series(
@@ -193,6 +193,12 @@ class Job(models.Model):
         df = batch.to_df()
 
         return df
+
+    def to_excel(self) -> BytesIO:
+        df = self.to_df()
+        f = BytesIO()
+        df.to_excel(f, index=False)
+        return f
 
     def update_selection(self, selection: validators.JobSelectedSchema):
         """Given a new selection data schema; update outputs and save instance

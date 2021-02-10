@@ -14,10 +14,12 @@ ROOT_DIR = Path(__file__).parents[3].resolve()
 
 # data paths
 PUBLIC_DATA_ROOT = Path(os.environ.get("PUBLIC_DATA_ROOT", ROOT_DIR / "public"))
+PRIVATE_DATA_ROOT = Path(os.environ.get("PRIVATE_DATA_ROOT", ROOT_DIR / "private"))
 LOGS_PATH = Path(os.environ.get("LOGS_PATH", ROOT_DIR / "logs"))
 
 # make sure these paths exist
 PUBLIC_DATA_ROOT.mkdir(exist_ok=True, parents=False)
+PRIVATE_DATA_ROOT.mkdir(exist_ok=True, parents=False)
 LOGS_PATH.mkdir(exist_ok=True, parents=False)
 
 SKIN = SkinStyle.Base
@@ -153,11 +155,17 @@ CELERY_WORKER_MAX_TASKS_PER_CHILD = 100
 CELERY_WORKER_PREFETCH_MULTIPLIER = 1
 
 # Cache settings
+DISK_CACHE_NAME = "disk"
 CACHES = {
     "default": {
         "BACKEND": "django.core.cache.backends.locmem.LocMemCache",
         "TIMEOUT": 60 * 10,  # 10 minutes (in seconds)
-    }
+    },
+    DISK_CACHE_NAME: {
+        "BACKEND": "diskcache.DjangoCache",
+        "LOCATION": f"{PRIVATE_DATA_ROOT}/diskcache/",
+        "TIMEOUT": 60 * 60 * 24 * 7,  # 1 week
+    },
 }
 
 REST_FRAMEWORK = {

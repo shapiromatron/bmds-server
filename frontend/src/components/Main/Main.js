@@ -14,36 +14,24 @@ import AnalysisFormReadOnly from "./AnalysisForm/AnalysisFormReadOnly";
 class Main extends Component {
     render() {
         const {mainStore} = this.props;
-        return (
-            <div>
-                {mainStore.isUpdateComplete ? (
-                    <div>
-                        <div className="row">
-                            <div className="col-lg-4 analysis">
-                                <div className="mb-2">
-                                    {mainStore.canEdit ? (
-                                        <AnalysisForm />
-                                    ) : (
-                                        <AnalysisFormReadOnly />
-                                    )}
-                                </div>
-                                <div>
-                                    {mainStore.getDatasetLength ? <DatasetModelOptionList /> : null}
-                                </div>
-                            </div>
-                            <div className="col-lg-8">
-                                <div>
-                                    <ModelsCheckBoxList />
-                                </div>
-                                <div>
-                                    <OptionsFormList />
-                                </div>
-                            </div>
-                        </div>
+        return mainStore.isUpdateComplete ? (
+            <div className="row">
+                <div className="col-lg-4 analysis">
+                    <div className="mb-2">
+                        {mainStore.canEdit ? <AnalysisForm /> : <AnalysisFormReadOnly />}
                     </div>
-                ) : null}
+                    <div>{mainStore.getDatasetLength ? <DatasetModelOptionList /> : null}</div>
+                </div>
+                <div className="col-lg-8">
+                    <div>
+                        <ModelsCheckBoxList />
+                    </div>
+                    <div>
+                        <OptionsFormList />
+                    </div>
+                </div>
             </div>
-        );
+        ) : null;
     }
 }
 Main.propTypes = {

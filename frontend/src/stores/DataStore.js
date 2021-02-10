@@ -224,8 +224,7 @@ class DataStore {
         return this.selectedDatasetId !== null;
     }
 
-    // ---------------------------------------------------------------------------------------------
-    // TABULAR MODAL DATASET
+    // *** TABULAR MODAL DATASET ***
     @observable showTabularModal = false;
     @observable tabularModalError = "";
     @observable tabularModalText = "";
@@ -274,8 +273,7 @@ class DataStore {
         this.datasets[index] = dataset;
         this.toggleDatasetModal();
     }
-    // END TABULAR MODAL DATASET
-    // ---------------------------------------------------------------------------------------------
+    // *** END TABULAR MODAL DATASET ***
 }
 
 export default DataStore;

@@ -16,6 +16,7 @@ from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.db import models
 from django.urls import reverse
+from django.utils.text import slugify
 from django.utils.timezone import now
 
 from . import tasks, transforms, utils, validators
@@ -46,7 +47,14 @@ class Job(models.Model):
         get_latest_by = ("created",)
 
     def __str__(self):
-        return str(self.id)
+        return str(self.inputs.get("analysis_name", self.id))
+
+    @property
+    def slug(self) -> str:
+        if "analysis_name" in self.inputs:
+            return slugify(self.inputs["analysis_name"])
+        else:
+            return str(self.id)
 
     def get_absolute_url(self):
         return reverse("job", args=(str(self.id),))
@@ -174,7 +182,7 @@ class Job(models.Model):
         report.document.save(f)
         return f
 
-    def to_excel(self) -> pd.DataFrame:
+    def to_df(self) -> pd.DataFrame:
         # exit early if we don't have data for a report
         if not self.is_finished or self.has_errors:
             return pd.Series(
@@ -185,6 +193,12 @@ class Job(models.Model):
         df = batch.to_df()
 
         return df
+
+    def to_excel(self) -> BytesIO:
+        df = self.to_df()
+        f = BytesIO()
+        df.to_excel(f, index=False)
+        return f
 
     def update_selection(self, selection: validators.JobSelectedSchema):
         """Given a new selection data schema; update outputs and save instance

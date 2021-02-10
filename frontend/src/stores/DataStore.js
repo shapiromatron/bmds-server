@@ -3,7 +3,51 @@ import _ from "lodash";
 
 import * as dc from "../constants/dataConstants";
 import {getDrLayout, getDrDatasetPlotData} from "../constants/plotting";
-import {datasetTypesByModelType, getDefaultDataset} from "../constants/dataConstants";
+import {datasetTypesByModelType, getDefaultDataset, columns} from "../constants/dataConstants";
+
+let validateTabularData = function(text, columns) {
+    let data = [],
+        errors = [];
+
+    data = _.chain(text)
+        .split("\n")
+        .filter(line => line.length > 0)
+        .map(line =>
+            _.chain(line)
+                .split("\t")
+                .map(parseFloat)
+                .filter(d => _.isFinite(d))
+                .value()
+        )
+        .compact()
+        .value();
+
+    if (
+        data.length > 0 &&
+        _.chain(data)
+            .map(d => d.length)
+            .uniq()
+            .value().length !== 1
+    ) {
+        errors.push("Data are not of equal length or contain non-numeric values.");
+    }
+
+    data = _.zip(...data);
+
+    if (data.length !== columns.length) {
+        errors.push(`Expecting ${columns.length} columns; got ${data.length} columns`);
+    }
+
+    if (data[0].length < 3) {
+        errors.push(`Expecting 3+ rows; got ${data[0].length} rows`);
+    }
+
+    if (errors.length == 0) {
+        data = _.zipObject(columns, data);
+    }
+
+    return {data, errors};
+};
 
 class DataStore {
     constructor(rootStore) {
@@ -13,11 +57,6 @@ class DataStore {
     @observable model_type = dc.DATA_CONTINUOUS_SUMMARY;
     @observable datasets = [];
     @observable selectedDatasetId = null;
-    @observable showModal = false;
-    @observable modalDatasets = "";
-    @observable modalValidatedDatasets = [];
-    @observable modalError = "";
-    @observable modalDataValidated = false;
 
     @action.bound setDefaultsByDatasetType() {
         this.selectedDatasetId = null;
@@ -89,7 +128,7 @@ class DataStore {
     }
 
     @action.bound deleteDataset() {
-        var index = this.datasets.findIndex(item => item.metadata.id == this.selectedDatasetId),
+        var index = this.selectedDatasetIndex,
             datasetId = toJS(this.selectedDatasetId);
         if (index > -1) {
             this.datasets.splice(index, 1);
@@ -106,82 +145,12 @@ class DataStore {
         this.selectedDatasetId = datasets.length > 0 ? datasets[0].metadata.id : null;
     }
 
-    @action toggleDatasetModal() {
-        this.showModal = !this.showModal;
-        this.modalError = "";
-    }
-    @action closeDatasetModal() {
-        this.showModal = false;
-    }
-
-    @action changeDatasetFromModal(dataset) {
-        this.modalDataValidated = false;
-        this.modalDatasets = dataset;
-    }
-
-    @action validateModalDataset() {
-        this.modalValidatedDatasets = [];
-        let modalDataset = this.modalDatasets.split("\n");
-
-        //remove any empty lines
-        _.remove(modalDataset, function(n) {
-            return n.length <= 1;
-        });
-        modalDataset.map(item => {
-            let line = item.split("\t");
-            if (line.length != dc.datasetColumnLength[this.model_type]) {
-                this.modalError =
-                    dc.datasetTypes[this.model_type] +
-                    " datasets must have exactly " +
-                    dc.datasetColumnLength[this.model_type] +
-                    " columns of data.";
-                return;
-            }
-            let result = line.map(function(e) {
-                return isNaN(e);
-            });
-            if (result.includes(true)) {
-                this.modalError =
-                    "Copy/paste data from Excel into the box below. Data must be all numeric with no headers or descriptive columns.";
-                return;
-            }
-
-            this.modalValidatedDatasets.push(line);
-            this.modalError = "";
-            this.modalDataValidated = true;
-        });
-    }
-    @action saveDatasetFromModal() {
-        //make array  as per columns
-        let dataset_columns = _.zip(...this.modalValidatedDatasets);
-
-        let dataset = getDefaultDataset(this.model_type);
-        Object.keys(dataset).map((key, index) => {
-            if (Array.isArray(dataset[key])) {
-                dataset[key] = dataset_columns[index - 2];
-            }
-        });
-        let id =
-            _.chain(this.datasets)
-                .map(d => d.metadata.id)
-                .max()
-                .defaultTo(-1)
-                .value() + 1;
-
-        dataset.metadata.id = id;
-        dataset.metadata.name = `Dataset #${id + 1}`;
-        this.datasets.push(dataset);
-        this.rootStore.dataOptionStore.createOption(dataset);
-        this.selectedDatasetId = id;
-        this.toggleDatasetModal();
-    }
-
-    @computed get isModalDataValidated() {
-        return this.modalDataValidated;
-    }
-
     @computed get selectedDataset() {
         return this.datasets.find(item => item.metadata.id === this.selectedDatasetId);
+    }
+
+    @computed get selectedDatasetIndex() {
+        return _.findIndex(this.datasets, item => item.metadata.id === this.selectedDatasetId);
     }
 
     @computed get getMappedArray() {
@@ -257,6 +226,58 @@ class DataStore {
 
     @computed get openDatasetModal() {
         return this.openModal;
+    }
+
+    // ---------------------------------------------------------------------------------------------
+    // TABULAR MODAL DATASET
+    @observable showModal = false;
+    @observable modalError = "";
+    @observable tabularModalText = "";
+    @observable tabularModalData = null;
+    @observable tabularModalDataValidated = false;
+    @action toggleDatasetModal() {
+        this.showModal = !this.showModal;
+        this.modalError = "";
+    }
+    @action closeDatasetModal() {
+        this.showModal = false;
+    }
+
+    @action.bound changeDatasetFromModal(text) {
+        text = text.trim();
+        this.tabularModalDataValidated = false;
+        this.tabularModalText = text;
+
+        if (text == "") {
+            return;
+        }
+
+        let expectedColumns = columns[this.selectedDataset.dtype],
+            results = validateTabularData(text, expectedColumns);
+
+        if (results.errors.length > 0) {
+            this.modalError = results.errors.join("\n");
+            this.tabularModalData = null;
+        } else {
+            this.modalError = "";
+            this.tabularModalData = results.data;
+        }
+
+        this.tabularModalDataValidated = results.errors.length === 0;
+    }
+    @action.bound updateDatasetFromModal() {
+        if (!this.tabularModalData) {
+            return;
+        }
+
+        const dataset = _.cloneDeep(this.selectedDataset),
+            index = this.selectedDatasetIndex;
+
+        _.each(this.tabularModalData, (value, key) => {
+            dataset[key] = value;
+        });
+        this.datasets[index] = dataset;
+        this.toggleDatasetModal();
     }
 }
 

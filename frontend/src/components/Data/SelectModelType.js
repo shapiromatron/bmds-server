@@ -1,7 +1,6 @@
 import React, {Component} from "react";
 import {inject, observer} from "mobx-react";
 import PropTypes from "prop-types";
-import CopyTableModal from "./CopyTableModal";
 
 @inject("dataStore")
 @observer
@@ -36,16 +35,6 @@ class SelectModelType extends Component {
                             </button>
                         </div>
                     </div>
-                </div>
-                <div className="mt-1">
-                    <button
-                        className="btn btn-info btn-block"
-                        onClick={() => dataStore.toggleDatasetModal()}>
-                        Load Datasets
-                    </button>
-                </div>
-                <div>
-                    <CopyTableModal />
                 </div>
             </div>
         );

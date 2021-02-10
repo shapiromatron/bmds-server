@@ -1,6 +1,7 @@
 import React, {Component} from "react";
 import {inject, observer} from "mobx-react";
 import PropTypes from "prop-types";
+import TabularDatasetModal from "./TabularDatasetModal";
 
 import {columnHeaders, columns} from "../../constants/dataConstants";
 
@@ -139,10 +140,17 @@ class DatasetForm extends Component {
                             {columnNames.map((item, index) => (
                                 <th key={index}>{columnHeaders[item]}</th>
                             ))}
-                            <td>
+                            <td style={{width: 100}}>
+                                <button
+                                    className="btn btn-info mr-1"
+                                    title="Load dataset from Excel"
+                                    onClick={() => dataStore.toggleDatasetModal()}>
+                                    <i className="fa fa-file-excel-o"></i>
+                                </button>
                                 <button
                                     type="button"
                                     className="btn btn-primary"
+                                    title="Add row"
                                     onClick={() => dataStore.addRow()}>
                                     <i className="fa fa-plus-square" aria-hidden="true"></i>{" "}
                                 </button>
@@ -164,6 +172,7 @@ class DatasetForm extends Component {
                         })}
                     </tbody>
                 </table>
+                <TabularDatasetModal />
             </div>
         );
     }

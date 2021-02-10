@@ -42,17 +42,16 @@ def bmds3_complete_continuous():
         ],
         "options": [
             {
-                "bmr_type": "Std. Dev.",
+                "bmr_type": 2,
                 "bmr_value": 1.0,
                 "tail_probability": 0.95,
-                "confidence_level": 0.05,
-                "distribution": "Normal",
-                "variance": "Calculated",
-                "polynomial_restriction": "Use dataset adverse direction",
-                "background": "Estimated",
+                "confidence_level": 0.95,
+                "dist_type": 1,
             }
         ],
-        "dataset_options": [{"dataset_id": 123, "enabled": True, "adverse_direction": "automatic"}],
+        "dataset_options": [
+            {"dataset_id": 123, "enabled": True, "degree": 0, "adverse_direction": -1}
+        ],
         "recommender": RecommenderSettings.build_default().dict(),
     }
 
@@ -72,14 +71,7 @@ def bmds3_complete_dichotomous():
                 "incidences": [0, 0, 1, 4, 11],
             }
         ],
-        "options": [
-            {
-                "bmr_type": "Extra",
-                "bmr_value": 0.1,
-                "confidence_level": 0.95,
-                "background": "Estimated",
-            }
-        ],
-        "dataset_options": [{"dataset_id": 123, "enabled": True}],
+        "options": [{"bmr_type": 1, "bmr_value": 0.1, "confidence_level": 0.95}],
+        "dataset_options": [{"dataset_id": 123, "enabled": True, "degree": 0}],
         "recommender": RecommenderSettings.build_default().dict(),
     }

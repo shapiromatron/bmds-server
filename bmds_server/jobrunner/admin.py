@@ -43,3 +43,9 @@ class JobAdmin(admin.ModelAdmin):
     diagnostic_cache.short_description = "Diagnostic cache test"
 
     actions = (diagnostic_celery_task, diagnostic_cache)
+
+
+@admin.register(models.Content)
+class Content(admin.ModelAdmin):
+    list_display = ("id", "content_type", "subject", "created", "last_updated")
+    list_filter = ("content_type",)

@@ -111,12 +111,26 @@ class MainStore {
 
         const apiUrl = this.config.apiUrl,
             {csrfToken} = this.config.editSettings,
+            handleServerError = error => {
+                console.error("error", error);
+                if (error.status == 500) {
+                    this.errorMessage =
+                        "A server error occurred... if the error continues or your analysis does not complete please contact us.";
+                    return;
+                }
+                this.errorMessage = error;
+            },
             pollForResults = () => {
                 fetch(apiUrl, {
                     method: "GET",
                     mode: "cors",
                 })
-                    .then(response => response.json())
+                    .then(response => {
+                        if (!response.ok) {
+                            throw response;
+                        }
+                        return response.json();
+                    })
                     .then(data => {
                         if (data.is_executing) {
                             setTimeout(pollForResults, 5000);
@@ -125,10 +139,7 @@ class MainStore {
                             simulateClick(document.getElementById("navlink-output"));
                         }
                     })
-                    .catch(error => {
-                        this.errorMessage = error;
-                        console.error("error", error);
-                    });
+                    .catch(handleServerError);
             };
 
         await fetch(this.config.editSettings.executeUrl, {
@@ -139,7 +150,12 @@ class MainStore {
                 editKey: this.config.editSettings.editKey,
             }),
         })
-            .then(response => response.json())
+            .then(response => {
+                if (!response.ok) {
+                    throw response;
+                }
+                return response.json();
+            })
             .then(data => {
                 if (data.is_executing) {
                     setTimeout(pollForResults, 5000);
@@ -148,10 +164,7 @@ class MainStore {
                     simulateClick(document.getElementById("navlink-output"));
                 }
             })
-            .catch(error => {
-                this.errorMessage = error;
-                console.error("error", error);
-            });
+            .catch(handleServerError);
     }
     @action
     async executeResetAnalysis() {

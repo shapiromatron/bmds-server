@@ -3,6 +3,22 @@ import React, {Component} from "react";
 import PropTypes from "prop-types";
 
 import {getPValue} from "../../constants/outputConstants";
+import {getModelBinLabel, getModelBinText} from "../../constants/logicConstants";
+import {ff} from "../../common";
+
+const getRecommenderText = function(output, index) {
+    let items = getModelBinText(output, index);
+    if (items.length === 0) {
+        return null;
+    }
+    return (
+        <ul className="list-unstyled">
+            {items.map((d, idx) => (
+                <li key={idx}>{d}</li>
+            ))}
+        </ul>
+    );
+};
 
 @inject("outputStore")
 @observer
@@ -18,11 +34,17 @@ class ResultsTable extends Component {
                 <thead className="table-bordered">
                     <tr className="table-primary">
                         <th>Model</th>
-                        <th>BMD</th>
                         <th>BMDL</th>
+                        <th>BMD</th>
                         <th>BMDU</th>
                         <th>AIC</th>
                         <th>p-value</th>
+                        {store.recommendationEnabled ? (
+                            <>
+                                <th>Recommendation bin</th>
+                                <th>Recommendation notes</th>
+                            </>
+                        ) : null}
                     </tr>
                 </thead>
                 <tbody className="table-bordered">
@@ -43,11 +65,17 @@ class ResultsTable extends Component {
                                         {model.name}
                                     </a>
                                 </td>
-                                <td>{model.results.bmd}</td>
-                                <td>{model.results.bmdl}</td>
-                                <td>{model.results.bmdu}</td>
-                                <td>{model.results.aic}</td>
-                                <td>{getPValue(dataset.model_type, model.results)}</td>
+                                <td>{ff(model.results.bmdl)}</td>
+                                <td>{ff(model.results.bmd)}</td>
+                                <td>{ff(model.results.bmdu)}</td>
+                                <td>{ff(model.results.aic)}</td>
+                                <td>{ff(getPValue(dataset.dtype, model.results))}</td>
+                                {store.recommendationEnabled ? (
+                                    <>
+                                        <td>{getModelBinLabel(store.selectedOutput, idx)}</td>
+                                        <td>{getRecommenderText(store.selectedOutput, idx)}</td>
+                                    </>
+                                ) : null}
                             </tr>
                         );
                     })}

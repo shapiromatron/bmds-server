@@ -14,7 +14,6 @@ admin_url = f"{settings.ADMIN_URL_PREFIX}/admin/" if not settings.DEBUG else "ad
 urlpatterns = [
     path("api/v1/", include((router.urls, "jobrunner"), namespace="api")),
     path("", views.Home.as_view(), name="home"),
-    path("job/q/", views.JobQuery.as_view(), name="job_query"),
     path("job/<uuid:pk>/", views.JobDetail.as_view(), name="job"),
     path("job/<uuid:pk>/<str:password>/", views.JobDetail.as_view(), name="job_edit"),
     path("job/<uuid:pk>/<str:password>/renew/", views.JobRenew.as_view(), name="job_renew"),

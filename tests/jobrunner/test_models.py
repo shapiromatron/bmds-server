@@ -6,7 +6,7 @@ import pytest
 from bmds_server.jobrunner.models import Job
 
 # TODO remove this restriction
-should_run = platform.system() == "Darwin" and os.getenv("CI") is None
+should_run = platform.system() != "Windows" and os.getenv("CI") is None
 
 
 @pytest.mark.django_db()

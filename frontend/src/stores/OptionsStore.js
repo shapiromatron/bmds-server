@@ -9,8 +9,6 @@ class OptionsStore {
     }
 
     @observable optionsList = [];
-    @observable headers = [];
-
     @computed get canEdit() {
         return this.rootStore.mainStore.canEdit;
     }
@@ -18,7 +16,6 @@ class OptionsStore {
     @action.bound setDefaultsByDatasetType() {
         const option = _.cloneDeep(constant.options[this.getModelType]);
         this.optionsList = [option];
-        this.headers = constant.headers[this.getModelType];
     }
 
     @action.bound addOptions() {
@@ -35,7 +32,6 @@ class OptionsStore {
     }
     @action setOptions(options) {
         this.optionsList = options;
-        this.headers = constant.headers[this.getModelType];
     }
 
     @computed get getModelType() {

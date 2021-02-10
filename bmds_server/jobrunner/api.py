@@ -67,9 +67,9 @@ class JobViewset(mixins.CreateModelMixin, mixins.RetrieveModelMixin, viewsets.Ge
 
         # preflight execution check
         if not instance.inputs_valid():
-            return Response("Invalid inputs", status_code=400)
+            return Response("Invalid inputs", status=400)
         elif instance.is_executing:
-            return Response("Execution already started", status_code=400)
+            return Response("Execution already started", status=400)
 
         # start job execution
         instance.reset_execution()

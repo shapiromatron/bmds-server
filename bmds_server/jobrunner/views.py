@@ -1,6 +1,7 @@
 import json
 
 from django.conf import settings
+from django.core.cache import cache
 from django.http.response import JsonResponse
 from django.middleware.csrf import get_token
 from django.shortcuts import get_object_or_404
@@ -27,11 +28,17 @@ class Home(CreateView):
     def get_success_url(self):
         return self.object.get_edit_url()
 
+    def _get_frontmatter(self):
+        key = "frontmatter"
+        frontmatter = cache.get(key)
+        if frontmatter is None:
+            frontmatter = models.Content.objects.get(content_type=models.ContentType.HOMEPAGE)
+            cache.set(key, frontmatter, 3600)  # cache for an hour
+        return frontmatter
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["frontmatter"] = models.Content.objects.get(
-            content_type=models.ContentType.HOMEPAGE
-        )
+        context["frontmatter"] = self._get_frontmatter()
         context["days_to_keep_jobs"] = settings.DAYS_TO_KEEP_JOBS
         return context
 

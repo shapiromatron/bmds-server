@@ -83,7 +83,7 @@ class ModelsStore {
         });
     }
 
-    @action.bound savePriorWeght(key, val) {
+    @action.bound savePriorWeight(key, val) {
         this.models.map(model => {
             model.values.map(value => {
                 if (value.name == key) {

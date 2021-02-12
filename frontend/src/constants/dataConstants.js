@@ -105,9 +105,14 @@ export const DATA_CONTINUOUS_SUMMARY = "CS",
         }
     },
     datasetOptionColumnNames = {
-        [Dtype.CONTINUOUS]: ["Enabled", "Dataset", "Degree", "Adverse Direction"],
-        [Dtype.CONTINUOUS_INDIVIDUAL]: ["Enabled", "Dataset", "Degree", "Adverse Direction"],
-        [Dtype.DICHOTOMOUS]: ["Enabled", "Dataset", "Degree"],
+        [Dtype.CONTINUOUS]: ["Enabled", "Dataset", "Polynomial degree", "Adverse Direction"],
+        [Dtype.CONTINUOUS_INDIVIDUAL]: [
+            "Enabled",
+            "Dataset",
+            "Polynomial degree",
+            "Adverse Direction",
+        ],
+        [Dtype.DICHOTOMOUS]: ["Enabled", "Dataset", "Multistage degree"],
     },
     adverseDirectionOptions = [
         {value: -1, label: "Automatic"},

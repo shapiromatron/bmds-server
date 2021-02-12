@@ -162,7 +162,7 @@ print and (min-width: 35em) {
 .epa-style.main-footer {
     background-color: #323a45;
     color: #fff;
-    padding-bottom: 3.9em;
+    padding-bottom: 3em;
     padding-top: 2.5em;
 }
 
@@ -211,10 +211,6 @@ print and (min-width: 35em) {
 
 .epa-style .last-updated p {
     font-size: 12px;
-}
-
-.epa-style .region-footer .menu {
-    margin-bottom: 2em;
 }
 
 .epa-style .region-footer .menu>li {
@@ -271,6 +267,10 @@ print and (min-width: 58em) {
     text-decoration: none;
     text-shadow: none;
     width: 26px;
+}
+
+.epa-search-fixed-size {
+    width: 16.5em;
 }
 
 .epa-style .region-footer .social-menu>li>a:hover,

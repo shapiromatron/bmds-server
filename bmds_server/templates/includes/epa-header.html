@@ -1,7 +1,7 @@
 <div class="epa-style app-header">
 
     <header class="masthead clearfix" role="banner">
-        <form class="float-right form-inline d-none d-md-block d-lg-none mr-2" style="width: 16.5em">
+        <form class="float-right form-inline d-none d-md-block d-lg-none mr-2 epa-search-fixed-size">
             <div class="input-group input-group-sm">
                 <input type="text" class="form-control " placeholder="Search EPA.gov" name="querytext" id="search-box">
                 <div class="input-group-append">
@@ -43,7 +43,7 @@
             </ul>
         </div>
 
-        <form class="form-inline d-none d-lg-block" style="width: 16.5em">
+        <form class="form-inline d-none d-lg-block epa-search-fixed-size">
             <div class="input-group input-group-sm">
                 <input type="text" class="form-control " placeholder="Search EPA.gov" name="querytext" id="search-box">
                 <div class="input-group-append">
@@ -59,7 +59,6 @@
         </form>
     </nav>
 
-
     <form class="form-inline d-sm-block d-md-none p-2">
         <div class="input-group input-group-sm">
             <input type="text" class="form-control " placeholder="Search EPA.gov" name="querytext" id="search-box">
@@ -74,8 +73,8 @@
             <input type="hidden" name="result_template" value="2col.ftl">
         </div>
     </form>
-
 </div>
+
 <nav class="navbar navbar-dark bg-dark">
     <a class="navbar-brand" href="{% url 'home' %}">BMDS Online</a>
     <ul class="nav navbar-nav ml-auto">

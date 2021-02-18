@@ -1,4 +1,6 @@
 from django.core.exceptions import ValidationError
+from django.utils.decorators import method_decorator
+from django.views.decorators.csrf import csrf_protect
 from rest_framework import exceptions, mixins, status, viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
@@ -8,6 +10,7 @@ from . import models, renderers, serializers, validators
 from .cache import DocxReportCache, ExcelReportCache
 
 
+@method_decorator(csrf_protect, name="dispatch")
 class JobViewset(mixins.CreateModelMixin, mixins.RetrieveModelMixin, viewsets.GenericViewSet):
     serializer_class = serializers.JobSerializer
     queryset = models.Job.objects.all()

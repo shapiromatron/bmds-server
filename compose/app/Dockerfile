@@ -15,6 +15,7 @@ COPY ./compose/app/sync.sh /app/bin/sync.sh
 COPY ./compose/app/web.sh /app/bin/web.sh
 COPY ./compose/app/workers.sh /app/bin/workers.sh
 COPY ./compose/app/cron.sh /app/bin/cron.sh
+COPY ./compose/app/test.py /app/test.py
 
 # used in some dev/staging environments
 COPY ./tests/data/db.yaml /app/test-db-fixture.yaml
@@ -28,8 +29,7 @@ RUN mkdir -p /app/logs && \
 COPY ./requirements /requirements
 COPY ./vendor /vendor
 
-RUN mv /vendor/*.so /usr/local/lib/ && \
-    ln -s /usr/local/lib/libnlopt.so /usr/local/lib/libnlopt.so.0 && \
+RUN mv /vendor/libnlopt.so /usr/local/lib/libnlopt.so.0 && \
     \
     pip install -U pip && \
     pip install -r /requirements/production.txt --no-cache-dir && \
@@ -48,3 +48,6 @@ RUN tar -xf bmds_server.tar.gz --strip-components=1 && \
 USER app
 
 ENV LD_LIBRARY_PATH=/usr/local/lib:$LD_LIBRARY_PATH
+
+RUN ldd /usr/local/lib/python3.6/site-packages/bmds/bin/BMDS330/libDRBMD.so && \
+    python /app/test.py

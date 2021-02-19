@@ -8,7 +8,6 @@ set -xe
     --timeout 300 \
     --workers $(nproc) \
     --log-level info \
-    --access-logfile - \
     --log-file - \
     --max-requests 750 \
     --max-requests-jitter 250

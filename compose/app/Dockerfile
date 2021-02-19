@@ -5,15 +5,19 @@ ENV BMDS_SERVER_VERSION 0.8
 RUN groupadd -g 555 -r app && \
     useradd -u 555 -r -g app app
 
-# bmds shared object dependencies
+# dependencies wait-for: netcat
+# dependencies bmds: libgslcblas0 libgsl-dev
 RUN apt-get update -y && \
-    apt-get install -y libgslcblas0 libgsl-dev
+    apt-get install -y netcat libgslcblas0 libgsl-dev
 
-COPY ./compose/app/entrypoint.sh /app/bin/entrypoint.sh
+COPY ./compose/app/wait-for.sh /app/bin/wait-for.sh
 COPY ./compose/app/sync.sh /app/bin/sync.sh
-COPY ./compose/app/gunicorn.sh /app/bin/gunicorn.sh
-COPY ./compose/app/celery.sh /app/bin/celery.sh
-COPY ./compose/app/celerybeat.sh /app/bin/celerybeat.sh
+COPY ./compose/app/web.sh /app/bin/web.sh
+COPY ./compose/app/workers.sh /app/bin/workers.sh
+COPY ./compose/app/cron.sh /app/bin/cron.sh
+
+# used in some dev/staging environments
+COPY ./tests/data/db.yaml /app/test-db-fixture.yaml
 
 # 1) install start-scripts
 # 2) install fonts
@@ -44,5 +48,3 @@ RUN tar -xf bmds_server.tar.gz --strip-components=1 && \
 USER app
 
 ENV LD_LIBRARY_PATH=/usr/local/lib:$LD_LIBRARY_PATH
-
-ENTRYPOINT ["/app/bin/entrypoint.sh"]

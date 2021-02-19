@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -xe
+
 /usr/local/bin/gunicorn bmds_server.main.wsgi \
     --bind 0.0.0.0:5000 \
     --chdir=/app \

@@ -11,7 +11,9 @@ Minimum hardware requirements:
 Software requirements:
 
 - docker and docker compose
-- `fabric`_ scripts are currently used for deployment, and are recommended for ease of use
+- `fabric`_ is used for (semi) automated deployment; contact if you're interested and we can share ...
+
+.. _fabric: http://www.fabfile.org/
 
 Build and deploy
 ----------------

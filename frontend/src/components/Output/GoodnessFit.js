@@ -1,7 +1,6 @@
 import React, {Component} from "react";
 import {observer} from "mobx-react";
 import PropTypes from "prop-types";
-import {goodnessFitHeaders} from "../../constants/outputConstants";
 import {ff} from "../../common";
 
 @observer
@@ -16,9 +15,12 @@ class GoodnessFit extends Component {
                         <th colSpan="9">Goodness of Fit</th>
                     </tr>
                     <tr>
-                        {goodnessFitHeaders.map((header, i) => {
-                            return <th key={i}>{header}</th>;
-                        })}
+                        <th>Dose</th>
+                        <th>Est. Prob</th>
+                        <th>Expected</th>
+                        <th>Observed</th>
+                        <th>Size</th>
+                        <th>Scaled Res.</th>
                     </tr>
                 </thead>
                 <tbody>

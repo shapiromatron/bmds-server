@@ -2,7 +2,6 @@ import React, {Component} from "react";
 import {observer} from "mobx-react";
 import PropTypes from "prop-types";
 import {ff} from "../../common";
-import {testofInterestHeaders} from "../../constants/outputConstants";
 
 @observer
 class CSTestofInterest extends Component {
@@ -16,9 +15,10 @@ class CSTestofInterest extends Component {
                         <th colSpan="4">Test of Interest</th>
                     </tr>
                     <tr>
-                        {testofInterestHeaders.map((header, i) => {
-                            return <th key={i}>{header}</th>;
-                        })}
+                        <th>Test</th>
+                        <th>Likelihood Ratio</th>
+                        <th>DF</th>
+                        <th>P Value</th>
                     </tr>
                 </thead>
                 <tbody>

@@ -1,7 +1,6 @@
 import React, {Component} from "react";
 import {observer} from "mobx-react";
 import PropTypes from "prop-types";
-import {dichotomousDevianceHeader} from "../../../constants/outputConstants";
 import {ff} from "../../../common";
 
 @observer
@@ -16,9 +15,12 @@ class DichotomousDeviance extends Component {
                         <th colSpan="9">Analysis of Deviance</th>
                     </tr>
                     <tr>
-                        {dichotomousDevianceHeader.map((header, i) => {
-                            return <th key={i}>{header}</th>;
-                        })}
+                        <th>Model</th>
+                        <th>LL</th>
+                        <th>Num Params</th>
+                        <th>Deviance</th>
+                        <th>Test DF</th>
+                        <th>P Value</th>
                     </tr>
                 </thead>
                 <tbody>

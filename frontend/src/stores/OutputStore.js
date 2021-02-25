@@ -225,7 +225,7 @@ class OutputStore {
         let parameters = this.modalModel.results.parameters;
         let data = [];
         parameters.names.map((item, index) => {
-            data.push([item, parameters.values[index], parameters.bounded[index].toString()]);
+            data.push([item, parameters.values[index], parameters.bounded[index]]);
         });
         return data;
     }

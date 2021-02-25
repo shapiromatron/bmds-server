@@ -2,7 +2,6 @@ import React, {Component} from "react";
 import {observer} from "mobx-react";
 import PropTypes from "prop-types";
 import {ff} from "../../common";
-import {modelParametersHeaders} from "../../constants/outputConstants";
 @observer
 class ModelParameters extends Component {
     render() {
@@ -14,9 +13,9 @@ class ModelParameters extends Component {
                         <th colSpan="3">Model Parameters</th>
                     </tr>
                     <tr>
-                        {modelParametersHeaders.map((header, i) => {
-                            return <th key={i}>{header}</th>;
-                        })}
+                        <th>Variable</th>
+                        <th>Parameter</th>
+                        <th>Bounded</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -26,7 +25,13 @@ class ModelParameters extends Component {
                             <tr key={idx}>
                                 <td>{variable}</td>
                                 <td>{ff(param)}</td>
-                                <td>{bounded}</td>
+                                <td>
+                                    {bounded.toString() === "true" ? (
+                                        <i className="fa fa-check fa-lg "></i>
+                                    ) : (
+                                        <i className="fa fa-times fa-lg "></i>
+                                    )}
+                                </td>
                             </tr>
                         );
                     })}

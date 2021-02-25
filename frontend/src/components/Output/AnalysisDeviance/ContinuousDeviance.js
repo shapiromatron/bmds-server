@@ -1,7 +1,6 @@
 import React, {Component} from "react";
 import {observer} from "mobx-react";
 import PropTypes from "prop-types";
-import {continuousDevianceHeader} from "../../../constants/outputConstants";
 import {ff} from "../../../common";
 @observer
 class ContinuousDeviance extends Component {
@@ -15,9 +14,10 @@ class ContinuousDeviance extends Component {
                         <th colSpan="9">Analysis of Deviance</th>
                     </tr>
                     <tr>
-                        {continuousDevianceHeader.map((header, i) => {
-                            return <th key={i}>{header}</th>;
-                        })}
+                        <th>Name</th>
+                        <th>Loglikelihood</th>
+                        <th>Num Params</th>
+                        <th>AIC</th>
                     </tr>
                 </thead>
                 <tbody>

@@ -5,17 +5,19 @@ import PropTypes from "prop-types";
 
 import InfoTable from "./InfoTable";
 import ModelOptionsTable from "./ModelOptionsTable";
-import BenchmarkDose from "./BenchmarkDose";
 import ModelData from "./ModelData";
 import ModelParameters from "./ModelParameters";
 import GoodnessFit from "./GoodnessFit";
 import CDFTable from "./CDFTable";
 import CDFPlot from "./CDFPlot";
-import CSLoglikelihoods from "./CSLoglikelihoods";
 import DoseResponsePlot from "../common/DoseResponsePlot";
 import CSTestofInterest from "./CSTestofInterest";
+import DichotomousSummary from "./Summary/DichotomousSummary";
 
 import * as dc from "../../constants/dataConstants";
+import DichotomousDeviance from "./AnalysisDeviance/DichotomousDeviance";
+import ContinuousSummary from "./Summary/ContinuousSummary";
+import ContinuousDeviance from "./AnalysisDeviance/ContinuousDeviance";
 
 @inject("outputStore")
 @observer
@@ -62,7 +64,12 @@ class ModelDetailModal extends Component {
                     </Row>
                     <Row>
                         <Col xs={4}>
-                            <BenchmarkDose store={outputStore} />
+                            {dtype == dc.Dtype.DICHOTOMOUS ? (
+                                <DichotomousSummary store={outputStore} />
+                            ) : null}
+                            {dtype == dc.Dtype.CONTINUOUS ? (
+                                <ContinuousSummary store={outputStore} />
+                            ) : null}
                             <ModelParameters store={outputStore} />
                         </Col>
                         <Col xs={8}>
@@ -72,20 +79,23 @@ class ModelDetailModal extends Component {
                             />
                         </Col>
                     </Row>
+                    <Row>
+                        <Col xs={12}>
+                            <GoodnessFit store={outputStore} />
+                        </Col>
+                    </Row>
                     {dtype == dc.Dtype.DICHOTOMOUS ? (
                         <Row>
                             <Col xs={12}>
-                                <GoodnessFit store={outputStore} />
+                                <DichotomousDeviance store={outputStore} />
                             </Col>
                         </Row>
                     ) : null}
-                    {dtype.model_type == dc.Dtype.CONTINUOUS ? (
+                    {dtype == dc.Dtype.CONTINUOUS ? (
                         <Row>
-                            <Col xs={4}>
-                                <CSLoglikelihoods results={model.results} />
-                            </Col>
-                            <Col xs={4}>
-                                <CSTestofInterest results={model.results} />
+                            <Col xs={12}>
+                                <ContinuousDeviance store={outputStore} />
+                                <CSTestofInterest store={outputStore} />
                             </Col>
                         </Row>
                     ) : null}

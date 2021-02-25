@@ -1,10 +1,8 @@
-import _ from "lodash";
 import React, {Component} from "react";
 import {observer} from "mobx-react";
 import PropTypes from "prop-types";
-
 import {ff} from "../../common";
-
+import {modelParametersHeaders} from "../../constants/outputConstants";
 @observer
 class ModelParameters extends Component {
     render() {
@@ -13,19 +11,22 @@ class ModelParameters extends Component {
             <table className="table table-bordered table-sm">
                 <thead>
                     <tr className="table-primary">
-                        <th colSpan="2">Model Parameters</th>
+                        <th colSpan="3">Model Parameters</th>
                     </tr>
                     <tr>
-                        <th>Variable</th>
-                        <th>Parameter</th>
+                        {modelParametersHeaders.map((header, i) => {
+                            return <th key={i}>{header}</th>;
+                        })}
                     </tr>
                 </thead>
                 <tbody>
-                    {_.map(store.selectedParams, (value, key) => {
+                    {store.modelParameters.map((params, idx) => {
+                        var [variable, param, bounded] = params;
                         return (
-                            <tr key={key}>
-                                <td>{key}</td>
-                                <td>{ff(value)}</td>
+                            <tr key={idx}>
+                                <td>{variable}</td>
+                                <td>{ff(param)}</td>
+                                <td>{bounded}</td>
                             </tr>
                         );
                     })}

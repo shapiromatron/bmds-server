@@ -1,35 +1,34 @@
 import React, {Component} from "react";
 import {observer} from "mobx-react";
 import PropTypes from "prop-types";
-import {ff} from "../../common";
-import {testofInterestHeaders} from "../../constants/outputConstants";
-
+import {continuousDevianceHeader} from "../../../constants/outputConstants";
+import {ff} from "../../../common";
 @observer
-class CSTestofInterest extends Component {
+class ContinuousDeviance extends Component {
     render() {
         const {store} = this.props,
-            testInterest = store.testInterest;
+            deviances = store.continuousDeviance;
         return (
             <table className="table table-bordered table-sm">
                 <thead className="table-primary">
                     <tr>
-                        <th colSpan="4">Test of Interest</th>
+                        <th colSpan="9">Analysis of Deviance</th>
                     </tr>
                     <tr>
-                        {testofInterestHeaders.map((header, i) => {
+                        {continuousDevianceHeader.map((header, i) => {
                             return <th key={i}>{header}</th>;
                         })}
                     </tr>
                 </thead>
                 <tbody>
-                    {testInterest.map((gof, idx) => {
-                        var [test, ll_ratio, df, p_value] = gof;
+                    {deviances.map((deviance, idx) => {
+                        var [deviance_name, ll, num_param, aic] = deviance;
                         return (
                             <tr key={idx}>
-                                <td>{test}</td>
-                                <td>{ff(ll_ratio)}</td>
-                                <td>{ff(df)}</td>
-                                <td>{ff(p_value)}</td>
+                                <td>{deviance_name}</td>
+                                <td>{ff(ll)}</td>
+                                <td>{num_param}</td>
+                                <td>{ff(aic)}</td>
                             </tr>
                         );
                     })}
@@ -38,7 +37,7 @@ class CSTestofInterest extends Component {
         );
     }
 }
-CSTestofInterest.propTypes = {
+ContinuousDeviance.propTypes = {
     store: PropTypes.object,
 };
-export default CSTestofInterest;
+export default ContinuousDeviance;

@@ -3,7 +3,7 @@ import {observer} from "mobx-react";
 import PropTypes from "prop-types";
 
 import {ff} from "../../common";
-import {readOnlyCheckbox} from "../../common";
+import {isParameterBounded} from "../../common";
 
 @observer
 class ModelParameters extends Component {
@@ -28,7 +28,7 @@ class ModelParameters extends Component {
                             <tr key={i}>
                                 <td>{name}</td>
                                 <td>{ff(parameters.values[i])}</td>
-                                <td>{readOnlyCheckbox(parameters.bounded[i])}</td>
+                                <td>{isParameterBounded(parameters.bounded[i])}</td>
                             </tr>
                         );
                     })}

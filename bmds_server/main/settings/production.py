@@ -68,3 +68,9 @@ CACHES["default"] = dict(
 # Celery settings
 CELERY_BROKER_URL = os.environ["DJANGO_CELERY_BROKER_URL"]
 CELERY_RESULT_BACKEND = os.environ["DJANGO_CELERY_RESULT_BACKEND"]
+
+# load test db for dev/staging?
+LOAD_TEST_DB = bool(os.environ.get("LOAD_TEST_DB") == "True")
+if LOAD_TEST_DB:
+    PASSWORD_HASHERS = ("django.contrib.auth.hashers.MD5PasswordHasher",)
+    TEST_DB_FIXTURE = ROOT_DIR / "test-db-fixture.yaml"

@@ -1,11 +1,15 @@
 import React, {Component} from "react";
 import {observer} from "mobx-react";
 import PropTypes from "prop-types";
+
 import {ff} from "../../common";
+import {readOnlyCheckbox} from "../../common";
+
 @observer
 class ModelParameters extends Component {
     render() {
-        const {store} = this.props;
+        const {store} = this.props,
+            parameters = store.modalModel.results.parameters;
         return (
             <table className="table table-bordered table-sm">
                 <thead>
@@ -19,19 +23,12 @@ class ModelParameters extends Component {
                     </tr>
                 </thead>
                 <tbody>
-                    {store.modelParameters.map((params, idx) => {
-                        var [variable, param, bounded] = params;
+                    {parameters.names.map((name, i) => {
                         return (
-                            <tr key={idx}>
-                                <td>{variable}</td>
-                                <td>{ff(param)}</td>
-                                <td>
-                                    {bounded.toString() === "true" ? (
-                                        <i className="fa fa-check fa-lg "></i>
-                                    ) : (
-                                        <i className="fa fa-times fa-lg "></i>
-                                    )}
-                                </td>
+                            <tr key={i}>
+                                <td>{name}</td>
+                                <td>{ff(parameters.values[i])}</td>
+                                <td>{readOnlyCheckbox(parameters.bounded[i])}</td>
                             </tr>
                         );
                     })}

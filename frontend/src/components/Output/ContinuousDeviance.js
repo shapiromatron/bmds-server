@@ -1,12 +1,15 @@
 import React, {Component} from "react";
 import {observer} from "mobx-react";
 import PropTypes from "prop-types";
-import {ff} from "../../../common";
+
+import {ff} from "../../common";
+
 @observer
 class ContinuousDeviance extends Component {
     render() {
         const {store} = this.props,
-            deviances = store.continuousDeviance;
+            deviances = store.modalModel.results.deviance;
+
         return (
             <table className="table table-bordered table-sm">
                 <thead className="table-primary">
@@ -21,14 +24,13 @@ class ContinuousDeviance extends Component {
                     </tr>
                 </thead>
                 <tbody>
-                    {deviances.map((deviance, idx) => {
-                        var [deviance_name, ll, num_param, aic] = deviance;
+                    {deviances.names.map((name, i) => {
                         return (
-                            <tr key={idx}>
-                                <td>{deviance_name}</td>
-                                <td>{ff(ll)}</td>
-                                <td>{num_param}</td>
-                                <td>{ff(aic)}</td>
+                            <tr key={i}>
+                                <td>{name}</td>
+                                <td>{ff(deviances.loglikelihoods[i])}</td>
+                                <td>{deviances.num_params[i]}</td>
+                                <td>{ff(deviances.aics[i])}</td>
                             </tr>
                         );
                     })}

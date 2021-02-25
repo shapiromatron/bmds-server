@@ -12,12 +12,12 @@ import CDFTable from "./CDFTable";
 import CDFPlot from "./CDFPlot";
 import DoseResponsePlot from "../common/DoseResponsePlot";
 import CSTestofInterest from "./CSTestofInterest";
-import DichotomousSummary from "./Summary/DichotomousSummary";
+import DichotomousSummary from "./DichotomousSummary";
+import DichotomousDeviance from "./DichotomousDeviance";
+import ContinuousSummary from "./ContinuousSummary";
+import ContinuousDeviance from "./ContinuousDeviance";
 
 import * as dc from "../../constants/dataConstants";
-import DichotomousDeviance from "./AnalysisDeviance/DichotomousDeviance";
-import ContinuousSummary from "./Summary/ContinuousSummary";
-import ContinuousDeviance from "./AnalysisDeviance/ContinuousDeviance";
 
 @inject("outputStore")
 @observer

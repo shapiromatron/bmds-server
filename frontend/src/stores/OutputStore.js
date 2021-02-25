@@ -3,7 +3,6 @@ import _ from "lodash";
 import {getHeaders} from "../common";
 
 import {getDrLayout, getDrDatasetPlotData, getDrBmdLine} from "../constants/plotting";
-import {Dtype} from "../constants/dataConstants";
 
 class OutputStore {
     /*
@@ -189,87 +188,6 @@ class OutputStore {
         } else {
             return dataset.metadata.name;
         }
-    }
-
-    @computed get dichotomousdeviance() {
-        let deviances = this.modalModel.results.deviance;
-        let data = [];
-        deviances.names.map((deviance, index) => {
-            data.push([
-                deviance,
-                deviances.ll[index],
-                deviances.params[index],
-                deviances.deviance[index],
-                deviances.df[index],
-                deviances.p_value[index],
-            ]);
-        });
-        return data;
-    }
-
-    @computed get continuousDeviance() {
-        let deviances = this.modalModel.results.deviance;
-        let data = [];
-        deviances.names.map((deviance, i) => {
-            data.push([
-                deviance,
-                deviances.loglikelihoods[i],
-                deviances.num_params[i],
-                deviances.aics[i],
-            ]);
-        });
-        return data;
-    }
-
-    @computed get modelParameters() {
-        let parameters = this.modalModel.results.parameters;
-        let data = [];
-        parameters.names.map((item, index) => {
-            data.push([item, parameters.values[index], parameters.bounded[index]]);
-        });
-        return data;
-    }
-
-    @computed get goodnessofFit() {
-        let gofArray = [];
-        let results = this.modalModel.results.gof;
-        let dataset = this.selectedDataset;
-        let dtype = this.selectedOutput.dataset.dtype;
-        if (dtype == Dtype.CONTINUOUS) {
-            results.dose.map((result, i) => {
-                gofArray.push([
-                    result,
-                    results.est_mean[i],
-                    results.calc_mean[i],
-                    results.obs_mean[i],
-                    results.size[i],
-                    results.residual[i],
-                ]);
-            });
-        }
-        if (dtype == Dtype.DICHOTOMOUS) {
-            dataset.doses.map((result, i) => {
-                gofArray.push([
-                    result,
-                    results.expected[i] / dataset.ns[i],
-                    results.expected[i],
-                    dataset.incidences[i],
-                    dataset.ns[i],
-                    results.residual[i],
-                ]);
-            });
-        }
-
-        return gofArray;
-    }
-
-    @computed get testInterest() {
-        let gofArray = [];
-        let tests = this.modalModel.results.tests;
-        tests.names.map((name, i) => {
-            gofArray.push([name, tests.ll_ratios[i], tests.dfs[i], tests.p_values[i]]);
-        });
-        return gofArray;
     }
 }
 

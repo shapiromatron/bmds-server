@@ -1,13 +1,15 @@
 import React, {Component} from "react";
 import {observer} from "mobx-react";
 import PropTypes from "prop-types";
+
 import {ff} from "../../common";
 
 @observer
 class CSTestofInterest extends Component {
     render() {
         const {store} = this.props,
-            testInterest = store.testInterest;
+            testInterest = store.modalModel.results.tests;
+
         return (
             <table className="table table-bordered table-sm">
                 <thead className="table-primary">
@@ -22,14 +24,13 @@ class CSTestofInterest extends Component {
                     </tr>
                 </thead>
                 <tbody>
-                    {testInterest.map((gof, idx) => {
-                        var [test, ll_ratio, df, p_value] = gof;
+                    {testInterest.names.map((name, i) => {
                         return (
-                            <tr key={idx}>
-                                <td>{test}</td>
-                                <td>{ff(ll_ratio)}</td>
-                                <td>{ff(df)}</td>
-                                <td>{ff(p_value)}</td>
+                            <tr key={i}>
+                                <td>{name}</td>
+                                <td>{ff(testInterest.ll_ratios[i])}</td>
+                                <td>{ff(testInterest.dfs[i])}</td>
+                                <td>{ff(testInterest.p_values[i])}</td>
                             </tr>
                         );
                     })}

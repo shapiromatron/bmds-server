@@ -1,13 +1,17 @@
 import React, {Component} from "react";
 import {observer} from "mobx-react";
 import PropTypes from "prop-types";
+
 import {ff} from "../../common";
+import {Dtype} from "../../constants/dataConstants";
 
 @observer
 class GoodnessFit extends Component {
     render() {
         const {store} = this.props,
-            goodnessFit = store.goodnessofFit;
+            gof = store.modalModel.results.gof,
+            dataset = store.selectedDataset,
+            dtype = store.selectedOutput.dataset.dtype;
         return (
             <table className="table table-bordered table-sm">
                 <thead className="table-primary">
@@ -24,19 +28,34 @@ class GoodnessFit extends Component {
                     </tr>
                 </thead>
                 <tbody>
-                    {goodnessFit.map((gof, idx) => {
-                        var [dose, estProb, expected, observed, size, residual] = gof;
-                        return (
-                            <tr key={idx}>
-                                <td>{dose}</td>
-                                <td>{ff(estProb)}</td>
-                                <td>{ff(expected)}</td>
-                                <td>{observed}</td>
-                                <td>{size}</td>
-                                <td>{ff(residual)}</td>
-                            </tr>
-                        );
-                    })}
+                    {dtype == Dtype.CONTINUOUS
+                        ? gof.dose.map((item, i) => {
+                              return (
+                                  <tr key={i}>
+                                      <td>{item}</td>
+                                      <td>{ff(gof.est_mean[i])}</td>
+                                      <td>{ff(gof.calc_mean[i])}</td>
+                                      <td>{gof.obs_mean[i]}</td>
+                                      <td>{gof.size[i]}</td>
+                                      <td>{ff(gof.residual[i])}</td>
+                                  </tr>
+                              );
+                          })
+                        : null}
+                    {dtype == Dtype.DICHOTOMOUS
+                        ? dataset.doses.map((dose, i) => {
+                              return (
+                                  <tr key={i}>
+                                      <td>{dose}</td>
+                                      <td>{ff(gof.expected[i] / dataset.ns[i])}</td>
+                                      <td>{ff(gof.expected[i])}</td>
+                                      <td>{dataset.incidences[i]}</td>
+                                      <td>{dataset.ns[i]}</td>
+                                      <td>{ff(gof.residual[i])}</td>
+                                  </tr>
+                              );
+                          })
+                        : null}
                 </tbody>
             </table>
         );

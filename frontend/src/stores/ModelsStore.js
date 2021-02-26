@@ -18,6 +18,10 @@ class ModelsStore {
         return this.rootStore.mainStore.canEdit;
     }
 
+    @action.bound setDirtyData() {
+        this.rootStore.mainStore.setDirtyData();
+    }
+
     @action setDefaultsByDatasetType() {
         let modelType = this.rootStore.mainStore.model_type;
         this.models = _.cloneDeep(modelsList[modelType]);
@@ -34,6 +38,7 @@ class ModelsStore {
                     if (model === model.Bayesian_Model_Average) {
                         this.calculatePriorWeight();
                     }
+                    // this.setDirtyData();
                 }
             });
         });
@@ -59,6 +64,7 @@ class ModelsStore {
                 } else {
                     value.isChecked = false;
                 }
+                // this.setDirtyData();
             }
         });
     }
@@ -93,6 +99,7 @@ class ModelsStore {
                     } else {
                         this.total_weight = this.checkTotalWeight;
                     }
+                    // this.setDirtyData();
                 }
             });
         });

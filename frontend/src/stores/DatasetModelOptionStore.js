@@ -14,16 +14,22 @@ class DatasetModelOptionStore {
         return this.rootStore.mainStore.canEdit;
     }
 
+    @action.bound setDirtyData() {
+        this.rootStore.mainStore.setDirtyData();
+    }
+
     @action.bound setOptions(options) {
         this.options = options;
     }
     @action.bound updateOption(dataset_id, key, value) {
         const index = _.findIndex(this.options, d => d.dataset_id === dataset_id);
         this.options[index][key] = value;
+        this.setDirtyData();
     }
     @action.bound deleteOption(dataset_id) {
         const index = _.findIndex(this.options, d => d.dataset_id === dataset_id);
         this.options.splice(index, 1);
+        this.setDirtyData();
     }
     @action.bound createOption(dataset) {
         const opts = {dataset_id: dataset.metadata.id, enabled: true, degree: 0};
@@ -31,6 +37,7 @@ class DatasetModelOptionStore {
             opts.adverse_direction = adverseDirectionOptions[0].value;
         }
         this.options.push(opts);
+        this.setDirtyData();
     }
 
     @action.bound getDataset(option) {

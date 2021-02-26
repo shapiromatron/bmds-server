@@ -25,18 +25,25 @@ class MainStore {
     @action.bound setConfig(config) {
         this.config = config;
     }
-    @action changeAnalysisName(value) {
+    @action.bound changeAnalysisName(value) {
         this.analysis_name = value;
+        this.setDirtyData();
     }
-    @action changeAnalysisDescription(value) {
+    @action.bound changeAnalysisDescription(value) {
         this.analysis_description = value;
+        this.setDirtyData();
     }
-    @action changeDatasetType(value) {
+    @action.bound changeDatasetType(value) {
         this.model_type = value;
         this.rootStore.modelsStore.setDefaultsByDatasetType();
         this.rootStore.optionsStore.setDefaultsByDatasetType();
         this.rootStore.dataStore.setDefaultsByDatasetType();
         this.rootStore.dataOptionStore.options = [];
+    }
+
+    @action.bound setDirtyData() {
+        // if any changes have been made but not saved.
+        this.isReadyToExecute = false;
     }
 
     @computed get getOptions() {
@@ -67,7 +74,7 @@ class MainStore {
         };
     }
 
-    @action
+    @action.bound
     async saveAnalysis() {
         const url = this.config.editSettings.patchInputUrl,
             {csrfToken} = this.config.editSettings;
@@ -80,6 +87,7 @@ class MainStore {
         })
             .then(response => {
                 if (response.ok) {
+                    this.dataDirty = false;
                     response.json().then(data => this.updateModelStateFromApi(data));
                 } else {
                     response.json().then(data => (this.errorMessage = data));

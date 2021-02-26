@@ -5,32 +5,32 @@ import PropTypes from "prop-types";
 import {ff} from "../../common";
 
 @observer
-class CSTestofInterest extends Component {
+class ContinuousDeviance extends Component {
     render() {
         const {store} = this.props,
-            testInterest = store.modalModel.results.tests;
+            deviances = store.modalModel.results.deviance;
 
         return (
             <table className="table table-bordered table-sm">
                 <thead className="table-primary">
                     <tr>
-                        <th colSpan="4">Test of Interest</th>
+                        <th colSpan="9">Analysis of Deviance</th>
                     </tr>
                     <tr>
-                        <th>Test</th>
-                        <th>Likelihood Ratio</th>
-                        <th>DF</th>
-                        <th>P Value</th>
+                        <th>Name</th>
+                        <th>Loglikelihood</th>
+                        <th>Num Params</th>
+                        <th>AIC</th>
                     </tr>
                 </thead>
                 <tbody>
-                    {testInterest.names.map((name, i) => {
+                    {deviances.names.map((name, i) => {
                         return (
                             <tr key={i}>
                                 <td>{name}</td>
-                                <td>{ff(testInterest.ll_ratios[i])}</td>
-                                <td>{ff(testInterest.dfs[i])}</td>
-                                <td>{ff(testInterest.p_values[i])}</td>
+                                <td>{ff(deviances.loglikelihoods[i])}</td>
+                                <td>{deviances.num_params[i]}</td>
+                                <td>{ff(deviances.aics[i])}</td>
                             </tr>
                         );
                     })}
@@ -39,7 +39,7 @@ class CSTestofInterest extends Component {
         );
     }
 }
-CSTestofInterest.propTypes = {
+ContinuousDeviance.propTypes = {
     store: PropTypes.object,
 };
-export default CSTestofInterest;
+export default ContinuousDeviance;

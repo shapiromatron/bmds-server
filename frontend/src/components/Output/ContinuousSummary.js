@@ -2,21 +2,19 @@ import React, {Component} from "react";
 import {observer} from "mobx-react";
 import PropTypes from "prop-types";
 
-import {getPValue} from "../../constants/outputConstants";
 import {ff} from "../../common";
 
 @observer
-class BenchmarkDose extends Component {
+class ContinuousSummary extends Component {
     render() {
         const {store} = this.props,
-            dataset = store.selectedDataset,
             results = store.modalModel.results;
 
         return (
             <table className="table table-bordered table-sm">
                 <thead>
                     <tr className="table-primary">
-                        <th colSpan="2">Benchmark Dose</th>
+                        <th colSpan="2">Summary</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -34,11 +32,19 @@ class BenchmarkDose extends Component {
                     </tr>
                     <tr>
                         <td>AIC</td>
-                        <td>{ff(results.aic)}</td>
+                        <td>{ff(results.fit.aic)}</td>
                     </tr>
                     <tr>
-                        <td>P Value</td>
-                        <td>{ff(getPValue(dataset.dtype, results))}</td>
+                        <td>LL</td>
+                        <td>{ff(results.fit.loglikelihood)}</td>
+                    </tr>
+                    <tr>
+                        <td>model_df</td>
+                        <td>{ff(results.fit.model_df)}</td>
+                    </tr>
+                    <tr>
+                        <td>Chi-squared</td>
+                        <td>{results.fit.chisq}</td>
                     </tr>
                 </tbody>
             </table>
@@ -46,8 +52,8 @@ class BenchmarkDose extends Component {
     }
 }
 
-BenchmarkDose.propTypes = {
+ContinuousSummary.propTypes = {
     store: PropTypes.object,
 };
 
-export default BenchmarkDose;
+export default ContinuousSummary;

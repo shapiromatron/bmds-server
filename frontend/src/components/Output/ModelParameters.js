@@ -1,31 +1,34 @@
-import _ from "lodash";
 import React, {Component} from "react";
 import {observer} from "mobx-react";
 import PropTypes from "prop-types";
 
 import {ff} from "../../common";
+import {isParameterBounded} from "../../common";
 
 @observer
 class ModelParameters extends Component {
     render() {
-        const {store} = this.props;
+        const {store} = this.props,
+            parameters = store.modalModel.results.parameters;
         return (
             <table className="table table-bordered table-sm">
                 <thead>
                     <tr className="table-primary">
-                        <th colSpan="2">Model Parameters</th>
+                        <th colSpan="3">Model Parameters</th>
                     </tr>
                     <tr>
                         <th>Variable</th>
                         <th>Parameter</th>
+                        <th>Bounded</th>
                     </tr>
                 </thead>
                 <tbody>
-                    {_.map(store.selectedParams, (value, key) => {
+                    {parameters.names.map((name, i) => {
                         return (
-                            <tr key={key}>
-                                <td>{key}</td>
-                                <td>{ff(value)}</td>
+                            <tr key={i}>
+                                <td>{name}</td>
+                                <td>{ff(parameters.values[i])}</td>
+                                <td>{isParameterBounded(parameters.bounded[i])}</td>
                             </tr>
                         );
                     })}

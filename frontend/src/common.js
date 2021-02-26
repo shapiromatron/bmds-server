@@ -20,6 +20,9 @@ const BMDS_BLANK_VALUE = -9999,
     readOnlyCheckbox = bool => {
         return <i className={bool ? "fa fa-check-square-o" : "fa fa-square-o"}></i>;
     },
+    isParameterBounded = bool => {
+        return <i className={bool ? "fa fa-check" : "fa fa-times"}></i>;
+    },
     ff = function(value) {
         // ff = float format
         if (value === 0) {
@@ -38,4 +41,4 @@ const BMDS_BLANK_VALUE = -9999,
         return _.find(mapping, d => d.value === value).label;
     };
 
-export {simulateClick, getHeaders, readOnlyCheckbox, ff, getLabel};
+export {simulateClick, getHeaders, readOnlyCheckbox, ff, getLabel, isParameterBounded};

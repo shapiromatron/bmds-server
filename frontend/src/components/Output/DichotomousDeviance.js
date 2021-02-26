@@ -5,32 +5,36 @@ import PropTypes from "prop-types";
 import {ff} from "../../common";
 
 @observer
-class CSTestofInterest extends Component {
+class DichotomousDeviance extends Component {
     render() {
         const {store} = this.props,
-            testInterest = store.modalModel.results.tests;
+            deviances = store.modalModel.results.deviance;
 
         return (
             <table className="table table-bordered table-sm">
                 <thead className="table-primary">
                     <tr>
-                        <th colSpan="4">Test of Interest</th>
+                        <th colSpan="9">Analysis of Deviance</th>
                     </tr>
                     <tr>
-                        <th>Test</th>
-                        <th>Likelihood Ratio</th>
-                        <th>DF</th>
+                        <th>Model</th>
+                        <th>LL</th>
+                        <th>Num Params</th>
+                        <th>Deviance</th>
+                        <th>Test DF</th>
                         <th>P Value</th>
                     </tr>
                 </thead>
                 <tbody>
-                    {testInterest.names.map((name, i) => {
+                    {deviances.names.map((name, i) => {
                         return (
                             <tr key={i}>
                                 <td>{name}</td>
-                                <td>{ff(testInterest.ll_ratios[i])}</td>
-                                <td>{ff(testInterest.dfs[i])}</td>
-                                <td>{ff(testInterest.p_values[i])}</td>
+                                <td>{ff(deviances.ll[i])}</td>
+                                <td>{deviances.params[i]}</td>
+                                <td>{ff(deviances.deviance[i])}</td>
+                                <td>{ff(deviances.df[i])}</td>
+                                <td>{ff(deviances.p_value[i])}</td>
                             </tr>
                         );
                     })}
@@ -39,7 +43,7 @@ class CSTestofInterest extends Component {
         );
     }
 }
-CSTestofInterest.propTypes = {
+DichotomousDeviance.propTypes = {
     store: PropTypes.object,
 };
-export default CSTestofInterest;
+export default DichotomousDeviance;

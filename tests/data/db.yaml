@@ -288,7 +288,7 @@
     codename: view_job
 - model: auth.user
   fields:
-    password: md5$QdNx4lDmPNJV$df9f8dd15d90a1bca5e2bcf428b89987
+    password: md5$QdNx4lDmPNJV$df9f8dd15d90a1bca5e2bcf428b89987  # clear-text: "pw"
     last_login: 2020-12-15 23:28:26.017464+00:00
     is_superuser: true
     username: admin@bmdsonline.org

@@ -68,7 +68,7 @@ class ResultsTable extends Component {
                                 <td>{ff(model.results.bmdl)}</td>
                                 <td>{ff(model.results.bmd)}</td>
                                 <td>{ff(model.results.bmdu)}</td>
-                                <td>{ff(model.results.aic)}</td>
+                                <td>{ff(model.results.fit.aic)}</td>
                                 <td>{ff(getPValue(dataset.dtype, model.results))}</td>
                                 {store.recommendationEnabled ? (
                                     <>

@@ -1,14 +1,12 @@
 #!/bin/bash
 
-set -e
+set -xe
 
-echo "clearing cache..."
 manage.py clear_cache
-
-echo "migrating db..."
 manage.py migrate --noinput
-
-echo "collecting static files..."
 manage.py collectstatic --noinput
 
-echo "sync complete!"
+if [[ $LOAD_TEST_DB == "True" ]]; then
+    echo "loading test database..."
+    manage.py load_test_db --ifempty
+fi

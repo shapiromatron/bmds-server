@@ -36,6 +36,7 @@ INSTALLED_APPS = [
     "rest_framework.authtoken",
     "webpack_loader",
     # Custom apps
+    "bmds_server.common",
     "bmds_server.jobrunner",
 ]
 

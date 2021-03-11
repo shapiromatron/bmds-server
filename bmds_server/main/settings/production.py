@@ -21,6 +21,9 @@ if _admin_names and _admin_emails:
 else:
     raise ValueError("Invalid DJANGO_ADMIN_NAMES or DJANGO_ADMIN_EMAILS")
 
+SESSION_COOKIE_SECURE = bool(os.environ.get("DJANGO_HTTPS_ONLY") == "True")
+CSRF_COOKIE_SECURE = bool(os.environ.get("DJANGO_HTTPS_ONLY") == "True")
+
 ALLOWED_HOSTS = os.environ["DJANGO_ALLOWED_HOSTS"].split("|")
 SECRET_KEY = os.environ["DJANGO_SECRET_KEY"]
 ADMIN_URL_PREFIX = os.environ["ADMIN_URL_PREFIX"]

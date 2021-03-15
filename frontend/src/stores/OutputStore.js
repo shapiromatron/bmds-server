@@ -56,12 +56,6 @@ class OutputStore {
         return pValue;
     }
 
-    @computed get selectedParams() {
-        let names = this.modalModel.model_class.params,
-            values = this.modalModel.results.fit.params.toJS();
-        return _.zipObject(names, values);
-    }
-
     @computed get doseArray() {
         let maxDose = _.max(this.selectedDataset.doses);
         let minDose = _.min(this.selectedDataset.doses);

@@ -11,5 +11,5 @@ Table of contents:
     inputs
     outputs
     development
-    deploying
+    deployment
     history

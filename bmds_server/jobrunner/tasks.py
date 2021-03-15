@@ -1,20 +1,10 @@
 from celery import task
 from celery.utils.log import get_task_logger
 from django.apps import apps
-from django.contrib.auth import get_user_model
-from django.utils import timezone
 
 from .cache import DocxReportCache, ExcelReportCache
 
 logger = get_task_logger(__name__)
-
-
-@task
-def diagnostic_celery_task(id_: str):
-    User = get_user_model()
-    user = User.objects.get(id=id_)
-    logger.info(f"Diagnostic celery task triggered by: {user}")
-    return dict(success=True, when=str(timezone.now()), user=user.email)
 
 
 @task()

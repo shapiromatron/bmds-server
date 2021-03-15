@@ -6,6 +6,36 @@ from bmds_server.jobrunner.models import Job
 
 
 @pytest.mark.django_db
+class TestJobViewset:
+    def test_csrf(self, bmds3_complete_continuous):
+        """By default CSRF validation is not applied when using APIClient."""
+        client = APIClient(enforce_csrf_checks=True)
+        client.defaults.update(SERVER_NAME="testserver")
+
+        job = Job.objects.create()
+        url = job.get_api_patch_inputs_url()
+
+        # complete bmds3 continuous
+        payload = {
+            "editKey": job.password,
+            "data": bmds3_complete_continuous,
+        }
+
+        # first test without token
+        response = client.patch(url, payload, format="json")
+        assert response.status_code == 403
+
+        # get csrftoken
+        response = client.get(job.get_edit_url())
+        assert response.status_code == 200
+        csrftoken = response.cookies["csrftoken"]
+
+        # test with token (required some renaming of headers to match test client)
+        response = client.patch(url, payload, format="json", HTTP_X_CSRFTOKEN=csrftoken.value)
+        assert response.status_code == 200
+
+
+@pytest.mark.django_db
 class TestPatchInputs:
     def test_auth(self):
         client = APIClient()

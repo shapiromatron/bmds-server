@@ -110,7 +110,7 @@ export const getDrLayout = function(dataset, selected, modal, hover) {
             // https://plotly.com/javascript/reference/layout/annotations/#layout-annotations
             annotations.push({
                 x: model.results.bmd,
-                y: model.results.bmd_y,
+                y: model.results.plotting.bmd_y,
                 text: "BMD",
                 showarrow: true,
                 arrowhead: 6,
@@ -125,7 +125,7 @@ export const getDrLayout = function(dataset, selected, modal, hover) {
         if (model.results.bmdl) {
             annotations.push({
                 x: model.results.bmdl,
-                y: model.results.bmdl_y,
+                y: model.results.plotting.bmdl_y,
                 text: "BMDL",
                 showarrow: true,
                 arrowhead: 6,
@@ -139,8 +139,8 @@ export const getDrLayout = function(dataset, selected, modal, hover) {
         }
 
         return {
-            x: model.results.dr_x,
-            y: model.results.dr_y,
+            x: model.results.plotting.dr_x,
+            y: model.results.plotting.dr_y,
             mode: "lines",
             name: model.name,
             line: {

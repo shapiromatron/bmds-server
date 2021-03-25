@@ -36,6 +36,7 @@ INSTALLED_APPS = [
     "rest_framework.authtoken",
     "webpack_loader",
     # Custom apps
+    "bmds_server.common",
     "bmds_server.jobrunner",
 ]
 
@@ -204,6 +205,9 @@ def get_git_commit() -> Commit:
 
 GIT_COMMIT_FILE = ROOT_DIR / ".gitcommit"
 COMMIT = get_git_commit()
+
+# Google Tag Manager settings
+GTM_ID = os.getenv("GTM_ID")
 
 TEST_DB_FIXTURE = ROOT_DIR / "tests/data/db.yaml"
 CONTACT_US_LINK = os.getenv("CONTACT_US_LINK", "")

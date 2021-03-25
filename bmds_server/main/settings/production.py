@@ -21,6 +21,9 @@ if _admin_names and _admin_emails:
 else:
     raise ValueError("Invalid DJANGO_ADMIN_NAMES or DJANGO_ADMIN_EMAILS")
 
+SESSION_COOKIE_SECURE = bool(os.environ.get("DJANGO_HTTPS_ONLY") == "True")
+CSRF_COOKIE_SECURE = bool(os.environ.get("DJANGO_HTTPS_ONLY") == "True")
+
 ALLOWED_HOSTS = os.environ["DJANGO_ALLOWED_HOSTS"].split("|")
 SECRET_KEY = os.environ["DJANGO_SECRET_KEY"]
 ADMIN_URL_PREFIX = os.environ["ADMIN_URL_PREFIX"]
@@ -28,6 +31,7 @@ ADMIN_URL_PREFIX = os.environ["ADMIN_URL_PREFIX"]
 # Email settings
 DEFAULT_FROM_EMAIL = os.environ["DJANGO_DEFAULT_FROM_EMAIL"]
 DJANGO_EMAIL_BACKEND = os.environ["DJANGO_EMAIL_BACKEND"]
+EMAIL_MESSAGEID_FQDN = None
 if DJANGO_EMAIL_BACKEND == "SMTP":
     EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
     EMAIL_HOST = os.environ["DJANGO_EMAIL_HOST"]
@@ -35,6 +39,7 @@ if DJANGO_EMAIL_BACKEND == "SMTP":
     EMAIL_HOST_PASSWORD = os.environ["DJANGO_EMAIL_PASSWORD"]
     EMAIL_PORT = int(os.environ["DJANGO_EMAIL_PORT"])
     EMAIL_USE_SSL = os.environ["DJANGO_EMAIL_USE_SSL"].lower() == "true"
+    EMAIL_MESSAGEID_FQDN = os.environ.get("DJANGO_EMAIL_MESSAGEID_FQDN")
 elif DJANGO_EMAIL_BACKEND == "MAILGUN":
     INSTALLED_APPS += ("anymail",)
     EMAIL_BACKEND = "anymail.backends.mailgun.EmailBackend"
@@ -74,3 +79,15 @@ LOAD_TEST_DB = bool(os.environ.get("LOAD_TEST_DB") == "True")
 if LOAD_TEST_DB:
     PASSWORD_HASHERS = ("django.contrib.auth.hashers.MD5PasswordHasher",)
     TEST_DB_FIXTURE = ROOT_DIR / "test-db-fixture.yaml"
+
+
+if DJANGO_EMAIL_BACKEND == "SMTP" and EMAIL_MESSAGEID_FQDN is not None:
+    """
+    Monkey-patch the FQDN for SMTP to our desired name; by default picks up container ID
+    Can be removed if this PR is merged:
+    - https://code.djangoproject.com/ticket/6989
+    - https://github.com/django/django/pull/13728/files
+    """
+    from django.core.mail.utils import DNS_NAME
+
+    DNS_NAME._fqdn = EMAIL_MESSAGEID_FQDN

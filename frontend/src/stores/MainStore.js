@@ -42,9 +42,7 @@ class MainStore {
     @computed get getOptions() {
         return this.rootStore.optionsStore.optionsList;
     }
-    @computed get getEnabledModels() {
-        return this.rootStore.modelsStore.getEnabledModels;
-    }
+
     @computed get getEnabledDatasets() {
         return this.rootStore.dataStore.getEnabledDatasets;
     }
@@ -58,7 +56,7 @@ class MainStore {
                 analysis_name: this.analysis_name,
                 analysis_description: this.analysis_description,
                 dataset_type: this.model_type,
-                models: this.getEnabledModels,
+                models: this.rootStore.modelsStore.models,
                 datasets: this.rootStore.dataStore.datasets,
                 dataset_options: this.rootStore.dataOptionStore.options,
                 options: this.getOptions,

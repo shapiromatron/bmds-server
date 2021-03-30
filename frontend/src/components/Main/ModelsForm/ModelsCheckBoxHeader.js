@@ -1,40 +1,88 @@
 import React from "react";
 import PropTypes from "prop-types";
-import {model} from "../../../constants/modelConstants";
+import {observer} from "mobx-react";
 
-const ModelsCheckBoxHeader = props => {
+import {modelsList} from "../../../constants/modelConstants";
+import * as mc from "../../../constants/mainConstants";
+
+const ModelsCheckBoxHeader = observer(props => {
+    const {store} = props,
+        isChecked = function(name) {
+            let checked = false;
+            if (name in store.models) {
+                checked = store.models[name].length === modelsList[store.getModelType].length;
+            }
+            return checked;
+        };
     return (
         <thead className="table-primary">
-            {Object.keys(props.model_headers).map((item, index) => {
-                return (
-                    <tr key={index}>
-                        <th>{props.model_headers[item].model}</th>
-                        {props.model_headers[item].values.map((dev, index) => {
-                            return (
-                                <th key={index} colSpan={dev.colspan}>
-                                    {dev.name}{" "}
-                                    {(dev.name === "Enable") & props.isEditSettings ? (
-                                        <input
-                                            type="checkbox"
-                                            onChange={e =>
-                                                props.enableAll(dev.model_name, e.target.checked)
-                                            }
-                                            checked={dev.isChecked}
-                                        />
-                                    ) : null}
-                                    &emsp;
-                                    {dev.model_name === model.Bayesian_Model_Average
-                                        ? dev.prior_weight
-                                        : null}
-                                </th>
-                            );
-                        })}
-                    </tr>
-                );
-            })}
+            <tr>
+                <th></th>
+                <th colSpan="2">MLE</th>
+                <th colSpan="3"> Alternatives</th>
+            </tr>
+            <tr>
+                <th></th>
+                <th>Frequentist Restricted</th>
+                <th>Frequentist Unrestricted</th>
+                <th>Bayesian</th>
+                {store.getModelType === mc.MODEL_DICHOTOMOUS ? (
+                    <th colSpan="2">Bayesian Model Average</th>
+                ) : null}
+            </tr>
+            <tr>
+                <th>Models</th>
+                <th>
+                    <input
+                        type="checkbox"
+                        onChange={e =>
+                            props.store.enableAll("frequentist_restricted", e.target.checked)
+                        }
+                        checked={isChecked("frequentist_restricted")}
+                    />
+                    Enable
+                </th>
+                <th>
+                    <input
+                        type="checkbox"
+                        onChange={e =>
+                            props.store.enableAll("frequentist_unrestricted", e.target.checked)
+                        }
+                        checked={isChecked("frequentist_unrestricted")}
+                    />
+                    Enable
+                </th>
+                <th>
+                    <input
+                        type="checkbox"
+                        onChange={e => props.store.enableAll("bayesian", e.target.checked)}
+                        checked={isChecked("bayesian")}
+                    />
+                    Enable
+                </th>
+
+                {store.getModelType === mc.MODEL_DICHOTOMOUS ? (
+                    <>
+                        <th>
+                            <input
+                                type="checkbox"
+                                onChange={e =>
+                                    props.store.enableAll(
+                                        "bayesian_model_average",
+                                        e.target.checked
+                                    )
+                                }
+                                checked={isChecked("bayesian_model_average")}
+                            />
+                            Enable
+                        </th>
+                        <th>Prior Weights</th>
+                    </>
+                ) : null}
+            </tr>
         </thead>
     );
-};
+});
 ModelsCheckBoxHeader.propTypes = {
     model_headers: PropTypes.object,
     model: PropTypes.string,

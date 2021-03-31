@@ -2,7 +2,6 @@ import React, {Component} from "react";
 
 import {inject, observer} from "mobx-react";
 import ModelsCheckBox from "./ModelsCheckBox";
-import ModelsReadOnly from "./ModelsReadOnly";
 import ModelsCheckBoxHeader from "./ModelsCheckBoxHeader";
 import PropTypes from "prop-types";
 
@@ -16,15 +15,8 @@ class ModelsCheckBoxList extends Component {
             <div className="mt-2 text-center">
                 {!(typeof models === "undefined") ? (
                     <table className="modelscheckbox table table-bordered table-sm">
-                        <ModelsCheckBoxHeader
-                            store={modelsStore}
-                            isEditSettings={modelsStore.canEdit}
-                        />
-                        {modelsStore.canEdit ? (
-                            <ModelsCheckBox store={modelsStore} />
-                        ) : (
-                            <ModelsReadOnly store={modelsStore} />
-                        )}
+                        <ModelsCheckBoxHeader store={modelsStore} />
+                        <ModelsCheckBox store={modelsStore} />
                     </table>
                 ) : null}
             </div>

@@ -5,15 +5,32 @@ import {observer} from "mobx-react";
 import {modelsList} from "../../../constants/modelConstants";
 import * as mc from "../../../constants/mainConstants";
 
+const isChecked = function(models, model_type, type) {
+    let checked = false;
+    if (type in models) {
+        checked = models[type].length === modelsList[model_type].length;
+    }
+    return checked;
+};
+
+const SelectAllComponent = observer(props => {
+    const {store, type} = props;
+    return (
+        <th>
+            {store.canEdit ? (
+                <input
+                    type="checkbox"
+                    onChange={e => store.enableAll(type, e.target.checked)}
+                    checked={isChecked(store.models, store.getModelType, type)}
+                />
+            ) : null}
+            Enable
+        </th>
+    );
+});
+
 const ModelsCheckBoxHeader = observer(props => {
-    const {store} = props,
-        isChecked = function(name) {
-            let checked = false;
-            if (name in store.models) {
-                checked = store.models[name].length === modelsList[store.getModelType].length;
-            }
-            return checked;
-        };
+    const {store} = props;
     return (
         <thead className="table-primary">
             <tr>
@@ -32,50 +49,15 @@ const ModelsCheckBoxHeader = observer(props => {
             </tr>
             <tr>
                 <th>Models</th>
-                <th>
-                    <input
-                        type="checkbox"
-                        onChange={e =>
-                            props.store.enableAll("frequentist_restricted", e.target.checked)
-                        }
-                        checked={isChecked("frequentist_restricted")}
-                    />
-                    Enable
-                </th>
-                <th>
-                    <input
-                        type="checkbox"
-                        onChange={e =>
-                            props.store.enableAll("frequentist_unrestricted", e.target.checked)
-                        }
-                        checked={isChecked("frequentist_unrestricted")}
-                    />
-                    Enable
-                </th>
-                <th>
-                    <input
-                        type="checkbox"
-                        onChange={e => props.store.enableAll("bayesian", e.target.checked)}
-                        checked={isChecked("bayesian")}
-                    />
-                    Enable
-                </th>
+                <SelectAllComponent store={store} type={"frequentist_restricted"} />
+                <SelectAllComponent store={store} type={"frequentist_unrestricted"} />
+
+                <SelectAllComponent store={store} type={"bayesian"} />
 
                 {store.getModelType === mc.MODEL_DICHOTOMOUS ? (
                     <>
-                        <th>
-                            <input
-                                type="checkbox"
-                                onChange={e =>
-                                    props.store.enableAll(
-                                        "bayesian_model_average",
-                                        e.target.checked
-                                    )
-                                }
-                                checked={isChecked("bayesian_model_average")}
-                            />
-                            Enable
-                        </th>
+                        <SelectAllComponent store={store} type={"bayesian_model_average"} />
+
                         <th>Prior Weights</th>
                     </>
                 ) : null}

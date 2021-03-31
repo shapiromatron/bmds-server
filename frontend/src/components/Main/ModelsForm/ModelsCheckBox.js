@@ -85,7 +85,6 @@ const ModelsCheckBox = observer(props => {
                     <CheckBoxTd store={store} type={fu} model={"Dichotomous-Hill"} />
                     <CheckBoxTd store={store} type={b} model={"Dichotomous-Hill"} />
                     <CheckBoxTd store={store} type={bma} model={"Dichotomous-Hill"} />
-
                     <PriorWeightTd store={store} model={"Dichotomous-Hill"} />
                 </tr>
                 <tr>

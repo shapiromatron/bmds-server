@@ -6,28 +6,29 @@ import {modelsList} from "../../../constants/modelConstants";
 import * as mc from "../../../constants/mainConstants";
 
 const isChecked = function(models, model_type, type) {
-    let checked = false;
-    if (type in models) {
-        checked = models[type].length === modelsList[model_type].length;
-    }
-    return checked;
-};
-
-const SelectAllComponent = observer(props => {
-    const {store, type} = props;
-    return (
-        <th>
-            {store.canEdit ? (
-                <input
-                    type="checkbox"
-                    onChange={e => store.enableAll(type, e.target.checked)}
-                    checked={isChecked(store.models, store.getModelType, type)}
-                />
-            ) : null}
-            Enable
-        </th>
-    );
-});
+        let checked = false;
+        if (type in models) {
+            checked = models[type].length === modelsList[model_type].length;
+        }
+        return checked;
+    },
+    SelectAllComponent = observer(props => {
+        const {store, type} = props;
+        return store.canEdit ? (
+            <th>
+                <label className="m-0">
+                    <input
+                        type="checkbox"
+                        onChange={e => store.enableAll(type, e.target.checked)}
+                        checked={isChecked(store.models, store.getModelType, type)}
+                    />
+                    &nbsp;Select all
+                </label>
+            </th>
+        ) : (
+            <th></th>
+        );
+    });
 
 const ModelsCheckBoxHeader = observer(props => {
     const {store} = props;
@@ -36,7 +37,7 @@ const ModelsCheckBoxHeader = observer(props => {
             <tr>
                 <th></th>
                 <th colSpan="2">MLE</th>
-                <th colSpan="3"> Alternatives</th>
+                <th colSpan="3">Alternatives</th>
             </tr>
             <tr>
                 <th></th>
@@ -51,13 +52,10 @@ const ModelsCheckBoxHeader = observer(props => {
                 <th>Models</th>
                 <SelectAllComponent store={store} type={"frequentist_restricted"} />
                 <SelectAllComponent store={store} type={"frequentist_unrestricted"} />
-
                 <SelectAllComponent store={store} type={"bayesian"} />
-
                 {store.getModelType === mc.MODEL_DICHOTOMOUS ? (
                     <>
                         <SelectAllComponent store={store} type={"bayesian_model_average"} />
-
                         <th>Prior Weights</th>
                     </>
                 ) : null}
@@ -66,11 +64,6 @@ const ModelsCheckBoxHeader = observer(props => {
     );
 });
 ModelsCheckBoxHeader.propTypes = {
-    model_headers: PropTypes.object,
-    model: PropTypes.string,
-    values: PropTypes.array,
-    isEditSettings: PropTypes.bool,
-    onChange: PropTypes.func,
-    enableAll: PropTypes.func,
+    store: PropTypes.object,
 };
 export default ModelsCheckBoxHeader;

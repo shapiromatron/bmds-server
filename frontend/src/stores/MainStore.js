@@ -269,8 +269,12 @@ class MainStore {
         return _.find(mc.modelTypes, {value: this.model_type}).name;
     }
 
+    @computed get getModels() {
+        return this.rootStore.modelsStore.models;
+    }
+
     @computed get hasAtLeastOneModelSelected() {
-        return !_.isEmpty(this.getEnabledModels);
+        return !_.isEmpty(this.getModels);
     }
 
     @computed get hasAtLeastOneDatasetSelected() {

@@ -5,7 +5,6 @@ import * as constant from "../constants/optionsConstants";
 class OptionsStore {
     constructor(rootStore) {
         this.rootStore = rootStore;
-        this.setDefaultsByDatasetType();
     }
 
     @observable optionsList = [];

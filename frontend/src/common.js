@@ -46,7 +46,6 @@ const BMDS_BLANK_VALUE = -9999,
         let prior_weight = 0;
         if (mc.BAYESIAN_MODEL_AVERAGE in models) {
             let obj = models[mc.BAYESIAN_MODEL_AVERAGE].find(obj => obj.model === model);
-
             if (obj != undefined) {
                 prior_weight = obj.prior_weight;
             }

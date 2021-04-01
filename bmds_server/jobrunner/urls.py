@@ -9,7 +9,7 @@ from . import api, views
 router = DefaultRouter()
 router.register("job", api.JobViewset, basename="job")
 
-admin_url = f"{settings.ADMIN_URL_PREFIX}/admin/" if not settings.DEBUG else "admin/"
+admin_url = f"admin/{settings.ADMIN_URL_PREFIX}/" if not settings.DEBUG else "admin/"
 
 urlpatterns = [
     path("api/v1/", include((router.urls, "jobrunner"), namespace="api")),

@@ -33,8 +33,8 @@ class MainStore {
     }
     @action changeDatasetType(value) {
         this.model_type = value;
-        this.rootStore.modelsStore.setDefaultsByDatasetType();
-        this.rootStore.optionsStore.setDefaultsByDatasetType();
+        this.rootStore.modelsStore.setDefaultsByDatasetType(true);
+        this.rootStore.optionsStore.setDefaultsByDatasetType(true);
         this.rootStore.dataStore.setDefaultsByDatasetType();
         this.rootStore.dataOptionStore.options = [];
     }
@@ -42,9 +42,7 @@ class MainStore {
     @computed get getOptions() {
         return this.rootStore.optionsStore.optionsList;
     }
-    @computed get getEnabledModels() {
-        return this.rootStore.modelsStore.getEnabledModels;
-    }
+
     @computed get getEnabledDatasets() {
         return this.rootStore.dataStore.getEnabledDatasets;
     }
@@ -58,7 +56,7 @@ class MainStore {
                 analysis_name: this.analysis_name,
                 analysis_description: this.analysis_description,
                 dataset_type: this.model_type,
-                models: this.getEnabledModels,
+                models: this.rootStore.modelsStore.models,
                 datasets: this.rootStore.dataStore.datasets,
                 dataset_options: this.rootStore.dataOptionStore.options,
                 options: this.getOptions,
@@ -271,8 +269,12 @@ class MainStore {
         return _.find(mc.modelTypes, {value: this.model_type}).name;
     }
 
+    @computed get getModels() {
+        return this.rootStore.modelsStore.models;
+    }
+
     @computed get hasAtLeastOneModelSelected() {
-        return !_.isEmpty(this.getEnabledModels);
+        return !_.isEmpty(this.getModels);
     }
 
     @computed get hasAtLeastOneDatasetSelected() {

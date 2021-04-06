@@ -82,6 +82,7 @@ DATABASES = {
         "PORT": os.getenv("DJANGO_DB_PORT", "5432"),
     }
 }
+DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 LOGIN_URL = "admin:login"
 
 # add randomness to url prefix to prevent easy access

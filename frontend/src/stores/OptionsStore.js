@@ -31,7 +31,7 @@ class OptionsStore {
     @action.bound deleteOptions(val) {
         this.optionsList.splice(val, 1);
     }
-    @action setOptions(options) {
+    @action.bound setOptions(options) {
         this.optionsList = options;
         this.setDefaultsByDatasetType();
     }

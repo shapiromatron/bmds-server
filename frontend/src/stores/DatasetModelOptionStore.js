@@ -14,7 +14,7 @@ class DatasetModelOptionStore {
         return this.rootStore.mainStore.canEdit;
     }
 
-    @action.bound setOptions(options) {
+    @action.bound setDatasetOptions(options) {
         this.options = options;
     }
     @action.bound updateOption(dataset_id, key, value) {

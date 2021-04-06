@@ -10,13 +10,17 @@ class DownloadToast extends Component {
         const {mainStore} = this.props;
         return (
             <Toast
-                style={{
-                    position: "absolute",
-                    top: 0,
-                    right: 100,
-                    width: 300,
-                    zIndex: 1000,
-                }}
+                style={
+                    mainStore.showToast
+                        ? {
+                              position: "absolute",
+                              top: 0,
+                              right: 100,
+                              width: 300,
+                              zIndex: 1000,
+                          }
+                        : {display: "none"}
+                }
                 show={mainStore.showToast}
                 onClose={mainStore.closeToast}>
                 <Toast.Header className="bg-primary text-white" closeButton={false}>

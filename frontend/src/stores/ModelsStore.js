@@ -1,3 +1,4 @@
+import _ from "lodash";
 import {observable, action, computed} from "mobx";
 
 import {modelsList, models} from "../constants/modelConstants";
@@ -17,8 +18,17 @@ class ModelsStore {
         return this.rootStore.mainStore.canEdit;
     }
 
-    @action setDefaultsByDatasetType() {
-        this.models = models[this.getModelType];
+    @action.bound setDefaultsByDatasetType(force) {
+        if (this.numModelsSelected === 0 || force) {
+            this.models = models[this.getModelType];
+        }
+    }
+
+    @computed get numModelsSelected() {
+        return _.chain(this.models)
+            .values()
+            .reduce((sum, d) => d.length, 0)
+            .value();
     }
 
     @computed get getModelType() {
@@ -27,6 +37,7 @@ class ModelsStore {
 
     @action setModels(models) {
         this.models = models;
+        this.setDefaultsByDatasetType();
     }
 
     @action enableAll(name, checked) {

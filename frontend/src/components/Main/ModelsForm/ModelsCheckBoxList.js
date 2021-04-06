@@ -8,10 +8,6 @@ import PropTypes from "prop-types";
 @inject("modelsStore")
 @observer
 class ModelsCheckBoxList extends Component {
-    componentDidMount() {
-        this.props.modelsStore.setDefaultsByDatasetType();
-    }
-
     render() {
         const {modelsStore} = this.props;
         let models = modelsStore.models;

@@ -33,8 +33,8 @@ class MainStore {
     }
     @action changeDatasetType(value) {
         this.model_type = value;
-        this.rootStore.modelsStore.setDefaultsByDatasetType();
-        this.rootStore.optionsStore.setDefaultsByDatasetType();
+        this.rootStore.modelsStore.setDefaultsByDatasetType(true);
+        this.rootStore.optionsStore.setDefaultsByDatasetType(true);
         this.rootStore.dataStore.setDefaultsByDatasetType();
         this.rootStore.dataOptionStore.options = [];
     }

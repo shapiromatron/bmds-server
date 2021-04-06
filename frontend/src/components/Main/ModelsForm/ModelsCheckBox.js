@@ -3,9 +3,30 @@ import PropTypes from "prop-types";
 import {observer} from "mobx-react";
 
 import * as mc from "../../../constants/mainConstants";
-import {getPriorWeightValue, isChecked, readOnlyCheckbox} from "../../../common";
+import {readOnlyCheckbox} from "../../../common";
 
-const PriorWeightTd = observer(props => {
+const isModelChecked = function(models, type, model) {
+        let checked = false;
+        if (type in models) {
+            if (type === mc.BAYESIAN_MODEL_AVERAGE) {
+                checked = models[type].findIndex(obj => obj.model === model) > -1;
+            } else {
+                checked = models[type].indexOf(model) > -1;
+            }
+        }
+        return checked;
+    },
+    getPriorWeightValue = function(models, model) {
+        let prior_weight = 0;
+        if (mc.BAYESIAN_MODEL_AVERAGE in models) {
+            let obj = models[mc.BAYESIAN_MODEL_AVERAGE].find(obj => obj.model === model);
+            if (obj != undefined) {
+                prior_weight = obj.prior_weight;
+            }
+        }
+        return prior_weight;
+    },
+    PriorWeightTd = observer(props => {
         const {store, model} = props;
         return store.canEdit ? (
             <td>
@@ -27,10 +48,10 @@ const PriorWeightTd = observer(props => {
                 <input
                     type="checkbox"
                     onChange={e => store.setModelSelection(type, model, e.target.checked)}
-                    checked={isChecked(store.models, type, model)}></input>
+                    checked={isModelChecked(store.models, type, model)}></input>
             </td>
         ) : (
-            <td>{readOnlyCheckbox(isChecked(store.models, type, model))}</td>
+            <td>{readOnlyCheckbox(isModelChecked(store.models, type, model))}</td>
         );
     }),
     fr = "frequentist_restricted",
@@ -138,10 +159,10 @@ const ModelsCheckBox = observer(props => {
                 <tr>
                     <td className="text-left align-middle">Quantal Linear</td>
                     <td></td>
-                    <CheckBoxTd store={store} type={fu} model={"QuantalLinear"} />
-                    <CheckBoxTd store={store} type={b} model={"QuantalLinear"} />
-                    <CheckBoxTd store={store} type={bma} model={"QuantalLinear"} />
-                    <PriorWeightTd store={store} model={"QuantalLinear"} />
+                    <CheckBoxTd store={store} type={fu} model={"Quantal Linear"} />
+                    <CheckBoxTd store={store} type={b} model={"Quantal Linear"} />
+                    <CheckBoxTd store={store} type={bma} model={"Quantal Linear"} />
+                    <PriorWeightTd store={store} model={"Quantal Linear"} />
                 </tr>
                 <tr>
                     <td className="text-left align-middle">Weibull</td>

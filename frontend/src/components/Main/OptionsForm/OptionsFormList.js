@@ -10,10 +10,6 @@ import {MODEL_CONTINUOUS, MODEL_DICHOTOMOUS} from "../../../constants/mainConsta
 @inject("optionsStore")
 @observer
 class OptionsFormList extends Component {
-    componentDidMount() {
-        this.props.optionsStore.setDefaultsByDatasetType();
-    }
-
     render() {
         const {optionsStore} = this.props,
             modelType = optionsStore.getModelType,

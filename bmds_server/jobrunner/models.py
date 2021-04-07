@@ -13,6 +13,7 @@ from bmds.bmds3.recommender.recommender import RecommenderSettings
 from bmds.bmds3.sessions import BmdsSession
 from bmds.reporting.styling import Report
 from django.conf import settings
+from django.core.cache import cache
 from django.core.exceptions import ValidationError
 from django.db import models
 from django.urls import reverse
@@ -342,14 +343,36 @@ class ContentType(models.IntegerChoices):
 
 
 class Content(models.Model):
-    content_type = models.PositiveIntegerField(choices=ContentType.choices)
+    content_type = models.PositiveIntegerField(choices=ContentType.choices, unique=True)
     subject = models.CharField(max_length=128)
     content = models.JSONField(null=False)
     created = models.DateTimeField(auto_now_add=True)
     last_updated = models.DateTimeField(auto_now=True)
 
+    class Meta:
+        ordering = ("-created",)
+
     def __str__(self) -> str:
         return self.subject
 
-    class Meta:
-        ordering = ("-created",)
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
+        self.update_cache()
+
+    def update_cache(self) -> Dict:
+        key = self.cache_name(self.content_type)
+        cache.set(key, self.content, 3600)  # cache for an hour
+        return self.content
+
+    @classmethod
+    def cache_name(cls, content_type: ContentType) -> str:
+        return f"{cls._meta.db_table}-{content_type}"
+
+    @classmethod
+    def get_cached_content(cls, content_type: ContentType) -> Dict:
+        key = cls.cache_name(content_type)
+        content = cache.get(key)
+        if content is None:
+            obj = cls.objects.get(content_type=content_type)
+            content = obj.update_cache()
+        return content

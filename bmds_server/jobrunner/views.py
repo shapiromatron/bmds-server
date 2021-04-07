@@ -1,10 +1,10 @@
 import json
 
 from django.conf import settings
-from django.core.cache import cache
 from django.http.response import JsonResponse
 from django.middleware.csrf import get_token
 from django.shortcuts import get_object_or_404
+from django.template import RequestContext, Template
 from django.views.generic import CreateView, DetailView, RedirectView, View
 
 from . import forms, models
@@ -28,18 +28,15 @@ class Home(CreateView):
     def get_success_url(self):
         return self.object.get_edit_url()
 
-    def _get_frontmatter(self):
-        key = "frontmatter"
-        frontmatter = cache.get(key)
-        if frontmatter is None:
-            frontmatter = models.Content.objects.get(content_type=models.ContentType.HOMEPAGE)
-            cache.set(key, frontmatter, 3600)  # cache for an hour
-        return frontmatter
+    def _render_template(self, extra):
+        context = RequestContext(self.request, extra)
+        content = models.Content.get_cached_content(models.ContentType.HOMEPAGE)
+        return Template(content["template"]).render(context)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["frontmatter"] = self._get_frontmatter()
         context["days_to_keep_jobs"] = settings.DAYS_TO_KEEP_JOBS
+        context["page"] = self._render_template(context)
         return context
 
 

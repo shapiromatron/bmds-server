@@ -24,7 +24,10 @@ class Migration(migrations.Migration):
                         auto_created=True, primary_key=True, serialize=False, verbose_name="ID"
                     ),
                 ),
-                ("content_type", models.PositiveIntegerField(choices=[(1, "Homepage")])),
+                (
+                    "content_type",
+                    models.PositiveIntegerField(choices=[(1, "Homepage")], unique=True),
+                ),
                 ("subject", models.CharField(max_length=128)),
                 ("content", models.JSONField()),
                 ("created", models.DateTimeField(auto_now_add=True)),

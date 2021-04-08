@@ -279,7 +279,9 @@ class Analysis(models.Model):
             for dataset_index, option_index in combinations
         ]
 
-        obj = dict(analysis_id=str(self.id), outputs=outputs)
+        obj = dict(
+            analysis_id=str(self.id), bmds_server_version=settings.COMMIT.sha, outputs=outputs
+        )
         self.outputs = obj
         self.errors = [out["error"] for out in outputs if "error" in out]
         self.ended = now()

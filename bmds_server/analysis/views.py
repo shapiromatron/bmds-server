@@ -21,9 +21,9 @@ class Healthcheck(View):
 
 
 class Home(CreateView):
-    model = models.Job
-    form_class = forms.CreateJobForm
-    template_name = "jobrunner/home.html"
+    model = models.Analysis
+    form_class = forms.CreateAnalysisForm
+    template_name = "analysis/home.html"
 
     def get_success_url(self):
         return self.object.get_edit_url()
@@ -35,13 +35,13 @@ class Home(CreateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["days_to_keep_jobs"] = settings.DAYS_TO_KEEP_JOBS
+        context["days_to_keep_analyses"] = settings.DAYS_TO_KEEP_ANALYSES
         context["page"] = self._render_template(context)
         return context
 
 
-class JobDetail(DetailView):
-    model = models.Job
+class AnalysisDetail(DetailView):
+    model = models.Analysis
 
     def get_object(self, queryset=None):
         kwargs = dict(pk=self.kwargs.get("pk"), password=self.kwargs.get("password"))
@@ -75,11 +75,11 @@ class JobDetail(DetailView):
         return context
 
 
-class JobRenew(RedirectView):
-    """Renew the current job and redirect back to editing"""
+class AnalysisRenew(RedirectView):
+    """Renew the current analysis and redirect back to editing"""
 
     def get_redirect_url(self, *args, **kwargs):
-        job = get_object_or_404(models.Job, **kwargs)
-        job.renew()
-        job.save()
-        return job.get_edit_url()
+        analysis = get_object_or_404(models.Analysis, **kwargs)
+        analysis.renew()
+        analysis.save()
+        return analysis.get_edit_url()

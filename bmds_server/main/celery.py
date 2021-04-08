@@ -15,8 +15,8 @@ app.autodiscover_tasks()
 
 
 app.conf.beat_schedule = {
-    "ten-minutes-delete-old-jobs": {
-        "task": "bmds_server.jobrunner.tasks.delete_old_jobs",
+    "ten-minutes-delete-old-analyses": {
+        "task": "bmds_server.analysis.tasks.delete_old_analyses",
         "schedule": 60 * 10,  # every 10 minutes
     },
 }

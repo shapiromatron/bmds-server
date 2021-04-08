@@ -26,13 +26,13 @@ logger = logging.getLogger(__name__)
 
 
 def get_deletion_date(current_deletion_date=None):
-    date = now() + timedelta(days=settings.DAYS_TO_KEEP_JOBS)
+    date = now() + timedelta(days=settings.DAYS_TO_KEEP_ANALYSES)
     if current_deletion_date:
         return max(current_deletion_date, date)
     return date
 
 
-class Job(models.Model):
+class Analysis(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     password = models.CharField(max_length=12, default=utils.random_string, editable=False)
     inputs = models.JSONField(default=dict)
@@ -44,6 +44,7 @@ class Job(models.Model):
     deletion_date = models.DateTimeField(null=True, blank=True, default=get_deletion_date)
 
     class Meta:
+        verbose_name_plural = "Analyses"
         ordering = ("created",)
         get_latest_by = ("created",)
 
@@ -58,31 +59,31 @@ class Job(models.Model):
             return str(self.id)
 
     def get_absolute_url(self):
-        return reverse("job", args=(str(self.id),))
+        return reverse("analysis", args=(str(self.id),))
 
     def get_api_url(self):
-        return reverse("api:job-detail", args=(str(self.id),))
+        return reverse("api:analysis-detail", args=(str(self.id),))
 
     def get_api_patch_inputs_url(self):
-        return reverse("api:job-patch-inputs", args=(str(self.id),))
+        return reverse("api:analysis-patch-inputs", args=(str(self.id),))
 
     def get_api_execute_url(self):
-        return reverse("api:job-execute", args=(str(self.id),))
+        return reverse("api:analysis-execute", args=(str(self.id),))
 
     def get_api_execute_reset_url(self):
-        return reverse("api:job-execute-reset", args=(str(self.id),))
+        return reverse("api:analysis-execute-reset", args=(str(self.id),))
 
     def get_edit_url(self):
-        return reverse("job_edit", args=(str(self.id), self.password))
+        return reverse("analysis_edit", args=(str(self.id), self.password))
 
     def get_renew_url(self):
-        return reverse("job_renew", args=(str(self.id), self.password))
+        return reverse("analysis_renew", args=(str(self.id), self.password))
 
     def get_excel_url(self):
-        return reverse("api:job-excel", args=(str(self.id),))
+        return reverse("api:analysis-excel", args=(str(self.id),))
 
     def get_word_url(self):
-        return reverse("api:job-word", args=(str(self.id),))
+        return reverse("api:analysis-word", args=(str(self.id),))
 
     def inputs_valid(self) -> bool:
         try:
@@ -104,9 +105,9 @@ class Job(models.Model):
         return len(self.errors) > 0
 
     @classmethod
-    def delete_old_jobs(cls):
+    def delete_old_analysis(cls):
         qs = cls.objects.filter(deletion_date=now())
-        logger.info(f"Removing {qs.count()} old BMDS jobs")
+        logger.info(f"Removing {qs.count()} old BMDS analysis")
         qs.delete()
 
     @classmethod
@@ -187,7 +188,8 @@ class Job(models.Model):
         # exit early if we don't have data for a report
         if not self.is_finished or self.has_errors:
             return pd.Series(
-                data=["Job not finished or error occurred - cannot create report"], name="Status"
+                data=["Analysis not finished or error occurred - cannot create report"],
+                name="Status",
             ).to_frame()
 
         batch = BmdsSessionBatch(sessions=self.get_sessions())
@@ -201,11 +203,11 @@ class Job(models.Model):
         df.to_excel(f, index=False)
         return f
 
-    def update_selection(self, selection: validators.JobSelectedSchema):
+    def update_selection(self, selection: validators.AnalysisSelectedSchema):
         """Given a new selection data schema; update outputs and save instance
 
         Args:
-            selection (validators.JobSelectedSchema): The selection to update
+            selection (validators.AnalysisSelectedSchema): The selection to update
         """
         for idx, output in enumerate(self.outputs["outputs"]):
             if (
@@ -258,7 +260,7 @@ class Job(models.Model):
         self.ended = None
         self.save()
 
-        # add to job queue...
+        # add to analysis queue...
         tasks.try_execute.delay(str(self.id))
 
     def execute(self):
@@ -277,7 +279,7 @@ class Job(models.Model):
             for dataset_index, option_index in combinations
         ]
 
-        obj = dict(job_id=str(self.id), outputs=outputs)
+        obj = dict(analysis_id=str(self.id), outputs=outputs)
         self.outputs = obj
         self.errors = [out["error"] for out in outputs if "error" in out]
         self.ended = now()
@@ -286,8 +288,8 @@ class Job(models.Model):
 
     def reset_execution(self):
         """
-        Update all modeling results and execution fields to a state where the job has not yet been
-        executed.
+        Update all modeling results and execution fields to a state where the analysis
+        has not yet been executed.
         """
         self.started = None
         self.ended = None

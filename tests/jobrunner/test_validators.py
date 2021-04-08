@@ -5,7 +5,7 @@ import pytest
 from bmds.bmds3.recommender import RecommenderSettings
 from django.core.exceptions import ValidationError
 
-from bmds_server.jobrunner import validators
+from bmds_server.analysis import validators
 
 
 class TestInputValidation:

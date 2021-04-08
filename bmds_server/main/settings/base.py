@@ -37,7 +37,7 @@ INSTALLED_APPS = [
     "webpack_loader",
     # Custom apps
     "bmds_server.common",
-    "bmds_server.jobrunner",
+    "bmds_server.analysis",
 ]
 
 MIDDLEWARE = [
@@ -50,7 +50,7 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
 
-ROOT_URLCONF = "bmds_server.jobrunner.urls"
+ROOT_URLCONF = "bmds_server.analysis.urls"
 
 TEMPLATES = [
     {
@@ -190,7 +190,7 @@ WEBPACK_LOADER = {
     }
 }
 
-DAYS_TO_KEEP_JOBS = 180
+DAYS_TO_KEEP_ANALYSES = 180
 
 
 # commit information

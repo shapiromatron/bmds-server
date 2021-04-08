@@ -4,8 +4,8 @@ from django.utils.html import format_html
 from . import models
 
 
-@admin.register(models.Job)
-class JobAdmin(admin.ModelAdmin):
+@admin.register(models.Analysis)
+class AnalysisAdmin(admin.ModelAdmin):
     list_display = ("__str__", "view_url", "edit_url", "created", "is_finished", "deletion_date")
     readonly_fields = ("password",)
     list_filter = (

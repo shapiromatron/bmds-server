@@ -3,7 +3,7 @@ from rest_framework import serializers
 from . import models, validators
 
 
-class JobSerializer(serializers.ModelSerializer):
+class AnalysisSerializer(serializers.ModelSerializer):
     is_executing = serializers.BooleanField(read_only=True)
     is_finished = serializers.BooleanField(read_only=True)
     has_errors = serializers.BooleanField(read_only=True)
@@ -13,7 +13,7 @@ class JobSerializer(serializers.ModelSerializer):
     word_url = serializers.URLField(source="get_word_url", read_only=True)
 
     class Meta:
-        model = models.Job
+        model = models.Analysis
         fields = (
             "id",
             "inputs",

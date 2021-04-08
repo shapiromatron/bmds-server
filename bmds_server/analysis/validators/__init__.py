@@ -7,7 +7,7 @@ from ...common.validation import pydantic_validate
 from .datasets import validate_datasets
 from .models import validate_models
 from .options import validate_options
-from .selectors import JobSelectedSchema  # noqa: F401
+from .selectors import AnalysisSelectedSchema  # noqa: F401
 from .session import validate_session
 
 

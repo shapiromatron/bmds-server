@@ -298,3 +298,20 @@ print and (min-width: 58em) {
 .epa-style .social-youtube {
     background: url(https://www.epa.gov/sites/all/themes/epa/img/svg/epa_icons_YouTube.svg) no-repeat;
 }
+
+/* -- bootstrap overrides -- */
+/* header text */
+h1,h2,h3,h4,h5,h6 {
+    font-family: "Merriweather", "Georgia", "Cambria", "Times New Roman", "Times", serif;
+}
+/* sidebar-cards */
+.card.pane {
+    border-color:#5b616b;
+    border-width: 1px 1px 4px 1px;
+    border-radius: 0;
+}
+.card.pane > .card-header {
+    border-color:#5b616b;
+    background-color: #5b616b;
+    border-radius: 0;
+}

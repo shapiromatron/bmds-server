@@ -20,19 +20,19 @@ class ReportResponse(BaseModel):
 
 class ReportCache:
     """
-    A cache designed for long-running report jobs.
+    A cache designed for long-running report tasks.
     """
 
     cache_prefix: str = ""  # should be unique for each subclass
     status = ReportStatus
 
-    def __init__(self, job):
+    def __init__(self, analysis):
         self.cache = caches[settings.DISK_CACHE_NAME]
-        self.job = job
+        self.analysis = analysis
 
     @property
     def cache_key(self):
-        return f"{self.cache_prefix}-{self.job.id}"
+        return f"{self.cache_prefix}-{self.analysis.id}"
 
     def invoke_celery_task(self) -> None:
         """
@@ -54,7 +54,7 @@ class ReportCache:
     def request_content(self) -> ReportResponse:
         """
         Request the content if it exists; otherwise return teh current status and optionally kick
-        off a job to create it. To be called from an HTTP request lifecycle.
+        off a task to create it. To be called from an HTTP request lifecycle.
 
         Returns:
             ReportResponse:

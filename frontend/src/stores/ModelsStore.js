@@ -35,18 +35,18 @@ class ModelsStore {
         return this.rootStore.mainStore.model_type;
     }
 
-    @action setModels(models) {
+    @action.bound setModels(models) {
         this.models = models;
         this.setDefaultsByDatasetType();
     }
 
-    @action enableAll(name, checked) {
+    @action.bound enableAll(name, checked) {
         modelsList[this.getModelType].forEach(item => {
             this.setModelSelection(name, item, checked);
         });
     }
 
-    @action setModelSelection(name, model, checked) {
+    @action.bound setModelSelection(name, model, checked) {
         if (checked) {
             if (!(name in this.models)) {
                 this.models[name] = [];
@@ -87,7 +87,7 @@ class ModelsStore {
         }
     }
 
-    @action setPriorWeight() {
+    @action.bound setPriorWeight() {
         this.models[mc.BAYESIAN_MODEL_AVERAGE].forEach(obj => {
             obj.prior_weight = this.prior_weight / this.models[mc.BAYESIAN_MODEL_AVERAGE].length;
         });

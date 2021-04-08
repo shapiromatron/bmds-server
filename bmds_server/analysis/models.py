@@ -304,17 +304,6 @@ class Analysis(models.Model):
         self.deletion_date = None  # don't delete; save for troubleshooting
         self.save()
 
-    def get_outputs_json(self) -> Optional[Dict]:
-        # TODO - revisit the NaN replacement issue...
-        if self.is_finished and self.outputs:
-            outputs = (
-                self.outputs.replace("NaN", "0")
-                .replace("-Infinity", "-999")
-                .replace("Infinity", "999")
-            )
-            return json.loads(outputs)
-        return None
-
     def default_input(self) -> Dict:
         return {
             "bmds_version": "BMDS330",

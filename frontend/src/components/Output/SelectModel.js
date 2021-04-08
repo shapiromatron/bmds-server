@@ -14,51 +14,46 @@ class SelectModelIndex extends Component {
             textValue = _.isNull(notes) ? "" : notes;
 
         return (
-            <form>
-                <div className="form-group row">
-                    <label className="col-sm-3 col-form-label">Selected best-fitting model</label>
-                    <div className="col-sm-9">
-                        <select
-                            id="dataset-type"
-                            className="form-control form-control-sm"
-                            onChange={e =>
-                                outputStore.saveSelectedModelIndex(parseInt(e.target.value))
-                            }
-                            value={selectValue}>
-                            <option value={-1}>None</option>
-                            {models.map((model, idx) => {
-                                return (
-                                    <option key={idx} value={idx}>
-                                        {model.name}
-                                    </option>
-                                );
-                            })}
-                        </select>
-                    </div>
+            <form className="form-group row well py-2">
+                <div className="col-md-4">
+                    <label htmlFor="selectedModelIndex">Selected best-fitting model</label>
+                    <select
+                        id="selectedModelIndex"
+                        className="form-control"
+                        onChange={e => outputStore.saveSelectedModelIndex(parseInt(e.target.value))}
+                        value={selectValue}>
+                        <option key={-1} value={-1}>
+                            None (no model selected)
+                        </option>
+                        {models.map((model, idx) => {
+                            return (
+                                <option key={idx} value={idx}>
+                                    {model.name}
+                                </option>
+                            );
+                        })}
+                    </select>
                 </div>
-                <div className="form-group row">
-                    <label className="col-sm-3 col-form-label">Selection notes</label>
-                    <div className="col-sm-9">
-                        <textarea
-                            className="form-control"
-                            type="textarea"
-                            rows="2"
-                            value={textValue}
-                            onChange={e =>
-                                outputStore.saveSelectedIndexNotes(e.target.value)
-                            }></textarea>
-                    </div>
+                <div className="col-md-4">
+                    <label htmlFor="selectedNotes">Selection notes</label>
+                    <textarea
+                        id="selectedNotes"
+                        className="form-control"
+                        type="textarea"
+                        rows="3"
+                        value={textValue}
+                        onChange={e =>
+                            outputStore.saveSelectedIndexNotes(e.target.value)
+                        }></textarea>
                 </div>
-
-                <div className="">
-                    <div className="">
-                        <button
-                            type="button"
-                            className="btn btn-sm btn-primary btn-lg btn-block pull-right col-sm-9"
-                            onClick={() => outputStore.saveSelectedModel()}>
-                            Save
-                        </button>
-                    </div>
+                <div className="col-md-4">
+                    <label>&nbsp;</label>
+                    <button
+                        type="button"
+                        className="btn btn-primary btn-block mt-1"
+                        onClick={() => outputStore.saveSelectedModel()}>
+                        Save model selection
+                    </button>
                 </div>
             </form>
         );

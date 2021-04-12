@@ -2,22 +2,22 @@ import pytest
 from bmds.bmds3.recommender import RecommenderSettings
 from rest_framework.test import APIClient
 
-from bmds_server.jobrunner.models import Job
+from bmds_server.analysis.models import Analysis
 
 
 @pytest.mark.django_db
-class TestJobViewset:
+class TestAnalysisViewset:
     def test_csrf(self, bmds3_complete_continuous):
         """By default CSRF validation is not applied when using APIClient."""
         client = APIClient(enforce_csrf_checks=True)
         client.defaults.update(SERVER_NAME="testserver")
 
-        job = Job.objects.create()
-        url = job.get_api_patch_inputs_url()
+        analysis = Analysis.objects.create()
+        url = analysis.get_api_patch_inputs_url()
 
         # complete bmds3 continuous
         payload = {
-            "editKey": job.password,
+            "editKey": analysis.password,
             "data": bmds3_complete_continuous,
         }
 
@@ -26,7 +26,7 @@ class TestJobViewset:
         assert response.status_code == 403
 
         # get csrftoken
-        response = client.get(job.get_edit_url())
+        response = client.get(analysis.get_edit_url())
         assert response.status_code == 200
         csrftoken = response.cookies["csrftoken"]
 
@@ -39,8 +39,8 @@ class TestJobViewset:
 class TestPatchInputs:
     def test_auth(self):
         client = APIClient()
-        job = Job.objects.create()
-        url = job.get_api_patch_inputs_url()
+        analysis = Analysis.objects.create()
+        url = analysis.get_api_patch_inputs_url()
 
         # check HTTP verbs
         response = client.post(url, {}, format="json")
@@ -51,21 +51,23 @@ class TestPatchInputs:
         response = client.patch(url, {}, format="json")
         assert response.status_code == 403
         assert response.json() == {"detail": "You do not have permission to perform this action."}
-        assert client.patch(url, {"editKey": job.password[:2]}, format="json").status_code == 403
+        assert (
+            client.patch(url, {"editKey": analysis.password[:2]}, format="json").status_code == 403
+        )
 
         # check data
-        payload = {"editKey": job.password}
+        payload = {"editKey": analysis.password}
         response = client.patch(url, payload, format="json")
         assert response.status_code == 400
         assert response.json() == ["A `data` object is required"]
 
     def test_partial(self):
         client = APIClient()
-        job = Job.objects.create()
-        url = job.get_api_patch_inputs_url()
+        analysis = Analysis.objects.create()
+        url = analysis.get_api_patch_inputs_url()
 
         payload = {
-            "editKey": job.password,
+            "editKey": analysis.password,
             "data": {"bmds_version": "BMDS330", "dataset_type": "C"},
         }
         response = client.patch(url, payload, format="json",)
@@ -73,7 +75,7 @@ class TestPatchInputs:
         assert response.json() == ["'datasets' is a required property"]
 
         payload = {
-            "editKey": job.password,
+            "editKey": analysis.password,
             "data": {"bmds_version": "BMDS330", "dataset_type": "C"},
             "partial": True,
         }
@@ -104,12 +106,12 @@ class TestPatchInputs:
 
     def test_complete_continuous(self, bmds3_complete_continuous):
         client = APIClient()
-        job = Job.objects.create()
-        url = job.get_api_patch_inputs_url()
+        analysis = Analysis.objects.create()
+        url = analysis.get_api_patch_inputs_url()
 
         # complete bmds3 continuous
         payload = {
-            "editKey": job.password,
+            "editKey": analysis.password,
             "data": bmds3_complete_continuous,
         }
 
@@ -119,12 +121,12 @@ class TestPatchInputs:
 
     def test_complete_dichotomous(self, bmds3_complete_dichotomous):
         client = APIClient()
-        job = Job.objects.create()
-        url = job.get_api_patch_inputs_url()
+        analysis = Analysis.objects.create()
+        url = analysis.get_api_patch_inputs_url()
 
         # complete bmds3 dichotomous
         payload = {
-            "editKey": job.password,
+            "editKey": analysis.password,
             "data": bmds3_complete_dichotomous,
         }
 

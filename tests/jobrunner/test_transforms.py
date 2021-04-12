@@ -2,7 +2,7 @@ import pytest
 from bmds.bmds3.types.continuous import ContinuousRiskType
 from bmds.bmds3.types.dichotomous import DichotomousRiskType
 
-from bmds_server.jobrunner import transforms
+from bmds_server.analysis import transforms
 
 
 class TestOptions:

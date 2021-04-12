@@ -1,8 +1,9 @@
 import _ from "lodash";
 import React from "react";
 
-const BMDS_BLANK_VALUE = -9999,
-    simulateClick = function(el) {
+const BMDS_BLANK_VALUE = -9999;
+
+export const simulateClick = function(el) {
         // https://gomakethings.com/how-to-simulate-a-click-event-with-javascript/
         const evt = new MouseEvent("click", {
             bubbles: true,
@@ -40,5 +41,3 @@ const BMDS_BLANK_VALUE = -9999,
     getLabel = function(value, mapping) {
         return _.find(mapping, d => d.value === value).label;
     };
-
-export {simulateClick, getHeaders, readOnlyCheckbox, ff, getLabel, isParameterBounded};

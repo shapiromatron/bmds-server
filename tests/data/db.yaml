@@ -32,11 +32,11 @@
     model: tokenproxy
 - model: contenttypes.contenttype
   fields:
-    app_label: jobrunner
+    app_label: analysis
     model: job
 - model: contenttypes.contenttype
   fields:
-    app_label: jobrunner
+    app_label: analysis
     model: content
 - model: auth.permission
   fields:
@@ -266,56 +266,56 @@
   fields:
     name: Can add job
     content_type:
-    - jobrunner
+    - analysis
     - job
     codename: add_job
 - model: auth.permission
   fields:
     name: Can change job
     content_type:
-    - jobrunner
+    - analysis
     - job
     codename: change_job
 - model: auth.permission
   fields:
     name: Can delete job
     content_type:
-    - jobrunner
+    - analysis
     - job
     codename: delete_job
 - model: auth.permission
   fields:
     name: Can view job
     content_type:
-    - jobrunner
+    - analysis
     - job
     codename: view_job
 - model: auth.permission
   fields:
     name: Can add content
     content_type:
-    - jobrunner
+    - analysis
     - content
     codename: add_content
 - model: auth.permission
   fields:
     name: Can change content
     content_type:
-    - jobrunner
+    - analysis
     - content
     codename: change_content
 - model: auth.permission
   fields:
     name: Can delete content
     content_type:
-    - jobrunner
+    - analysis
     - content
     codename: delete_content
 - model: auth.permission
   fields:
     name: Can view content
     content_type:
-    - jobrunner
+    - analysis
     - content
     codename: view_content
 - model: auth.user
@@ -332,7 +332,7 @@
     date_joined: 2020-12-15 23:27:18.235646+00:00
     groups: []
     user_permissions: []
-- model: jobrunner.job
+- model: analysis.analysis
   pk: 4e457489-52e6-4d2b-a972-06714f9a03c4
   fields:
     password: pyz355cp9hwp
@@ -343,7 +343,7 @@
     started: null
     ended: null
     deletion_date: null
-- model: jobrunner.job
+- model: analysis.analysis
   pk: cc3ca355-a57a-4fba-9dc3-99657562df68
   fields:
     password: 641515anrub7
@@ -6820,7 +6820,7 @@
     started: 2020-12-15 23:30:20.926326+00:00
     ended: 2020-12-15 23:30:22.052659+00:00
     deletion_date: 2021-12-15 23:30:22.052659+00:00
-- model: jobrunner.content
+- model: analysis.content
   pk: 1
   fields:
     content_type: 1

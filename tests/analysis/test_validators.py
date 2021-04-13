@@ -1,3 +1,4 @@
+import json
 from typing import Any, Dict
 
 import bmds
@@ -6,6 +7,12 @@ from bmds.bmds3.recommender import RecommenderSettings
 from django.core.exceptions import ValidationError
 
 from bmds_server.analysis import validators
+
+
+def _missing_field(err, missing_field: str):
+    data = json.loads(err.value.message)
+    assert data[0]["loc"] == [missing_field]
+    assert data[0]["msg"] == "field required"
 
 
 class TestInputValidation:
@@ -21,7 +28,7 @@ class TestInputValidation:
         # but fails when complete
         with pytest.raises(ValidationError) as err:
             validators.validate_input(data)
-        assert "'datasets' is a required property" in str(err)
+        _missing_field(err, "datasets")
 
         # add datasets, try again
         data["datasets"] = [
@@ -41,7 +48,7 @@ class TestInputValidation:
 
         with pytest.raises(ValidationError) as err:
             validators.validate_input(data)
-        assert "'models' is a required property" in str(err)
+        _missing_field(err, "models")
 
         # add models, try again
         data["models"] = {"frequentist_restricted": [bmds.constants.M_Power]}
@@ -49,7 +56,7 @@ class TestInputValidation:
 
         with pytest.raises(ValidationError) as err:
             validators.validate_input(data)
-        assert "'options' is a required property" in str(err)
+        _missing_field(err, "options")
 
         # add options, try again
         data["options"] = [
@@ -63,7 +70,7 @@ class TestInputValidation:
         ]
         with pytest.raises(ValidationError) as err:
             validators.validate_input(data)
-        assert "rules" in str(err) and "field required" in str(err)
+        _missing_field(err, "rules")
 
         data["recommender"] = RecommenderSettings.build_default().dict()
         assert validators.validate_input(data, partial=True) is None
@@ -73,41 +80,36 @@ class TestInputValidation:
 class TestModelValidation:
     def test_bmds3_dichotomous(self):
         dtype = bmds.constants.DICHOTOMOUS
-        version = bmds.constants.BMDS330
         probit = bmds.constants.M_Probit
         logprobit = bmds.constants.M_LogProbit
 
         # test success
-        assert (
-            validators.validate_models(version, dtype, {"frequentist_restricted": [logprobit]},)
-            is None
-        )
+        assert validators.validate_models(dtype, {"frequentist_restricted": [logprobit]},) is None
 
         # assert wrong model type
         with pytest.raises(ValidationError) as err:
             validators.validate_models(
-                version, dtype, {"frequentist_restricted": [bmds.constants.M_Power]},
+                dtype, {"frequentist_restricted": [bmds.constants.M_Power]},
             )
-        assert "is not one of" in str(err)
+        assert "Invalid model(s) in frequentist_restricted: Power" in str(err)
 
         # assert duplicates model type
         with pytest.raises(ValidationError) as err:
             validators.validate_models(
-                version, dtype, {"frequentist_restricted": [logprobit, logprobit]},
+                dtype, {"frequentist_restricted": [logprobit, logprobit]},
             )
-        assert "has non-unique elements" in str(err)
+        assert "Models in frequentist_restricted are not unique" in str(err)
 
         # assert empty
         with pytest.raises(ValidationError) as err:
             validators.validate_models(
-                version, dtype, {"frequentist_restricted": []},
+                dtype, {"frequentist_restricted": []},
             )
         assert "At least one model must be selected" in str(err)
 
         # assert bayesian duplicates
         with pytest.raises(ValidationError) as err:
             validators.validate_models(
-                version,
                 dtype,
                 {
                     "bayesian_model_average": [
@@ -117,12 +119,11 @@ class TestModelValidation:
                     ]
                 },
             )
-        assert "Model names in bayesian model average not unique" in str(err)
+        assert "Models in bayesian_model_average are not unique" in str(err)
 
         # assert bayesian prior_weight sum
         with pytest.raises(ValidationError) as err:
             validators.validate_models(
-                version,
                 dtype,
                 {
                     "bayesian_model_average": [
@@ -131,44 +132,40 @@ class TestModelValidation:
                     ]
                 },
             )
-        assert "Prior weight in bayesian model average does not sum to 1" in str(err)
+        assert "Prior weight in bayesian model average does not sum to 1" in str(err.value)
 
     def test_bmds3_continuous(self):
         dtype = bmds.constants.CONTINUOUS
-        version = bmds.constants.BMDS330
         power = bmds.constants.M_Power
         linear = bmds.constants.M_Linear
 
         # test success
-        assert (
-            validators.validate_models(version, dtype, {"frequentist_restricted": [power]},) is None
-        )
+        assert validators.validate_models(dtype, {"frequentist_restricted": [power]},) is None
 
         # assert wrong model type
         with pytest.raises(ValidationError) as err:
             validators.validate_models(
-                version, dtype, {"frequentist_restricted": [bmds.constants.M_Probit]},
+                dtype, {"frequentist_restricted": [bmds.constants.M_Probit]},
             )
-        assert "is not one of" in str(err)
+        assert "Invalid model(s) in frequentist_restricted: Probit" in str(err)
 
         # assert duplicates model type
         with pytest.raises(ValidationError) as err:
             validators.validate_models(
-                version, dtype, {"frequentist_restricted": [power, power]},
+                dtype, {"frequentist_restricted": [power, power]},
             )
-        assert "has non-unique elements" in str(err)
+        assert "Models in frequentist_restricted are not unique" in str(err)
 
         # assert empty
         with pytest.raises(ValidationError) as err:
             validators.validate_models(
-                version, dtype, {"frequentist_restricted": []},
+                dtype, {"frequentist_restricted": []},
             )
         assert "At least one model must be selected" in str(err)
 
         # assert bayesian duplicates
         with pytest.raises(ValidationError) as err:
             validators.validate_models(
-                version,
                 dtype,
                 {
                     "bayesian_model_average": [
@@ -178,12 +175,11 @@ class TestModelValidation:
                     ]
                 },
             )
-        assert "Model names in bayesian model average not unique" in str(err)
+        assert "Models in bayesian_model_average are not unique" in str(err)
 
         # assert bayesian prior_weight sum
         with pytest.raises(ValidationError) as err:
             validators.validate_models(
-                version,
                 dtype,
                 {
                     "bayesian_model_average": [
@@ -192,7 +188,7 @@ class TestModelValidation:
                     ]
                 },
             )
-        assert "Prior weight in bayesian model average does not sum to 1" in str(err)
+        assert "Prior weight in bayesian model average does not sum to 1" in str(err.value)
 
 
 class TestOptionSetValidation:

@@ -27,6 +27,26 @@ const modelsList = {
             ],
             frequentist_unrestricted: ["Logistic", "LogProbit", "Probit", "Quantal Linear"],
         },
+    },
+    allModelOptions = {
+        C: {
+            frequentist_restricted: ["Exponential", "Hill", "Polynomial", "Power"],
+            frequentist_unrestricted: ["Hill", "Linear", "Polynomial", "Power"],
+            bayesian: modelsList.C,
+        },
+        D: {
+            frequentist_restricted: [
+                "Dichotomous-Hill",
+                "Gamma",
+                "LogLogistic",
+                "LogProbit",
+                "Multistage",
+                "Weibull",
+            ],
+            frequentist_unrestricted: modelsList.D,
+            bayesian: modelsList.D,
+            bayesian_model_average: modelsList.D,
+        },
     };
 
-export {modelsList, models};
+export {allModelOptions, modelsList, models};

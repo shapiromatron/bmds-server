@@ -97,9 +97,9 @@ export const DATA_CONTINUOUS_SUMMARY = "CS",
                         dose_name: "Dose",
                         response_name: "Response",
                     },
-                    doses: [0, 0.46, 1.39, 4.17, 12.5],
-                    ns: [9, 9, 11, 10, 7],
-                    incidences: [0, 0, 3, 2, 3],
+                    doses: [0, 10, 50, 150, 400],
+                    ns: [20, 20, 20, 20, 20],
+                    incidences: [0, 0, 1, 4, 11],
                 };
             default:
                 throw `Unknown dataset type ${dtype}`;

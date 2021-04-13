@@ -1,3 +1,4 @@
+from enum import Enum
 from typing import Dict
 
 from bmds.bmds3.types.continuous import ContinuousModelSettings
@@ -6,11 +7,19 @@ from bmds.bmds3.types.priors import PriorClass
 
 from .validators.datasets import AdverseDirection
 
+
+class PriorEnum(str, Enum):
+    frequentist_restricted = "frequentist_restricted"
+    frequentist_unrestricted = "frequentist_unrestricted"
+    bayesian = "bayesian"
+    bayesian_model_average = "bayesian_model_average"
+
+
 bmd3_prior_map = {
-    "frequentist_restricted": PriorClass.frequentist_restricted,
-    "frequentist_unrestricted": PriorClass.frequentist_unrestricted,
-    "bayesian": PriorClass.bayesian,
-    "bayesian_model_average": PriorClass.bayesian,
+    PriorEnum.frequentist_restricted: PriorClass.frequentist_restricted,
+    PriorEnum.frequentist_unrestricted: PriorClass.frequentist_unrestricted,
+    PriorEnum.bayesian: PriorClass.bayesian,
+    PriorEnum.bayesian_model_average: PriorClass.bayesian,
 }
 is_increasing_map = {
     AdverseDirection.AUTOMATIC: None,

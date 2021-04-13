@@ -4,6 +4,7 @@ import {observer} from "mobx-react";
 
 import * as mc from "../../../constants/mainConstants";
 import {readOnlyCheckbox} from "../../../common";
+import HelpTextPopup from "../../common/HelpTextPopup";
 
 const isModelChecked = function(models, type, model) {
         let checked = false;
@@ -54,13 +55,17 @@ const isModelChecked = function(models, type, model) {
             <td>{readOnlyCheckbox(isModelChecked(store.models, type, model))}</td>
         );
     }),
+    multistageHelpText = `All Multistage model polynomial degrees will be run up to a maximum
+        degree as specified by the user. For Bayesian Model Averaging, only the 2nd degree
+        Multistage model is used (see User Manual for details).`,
     fr = "frequentist_restricted",
     fu = "frequentist_unrestricted",
     b = "bayesian",
     bma = "bayesian_model_average";
 
 const ModelsCheckBox = observer(props => {
-    const {store} = props;
+    const {store} = props,
+        writeMode = store.canEdit;
     if (store.getModelType === mc.MODEL_CONTINUOUS) {
         return (
             <tbody>
@@ -141,7 +146,10 @@ const ModelsCheckBox = observer(props => {
                     <PriorWeightTd store={store} model={"LogProbit"} />
                 </tr>
                 <tr>
-                    <td className="text-left align-middle">Multistage</td>
+                    <td className="text-left align-middle">
+                        Multistage&nbsp;
+                        {writeMode ? <HelpTextPopup content={multistageHelpText} /> : null}
+                    </td>
                     <CheckBoxTd store={store} type={fr} model={"Multistage"} />
                     <CheckBoxTd store={store} type={fu} model={"Multistage"} />
                     <CheckBoxTd store={store} type={b} model={"Multistage"} />

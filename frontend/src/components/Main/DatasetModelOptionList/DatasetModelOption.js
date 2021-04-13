@@ -20,15 +20,6 @@ class DatasetModelOption extends Component {
 
         return canEdit ? (
             <tr>
-                <td>{readOnlyCheckbox(option.enabled)}</td>
-                <td>{dataset.metadata.name}</td>
-                <td>{getLabel(option.degree, allDegreeOptions)}</td>
-                {hasAdverseDirection ? (
-                    <td>{getLabel(option.adverse_direction, adverseDirectionOptions)}</td>
-                ) : null}
-            </tr>
-        ) : (
-            <tr>
                 <td>
                     <input
                         id="enable-model"
@@ -69,6 +60,15 @@ class DatasetModelOption extends Component {
                             ))}
                         </select>
                     </td>
+                ) : null}
+            </tr>
+        ) : (
+            <tr>
+                <td>{readOnlyCheckbox(option.enabled)}</td>
+                <td>{dataset.metadata.name}</td>
+                <td>{getLabel(option.degree, allDegreeOptions)}</td>
+                {hasAdverseDirection ? (
+                    <td>{getLabel(option.adverse_direction, adverseDirectionOptions)}</td>
                 ) : null}
             </tr>
         );

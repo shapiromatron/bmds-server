@@ -36,7 +36,7 @@ def validate_input(data: Dict, partial: bool = False) -> None:
     # check model schema
     models = data.get("models")
     if models or partial is False:
-        validate_models(bmds_version, dataset_type, models)
+        validate_models(dataset_type, models)
 
     options = data.get("options")
     if options or (partial is False and bmds_version in bmds.constants.BMDS_THREES):

@@ -1,3 +1,5 @@
+import json
+
 import pytest
 from bmds.bmds3.recommender import RecommenderSettings
 from rest_framework.test import APIClient
@@ -72,7 +74,11 @@ class TestPatchInputs:
         }
         response = client.patch(url, payload, format="json",)
         assert response.status_code == 400
-        assert response.json() == ["'datasets' is a required property"]
+        assert json.loads(response.json()[0])[0] == {
+            "loc": ["datasets"],
+            "msg": "field required",
+            "type": "value_error.missing",
+        }
 
         payload = {
             "editKey": analysis.password,
@@ -90,9 +96,11 @@ class TestPatchInputs:
         }
         response = client.patch(url, payload, format="json",)
         assert response.status_code == 400
-        assert response.json() == [
-            "Model error(s): 'ZZZ' is not one of ['Exponential', 'Hill', 'Polynomial', 'Power']"
-        ]
+        assert json.loads(response.json()[0])[0] == {
+            "loc": ["__root__"],
+            "msg": "Invalid model(s) in frequentist_restricted: ZZZ",
+            "type": "value_error",
+        }
 
         payload["data"] = {
             "bmds_version": "BMDS330",

@@ -27,7 +27,7 @@ class Command(BaseCommand):
 
         call_command("dumpdata", "contenttypes", **shared_kwargs)
         call_command("dumpdata", "auth", **shared_kwargs)
-        call_command("dumpdata", "jobrunner", **shared_kwargs)
+        call_command("dumpdata", "analysis", **shared_kwargs)
 
         Path(settings.TEST_DB_FIXTURE).parent.mkdir(exist_ok=True, parents=True)
         Path(settings.TEST_DB_FIXTURE).write_text(f.getvalue())

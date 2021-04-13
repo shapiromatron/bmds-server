@@ -9,12 +9,12 @@ from django.core.exceptions import ValidationError
 latest_bmds = BMDS.latest_version()
 base_schema = {
     "$schema": "http://json-schema.org/draft-04/schema#",
-    "title": "BMDS job overview",
+    "title": "BMDS analysis overview",
     "description": "BMDS version, dataset and dataset type, model options, recommendation logic, etc.",  # noqa: E501
     "type": "object",
     "properties": {
         "id": {
-            "description": "An (optional) unique identifier BMDS job",
+            "description": "An (optional) unique identifier BMDS analysis",
             "type": ["integer", "string"],
         },
         "bmds_version": {

@@ -25,16 +25,16 @@ class MainStore {
     @action.bound setConfig(config) {
         this.config = config;
     }
-    @action changeAnalysisName(value) {
+    @action.bound changeAnalysisName(value) {
         this.analysis_name = value;
     }
-    @action changeAnalysisDescription(value) {
+    @action.bound changeAnalysisDescription(value) {
         this.analysis_description = value;
     }
-    @action changeDatasetType(value) {
+    @action.bound changeDatasetType(value) {
         this.model_type = value;
-        this.rootStore.modelsStore.setDefaultsByDatasetType();
-        this.rootStore.optionsStore.setDefaultsByDatasetType();
+        this.rootStore.modelsStore.setDefaultsByDatasetType(true);
+        this.rootStore.optionsStore.setDefaultsByDatasetType(true);
         this.rootStore.dataStore.setDefaultsByDatasetType();
         this.rootStore.dataOptionStore.options = [];
     }
@@ -65,7 +65,7 @@ class MainStore {
         };
     }
 
-    @action
+    @action.bound
     async saveAnalysis() {
         const url = this.config.editSettings.patchInputUrl,
             {csrfToken} = this.config.editSettings;
@@ -91,7 +91,7 @@ class MainStore {
     @observable isReadyToExecute = false;
     @observable isExecuting = false;
 
-    @action
+    @action.bound
     async executeAnalysis() {
         if (!this.isReadyToExecute) {
             // don't execute if we're not ready
@@ -161,7 +161,7 @@ class MainStore {
             })
             .catch(handleServerError);
     }
-    @action
+    @action.bound
     async executeResetAnalysis() {
         const {csrfToken, executeResetUrl} = this.config.editSettings;
         await fetch(executeResetUrl, {
@@ -183,7 +183,7 @@ class MainStore {
                 console.error("error", error);
             });
     }
-    @action
+    @action.bound
     async fetchSavedAnalysis() {
         const apiUrl = this.config.apiUrl;
         this.errorMessage = "";
@@ -224,7 +224,7 @@ class MainStore {
         this.changeDatasetType(this.model_type);
         this.rootStore.optionsStore.setOptions(inputs.options);
         this.rootStore.dataStore.setDatasets(inputs.datasets);
-        this.rootStore.dataOptionStore.setOptions(inputs.dataset_options);
+        this.rootStore.dataOptionStore.setDatasetOptions(inputs.dataset_options);
         this.rootStore.modelsStore.setModels(inputs.models);
         this.rootStore.logicStore.setLogic(inputs.recommender);
         this.isUpdateComplete = true;
@@ -269,8 +269,12 @@ class MainStore {
         return _.find(mc.modelTypes, {value: this.model_type}).name;
     }
 
+    @computed get getModels() {
+        return this.rootStore.modelsStore.models;
+    }
+
     @computed get hasAtLeastOneModelSelected() {
-        return !_.isEmpty(this.getEnabledModels);
+        return !_.isEmpty(this.getModels);
     }
 
     @computed get hasAtLeastOneDatasetSelected() {

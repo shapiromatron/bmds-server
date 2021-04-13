@@ -3,7 +3,7 @@ import platform
 
 import pytest
 
-from bmds_server.jobrunner.models import Job
+from bmds_server.analysis.models import Analysis
 
 # TODO remove this restriction
 should_run = platform.system() != "Windows" and os.getenv("CI") is None
@@ -13,33 +13,33 @@ should_run = platform.system() != "Windows" and os.getenv("CI") is None
 @pytest.mark.skipif(not should_run, reason="dlls only exist for Mac")
 class TestBmds3Execution:
     def test_bmds3_execution_c(self, bmds3_complete_continuous):
-        job = Job.objects.create(inputs=bmds3_complete_continuous)
+        analysis = Analysis.objects.create(inputs=bmds3_complete_continuous)
 
-        assert job.is_finished is False
-        assert job.has_errors is False
+        assert analysis.is_finished is False
+        assert analysis.has_errors is False
 
-        job.execute()
+        analysis.execute()
 
-        assert job.is_finished is True
-        assert job.has_errors is False
-        assert job.outputs["outputs"][0]["metadata"]["dataset_index"] == 0
-        assert job.outputs["outputs"][0]["metadata"]["option_index"] == 0
-        assert len(job.outputs["outputs"]) == 1
-        assert len(job.outputs["outputs"][0]["models"]) == 1
-        assert job.errors == []
+        assert analysis.is_finished is True
+        assert analysis.has_errors is False
+        assert analysis.outputs["outputs"][0]["metadata"]["dataset_index"] == 0
+        assert analysis.outputs["outputs"][0]["metadata"]["option_index"] == 0
+        assert len(analysis.outputs["outputs"]) == 1
+        assert len(analysis.outputs["outputs"][0]["models"]) == 1
+        assert analysis.errors == []
 
     def test_bmds3_execution_d(self, bmds3_complete_dichotomous):
-        job = Job.objects.create(inputs=bmds3_complete_dichotomous)
+        analysis = Analysis.objects.create(inputs=bmds3_complete_dichotomous)
 
-        assert job.is_finished is False
-        assert job.has_errors is False
+        assert analysis.is_finished is False
+        assert analysis.has_errors is False
 
-        job.execute()
+        analysis.execute()
 
-        assert job.is_finished is True
-        assert job.has_errors is False
-        assert job.outputs["outputs"][0]["metadata"]["dataset_index"] == 0
-        assert job.outputs["outputs"][0]["metadata"]["option_index"] == 0
-        assert len(job.outputs["outputs"]) == 1
-        assert len(job.outputs["outputs"][0]["models"]) == 1
-        assert job.errors == []
+        assert analysis.is_finished is True
+        assert analysis.has_errors is False
+        assert analysis.outputs["outputs"][0]["metadata"]["dataset_index"] == 0
+        assert analysis.outputs["outputs"][0]["metadata"]["option_index"] == 0
+        assert len(analysis.outputs["outputs"]) == 1
+        assert len(analysis.outputs["outputs"][0]["models"]) == 1
+        assert analysis.errors == []

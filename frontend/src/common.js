@@ -1,10 +1,9 @@
 import _ from "lodash";
 import React from "react";
 
-import * as mc from "../src/constants/mainConstants";
+const BMDS_BLANK_VALUE = -9999;
 
-const BMDS_BLANK_VALUE = -9999,
-    simulateClick = function(el) {
+export const simulateClick = function(el) {
         // https://gomakethings.com/how-to-simulate-a-click-event-with-javascript/
         const evt = new MouseEvent("click", {
             bubbles: true,
@@ -64,14 +63,3 @@ const BMDS_BLANK_VALUE = -9999,
         }
         return checked;
     };
-
-export {
-    simulateClick,
-    getHeaders,
-    readOnlyCheckbox,
-    ff,
-    getLabel,
-    isParameterBounded,
-    getPriorWeightValue,
-    isChecked,
-};

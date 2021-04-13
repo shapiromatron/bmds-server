@@ -8,7 +8,7 @@ const modelsList = {
             "LogProbit",
             "Multistage",
             "Probit",
-            "QuantalLinear",
+            "Quantal Linear",
             "Weibull",
         ],
     },
@@ -25,7 +25,7 @@ const modelsList = {
                 "Multistage",
                 "Weibull",
             ],
-            frequentist_unrestricted: ["Logistic", "LogProbit", "Probit", "QuantalLinear"],
+            frequentist_unrestricted: ["Logistic", "LogProbit", "Probit", "Quantal Linear"],
         },
     };
 

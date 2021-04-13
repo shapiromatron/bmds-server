@@ -140,7 +140,7 @@ class DataStore {
         }
     }
 
-    @action setDatasets(datasets) {
+    @action.bound setDatasets(datasets) {
         this.datasets = datasets;
         this.selectedDatasetId = datasets.length > 0 ? datasets[0].metadata.id : null;
     }

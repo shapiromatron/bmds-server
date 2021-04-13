@@ -11,9 +11,9 @@ from .cache import DocxReportCache, ExcelReportCache
 
 
 @method_decorator(csrf_protect, name="dispatch")
-class JobViewset(mixins.CreateModelMixin, mixins.RetrieveModelMixin, viewsets.GenericViewSet):
-    serializer_class = serializers.JobSerializer
-    queryset = models.Job.objects.all()
+class AnalysisViewset(mixins.CreateModelMixin, mixins.RetrieveModelMixin, viewsets.GenericViewSet):
+    serializer_class = serializers.AnalysisSerializer
+    queryset = models.Analysis.objects.all()
 
     def not_ready_yet(self):
         content = "Outputs processing; not ready yet."
@@ -21,7 +21,7 @@ class JobViewset(mixins.CreateModelMixin, mixins.RetrieveModelMixin, viewsets.Ge
 
     @action(detail=False, url_path="default")
     def default(self, request, *args, **kwargs):
-        data = models.Job().default_input()
+        data = models.Analysis().default_input()
         return Response(data)
 
     @action(
@@ -72,7 +72,7 @@ class JobViewset(mixins.CreateModelMixin, mixins.RetrieveModelMixin, viewsets.Ge
         elif instance.is_executing:
             return Response("Execution already started", status=400)
 
-        # start job execution
+        # start analysis execution
         instance.reset_execution()
         instance.start_execute()
 
@@ -93,7 +93,7 @@ class JobViewset(mixins.CreateModelMixin, mixins.RetrieveModelMixin, viewsets.Ge
         if not isinstance(data, dict):
             raise exceptions.ValidationError("A `data` object is required")
 
-        selection = pydantic_validate(data, validators.JobSelectedSchema)
+        selection = pydantic_validate(data, validators.AnalysisSelectedSchema)
         instance.update_selection(selection)
 
         # fetch from db and get the latest
@@ -124,10 +124,10 @@ class JobViewset(mixins.CreateModelMixin, mixins.RetrieveModelMixin, viewsets.Ge
     @action(detail=True, renderer_classes=(renderers.XlsxRenderer,))
     def excel(self, request, *args, **kwargs):
         """
-        Return Excel export of outputs for selected job
+        Return Excel export of outputs for selected analysis
         """
         instance = self.get_object()
-        cache = ExcelReportCache(job=instance)
+        cache = ExcelReportCache(analysis=instance)
         response = cache.request_content()
 
         if response.status is cache.status.COMPLETE:
@@ -139,10 +139,10 @@ class JobViewset(mixins.CreateModelMixin, mixins.RetrieveModelMixin, viewsets.Ge
     @action(detail=True, renderer_classes=(renderers.DocxRenderer,))
     def word(self, request, *args, **kwargs):
         """
-        Return Word report for the selected job
+        Return Word report for the selected analysis
         """
         instance = self.get_object()
-        cache = DocxReportCache(job=instance)
+        cache = DocxReportCache(analysis=instance)
         response = cache.request_content()
 
         if response.status is cache.status.COMPLETE:

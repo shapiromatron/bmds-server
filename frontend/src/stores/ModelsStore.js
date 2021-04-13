@@ -1,3 +1,4 @@
+import _ from "lodash";
 import {observable, action, computed} from "mobx";
 
 import {modelsList, models} from "../constants/modelConstants";
@@ -17,25 +18,35 @@ class ModelsStore {
         return this.rootStore.mainStore.canEdit;
     }
 
-    @action setDefaultsByDatasetType() {
-        this.models = models[this.getModelType];
+    @action.bound setDefaultsByDatasetType(force) {
+        if (this.numModelsSelected === 0 || force) {
+            this.models = models[this.getModelType];
+        }
+    }
+
+    @computed get numModelsSelected() {
+        return _.chain(this.models)
+            .values()
+            .reduce((sum, d) => d.length, 0)
+            .value();
     }
 
     @computed get getModelType() {
         return this.rootStore.mainStore.model_type;
     }
 
-    @action setModels(models) {
+    @action.bound setModels(models) {
         this.models = models;
+        this.setDefaultsByDatasetType();
     }
 
-    @action enableAll(name, checked) {
+    @action.bound enableAll(name, checked) {
         modelsList[this.getModelType].forEach(item => {
             this.setModelSelection(name, item, checked);
         });
     }
 
-    @action setModelSelection(name, model, checked) {
+    @action.bound setModelSelection(name, model, checked) {
         if (checked) {
             if (!(name in this.models)) {
                 this.models[name] = [];
@@ -76,7 +87,7 @@ class ModelsStore {
         }
     }
 
-    @action setPriorWeight() {
+    @action.bound setPriorWeight() {
         this.models[mc.BAYESIAN_MODEL_AVERAGE].forEach(obj => {
             obj.prior_weight = this.prior_weight / this.models[mc.BAYESIAN_MODEL_AVERAGE].length;
         });

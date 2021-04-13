@@ -2,6 +2,11 @@
 History
 =======
 
+v1.0 (TBD)
+-------------------
+* Update to python-bmds v1.0, including BMDS 3.3
+* Add full javascript frontend
+
 v0.6 (2018-09-16)
 -------------------
 * Update to `BMDS v0.11.0`_

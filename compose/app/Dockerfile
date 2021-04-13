@@ -1,4 +1,4 @@
-FROM python:3.6-slim
+FROM python:3.9-slim
 
 ENV BMDS_SERVER_VERSION 0.8
 
@@ -31,7 +31,7 @@ COPY ./vendor /vendor
 
 RUN mv /vendor/libnlopt.so /usr/local/lib/libnlopt.so.0 && \
     \
-    pip install -U pip && \
+    pip install -U pip wheel && \
     pip install -r /requirements/production.txt --no-cache-dir && \
     \
     rm -rf /requirements /vendor
@@ -49,5 +49,5 @@ USER app
 
 ENV LD_LIBRARY_PATH=/usr/local/lib:$LD_LIBRARY_PATH
 
-RUN ldd /usr/local/lib/python3.6/site-packages/bmds/bin/BMDS330/libDRBMD.so && \
+RUN ldd /usr/local/lib/python3.9/site-packages/bmds/bin/BMDS330/libDRBMD.so && \
     python /app/test.py

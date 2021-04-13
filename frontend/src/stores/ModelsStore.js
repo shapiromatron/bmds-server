@@ -1,7 +1,7 @@
 import _ from "lodash";
 import {observable, action, computed} from "mobx";
 
-import {modelsList, models} from "../constants/modelConstants";
+import {allModelOptions, models} from "../constants/modelConstants";
 
 import * as mc from "../constants/mainConstants";
 
@@ -41,8 +41,8 @@ class ModelsStore {
     }
 
     @action.bound enableAll(name, checked) {
-        modelsList[this.getModelType].forEach(item => {
-            this.setModelSelection(name, item, checked);
+        allModelOptions[this.getModelType][name].map(model => {
+            this.setModelSelection(name, model, checked);
         });
     }
 

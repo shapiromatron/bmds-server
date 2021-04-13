@@ -279,7 +279,10 @@ class Analysis(models.Model):
         ]
 
         obj = dict(
-            analysis_id=str(self.id), bmds_server_version=settings.COMMIT.sha, outputs=outputs
+            analysis_id=str(self.id),
+            bmds_server_version=settings.COMMIT.sha,
+            bmds_python_version=bmds.__version__,
+            outputs=outputs,
         )
         self.outputs = obj
         self.errors = [out["error"] for out in outputs if "error" in out]

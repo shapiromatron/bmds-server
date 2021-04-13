@@ -2,11 +2,11 @@ import React from "react";
 import PropTypes from "prop-types";
 import {observer} from "mobx-react";
 
-import {modelsList} from "../../../constants/modelConstants";
+import {allModelOptions} from "../../../constants/modelConstants";
 import * as mc from "../../../constants/mainConstants";
 
-const areAllModelsChecked = function(models, model_type, type) {
-        return type in models && models[type].length === modelsList[model_type].length;
+const areAllModelsChecked = function(modelType, type, models) {
+        return type in models && models[type].length === allModelOptions[modelType][type].length;
     },
     SelectAllComponent = observer(props => {
         const {store, type} = props;
@@ -16,7 +16,7 @@ const areAllModelsChecked = function(models, model_type, type) {
                     <input
                         type="checkbox"
                         onChange={e => store.enableAll(type, e.target.checked)}
-                        checked={areAllModelsChecked(store.models, store.getModelType, type)}
+                        checked={areAllModelsChecked(store.getModelType, type, store.models)}
                     />
                     &nbsp;Select all
                 </label>

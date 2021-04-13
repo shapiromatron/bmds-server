@@ -14,6 +14,10 @@ class DatasetModelOptionStore {
         return this.rootStore.mainStore.canEdit;
     }
 
+    @computed get getModelType() {
+        return this.rootStore.mainStore.model_type;
+    }
+
     @action.bound setDatasetOptions(options) {
         this.options = options;
     }

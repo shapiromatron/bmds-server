@@ -1,52 +1,62 @@
 import React, {Component} from "react";
 import {inject, observer} from "mobx-react";
 import DatasetModelOption from "./DatasetModelOption";
-import DatasetModelOptionReadOnly from "./DatasetModelOptionReadOnly";
 import PropTypes from "prop-types";
 
-import {datasetOptionColumnNames} from "../../../constants/dataConstants";
+import {Dtype} from "../../../constants/dataConstants";
+import HelpTextPopup from "../../common/HelpTextPopup";
+
+const maxDegreeText = `Studies have indicated that higher degree polynomial models are not
+    warranted in that they generally do not sufficiently improve fit over simpler models
+    (Nitcheva et al., 2007; PMC2040324).  Complex models also increase computer processing time
+    and the chance of model failure.`;
 
 @inject("dataOptionStore")
 @observer
 class DatasetModelOptionList extends Component {
     render() {
         const {dataOptionStore} = this.props,
-            {canEdit, getDataset, options, updateOption} = dataOptionStore;
+            {options} = dataOptionStore,
+            dtype = dataOptionStore.getModelType;
 
         if (options.length == 0) {
             return null;
         }
-        const headers = datasetOptionColumnNames[getDataset(options[0]).dtype];
 
         return (
             <table className="table table-bordered table-sm">
                 <thead>
-                    <tr className="table-primary">
-                        {headers.map(text => (
-                            <th key={text}>{text}</th>
-                        ))}
-                    </tr>
+                    {dtype == Dtype.CONTINUOUS || dtype == Dtype.CONTINUOUS_INDIVIDUAL ? (
+                        <tr className="table-primary">
+                            <th>Enabled</th>
+                            <th>Dataset</th>
+                            <th>
+                                Maximum polynomial degree&nbsp;
+                                <HelpTextPopup content={maxDegreeText} />
+                            </th>
+                            <th>Adverse Direction</th>
+                        </tr>
+                    ) : null}
+                    {dtype == Dtype.DICHOTOMOUS ? (
+                        <tr className="table-primary">
+                            <th>Enabled</th>
+                            <th>Dataset</th>
+                            <th>
+                                Maximum multistage degree&nbsp;
+                                <HelpTextPopup content={maxDegreeText} />
+                            </th>
+                        </tr>
+                    ) : null}
                 </thead>
                 <tbody>
                     {options.map(option => {
-                        if (canEdit) {
-                            return (
-                                <DatasetModelOption
-                                    key={option.dataset_id}
-                                    dataset={getDataset(option)}
-                                    option={option}
-                                    handleChange={updateOption}
-                                />
-                            );
-                        } else {
-                            return (
-                                <DatasetModelOptionReadOnly
-                                    key={option.dataset_id}
-                                    dataset={getDataset(option)}
-                                    option={option}
-                                />
-                            );
-                        }
+                        return (
+                            <DatasetModelOption
+                                key={option.dataset_id}
+                                datasetId={option.dataset_id}
+                                store={dataOptionStore}
+                            />
+                        );
                     })}
                 </tbody>
             </table>

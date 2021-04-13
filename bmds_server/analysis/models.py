@@ -137,6 +137,9 @@ class Analysis(models.Model):
         )
         for prior_class, model_names in inputs["models"].items():
             for model_name in model_names:
+                if prior_class == transforms.PriorEnum.bayesian_model_average:
+                    model_name = model_name["model"]
+
                 if dataset_type in bmds.constants.DICHOTOMOUS_DTYPES:
                     model_options = transforms.bmds3_d_model_options(
                         prior_class, options, dataset_options
@@ -148,7 +151,22 @@ class Analysis(models.Model):
                 else:
                     raise ValueError(f"Unknown dataset_type: {dataset_type}")
 
-                if model_name == bmds.constants.M_Exponential:
+                if model_name in bmds.constants.VARIABLE_POLYNOMIAL:
+                    if prior_class == transforms.PriorEnum.bayesian_model_average:
+                        model_options.degree = 2
+                        session.add_model(model_name, settings=model_options)
+                    else:
+                        max_degree = (
+                            model_options.degree + 1
+                            if model_options.degree > 0
+                            else dataset.num_dose_groups
+                        )
+                        degrees = list(range(1, max(min(max_degree, 5), 2)))
+                        for degree in degrees:
+                            model_options = model_options.copy()
+                            model_options.degree = degree
+                            session.add_model(model_name, settings=model_options)
+                elif model_name == bmds.constants.M_Exponential:
                     session.add_model(bmds.constants.M_ExponentialM3, settings=model_options)
                     session.add_model(bmds.constants.M_ExponentialM5, settings=model_options)
                 else:

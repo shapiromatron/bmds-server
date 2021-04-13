@@ -1,3 +1,4 @@
+import _ from "lodash";
 import * as mc from "./mainConstants";
 
 const Dtype = {
@@ -104,22 +105,12 @@ export const DATA_CONTINUOUS_SUMMARY = "CS",
                 throw `Unknown dataset type ${dtype}`;
         }
     },
-    datasetOptionColumnNames = {
-        [Dtype.CONTINUOUS]: ["Enabled", "Dataset", "Polynomial degree", "Adverse Direction"],
-        [Dtype.CONTINUOUS_INDIVIDUAL]: [
-            "Enabled",
-            "Dataset",
-            "Polynomial degree",
-            "Adverse Direction",
-        ],
-        [Dtype.DICHOTOMOUS]: ["Enabled", "Dataset", "Multistage degree"],
-    },
     adverseDirectionOptions = [
         {value: -1, label: "Automatic"},
         {value: 1, label: "Up"},
         {value: 0, label: "Down"},
     ],
-    degreeOptions = [
+    allDegreeOptions = [
         {value: 0, label: "N-1"},
         {value: 1, label: "1"},
         {value: 2, label: "2"},
@@ -129,4 +120,8 @@ export const DATA_CONTINUOUS_SUMMARY = "CS",
         {value: 6, label: "6"},
         {value: 7, label: "7"},
         {value: 8, label: "8"},
-    ];
+    ],
+    getDegreeOptions = function(dataset) {
+        const maxDegree = Math.max(Math.min(4, _.uniq(dataset.doses).length - 1), 1);
+        return allDegreeOptions.filter(d => d.value <= maxDegree);
+    };

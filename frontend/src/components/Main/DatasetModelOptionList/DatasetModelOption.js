@@ -2,47 +2,62 @@ import React, {Component} from "react";
 import {observer} from "mobx-react";
 import PropTypes from "prop-types";
 
-import {adverseDirectionOptions, degreeOptions} from "../../../constants/dataConstants";
+import {
+    adverseDirectionOptions,
+    getDegreeOptions,
+    allDegreeOptions,
+} from "../../../constants/dataConstants";
+import {getLabel, readOnlyCheckbox} from "../../../common";
 
 @observer
 class DatasetModelOption extends Component {
     render() {
-        const {dataset, option, handleChange} = this.props;
-        return (
+        const {datasetId, store} = this.props,
+            option = store.options[datasetId],
+            dataset = store.getDataset(option),
+            {canEdit, updateOption} = store,
+            hasAdverseDirection = option.adverse_direction !== undefined;
+
+        return canEdit ? (
+            <tr>
+                <td>{readOnlyCheckbox(option.enabled)}</td>
+                <td>{dataset.metadata.name}</td>
+                <td>{getLabel(option.degree, allDegreeOptions)}</td>
+                {hasAdverseDirection ? (
+                    <td>{getLabel(option.adverse_direction, adverseDirectionOptions)}</td>
+                ) : null}
+            </tr>
+        ) : (
             <tr>
                 <td>
                     <input
                         id="enable-model"
                         type="checkbox"
                         checked={option.enabled}
-                        onChange={e => handleChange(option.dataset_id, "enabled", e.target.checked)}
+                        onChange={e => updateOption(datasetId, "enabled", e.target.checked)}
                     />
                 </td>
                 <td>{dataset.metadata.name}</td>
-                {option.degree !== undefined ? (
-                    <td>
-                        <select
-                            className="form-control"
-                            value={option.degree}
-                            onChange={e =>
-                                handleChange(option.dataset_id, "degree", parseInt(e.target.value))
-                            }>
-                            {degreeOptions.map(item => (
-                                <option key={item.value} value={item.value}>
-                                    {item.label}
-                                </option>
-                            ))}
-                        </select>
-                    </td>
-                ) : null}
-                {option.adverse_direction !== undefined ? (
+                <td>
+                    <select
+                        className="form-control"
+                        value={option.degree}
+                        onChange={e => updateOption(datasetId, "degree", parseInt(e.target.value))}>
+                        {getDegreeOptions(dataset).map(item => (
+                            <option key={item.value} value={item.value}>
+                                {item.label}
+                            </option>
+                        ))}
+                    </select>
+                </td>
+                {hasAdverseDirection ? (
                     <td>
                         <select
                             className="form-control"
                             value={option.adverse_direction}
                             onChange={e =>
-                                handleChange(
-                                    option.dataset_id,
+                                updateOption(
+                                    datasetId,
                                     "adverse_direction",
                                     parseInt(e.target.value)
                                 )
@@ -61,8 +76,7 @@ class DatasetModelOption extends Component {
 }
 
 DatasetModelOption.propTypes = {
-    dataset: PropTypes.object.isRequired,
-    option: PropTypes.object.isRequired,
-    handleChange: PropTypes.func.isRequired,
+    datasetId: PropTypes.number.isRequired,
+    store: PropTypes.object,
 };
 export default DatasetModelOption;

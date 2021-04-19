@@ -23,21 +23,14 @@ class App extends Component {
         });
     }
     render() {
-        return (
-            <div>
-                {this.props.mainStore.isUpdateComplete ? (
-                    <HashRouter>
-                        <Navigation />
-                    </HashRouter>
-                ) : null}
-            </div>
-        );
+        return this.props.mainStore.isUpdateComplete ? (
+            <HashRouter>
+                <Navigation />
+            </HashRouter>
+        ) : null;
     }
 }
 App.propTypes = {
     mainStore: PropTypes.object,
-    setConfig: PropTypes.func,
-    fetchSavedAnalysis: PropTypes.func,
-    isUpdateComplete: PropTypes.func,
 };
 export default App;

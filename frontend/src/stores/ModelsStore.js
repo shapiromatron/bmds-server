@@ -1,18 +1,18 @@
+import _ from "lodash";
 import {observable, action, computed} from "mobx";
 
-import {modelsList, modelHeaders, model} from "../constants/modelConstants";
-import _ from "lodash";
+import {allModelOptions, models} from "../constants/modelConstants";
+
+import * as mc from "../constants/mainConstants";
 
 class ModelsStore {
     constructor(rootStore) {
         this.rootStore = rootStore;
-        this.setDefaultsByDatasetType();
     }
 
     @observable model_headers = {};
-    @observable models = [];
-    @observable total_weight = 100;
-    @observable prior_weight_models = [];
+    @observable models = {};
+    @observable prior_weight = 100;
 
     @computed get canEdit() {
         return this.rootStore.mainStore.canEdit;
@@ -22,172 +22,78 @@ class ModelsStore {
         this.rootStore.mainStore.setDirtyData();
     }
 
-    @action setDefaultsByDatasetType() {
-        let modelType = this.rootStore.mainStore.model_type;
-        this.models = _.cloneDeep(modelsList[modelType]);
-        this.model_headers = modelHeaders;
+    @action.bound setDefaultsByDatasetType(force) {
+        if (this.numModelsSelected === 0 || force) {
+            this.models = models[this.getModelType];
+        }
     }
 
-    @action.bound toggleModelsCheckBox(selectedModel, checked) {
-        let model = selectedModel.split("-")[0];
-        this.models.map(item => {
-            item.values.map(value => {
-                if (value.name === selectedModel && !value.isDisabled) {
-                    value.isChecked = checked;
-                    this.checkAllEnabled(model);
-                    if (model === model.Bayesian_Model_Average) {
-                        this.calculatePriorWeight();
-                    }
-                    // this.setDirtyData();
-                }
-            });
-        });
-    }
-    //checks if all models are enabled
-    @action checkAllEnabled(modelName) {
-        let totalModels = [];
-        let enabledModels = [];
-        this.models.map(model => {
-            model.values.map(item => {
-                if (item.name.split("-")[0] == modelName && !item.isDisabled) {
-                    totalModels.push(item.name);
-                }
-                if (item.name.split("-")[0] == modelName && item.isChecked) {
-                    enabledModels.push(item.name);
-                }
-            });
-        });
-        this.model_headers.third.values.map(value => {
-            if (value.model_name == modelName) {
-                if (totalModels.length == enabledModels.length) {
-                    value.isChecked = true;
-                } else {
-                    value.isChecked = false;
-                }
-                // this.setDirtyData();
-            }
-        });
-    }
-    @action.bound calculatePriorWeight() {
-        let checkedModels = [];
-        this.models.map(model => {
-            model.values.map(item => {
-                if (item.isChecked) {
-                    checkedModels.push(item);
-                }
-            });
-        });
-        let prior_weight = 100 / checkedModels.length;
-        this.models.map(model => {
-            model.values.map(item => {
-                if (item.isChecked) {
-                    item.prior_weight = prior_weight;
-                } else {
-                    item.prior_weight = 0;
-                }
-            });
-        });
+    @computed get numModelsSelected() {
+        return _.chain(this.models)
+            .values()
+            .reduce((sum, d) => d.length, 0)
+            .value();
     }
 
-    @action.bound savePriorWeight(key, val) {
-        this.models.map(model => {
-            model.values.map(value => {
-                if (value.name == key) {
-                    value.prior_weight = val;
-                    if (this.checkTotalWeight > 100) {
-                        value.prior_weight = 0;
-                    } else {
-                        this.total_weight = this.checkTotalWeight;
-                    }
-                    // this.setDirtyData();
-                }
-            });
-        });
+    @computed get getModelType() {
+        return this.rootStore.mainStore.model_type;
     }
 
-    @computed get checkTotalWeight() {
-        let total_weight = [];
-        this.models.map(modelArr => {
-            modelArr.values.map(value => {
-                if (value.name.split("-")[0] === model.Bayesian_Model_Average) {
-                    total_weight.push(value.prior_weight);
-                }
-            });
-        });
-        let sum = total_weight.reduce(function(a, b) {
-            return a + b;
-        });
-        return sum;
-    }
-
-    @action.bound enableAllModels(model, checked) {
-        this.model_headers.third.values.map(value => {
-            if (value.model_name == model) {
-                value.isChecked = checked;
-            }
-        });
-        this.models.map(item => {
-            item.values.map(value => {
-                if (value.name.split("-")[0] === model && !value.isDisabled) {
-                    value.isChecked = checked;
-                }
-            });
-        });
-        this.calculatePriorWeight();
-    }
-
-    //returns enabled model types
-    @computed get getEnabledModels() {
-        let result = {};
-        this.models.map(item => {
-            item.values.map(val => {
-                if (val.isChecked) {
-                    var [k, v] = val.name.split("-");
-                    if (v === model.DichotomousHill) {
-                        v = model.Dichotomous_Hill;
-                    }
-                    if (k in result) {
-                        if (k === model.Bayesian_Model_Average) {
-                            result[k] = result[k].concat({
-                                model: v,
-                                prior_weight: val.prior_weight / 100,
-                            });
-                        } else {
-                            result[k] = result[k].concat(v);
-                        }
-                    } else {
-                        if (k === model.Bayesian_Model_Average) {
-                            result[k] = [{model: v, prior_weight: val.prior_weight / 100}];
-                        } else {
-                            result[k] = [v];
-                        }
-                    }
-                }
-            });
-        });
-
-        return result;
-    }
-
-    @action setModels(models) {
+    @action.bound setModels(models) {
+        this.models = models;
         this.setDefaultsByDatasetType();
-        let modelArr = [];
-        Object.keys(models).map((item, i) => {
-            models[item].map(val => {
-                if (item === model.Bayesian_Model_Average) {
-                    val = val.model;
-                }
-                if (val == model.Dichotomous_Hill) {
-                    let [k, v] = val.split("-");
-                    val = k + v;
-                }
-                val = item + "-" + val;
-                modelArr.push(val);
-            });
+    }
+
+    @action.bound enableAll(name, checked) {
+        allModelOptions[this.getModelType][name].map(model => {
+            this.setModelSelection(name, model, checked);
         });
-        modelArr.forEach((model, i) => {
-            let checked = true;
-            this.toggleModelsCheckBox(model, checked);
+    }
+
+    @action.bound setModelSelection(name, model, checked) {
+        if (checked) {
+            if (!(name in this.models)) {
+                this.models[name] = [];
+            }
+            if (name === mc.BAYESIAN_MODEL_AVERAGE) {
+                let bma = {
+                    model,
+                    prior_weight: "",
+                };
+                let obj = this.models[name].find(obj => obj.model === model);
+                if (obj === undefined) {
+                    this.models[name].push(bma);
+                }
+                this.setPriorWeight();
+            } else {
+                if (!this.models[name].includes(model)) {
+                    this.models[name].push(model);
+                }
+            }
+        } else {
+            let index = -1;
+            if (name === mc.BAYESIAN_MODEL_AVERAGE) {
+                index = this.models[name].findIndex(obj => obj.model === model);
+                if (index > -1) {
+                    this.models[name].splice(index, 1);
+                    this.setPriorWeight();
+                }
+            } else {
+                index = this.models[name].indexOf(model);
+                if (index > -1) {
+                    this.models[name].splice(index, 1);
+                }
+            }
+
+            if (!this.models[name].length) {
+                delete this.models[name];
+            }
+        }
+    }
+
+    @action.bound setPriorWeight() {
+        this.models[mc.BAYESIAN_MODEL_AVERAGE].forEach(obj => {
+            obj.prior_weight = this.prior_weight / this.models[mc.BAYESIAN_MODEL_AVERAGE].length;
         });
     }
 }

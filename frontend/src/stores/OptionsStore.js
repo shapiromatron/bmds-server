@@ -5,7 +5,6 @@ import * as constant from "../constants/optionsConstants";
 class OptionsStore {
     constructor(rootStore) {
         this.rootStore = rootStore;
-        this.setDefaultsByDatasetType();
     }
 
     @observable optionsList = [];
@@ -17,9 +16,11 @@ class OptionsStore {
         this.rootStore.mainStore.setDirtyData();
     }
 
-    @action.bound setDefaultsByDatasetType() {
-        const option = _.cloneDeep(constant.options[this.getModelType]);
-        this.optionsList = [option];
+    @action.bound setDefaultsByDatasetType(force) {
+        if (this.optionsList.length === 0 || force) {
+            const option = _.cloneDeep(constant.options[this.getModelType]);
+            this.optionsList = [option];
+        }
     }
 
     @action.bound addOptions() {
@@ -37,8 +38,9 @@ class OptionsStore {
         this.optionsList.splice(val, 1);
         this.setDirtyData();
     }
-    @action setOptions(options) {
+    @action.bound setOptions(options) {
         this.optionsList = options;
+        this.setDefaultsByDatasetType();
     }
 
     @computed get getModelType() {

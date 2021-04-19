@@ -6,7 +6,7 @@ TODO - update
 Make sure you have the following applications installed locally:
 
 - `Git`_
-- `Python`_ == 3.6 (recommended to stay on Python 3.6 for some packages)
+- `Python`_ == 3.9
 - `Node.js`_
 - `Yarn`_
 

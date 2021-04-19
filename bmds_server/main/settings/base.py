@@ -36,7 +36,8 @@ INSTALLED_APPS = [
     "rest_framework.authtoken",
     "webpack_loader",
     # Custom apps
-    "bmds_server.jobrunner",
+    "bmds_server.common",
+    "bmds_server.analysis",
 ]
 
 MIDDLEWARE = [
@@ -49,7 +50,7 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
 
-ROOT_URLCONF = "bmds_server.jobrunner.urls"
+ROOT_URLCONF = "bmds_server.analysis.urls"
 
 TEMPLATES = [
     {
@@ -81,6 +82,7 @@ DATABASES = {
         "PORT": os.getenv("DJANGO_DB_PORT", "5432"),
     }
 }
+DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 LOGIN_URL = "admin:login"
 
 # add randomness to url prefix to prevent easy access
@@ -189,7 +191,7 @@ WEBPACK_LOADER = {
     }
 }
 
-DAYS_TO_KEEP_JOBS = 180
+DAYS_TO_KEEP_ANALYSES = 180
 
 
 # commit information
@@ -204,6 +206,9 @@ def get_git_commit() -> Commit:
 
 GIT_COMMIT_FILE = ROOT_DIR / ".gitcommit"
 COMMIT = get_git_commit()
+
+# Google Tag Manager settings
+GTM_ID = os.getenv("GTM_ID")
 
 TEST_DB_FIXTURE = ROOT_DIR / "tests/data/db.yaml"
 CONTACT_US_LINK = os.getenv("CONTACT_US_LINK", "")

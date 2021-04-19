@@ -32,8 +32,12 @@
     model: tokenproxy
 - model: contenttypes.contenttype
   fields:
-    app_label: jobrunner
+    app_label: analysis
     model: job
+- model: contenttypes.contenttype
+  fields:
+    app_label: analysis
+    model: content
 - model: auth.permission
   fields:
     name: Can add log entry
@@ -262,34 +266,62 @@
   fields:
     name: Can add job
     content_type:
-    - jobrunner
+    - analysis
     - job
     codename: add_job
 - model: auth.permission
   fields:
     name: Can change job
     content_type:
-    - jobrunner
+    - analysis
     - job
     codename: change_job
 - model: auth.permission
   fields:
     name: Can delete job
     content_type:
-    - jobrunner
+    - analysis
     - job
     codename: delete_job
 - model: auth.permission
   fields:
     name: Can view job
     content_type:
-    - jobrunner
+    - analysis
     - job
     codename: view_job
+- model: auth.permission
+  fields:
+    name: Can add content
+    content_type:
+    - analysis
+    - content
+    codename: add_content
+- model: auth.permission
+  fields:
+    name: Can change content
+    content_type:
+    - analysis
+    - content
+    codename: change_content
+- model: auth.permission
+  fields:
+    name: Can delete content
+    content_type:
+    - analysis
+    - content
+    codename: delete_content
+- model: auth.permission
+  fields:
+    name: Can view content
+    content_type:
+    - analysis
+    - content
+    codename: view_content
 - model: auth.user
   fields:
-    password: md5$QdNx4lDmPNJV$df9f8dd15d90a1bca5e2bcf428b89987
-    last_login: 2020-12-15 23:28:26.017464+00:00
+    password: md5$rkrC7MTwzfRQ$8583b60efb5645130b2c7862fb007592   # clear-text = "pw"
+    last_login: 2021-03-01 22:41:15.270081+00:00
     is_superuser: true
     username: admin@bmdsonline.org
     first_name: ''
@@ -300,7 +332,7 @@
     date_joined: 2020-12-15 23:27:18.235646+00:00
     groups: []
     user_permissions: []
-- model: jobrunner.job
+- model: analysis.analysis
   pk: 4e457489-52e6-4d2b-a972-06714f9a03c4
   fields:
     password: pyz355cp9hwp
@@ -311,7 +343,7 @@
     started: null
     ended: null
     deletion_date: null
-- model: jobrunner.job
+- model: analysis.analysis
   pk: cc3ca355-a57a-4fba-9dc3-99657562df68
   fields:
     password: 641515anrub7
@@ -6788,3 +6820,22 @@
     started: 2020-12-15 23:30:20.926326+00:00
     ended: 2020-12-15 23:30:22.052659+00:00
     deletion_date: 2021-12-15 23:30:22.052659+00:00
+- model: analysis.content
+  pk: 1
+  fields:
+    content_type: 1
+    subject: Homepage
+    content:
+      html: "<div class=\"col-lg\">\n    <p>\n        This web-application executes\
+        \ the US EPA's benchmark dose modeling software (<a href=\"https://www.epa.gov/bmds\"\
+        >BMDS</a>).\n    </p>\n    <ul>\n        <li>Load example datasets below to\
+        \ view example input files;\n            for more information, see the <a\
+        \ href=\"http://bmds-server.readthedocs.io/en/latest/\">documentation</a>\n\
+        \        </li>\n        <li>Software is designed for automated BMDS execution\
+        \ using a\n            programming language such as Python, R, or Java. To\
+        \ take\n            advantage of automation, use the <a href=\"/api/v1/\"\
+        >API</a>,\n            and see the <a href=\"http://bmds-server.readthedocs.io/en/latest/quickstart.html\"\
+        >quickstart</a> section.</li>\n    </ul>\n</div>"
+      title: <h1>Welcome to BMDS online.</h1>
+    created: 2021-03-01 22:39:06.328990+00:00
+    last_updated: 2021-03-01 22:39:06.329015+00:00

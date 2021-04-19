@@ -18,7 +18,11 @@ class DatasetModelOptionStore {
         this.rootStore.mainStore.setDirtyData();
     }
 
-    @action.bound setOptions(options) {
+    @computed get getModelType() {
+        return this.rootStore.mainStore.model_type;
+    }
+
+    @action.bound setDatasetOptions(options) {
         this.options = options;
     }
     @action.bound updateOption(dataset_id, key, value) {

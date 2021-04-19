@@ -21,7 +21,7 @@ class OutputStore {
 
     @observable showBMDLine = false;
 
-    @action setSelectedOutputIndex(output_id) {
+    @action.bound setSelectedOutputIndex(output_id) {
         this.selectedOutputIndex = output_id;
     }
 

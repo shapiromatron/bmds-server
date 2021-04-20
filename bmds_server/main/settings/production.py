@@ -35,8 +35,6 @@ EMAIL_MESSAGEID_FQDN = None
 if DJANGO_EMAIL_BACKEND == "SMTP":
     EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
     EMAIL_HOST = os.environ["DJANGO_EMAIL_HOST"]
-    EMAIL_HOST_USER = os.environ["DJANGO_EMAIL_USER"]
-    EMAIL_HOST_PASSWORD = os.environ["DJANGO_EMAIL_PASSWORD"]
     EMAIL_PORT = int(os.environ["DJANGO_EMAIL_PORT"])
     EMAIL_USE_SSL = os.environ["DJANGO_EMAIL_USE_SSL"].lower() == "true"
     EMAIL_MESSAGEID_FQDN = os.environ.get("DJANGO_EMAIL_MESSAGEID_FQDN")

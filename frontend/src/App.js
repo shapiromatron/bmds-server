@@ -23,8 +23,17 @@ class App extends Component {
         });
     }
     render() {
+        const {analysis_name, canEdit} = this.props.mainStore,
+            getHeader = () => {
+                if (canEdit) {
+                    return "Update BMDS analysis";
+                }
+                return analysis_name ? analysis_name : "BMDS analysis";
+            };
+
         return this.props.mainStore.isUpdateComplete ? (
             <HashRouter>
+                <h3 className="pt-1">{getHeader()}</h3>
                 <Navigation />
             </HashRouter>
         ) : null;

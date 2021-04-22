@@ -9,6 +9,10 @@ module.exports = {
         main: ["./src/index"],
     },
 
+    externals: {
+        $: "$",
+    },
+
     mode: "development",
 
     module: {

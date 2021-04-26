@@ -68,6 +68,16 @@ export const getDrLayout = function(dataset, selected, modal, hover) {
         layout.xaxis.title.text = xlabel;
         layout.yaxis.title.text = ylabel;
 
+        let xmin = _.min(dataset.doses);
+        let xmax = _.max(dataset.doses);
+
+        let response = getResponse(dataset);
+        let ymin = _.min(response);
+        let ymax = _.max(response);
+
+        layout.xaxis.range = [xmin == 0 ? -0.1 * xmax : 0.9 * xmin, 1.1 * xmax];
+        layout.yaxis.range = [ymin == 0 ? -0.1 * ymax : 0.9 * ymin, 1.1 * ymax];
+
         return layout;
     },
     getCdfLayout = function(dataset) {

@@ -214,6 +214,7 @@ class MainStore {
         }
 
         const inputs = data.inputs;
+
         if (_.isEmpty(inputs)) {
             this.changeDatasetType(this.model_type);
             this.isUpdateComplete = true;

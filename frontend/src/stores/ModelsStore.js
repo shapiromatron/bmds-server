@@ -89,6 +89,7 @@ class ModelsStore {
                 delete this.models[name];
             }
         }
+        this.setDirtyData();
     }
 
     @action.bound setPriorWeight() {

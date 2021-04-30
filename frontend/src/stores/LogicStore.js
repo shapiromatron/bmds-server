@@ -11,6 +11,10 @@ class LogicStore {
         return this.rootStore.mainStore.canEdit;
     }
 
+    @action.bound setDirtyData() {
+        this.rootStore.mainStore.setDirtyData();
+    }
+
     @action.bound setLogic(data) {
         this.logic = data;
     }
@@ -24,12 +28,15 @@ class LogicStore {
             .then(json => {
                 this.logic = json.recommender;
             });
+        this.setDirtyData();
     }
     @action.bound updateLogic(key, value) {
         this.logic[key] = value;
+        this.setDirtyData();
     }
     @action.bound updateRule(ruleIndex, key, value) {
         this.logic.rules[ruleIndex][key] = value;
+        this.setDirtyData();
     }
 }
 export default LogicStore;

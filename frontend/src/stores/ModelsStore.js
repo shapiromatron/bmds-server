@@ -18,6 +18,10 @@ class ModelsStore {
         return this.rootStore.mainStore.canEdit;
     }
 
+    @action.bound setDirtyData() {
+        this.rootStore.mainStore.setDirtyData();
+    }
+
     @action.bound setDefaultsByDatasetType(force) {
         if (this.numModelsSelected === 0 || force) {
             this.models = models[this.getModelType];
@@ -85,6 +89,7 @@ class ModelsStore {
                 delete this.models[name];
             }
         }
+        this.setDirtyData();
     }
 
     @action.bound setPriorWeight() {

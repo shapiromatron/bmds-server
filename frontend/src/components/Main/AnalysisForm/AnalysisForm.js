@@ -18,7 +18,7 @@ class AnalysisForm extends Component {
                         <input
                             className="form-control"
                             type="text"
-                            value={mainStore.analysis_name}
+                            value={mainStore.analysis_name || ""}
                             onChange={e => mainStore.changeAnalysisName(e.target.value)}
                         />
                     </div>
@@ -28,7 +28,7 @@ class AnalysisForm extends Component {
                             className="form-control"
                             type="textarea"
                             rows="3"
-                            value={mainStore.analysis_description}
+                            value={mainStore.analysis_description || ""}
                             onChange={e =>
                                 mainStore.changeAnalysisDescription(e.target.value)
                             }></textarea>

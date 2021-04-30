@@ -27,9 +27,11 @@ class MainStore {
     }
     @action.bound changeAnalysisName(value) {
         this.analysis_name = value;
+        this.setDirtyData();
     }
     @action.bound changeAnalysisDescription(value) {
         this.analysis_description = value;
+        this.setDirtyData();
     }
     @action.bound changeDatasetType(value) {
         this.model_type = value;
@@ -37,6 +39,11 @@ class MainStore {
         this.rootStore.optionsStore.setDefaultsByDatasetType(true);
         this.rootStore.dataStore.setDefaultsByDatasetType();
         this.rootStore.dataOptionStore.options = [];
+    }
+
+    @action.bound setDirtyData() {
+        // if any changes have been made but not saved.
+        this.isReadyToExecute = false;
     }
 
     @computed get getOptions() {
@@ -78,6 +85,7 @@ class MainStore {
         })
             .then(response => {
                 if (response.ok) {
+                    this.dataDirty = false;
                     response.json().then(data => this.updateModelStateFromApi(data));
                 } else {
                     response.json().then(data => (this.errorMessage = data));
@@ -206,6 +214,7 @@ class MainStore {
         }
 
         const inputs = data.inputs;
+
         if (_.isEmpty(inputs)) {
             this.changeDatasetType(this.model_type);
             this.isUpdateComplete = true;

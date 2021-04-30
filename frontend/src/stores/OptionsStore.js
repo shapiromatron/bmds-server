@@ -12,6 +12,10 @@ class OptionsStore {
         return this.rootStore.mainStore.canEdit;
     }
 
+    @action.bound setDirtyData() {
+        this.rootStore.mainStore.setDirtyData();
+    }
+
     @action.bound setDefaultsByDatasetType(force) {
         if (this.optionsList.length === 0 || force) {
             const option = _.cloneDeep(constant.options[this.getModelType]);
@@ -22,14 +26,17 @@ class OptionsStore {
     @action.bound addOptions() {
         const option = _.cloneDeep(constant.options[this.getModelType]);
         this.optionsList.push(option);
+        this.setDirtyData();
     }
 
     @action.bound saveOptions(name, value, id) {
         this.optionsList[id][name] = value;
+        this.setDirtyData();
     }
 
     @action.bound deleteOptions(val) {
         this.optionsList.splice(val, 1);
+        this.setDirtyData();
     }
     @action.bound setOptions(options) {
         this.optionsList = options;

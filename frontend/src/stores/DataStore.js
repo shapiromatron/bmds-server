@@ -58,6 +58,10 @@ class DataStore {
     @observable datasets = [];
     @observable selectedDatasetId = null;
 
+    @action.bound setDirtyData() {
+        this.rootStore.mainStore.setDirtyData();
+    }
+
     @action.bound setDefaultsByDatasetType() {
         this.selectedDatasetId = null;
         this.datasets = [];
@@ -66,14 +70,17 @@ class DataStore {
 
     @action.bound setModelType(model_type) {
         this.model_type = model_type;
+        this.setDirtyData();
     }
 
     @action.bound setSelectedDataset(dataset) {
         this.selectedDatasetId = dataset.metadata.id;
+        this.setDirtyData();
     }
 
     @action.bound setDatasetMetadata(key, value) {
         this.selectedDataset.metadata[key] = value;
+        this.setDirtyData();
     }
 
     @action.bound addDataset() {
@@ -90,6 +97,7 @@ class DataStore {
         this.datasets.push(dataset);
         this.rootStore.dataOptionStore.createOption(dataset);
         this.selectedDatasetId = id;
+        this.setDirtyData();
     }
 
     @action.bound addRow() {
@@ -99,6 +107,7 @@ class DataStore {
                 dataset[key].push("");
             }
         });
+        this.setDirtyData();
     }
 
     @action.bound deleteRow = index => {
@@ -108,6 +117,7 @@ class DataStore {
                 dataset[key].splice(index, 1);
             }
         });
+        this.setDirtyData();
     };
 
     @action.bound saveDatasetCellItem(key, value, rowIdx) {
@@ -121,10 +131,12 @@ class DataStore {
         if (_.isNumber(parsedValue)) {
             dataset[key][rowIdx] = parsedValue;
         }
+        this.setDirtyData();
     }
 
     @action.bound changeColumnName(name, value) {
         this.selectedDataset.column_names[name] = value;
+        this.setDirtyData();
     }
 
     @action.bound deleteDataset() {
@@ -138,6 +150,7 @@ class DataStore {
         if (this.datasets.length > 0) {
             this.selectedDatasetId = this.datasets[this.datasets.length - 1].metadata.id;
         }
+        this.setDirtyData();
     }
 
     @action.bound setDatasets(datasets) {
@@ -236,6 +249,7 @@ class DataStore {
         this.tabularModalText = "";
         this.tabularModalError = "";
         this.tabularModalData = null;
+        this.setDirtyData();
     }
     @action.bound changeDatasetFromModal(text) {
         text = text.trim();
@@ -258,6 +272,7 @@ class DataStore {
         }
 
         this.tabularModalDataValidated = results.errors.length === 0;
+        this.setDirtyData();
     }
     @action.bound updateDatasetFromModal() {
         if (!this.tabularModalData) {
@@ -272,6 +287,7 @@ class DataStore {
         });
         this.datasets[index] = dataset;
         this.toggleDatasetModal();
+        this.setDirtyData();
     }
     // *** END TABULAR MODAL DATASET ***
 }

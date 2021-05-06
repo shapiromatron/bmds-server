@@ -60,8 +60,7 @@ const isModelChecked = function(models, type, model) {
         Multistage model is used (see User Manual for details).`,
     fr = "frequentist_restricted",
     fu = "frequentist_unrestricted",
-    b = "bayesian",
-    bma = "bayesian_model_average";
+    b = "bayesian";
 
 const ModelsCheckBox = observer(props => {
     const {store} = props,
@@ -110,7 +109,6 @@ const ModelsCheckBox = observer(props => {
                     <CheckBoxTd store={store} type={fr} model={"Dichotomous-Hill"} />
                     <CheckBoxTd store={store} type={fu} model={"Dichotomous-Hill"} />
                     <CheckBoxTd store={store} type={b} model={"Dichotomous-Hill"} />
-                    <CheckBoxTd store={store} type={bma} model={"Dichotomous-Hill"} />
                     <PriorWeightTd store={store} model={"Dichotomous-Hill"} />
                 </tr>
                 <tr>
@@ -118,7 +116,6 @@ const ModelsCheckBox = observer(props => {
                     <CheckBoxTd store={store} type={fr} model={"Gamma"} />
                     <CheckBoxTd store={store} type={fu} model={"Gamma"} />
                     <CheckBoxTd store={store} type={b} model={"Gamma"} />
-                    <CheckBoxTd store={store} type={bma} model={"Gamma"} />
                     <PriorWeightTd store={store} model={"Gamma"} />
                 </tr>
                 <tr>
@@ -126,7 +123,6 @@ const ModelsCheckBox = observer(props => {
                     <td></td>
                     <CheckBoxTd store={store} type={fu} model={"Logistic"} />
                     <CheckBoxTd store={store} type={b} model={"Logistic"} />
-                    <CheckBoxTd store={store} type={bma} model={"Logistic"} />
                     <PriorWeightTd store={store} model={"Logistic"} />
                 </tr>
                 <tr>
@@ -134,7 +130,6 @@ const ModelsCheckBox = observer(props => {
                     <CheckBoxTd store={store} type={fr} model={"LogLogistic"} />
                     <CheckBoxTd store={store} type={fu} model={"LogLogistic"} />
                     <CheckBoxTd store={store} type={b} model={"LogLogistic"} />
-                    <CheckBoxTd store={store} type={bma} model={"LogLogistic"} />
                     <PriorWeightTd store={store} model={"LogLogistic"} />
                 </tr>
                 <tr>
@@ -142,7 +137,6 @@ const ModelsCheckBox = observer(props => {
                     <CheckBoxTd store={store} type={fr} model={"LogProbit"} />
                     <CheckBoxTd store={store} type={fu} model={"LogProbit"} />
                     <CheckBoxTd store={store} type={b} model={"LogProbit"} />
-                    <CheckBoxTd store={store} type={bma} model={"LogProbit"} />
                     <PriorWeightTd store={store} model={"LogProbit"} />
                 </tr>
                 <tr>
@@ -153,7 +147,6 @@ const ModelsCheckBox = observer(props => {
                     <CheckBoxTd store={store} type={fr} model={"Multistage"} />
                     <CheckBoxTd store={store} type={fu} model={"Multistage"} />
                     <CheckBoxTd store={store} type={b} model={"Multistage"} />
-                    <CheckBoxTd store={store} type={bma} model={"Multistage"} />
                     <PriorWeightTd store={store} model={"Multistage"} />
                 </tr>
                 <tr>
@@ -161,7 +154,6 @@ const ModelsCheckBox = observer(props => {
                     <td></td>
                     <CheckBoxTd store={store} type={fu} model={"Probit"} />
                     <CheckBoxTd store={store} type={b} model={"Probit"} />
-                    <CheckBoxTd store={store} type={bma} model={"Probit"} />
                     <PriorWeightTd store={store} model={"Probit"} />
                 </tr>
                 <tr>
@@ -169,7 +161,6 @@ const ModelsCheckBox = observer(props => {
                     <td></td>
                     <CheckBoxTd store={store} type={fu} model={"Quantal Linear"} />
                     <CheckBoxTd store={store} type={b} model={"Quantal Linear"} />
-                    <CheckBoxTd store={store} type={bma} model={"Quantal Linear"} />
                     <PriorWeightTd store={store} model={"Quantal Linear"} />
                 </tr>
                 <tr>
@@ -177,7 +168,6 @@ const ModelsCheckBox = observer(props => {
                     <CheckBoxTd store={store} type={fr} model={"Weibull"} />
                     <CheckBoxTd store={store} type={fu} model={"Weibull"} />
                     <CheckBoxTd store={store} type={b} model={"Weibull"} />
-                    <CheckBoxTd store={store} type={bma} model={"Weibull"} />
                     <PriorWeightTd store={store} model={"Weibull"} />
                 </tr>
             </tbody>

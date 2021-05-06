@@ -24,6 +24,11 @@ class Main extends Component {
                 </div>
                 <div className="col-lg-8">
                     <div>
+                        <button
+                            className="btn btn-sm btn-warning mr-auto"
+                            onClick={e => mainStore.resetModelSelection()}>
+                            Reset Model Selection
+                        </button>
                         <ModelsCheckBoxList />
                     </div>
                     <div>

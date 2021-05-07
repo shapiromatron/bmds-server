@@ -15,7 +15,7 @@ class LogicStore {
         this.logic = data;
     }
     @action.bound async resetLogic() {
-        const url = "/api/v1/job/default/";
+        const url = "/api/v1/analysis/default/";
         await fetch(url, {
             method: "GET",
             mode: "cors",

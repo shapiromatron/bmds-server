@@ -15,7 +15,7 @@
       <link rel="shortcut icon" href="https://www.epa.gov/sites/all/themes/epa/favicon.ico" type="image/vnd.microsoft.icon" />
     {% endif %}
 
-    <link rel="stylesheet" type="text/css" href="{% static 'vendor/bootstrap-4.5.3/css/bootstrap.min.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'vendor/bootstrap-4.6.0/css/bootstrap.min.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'vendor/font-awesome-4.7.0/css/font-awesome.min.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'css/site.css' %}">
 
@@ -69,8 +69,8 @@
   {% include "./includes/epa-footer.html" %}
 {% endif %}
 
-<script src="{% static 'vendor/jquery-3.5.1/jquery.min.js' %}"></script>
-<script src="{% static 'vendor/bootstrap-4.5.3/js/bootstrap.bundle.min.js' %}"></script>
+<script src="{% static 'vendor/jquery-3.6.0.min.js' %}"></script>
+<script src="{% static 'vendor/bootstrap-4.6.0/js/bootstrap.bundle.min.js' %}"></script>
 {% render_bundle 'main' %}
 {% block extra-js %}
 {% endblock %}

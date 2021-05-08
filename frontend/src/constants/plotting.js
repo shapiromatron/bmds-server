@@ -68,15 +68,20 @@ export const getDrLayout = function(dataset, selected, modal, hover) {
         layout.xaxis.title.text = xlabel;
         layout.yaxis.title.text = ylabel;
 
-        let xmin = _.min(dataset.doses);
-        let xmax = _.max(dataset.doses);
+        const xmin = _.min(dataset.doses) || 0,
+            xmax = _.max(dataset.doses) || 0,
+            response = getResponse(dataset),
+            ymin = _.min(response) || 0,
+            ymax = _.max(response) || 0;
 
-        let response = getResponse(dataset);
-        let ymin = _.min(response);
-        let ymax = _.max(response);
-
-        layout.xaxis.range = [xmin == 0 ? -0.1 * xmax : 0.9 * xmin, 1.1 * xmax];
-        layout.yaxis.range = [ymin == 0 ? -0.1 * ymax : 0.9 * ymin, 1.1 * ymax];
+        layout.xaxis.range = [
+            xmin > 0 ? xmin * 0.9 : xmin * 1.1,
+            xmax > 0 ? xmax * 1.1 : xmax * 0.9,
+        ];
+        layout.yaxis.range = [
+            ymin > 0 ? ymin * 0.9 : ymin * 1.1,
+            ymax > 0 ? ymax * 1.1 : ymax * 0.9,
+        ];
 
         return layout;
     },

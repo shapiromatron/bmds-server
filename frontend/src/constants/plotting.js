@@ -68,6 +68,21 @@ export const getDrLayout = function(dataset, selected, modal, hover) {
         layout.xaxis.title.text = xlabel;
         layout.yaxis.title.text = ylabel;
 
+        const xmin = _.min(dataset.doses) || 0,
+            xmax = _.max(dataset.doses) || 0,
+            response = getResponse(dataset),
+            ymin = _.min(response) || 0,
+            ymax = _.max(response) || 0;
+
+        layout.xaxis.range = [
+            xmin > 0 ? xmin * 0.9 : xmin * 1.1,
+            xmax > 0 ? xmax * 1.1 : xmax * 0.9,
+        ];
+        layout.yaxis.range = [
+            ymin > 0 ? ymin * 0.9 : ymin * 1.1,
+            ymax > 0 ? ymax * 1.1 : ymax * 0.9,
+        ];
+
         return layout;
     },
     getCdfLayout = function(dataset) {
@@ -101,8 +116,8 @@ export const getDrLayout = function(dataset, selected, modal, hover) {
                 size: 10,
             },
             error_y: errorBars,
-            hovertemplate:
-                "%{y:.3f} (%{error_y.array:.3f}, %{error_y.arrayminus:.3f})<extra></extra>",
+            customdata: errorBars.bounds,
+            hovertemplate: "%{y:.3f} (%{customdata[0]:.3f}, %{customdata[1]:.3f})<extra></extra>",
             name: "Response",
         };
     },

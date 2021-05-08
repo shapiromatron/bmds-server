@@ -60,19 +60,23 @@ export const inv_tdist_05 = function(df) {
     continuousErrorBars = function(dataset) {
         // Calculate 95% confidence intervals
         let uppers = [],
-            lowers = [];
+            lowers = [],
+            bounds = [];
         dataset.doses.map((dose, idx) => {
             let n = dataset.ns[idx],
                 stdev = dataset.stdevs[idx];
 
             if (_.isFinite(n) && _.isFinite(stdev)) {
                 const se = stdev / Math.sqrt(n),
-                    z = inv_tdist_05(n - 1) || 1.96;
-                uppers.push(se * z);
-                lowers.push(se * z);
+                    z = inv_tdist_05(n - 1) || 1.96,
+                    change = se * z;
+                uppers.push(change);
+                lowers.push(change);
+                bounds.push([dataset.means[idx] - change, dataset.means[idx] + change]);
             } else {
                 uppers.push(undefined);
                 lowers.push(undefined);
+                bounds.push([undefined, undefined]);
             }
         });
 
@@ -81,6 +85,7 @@ export const inv_tdist_05 = function(df) {
             symmetric: false,
             array: uppers,
             arrayminus: lowers,
+            bounds,
         };
     },
     dichotomousErrorBars = function(dataset) {
@@ -103,7 +108,8 @@ export const inv_tdist_05 = function(df) {
         model).
         */
         let uppers = [],
-            lowers = [];
+            lowers = [],
+            bounds = [];
         dataset.doses.map((dose, idx) => {
             let n = dataset.ns[idx],
                 incidence = dataset.incidences[idx];
@@ -126,9 +132,11 @@ export const inv_tdist_05 = function(df) {
                         (2 * (n + 2 * z));
                 uppers.push(p + upper > 1 ? 1 - p : upper);
                 lowers.push(lower);
+                bounds.push([Math.max(p - lower, 0), Math.min(p + upper, 1)]);
             } else {
                 uppers.push(undefined);
                 lowers.push(undefined);
+                bounds.push([undefined, undefined]);
             }
         });
 
@@ -137,5 +145,6 @@ export const inv_tdist_05 = function(df) {
             symmetric: false,
             array: uppers,
             arrayminus: lowers,
+            bounds,
         };
     };

@@ -111,8 +111,8 @@ export const getDrLayout = function(dataset, selected, modal, hover) {
                 size: 10,
             },
             error_y: errorBars,
-            hovertemplate:
-                "%{y:.3f} (%{error_y.array:.3f}, %{error_y.arrayminus:.3f})<extra></extra>",
+            customdata: errorBars.bounds,
+            hovertemplate: "%{y:.3f} (%{customdata[0]:.3f}, %{customdata[1]:.3f})<extra></extra>",
             name: "Response",
         };
     },

@@ -12,7 +12,7 @@ class ModelsStore {
 
     @observable model_headers = {};
     @observable models = {};
-    @observable prior_weight = 100;
+    @observable prior_weight = 1;
 
     @computed get canEdit() {
         return this.rootStore.mainStore.canEdit;
@@ -51,10 +51,10 @@ class ModelsStore {
             if (!(name in this.models)) {
                 this.models[name] = [];
             }
-            if (name === mc.BAYESIAN_MODEL_AVERAGE) {
+            if (name === mc.BAYESIAN) {
                 let bma = {
                     model,
-                    prior_weight: "",
+                    prior_weight: 0,
                 };
                 let obj = this.models[name].find(obj => obj.model === model);
                 if (obj === undefined) {
@@ -68,7 +68,7 @@ class ModelsStore {
             }
         } else {
             let index = -1;
-            if (name === mc.BAYESIAN_MODEL_AVERAGE) {
+            if (name === mc.BAYESIAN) {
                 index = this.models[name].findIndex(obj => obj.model === model);
                 if (index > -1) {
                     this.models[name].splice(index, 1);
@@ -88,8 +88,8 @@ class ModelsStore {
     }
 
     @action.bound setPriorWeight() {
-        this.models[mc.BAYESIAN_MODEL_AVERAGE].forEach(obj => {
-            obj.prior_weight = this.prior_weight / this.models[mc.BAYESIAN_MODEL_AVERAGE].length;
+        this.models[mc.BAYESIAN].forEach(obj => {
+            obj.prior_weight = this.prior_weight / this.models[mc.BAYESIAN].length;
         });
     }
     @action.bound resetModelSelection() {

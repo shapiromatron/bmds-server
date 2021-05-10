@@ -28,7 +28,7 @@ ContinuousModelSchema = ModelTypeSchema(
 )
 
 
-class BmaModelSchema(BaseModel):
+class BayesianModelSchema(BaseModel):
     model: str
     prior_weight: confloat(ge=0, le=1)
 
@@ -36,16 +36,15 @@ class BmaModelSchema(BaseModel):
 class ModelListSchema(BaseModel):
     frequentist_restricted: List[str] = []
     frequentist_unrestricted: List[str] = []
-    bayesian: List[str] = []
-    bayesian_model_average: List[BmaModelSchema] = []
+    bayesian: List[BayesianModelSchema] = []
     model_schema: ModelTypeSchema
 
-    @validator("bayesian_model_average")
-    def bma_weights(cls, values):
+    @validator("bayesian")
+    def bayesian_weights(cls, values):
         if len(values) > 0:
             weights = sum([value.prior_weight for value in values])
             if not np.isclose(weights, 1.0, atol=0.005):
-                raise ValueError("Prior weight in bayesian model average does not sum to 1")
+                raise ValueError("Prior weight in bayesian does not sum to 1")
 
         return values
 
@@ -55,7 +54,6 @@ class ModelListSchema(BaseModel):
         for field, valid_models in [
             ("frequentist_restricted", schema.restricted),
             ("frequentist_unrestricted", schema.unrestricted),
-            ("bayesian", schema.bayesian),
         ]:
             models = values.get(field)
             if len(models) != len(set(models)):
@@ -65,7 +63,7 @@ class ModelListSchema(BaseModel):
                 raise ValueError(f"Invalid model(s) in {field}: {','.join(extras)}")
 
         for field, valid_models in [
-            ("bayesian_model_average", schema.bayesian),
+            ("bayesian", schema.bayesian),
         ]:
             models = [model.model for model in values.get(field)]
             if len(models) != len(set(models)):
@@ -82,7 +80,6 @@ class ModelListSchema(BaseModel):
             len(values.get("frequentist_restricted"))
             + len(values.get("frequentist_unrestricted"))
             + len(values.get("bayesian"))
-            + len(values.get("bayesian_model_average"))
         )
         if num_models == 0:
             raise ValueError("At least one model must be selected")

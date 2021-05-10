@@ -9,7 +9,7 @@ import HelpTextPopup from "../../common/HelpTextPopup";
 const isModelChecked = function(models, type, model) {
         let checked = false;
         if (type in models) {
-            if (type === mc.BAYESIAN_MODEL_AVERAGE) {
+            if (type === mc.BAYESIAN) {
                 checked = models[type].findIndex(obj => obj.model === model) > -1;
             } else {
                 checked = models[type].indexOf(model) > -1;
@@ -19,8 +19,8 @@ const isModelChecked = function(models, type, model) {
     },
     getPriorWeightValue = function(models, model) {
         let prior_weight = 0;
-        if (mc.BAYESIAN_MODEL_AVERAGE in models) {
-            let obj = models[mc.BAYESIAN_MODEL_AVERAGE].find(obj => obj.model === model);
+        if (mc.BAYESIAN in models) {
+            let obj = models[mc.BAYESIAN].find(obj => obj.model === model);
             if (obj != undefined) {
                 prior_weight = obj.prior_weight;
             }

@@ -68,9 +68,9 @@ class TestBmds3SessionBuild:
             print(f"{num_doses=} {expected_degree=}")
             _expected_degree(session, expected_degree)
 
-        # degree = N -1, bayesian_model_average, fixed at degree == 2
+        # degree = N -1, bayesian, fixed at degree == 2
         data = deepcopy(bmds3_complete_dichotomous)
-        data["models"] = {"bayesian_model_average": [{"model": "Multistage", "prior_weight": 1}]}
+        data["models"] = {"bayesian": [{"model": "Multistage", "prior_weight": 1}]}
         data["dataset_options"][0]["degree"] = 0
         session = Analysis.build_session(data, 0, 0)
         assert len(session.models) == 1

@@ -12,14 +12,12 @@ class PriorEnum(str, Enum):
     frequentist_restricted = "frequentist_restricted"
     frequentist_unrestricted = "frequentist_unrestricted"
     bayesian = "bayesian"
-    bayesian_model_average = "bayesian_model_average"
 
 
 bmd3_prior_map = {
     PriorEnum.frequentist_restricted: PriorClass.frequentist_restricted,
     PriorEnum.frequentist_unrestricted: PriorClass.frequentist_unrestricted,
     PriorEnum.bayesian: PriorClass.bayesian,
-    PriorEnum.bayesian_model_average: PriorClass.bayesian,
 }
 is_increasing_map = {
     AdverseDirection.AUTOMATIC: None,

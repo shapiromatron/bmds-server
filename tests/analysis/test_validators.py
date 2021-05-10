@@ -112,27 +112,27 @@ class TestModelValidation:
             validators.validate_models(
                 dtype,
                 {
-                    "bayesian_model_average": [
+                    "bayesian": [
                         {"model": probit, "prior_weight": 0.3},
                         {"model": logprobit, "prior_weight": 0.4},
                         {"model": logprobit, "prior_weight": 0.3},
                     ]
                 },
             )
-        assert "Models in bayesian_model_average are not unique" in str(err)
+        assert "Models in bayesian are not unique" in str(err)
 
         # assert bayesian prior_weight sum
         with pytest.raises(ValidationError) as err:
             validators.validate_models(
                 dtype,
                 {
-                    "bayesian_model_average": [
+                    "bayesian": [
                         {"model": probit, "prior_weight": 0.5},
                         {"model": logprobit, "prior_weight": 0.49},
                     ]
                 },
             )
-        assert "Prior weight in bayesian model average does not sum to 1" in str(err.value)
+        assert "Prior weight in bayesian does not sum to 1" in str(err.value)
 
     def test_bmds3_continuous(self):
         dtype = bmds.constants.CONTINUOUS
@@ -168,27 +168,27 @@ class TestModelValidation:
             validators.validate_models(
                 dtype,
                 {
-                    "bayesian_model_average": [
+                    "bayesian": [
                         {"model": power, "prior_weight": 0.3},
                         {"model": linear, "prior_weight": 0.4},
                         {"model": linear, "prior_weight": 0.3},
                     ]
                 },
             )
-        assert "Models in bayesian_model_average are not unique" in str(err)
+        assert "Models in bayesian are not unique" in str(err)
 
         # assert bayesian prior_weight sum
         with pytest.raises(ValidationError) as err:
             validators.validate_models(
                 dtype,
                 {
-                    "bayesian_model_average": [
+                    "bayesian": [
                         {"model": power, "prior_weight": 0.5},
                         {"model": linear, "prior_weight": 0.49},
                     ]
                 },
             )
-        assert "Prior weight in bayesian model average does not sum to 1" in str(err.value)
+        assert "Prior weight in bayesian does not sum to 1" in str(err.value)
 
 
 class TestOptionSetValidation:

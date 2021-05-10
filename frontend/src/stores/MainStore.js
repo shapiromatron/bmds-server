@@ -338,6 +338,9 @@ class MainStore {
     @action.bound closeToast() {
         this.showToast = false;
     }
+    @action.bound resetModelSelection() {
+        this.rootStore.modelsStore.resetModelSelection();
+    }
     // *** END TOAST ***
 }
 

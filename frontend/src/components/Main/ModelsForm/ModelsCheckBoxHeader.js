@@ -39,10 +39,7 @@ const ModelsCheckBoxHeader = observer(props => {
                 <th></th>
                 <th>Frequentist Restricted</th>
                 <th>Frequentist Unrestricted</th>
-                <th>Bayesian</th>
-                {store.getModelType === mc.MODEL_DICHOTOMOUS ? (
-                    <th colSpan="2">Bayesian Model Average</th>
-                ) : null}
+                <th colSpan="2">Bayesian </th>
             </tr>
             <tr>
                 <th>Models</th>
@@ -51,7 +48,6 @@ const ModelsCheckBoxHeader = observer(props => {
                 <SelectAllComponent store={store} type={"bayesian"} />
                 {store.getModelType === mc.MODEL_DICHOTOMOUS ? (
                     <>
-                        <SelectAllComponent store={store} type={"bayesian_model_average"} />
                         <th>Prior Weights</th>
                     </>
                 ) : null}

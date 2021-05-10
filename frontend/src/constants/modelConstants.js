@@ -45,7 +45,6 @@ const modelsList = {
             ],
             frequentist_unrestricted: modelsList.D,
             bayesian: modelsList.D,
-            bayesian_model_average: modelsList.D,
         },
     };
 

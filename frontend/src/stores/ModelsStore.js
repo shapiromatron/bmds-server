@@ -92,6 +92,9 @@ class ModelsStore {
             obj.prior_weight = this.prior_weight / this.models[mc.BAYESIAN_MODEL_AVERAGE].length;
         });
     }
+    @action.bound resetModelSelection() {
+        this.setDefaultsByDatasetType(true);
+    }
 }
 
 export default ModelsStore;

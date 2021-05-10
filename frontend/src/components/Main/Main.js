@@ -23,17 +23,15 @@ class Main extends Component {
                     <div>{mainStore.getDatasetLength ? <DatasetModelOptionList /> : null}</div>
                 </div>
                 <div className="col-lg-8">
-                    <div>
+                    {mainStore.canEdit ? (
                         <button
-                            className="btn btn-sm btn-warning mr-auto"
+                            className="btn btn-sm btn-warning"
                             onClick={e => mainStore.resetModelSelection()}>
                             Reset Model Selection
                         </button>
-                        <ModelsCheckBoxList />
-                    </div>
-                    <div>
-                        <OptionsFormList />
-                    </div>
+                    ) : null}
+                    <ModelsCheckBoxList />
+                    <OptionsFormList />
                 </div>
             </div>
         ) : null;

@@ -25,7 +25,7 @@ const modelsList = {
                 "Multistage",
                 "Weibull",
             ],
-            frequentist_unrestricted: ["Logistic", "LogProbit", "Probit", "Quantal Linear"],
+            frequentist_unrestricted: ["Logistic", "LogProbit", "Probit"],
         },
     },
     allModelOptions = {

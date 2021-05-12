@@ -46,6 +46,10 @@ class ModelsStore {
         });
     }
 
+    @action.bound resetModelSelection() {
+        this.setDefaultsByDatasetType(true);
+    }
+
     @action.bound setModelSelection(name, model, checked) {
         if (checked) {
             if (!(name in this.models)) {
@@ -91,9 +95,6 @@ class ModelsStore {
         this.models[mc.BAYESIAN].forEach(obj => {
             obj.prior_weight = this.prior_weight / this.models[mc.BAYESIAN].length;
         });
-    }
-    @action.bound resetModelSelection() {
-        this.setDefaultsByDatasetType(true);
     }
 }
 

@@ -38,6 +38,9 @@ class MainStore {
         this.rootStore.dataStore.setDefaultsByDatasetType();
         this.rootStore.dataOptionStore.options = [];
     }
+    @action.bound resetModelSelection() {
+        this.rootStore.modelsStore.resetModelSelection();
+    }
 
     @computed get getOptions() {
         return this.rootStore.optionsStore.optionsList;
@@ -328,9 +331,6 @@ class MainStore {
     }
     @action.bound closeToast() {
         this.showToast = false;
-    }
-    @action.bound resetModelSelection() {
-        this.rootStore.modelsStore.resetModelSelection();
     }
     // *** END TOAST ***
 }

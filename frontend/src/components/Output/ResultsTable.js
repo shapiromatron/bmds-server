@@ -26,8 +26,8 @@ class ResultsTable extends Component {
     render() {
         const store = this.props.outputStore,
             dataset = store.selectedDataset,
-            {models} = store.selectedOutput,
-            {model_index, notes} = store.selectedOutput.selected;
+            {models} = store.selectedOutput.frequentist,
+            {model_index, notes} = store.selectedOutput.frequentist.selected;
 
         return (
             <table className="table result table-sm">
@@ -72,8 +72,18 @@ class ResultsTable extends Component {
                                 <td>{ff(getPValue(dataset.dtype, model.results))}</td>
                                 {store.recommendationEnabled ? (
                                     <>
-                                        <td>{getModelBinLabel(store.selectedOutput, idx)}</td>
-                                        <td>{getRecommenderText(store.selectedOutput, idx)}</td>
+                                        <td>
+                                            {getModelBinLabel(
+                                                store.selectedOutput.frequentist,
+                                                idx
+                                            )}
+                                        </td>
+                                        <td>
+                                            {getRecommenderText(
+                                                store.selectedOutput.frequentist,
+                                                idx
+                                            )}
+                                        </td>
                                     </>
                                 ) : null}
                             </tr>

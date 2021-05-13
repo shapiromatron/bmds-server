@@ -45,7 +45,7 @@ class OutputStore {
     }
 
     @computed get recommendationEnabled() {
-        return this.selectedOutput.recommender.settings.enabled;
+        return this.selectedOutput.frequentist.recommender.settings.enabled;
     }
 
     @computed get getPValue() {
@@ -70,7 +70,7 @@ class OutputStore {
 
     @computed get drModelSelected() {
         const output = this.selectedOutput;
-        if (output && _.isNumber(output.selected.model_index)) {
+        if (output && output.frequentist && _.isNumber(output.frequentist.selected.model_index)) {
             const model = output.models[output.selected.model_index];
             return getDrBmdLine(model, "#4a9f2f");
         }
@@ -137,10 +137,10 @@ class OutputStore {
 
     // start model selection methods
     @action.bound saveSelectedModelIndex(idx) {
-        this.selectedOutput.selected.model_index = idx === -1 ? null : idx;
+        this.selectedOutput.frequentist.selected.model_index = idx === -1 ? null : idx;
     }
     @action.bound saveSelectedIndexNotes(value) {
-        this.selectedOutput.selected.notes = value.length > 0 ? value : null;
+        this.selectedOutput.frequentist.selected.notes = value.length > 0 ? value : null;
     }
     @action.bound saveSelectedModel() {
         const output = this.selectedOutput,

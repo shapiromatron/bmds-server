@@ -7,7 +7,7 @@ import PropTypes from "prop-types";
 class SelectModelIndex extends Component {
     render() {
         const {outputStore} = this.props,
-            {selectedOutput} = outputStore,
+            selectedOutput = outputStore.selectedOutput.frequentist,
             {models} = selectedOutput,
             {model_index, notes} = selectedOutput.selected,
             selectValue = _.isNumber(model_index) ? model_index : -1,

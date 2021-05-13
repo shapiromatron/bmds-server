@@ -1,11 +1,12 @@
 from enum import Enum
-from typing import Dict, Union
+from typing import Dict, List, Union
 
 import bmds
 from bmds.bmds3.sessions import get_model
 from bmds.bmds3.types.continuous import ContinuousModelSettings
 from bmds.bmds3.types.dichotomous import DichotomousModelSettings
 from bmds.bmds3.types.priors import PriorClass, get_continuous_prior, get_dichotomous_prior
+from bmds.constants import Dtype
 
 from .validators.datasets import AdverseDirection
 
@@ -16,6 +17,7 @@ class PriorEnum(str, Enum):
     bayesian = "bayesian"
 
 
+# TODO - remove these maps; use contants from bmds
 bmd3_prior_map = {
     PriorEnum.frequentist_restricted: PriorClass.frequentist_restricted,
     PriorEnum.frequentist_unrestricted: PriorClass.frequentist_unrestricted,
@@ -59,3 +61,23 @@ def build_model_settings(
         )
     else:
         raise ValueError(f"Unknown dataset_type: {dataset_type}")
+
+
+def build_dataset(dataset_type: str, dataset: Dict[str, List[float]]) -> bmds.datasets.DatasetType:
+    if dataset_type == Dtype.CONTINUOUS:
+        schema = bmds.datasets.ContinuousDatasetSchema
+    elif dataset_type == Dtype.CONTINUOUS_INDIVIDUAL:
+        schema = bmds.datasets.ContinuousIndividualDatasetSchema
+    elif dataset_type == Dtype.DICHOTOMOUS:
+        schema = bmds.datasets.DichotomousDatasetSchema
+    else:
+        raise ValueError(f"Unknown dataset type: {dataset_type}")
+    return schema.parse_obj(dataset).deserialize()
+
+
+def remap_exponential(models: List[str]) -> List[str]:
+    # recursively expand user-specified "exponential" model into M3 and M5
+    if bmds.constants.M_Exponential in models:
+        pos = models.index(bmds.constants.M_Exponential)
+        models[pos : pos + 1] = (bmds.constants.M_ExponentialM3, bmds.constants.M_ExponentialM5)
+    return models

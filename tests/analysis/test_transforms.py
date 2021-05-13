@@ -1,8 +1,8 @@
-import pytest
-
 import bmds
+import pytest
 from bmds.bmds3.types.continuous import ContinuousRiskType
 from bmds.bmds3.types.dichotomous import DichotomousRiskType
+from bmds.constants import M_Exponential, M_ExponentialM3, M_ExponentialM5
 
 from bmds_server.analysis import transforms
 
@@ -51,3 +51,10 @@ class TestOptions:
         assert pytest.approx(res.bmr, 0.15)
         assert pytest.approx(res.alpha, 0.05)
         assert res.degree == 1
+
+
+def test_remap_exponential():
+    assert transforms.remap_exponential([]) == []
+    assert transforms.remap_exponential([M_Exponential]) == [M_ExponentialM3, M_ExponentialM5]
+    expected = ["a", M_ExponentialM3, M_ExponentialM5, "b"]
+    assert transforms.remap_exponential(["a", M_Exponential, "b"]) == expected

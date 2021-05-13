@@ -140,18 +140,40 @@ class Analysis(models.Model):
                 if prior_class == transforms.PriorEnum.bayesian:
                     model_name = model_name["model"]
 
-                if dataset_type in bmds.constants.DICHOTOMOUS_DTYPES:
-                    model_options = transforms.bmds3_d_model_options(
-                        prior_class, options, dataset_options
+                if model_name == bmds.constants.M_Exponential:
+                    # add m3
+                    model_name = bmds.constants.M_ExponentialM3
+                    model_options = transforms.build_model_settings(
+                        bmds_version,
+                        dataset_type,
+                        model_name,
+                        prior_class,
+                        options,
+                        dataset_options,
                     )
-                elif dataset_type in bmds.constants.CONTINUOUS_DTYPES:
-                    model_options = transforms.bmds3_c_model_options(
-                        prior_class, options, dataset_options
-                    )
-                else:
-                    raise ValueError(f"Unknown dataset_type: {dataset_type}")
+                    session.add_model(model_name, settings=model_options)
 
-                if model_name in bmds.constants.VARIABLE_POLYNOMIAL:
+                    # add m5
+                    model_name = bmds.constants.M_ExponentialM5
+                    model_options = transforms.build_model_settings(
+                        bmds_version,
+                        dataset_type,
+                        model_name,
+                        prior_class,
+                        options,
+                        dataset_options,
+                    )
+                    session.add_model(model_name, settings=model_options)
+
+                elif model_name in bmds.constants.VARIABLE_POLYNOMIAL:
+                    model_options = transforms.build_model_settings(
+                        bmds_version,
+                        dataset_type,
+                        model_name,
+                        prior_class,
+                        options,
+                        dataset_options,
+                    )
                     if prior_class == transforms.PriorEnum.bayesian:
                         model_options.degree = 2
                         session.add_model(model_name, settings=model_options)
@@ -166,10 +188,16 @@ class Analysis(models.Model):
                             model_options = model_options.copy()
                             model_options.degree = degree
                             session.add_model(model_name, settings=model_options)
-                elif model_name == bmds.constants.M_Exponential:
-                    session.add_model(bmds.constants.M_ExponentialM3, settings=model_options)
-                    session.add_model(bmds.constants.M_ExponentialM5, settings=model_options)
+
                 else:
+                    model_options = transforms.build_model_settings(
+                        bmds_version,
+                        dataset_type,
+                        model_name,
+                        prior_class,
+                        options,
+                        dataset_options,
+                    )
                     session.add_model(model_name, settings=model_options)
 
         return session

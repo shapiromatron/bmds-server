@@ -1,6 +1,7 @@
 from copy import deepcopy
 
 from bmds.bmds3.constants import ContinuousModelIds, DichotomousModelIds
+from bmds.bmds3.types.priors import PriorClass
 
 from bmds_server.analysis.models import Analysis
 
@@ -17,6 +18,20 @@ class TestBmds3SessionBuild:
         data = deepcopy(bmds3_complete_continuous)
         session = Analysis.build_session(data, 0, 0)
         assert len(session.models) == 1
+
+    def test_prior_classes(self, bmds3_complete_dichotomous):
+        # assure a default dataset can be created
+        data = deepcopy(bmds3_complete_dichotomous)
+        data["models"] = {
+            "frequentist_restricted": ["Gamma"],
+            "frequentist_unrestricted": ["Gamma"],
+            "bayesian": [{"model": "Gamma", "prior_weight": 1}],
+        }
+        session = Analysis.build_session(data, 0, 0)
+        assert len(session.models) == 3
+        assert session.models[0].settings.priors.prior_class is PriorClass.frequentist_restricted
+        assert session.models[1].settings.priors.prior_class is PriorClass.frequentist_unrestricted
+        assert session.models[2].settings.priors.prior_class is PriorClass.bayesian
 
     def test_exponential_unpacking(self, bmds3_complete_continuous):
         data = deepcopy(bmds3_complete_continuous)

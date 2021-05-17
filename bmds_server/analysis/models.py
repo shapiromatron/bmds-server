@@ -110,17 +110,25 @@ class Analysis(models.Model):
         logger.info(f"Removing {qs.count()} old BMDS analysis")
         qs.delete()
 
-    def get_session(self, index: int) -> BmdsSession:
-        # TODO - fix here
+    def get_session(self, index: int) -> executor.AnalysisSession:
         if not self.is_finished or self.has_errors:
             raise ValueError("Session cannot be returned")
-        return BmdsSession.from_serialized(self.outputs["outputs"][index])
+        return executor.AnalysisSession.deserialize(self.outputs["outputs"][index])
 
-    def get_sessions(self) -> List[BmdsSession]:
-        # TODO - fix here
+    def get_sessions(self) -> List[executor.AnalysisSession]:
         if not self.is_finished or self.has_errors:
             raise ValueError("Session cannot be returned")
-        return [BmdsSession.from_serialized(output) for output in self.outputs["outputs"]]
+        return [executor.AnalysisSession.deserialize(output) for output in self.outputs["outputs"]]
+
+    def to_batch(self) -> BmdsSessionBatch:
+        # convert List[executor.AnalysisSession] to List[bmds.BmdsSession]
+        items = []
+        for session in self.get_sessions():
+            if session.frequentist:
+                items.append(session.frequentist)
+            if session.bayesian:
+                items.append(session.bayesian)
+        return BmdsSessionBatch(sessions=items)
 
     def to_word(self) -> BytesIO:
         f = BytesIO()
@@ -133,7 +141,7 @@ class Analysis(models.Model):
         elif self.has_errors:
             report.document.add_paragraph("Execution generated errors; no report can be generated")
         else:
-            batch = BmdsSessionBatch(sessions=self.get_sessions())
+            batch = self.to_batch()
             batch.to_docx(report=report)
 
         report.document.save(f)
@@ -147,7 +155,7 @@ class Analysis(models.Model):
                 name="Status",
             ).to_frame()
 
-        batch = BmdsSessionBatch(sessions=self.get_sessions())
+        batch = self.to_batch()
         df = batch.to_df()
 
         return df
@@ -170,10 +178,8 @@ class Analysis(models.Model):
                 and output["metadata"]["option_index"] == selection.option_index
             ):
                 session = self.get_session(idx)
-                session.selected = selection.selected.deserialize(session)
-                self.outputs["outputs"][idx] = self.session_to_output(
-                    session, selection.dataset_index, selection.option_index
-                )
+                session.frequentist.selected = selection.selected.deserialize(session)
+                self.outputs["outputs"][idx] = session.to_dict()
                 self.save()
                 break
 

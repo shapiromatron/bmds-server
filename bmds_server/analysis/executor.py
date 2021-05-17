@@ -109,6 +109,17 @@ class AnalysisSession(NamedTuple):
             bayesian=build_bayesian_session(dataset, inputs, options, dataset_options),
         )
 
+    @classmethod
+    def deserialize(cls, data: Dict) -> "AnalysisSession":
+        freq = BmdsSession.from_serialized(data["frequentist"]) if data["frequentist"] else None
+        bay = BmdsSession.from_serialized(data["bayesian"]) if data["bayesian"] else None
+        return cls(
+            dataset_index=data["metadata"]["dataset_index"],
+            option_index=data["metadata"]["option_index"],
+            frequentist=freq,
+            bayesian=bay,
+        )
+
     def execute(self) -> Dict:
         if self.frequentist:
             self.frequentist.execute()

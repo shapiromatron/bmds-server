@@ -151,8 +151,8 @@ class OutputStore {
                     dataset_index: output.metadata.dataset_index,
                     option_index: output.metadata.option_index,
                     selected: {
-                        model_index: output.selected.model_index,
-                        notes: output.selected.notes,
+                        model_index: output.frequentist.selected.model_index,
+                        notes: output.frequentist.selected.notes,
                     },
                 },
             }),

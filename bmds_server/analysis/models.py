@@ -9,7 +9,7 @@ import bmds
 import pandas as pd
 from bmds.bmds3.batch import BmdsSessionBatch
 from bmds.bmds3.recommender.recommender import RecommenderSettings
-from bmds.bmds3.sessions import BmdsSession
+from bmds.constants import Dtype
 from bmds.reporting.styling import Report
 from django.conf import settings
 from django.core.cache import cache
@@ -19,7 +19,7 @@ from django.urls import reverse
 from django.utils.text import slugify
 from django.utils.timezone import now
 
-from . import tasks, transforms, utils, validators
+from . import executor, tasks, utils, validators
 
 logger = logging.getLogger(__name__)
 
@@ -109,80 +109,25 @@ class Analysis(models.Model):
         logger.info(f"Removing {qs.count()} old BMDS analysis")
         qs.delete()
 
-    @classmethod
-    def _build_dataset(
-        cls, dataset_type: str, dataset: Dict[str, List[float]]
-    ) -> bmds.datasets.DatasetType:
-        if dataset_type == bmds.constants.Dtype.CONTINUOUS:
-            schema = bmds.datasets.ContinuousDatasetSchema
-        elif dataset_type == bmds.constants.Dtype.CONTINUOUS_INDIVIDUAL:
-            schema = bmds.datasets.ContinuousIndividualDatasetSchema
-        elif dataset_type == bmds.constants.Dtype.DICHOTOMOUS:
-            schema = bmds.datasets.DichotomousDatasetSchema
-        else:
-            raise ValueError(f"Unknown dataset type: {dataset_type}")
-        return schema.parse_obj(dataset).deserialize()
-
-    @classmethod
-    def build_session(cls, inputs: Dict, dataset_index: int, option_index: int) -> bmds.BMDS:
-        bmds_version = inputs["bmds_version"]
-        dataset_type = inputs["dataset_type"]
-        dataset = cls._build_dataset(dataset_type, inputs["datasets"][dataset_index])
-        options = inputs["options"][option_index]
-        dataset_options = inputs["dataset_options"][dataset_index]
-        recommendation_settings = inputs.get("recommender", None)
-
-        session = bmds.BMDS.version(bmds_version)(
-            dataset=dataset, recommendation_settings=recommendation_settings
-        )
-        for prior_class, model_names in inputs["models"].items():
-            for model_name in model_names:
-                if prior_class == transforms.PriorEnum.bayesian:
-                    model_name = model_name["model"]
-
-                if dataset_type in bmds.constants.DICHOTOMOUS_DTYPES:
-                    model_options = transforms.bmds3_d_model_options(
-                        prior_class, options, dataset_options
-                    )
-                elif dataset_type in bmds.constants.CONTINUOUS_DTYPES:
-                    model_options = transforms.bmds3_c_model_options(
-                        prior_class, options, dataset_options
-                    )
-                else:
-                    raise ValueError(f"Unknown dataset_type: {dataset_type}")
-
-                if model_name in bmds.constants.VARIABLE_POLYNOMIAL:
-                    if prior_class == transforms.PriorEnum.bayesian:
-                        model_options.degree = 2
-                        session.add_model(model_name, settings=model_options)
-                    else:
-                        max_degree = (
-                            model_options.degree + 1
-                            if model_options.degree > 0
-                            else dataset.num_dose_groups
-                        )
-                        degrees = list(range(1, max(min(max_degree, 5), 2)))
-                        for degree in degrees:
-                            model_options = model_options.copy()
-                            model_options.degree = degree
-                            session.add_model(model_name, settings=model_options)
-                elif model_name == bmds.constants.M_Exponential:
-                    session.add_model(bmds.constants.M_ExponentialM3, settings=model_options)
-                    session.add_model(bmds.constants.M_ExponentialM5, settings=model_options)
-                else:
-                    session.add_model(model_name, settings=model_options)
-
-        return session
-
-    def get_session(self, index: int) -> BmdsSession:
+    def get_session(self, index: int) -> executor.AnalysisSession:
         if not self.is_finished or self.has_errors:
             raise ValueError("Session cannot be returned")
-        return BmdsSession.from_serialized(self.outputs["outputs"][index])
+        return executor.AnalysisSession.deserialize(self.outputs["outputs"][index])
 
-    def get_sessions(self) -> List[BmdsSession]:
+    def get_sessions(self) -> List[executor.AnalysisSession]:
         if not self.is_finished or self.has_errors:
             raise ValueError("Session cannot be returned")
-        return [BmdsSession.from_serialized(output) for output in self.outputs["outputs"]]
+        return [executor.AnalysisSession.deserialize(output) for output in self.outputs["outputs"]]
+
+    def to_batch(self) -> BmdsSessionBatch:
+        # convert List[executor.AnalysisSession] to List[bmds.BmdsSession]
+        items = []
+        for session in self.get_sessions():
+            if session.frequentist:
+                items.append(session.frequentist)
+            if session.bayesian:
+                items.append(session.bayesian)
+        return BmdsSessionBatch(sessions=items)
 
     def to_word(self) -> BytesIO:
         f = BytesIO()
@@ -195,7 +140,7 @@ class Analysis(models.Model):
         elif self.has_errors:
             report.document.add_paragraph("Execution generated errors; no report can be generated")
         else:
-            batch = BmdsSessionBatch(sessions=self.get_sessions())
+            batch = self.to_batch()
             batch.to_docx(report=report)
 
         report.document.save(f)
@@ -209,7 +154,7 @@ class Analysis(models.Model):
                 name="Status",
             ).to_frame()
 
-        batch = BmdsSessionBatch(sessions=self.get_sessions())
+        batch = self.to_batch()
         df = batch.to_df()
 
         return df
@@ -232,10 +177,8 @@ class Analysis(models.Model):
                 and output["metadata"]["option_index"] == selection.option_index
             ):
                 session = self.get_session(idx)
-                session.selected = selection.selected.deserialize(session)
-                self.outputs["outputs"][idx] = self.session_to_output(
-                    session, selection.dataset_index, selection.option_index
-                )
+                session.frequentist.selected = selection.selected.deserialize(session)
+                self.outputs["outputs"][idx] = session.to_dict()
                 self.save()
                 break
 
@@ -246,26 +189,9 @@ class Analysis(models.Model):
             err = traceback.format_exc()
             self.handle_execution_error(err)
 
-    def run_session(self, inputs: Dict, dataset_index: int, option_index: int) -> Dict:
-
-        # build session
-        session = self.build_session(inputs, dataset_index, option_index)
-
-        # execute
-        session.execute()
-        if session.recommendation_enabled:
-            session.recommend()
-
-        return self.session_to_output(session, dataset_index, option_index)
-
-    def session_to_output(self, session, dataset_index: int, option_index: int) -> Dict:
-        output = session.to_dict()
-        output["metadata"] = dict(dataset_index=dataset_index, option_index=option_index)
-        return output
-
     def try_run_session(self, inputs: Dict, dataset_index: int, option_index: int) -> Dict:
         try:
-            return self.run_session(inputs, dataset_index, option_index)
+            return executor.AnalysisSession.run(inputs, dataset_index, option_index)
         except Exception:
             exception = dict(dataset_index=dataset_index, error=traceback.format_exc())
             logger.error(exception)
@@ -298,6 +224,7 @@ class Analysis(models.Model):
 
         obj = dict(
             analysis_id=str(self.id),
+            analysis_schema_version="1.0",
             bmds_server_version=settings.COMMIT.sha,
             bmds_python_version=bmds.__version__,
             outputs=outputs,
@@ -326,8 +253,8 @@ class Analysis(models.Model):
 
     def default_input(self) -> Dict:
         return {
-            "bmds_version": "BMDS330",
-            "dataset_type": "D",
+            "bmds_version": bmds.constants.BMDS330,
+            "dataset_type": Dtype.DICHOTOMOUS,
             "datasets": [],
             "models": {},
             "dataset_options": [],

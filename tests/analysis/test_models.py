@@ -25,7 +25,7 @@ class TestBmds3Execution:
         assert analysis.outputs["outputs"][0]["metadata"]["dataset_index"] == 0
         assert analysis.outputs["outputs"][0]["metadata"]["option_index"] == 0
         assert len(analysis.outputs["outputs"]) == 1
-        assert len(analysis.outputs["outputs"][0]["models"]) == 1
+        assert len(analysis.outputs["outputs"][0]["frequentist"]["models"]) == 1
         assert analysis.errors == []
 
     def test_bmds3_execution_d(self, bmds3_complete_dichotomous):
@@ -41,5 +41,5 @@ class TestBmds3Execution:
         assert analysis.outputs["outputs"][0]["metadata"]["dataset_index"] == 0
         assert analysis.outputs["outputs"][0]["metadata"]["option_index"] == 0
         assert len(analysis.outputs["outputs"]) == 1
-        assert len(analysis.outputs["outputs"][0]["models"]) == 1
+        assert len(analysis.outputs["outputs"][0]["frequentist"]["models"]) == 1
         assert analysis.errors == []

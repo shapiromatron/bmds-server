@@ -24,8 +24,7 @@ import * as dc from "../../constants/dataConstants";
 class ModelDetailModal extends Component {
     render() {
         const {outputStore} = this.props,
-            output = outputStore.selectedOutput,
-            dataset = output.dataset,
+            dataset = outputStore.selectedDataset,
             model = outputStore.modalModel,
             dtype = dataset.dtype;
 

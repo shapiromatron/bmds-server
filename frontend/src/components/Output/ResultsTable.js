@@ -13,7 +13,7 @@ const getRecommenderText = function(output, index) {
         return null;
     }
     return (
-        <ul className="list-unstyled mb-0">
+        <ul className="list-unstyled text-muted mb-0">
             {items.map((d, idx) => (
                 <li key={idx}>{d}</li>
             ))}
@@ -79,8 +79,8 @@ class FrequentistResultTable extends Component {
                         <td>{ff(data.model.results.bmdu)}</td>
                         <td>{ff(getPValue(dataset.dtype, data.model.results))}</td>
                         <td>{ff(data.model.results.fit.aic)}</td>
-                        <td>{ff(-999)}</td>
-                        <td>{ff(-999)}</td>
+                        <td>{ff(data.model.results.gof.roi)}</td>
+                        <td>{ff(data.model.results.gof.residual[0])}</td>
                         {store.recommendationEnabled ? (
                             <td>
                                 <u>{getModelBinLabel(selectedFrequentist, data.index)}</u>
@@ -130,7 +130,7 @@ class FrequentistResultTable extends Component {
                             <tr>
                                 <td colSpan={numCols}>
                                     <b>
-                                        <u>Restricted Models</u>
+                                        <u>Unrestricted Models</u>
                                     </b>
                                 </td>
                             </tr>
@@ -209,8 +209,8 @@ class BayesianResultTable extends Component {
                                 <td>{ff(model.results.bmd)}</td>
                                 <td>{ff(model.results.bmdu)}</td>
                                 <td>{ff(getPValue(dataset.dtype, model.results))}</td>
-                                <td>{ff(-999)}</td>
-                                <td>{ff(-999)}</td>
+                                <td>{ff(model.results.gof.roi)}</td>
+                                <td>{ff(model.results.gof.residual[0])}</td>
                             </tr>
                         );
                     })}

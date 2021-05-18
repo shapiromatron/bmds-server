@@ -225,6 +225,7 @@ class Analysis(models.Model):
 
         obj = dict(
             analysis_id=str(self.id),
+            analysis_schema_version="1.0",
             bmds_server_version=settings.COMMIT.sha,
             bmds_python_version=bmds.__version__,
             outputs=outputs,

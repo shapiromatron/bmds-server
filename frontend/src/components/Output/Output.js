@@ -5,7 +5,6 @@ import ModelDetailModal from "./ModelDetailModal";
 import {FrequentistResultTable, BayesianResultTable} from "./ResultsTable";
 import DatasetTable from "../Data/DatasetTable";
 import OutputSelector from "./OutputSelector";
-import DoseResponsePlot from "../common/DoseResponsePlot";
 import SelectModel from "./SelectModel";
 import "./Output.css";
 
@@ -44,10 +43,17 @@ class Output extends Component {
                                 <DatasetTable dataset={outputStore.selectedDataset} />
                             </div>
                             <div className="col-lg-6">
-                                {/* <DoseResponsePlot
+                                {/*
+
+                                TODO - restore!
+                                import DoseResponsePlot from "../common/DoseResponsePlot";
+
+                                <DoseResponsePlot
                                     layout={outputStore.drPlotLayout}
                                     data={outputStore.drPlotData}
-                                /> */}
+                                />
+
+                                */}
                             </div>
                         </div>
                         <div className="row">

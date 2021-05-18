@@ -2,7 +2,7 @@ import React, {Component} from "react";
 import {inject, observer} from "mobx-react";
 import PropTypes from "prop-types";
 import ModelDetailModal from "./ModelDetailModal";
-import ResultsTable from "./ResultsTable";
+import {FrequentistResultTable, BayesianResultTable} from "./ResultsTable";
 import DatasetTable from "../Data/DatasetTable";
 import OutputSelector from "./OutputSelector";
 import DoseResponsePlot from "../common/DoseResponsePlot";
@@ -14,7 +14,7 @@ import "./Output.css";
 class Output extends Component {
     render() {
         const {outputStore} = this.props,
-            {canEdit, selectedOutput} = outputStore;
+            {canEdit, selectedOutput, selectedFrequentist, selectedBayesian} = outputStore;
 
         if (selectedOutput === null) {
             return (
@@ -51,10 +51,19 @@ class Output extends Component {
                             </div>
                         </div>
                         <div className="row">
-                            <div className="col-lg-12">
-                                <ResultsTable />
-                                {canEdit ? <SelectModel /> : null}
-                            </div>
+                            {selectedFrequentist ? (
+                                <div className="col-lg-12">
+                                    <h4>Frequentist Model Results</h4>
+                                    <FrequentistResultTable />
+                                    {canEdit ? <SelectModel /> : null}
+                                </div>
+                            ) : null}
+                            {selectedBayesian ? (
+                                <div className="col-lg-12">
+                                    <h4>Bayesian Model Results</h4>
+                                    <BayesianResultTable />
+                                </div>
+                            ) : null}
                         </div>
                     </div>
                 </div>

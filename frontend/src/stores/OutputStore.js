@@ -39,13 +39,30 @@ class OutputStore {
         }
         return outputs[this.selectedOutputIndex];
     }
+    @computed get selectedFrequentist() {
+        const output = this.selectedOutput;
+        if (output && output.frequentist) {
+            return output.frequentist;
+        }
+        return null;
+    }
+    @computed get selectedBayesian() {
+        const output = this.selectedOutput;
+        if (output && output.bayesian) {
+            return output.bayesian;
+        }
+        return null;
+    }
     @computed get selectedDataset() {
         const dataset_index = this.selectedOutput.metadata.dataset_index;
         return this.rootStore.dataStore.datasets[dataset_index];
     }
 
     @computed get recommendationEnabled() {
-        return this.selectedOutput.frequentist.recommender.settings.enabled;
+        return (
+            this.selectedOutput.frequentist &&
+            this.selectedOutput.frequentist.recommender.settings.enabled
+        );
     }
 
     @computed get getPValue() {

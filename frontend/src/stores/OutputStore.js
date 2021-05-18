@@ -2,6 +2,7 @@ import {observable, action, computed, toJS} from "mobx";
 import _ from "lodash";
 import {getHeaders} from "../common";
 
+import {modelClasses} from "../constants/outputConstants";
 import {getDrLayout, getDrDatasetPlotData, getDrBmdLine} from "../constants/plotting";
 
 class OutputStore {
@@ -95,7 +96,18 @@ class OutputStore {
     }
 
     // start modal methods
-    @action.bound showModalDetail(model) {
+    getModel(modelClass, index) {
+        if (modelClass === modelClasses.frequentist) {
+            return this.selectedFrequentist.models[index];
+        } else if (modelClass === modelClasses.bayesian) {
+            return this.selectedBayesian.models[index];
+        } else {
+            throw `Unknown modelClass: ${modelClass}`;
+        }
+    }
+
+    @action.bound showModalDetail(modelClass, index) {
+        const model = this.getModel(modelClass, index);
         this.modalModel = model;
         if (!this.drModelSelected || this.drModelSelected.name !== model.name) {
             this.drModelModal = getDrBmdLine(model, "#0000FF");

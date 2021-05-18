@@ -13,4 +13,8 @@ export const getPValue = function(dataType, results) {
         frequentist_restricted: 1,
         bayesian: 2,
         custom: 3,
+    },
+    modelClasses = {
+        frequentist: 0,
+        bayesian: 1,
     };

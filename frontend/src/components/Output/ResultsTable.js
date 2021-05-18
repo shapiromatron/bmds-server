@@ -3,7 +3,7 @@ import {inject, observer} from "mobx-react";
 import React, {Component} from "react";
 import PropTypes from "prop-types";
 
-import {getPValue, priorClass} from "../../constants/outputConstants";
+import {getPValue, modelClasses, priorClass} from "../../constants/outputConstants";
 import {getModelBinLabel, getModelBinText} from "../../constants/logicConstants";
 import {ff} from "../../common";
 
@@ -35,39 +35,57 @@ class FrequentistResultTable extends Component {
 
         const {models} = selectedFrequentist,
             {model_index, notes} = selectedFrequentist.selected,
+            restrictedModels = _.chain(models)
+                .map((model, index) => {
+                    if (model.settings.priors.prior_class === priorClass.frequentist_restricted) {
+                        return {model, index};
+                    }
+                    return null;
+                })
+                .compact()
+                .value(),
+            unrestrictedModels = _.chain(models)
+                .map((model, index) => {
+                    if (model.settings.priors.prior_class === priorClass.frequentist_unrestricted) {
+                        return {model, index};
+                    }
+                    return null;
+                })
+                .compact()
+                .value(),
             numCols = store.recommendationEnabled ? 9 : 8,
             colWidths = store.recommendationEnabled
-                ? [12, 10, 10, 10, 10, 10, 10, 10, 18]
-                : [14, 10, 10, 10, 10, 10, 13, 13],
-            renderRow = (model, idx) => {
+                ? [12, 8, 8, 8, 8, 8, 10, 10, 28]
+                : [20, 10, 10, 10, 10, 10, 15, 15],
+            renderRow = data => {
                 return (
                     <tr
-                        key={idx}
-                        onMouseEnter={() => store.drPlotAddHover(model)}
+                        key={data.index}
+                        onMouseEnter={() => store.drPlotAddHover(data.model)}
                         onMouseLeave={() => store.drPlotRemoveHover()}
-                        className={model_index == idx ? "table-success" : ""}>
+                        className={model_index == data.index ? "table-success" : ""}>
                         <td>
                             <a
                                 href="#"
                                 onClick={e => {
                                     e.preventDefault();
-                                    store.showModalDetail(model);
+                                    store.showModalDetail(modelClasses.frequentist, data.index);
                                 }}>
-                                {model.name}
+                                {data.model.name}
                             </a>
                         </td>
-                        <td>{ff(model.results.bmdl)}</td>
-                        <td>{ff(model.results.bmd)}</td>
-                        <td>{ff(model.results.bmdu)}</td>
-                        <td>{ff(getPValue(dataset.dtype, model.results))}</td>
-                        <td>{ff(model.results.fit.aic)}</td>
+                        <td>{ff(data.model.results.bmdl)}</td>
+                        <td>{ff(data.model.results.bmd)}</td>
+                        <td>{ff(data.model.results.bmdu)}</td>
+                        <td>{ff(getPValue(dataset.dtype, data.model.results))}</td>
+                        <td>{ff(data.model.results.fit.aic)}</td>
                         <td>{ff(-999)}</td>
                         <td>{ff(-999)}</td>
                         {store.recommendationEnabled ? (
                             <td>
-                                <u>{getModelBinLabel(selectedFrequentist, idx)}</u>
+                                <u>{getModelBinLabel(selectedFrequentist, data.index)}</u>
                                 <br />
-                                {getRecommenderText(selectedFrequentist, idx)}
+                                {getRecommenderText(selectedFrequentist, data.index)}
                             </td>
                         ) : null}
                     </tr>
@@ -95,34 +113,30 @@ class FrequentistResultTable extends Component {
                     </tr>
                 </thead>
                 <tbody className="table-bordered">
-                    <tr>
-                        <td colSpan={numCols}>
-                            <b>
-                                <u>Restricted Models</u>
-                            </b>
-                        </td>
-                    </tr>
-                    {models.map((model, idx) => {
-                        const {prior_class} = model.settings.priors;
-                        if (prior_class != priorClass.frequentist_restricted) {
-                            return null;
-                        }
-                        return renderRow(model, idx);
-                    })}
-                    <tr>
-                        <td colSpan={numCols}>
-                            <b>
-                                <u>Unrestricted Models</u>
-                            </b>
-                        </td>
-                    </tr>
-                    {models.map((model, idx) => {
-                        const {prior_class} = model.settings.priors;
-                        if (prior_class != priorClass.frequentist_unrestricted) {
-                            return null;
-                        }
-                        return renderRow(model, idx);
-                    })}
+                    {restrictedModels.length > 0 ? (
+                        <>
+                            <tr>
+                                <td colSpan={numCols}>
+                                    <b>
+                                        <u>Restricted Models</u>
+                                    </b>
+                                </td>
+                            </tr>
+                            {restrictedModels.map(renderRow)}
+                        </>
+                    ) : null}
+                    {unrestrictedModels.length > 0 ? (
+                        <>
+                            <tr>
+                                <td colSpan={numCols}>
+                                    <b>
+                                        <u>Restricted Models</u>
+                                    </b>
+                                </td>
+                            </tr>
+                            {unrestrictedModels.map(renderRow)}
+                        </>
+                    ) : null}
                 </tbody>
                 {notes ? (
                     <tfoot>
@@ -176,15 +190,15 @@ class BayesianResultTable extends Component {
                     </tr>
                 </thead>
                 <tbody className="table-bordered">
-                    {selectedBayesian.models.map((model, idx) => {
+                    {selectedBayesian.models.map((model, index) => {
                         return (
-                            <tr key={idx}>
+                            <tr key={index}>
                                 <td>
                                     <a
                                         href="#"
                                         onClick={e => {
                                             e.preventDefault();
-                                            store.showModalDetail(model);
+                                            store.showModalDetail(modelClasses.bayesian, index);
                                         }}>
                                         {model.name}
                                     </a>

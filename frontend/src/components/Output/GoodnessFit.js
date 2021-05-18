@@ -11,7 +11,7 @@ class GoodnessFit extends Component {
         const {store} = this.props,
             gof = store.modalModel.results.gof,
             dataset = store.selectedDataset,
-            dtype = store.selectedOutput.dataset.dtype;
+            {dtype} = dataset;
         return (
             <table className="table table-bordered table-sm">
                 <thead className="table-primary">

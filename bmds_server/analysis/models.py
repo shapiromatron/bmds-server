@@ -9,7 +9,6 @@ import bmds
 import pandas as pd
 from bmds.bmds3.batch import BmdsSessionBatch
 from bmds.bmds3.recommender.recommender import RecommenderSettings
-from bmds.bmds3.sessions import BmdsSession
 from bmds.constants import Dtype
 from bmds.reporting.styling import Report
 from django.conf import settings

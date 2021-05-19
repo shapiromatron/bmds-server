@@ -2,6 +2,7 @@ import {observable, action, computed, toJS} from "mobx";
 import _ from "lodash";
 import {getHeaders} from "../common";
 
+import {modelClasses} from "../constants/outputConstants";
 import {getDrLayout, getDrDatasetPlotData, getDrBmdLine} from "../constants/plotting";
 
 class OutputStore {
@@ -39,13 +40,30 @@ class OutputStore {
         }
         return outputs[this.selectedOutputIndex];
     }
+    @computed get selectedFrequentist() {
+        const output = this.selectedOutput;
+        if (output && output.frequentist) {
+            return output.frequentist;
+        }
+        return null;
+    }
+    @computed get selectedBayesian() {
+        const output = this.selectedOutput;
+        if (output && output.bayesian) {
+            return output.bayesian;
+        }
+        return null;
+    }
     @computed get selectedDataset() {
         const dataset_index = this.selectedOutput.metadata.dataset_index;
         return this.rootStore.dataStore.datasets[dataset_index];
     }
 
     @computed get recommendationEnabled() {
-        return this.selectedOutput.recommender.settings.enabled;
+        return (
+            this.selectedOutput.frequentist &&
+            this.selectedOutput.frequentist.recommender.settings.enabled
+        );
     }
 
     @computed get getPValue() {
@@ -70,7 +88,7 @@ class OutputStore {
 
     @computed get drModelSelected() {
         const output = this.selectedOutput;
-        if (output && _.isNumber(output.selected.model_index)) {
+        if (output && output.frequentist && _.isNumber(output.frequentist.selected.model_index)) {
             const model = output.models[output.selected.model_index];
             return getDrBmdLine(model, "#4a9f2f");
         }
@@ -78,7 +96,18 @@ class OutputStore {
     }
 
     // start modal methods
-    @action.bound showModalDetail(model) {
+    getModel(modelClass, index) {
+        if (modelClass === modelClasses.frequentist) {
+            return this.selectedFrequentist.models[index];
+        } else if (modelClass === modelClasses.bayesian) {
+            return this.selectedBayesian.models[index];
+        } else {
+            throw `Unknown modelClass: ${modelClass}`;
+        }
+    }
+
+    @action.bound showModalDetail(modelClass, index) {
+        const model = this.getModel(modelClass, index);
         this.modalModel = model;
         if (!this.drModelSelected || this.drModelSelected.name !== model.name) {
             this.drModelModal = getDrBmdLine(model, "#0000FF");
@@ -137,10 +166,10 @@ class OutputStore {
 
     // start model selection methods
     @action.bound saveSelectedModelIndex(idx) {
-        this.selectedOutput.selected.model_index = idx === -1 ? null : idx;
+        this.selectedOutput.frequentist.selected.model_index = idx === -1 ? null : idx;
     }
     @action.bound saveSelectedIndexNotes(value) {
-        this.selectedOutput.selected.notes = value.length > 0 ? value : null;
+        this.selectedOutput.frequentist.selected.notes = value.length > 0 ? value : null;
     }
     @action.bound saveSelectedModel() {
         const output = this.selectedOutput,
@@ -151,8 +180,8 @@ class OutputStore {
                     dataset_index: output.metadata.dataset_index,
                     option_index: output.metadata.option_index,
                     selected: {
-                        model_index: output.selected.model_index,
-                        notes: output.selected.notes,
+                        model_index: output.frequentist.selected.model_index,
+                        notes: output.frequentist.selected.notes,
                     },
                 },
             }),

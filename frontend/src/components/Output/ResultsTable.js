@@ -3,7 +3,7 @@ import {inject, observer} from "mobx-react";
 import React, {Component} from "react";
 import PropTypes from "prop-types";
 
-import {getPValue, modelClasses, priorClass} from "../../constants/outputConstants";
+import {maIndex, getPValue, modelClasses, priorClass} from "../../constants/outputConstants";
 import {getModelBinLabel, getModelBinText} from "../../constants/logicConstants";
 import {ff} from "../../common";
 
@@ -221,6 +221,7 @@ class BayesianResultTable extends Component {
                                     href="#"
                                     onClick={e => {
                                         e.preventDefault();
+                                        store.showModalDetail(modelClasses.bayesian, maIndex);
                                     }}>
                                     Model Average
                                 </a>

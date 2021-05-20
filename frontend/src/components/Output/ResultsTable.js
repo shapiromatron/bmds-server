@@ -160,14 +160,14 @@ FrequentistResultTable.propTypes = {
 class BayesianResultTable extends Component {
     render() {
         const store = this.props.outputStore,
-            dataset = store.selectedDataset,
             {selectedBayesian} = store;
 
         if (!selectedBayesian) {
             return null;
         }
 
-        const colWidths = [14, 10, 10, 10, 10, 10, 10, 13, 13];
+        const colWidths = [14, 10, 10, 10, 10, 10, 10, 13, 13],
+            ma = selectedBayesian.model_average;
 
         return (
             <table className="table table-sm">
@@ -203,17 +203,38 @@ class BayesianResultTable extends Component {
                                         {model.name}
                                     </a>
                                 </td>
-                                <td>{ff(-999)}</td>
-                                <td>{ff(-999)}</td>
+                                <td>{ma ? ff(ma.results.priors[index]) : "-"}</td>
+                                <td>{ma ? ff(ma.results.posteriors[index]) : "-"}</td>
                                 <td>{ff(model.results.bmdl)}</td>
                                 <td>{ff(model.results.bmd)}</td>
                                 <td>{ff(model.results.bmdu)}</td>
-                                <td>{ff(getPValue(dataset.dtype, model.results))}</td>
+                                <td>-</td>
                                 <td>{ff(model.results.gof.roi)}</td>
                                 <td>{ff(model.results.gof.residual[0])}</td>
                             </tr>
                         );
                     })}
+                    {ma ? (
+                        <tr className="table-warning">
+                            <td>
+                                <a
+                                    href="#"
+                                    onClick={e => {
+                                        e.preventDefault();
+                                    }}>
+                                    Model Average
+                                </a>
+                            </td>
+                            <td>-</td>
+                            <td>-</td>
+                            <td>{ff(ma.results.bmdl)}</td>
+                            <td>{ff(ma.results.bmd)}</td>
+                            <td>{ff(ma.results.bmdu)}</td>
+                            <td>-</td>
+                            <td>-</td>
+                            <td>-</td>
+                        </tr>
+                    ) : null}
                 </tbody>
             </table>
         );

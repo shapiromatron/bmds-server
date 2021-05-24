@@ -89,7 +89,7 @@ class OutputStore {
     @computed get drModelSelected() {
         const output = this.selectedOutput;
         if (output && output.frequentist && _.isNumber(output.frequentist.selected.model_index)) {
-            const model = output.models[output.selected.model_index];
+            const model = output.frequentist.models[output.frequentist.selected.model_index];
             return getDrBmdLine(model, "#4a9f2f");
         }
         return null;
@@ -143,6 +143,36 @@ class OutputStore {
         }
         return data;
     }
+    @computed get drBayesianPlotData() {
+        const output = this.selectedOutput;
+        const data = [getDrDatasetPlotData(this.selectedDataset)];
+        output.bayesian.models.map(model => {
+            let data2 = {
+                x: model.results.plotting.dr_x,
+                y: model.results.plotting.dr_y,
+                name: model.name,
+                line: {
+                    width: 1,
+                    color: "#add8e6",
+                },
+            };
+            data.push(data2);
+        });
+
+        let bma = output.bayesian.models[0];
+        let bma_data = {
+            x: bma.results.plotting.dr_x,
+            y: bma.results.plotting.dr_y,
+            name: "BMA",
+            line: {
+                width: 4,
+                color: "#00008b",
+            },
+        };
+        data.push(bma_data);
+        return data;
+    }
+
     @computed get drPlotModalData() {
         const data = [getDrDatasetPlotData(this.selectedDataset)];
         if (this.drModelModal) {

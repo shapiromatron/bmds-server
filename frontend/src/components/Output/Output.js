@@ -6,6 +6,7 @@ import {FrequentistResultTable, BayesianResultTable} from "./ResultsTable";
 import DatasetTable from "../Data/DatasetTable";
 import OutputSelector from "./OutputSelector";
 import SelectModel from "./SelectModel";
+import DoseResponsePlot from "../common/DoseResponsePlot";
 import "./Output.css";
 
 @inject("outputStore")
@@ -43,33 +44,45 @@ class Output extends Component {
                                 <DatasetTable dataset={outputStore.selectedDataset} />
                             </div>
                             <div className="col-lg-6">
-                                {/*
+                                {/* TODO - restore!
+                                import DoseResponsePlot from "../common/DoseResponsePlot"; */}
 
-                                TODO - restore!
-                                import DoseResponsePlot from "../common/DoseResponsePlot";
-
-                                <DoseResponsePlot
+                                {/* <DoseResponsePlot
                                     layout={outputStore.drPlotLayout}
                                     data={outputStore.drPlotData}
-                                />
-
-                                */}
+                                /> */}
                             </div>
                         </div>
                         <div className="row">
                             {selectedFrequentist ? (
-                                <div className="col-lg-12">
-                                    <h4>Frequentist Model Results</h4>
-                                    <FrequentistResultTable />
-                                    {canEdit ? <SelectModel /> : null}
-                                </div>
+                                <>
+                                    <div className="col-lg-8">
+                                        <h4>Frequentist Model Results</h4>
+                                        <FrequentistResultTable />
+                                        {canEdit ? <SelectModel /> : null}
+                                    </div>
+                                    <div className="col-lg-4">
+                                        <DoseResponsePlot
+                                            layout={outputStore.drPlotLayout}
+                                            data={outputStore.drPlotData}
+                                        />
+                                    </div>
+                                </>
                             ) : null}
+                        </div>
+                        <div>
                             {selectedBayesian ? (
                                 <div className="col-lg-12">
                                     <h4>Bayesian Model Results</h4>
                                     <BayesianResultTable />
                                 </div>
                             ) : null}
+                        </div>
+                        <div className="row">
+                            <DoseResponsePlot
+                                layout={outputStore.drPlotLayout}
+                                data={outputStore.drBayesianPlotData}
+                            />
                         </div>
                     </div>
                 </div>

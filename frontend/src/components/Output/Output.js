@@ -44,46 +44,37 @@ class Output extends Component {
                                 <DatasetTable dataset={outputStore.selectedDataset} />
                             </div>
                             <div className="col-lg-6">
-                                {/* TODO - restore!
-                                import DoseResponsePlot from "../common/DoseResponsePlot"; */}
-
-                                {/* <DoseResponsePlot
-                                    layout={outputStore.drPlotLayout}
-                                    data={outputStore.drPlotData}
-                                /> */}
+                                {selectedFrequentist ? (
+                                    <DoseResponsePlot
+                                        layout={outputStore.drPlotLayout}
+                                        data={outputStore.drPlotData}
+                                    />
+                                ) : null}
                             </div>
                         </div>
                         <div className="row">
                             {selectedFrequentist ? (
-                                <>
-                                    <div className="col-lg-8">
-                                        <h4>Frequentist Model Results</h4>
-                                        <FrequentistResultTable />
-                                        {canEdit ? <SelectModel /> : null}
-                                    </div>
-                                    <div className="col-lg-4">
-                                        <DoseResponsePlot
-                                            layout={outputStore.drPlotLayout}
-                                            data={outputStore.drPlotData}
-                                        />
-                                    </div>
-                                </>
+                                <div className="col-lg-12">
+                                    <h4>Frequentist Model Results</h4>
+                                    <FrequentistResultTable />
+                                    {canEdit ? <SelectModel /> : null}
+                                </div>
                             ) : null}
                         </div>
-                        <div>
-                            {selectedBayesian ? (
+                        {selectedBayesian ? (
+                            <div className="row">
                                 <div className="col-lg-12">
                                     <h4>Bayesian Model Results</h4>
                                     <BayesianResultTable />
                                 </div>
-                            ) : null}
-                        </div>
-                        <div className="row">
-                            <DoseResponsePlot
-                                layout={outputStore.drPlotLayout}
-                                data={outputStore.drBayesianPlotData}
-                            />
-                        </div>
+                                <div className="col-lg-12">
+                                    <DoseResponsePlot
+                                        layout={outputStore.drPlotLayout}
+                                        data={outputStore.drBayesianPlotData}
+                                    />
+                                </div>
+                            </div>
+                        ) : null}
                     </div>
                 </div>
                 <div>{outputStore.showModelModal ? <ModelDetailModal /> : null}</div>

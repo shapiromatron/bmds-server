@@ -16,4 +16,5 @@ export const getPValue = function(dataType, results) {
     modelClasses = {
         frequentist: 0,
         bayesian: 1,
-    };
+    },
+    maIndex = 999;

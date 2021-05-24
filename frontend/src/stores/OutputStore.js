@@ -2,7 +2,7 @@ import {observable, action, computed, toJS} from "mobx";
 import _ from "lodash";
 import {getHeaders} from "../common";
 
-import {modelClasses} from "../constants/outputConstants";
+import {modelClasses, maIndex} from "../constants/outputConstants";
 import {getDrLayout, getDrDatasetPlotData, getDrBmdLine} from "../constants/plotting";
 
 class OutputStore {
@@ -19,6 +19,8 @@ class OutputStore {
     @observable selectedOutputIndex = 0;
     @observable drModelHover = null;
     @observable drModelModal = null;
+    @observable drModelModalIsMA = false;
+    @observable drModelAverageModal = false;
 
     @observable showBMDLine = false;
 
@@ -100,6 +102,9 @@ class OutputStore {
         if (modelClass === modelClasses.frequentist) {
             return this.selectedFrequentist.models[index];
         } else if (modelClass === modelClasses.bayesian) {
+            if (index === maIndex) {
+                return this.selectedBayesian.model_average;
+            }
             return this.selectedBayesian.models[index];
         } else {
             throw `Unknown modelClass: ${modelClass}`;
@@ -109,7 +114,11 @@ class OutputStore {
     @action.bound showModalDetail(modelClass, index) {
         const model = this.getModel(modelClass, index);
         this.modalModel = model;
-        if (!this.drModelSelected || this.drModelSelected.name !== model.name) {
+        this.drModelModalIsMA = index === maIndex;
+        if (
+            !this.drModelModalIsMA &&
+            (!this.drModelSelected || this.drModelSelected.name !== model.name)
+        ) {
             this.drModelModal = getDrBmdLine(model, "#0000FF");
         }
         this.showModelModal = true;

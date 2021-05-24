@@ -161,24 +161,25 @@ class OutputStore {
                 y: model.results.plotting.dr_y,
                 name: model.name,
                 line: {
-                    width: 1,
-                    color: "#add8e6",
+                    width: 2,
+                    color: "#FF6352",
                 },
             };
             data.push(data2);
         });
 
-        let bma = output.bayesian.models[0];
-        let bma_data = {
-            x: bma.results.plotting.dr_x,
-            y: bma.results.plotting.dr_y,
-            name: "BMA",
-            line: {
-                width: 4,
-                color: "#00008b",
-            },
-        };
-        data.push(bma_data);
+        if (this.selectedBayesian && this.selectedBayesian.model_average) {
+            const bma = this.selectedBayesian.model_average;
+            data.push({
+                x: bma.results.dr_x,
+                y: bma.results.dr_y,
+                name: "BMA",
+                line: {
+                    width: 4,
+                    color: "#00008b",
+                },
+            });
+        }
         return data;
     }
 

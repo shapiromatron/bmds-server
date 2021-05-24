@@ -19,18 +19,122 @@ import ContinuousDeviance from "./ContinuousDeviance";
 
 import * as dc from "../../constants/dataConstants";
 
-@inject("outputStore")
 @observer
-class ModelDetailModal extends Component {
+class IndividualModelBody extends Component {
     render() {
         const {outputStore} = this.props,
             dataset = outputStore.selectedDataset,
             model = outputStore.modalModel,
             dtype = dataset.dtype;
 
+        return (
+            <Modal.Body>
+                <Row>
+                    <Col xs={4}>
+                        <InfoTable />
+                    </Col>
+                    <Col xs={4}>
+                        <ModelOptionsTable dtype={dtype} model={model} />
+                    </Col>
+                    <Col xs={4}>
+                        <ModelData dtype={dtype} dataset={dataset} />
+                    </Col>
+                </Row>
+                <Row>
+                    <Col xs={4}>
+                        {dtype == dc.Dtype.DICHOTOMOUS ? (
+                            <DichotomousSummary store={outputStore} />
+                        ) : null}
+                        {dtype == dc.Dtype.CONTINUOUS ? (
+                            <ContinuousSummary store={outputStore} />
+                        ) : null}
+                        <ModelParameters store={outputStore} />
+                    </Col>
+                    <Col xs={8}>
+                        <DoseResponsePlot
+                            layout={outputStore.drPlotLayout}
+                            data={outputStore.drPlotModalData}
+                        />
+                    </Col>
+                </Row>
+                <Row>
+                    <Col xs={12}>
+                        <GoodnessFit store={outputStore} />
+                    </Col>
+                </Row>
+                {dtype == dc.Dtype.DICHOTOMOUS ? (
+                    <Row>
+                        <Col xs={12}>
+                            <DichotomousDeviance store={outputStore} />
+                        </Col>
+                    </Row>
+                ) : null}
+                {dtype == dc.Dtype.CONTINUOUS ? (
+                    <Row>
+                        <Col xs={12}>
+                            <ContinuousDeviance store={outputStore} />
+                            <CSTestofInterest store={outputStore} />
+                        </Col>
+                    </Row>
+                ) : null}
+                <Row>
+                    <Col xs={4} style={{maxHeight: "50vh", overflowY: "scroll"}}>
+                        <CDFTable bmd_dist={model.results.fit.bmd_dist} />
+                    </Col>
+                    <Col xs={8}>
+                        <CDFPlot dataset={dataset} cdf={model.results.fit.bmd_dist} />
+                    </Col>
+                </Row>
+            </Modal.Body>
+        );
+    }
+}
+IndividualModelBody.propTypes = {
+    outputStore: PropTypes.object,
+};
+
+@observer
+class ModelAverageBody extends Component {
+    render() {
+        const {outputStore} = this.props,
+            dataset = outputStore.selectedDataset,
+            model = outputStore.modalModel;
+
+        return (
+            <Modal.Body>
+                <pre style={{maxHeight: "50vh", whiteSpace: "pre-wrap"}}>
+                    {JSON.stringify(model, null, 2)}
+                </pre>
+                <Row>
+                    <Col xs={4} style={{maxHeight: "50vh", overflowY: "scroll"}}>
+                        <CDFTable bmd_dist={model.results.bmd_dist} />
+                    </Col>
+                    <Col xs={8}>
+                        <CDFPlot dataset={dataset} cdf={model.results.bmd_dist} />
+                    </Col>
+                </Row>
+            </Modal.Body>
+        );
+    }
+}
+ModelAverageBody.propTypes = {
+    outputStore: PropTypes.object,
+};
+
+@inject("outputStore")
+@observer
+class ModelDetailModal extends Component {
+    render() {
+        const {outputStore} = this.props,
+            model = outputStore.modalModel,
+            isMA = outputStore.drModelModalIsMA;
+
         if (!model) {
             return null;
         }
+
+        const name = isMA ? "Model Average" : model.name,
+            Body = isMA ? ModelAverageBody : IndividualModelBody;
 
         return (
             <Modal
@@ -40,7 +144,7 @@ class ModelDetailModal extends Component {
                 aria-labelledby="contained-modal-title-vcenter"
                 centered>
                 <Modal.Header>
-                    <Modal.Title id="contained-modal-title-vcenter">{model.name}</Modal.Title>
+                    <Modal.Title id="contained-modal-title-vcenter">{name}</Modal.Title>
                     <button
                         className="btn btn-danger"
                         style={{float: "right"}}
@@ -48,65 +152,7 @@ class ModelDetailModal extends Component {
                         <i className="fa fa-times" aria-hidden="true"></i>
                     </button>
                 </Modal.Header>
-
-                <Modal.Body>
-                    <Row>
-                        <Col xs={4}>
-                            <InfoTable />
-                        </Col>
-                        <Col xs={4}>
-                            <ModelOptionsTable dtype={dtype} model={model} />
-                        </Col>
-                        <Col xs={4}>
-                            <ModelData dtype={dtype} dataset={dataset} />
-                        </Col>
-                    </Row>
-                    <Row>
-                        <Col xs={4}>
-                            {dtype == dc.Dtype.DICHOTOMOUS ? (
-                                <DichotomousSummary store={outputStore} />
-                            ) : null}
-                            {dtype == dc.Dtype.CONTINUOUS ? (
-                                <ContinuousSummary store={outputStore} />
-                            ) : null}
-                            <ModelParameters store={outputStore} />
-                        </Col>
-                        <Col xs={8}>
-                            <DoseResponsePlot
-                                layout={outputStore.drPlotLayout}
-                                data={outputStore.drPlotModalData}
-                            />
-                        </Col>
-                    </Row>
-                    <Row>
-                        <Col xs={12}>
-                            <GoodnessFit store={outputStore} />
-                        </Col>
-                    </Row>
-                    {dtype == dc.Dtype.DICHOTOMOUS ? (
-                        <Row>
-                            <Col xs={12}>
-                                <DichotomousDeviance store={outputStore} />
-                            </Col>
-                        </Row>
-                    ) : null}
-                    {dtype == dc.Dtype.CONTINUOUS ? (
-                        <Row>
-                            <Col xs={12}>
-                                <ContinuousDeviance store={outputStore} />
-                                <CSTestofInterest store={outputStore} />
-                            </Col>
-                        </Row>
-                    ) : null}
-                    <Row>
-                        <Col xs={4} style={{maxHeight: "50vh", overflowY: "scroll"}}>
-                            <CDFTable bmd_dist={model.results.fit.bmd_dist} />
-                        </Col>
-                        <Col xs={8}>
-                            <CDFPlot dataset={dataset} cdf={model.results.fit.bmd_dist} />
-                        </Col>
-                    </Row>
-                </Modal.Body>
+                <Body outputStore={outputStore} />
             </Modal>
         );
     }

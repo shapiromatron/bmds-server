@@ -46,8 +46,8 @@ class Output extends Component {
                             <div className="col-lg-6">
                                 {selectedFrequentist ? (
                                     <DoseResponsePlot
-                                        layout={outputStore.drPlotLayout}
-                                        data={outputStore.drPlotData}
+                                        layout={outputStore.drFrequentistPlotLayout}
+                                        data={outputStore.drFrequentistPlotData}
                                     />
                                 ) : null}
                             </div>
@@ -69,7 +69,7 @@ class Output extends Component {
                                 </div>
                                 <div className="col-lg-12">
                                     <DoseResponsePlot
-                                        layout={outputStore.drPlotLayout}
+                                        layout={outputStore.drBayesianPlotLayout}
                                         data={outputStore.drBayesianPlotData}
                                     />
                                 </div>

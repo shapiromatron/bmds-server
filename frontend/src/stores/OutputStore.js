@@ -3,7 +3,13 @@ import _ from "lodash";
 import {getHeaders} from "../common";
 
 import {modelClasses, maIndex} from "../constants/outputConstants";
-import {getDrLayout, getDrDatasetPlotData, getDrBmdLine} from "../constants/plotting";
+import {
+    getDrLayout,
+    getDrDatasetPlotData,
+    getDrBmdLine,
+    colorCodes,
+    getBayesianBMDLine,
+} from "../constants/plotting";
 
 class OutputStore {
     /*
@@ -131,7 +137,7 @@ class OutputStore {
     // end modal methods
 
     // start dose-response plotting data methods
-    @computed get drPlotLayout() {
+    @computed get drFrequentistPlotLayout() {
         return getDrLayout(
             this.selectedDataset,
             this.drModelSelected,
@@ -139,7 +145,15 @@ class OutputStore {
             this.drModelHover
         );
     }
-    @computed get drPlotData() {
+    @computed get drBayesianPlotLayout() {
+        let layout = _.cloneDeep(this.drFrequentistPlotLayout);
+        const output = this.selectedOutput;
+        layout.annotations = _.flatten(
+            getBayesianBMDLine(output.bayesian.model_average).annotations
+        );
+        return layout;
+    }
+    @computed get drFrequentistPlotData() {
         const data = [getDrDatasetPlotData(this.selectedDataset)];
         if (this.drModelSelected) {
             data.push(this.drModelSelected);
@@ -153,34 +167,25 @@ class OutputStore {
         return data;
     }
     @computed get drBayesianPlotData() {
+        const bayesian_plot_data = [getDrDatasetPlotData(this.selectedDataset)];
         const output = this.selectedOutput;
-        const data = [getDrDatasetPlotData(this.selectedDataset)];
-        output.bayesian.models.map(model => {
-            let data2 = {
+        output.bayesian.models.map((model, index) => {
+            let bayesian_model = {
                 x: model.results.plotting.dr_x,
                 y: model.results.plotting.dr_y,
                 name: model.name,
                 line: {
-                    width: 2,
-                    color: "#FF6352",
+                    width: 1,
+                    color: colorCodes[index],
                 },
             };
-            data.push(data2);
+            bayesian_plot_data.push(bayesian_model);
         });
-
-        if (this.selectedBayesian && this.selectedBayesian.model_average) {
-            const bma = this.selectedBayesian.model_average;
-            data.push({
-                x: bma.results.dr_x,
-                y: bma.results.dr_y,
-                name: "BMA",
-                line: {
-                    width: 4,
-                    color: "#00008b",
-                },
-            });
+        if (output.bayesian.model_average) {
+            let bma_data = getBayesianBMDLine(output.bayesian.model_average);
+            bayesian_plot_data.push(bma_data);
         }
-        return data;
+        return bayesian_plot_data;
     }
 
     @computed get drPlotModalData() {

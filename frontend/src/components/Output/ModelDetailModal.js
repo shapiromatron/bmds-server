@@ -16,8 +16,8 @@ import DichotomousSummary from "./DichotomousSummary";
 import DichotomousDeviance from "./DichotomousDeviance";
 import ContinuousSummary from "./ContinuousSummary";
 import ContinuousDeviance from "./ContinuousDeviance";
-import BenchmarkDose from "./BenchmarkDose";
-import MA_IndividualModels from "./MA_IndividualModels";
+import MaBenchmarkDose from "./MaBenchmarkDose";
+import MaIndividualModels from "./MaIndividualModels";
 
 import * as dc from "../../constants/dataConstants";
 
@@ -106,7 +106,7 @@ class ModelAverageBody extends Component {
             <Modal.Body>
                 <Row>
                     <Col xs={3}>
-                        <BenchmarkDose model={model} />
+                        <MaBenchmarkDose results={model.results} />
                     </Col>
                     <Col>
                         <DoseResponsePlot
@@ -117,7 +117,7 @@ class ModelAverageBody extends Component {
                 </Row>
                 <Row>
                     <Col>
-                        <MA_IndividualModels model={model} bayesian_models={bayesian_models} />
+                        <MaIndividualModels model_average={model} models={bayesian_models} />
                     </Col>
                 </Row>
                 <Row>

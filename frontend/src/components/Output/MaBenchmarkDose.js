@@ -5,9 +5,9 @@ import PropTypes from "prop-types";
 import {ff} from "../../common";
 
 @observer
-class BenchmarkDose extends Component {
+class MaBenchmarkDose extends Component {
     render() {
-        const {model} = this.props;
+        const {results} = this.props;
         return (
             <table className="table table-bordered table-sm">
                 <thead>
@@ -17,24 +17,23 @@ class BenchmarkDose extends Component {
                 </thead>
                 <tbody>
                     <tr>
-                        <td>BMD</td>
-                        <td>{ff(model.results.bmd)}</td>
+                        <td>BMDL</td>
+                        <td>{ff(results.bmdl)}</td>
                     </tr>
                     <tr>
-                        <td>BMDL</td>
-                        <td>{ff(model.results.bmdl)}</td>
+                        <td>BMD</td>
+                        <td>{ff(results.bmd)}</td>
                     </tr>
                     <tr>
                         <td>BMDU</td>
-                        <td>{ff(model.results.bmdu)}</td>
+                        <td>{ff(results.bmdu)}</td>
                     </tr>
                 </tbody>
             </table>
         );
     }
 }
-BenchmarkDose.propTypes = {
-    store: PropTypes.object,
-    model: PropTypes.object,
+MaBenchmarkDose.propTypes = {
+    results: PropTypes.object.isRequired,
 };
-export default BenchmarkDose;
+export default MaBenchmarkDose;

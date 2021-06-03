@@ -16,6 +16,8 @@ import DichotomousSummary from "./DichotomousSummary";
 import DichotomousDeviance from "./DichotomousDeviance";
 import ContinuousSummary from "./ContinuousSummary";
 import ContinuousDeviance from "./ContinuousDeviance";
+import BenchmarkDose from "./BenchmarkDose";
+import MA_IndividualModels from "./MA_IndividualModels";
 
 import * as dc from "../../constants/dataConstants";
 
@@ -98,13 +100,26 @@ class ModelAverageBody extends Component {
     render() {
         const {outputStore} = this.props,
             dataset = outputStore.selectedDataset,
-            model = outputStore.modalModel;
-
+            model = outputStore.modalModel,
+            bayesian_models = outputStore.selectedOutput.bayesian.models;
         return (
             <Modal.Body>
-                <pre style={{maxHeight: "50vh", whiteSpace: "pre-wrap"}}>
-                    {JSON.stringify(model, null, 2)}
-                </pre>
+                <Row>
+                    <Col xs={3}>
+                        <BenchmarkDose model={model} />
+                    </Col>
+                    <Col>
+                        <DoseResponsePlot
+                            layout={outputStore.drBayesianPlotLayout}
+                            data={outputStore.drBayesianPlotData}
+                        />
+                    </Col>
+                </Row>
+                <Row>
+                    <Col>
+                        <MA_IndividualModels model={model} bayesian_models={bayesian_models} />
+                    </Col>
+                </Row>
                 <Row>
                     <Col xs={4} style={{maxHeight: "50vh", overflowY: "scroll"}}>
                         <CDFTable bmd_dist={model.results.bmd_dist} />

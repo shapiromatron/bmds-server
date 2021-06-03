@@ -22,6 +22,7 @@ class OutputStore {
 
     @observable showModelModal = false;
     @observable modalModel = null;
+    @observable modalModelClass = null;
     @observable currentOutput = {};
     @observable selectedOutputIndex = 0;
     @observable drModelHover = null;
@@ -105,21 +106,22 @@ class OutputStore {
     }
 
     // start modal methods
-    getModel(modelClass, index) {
-        if (modelClass === modelClasses.frequentist) {
+    getModel(index) {
+        if (this.modalModelClass === modelClasses.frequentist) {
             return this.selectedFrequentist.models[index];
-        } else if (modelClass === modelClasses.bayesian) {
+        } else if (this.modalModelClass === modelClasses.bayesian) {
             if (index === maIndex) {
                 return this.selectedBayesian.model_average;
             }
             return this.selectedBayesian.models[index];
         } else {
-            throw `Unknown modelClass: ${modelClass}`;
+            throw `Unknown modelClass: ${this.modalModelClass}`;
         }
     }
 
     @action.bound showModalDetail(modelClass, index) {
-        const model = this.getModel(modelClass, index);
+        this.modalModelClass = modelClass;
+        const model = this.getModel(index);
         this.modalModel = model;
         this.drModelModalIsMA = index === maIndex;
         if (
@@ -138,22 +140,32 @@ class OutputStore {
     // end modal methods
 
     // start dose-response plotting data methods
-    @computed get drFrequentistPlotLayout() {
+    @computed get showSelectedModelInModalPlot() {
+        return this.modalModelClass === modelClasses.frequentist;
+    }
+    @computed get drIndividualPlotData() {
+        // a single model, shown in the modal
+        const data = [getDrDatasetPlotData(this.selectedDataset)];
+        if (this.showSelectedModelInModalPlot && this.drModelSelected) {
+            data.push(this.drModelSelected);
+        }
+        if (this.drModelModal) {
+            data.push(this.drModelModal);
+        }
+        if (this.drModelHover) {
+            data.push(this.drModelHover);
+        }
+        return data;
+    }
+    @computed get drIndividualPlotLayout() {
+        // a single model, shown in the modal
+        const selectedModel = this.showSelectedModelInModalPlot ? this.drModelSelected : null;
         return getDrLayout(
             this.selectedDataset,
-            this.drModelSelected,
+            selectedModel,
             this.drModelModal,
             this.drModelHover
         );
-    }
-    @computed get drBayesianPlotLayout() {
-        let layout = _.cloneDeep(this.drFrequentistPlotLayout);
-        const output = this.selectedOutput;
-        layout.annotations = getBayesianBMDLine(
-            output.bayesian.model_average,
-            bmaColor
-        ).annotations;
-        return layout;
     }
     @computed get drFrequentistPlotData() {
         const data = [getDrDatasetPlotData(this.selectedDataset)];
@@ -167,6 +179,15 @@ class OutputStore {
             data.push(this.drModelHover);
         }
         return data;
+    }
+    @computed get drFrequentistPlotLayout() {
+        // the main frequentist plot shown on the output page
+        return getDrLayout(
+            this.selectedDataset,
+            this.drModelSelected,
+            this.drModelModal,
+            this.drModelHover
+        );
     }
     @computed get drBayesianPlotData() {
         const bayesian_plot_data = [getDrDatasetPlotData(this.selectedDataset)];
@@ -188,6 +209,16 @@ class OutputStore {
             bayesian_plot_data.push(bma_data);
         }
         return bayesian_plot_data;
+    }
+    @computed get drBayesianPlotLayout() {
+        // the bayesian plot shown on the output page and modal
+        let layout = _.cloneDeep(this.drFrequentistPlotLayout);
+        const output = this.selectedOutput;
+        layout.annotations = getBayesianBMDLine(
+            output.bayesian.model_average,
+            bmaColor
+        ).annotations;
+        return layout;
     }
 
     @computed get drPlotModalData() {

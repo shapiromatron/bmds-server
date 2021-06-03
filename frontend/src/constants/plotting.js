@@ -133,9 +133,9 @@ export const getDrLayout = function(dataset, selected, modal, hover) {
                 arrowhead: 6,
                 arrowsize: 1.5,
                 arrowcolor: hexColor,
-                ay: 0,
                 ax: 0,
-                ayref: "y",
+                ay: -30,
+                ayref: "pixel",
                 bgcolor: "white",
             });
         }
@@ -148,9 +148,9 @@ export const getDrLayout = function(dataset, selected, modal, hover) {
                 arrowhead: 6,
                 arrowsize: 1.5,
                 arrowcolor: hexColor,
-                ay: 0,
                 ax: 0,
-                ayref: "y",
+                ay: -30,
+                ayref: "pixel",
                 bgcolor: "white",
             });
         }
@@ -167,6 +167,51 @@ export const getDrLayout = function(dataset, selected, modal, hover) {
             annotations,
         };
     },
+    getBayesianBMDLine = function(model, hexColor) {
+        const annotations = [];
+        if (model.results.bmd) {
+            // https://plotly.com/javascript/reference/layout/annotations/#layout-annotations
+            annotations.push({
+                x: model.results.bmd,
+                y: model.results.bmd_y,
+                text: "BMD",
+                showarrow: true,
+                arrowhead: 6,
+                arrowsize: 1.5,
+                arrowcolor: hexColor,
+                ay: -30,
+                ax: 0,
+                ayref: "pixel",
+                bgcolor: "white",
+            });
+        }
+        if (model.results.bmdl) {
+            annotations.push({
+                x: model.results.bmdl,
+                y: model.results.bmdl_y,
+                text: "BMDL",
+                showarrow: true,
+                arrowhead: 6,
+                arrowsize: 1.5,
+                arrowcolor: hexColor,
+                ay: -30,
+                ax: 0,
+                ayref: "pixel",
+                bgcolor: "white",
+            });
+        }
+        let bma_data = {
+            x: model.results.dr_x,
+            y: model.results.dr_y,
+            name: "BMA",
+            line: {
+                width: 6,
+                color: hexColor,
+            },
+            annotations,
+        };
+        return bma_data;
+    },
     getConfig = function() {
         return {
             modeBarButtonsToRemove: [
@@ -181,4 +226,26 @@ export const getDrLayout = function(dataset, selected, modal, hover) {
                 "toggleSpikelines",
             ],
         };
-    };
+    },
+    bmaColor = "#00008b",
+    colorCodes = [
+        // adapted from https://observablehq.com/@d3/color-schemes
+        "#e41a1c",
+        "#377eb8",
+        "#4daf4a",
+        "#984ea3",
+        "#ff7f00",
+        "#edc949",
+        "#a65628",
+        "#f781bf",
+        "#999999",
+        "#e41a1c",
+        "#377eb8",
+        "#4daf4a",
+        "#984ea3",
+        "#ff7f00",
+        "#edc949",
+        "#a65628",
+        "#f781bf",
+        "#999999",
+    ];

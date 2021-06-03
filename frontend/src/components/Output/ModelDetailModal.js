@@ -52,8 +52,8 @@ class IndividualModelBody extends Component {
                     </Col>
                     <Col xs={8}>
                         <DoseResponsePlot
-                            layout={outputStore.drPlotLayout}
-                            data={outputStore.drPlotModalData}
+                            layout={outputStore.drIndividualPlotLayout}
+                            data={outputStore.drIndividualPlotData}
                         />
                     </Col>
                 </Row>

@@ -133,9 +133,9 @@ export const getDrLayout = function(dataset, selected, modal, hover) {
                 arrowhead: 6,
                 arrowsize: 1.5,
                 arrowcolor: hexColor,
-                ay: 0,
                 ax: 0,
-                ayref: "y",
+                ay: -30,
+                ayref: "pixel",
                 bgcolor: "white",
             });
         }
@@ -148,9 +148,9 @@ export const getDrLayout = function(dataset, selected, modal, hover) {
                 arrowhead: 6,
                 arrowsize: 1.5,
                 arrowcolor: hexColor,
-                ay: 0,
                 ax: 0,
-                ayref: "y",
+                ay: -30,
+                ayref: "pixel",
                 bgcolor: "white",
             });
         }
@@ -167,7 +167,7 @@ export const getDrLayout = function(dataset, selected, modal, hover) {
             annotations,
         };
     },
-    getBayesianBMDLine = function(model) {
+    getBayesianBMDLine = function(model, hexColor) {
         const annotations = [];
         if (model.results.bmd) {
             // https://plotly.com/javascript/reference/layout/annotations/#layout-annotations
@@ -178,10 +178,10 @@ export const getDrLayout = function(dataset, selected, modal, hover) {
                 showarrow: true,
                 arrowhead: 6,
                 arrowsize: 1.5,
-                arrowcolor: "#00008b",
-                ay: 0,
+                arrowcolor: hexColor,
+                ay: -30,
                 ax: 0,
-                ayref: "y",
+                ayref: "pixel",
                 bgcolor: "white",
             });
         }
@@ -193,10 +193,10 @@ export const getDrLayout = function(dataset, selected, modal, hover) {
                 showarrow: true,
                 arrowhead: 6,
                 arrowsize: 1.5,
-                arrowcolor: "#00008b",
-                ay: 0,
+                arrowcolor: hexColor,
+                ay: -30,
                 ax: 0,
-                ayref: "y",
+                ayref: "pixel",
                 bgcolor: "white",
             });
         }
@@ -205,8 +205,8 @@ export const getDrLayout = function(dataset, selected, modal, hover) {
             y: model.results.dr_y,
             name: "BMA",
             line: {
-                width: 4,
-                color: "#00008b",
+                width: 6,
+                color: hexColor,
             },
             annotations,
         };
@@ -227,14 +227,25 @@ export const getDrLayout = function(dataset, selected, modal, hover) {
             ],
         };
     },
+    bmaColor = "#00008b",
     colorCodes = [
-        "#FF6633",
-        "#FFB399",
-        "#FF33FF",
-        "#FFFF99",
-        "#00B3E6",
-        "#E6B333",
-        "#3366E6",
-        "#999966",
-        "#99FF99",
+        // adapted from https://observablehq.com/@d3/color-schemes
+        "#e41a1c",
+        "#377eb8",
+        "#4daf4a",
+        "#984ea3",
+        "#ff7f00",
+        "#edc949",
+        "#a65628",
+        "#f781bf",
+        "#999999",
+        "#e41a1c",
+        "#377eb8",
+        "#4daf4a",
+        "#984ea3",
+        "#ff7f00",
+        "#edc949",
+        "#a65628",
+        "#f781bf",
+        "#999999",
     ];

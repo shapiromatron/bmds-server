@@ -8,6 +8,7 @@ import {
     getDrDatasetPlotData,
     getDrBmdLine,
     colorCodes,
+    bmaColor,
     getBayesianBMDLine,
 } from "../constants/plotting";
 
@@ -148,9 +149,10 @@ class OutputStore {
     @computed get drBayesianPlotLayout() {
         let layout = _.cloneDeep(this.drFrequentistPlotLayout);
         const output = this.selectedOutput;
-        layout.annotations = _.flatten(
-            getBayesianBMDLine(output.bayesian.model_average).annotations
-        );
+        layout.annotations = getBayesianBMDLine(
+            output.bayesian.model_average,
+            bmaColor
+        ).annotations;
         return layout;
     }
     @computed get drFrequentistPlotData() {
@@ -175,14 +177,14 @@ class OutputStore {
                 y: model.results.plotting.dr_y,
                 name: model.name,
                 line: {
-                    width: 1,
+                    width: 2,
                     color: colorCodes[index],
                 },
             };
             bayesian_plot_data.push(bayesian_model);
         });
         if (output.bayesian.model_average) {
-            let bma_data = getBayesianBMDLine(output.bayesian.model_average);
+            let bma_data = getBayesianBMDLine(output.bayesian.model_average, bmaColor);
             bayesian_plot_data.push(bma_data);
         }
         return bayesian_plot_data;

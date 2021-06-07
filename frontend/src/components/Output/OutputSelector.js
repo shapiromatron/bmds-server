@@ -8,28 +8,20 @@ class OutputSelector extends Component {
     render() {
         const store = this.props.outputStore;
         return (
-            <div className="nav flex-column nav-fill nav-pills nav-stacked mt-2">
-                {store.outputs.map((output, idx) => {
-                    return (
-                        <a
-                            key={idx}
-                            className={
-                                idx === store.selectedOutputIndex
-                                    ? "nav-link btn-sm active"
-                                    : "nav-link btn-sm"
-                            }
-                            data-toggle="pill"
-                            href="#"
-                            role="tab"
-                            aria-selected="true"
-                            onClick={e => {
-                                e.preventDefault();
-                                store.setSelectedOutputIndex(idx);
-                            }}>
-                            {store.getOutputName(idx)}
-                        </a>
-                    );
-                })}
+            <div className="mt-2">
+                <select
+                    id="dataset-type"
+                    className="form-control"
+                    onChange={e => store.setSelectedOutputIndex(parseInt(e.target.value))}
+                    value={store.selectedOutputIndex}>
+                    {store.outputs.map((output, i) => {
+                        return (
+                            <option key={i} value={i}>
+                                {store.getOutputName(i)}
+                            </option>
+                        );
+                    })}
+                </select>
             </div>
         );
     }

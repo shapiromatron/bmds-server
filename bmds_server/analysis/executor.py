@@ -26,6 +26,13 @@ def build_frequentist_session(dataset, inputs, options, dataset_options) -> Opti
         (PriorEnum.frequentist_restricted, remap_exponential(restricted_models)),
         (PriorEnum.frequentist_unrestricted, remap_exponential(unrestricted_models)),
     ]:
+        # remove models from models_name if distribution is lognormal i.e 3.
+        if "dist_type" in options and options["dist_type"] == 3:
+            models_to_disable = ["Linear", "Polynomial", "Power"]
+            for model in models_to_disable:
+                if model in model_names:
+                    model_names.remove(model)
+
         for model_name in model_names:
             model_options = build_model_settings(
                 bmds_version, dataset_type, model_name, prior_type, options, dataset_options,
@@ -61,6 +68,14 @@ def build_bayesian_session(
     model_names = [model["model"] for model in models]
     model_names = remap_exponential(model_names)
     session = bmds.BMDS.version(bmds_version)(dataset=dataset)
+
+    # remove models from models_name if distribution is lognormal i.e 3.
+    if "dist_type" in options and options["dist_type"] == 3:
+        models_to_disable = ["Linear", "Polynomial", "Power"]
+        for model in models_to_disable:
+            if model in model_names:
+                model_names.remove(model)
+
     for model_name in model_names:
         model_options = build_model_settings(
             bmds_version, dataset_type, model_name, PriorEnum.bayesian, options, dataset_options,

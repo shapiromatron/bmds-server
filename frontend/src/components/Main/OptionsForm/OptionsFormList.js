@@ -16,6 +16,11 @@ class OptionsFormList extends Component {
             optionsList = toJS(optionsStore.optionsList);
         return (
             <div>
+                <div className="text-danger">
+                    {optionsStore.hasLogNormalSelected
+                        ? "** If lognormal is selected, only the Exponential and Hill models can be executed"
+                        : null}{" "}
+                </div>
                 <div className="panel panel-default">
                     <form className="form-horizontal">
                         <table className="options-table table table-bordered table-sm text-center">

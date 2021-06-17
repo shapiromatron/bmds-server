@@ -1,8 +1,8 @@
 from typing import Dict, NamedTuple, Optional
 
 import bmds
-from bmds.bmds3.sessions import BmdsSession
 from bmds.bmds3.constants import DistType
+from bmds.bmds3.sessions import BmdsSession
 
 from .transforms import PriorEnum, build_dataset, build_model_settings, remap_exponential
 

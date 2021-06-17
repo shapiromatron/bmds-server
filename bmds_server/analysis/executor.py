@@ -6,6 +6,9 @@ from bmds.bmds3.sessions import BmdsSession
 
 from .transforms import PriorEnum, build_dataset, build_model_settings, remap_exponential
 
+# excluded continuous models if distribution type is lognormal
+lognormal_disabled = {bmds.constants.M_Linear, bmds.constants.M_Polynomial, bmds.constants.M_Power}
+
 
 def build_frequentist_session(dataset, inputs, options, dataset_options) -> Optional[BmdsSession]:
     restricted_models = inputs["models"].get(PriorEnum.frequentist_restricted, [])
@@ -27,16 +30,8 @@ def build_frequentist_session(dataset, inputs, options, dataset_options) -> Opti
         (PriorEnum.frequentist_restricted, remap_exponential(restricted_models)),
         (PriorEnum.frequentist_unrestricted, remap_exponential(unrestricted_models)),
     ]:
-        # remove models from models_name if distribution is lognormal i.e 3.
-        if "dist_type" in options and options["dist_type"] == DistType.log_normal:
-            models_to_disable = [
-                bmds.constants.M_Linear,
-                bmds.constants.M_Polynomial,
-                bmds.constants.M_Power,
-            ]
-            for model in models_to_disable:
-                if model in model_names:
-                    model_names.remove(model)
+        if options.get("dist_type") == DistType.log_normal:
+            model_names = [model for model in model_names if model not in lognormal_disabled]
 
         for model_name in model_names:
             model_options = build_model_settings(
@@ -74,16 +69,8 @@ def build_bayesian_session(
     model_names = remap_exponential(model_names)
     session = bmds.BMDS.version(bmds_version)(dataset=dataset)
 
-    # remove models from models_name if distribution is lognormal i.e 3.
-    if "dist_type" in options and options["dist_type"] == DistType.log_normal:
-        models_to_disable = [
-            bmds.constants.M_Linear,
-            bmds.constants.M_Polynomial,
-            bmds.constants.M_Power,
-        ]
-        for model in models_to_disable:
-            if model in model_names:
-                model_names.remove(model)
+    if options.get("dist_type") == DistType.log_normal:
+        model_names = [model for model in model_names if model not in lognormal_disabled]
 
     for model_name in model_names:
         model_options = build_model_settings(

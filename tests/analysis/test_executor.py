@@ -110,3 +110,37 @@ class TestAnalysisSession:
         model = session.bayesian.models[0]
         assert model.bmd_model_class.id == DichotomousModelIds.d_multistage
         assert model.settings.degree == 2
+
+    # disttype 3 Linear and power are not added
+    def test_lognormal(self, bmds3_complete_continuous):
+        # assure a default dataset can be created
+        data = deepcopy(bmds3_complete_continuous)
+        data["models"] = {
+            "frequentist_restricted": ["Hill", "Linear", "Power"],
+        }
+        data["options"][0] = {
+            "bmr_type": 2,
+            "bmr_value": 1,
+            "dist_type": 3,
+            "confidence_level": 0.95,
+            "tail_probability": 0.01,
+        }
+        session = AnalysisSession.create(data, 0, 0)
+        assert len(session.frequentist.models) == 1
+
+    # disttype 1 #adding all models
+    def test_lognormal(self, bmds3_complete_continuous):
+        # assure a default dataset can be created
+        data = deepcopy(bmds3_complete_continuous)
+        data["models"] = {
+            "frequentist_restricted": ["Hill", "Linear", "Power"],
+        }
+        data["options"][0] = {
+            "bmr_type": 2,
+            "bmr_value": 1,
+            "dist_type": 1,
+            "confidence_level": 0.95,
+            "tail_probability": 0.01,
+        }
+        session = AnalysisSession.create(data, 0, 0)
+        assert len(session.frequentist.models) == 3

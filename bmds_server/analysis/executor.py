@@ -2,6 +2,7 @@ from typing import Dict, NamedTuple, Optional
 
 import bmds
 from bmds.bmds3.sessions import BmdsSession
+from bmds.bmds3.constants import DistType
 
 from .transforms import PriorEnum, build_dataset, build_model_settings, remap_exponential
 
@@ -27,8 +28,12 @@ def build_frequentist_session(dataset, inputs, options, dataset_options) -> Opti
         (PriorEnum.frequentist_unrestricted, remap_exponential(unrestricted_models)),
     ]:
         # remove models from models_name if distribution is lognormal i.e 3.
-        if "dist_type" in options and options["dist_type"] == 3:
-            models_to_disable = ["Linear", "Polynomial", "Power"]
+        if "dist_type" in options and options["dist_type"] == DistType.log_normal:
+            models_to_disable = [
+                bmds.constants.M_Linear,
+                bmds.constants.M_Polynomial,
+                bmds.constants.M_Power,
+            ]
             for model in models_to_disable:
                 if model in model_names:
                     model_names.remove(model)
@@ -70,8 +75,12 @@ def build_bayesian_session(
     session = bmds.BMDS.version(bmds_version)(dataset=dataset)
 
     # remove models from models_name if distribution is lognormal i.e 3.
-    if "dist_type" in options and options["dist_type"] == 3:
-        models_to_disable = ["Linear", "Polynomial", "Power"]
+    if "dist_type" in options and options["dist_type"] == DistType.log_normal:
+        models_to_disable = [
+            bmds.constants.M_Linear,
+            bmds.constants.M_Polynomial,
+            bmds.constants.M_Power,
+        ]
         for model in models_to_disable:
             if model in model_names:
                 model_names.remove(model)

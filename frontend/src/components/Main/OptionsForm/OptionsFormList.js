@@ -5,6 +5,7 @@ import {toJS} from "mobx";
 
 import OptionsForm from "./OptionsForm";
 import OptionsReadOnly from "./OptionsReadOnly";
+import HelpTextPopup from "../../common/HelpTextPopup";
 import {MODEL_CONTINUOUS, MODEL_DICHOTOMOUS} from "../../../constants/mainConstants";
 
 @inject("optionsStore")
@@ -13,14 +14,11 @@ class OptionsFormList extends Component {
     render() {
         const {optionsStore} = this.props,
             modelType = optionsStore.getModelType,
-            optionsList = toJS(optionsStore.optionsList);
+            optionsList = toJS(optionsStore.optionsList),
+            distTypeHelpText =
+                "If lognormal is selected, only the Exponential and Hill models can be executed";
         return (
             <div>
-                <div className="text-danger">
-                    {optionsStore.hasLogNormalSelected
-                        ? "** If lognormal is selected, only the Exponential and Hill models can be executed"
-                        : null}{" "}
-                </div>
                 <div className="panel panel-default">
                     <form className="form-horizontal">
                         <table className="options-table table table-bordered table-sm text-center">
@@ -32,7 +30,10 @@ class OptionsFormList extends Component {
                                             <th>BMRF</th>
                                             <th>Tail Probability</th>
                                             <th>Confidence Level</th>
-                                            <th>Distribution + Variance</th>
+                                            <th>
+                                                Distribution + Variance{" "}
+                                                <HelpTextPopup content={distTypeHelpText} />
+                                            </th>
                                         </>
                                     ) : null}
                                     {modelType === MODEL_DICHOTOMOUS ? (

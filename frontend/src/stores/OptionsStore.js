@@ -45,7 +45,10 @@ class OptionsStore {
     }
 
     @computed get hasLogNormalSelected() {
-        return this.optionsList.filter(option => option.dist_type === 3).length > 0;
+        return (
+            this.optionsList.filter(option => option.dist_type === constant.DistTypeLognormal)
+                .length > 0
+        );
     }
 }
 

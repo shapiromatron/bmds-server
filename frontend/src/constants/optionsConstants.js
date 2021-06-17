@@ -28,4 +28,5 @@ export const options = {
         {value: 1, label: "Normal + Constant"},
         {value: 2, label: "Normal + Non-constant"},
         {value: 3, label: "Log-normal"}, // TODO - add back
-    ];
+    ],
+    DistTypeLognormal = 3;

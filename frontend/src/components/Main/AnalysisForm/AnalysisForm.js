@@ -4,6 +4,7 @@ import PropTypes from "prop-types";
 import {modelTypes} from "../../../constants/mainConstants";
 
 import Spinner from "../../common/Spinner";
+import SelectInput from "../../common/SelectInput";
 
 @inject("mainStore")
 @observer
@@ -14,8 +15,9 @@ class AnalysisForm extends Component {
             <div>
                 <form className="table-primary p-3 mt-2">
                     <div className="form-group">
-                        <label>Analysis Name</label>
+                        <label htmlFor="analysisName">Analysis Name</label>
                         <input
+                            id="analysisName"
                             className="form-control"
                             type="text"
                             value={mainStore.analysis_name}
@@ -23,8 +25,9 @@ class AnalysisForm extends Component {
                         />
                     </div>
                     <div className="form-group">
-                        <label>Analysis Description</label>
+                        <label htmlFor="analysisDescription">Analysis Description</label>
                         <textarea
+                            id="analysisDescription"
                             className="form-control"
                             type="textarea"
                             rows="3"
@@ -33,22 +36,14 @@ class AnalysisForm extends Component {
                                 mainStore.changeAnalysisDescription(e.target.value)
                             }></textarea>
                     </div>
-                    <div className="form-group">
-                        <label>Model Type</label>
-                        <select
-                            id="dataset-type"
-                            className="form-control"
-                            onChange={e => mainStore.changeDatasetType(e.target.value)}
-                            value={mainStore.model_type}>
-                            {modelTypes.map((item, i) => {
-                                return (
-                                    <option key={i} value={item.value}>
-                                        {item.name}
-                                    </option>
-                                );
-                            })}
-                        </select>
-                    </div>
+                    <SelectInput
+                        label="Model Class"
+                        onChange={value => mainStore.changeDatasetType(value)}
+                        value={mainStore.model_type}
+                        choices={modelTypes.map((item, i) => {
+                            return {value: item.value, text: item.name};
+                        })}
+                    />
                     {mainStore.errorMessage ? (
                         <div className="alert alert-danger">{mainStore.errorMessage}</div>
                     ) : null}

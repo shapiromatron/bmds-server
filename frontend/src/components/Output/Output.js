@@ -4,10 +4,11 @@ import PropTypes from "prop-types";
 import ModelDetailModal from "./ModelDetailModal";
 import {FrequentistResultTable, BayesianResultTable} from "./ResultsTable";
 import DatasetTable from "../Data/DatasetTable";
-import OutputSelector from "./OutputSelector";
 import SelectModel from "./SelectModel";
 import DoseResponsePlot from "../common/DoseResponsePlot";
 import "./Output.css";
+
+import SelectInput from "../common/SelectInput";
 
 @inject("outputStore")
 @observer
@@ -36,29 +37,34 @@ class Output extends Component {
             <div className="container-fluid">
                 <div className="row">
                     <div className="col-lg-2">
-                        <OutputSelector />
+                        <SelectInput
+                            label="Select an output"
+                            onChange={value => outputStore.setSelectedOutputIndex(parseInt(value))}
+                            value={outputStore.selectedOutputIndex}
+                            choices={outputStore.outputs.map((output, idx) => {
+                                return {value: idx, text: outputStore.getOutputName(idx)};
+                            })}
+                        />
                     </div>
                     <div className="col-lg-6">
                         <DatasetTable dataset={outputStore.selectedDataset} />
                     </div>
                 </div>
-                <div className="row">
-                    {selectedFrequentist ? (
+                {selectedFrequentist ? (
+                    <div className="row">
                         <div className="col-lg-8">
                             <h4>Frequentist Model Results</h4>
                             <FrequentistResultTable />
                             {canEdit ? <SelectModel /> : null}
                         </div>
-                    ) : null}
-                    <div className="align-items-center d-flex col-lg-4">
-                        {selectedFrequentist ? (
+                        <div className="align-items-center d-flex col-lg-4">
                             <DoseResponsePlot
                                 layout={outputStore.drFrequentistPlotLayout}
                                 data={outputStore.drFrequentistPlotData}
                             />
-                        ) : null}
+                        </div>
                     </div>
-                </div>
+                ) : null}
                 {selectedBayesian ? (
                     <div className="row">
                         <div className="col-lg-12">

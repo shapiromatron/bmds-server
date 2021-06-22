@@ -2,6 +2,8 @@ import React, {Component} from "react";
 import {inject, observer} from "mobx-react";
 import PropTypes from "prop-types";
 
+import SelectInput from "../common/SelectInput";
+
 @inject("dataStore")
 @observer
 class DatasetSelector extends Component {
@@ -9,19 +11,14 @@ class DatasetSelector extends Component {
         const {dataStore, store} = this.props;
         return (
             <div className="mt-2">
-                <select
-                    id="dataset-type"
-                    className="form-control"
-                    onChange={e => store.setSelectedDataset(parseInt(e.target.value))}
-                    value={store.selectedDatasetId}>
-                    {dataStore.datasets.map(dataset => {
-                        return (
-                            <option key={dataset.metadata.id} value={dataset.metadata.id}>
-                                {dataset.metadata.name}
-                            </option>
-                        );
+                <SelectInput
+                    label="Existing datasets"
+                    onChange={value => store.setSelectedDataset(parseInt(value))}
+                    value={store.selectedDatasetId}
+                    choices={dataStore.datasets.map(dataset => {
+                        return {value: dataset.metadata.id, text: dataset.metadata.name};
                     })}
-                </select>
+                />
             </div>
         );
     }

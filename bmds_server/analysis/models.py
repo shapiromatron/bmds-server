@@ -78,6 +78,9 @@ class Analysis(models.Model):
     def get_renew_url(self):
         return reverse("analysis_renew", args=(str(self.id), self.password))
 
+    def get_delete_url(self):
+        return reverse("analysis_delete", args=(str(self.id), self.password))
+
     def get_excel_url(self):
         return reverse("api:analysis-excel", args=(str(self.id),))
 

@@ -1,11 +1,13 @@
 import json
+from typing import Optional, Tuple
 
 from django.conf import settings
 from django.http.response import JsonResponse
 from django.middleware.csrf import get_token
 from django.shortcuts import get_object_or_404
 from django.template import RequestContext, Template
-from django.views.generic import CreateView, DetailView, RedirectView, View
+from django.urls import reverse_lazy
+from django.views.generic import CreateView, DeleteView, DetailView, RedirectView, View
 
 from . import forms, models
 
@@ -40,15 +42,33 @@ class Home(CreateView):
         return context
 
 
+def get_analysis_or_404(pk: str, password: Optional[str] = "") -> Tuple[models.Analysis, bool]:
+    """Return an analysis object and if a correct password is provided for this object.
+
+    Args:
+        pk (str): The UUID for the analysis
+        password (Optional[str]): A edit password for this analysis
+
+    Returns:
+        Tuple[models.Analysis, bool]: An analysis object and if it has a correct password
+
+    Raises:
+        Http404: if the selected object cannot be found
+    """
+    filters = dict(pk=pk)
+    if password:
+        filters["password"] = password
+    analysis = get_object_or_404(models.Analysis, **filters)
+    return analysis, "password" in filters
+
+
 class AnalysisDetail(DetailView):
     model = models.Analysis
 
     def get_object(self, queryset=None):
-        kwargs = dict(pk=self.kwargs.get("pk"), password=self.kwargs.get("password"))
-        if kwargs["password"] is None:
-            kwargs.pop("password")
-        self.edit_mode = "password" in kwargs
-        return get_object_or_404(self.model, **kwargs)
+        analysis, can_edit = get_analysis_or_404(self.kwargs["pk"], self.kwargs.get("password"))
+        self.can_edit = can_edit
+        return analysis
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -58,13 +78,14 @@ class AnalysisDetail(DetailView):
             "excelUrl": self.object.get_excel_url(),
             "wordUrl": self.object.get_word_url(),
         }
-        if self.edit_mode:
+        if self.can_edit:
             config["editSettings"] = {
                 "csrfToken": get_token(self.request),
                 "editKey": self.object.password,
                 "viewUrl": self.request.build_absolute_uri(self.object.get_absolute_url()),
                 "editUrl": self.request.build_absolute_uri(self.object.get_edit_url()),
                 "renewUrl": self.request.build_absolute_uri(self.object.get_renew_url()),
+                "deleteUrl": self.request.build_absolute_uri(self.object.get_delete_url()),
                 "patchInputUrl": self.object.get_api_patch_inputs_url(),
                 "executeUrl": self.object.get_api_execute_url(),
                 "executeResetUrl": self.object.get_api_execute_reset_url(),
@@ -79,7 +100,18 @@ class AnalysisRenew(RedirectView):
     """Renew the current analysis and redirect back to editing"""
 
     def get_redirect_url(self, *args, **kwargs):
-        analysis = get_object_or_404(models.Analysis, **kwargs)
+        analysis, _ = get_analysis_or_404(self.kwargs["pk"], self.kwargs["password"])
         analysis.renew()
         analysis.save()
         return analysis.get_edit_url()
+
+
+class AnalysisDelete(DeleteView):
+    """Delete the current analysis"""
+
+    model = models.Analysis
+    success_url = reverse_lazy("home")
+
+    def get_object(self, queryset=None):
+        analysis, _ = get_analysis_or_404(self.kwargs["pk"], self.kwargs["password"])
+        return analysis

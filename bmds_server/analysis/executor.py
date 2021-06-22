@@ -1,9 +1,13 @@
 from typing import Dict, NamedTuple, Optional
 
 import bmds
+from bmds.bmds3.constants import DistType
 from bmds.bmds3.sessions import BmdsSession
 
 from .transforms import PriorEnum, build_dataset, build_model_settings, remap_exponential
+
+# excluded continuous models if distribution type is lognormal
+lognormal_disabled = {bmds.constants.M_Linear, bmds.constants.M_Polynomial, bmds.constants.M_Power}
 
 
 def build_frequentist_session(dataset, inputs, options, dataset_options) -> Optional[BmdsSession]:
@@ -26,6 +30,9 @@ def build_frequentist_session(dataset, inputs, options, dataset_options) -> Opti
         (PriorEnum.frequentist_restricted, remap_exponential(restricted_models)),
         (PriorEnum.frequentist_unrestricted, remap_exponential(unrestricted_models)),
     ]:
+        if options.get("dist_type") == DistType.log_normal:
+            model_names = [model for model in model_names if model not in lognormal_disabled]
+
         for model_name in model_names:
             model_options = build_model_settings(
                 bmds_version, dataset_type, model_name, prior_type, options, dataset_options,
@@ -61,6 +68,10 @@ def build_bayesian_session(
     model_names = [model["model"] for model in models]
     model_names = remap_exponential(model_names)
     session = bmds.BMDS.version(bmds_version)(dataset=dataset)
+
+    if options.get("dist_type") == DistType.log_normal:
+        model_names = [model for model in model_names if model not in lognormal_disabled]
+
     for model_name in model_names:
         model_options = build_model_settings(
             bmds_version, dataset_type, model_name, PriorEnum.bayesian, options, dataset_options,

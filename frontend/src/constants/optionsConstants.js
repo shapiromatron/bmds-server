@@ -27,5 +27,5 @@ export const options = {
     distTypeOptions = [
         {value: 1, label: "Normal + Constant"},
         {value: 2, label: "Normal + Non-constant"},
-        // {value: 3, label: "Log-normal"}, // TODO - add back
+        {value: 3, label: "Lognormal"},
     ];

@@ -110,3 +110,31 @@ class TestAnalysisSession:
         model = session.bayesian.models[0]
         assert model.bmd_model_class.id == DichotomousModelIds.d_multistage
         assert model.settings.degree == 2
+
+    # disttype 3 Linear and power are not added
+    def test_disttype(self, bmds3_complete_continuous):
+
+        data = deepcopy(bmds3_complete_continuous)
+        data["models"] = {
+            "frequentist_restricted": ["Hill", "Linear", "Power"],
+        }
+
+        # normal
+        data["options"][0]["dist_type"] = 1
+        session = AnalysisSession.create(data, 0, 0)
+        assert len(session.frequentist.models) == 3
+        names = [model.name() for model in session.frequentist.models]
+        assert names == ["Hill", "Linear", "Power"]
+
+        data["options"][0]["dist_type"] = 2
+        session = AnalysisSession.create(data, 0, 0)
+        assert len(session.frequentist.models) == 3
+        names = [model.name() for model in session.frequentist.models]
+        assert names == ["Hill", "Linear", "Power"]
+
+        # lognormal
+        data["options"][0]["dist_type"] = 3
+        session = AnalysisSession.create(data, 0, 0)
+        assert len(session.frequentist.models) == 1
+        names = [model.name() for model in session.frequentist.models]
+        assert names == ["Hill"]

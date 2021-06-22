@@ -20,6 +20,7 @@ from django.utils.text import slugify
 from django.utils.timezone import now
 
 from . import executor, tasks, utils, validators
+from .cache import DocxReportCache, ExcelReportCache
 
 logger = logging.getLogger(__name__)
 
@@ -49,6 +50,11 @@ class Analysis(models.Model):
 
     def __str__(self):
         return str(self.inputs.get("analysis_name", self.id))
+
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
+        DocxReportCache(analysis=self).delete()
+        ExcelReportCache(analysis=self).delete()
 
     @property
     def slug(self) -> str:
@@ -128,6 +134,12 @@ class Analysis(models.Model):
         if not self.is_finished or self.has_errors:
             raise ValueError("Session cannot be returned")
         return [executor.AnalysisSession.deserialize(output) for output in self.outputs["outputs"]]
+
+    def get_excel_from_cache(self):
+        return ExcelReportCache(analysis=self).request_content()
+
+    def get_docx_from_cache(self):
+        return DocxReportCache(analysis=self).request_content()
 
     def to_batch(self) -> BmdsSessionBatch:
         # convert List[executor.AnalysisSession] to List[bmds.BmdsSession]

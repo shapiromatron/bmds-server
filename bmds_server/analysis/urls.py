@@ -2,6 +2,7 @@ from django.conf import settings
 from django.conf.urls import include
 from django.contrib import admin
 from django.urls import path
+from django.views.generic import TemplateView
 from rest_framework.routers import DefaultRouter
 
 from . import api, views
@@ -26,4 +27,9 @@ urlpatterns = [
 if settings.DEBUG:
     import debug_toolbar
 
-    urlpatterns += (path("__debug__/", include(debug_toolbar.urls)),)
+    urlpatterns += (
+        path("__debug__/", include(debug_toolbar.urls)),
+        path("403/", TemplateView.as_view(template_name="403.html"), name="403"),
+        path("404/", TemplateView.as_view(template_name="404.html"), name="404"),
+        path("500/", TemplateView.as_view(template_name="500.html"), name="500"),
+    )

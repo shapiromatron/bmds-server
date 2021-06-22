@@ -59,13 +59,16 @@ class Actions extends Component {
                                         <i className="fa fa-fw fa-calendar"></i>
                                         &nbsp;Extend deletion date
                                     </a>
-                                    <p className="text-muted pl-4">
+                                    <p className="text-muted pl-4 mb-0">
                                         <b>Deletion date:</b>&nbsp;
                                         {getDeletionDateText(config.editSettings)}
                                     </p>
                                 </>
                             ) : null}
-
+                            <a className="dropdown-item" href={config.editSettings.deleteUrl}>
+                                <i className="fa fa-fw fa-trash"></i>
+                                &nbsp;Delete analysis
+                            </a>
                             <div className="dropdown-divider"></div>
                         </>
                     ) : null}

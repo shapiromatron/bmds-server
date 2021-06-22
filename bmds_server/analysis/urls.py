@@ -10,19 +10,15 @@ router = DefaultRouter()
 router.register("analysis", api.AnalysisViewset, basename="analysis")
 
 admin_url = f"admin/{settings.ADMIN_URL_PREFIX}/" if not settings.DEBUG else "admin/"
+edit_pattern = "analysis/<uuid:pk>/<str:password>/"
 
 urlpatterns = [
     path("api/v1/", include((router.urls, "analysis"), namespace="api")),
     path("", views.Home.as_view(), name="home"),
     path("analysis/<uuid:pk>/", views.AnalysisDetail.as_view(), name="analysis"),
-    path(
-        "analysis/<uuid:pk>/<str:password>/", views.AnalysisDetail.as_view(), name="analysis_edit"
-    ),
-    path(
-        "analysis/<uuid:pk>/<str:password>/renew/",
-        views.AnalysisRenew.as_view(),
-        name="analysis_renew",
-    ),
+    path(edit_pattern, views.AnalysisDetail.as_view(), name="analysis_edit"),
+    path(f"{edit_pattern}renew/", views.AnalysisRenew.as_view(), name="analysis_renew",),
+    path(f"{edit_pattern}delete/", views.AnalysisDelete.as_view(), name="analysis_delete",),
     path(f"{admin_url}healthcheck/", views.Healthcheck.as_view(), name="healthcheck",),
     path(admin_url, admin.site.urls),
 ]

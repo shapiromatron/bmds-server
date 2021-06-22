@@ -38,6 +38,7 @@ class TestAnalysisDetail:
                 "editUrl": "http://testserver/analysis/cc3ca355-a57a-4fba-9dc3-99657562df68/641515anrub7/",  # noqa: E501
                 "patchInputUrl": "/api/v1/analysis/cc3ca355-a57a-4fba-9dc3-99657562df68/patch-inputs/",  # noqa: E501
                 "renewUrl": "http://testserver/analysis/cc3ca355-a57a-4fba-9dc3-99657562df68/641515anrub7/renew/",  # noqa: E501
+                "deleteUrl": "http://testserver/analysis/cc3ca355-a57a-4fba-9dc3-99657562df68/641515anrub7/delete/",  # noqa: E501
                 "executeUrl": "/api/v1/analysis/cc3ca355-a57a-4fba-9dc3-99657562df68/execute/",
                 "executeResetUrl": "/api/v1/analysis/cc3ca355-a57a-4fba-9dc3-99657562df68/execute-reset/",  # noqa: E501
                 "deleteDateStr": "December 15, 2021",

@@ -2,7 +2,8 @@
 
 {% block content %}
 <div class="alert alert-danger mt-3" role="alert">
-    <form method="post">{% csrf_token %}
+    <form method="post">
+        {% csrf_token %}
         <p><strong>Delete analysis?</strong></p>
         <p>
             Are you sure you want to delete <a href="{{object.get_edit_url}}">this analysis</a>?

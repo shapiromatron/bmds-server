@@ -12,6 +12,11 @@ export const simulateClick = function(el) {
         });
         !el.dispatchEvent(evt);
     },
+    randomString = function() {
+        return "xxxxxxxxxxxxxxx".replace(/x/g, c =>
+            String.fromCharCode(97 + parseInt(26 * Math.random()))
+        );
+    },
     getHeaders = function(csrfToken) {
         return {
             "X-CSRFToken": csrfToken,

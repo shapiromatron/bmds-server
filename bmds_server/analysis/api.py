@@ -5,9 +5,9 @@ from rest_framework import exceptions, mixins, status, viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
 
+from ..common.task_cache import ReportStatus
 from ..common.validation import pydantic_validate
 from . import models, renderers, serializers, validators
-from .cache import DocxReportCache, ExcelReportCache
 
 
 @method_decorator(csrf_protect, name="dispatch")
@@ -127,10 +127,9 @@ class AnalysisViewset(mixins.CreateModelMixin, mixins.RetrieveModelMixin, viewse
         Return Excel export of outputs for selected analysis
         """
         instance = self.get_object()
-        cache = ExcelReportCache(analysis=instance)
-        response = cache.request_content()
+        response = instance.get_excel_from_cache()
 
-        if response.status is cache.status.COMPLETE:
+        if response.status is ReportStatus.COMPLETE:
             data = renderers.BinaryFile(data=response.content, filename=instance.slug)
             return Response(data)
 
@@ -142,10 +141,9 @@ class AnalysisViewset(mixins.CreateModelMixin, mixins.RetrieveModelMixin, viewse
         Return Word report for the selected analysis
         """
         instance = self.get_object()
-        cache = DocxReportCache(analysis=instance)
-        response = cache.request_content()
+        response = instance.get_docx_from_cache()
 
-        if response.status is cache.status.COMPLETE:
+        if response.status is ReportStatus.COMPLETE:
             data = renderers.BinaryFile(data=response.content, filename=instance.slug)
             return Response(data)
 

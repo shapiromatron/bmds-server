@@ -34,6 +34,9 @@ class ReportCache:
     def cache_key(self):
         return f"{self.cache_prefix}-{self.analysis.id}"
 
+    def delete(self):
+        self.cache.delete(self.cache_key)
+
     def invoke_celery_task(self) -> None:
         """
         Invoke celery task to invoke which does the work in the create method.

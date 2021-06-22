@@ -59,7 +59,7 @@ class Migration(migrations.Migration):
             ],
             options={
                 "get_latest_by": ("created",),
-                "ordering": ("created",),
+                "ordering": ("-created",),
                 "verbose_name_plural": "Analyses",
             },
         ),

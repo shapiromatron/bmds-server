@@ -44,7 +44,7 @@ class Analysis(models.Model):
 
     class Meta:
         verbose_name_plural = "Analyses"
-        ordering = ("created",)
+        ordering = ("-created",)
         get_latest_by = ("created",)
 
     def __str__(self):
@@ -100,7 +100,7 @@ class Analysis(models.Model):
 
     @property
     def is_finished(self) -> bool:
-        return len(self.outputs) > 0 or len(self.errors) > 0
+        return self.ended and len(self.outputs) > 0 or len(self.errors) > 0
 
     @property
     def has_errors(self):
@@ -111,6 +111,13 @@ class Analysis(models.Model):
         qs = cls.objects.filter(deletion_date=now())
         logger.info(f"Removing {qs.count()} old BMDS analysis")
         qs.delete()
+
+    @classmethod
+    def maybe_hanging(cls, queryset):
+        """
+        Return a queryset of analyses which started at least an hour ago but have not yet ended.
+        """
+        return queryset.filter(started__lt=now() - timedelta(hours=1), ended__isnull=True)
 
     def get_session(self, index: int) -> executor.AnalysisSession:
         if not self.is_finished or self.has_errors:

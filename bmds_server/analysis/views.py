@@ -42,7 +42,7 @@ class Home(CreateView):
         return context
 
 
-def get_analysis(pk: str, password: Optional[str] = "") -> Tuple[models.Analysis, bool]:
+def get_analysis_or_404(pk: str, password: Optional[str] = "") -> Tuple[models.Analysis, bool]:
     """Return an analysis object and if a correct password is provided for this object.
 
     Args:
@@ -53,7 +53,7 @@ def get_analysis(pk: str, password: Optional[str] = "") -> Tuple[models.Analysis
         Tuple[models.Analysis, bool]: An analysis object and if it has a correct password
 
     Raises:
-        queryset.model.DoesNotExist: if the selected object cannot be found
+        Http404: if the selected object cannot be found
     """
     filters = dict(pk=pk)
     if password:
@@ -66,7 +66,7 @@ class AnalysisDetail(DetailView):
     model = models.Analysis
 
     def get_object(self, queryset=None):
-        analysis, can_edit = get_analysis(self.kwargs["pk"], self.kwargs.get("password"))
+        analysis, can_edit = get_analysis_or_404(self.kwargs["pk"], self.kwargs.get("password"))
         self.can_edit = can_edit
         return analysis
 
@@ -100,7 +100,7 @@ class AnalysisRenew(RedirectView):
     """Renew the current analysis and redirect back to editing"""
 
     def get_redirect_url(self, *args, **kwargs):
-        analysis, _ = get_analysis(self.kwargs["pk"], self.kwargs["password"])
+        analysis, _ = get_analysis_or_404(self.kwargs["pk"], self.kwargs["password"])
         analysis.renew()
         analysis.save()
         return analysis.get_edit_url()
@@ -113,5 +113,5 @@ class AnalysisDelete(DeleteView):
     success_url = reverse_lazy("home")
 
     def get_object(self, queryset=None):
-        analysis, _ = get_analysis(self.kwargs["pk"], self.kwargs["password"])
+        analysis, _ = get_analysis_or_404(self.kwargs["pk"], self.kwargs["password"])
         return analysis

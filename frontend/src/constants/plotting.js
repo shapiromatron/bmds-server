@@ -100,12 +100,15 @@ export const getDrLayout = function(dataset, selected, modal, hover) {
         return layout;
     },
     getDrDatasetPlotData = function(dataset) {
-        let errorBars = undefined;
+        let errorBars, hovertemplate;
         if (dataset.dtype == Dtype.CONTINUOUS) {
             errorBars = continuousErrorBars(dataset);
         }
         if (dataset.dtype == Dtype.DICHOTOMOUS) {
             errorBars = dichotomousErrorBars(dataset);
+        }
+        if (errorBars) {
+            hovertemplate = "%{y:.3f} (%{customdata[0]:.3f}, %{customdata[1]:.3f})<extra></extra>";
         }
         return {
             x: dataset.doses.slice(),
@@ -116,8 +119,8 @@ export const getDrLayout = function(dataset, selected, modal, hover) {
                 size: 10,
             },
             error_y: errorBars,
-            customdata: errorBars.bounds,
-            hovertemplate: "%{y:.3f} (%{customdata[0]:.3f}, %{customdata[1]:.3f})<extra></extra>",
+            customdata: errorBars ? errorBars.bounds : undefined,
+            hovertemplate,
             name: "Response",
         };
     },

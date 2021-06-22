@@ -31,7 +31,7 @@ class OptionsFormList extends Component {
                                             <th>Tail Probability</th>
                                             <th>Confidence Level</th>
                                             <th>
-                                                Distribution + Variance{" "}
+                                                Distribution + Variance&nbsp;
                                                 <HelpTextPopup content={distTypeHelpText} />
                                             </th>
                                         </>

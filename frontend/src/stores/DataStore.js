@@ -68,8 +68,8 @@ class DataStore {
         this.model_type = model_type;
     }
 
-    @action.bound setSelectedDataset(dataset) {
-        this.selectedDatasetId = dataset.metadata.id;
+    @action.bound setSelectedDataset(id) {
+        this.selectedDatasetId = id;
     }
 
     @action.bound setDatasetMetadata(key, value) {

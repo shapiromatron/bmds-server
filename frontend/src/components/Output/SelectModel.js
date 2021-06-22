@@ -15,16 +15,11 @@ class SelectModelIndex extends Component {
             {model_index, notes} = selectedOutput.selected,
             selectValue = _.isNumber(model_index) ? model_index : -1,
             textValue = _.isNull(notes) ? "" : notes,
-            choices = [
-                {
-                    value: -1,
-                    text: "None (no model selected)",
-                },
-            ];
+            choices = models.map((model, idx) => {
+                return {value: idx, text: model.name};
+            });
 
-        models.forEach((model, idx) => {
-            choices.push({value: idx, text: model.name});
-        });
+        choices.unshift({value: -1, text: "None (no model selected)"});
 
         return (
             <form className="form-group row well py-2">

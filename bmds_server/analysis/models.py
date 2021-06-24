@@ -20,6 +20,7 @@ from django.utils.text import slugify
 from django.utils.timezone import now
 
 from . import executor, tasks, utils, validators
+from .cache import DocxReportCache, ExcelReportCache
 
 logger = logging.getLogger(__name__)
 
@@ -44,11 +45,16 @@ class Analysis(models.Model):
 
     class Meta:
         verbose_name_plural = "Analyses"
-        ordering = ("created",)
+        ordering = ("-created",)
         get_latest_by = ("created",)
 
     def __str__(self):
         return str(self.inputs.get("analysis_name", self.id))
+
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
+        DocxReportCache(analysis=self).delete()
+        ExcelReportCache(analysis=self).delete()
 
     @property
     def slug(self) -> str:
@@ -78,6 +84,9 @@ class Analysis(models.Model):
     def get_renew_url(self):
         return reverse("analysis_renew", args=(str(self.id), self.password))
 
+    def get_delete_url(self):
+        return reverse("analysis_delete", args=(str(self.id), self.password))
+
     def get_excel_url(self):
         return reverse("api:analysis-excel", args=(str(self.id),))
 
@@ -97,7 +106,7 @@ class Analysis(models.Model):
 
     @property
     def is_finished(self) -> bool:
-        return len(self.outputs) > 0 or len(self.errors) > 0
+        return self.ended and len(self.outputs) > 0 or len(self.errors) > 0
 
     @property
     def has_errors(self):
@@ -109,6 +118,13 @@ class Analysis(models.Model):
         logger.info(f"Removing {qs.count()} old BMDS analysis")
         qs.delete()
 
+    @classmethod
+    def maybe_hanging(cls, queryset):
+        """
+        Return a queryset of analyses which started at least an hour ago but have not yet ended.
+        """
+        return queryset.filter(started__lt=now() - timedelta(hours=1), ended__isnull=True)
+
     def get_session(self, index: int) -> executor.AnalysisSession:
         if not self.is_finished or self.has_errors:
             raise ValueError("Session cannot be returned")
@@ -118,6 +134,12 @@ class Analysis(models.Model):
         if not self.is_finished or self.has_errors:
             raise ValueError("Session cannot be returned")
         return [executor.AnalysisSession.deserialize(output) for output in self.outputs["outputs"]]
+
+    def get_excel_from_cache(self):
+        return ExcelReportCache(analysis=self).request_content()
+
+    def get_docx_from_cache(self):
+        return DocxReportCache(analysis=self).request_content()
 
     def to_batch(self) -> BmdsSessionBatch:
         # convert List[executor.AnalysisSession] to List[bmds.BmdsSession]

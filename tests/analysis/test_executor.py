@@ -112,35 +112,29 @@ class TestAnalysisSession:
         assert model.settings.degree == 2
 
     # disttype 3 Linear and power are not added
-    def test_lognormal(self, bmds3_complete_continuous):
-        # assure a default dataset can be created
-        data = deepcopy(bmds3_complete_continuous)
-        data["models"] = {
-            "frequentist_restricted": ["Hill", "Linear", "Power"],
-        }
-        data["options"][0] = {
-            "bmr_type": 2,
-            "bmr_value": 1,
-            "dist_type": 3,
-            "confidence_level": 0.95,
-            "tail_probability": 0.01,
-        }
-        session = AnalysisSession.create(data, 0, 0)
-        assert len(session.frequentist.models) == 1
+    def test_disttype(self, bmds3_complete_continuous):
 
-    # disttype 1 #adding all models
-    def test_lognormal(self, bmds3_complete_continuous):
-        # assure a default dataset can be created
         data = deepcopy(bmds3_complete_continuous)
         data["models"] = {
             "frequentist_restricted": ["Hill", "Linear", "Power"],
         }
-        data["options"][0] = {
-            "bmr_type": 2,
-            "bmr_value": 1,
-            "dist_type": 1,
-            "confidence_level": 0.95,
-            "tail_probability": 0.01,
-        }
+
+        # normal
+        data["options"][0]["dist_type"] = 1
         session = AnalysisSession.create(data, 0, 0)
         assert len(session.frequentist.models) == 3
+        names = [model.name() for model in session.frequentist.models]
+        assert names == ["Hill", "Linear", "Power"]
+
+        data["options"][0]["dist_type"] = 2
+        session = AnalysisSession.create(data, 0, 0)
+        assert len(session.frequentist.models) == 3
+        names = [model.name() for model in session.frequentist.models]
+        assert names == ["Hill", "Linear", "Power"]
+
+        # lognormal
+        data["options"][0]["dist_type"] = 3
+        session = AnalysisSession.create(data, 0, 0)
+        assert len(session.frequentist.models) == 1
+        names = [model.name() for model in session.frequentist.models]
+        assert names == ["Hill"]

@@ -2,7 +2,7 @@ import _ from "lodash";
 import React, {Component} from "react";
 import {inject, observer} from "mobx-react";
 import PropTypes from "prop-types";
-import {readOnlyCheckbox} from "../../common";
+import {checkOrEmpty} from "../../common";
 
 @inject("logicStore")
 @observer
@@ -22,7 +22,7 @@ class DecisionLogic extends Component {
                                     checked={logic[field]}
                                 />
                             ) : (
-                                readOnlyCheckbox(logic[field])
+                                checkOrEmpty(logic[field])
                             )}
                         </td>
                     </tr>

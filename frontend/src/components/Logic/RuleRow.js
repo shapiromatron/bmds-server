@@ -3,7 +3,7 @@ import React, {Component} from "react";
 import {observer} from "mobx-react";
 import PropTypes from "prop-types";
 
-import {readOnlyCheckbox} from "../../common";
+import {checkOrEmpty} from "../../common";
 import {BIN_NAMES, BINS, ruleLookups} from "../../constants/logicConstants";
 
 @observer
@@ -61,15 +61,15 @@ class RuleRow extends Component {
             <tr>
                 <td>{ruleLookup.name}</td>
                 <td className="text-center">
-                    {ruleLookup.enabledContinuous ? readOnlyCheckbox(rule.enabled_continuous) : "-"}
+                    {ruleLookup.enabledContinuous ? checkOrEmpty(rule.enabled_continuous) : "-"}
                 </td>
                 <td className="text-center">
                     {ruleLookup.enabledDichotomous
-                        ? readOnlyCheckbox(rule.enabled_dichotomous)
+                        ? checkOrEmpty(rule.enabled_dichotomous)
                         : "-"}
                 </td>
                 <td className="text-center">
-                    {ruleLookup.enabledNested ? readOnlyCheckbox(rule.enabled_nested) : "-"}
+                    {ruleLookup.enabledNested ? checkOrEmpty(rule.enabled_nested) : "-"}
                 </td>
                 <td>{_.isNumber(rule.threshold) ? rule.threshold : "-"}</td>
                 <td>{BIN_NAMES[rule.failure_bin]}</td>

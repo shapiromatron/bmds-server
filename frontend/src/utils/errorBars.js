@@ -91,29 +91,8 @@ export const inv_tdist_05 = function(df) {
     dichotomousErrorBars = function(dataset) {
         /*
         Procedure adds confidence intervals to dichotomous datasets.
-        Taken from BMDS v2601.pdf, pg 142,
-        https://19january2017snapshot.epa.gov/sites/production/files/2015-11/documents/bmds_manual.pdf
-
-        LL = {(2np + z2 - 1) - z*sqrt[z2 - (2+1/n) + 4p(nq+1)]}/[2*(n+z2)]
-        UL = {(2np + z2 + 1) + z*sqrt[z2 + (2-1/n) + 4p(nq-1)]}/[2*(n+z2)]
-
-        - p = the observed proportion
-        - n = the total number in the group in question
-        - z = Z(1-alpha/2) is the inverse standard normal cumulative distribution
-                function evaluated at 1-alpha/2
-        - q = 1-p.
-
-        The error bars shown in BMDS plots use alpha = 0.05 and so represent
-        the 95% confidence intervals on the observed proportions (independent of
-        model).
-
-        Z value derivation:
-
-        ```python
-        alpha = 0.05
-        z = scipy.stats.norm.ppf(1-alpha/2)
-        assert numpy.isclose(scipy.stats.norm.cdf(scipy.stats.norm.ppf(alpha)), alpha)
-        ```
+        Add confidence intervals to dichotomous datasets. (pg 80)
+        https://www.epa.gov/sites/production/files/2020-09/documents/bmds_3.2_user_guide.pdf
         */
         let uppers = [],
             lowers = [],
@@ -126,21 +105,15 @@ export const inv_tdist_05 = function(df) {
                 var p = incidence / n,
                     q = 1 - p,
                     z = 1.959963984540054,
-                    lower =
-                        (2 * n * p +
-                            2 * z -
-                            1 -
-                            z * Math.sqrt(2 * z - (2 + 1 / n) + 4 * p * (n * q + 1))) /
-                        (2 * (n + 2 * z)),
-                    upper =
-                        (2 * n * p +
-                            2 * z +
-                            1 +
-                            z * Math.sqrt(2 * z + (2 + 1 / n) + 4 * p * (n * q - 1))) /
-                        (2 * (n + 2 * z));
-                uppers.push(p + upper > 1 ? 1 - p : upper);
-                lowers.push(lower);
-                bounds.push([Math.max(p - lower, 0), Math.min(p + upper, 1)]);
+                    z2 = z * z,
+                    tmp1 = 2 * n * p + z2,
+                    tmp2 = 2 + 1 / n,
+                    tmp3 = 2 * (n + z2),
+                    lower = (tmp1 - 1 - z * Math.sqrt(z2 - tmp2 + 4 * p * (n * q + 1))) / tmp3,
+                    upper = (tmp1 + 1 + z * Math.sqrt(z2 + tmp2 + 4 * p * (n * q - 1))) / tmp3;
+                uppers.push(upper - p);
+                lowers.push(p - lower);
+                bounds.push([lower, upper]);
             } else {
                 uppers.push(undefined);
                 lowers.push(undefined);

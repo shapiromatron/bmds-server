@@ -106,6 +106,14 @@ export const inv_tdist_05 = function(df) {
         The error bars shown in BMDS plots use alpha = 0.05 and so represent
         the 95% confidence intervals on the observed proportions (independent of
         model).
+
+        Z value derivation:
+
+        ```python
+        alpha = 0.05
+        z = scipy.stats.norm.ppf(1-alpha/2)
+        assert numpy.isclose(scipy.stats.norm.cdf(scipy.stats.norm.ppf(alpha)), alpha)
+        ```
         */
         let uppers = [],
             lowers = [],
@@ -117,7 +125,7 @@ export const inv_tdist_05 = function(df) {
             if (_.isNumber(n) && _.isNumber(incidence) && n > 0 && n >= incidence) {
                 var p = incidence / n,
                     q = 1 - p,
-                    z = 1.959963986120195,
+                    z = 1.959963984540054,
                     lower =
                         (2 * n * p +
                             2 * z -

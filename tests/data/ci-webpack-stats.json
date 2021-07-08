@@ -1,13 +1,16 @@
 {
     "status": "done",
-    "publicPath": "http://localhost:8001/dist/",
     "chunks": {
         "main": [
-            {
-                "name": "main.ae112c688348c4dc5b2a.js",
-                "publicPath": "http://localhost:8001/dist/main.ae112c688348c4dc5b2a.js",
-                "path": "/__w/bmds-server/bmds-server/bmds_server/static/bundles/main.ae112c688348c4dc5b2a.js"
-            }
+            "main.97590b3096a638c665c7.js"
         ]
+    },
+    "publicPath": "http://localhost:8001/dist/",
+    "assets": {
+        "main.97590b3096a638c665c7.js": {
+            "name": "main.97590b3096a638c665c7.js",
+            "path": "/Users/shapiromatron/dev/bmds-server/bmds_server/static/bundles/main.97590b3096a638c665c7.js",
+            "publicPath": "http://localhost:8001/dist/main.97590b3096a638c665c7.js"
+        }
     }
 }

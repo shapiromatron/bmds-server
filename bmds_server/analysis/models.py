@@ -113,7 +113,7 @@ class Analysis(models.Model):
         return len(self.errors) > 0
 
     @classmethod
-    def delete_old_analysis(cls):
+    def delete_old_analyses(cls):
         qs = cls.objects.filter(deletion_date=now())
         logger.info(f"Removing {qs.count()} old BMDS analysis")
         qs.delete()

@@ -1,6 +1,6 @@
 -r base.txt
 
-gunicorn==20.0.4
+gunicorn==20.1.0
 
 # vendored version of bbmd
 ./vendor/bmds-1.0.0-py3-none-any.whl

@@ -1,8 +1,10 @@
 import React, {Component} from "react";
 import {inject, observer} from "mobx-react";
 import PropTypes from "prop-types";
-import ModelDetailModal from "./ModelDetailModal";
-import {FrequentistResultTable, BayesianResultTable} from "./ResultsTable";
+
+import ModelDetailModal from "../IndividualModel/ModelDetailModal";
+import FrequentistResultTable from "./FrequentistResultTable";
+import BayesianResultTable from "./BayesianResultTable";
 import DatasetTable from "../Data/DatasetTable";
 import SelectModel from "./SelectModel";
 import DoseResponsePlot from "../common/DoseResponsePlot";

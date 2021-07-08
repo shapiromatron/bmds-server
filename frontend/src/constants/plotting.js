@@ -72,16 +72,15 @@ export const getDrLayout = function(dataset, selected, modal, hover) {
             xmax = _.max(dataset.doses) || 0,
             response = getResponse(dataset),
             ymin = _.min(response) || 0,
-            ymax = _.max(response) || 0;
+            ymax = _.max(response) || 0,
+            xbuff = Math.abs(xmax - xmin) * 0.05,
+            ybuff = Math.abs(ymax - ymin) * 0.05;
 
-        layout.xaxis.range = [
-            xmin > 0 ? xmin * 0.9 : xmin * 1.1,
-            xmax > 0 ? xmax * 1.1 : xmax * 0.9,
-        ];
-        layout.yaxis.range = [
-            ymin > 0 ? ymin * 0.9 : ymin * 1.1,
-            ymax > 0 ? ymax * 1.1 : ymax * 0.9,
-        ];
+        layout.xaxis.range = [xmin == 0 ? -xbuff : xmin - xbuff, xmax == 0 ? xbuff : xmax + xbuff];
+        layout.yaxis.range =
+            dataset.dtype == Dtype.DICHOTOMOUS
+                ? [0, 1]
+                : [ymin == 0 ? -ybuff : ymin - ybuff, ymax == 0 ? ybuff : ymax + ybuff];
 
         return layout;
     },

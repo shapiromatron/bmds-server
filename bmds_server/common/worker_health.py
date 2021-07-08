@@ -12,7 +12,7 @@ from ..main.celery import app
 
 
 class WorkerHealthcheck:
-    KEY = "bmd-worker-healthcheck"
+    KEY = "worker-healthcheck"
     MAX_SIZE = 60 * 24 // 5  # 1 day of data at a 5 minute-interval
     MAX_WAIT = timedelta(minutes=15)  # check is a failure if no task has run in X minutes
 

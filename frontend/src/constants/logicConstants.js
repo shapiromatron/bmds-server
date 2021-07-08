@@ -1,6 +1,3 @@
-import _ from "lodash";
-import {toJS} from "mobx";
-
 export const RULES = Object.freeze({
         BMD_MISSING: "bmd_missing",
         BMDL_MISSING: "bmdl_missing",

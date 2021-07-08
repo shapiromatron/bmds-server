@@ -64,9 +64,7 @@ class RuleRow extends Component {
                     {ruleLookup.enabledContinuous ? checkOrEmpty(rule.enabled_continuous) : "-"}
                 </td>
                 <td className="text-center">
-                    {ruleLookup.enabledDichotomous
-                        ? checkOrEmpty(rule.enabled_dichotomous)
-                        : "-"}
+                    {ruleLookup.enabledDichotomous ? checkOrEmpty(rule.enabled_dichotomous) : "-"}
                 </td>
                 <td className="text-center">
                     {ruleLookup.enabledNested ? checkOrEmpty(rule.enabled_nested) : "-"}

@@ -1,25 +1,13 @@
-import json
 from typing import Optional, Tuple
 
 from django.conf import settings
-from django.http.response import JsonResponse
 from django.middleware.csrf import get_token
 from django.shortcuts import get_object_or_404
 from django.template import RequestContext, Template
 from django.urls import reverse_lazy
-from django.views.generic import CreateView, DeleteView, DetailView, RedirectView, View
+from django.views.generic import CreateView, DeleteView, DetailView, RedirectView
 
 from . import forms, models
-
-
-class Healthcheck(View):
-    """
-    Healthcheck view check; ensure django server can serve requests.
-    """
-
-    def get(self, request, *args, **kwargs):
-        # TODO - add cache check and celery worker check
-        return JsonResponse({"status": "ok"})
 
 
 class Home(CreateView):
@@ -72,14 +60,14 @@ class AnalysisDetail(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        config = {
+        context["config"] = {
             "apiUrl": self.object.get_api_url(),
             "url": self.object.get_absolute_url(),
             "excelUrl": self.object.get_excel_url(),
             "wordUrl": self.object.get_word_url(),
         }
         if self.can_edit:
-            config["editSettings"] = {
+            context["config"]["editSettings"] = {
                 "csrfToken": get_token(self.request),
                 "editKey": self.object.password,
                 "viewUrl": self.request.build_absolute_uri(self.object.get_absolute_url()),
@@ -92,7 +80,6 @@ class AnalysisDetail(DetailView):
                 "deleteDateStr": self.object.deletion_date_str,
                 "deletionDaysUntilDeletion": self.object.days_until_deletion,
             }
-        context["config"] = json.dumps(config, indent=2)
         return context
 
 

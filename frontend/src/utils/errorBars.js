@@ -68,7 +68,7 @@ export const inv_tdist_05 = function(df) {
 
             if (_.isFinite(n) && _.isFinite(stdev)) {
                 const se = stdev / Math.sqrt(n),
-                    z = inv_tdist_05(n - 1) || 1.96,
+                    z = inv_tdist_05(n - 1) || 2.04,
                     change = se * z;
                 uppers.push(change);
                 lowers.push(change);

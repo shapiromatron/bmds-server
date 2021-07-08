@@ -21,14 +21,22 @@ class CDFTable extends Component {
                     </tr>
                 </thead>
                 <tbody>
-                    {_.range(bmd_dist[0].length).map(i => {
-                        return (
-                            <tr key={i}>
-                                <td>{bmd_dist[1][i]}</td>
-                                <td>{ff(bmd_dist[0][i])}</td>
-                            </tr>
-                        );
-                    })}
+                    {bmd_dist[0].length == 0 ? (
+                        <tr>
+                            <td colSpan={2}>
+                                <i>No data available.</i>
+                            </td>
+                        </tr>
+                    ) : (
+                        _.range(bmd_dist[0].length).map(i => {
+                            return (
+                                <tr key={i}>
+                                    <td>{ff(bmd_dist[1][i])}</td>
+                                    <td>{ff(bmd_dist[0][i])}</td>
+                                </tr>
+                            );
+                        })
+                    )}
                 </tbody>
             </table>
         );

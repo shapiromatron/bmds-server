@@ -206,8 +206,8 @@ class OutputStore {
         );
     }
     @computed get drBayesianPlotData() {
-        const bayesian_plot_data = [getDrDatasetPlotData(this.selectedDataset)];
-        const output = this.selectedOutput;
+        const bayesian_plot_data = [getDrDatasetPlotData(this.selectedDataset)],
+            output = this.selectedOutput;
         output.bayesian.models.map((model, index) => {
             let bayesian_model = {
                 x: model.results.plotting.dr_x,
@@ -228,12 +228,11 @@ class OutputStore {
     }
     @computed get drBayesianPlotLayout() {
         // the bayesian plot shown on the output page and modal
-        let layout = _.cloneDeep(this.drFrequentistPlotLayout);
-        const output = this.selectedOutput;
-        layout.annotations = getBayesianBMDLine(
-            output.bayesian.model_average,
-            bmaColor
-        ).annotations;
+        let layout = _.cloneDeep(this.drFrequentistPlotLayout),
+            output = this.selectedOutput;
+        layout.annotations = output.bayesian.model_average
+            ? getBayesianBMDLine(output.bayesian.model_average, bmaColor).annotations
+            : [];
         return layout;
     }
 

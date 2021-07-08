@@ -4,7 +4,7 @@ django-webpack-loader==1.1.0
 djangorestframework==3.12.4
 
 # db
-psycopg2-binary==2.8.6
+psycopg2-binary==2.9.1
 
 # celery
 celery==5.1.2

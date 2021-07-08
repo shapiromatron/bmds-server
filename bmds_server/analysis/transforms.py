@@ -78,6 +78,7 @@ def build_dataset(dataset_type: str, dataset: Dict[str, List[float]]) -> bmds.da
 def remap_exponential(models: List[str]) -> List[str]:
     # recursively expand user-specified "exponential" model into M3 and M5
     if bmds.constants.M_Exponential in models:
+        models = models.copy()  # return a copy so inputs are unchanged
         pos = models.index(bmds.constants.M_Exponential)
         models[pos : pos + 1] = (bmds.constants.M_ExponentialM3, bmds.constants.M_ExponentialM5)
     return models

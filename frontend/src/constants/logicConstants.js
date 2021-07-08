@@ -241,16 +241,4 @@ export const RULES = Object.freeze({
         [BINS.NO_CHANGE]: "Viable",
         [BINS.WARNING]: "Questionable",
         [BINS.FAILURE]: "Unusable",
-    },
-    getModelBinLabel = function(output, index) {
-        if (output.recommender.results.recommended_model_index == index) {
-            return `Recommended - ${output.recommender.results.recommended_model_variable.toUpperCase()}`;
-        }
-        return BIN_LABELS[output.recommender.results.model_bin[index]];
-    },
-    getModelBinText = function(output, index) {
-        return _.chain(toJS(output.recommender.results.model_notes[index]))
-            .values()
-            .flattenDeep()
-            .value();
     };

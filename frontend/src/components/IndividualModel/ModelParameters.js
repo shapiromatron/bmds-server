@@ -8,8 +8,7 @@ import {checkOrTimes} from "../../common";
 @observer
 class ModelParameters extends Component {
     render() {
-        const {store} = this.props,
-            parameters = store.modalModel.results.parameters;
+        const {parameters} = this.props;
         return (
             <table className="table table-bordered table-sm">
                 <thead>
@@ -18,7 +17,7 @@ class ModelParameters extends Component {
                     </tr>
                     <tr>
                         <th>Variable</th>
-                        <th>Parameter</th>
+                        <th>Parameter (CI)</th>
                         <th>Bounded</th>
                     </tr>
                 </thead>
@@ -27,7 +26,11 @@ class ModelParameters extends Component {
                         return (
                             <tr key={i}>
                                 <td>{name}</td>
-                                <td>{ff(parameters.values[i])}</td>
+                                <td>
+                                    {ff(parameters.values[i])}
+                                    <br />({ff(parameters.lower_ci[i])},{ff(parameters.upper_ci[i])}
+                                    )
+                                </td>
                                 <td>{checkOrTimes(parameters.bounded[i])}</td>
                             </tr>
                         );
@@ -38,6 +41,6 @@ class ModelParameters extends Component {
     }
 }
 ModelParameters.propTypes = {
-    store: PropTypes.object,
+    parameters: PropTypes.object.isRequired,
 };
 export default ModelParameters;

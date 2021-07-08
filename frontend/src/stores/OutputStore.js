@@ -36,6 +36,22 @@ class OutputStore {
         this.selectedOutputIndex = output_id;
     }
 
+    @computed get globalErrorMessage() {
+        return this.rootStore.mainStore.errorMessage;
+    }
+
+    @computed get selectedOutputErrorMessage() {
+        if (this.globalErrorMessage) {
+            return this.globalErrorMessage;
+        } else if (this.selectedOutput === null) {
+            return "No results available.";
+        } else if ("error" in this.selectedOutput) {
+            return this.selectedOutput.error;
+        } else {
+            return null;
+        }
+    }
+
     @computed get canEdit() {
         return this.rootStore.mainStore.canEdit;
     }

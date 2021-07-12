@@ -2,7 +2,6 @@ from enum import Enum
 from typing import Dict, List, Union
 
 import bmds
-from bmds.bmds3.sessions import get_model
 from bmds.bmds3.types.continuous import ContinuousModelSettings
 from bmds.bmds3.types.dichotomous import DichotomousModelSettings
 from bmds.bmds3.types.priors import PriorClass

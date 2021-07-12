@@ -14,7 +14,7 @@ from bmds.reporting.styling import Report
 from django.conf import settings
 from django.core.cache import cache
 from django.core.exceptions import ValidationError
-from django.db import models
+from django.db import DataError, models
 from django.urls import reverse
 from django.utils.text import slugify
 from django.utils.timezone import now
@@ -52,9 +52,15 @@ class Analysis(models.Model):
         return str(self.inputs.get("analysis_name", self.id))
 
     def save(self, *args, **kwargs):
-        super().save(*args, **kwargs)
-        DocxReportCache(analysis=self).delete()
-        ExcelReportCache(analysis=self).delete()
+        try:
+            super().save(*args, **kwargs)
+        except DataError:
+            self.reset_execution()
+            self.errors = ["An error occurred saving content. Please contact the developers."]
+            super().save(*args, **kwargs)
+        finally:
+            DocxReportCache(analysis=self).delete()
+            ExcelReportCache(analysis=self).delete()
 
     @property
     def slug(self) -> str:

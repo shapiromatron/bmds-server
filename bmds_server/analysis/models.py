@@ -14,7 +14,7 @@ from bmds.reporting.styling import Report
 from django.conf import settings
 from django.core.cache import cache
 from django.core.exceptions import ValidationError
-from django.db import models, DataError
+from django.db import DataError, models
 from django.urls import reverse
 from django.utils.text import slugify
 from django.utils.timezone import now

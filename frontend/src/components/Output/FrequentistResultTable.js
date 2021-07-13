@@ -36,7 +36,7 @@ const getModelBinLabel = function(output, index) {
     getFootnotes = function(recommendedModelIndex, selected) {
         const icons = "*†‡§",
             fns = [];
-        if (recommendedModelIndex) {
+        if (_.isNumber(recommendedModelIndex)) {
             fns.push({
                 index: recommendedModelIndex,
                 icon: icons[fns.length],
@@ -44,7 +44,7 @@ const getModelBinLabel = function(output, index) {
                 class: "table-info",
             });
         }
-        if (selected.model_index) {
+        if (_.isNumber(selected.model_index)) {
             fns.push({
                 index: selected.model_index,
                 icon: icons[fns.length],

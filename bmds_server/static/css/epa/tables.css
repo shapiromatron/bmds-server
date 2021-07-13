@@ -12,9 +12,6 @@ th {
   background-color: #f1f1f1;
   font-weight: 700;
 }
-thead th {
-  text-align: left;
-}
 caption {
   margin-bottom: 0.5em;
 }

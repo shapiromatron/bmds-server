@@ -12,7 +12,7 @@ class CSTestofInterest extends Component {
 
         return (
             <table className="table table-bordered table-sm">
-                <thead className="table-primary">
+                <thead className="bg-custom">
                     <tr>
                         <th colSpan="4">Test of Interest</th>
                     </tr>

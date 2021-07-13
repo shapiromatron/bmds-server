@@ -46,3 +46,7 @@
 .sidebar .bg-primary {
     background-color: white !important;
 }
+
+.bg-custom {
+  background-color: #f1f1f1;
+}

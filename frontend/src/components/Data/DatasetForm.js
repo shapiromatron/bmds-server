@@ -136,7 +136,7 @@ class DatasetForm extends Component {
 
                 <table className="table table-sm text-center">
                     <thead>
-                        <tr className="table-primary text-center">
+                        <tr className="bg-custom text-center">
                             {columnNames.map((item, index) => (
                                 <th key={index}>{columnHeaders[item]}</th>
                             ))}

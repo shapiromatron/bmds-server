@@ -28,7 +28,7 @@ class BayesianResultTable extends Component {
                     ))}
                 </colgroup>
                 <thead className="table-bordered">
-                    <tr className="table-primary">
+                    <tr className="bg-custom">
                         <th>Model</th>
                         <th>Prior Weights</th>
                         <th>Posterior Weights</th>

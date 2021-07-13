@@ -12,7 +12,7 @@ class ContinuousDeviance extends Component {
 
         return (
             <table className="table table-bordered table-sm">
-                <thead className="table-primary">
+                <thead className="bg-custom">
                     <tr>
                         <th colSpan="9">Analysis of Deviance</th>
                     </tr>

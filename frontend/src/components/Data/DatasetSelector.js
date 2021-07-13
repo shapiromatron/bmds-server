@@ -10,7 +10,6 @@ class DatasetSelector extends Component {
     render() {
         const {dataStore, store} = this.props;
         return (
-            <div className="mt-2">
                 <SelectInput
                     label="Existing datasets"
                     onChange={value => store.setSelectedDataset(parseInt(value))}
@@ -19,7 +18,6 @@ class DatasetSelector extends Component {
                         return {value: dataset.metadata.id, text: dataset.metadata.name};
                     })}
                 />
-            </div>
         );
     }
 }

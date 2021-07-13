@@ -26,7 +26,7 @@ class ShareActions extends Component {
                     aria-labelledby="bmdSessionShare">
                     <form className="px-3">
                         {/* READ ONLY LINK */}
-                        <h6 className="dropdown-header">Read-only link</h6>
+                        <span className="dropdown-header">Read-only link</span>
                         <div
                             className="btn-group btn-block"
                             role="group"
@@ -50,7 +50,7 @@ class ShareActions extends Component {
                         </p>
                         {/* EDIT LINK */}
                         <div className="dropdown-divider"></div>
-                        <h5 className="dropdown-header">Edit link</h5>
+                        <span className="dropdown-header">Edit link</span>
                         <div
                             className="btn-group btn-block"
                             role="group"

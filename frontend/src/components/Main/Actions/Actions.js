@@ -32,7 +32,7 @@ class Actions extends Component {
                     aria-labelledby="bmdSessionActions">
                     {mainStore.canEdit ? (
                         <>
-                            <h6 className="dropdown-header">Edit settings</h6>
+                            <span className="dropdown-header">Edit settings</span>
                             <div className="dropdown-item form-group mb-0">
                                 <label
                                     htmlFor="loadAnalysisFile"
@@ -74,7 +74,7 @@ class Actions extends Component {
                     ) : null}
                     {mainStore.hasOutputs ? (
                         <>
-                            <h6 className="dropdown-header">Reporting</h6>
+                            <span className="dropdown-header">Reporting</span>
                             <button
                                 className="dropdown-item"
                                 type="button"

@@ -10,14 +10,14 @@ class DatasetSelector extends Component {
     render() {
         const {dataStore, store} = this.props;
         return (
-                <SelectInput
-                    label="Existing datasets"
-                    onChange={value => store.setSelectedDataset(parseInt(value))}
-                    value={store.selectedDatasetId}
-                    choices={dataStore.datasets.map(dataset => {
-                        return {value: dataset.metadata.id, text: dataset.metadata.name};
-                    })}
-                />
+            <SelectInput
+                label="Existing datasets"
+                onChange={value => store.setSelectedDataset(parseInt(value))}
+                value={store.selectedDatasetId}
+                choices={dataStore.datasets.map(dataset => {
+                    return {value: dataset.metadata.id, text: dataset.metadata.name};
+                })}
+            />
         );
     }
 }

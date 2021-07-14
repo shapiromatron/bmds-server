@@ -45,7 +45,7 @@ class ShareActions extends Component {
                                 &nbsp;Open
                             </a>
                         </div>
-                        <p className="dropdown-item text-muted" style={{whiteSpace:"normal"}}>
+                        <p className="dropdown-item text-muted" style={{whiteSpace: "normal"}}>
                             Anyone with this link can view the analysis and download reports.
                         </p>
                         {/* EDIT LINK */}
@@ -69,7 +69,9 @@ class ShareActions extends Component {
                                 &nbsp;Open
                             </a>
                         </div>
-                        <p className="dropdown-item text-muted" style={{whiteSpace:"normal"}}>Anyone with this link can edit the analysis.</p>
+                        <p className="dropdown-item text-muted" style={{whiteSpace: "normal"}}>
+                            Anyone with this link can edit the analysis.
+                        </p>
                     </form>
                 </div>
             </div>

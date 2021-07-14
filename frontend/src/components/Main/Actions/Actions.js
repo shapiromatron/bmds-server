@@ -18,7 +18,7 @@ class Actions extends Component {
         return (
             <div className="dropdown">
                 <button
-                    className="btn btn-info dropdown-toggle"
+                    className="btn btn-primary dropdown-toggle"
                     type="button"
                     id="bmdSessionActions"
                     data-toggle="dropdown"

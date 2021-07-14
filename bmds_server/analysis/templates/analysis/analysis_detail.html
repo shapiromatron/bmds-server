@@ -5,7 +5,7 @@
 {% endblock content %}
 
 {% block extra-js %}
-<script type="text/json" id="config">{{config|safe}}</script>
+{{ config|json_script:"config" }}
 <script type="text/javascript">
     window.app.appStartup(document.getElementById("main"))
 </script>

@@ -203,7 +203,7 @@ class MainStore {
     }
     @action.bound
     updateModelStateFromApi(data) {
-        if (data.errors.length > 2) {
+        if (data.errors.length > 0) {
             this.errorMessage = data.errors;
             this.isUpdateComplete = true;
         }

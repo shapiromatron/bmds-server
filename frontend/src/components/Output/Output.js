@@ -1,8 +1,10 @@
 import React, {Component} from "react";
 import {inject, observer} from "mobx-react";
 import PropTypes from "prop-types";
-import ModelDetailModal from "./ModelDetailModal";
-import {FrequentistResultTable, BayesianResultTable} from "./ResultsTable";
+
+import ModelDetailModal from "../IndividualModel/ModelDetailModal";
+import FrequentistResultTable from "./FrequentistResultTable";
+import BayesianResultTable from "./BayesianResultTable";
 import DatasetTable from "../Data/DatasetTable";
 import SelectModel from "./SelectModel";
 import DoseResponsePlot from "../common/DoseResponsePlot";
@@ -15,20 +17,17 @@ import SelectInput from "../common/SelectInput";
 class Output extends Component {
     render() {
         const {outputStore} = this.props,
-            {canEdit, selectedOutput, selectedFrequentist, selectedBayesian} = outputStore;
+            {
+                canEdit,
+                selectedOutputErrorMessage,
+                selectedFrequentist,
+                selectedBayesian,
+            } = outputStore;
 
-        if (selectedOutput === null) {
+        if (selectedOutputErrorMessage) {
             return (
                 <div className="container-fluid">
-                    <p>No results available.</p>
-                </div>
-            );
-        }
-
-        if ("error" in selectedOutput) {
-            return (
-                <div className="container-fluid">
-                    <pre>{selectedOutput.error}</pre>
+                    <pre>{selectedOutputErrorMessage}</pre>
                 </div>
             );
         }

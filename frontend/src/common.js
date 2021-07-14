@@ -23,11 +23,13 @@ export const simulateClick = function(el) {
             "Content-Type": "application/json",
         };
     },
-    readOnlyCheckbox = bool => {
+    checkOrEmpty = bool => {
+        // ✓/<null> in box
         return <i className={bool ? "fa fa-check-square-o" : "fa fa-square-o"}></i>;
     },
-    isParameterBounded = bool => {
-        return <i className={bool ? "fa fa-check" : "fa fa-times"}></i>;
+    checkOrTimes = bool => {
+        // ✓/x in box
+        return <i className={bool ? "fa fa-check-square-o" : "fa fa-times-rectangle-o"}></i>;
     },
     ff = function(value) {
         // ff = float format

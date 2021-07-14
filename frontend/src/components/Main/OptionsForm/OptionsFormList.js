@@ -16,7 +16,7 @@ class OptionsFormList extends Component {
             modelType = optionsStore.getModelType,
             optionsList = toJS(optionsStore.optionsList),
             distTypeHelpText =
-                "If lognormal is selected, only the Exponential and Hill models can be executed";
+                "If lognormal is selected, only the Exponential and Hill models can be executed. Other models will be removed during the execution process and will not be shown in the outputs.";
         return (
             <div>
                 <div className="panel panel-default">
@@ -31,7 +31,8 @@ class OptionsFormList extends Component {
                                             <th>Tail Probability</th>
                                             <th>Confidence Level</th>
                                             <th>
-                                                Distribution + Variance&nbsp;
+                                                Distribution +<br />
+                                                Variance&nbsp;
                                                 <HelpTextPopup content={distTypeHelpText} />
                                             </th>
                                         </>

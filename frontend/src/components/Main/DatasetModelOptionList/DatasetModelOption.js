@@ -7,7 +7,7 @@ import {
     getDegreeOptions,
     allDegreeOptions,
 } from "../../../constants/dataConstants";
-import {getLabel, readOnlyCheckbox} from "../../../common";
+import {getLabel, checkOrEmpty} from "../../../common";
 
 @observer
 class DatasetModelOption extends Component {
@@ -64,7 +64,7 @@ class DatasetModelOption extends Component {
             </tr>
         ) : (
             <tr>
-                <td>{readOnlyCheckbox(option.enabled)}</td>
+                <td>{checkOrEmpty(option.enabled)}</td>
                 <td>{dataset.metadata.name}</td>
                 <td>{getLabel(option.degree, allDegreeOptions)}</td>
                 {hasAdverseDirection ? (

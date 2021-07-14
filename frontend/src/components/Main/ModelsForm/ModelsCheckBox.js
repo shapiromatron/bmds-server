@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import {observer} from "mobx-react";
 
 import * as mc from "../../../constants/mainConstants";
-import {readOnlyCheckbox} from "../../../common";
+import {checkOrEmpty} from "../../../common";
 import HelpTextPopup from "../../common/HelpTextPopup";
 
 const isModelChecked = function(models, type, model) {
@@ -52,7 +52,7 @@ const isModelChecked = function(models, type, model) {
                     checked={isModelChecked(store.models, type, model)}></input>
             </td>
         ) : (
-            <td>{readOnlyCheckbox(isModelChecked(store.models, type, model))}</td>
+            <td>{checkOrEmpty(isModelChecked(store.models, type, model))}</td>
         );
     }),
     multistageHelpText = `All Multistage model polynomial degrees will be run up to a maximum

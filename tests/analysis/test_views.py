@@ -1,5 +1,3 @@
-import json
-
 import pytest
 from django.http.response import Http404
 from django.test import Client
@@ -36,7 +34,7 @@ class TestAnalysisDetail:
 
         # read view should have no edit settings context
         response = client.get(analysis.get_absolute_url())
-        assert json.loads(response.context["config"]) == {
+        assert response.context["config"] == {
             "apiUrl": f"/api/v1/analysis/{pk}/",
             "url": f"/analysis/{pk}/",
             "excelUrl": f"/api/v1/analysis/{pk}/excel/",
@@ -45,7 +43,7 @@ class TestAnalysisDetail:
 
         # write view should have edit context
         response = client.get(analysis.get_edit_url())
-        config = json.loads(response.context["config"])
+        config = response.context["config"]
         config["editSettings"].pop("csrfToken")
         assert isinstance(config["editSettings"].pop("deletionDaysUntilDeletion"), int)
         assert config == {

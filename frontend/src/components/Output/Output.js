@@ -17,20 +17,17 @@ import SelectInput from "../common/SelectInput";
 class Output extends Component {
     render() {
         const {outputStore} = this.props,
-            {canEdit, selectedOutput, selectedFrequentist, selectedBayesian} = outputStore;
+            {
+                canEdit,
+                selectedOutputErrorMessage,
+                selectedFrequentist,
+                selectedBayesian,
+            } = outputStore;
 
-        if (selectedOutput === null) {
+        if (selectedOutputErrorMessage) {
             return (
                 <div className="container-fluid">
-                    <p>No results available.</p>
-                </div>
-            );
-        }
-
-        if ("error" in selectedOutput) {
-            return (
-                <div className="container-fluid">
-                    <pre>{selectedOutput.error}</pre>
+                    <pre>{selectedOutputErrorMessage}</pre>
                 </div>
             );
         }

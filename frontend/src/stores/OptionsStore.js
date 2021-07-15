@@ -43,13 +43,6 @@ class OptionsStore {
     @computed get canAddNewOption() {
         return this.optionsList.length < 3;
     }
-
-    @computed get hasLogNormalSelected() {
-        return (
-            this.optionsList.filter(option => option.dist_type === constant.DistTypeLognormal)
-                .length > 0
-        );
-    }
 }
 
 export default OptionsStore;

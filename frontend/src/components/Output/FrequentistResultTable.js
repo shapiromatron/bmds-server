@@ -165,7 +165,7 @@ class FrequentistRow extends Component {
                 <td>{ff(data.model.results.gof.roi)}</td>
                 <td>{ff(data.model.results.gof.residual[0])}</td>
                 {store.recommendationEnabled ? (
-                    store.showNotes ? (
+                    store.showInlineNotes ? (
                         <td>
                             <u>{getModelBinLabel(selectedFrequentist, data.index)}</u>
                             <br />
@@ -249,13 +249,13 @@ class FrequentistResultTable extends Component {
                                 <button
                                     title="Toggle showing notes inline or popover"
                                     className="btn btn-info btn-sm pull-right"
-                                    onClick={() => store.toggleNotesView()}>
+                                    onClick={store.toggleInlineNotes}>
                                     <i
                                         className={`fa fa-fw ${
-                                            store.showNotes ? "fa-eye-slash" : "fa-eye"
+                                            store.showInlineNotes ? "fa-eye-slash" : "fa-eye"
                                         }`}></i>
                                     &nbsp;
-                                    {store.showNotes ? "Hide" : "Show"}
+                                    {store.showInlineNotes ? "Hide" : "Show"}
                                 </button>
                                 Recommendation
                                 <br />

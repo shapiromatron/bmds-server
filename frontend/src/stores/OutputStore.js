@@ -31,10 +31,10 @@ class OutputStore {
     @observable drModelAverageModal = false;
 
     @observable showBMDLine = false;
-    @observable showNotes = false;
 
-    @action.bound toggleNotesView() {
-        this.showNotes = !this.showNotes;
+    @observable showInlineNotes = false;
+    @action.bound toggleInlineNotes() {
+        this.showInlineNotes = !this.showInlineNotes;
     }
 
     @action.bound setSelectedOutputIndex(output_id) {

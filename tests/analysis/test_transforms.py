@@ -25,7 +25,7 @@ class TestOptions:
             options,
             dataset_options,
         )
-        assert res.bmr_type is ContinuousRiskType.eStandardDev
+        assert res.bmr_type is ContinuousRiskType.StandardDeviation
         assert pytest.approx(res.bmr, 1.5)
         assert pytest.approx(res.alpha, 0.05)
         assert pytest.approx(res.tail_prob, 0.4)
@@ -47,7 +47,7 @@ class TestOptions:
             options,
             dataset_options,
         )
-        assert res.bmr_type is DichotomousRiskType.eAddedRisk
+        assert res.bmr_type is DichotomousRiskType.AddedRisk
         assert pytest.approx(res.bmr, 0.15)
         assert pytest.approx(res.alpha, 0.05)
         assert res.degree == 1

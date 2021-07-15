@@ -80,7 +80,7 @@ def build_bayesian_session(
             model_options.degree = 2
         session.add_model(model_name, settings=model_options)
 
-    # TODO: add model averaging; set prior weights
+    # TODO: set prior weights to bayesian model averaging
 
     return session
 

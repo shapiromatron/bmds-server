@@ -37,7 +37,11 @@ class Actions extends Component {
                                 <label
                                     htmlFor="loadAnalysisFile"
                                     className="mb-0"
-                                    style={{fontWeight: "normal", cursor: "pointer"}}>
+                                    style={{
+                                        fontWeight: "normal",
+                                        cursor: "pointer",
+                                        display: "block",
+                                    }}>
                                     <i className="fa fa-fw fa-upload"></i>
                                     &nbsp;Load analysis
                                 </label>

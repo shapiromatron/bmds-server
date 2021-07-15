@@ -31,6 +31,11 @@ class OutputStore {
     @observable drModelAverageModal = false;
 
     @observable showBMDLine = false;
+    @observable showNotes = false;
+
+    @action.bound toggleNotesView() {
+        this.showNotes = !this.showNotes;
+    }
 
     @action.bound setSelectedOutputIndex(output_id) {
         this.selectedOutputIndex = output_id;

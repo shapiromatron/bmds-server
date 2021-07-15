@@ -8,6 +8,8 @@ import {BIN_LABELS} from "../../constants/logicConstants";
 import {getPValue, modelClasses, priorClass} from "../../constants/outputConstants";
 import {ff} from "../../common";
 
+import HelpTextPopup from "../common/HelpTextPopup";
+
 const getModelBinLabel = function(output, index) {
         if (output.recommender.results.recommended_model_index == index) {
             return `Recommended - ${output.recommender.results.recommended_model_variable.toUpperCase()}`;
@@ -156,9 +158,20 @@ class FrequentistRow extends Component {
                 <td>{ff(data.model.results.gof.residual[0])}</td>
                 {store.recommendationEnabled ? (
                     <td>
-                        <u>{getModelBinLabel(selectedFrequentist, data.index)}</u>
+                        <u>
+                            {getModelBinLabel(selectedFrequentist, data.index)} &nbsp;
+                            <HelpTextPopup
+                                title={getModelBinLabel(selectedFrequentist, data.index)}
+                                content={getModelBinText(selectedFrequentist, data.index)
+                                    .toString()
+                                    .split(",")
+                                    .join("<br/>")}
+                            />
+                        </u>
                         <br />
-                        {getRecommenderText(selectedFrequentist, data.index)}
+                        {store.showNotes
+                            ? getRecommenderText(selectedFrequentist, data.index)
+                            : null}
                     </td>
                 ) : null}
             </tr>
@@ -228,7 +241,17 @@ class FrequentistResultTable extends Component {
                         <th>AIC</th>
                         <th>Scaled Residual for Dose Group near BMD</th>
                         <th>Scaled Residual for Control Dose Group</th>
-                        {store.recommendationEnabled ? <th>Recommendation and Notes</th> : null}
+                        {store.recommendationEnabled ? (
+                            <th>
+                                Recommendation and Notes <br />
+                                <button
+                                    className="btn btn-warning  btn-sm"
+                                    onClick={() => store.toggleNotesView()}>
+                                    {store.showNotes ? "Hide" : "Show"}
+                                    &nbsp;Notes
+                                </button>
+                            </th>
+                        ) : null}
                     </tr>
                 </thead>
                 <tbody className="table-bordered">

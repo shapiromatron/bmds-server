@@ -27,7 +27,7 @@ jobs:
         architecture: 'x64'
     - name: install
       run: |
-        mv tests/data/ci-webpack-stats.json webpack-stats.json
+        mv tests/data/ci-webpack-stats.json bmds_server/webpack-stats.json
         pip install -r requirements/ci.txt
     - name: lint
       run: |

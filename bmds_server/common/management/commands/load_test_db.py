@@ -3,11 +3,9 @@ from django.contrib.auth import get_user_model
 from django.core.management import call_command
 from django.core.management.base import BaseCommand, CommandError
 
-HELP_TEXT = """Load the test database from a fixture."""
-
 
 class Command(BaseCommand):
-    help = HELP_TEXT
+    help = """Load the test database from a fixture."""
 
     def add_arguments(self, parser):
         parser.add_argument(

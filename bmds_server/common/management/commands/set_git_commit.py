@@ -1,13 +1,11 @@
 from django.conf import settings
 from django.core.management.base import BaseCommand
 
-from ....common.git import Commit
-
-HELP_TEXT = """Set the .gitcommit file used for versioning"""
+from ...git import Commit
 
 
 class Command(BaseCommand):
-    help = HELP_TEXT
+    help = """Set the .gitcommit file used for versioning"""
 
     def handle(self, *args, **options):
         current = Commit.current(settings.ROOT_DIR)

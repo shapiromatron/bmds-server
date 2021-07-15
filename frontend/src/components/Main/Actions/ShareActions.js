@@ -40,7 +40,7 @@ class ShareActions extends Component {
                                 href={editSettings.viewUrl}
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="btn btn-secondary">
+                                className="btn btn-secondary text-white">
                                 <i className="fa fa-fw fa-external-link"></i>
                                 &nbsp;Open
                             </a>

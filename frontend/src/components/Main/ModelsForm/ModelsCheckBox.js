@@ -4,7 +4,7 @@ import {observer} from "mobx-react";
 
 import * as mc from "../../../constants/mainConstants";
 import {checkOrEmpty} from "../../../common";
-import HelpTextPopup from "../../common/HelpTextPopup";
+import HelpTextPopover from "../../common/HelpTextPopover";
 
 const isModelChecked = function(models, type, model) {
         let checked = false;
@@ -142,7 +142,7 @@ const ModelsCheckBox = observer(props => {
                 <tr>
                     <td className="text-left align-middle">
                         Multistage&nbsp;
-                        {writeMode ? <HelpTextPopup content={multistageHelpText} /> : null}
+                        {writeMode ? <HelpTextPopover content={multistageHelpText} /> : null}
                     </td>
                     <CheckBoxTd store={store} type={fr} model={"Multistage"} />
                     <CheckBoxTd store={store} type={fu} model={"Multistage"} />

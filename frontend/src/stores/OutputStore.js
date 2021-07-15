@@ -32,6 +32,11 @@ class OutputStore {
 
     @observable showBMDLine = false;
 
+    @observable showInlineNotes = false;
+    @action.bound toggleInlineNotes() {
+        this.showInlineNotes = !this.showInlineNotes;
+    }
+
     @action.bound setSelectedOutputIndex(output_id) {
         this.selectedOutputIndex = output_id;
     }

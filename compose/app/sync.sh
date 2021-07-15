@@ -10,3 +10,6 @@ if [[ $LOAD_TEST_DB == "True" ]]; then
     echo "loading test database..."
     manage.py load_test_db --ifempty
 fi
+
+# succcessful exit for healthchecks
+exit 0

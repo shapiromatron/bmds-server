@@ -16,7 +16,7 @@ class RuleList extends Component {
 
         return (
             <table className="table table-bordered">
-                <thead className="table-primary">
+                <thead className="bg-custom">
                     <tr>
                         <th colSpan="7" className="text-center">
                             Model Recommendation/Bin Placement Logic

@@ -22,7 +22,7 @@ class OptionsFormList extends Component {
                 <div className="panel panel-default">
                     <form className="form-horizontal">
                         <table className="options-table table table-bordered table-sm text-center">
-                            <thead className="table-primary">
+                            <thead className="bg-custom">
                                 <tr>
                                     {modelType === MODEL_CONTINUOUS ? (
                                         <>

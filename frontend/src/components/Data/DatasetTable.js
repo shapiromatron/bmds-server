@@ -25,7 +25,7 @@ class DatasetTable extends Component {
                             <col key={i} width={width}></col>
                         ))}
                     </colgroup>
-                    <thead className="table-primary">
+                    <thead className="bg-custom">
                         <tr>
                             {columnNames.map((column, i) => {
                                 return <th key={i}>{columnHeaders[column]}</th>;

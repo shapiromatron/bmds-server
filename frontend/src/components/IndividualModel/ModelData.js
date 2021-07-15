@@ -11,7 +11,7 @@ class ModelData extends Component {
         return (
             <table className="table table-bordered table-sm">
                 <thead>
-                    <tr className="table-primary">
+                    <tr className="bg-custom">
                         <th colSpan="2">Model Data</th>
                     </tr>
                 </thead>

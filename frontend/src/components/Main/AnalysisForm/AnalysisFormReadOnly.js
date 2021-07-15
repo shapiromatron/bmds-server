@@ -9,7 +9,7 @@ class AnalysisFormReadOnly extends Component {
         const {mainStore} = this.props;
         return (
             <div className="mt-2">
-                <table className="table table-bordered table-primary table-sm analysis-readonly">
+                <table className="table table-bordered bg-custom table-sm analysis-readonly">
                     <tbody>
                         <tr>
                             <th>Analysis Name:</th>

@@ -8,7 +8,7 @@ class SelectModelType extends Component {
     render() {
         const {dataStore} = this.props;
         return (
-            <div className="model-type">
+            <div className="model-type mb-2">
                 <label htmlFor="selectModel">New dataset</label>
                 <div className="input-group">
                     <select

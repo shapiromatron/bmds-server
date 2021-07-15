@@ -44,3 +44,8 @@ input[type=number] {
   border: 1px solid #e3e3e3;
   background-color: #f5f5f5;
 }
+
+/* background fill */
+.bg-custom {
+  background-color: #b8daff;
+}

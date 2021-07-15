@@ -27,7 +27,7 @@ class DatasetModelOptionList extends Component {
             <table className="table table-bordered table-sm">
                 <thead>
                     {dtype == Dtype.CONTINUOUS || dtype == Dtype.CONTINUOUS_INDIVIDUAL ? (
-                        <tr className="table-primary">
+                        <tr className="bg-custom">
                             <th>Enabled</th>
                             <th>Dataset</th>
                             <th>
@@ -38,7 +38,7 @@ class DatasetModelOptionList extends Component {
                         </tr>
                     ) : null}
                     {dtype == Dtype.DICHOTOMOUS ? (
-                        <tr className="table-primary">
+                        <tr className="bg-custom">
                             <th>Enabled</th>
                             <th>Dataset</th>
                             <th>

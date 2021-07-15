@@ -19,7 +19,7 @@ class MaIndividualModels extends Component {
                     <col width="15%" />
                 </colgroup>
                 <thead>
-                    <tr className="table-primary">
+                    <tr className="bg-custom">
                         <th colSpan="6">Individual Model Results</th>
                     </tr>
                     <tr>

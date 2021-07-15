@@ -24,11 +24,11 @@ class ShareActions extends Component {
                     style={{minWidth: 300}}
                     className="dropdown-menu dropdown-menu-right"
                     aria-labelledby="bmdSessionShare">
-                    <form className="px-3">
+                    <form>
                         {/* READ ONLY LINK */}
-                        <h6 className="dropdown-header">Read-only link</h6>
+                        <span className="dropdown-header">Read-only link</span>
                         <div
-                            className="btn-group btn-block"
+                            className="dropdown-item btn-group btn-block"
                             role="group"
                             aria-label="Basic example">
                             <ClipboardButton
@@ -40,19 +40,19 @@ class ShareActions extends Component {
                                 href={editSettings.viewUrl}
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="btn btn-secondary">
+                                className="btn btn-secondary text-white">
                                 <i className="fa fa-fw fa-external-link"></i>
                                 &nbsp;Open
                             </a>
                         </div>
-                        <p className="text-muted">
+                        <p className="dropdown-item text-muted" style={{whiteSpace: "normal"}}>
                             Anyone with this link can view the analysis and download reports.
                         </p>
                         {/* EDIT LINK */}
                         <div className="dropdown-divider"></div>
-                        <h5 className="dropdown-header">Edit link</h5>
+                        <span className="dropdown-header">Edit link</span>
                         <div
-                            className="btn-group btn-block"
+                            className="dropdown-item btn-group btn-block"
                             role="group"
                             aria-label="Basic example">
                             <ClipboardButton
@@ -69,7 +69,9 @@ class ShareActions extends Component {
                                 &nbsp;Open
                             </a>
                         </div>
-                        <p className="text-muted">Anyone with this link can edit the analysis.</p>
+                        <p className="dropdown-item text-muted" style={{whiteSpace: "normal"}}>
+                            Anyone with this link can edit the analysis.
+                        </p>
                     </form>
                 </div>
             </div>

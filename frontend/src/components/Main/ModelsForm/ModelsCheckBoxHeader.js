@@ -29,7 +29,7 @@ const areAllModelsChecked = function(modelType, type, models) {
 const ModelsCheckBoxHeader = observer(props => {
     const {store} = props;
     return (
-        <thead className="table-primary">
+        <thead className="bg-custom">
             <tr>
                 <th></th>
                 <th colSpan="2">MLE</th>

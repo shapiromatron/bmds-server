@@ -34,7 +34,7 @@ class DecisionLogic extends Component {
                 {canEdit ? (
                     <div className="row">
                         <div className="col col-md-6">
-                            <button className="btn btn-info btn-sm" onClick={() => resetLogic()}>
+                            <button className="btn btn-warning btn-sm" onClick={() => resetLogic()}>
                                 Reset to Default Logic
                             </button>
                         </div>
@@ -44,7 +44,7 @@ class DecisionLogic extends Component {
                     <div className="col col-lg-6">
                         <table className="table table-bordered table-sm">
                             <thead>
-                                <tr className="table-primary">
+                                <tr className="bg-custom">
                                     <th colSpan="2">Decision-Logic</th>
                                 </tr>
                             </thead>

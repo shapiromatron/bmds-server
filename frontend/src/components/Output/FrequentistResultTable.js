@@ -235,7 +235,7 @@ class FrequentistResultTable extends Component {
                     ))}
                 </colgroup>
                 <thead className="table-bordered">
-                    <tr className="table-primary">
+                    <tr className="bg-custom">
                         <th>Model</th>
                         <th>BMDL</th>
                         <th>BMD</th>

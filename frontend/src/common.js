@@ -37,6 +37,9 @@ export const simulateClick = function(el) {
             return value.toString();
         } else if (value == BMDS_BLANK_VALUE || !_.isFinite(value)) {
             return "-";
+        } else if (value > 0 && value < 0.001) {
+            // small things
+            return "<0.001";
         } else if (Math.abs(value) > 0.001 && Math.abs(value) < 1e5) {
             // local print "0" for anything smaller than this
             return value.toLocaleString();

@@ -4,7 +4,7 @@ import DatasetModelOption from "./DatasetModelOption";
 import PropTypes from "prop-types";
 
 import {Dtype} from "../../../constants/dataConstants";
-import HelpTextPopup from "../../common/HelpTextPopup";
+import HelpTextPopover from "../../common/HelpTextPopover";
 
 const maxDegreeText = `Studies have indicated that higher degree polynomial models are not
     warranted in that they generally do not sufficiently improve fit over simpler models
@@ -32,7 +32,7 @@ class DatasetModelOptionList extends Component {
                             <th>Dataset</th>
                             <th>
                                 Maximum polynomial degree&nbsp;
-                                <HelpTextPopup content={maxDegreeText} />
+                                <HelpTextPopover content={maxDegreeText} />
                             </th>
                             <th>Adverse Direction</th>
                         </tr>
@@ -43,7 +43,7 @@ class DatasetModelOptionList extends Component {
                             <th>Dataset</th>
                             <th>
                                 Maximum multistage degree&nbsp;
-                                <HelpTextPopup content={maxDegreeText} />
+                                <HelpTextPopover content={maxDegreeText} />
                             </th>
                         </tr>
                     ) : null}

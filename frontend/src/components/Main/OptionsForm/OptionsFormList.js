@@ -5,7 +5,7 @@ import {toJS} from "mobx";
 
 import OptionsForm from "./OptionsForm";
 import OptionsReadOnly from "./OptionsReadOnly";
-import HelpTextPopup from "../../common/HelpTextPopup";
+import HelpTextPopover from "../../common/HelpTextPopover";
 import {MODEL_CONTINUOUS, MODEL_DICHOTOMOUS} from "../../../constants/mainConstants";
 
 @inject("optionsStore")
@@ -33,7 +33,7 @@ class OptionsFormList extends Component {
                                             <th>
                                                 Distribution +<br />
                                                 Variance&nbsp;
-                                                <HelpTextPopup content={distTypeHelpText} />
+                                                <HelpTextPopover content={distTypeHelpText} />
                                             </th>
                                         </>
                                     ) : null}

@@ -8,6 +8,8 @@ import {BIN_LABELS} from "../../constants/logicConstants";
 import {getPValue, modelClasses, priorClass} from "../../constants/outputConstants";
 import {ff} from "../../common";
 
+import Popover from "../common/Popover";
+
 const getModelBinLabel = function(output, index) {
         if (output.recommender.results.recommended_model_index == index) {
             return `Recommended - ${output.recommender.results.recommended_model_variable.toUpperCase()}`;
@@ -127,9 +129,17 @@ FrequentistRowSet.propTypes = {
 class FrequentistRow extends Component {
     render() {
         const {store, data, dataset, selectedFrequentist, footnotes} = this.props,
+            {name} = data.model,
             fns = footnotes.filter(d => d.index == data.index),
             rowClass = fns.length > 0 ? fns[fns.length - 1].class : "",
-            rowIcon = fns.map(d => d.icon).join("");
+            rowIcon = fns.map(d => d.icon).join(""),
+            popoverTitle = `${name}: ${getModelBinLabel(selectedFrequentist, data.index)}`,
+            popoverContent =
+                getModelBinText(selectedFrequentist, data.index)
+                    .toString()
+                    .split(",")
+                    .join("<br/>") || "<i>No notes.</i>";
+
         return (
             <tr
                 key={data.index}
@@ -155,11 +165,17 @@ class FrequentistRow extends Component {
                 <td>{ff(data.model.results.gof.roi)}</td>
                 <td>{ff(data.model.results.gof.residual[0])}</td>
                 {store.recommendationEnabled ? (
-                    <td>
-                        <u>{getModelBinLabel(selectedFrequentist, data.index)}</u>
-                        <br />
-                        {getRecommenderText(selectedFrequentist, data.index)}
-                    </td>
+                    store.showInlineNotes ? (
+                        <td>
+                            <u>{getModelBinLabel(selectedFrequentist, data.index)}</u>
+                            <br />
+                            {getRecommenderText(selectedFrequentist, data.index)}
+                        </td>
+                    ) : (
+                        <Popover element="td" title={popoverTitle} content={popoverContent}>
+                            <u>{getModelBinLabel(selectedFrequentist, data.index)}</u>
+                        </Popover>
+                    )
                 ) : null}
             </tr>
         );
@@ -228,7 +244,24 @@ class FrequentistResultTable extends Component {
                         <th>AIC</th>
                         <th>Scaled Residual for Dose Group near BMD</th>
                         <th>Scaled Residual for Control Dose Group</th>
-                        {store.recommendationEnabled ? <th>Recommendation and Notes</th> : null}
+                        {store.recommendationEnabled ? (
+                            <th>
+                                <button
+                                    title="Toggle showing notes inline or popover"
+                                    className="btn btn-info btn-sm pull-right"
+                                    onClick={store.toggleInlineNotes}>
+                                    <i
+                                        className={`fa fa-fw ${
+                                            store.showInlineNotes ? "fa-eye-slash" : "fa-eye"
+                                        }`}></i>
+                                    &nbsp;
+                                    {store.showInlineNotes ? "Hide" : "Show"}
+                                </button>
+                                Recommendation
+                                <br />
+                                and Notes
+                            </th>
+                        ) : null}
                     </tr>
                 </thead>
                 <tbody className="table-bordered">

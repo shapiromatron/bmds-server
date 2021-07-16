@@ -44,10 +44,12 @@ const isModelChecked = function(models, type, model) {
     }),
     CheckBoxTd = observer(props => {
         const {store, type, model} = props;
+
         return store.canEdit ? (
             <td>
                 <input
                     type="checkbox"
+                    disabled={type === "bayesian" && store.getModelType === "C" ? true : false}
                     onChange={e => store.setModelSelection(type, model, e.target.checked)}
                     checked={isModelChecked(store.models, type, model)}></input>
             </td>

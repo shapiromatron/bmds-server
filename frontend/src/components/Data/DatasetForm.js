@@ -133,6 +133,11 @@ class DatasetForm extends Component {
                         />
                     </div>
                 </div>
+                <button
+                    className="btn btn-sm btn-warning"
+                    onClick={() => dataStore.loadExampleData()}>
+                    load example data
+                </button>
 
                 <table className="table table-sm text-center">
                     <thead>

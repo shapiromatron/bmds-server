@@ -67,10 +67,10 @@ export const DATA_CONTINUOUS_SUMMARY = "CS",
                         dose_name: "Dose",
                         response_name: "Response",
                     },
-                    doses: [0, 50, 100, 150, 200],
-                    ns: [100, 100, 100, 100, 100],
-                    means: [10, 18, 32, 38, 70],
-                    stdevs: [3.2, 4.8, 6.5, 7.2, 8.4],
+                    doses: ["", "", "", "", ""],
+                    ns: ["", "", "", "", ""],
+                    means: ["", "", "", "", ""],
+                    stdevs: ["", "", "", "", ""],
                 };
             case DATA_CONTINUOUS_INDIVIDUAL:
                 return {
@@ -83,8 +83,8 @@ export const DATA_CONTINUOUS_SUMMARY = "CS",
                         dose_name: "Dose",
                         response_name: "Response",
                     },
-                    doses: [0, 0, 0, 0, 5, 5, 5, 5],
-                    responses: [1, 1, 2, 3, 4, 5, 6, 7],
+                    doses: ["", "", "", "", ""],
+                    responses: ["", "", "", "", ""],
                 };
             case DATA_DICHOTOMOUS:
                 return {
@@ -97,6 +97,30 @@ export const DATA_CONTINUOUS_SUMMARY = "CS",
                         dose_name: "Dose",
                         response_name: "Incidence",
                     },
+                    doses: ["", "", "", "", ""],
+                    ns: ["", "", "", "", ""],
+                    incidences: ["", "", "", "", ""],
+                };
+            default:
+                throw `Unknown dataset type ${dtype}`;
+        }
+    },
+    getExampleData = function(dtype) {
+        switch (dtype) {
+            case DATA_CONTINUOUS_SUMMARY:
+                return {
+                    doses: [0, 50, 100, 150, 200],
+                    ns: [100, 100, 100, 100, 100],
+                    means: [10, 18, 32, 38, 70],
+                    stdevs: [3.2, 4.8, 6.5, 7.2, 8.4],
+                };
+            case DATA_CONTINUOUS_INDIVIDUAL:
+                return {
+                    doses: [0, 0, 0, 0, 5, 5, 5, 5],
+                    responses: [1, 1, 2, 3, 4, 5, 6, 7],
+                };
+            case DATA_DICHOTOMOUS:
+                return {
                     doses: [0, 10, 50, 150, 400],
                     ns: [20, 20, 20, 20, 20],
                     incidences: [0, 0, 1, 4, 11],

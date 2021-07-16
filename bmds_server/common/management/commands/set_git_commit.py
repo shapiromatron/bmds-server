@@ -5,7 +5,7 @@ from ...git import Commit
 
 
 class Command(BaseCommand):
-    help = """Set the .gitcommit file used for versioning"""
+    help = """Set the gitcommit.json file used for versioning"""
 
     def handle(self, *args, **options):
         current = Commit.current(settings.ROOT_DIR)

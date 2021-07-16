@@ -26,7 +26,7 @@ venv/
 *log
 .env
 .eslintcache
-bmds_server/.gitcommit
+bmds_server/gitcommit.json
 bmds_server/main/settings/local.py
 bmds_server/webpack-stats.json
 celerybeat-schedule

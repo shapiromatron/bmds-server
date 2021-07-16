@@ -204,7 +204,7 @@ def get_git_commit() -> Commit:
         return Commit(sha="<undefined>", dt=datetime.now())
 
 
-GIT_COMMIT_FILE = BASE_DIR / ".gitcommit"
+GIT_COMMIT_FILE = BASE_DIR / "gitcommit.json"
 COMMIT = get_git_commit()
 
 # Google Tag Manager settings

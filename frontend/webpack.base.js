@@ -49,7 +49,7 @@ module.exports = {
     plugins: [
         new CaseSensitivePathsPlugin(), // windows/mac doesn't always enforce
         new BundleTracker({
-            filename: "../webpack-stats.json",
+            filename: "../bmds_server/webpack-stats.json",
         }),
     ],
 

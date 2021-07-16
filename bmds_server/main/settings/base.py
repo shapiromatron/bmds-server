@@ -185,7 +185,7 @@ REST_FRAMEWORK = {
 WEBPACK_LOADER = {
     "DEFAULT": {
         "BUNDLE_DIR_NAME": "bundles/",
-        "STATS_FILE": str(ROOT_DIR / "webpack-stats.json"),
+        "STATS_FILE": str(BASE_DIR / "webpack-stats.json"),
         "POLL_INTERVAL": 0.1,
         "IGNORE": [".+/.map"],
     }
@@ -204,7 +204,7 @@ def get_git_commit() -> Commit:
         return Commit(sha="<undefined>", dt=datetime.now())
 
 
-GIT_COMMIT_FILE = ROOT_DIR / ".gitcommit"
+GIT_COMMIT_FILE = BASE_DIR / "gitcommit.json"
 COMMIT = get_git_commit()
 
 # Google Tag Manager settings

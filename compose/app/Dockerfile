@@ -1,7 +1,5 @@
 FROM python:3.9-slim
 
-ENV BMDS_SERVER_VERSION 0.8
-
 RUN groupadd -g 555 -r app && \
     useradd -u 555 -r -g app app
 
@@ -26,6 +24,7 @@ COPY ./tests/data/db.yaml /app/test-db-fixture.yaml
 RUN mkdir -p /app/logs && \
     mkdir -p /app/public/media
 
+COPY ./dist /dist
 COPY ./requirements /requirements
 COPY ./vendor /vendor
 
@@ -34,17 +33,11 @@ RUN mv /vendor/libnlopt.so /usr/local/lib/libnlopt.so.0 && \
     pip install -U pip wheel && \
     pip install -r /requirements/production.txt --no-cache-dir && \
     \
-    rm -rf /requirements /vendor
+    rm -rf /requirements /vendor /dist
 
 WORKDIR /app
 
-COPY ./dist/bmds_server-$BMDS_SERVER_VERSION.tar.gz /app/bmds_server.tar.gz
-
-RUN tar -xf bmds_server.tar.gz --strip-components=1 && \
-    rm /app/bmds_server.tar.gz && \
-    pip install -e . && \
-    chown -R app:app /app
-
+RUN chown -R app:app /app
 USER app
 
 ENV LD_LIBRARY_PATH=/usr/local/lib:$LD_LIBRARY_PATH

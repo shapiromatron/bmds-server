@@ -43,13 +43,13 @@ const isModelChecked = function(models, type, model) {
         );
     }),
     CheckBoxTd = observer(props => {
-        const {store, type, model} = props;
+        const {store, type, model, disabled} = props;
 
         return store.canEdit ? (
             <td>
                 <input
                     type="checkbox"
-                    disabled={type === "bayesian" && store.getModelType === "C" ? true : false}
+                    disabled={disabled}
                     onChange={e => store.setModelSelection(type, model, e.target.checked)}
                     checked={isModelChecked(store.models, type, model)}></input>
             </td>
@@ -74,31 +74,31 @@ const ModelsCheckBox = observer(props => {
                     <td className="text-left align-middle">Exponential</td>
                     <CheckBoxTd store={store} type={fr} model={"Exponential"} />
                     <td></td>
-                    <CheckBoxTd store={store} type={b} model={"Exponential"} />
+                    <CheckBoxTd store={store} type={b} model={"Exponential"} disabled={true} />
                 </tr>
                 <tr>
                     <td className="text-left align-middle">Hill</td>
                     <CheckBoxTd store={store} type={fr} model={"Hill"} />
                     <CheckBoxTd store={store} type={fu} model={"Hill"} />
-                    <CheckBoxTd store={store} type={b} model={"Hill"} />
+                    <CheckBoxTd store={store} type={b} model={"Hill"} disabled={true} />
                 </tr>
                 <tr>
                     <td className="text-left align-middle">Linear</td>
                     <td></td>
                     <CheckBoxTd store={store} type={fu} model={"Linear"} />
-                    <CheckBoxTd store={store} type={b} model={"Linear"} />
+                    <CheckBoxTd store={store} type={b} model={"Linear"} disabled={true} />
                 </tr>
                 <tr>
                     <td className="text-left align-middle">Polynomial</td>
                     <CheckBoxTd store={store} type={fr} model={"Polynomial"} />
                     <CheckBoxTd store={store} type={fu} model={"Polynomial"} />
-                    <CheckBoxTd store={store} type={b} model={"Polynomial"} />
+                    <CheckBoxTd store={store} type={b} model={"Polynomial"} disabled={true} />
                 </tr>
                 <tr>
                     <td className="text-left align-middle">Power</td>
                     <CheckBoxTd store={store} type={fr} model={"Power"} />
                     <CheckBoxTd store={store} type={fu} model={"Power"} />
-                    <CheckBoxTd store={store} type={b} model={"Power"} />
+                    <CheckBoxTd store={store} type={b} model={"Power"} disabled={true} />
                 </tr>
             </tbody>
         );

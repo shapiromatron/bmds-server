@@ -10,13 +10,13 @@ const areAllModelsChecked = function(modelType, type, models) {
         return type in models && models[type].length === allModelOptions[modelType][type].length;
     },
     SelectAllComponent = observer(props => {
-        const {store, type} = props;
+        const {store, type, disabled} = props;
         return store.canEdit ? (
             <th>
                 <label className="m-0">
                     <input
                         type="checkbox"
-                        disabled={type === "bayesian" && store.getModelType === "C" ? true : false}
+                        disabled={store.getModelType === "C" ? disabled : false}
                         onChange={e => store.enableAll(type, e.target.checked)}
                         checked={areAllModelsChecked(store.getModelType, type, store.models)}
                     />
@@ -32,7 +32,7 @@ const ModelsCheckBoxHeader = observer(props => {
     const {store} = props,
         content =
             "Models were previewed in BMDS 3.2 and will be formally peer reviewed. EPA plans to release the final models in 2022.",
-        title = "Bayesian";
+        title = "Bayesian Model Averaging";
     return (
         <thead className="bg-custom">
             <tr>
@@ -55,7 +55,7 @@ const ModelsCheckBoxHeader = observer(props => {
                 <th>Models</th>
                 <SelectAllComponent store={store} type={"frequentist_restricted"} />
                 <SelectAllComponent store={store} type={"frequentist_unrestricted"} />
-                <SelectAllComponent store={store} type={"bayesian"} />
+                <SelectAllComponent store={store} type={"bayesian"} disabled={true} />
                 {store.getModelType === mc.MODEL_DICHOTOMOUS ? (
                     <>
                         <th>Prior Weights</th>

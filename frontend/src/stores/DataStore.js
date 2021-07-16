@@ -100,11 +100,7 @@ class DataStore {
     @action.bound loadExampleData() {
         const dataset = getExampleData(this.model_type);
         const currentDataset = this.datasets[this.selectedDatasetId];
-        Object.keys(currentDataset).map(key => {
-            if (Array.isArray(currentDataset[key])) {
-                currentDataset[key] = dataset[key];
-            }
-        });
+        _.extend(currentDataset, dataset);
     }
     @action.bound addRow() {
         const dataset = this.selectedDataset;

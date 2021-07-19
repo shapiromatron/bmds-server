@@ -168,7 +168,7 @@ class AnalysisViewset(mixins.CreateModelMixin, mixins.RetrieveModelMixin, viewse
         Return Word report for the selected analysis
         """
         instance = self.get_object()
-        response = instance.get_docx_from_cache()
+        response = instance.get_docx_from_cache(request)
 
         if response.status is ReportStatus.COMPLETE:
             data = renderers.BinaryFile(data=response.content, filename=instance.slug)

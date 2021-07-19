@@ -22,3 +22,6 @@ class Commit(BaseModel):
             int(subprocess.check_output(cmd.split(), cwd=cwd).decode().strip())
         )
         return cls(sha=sha, dt=dt)
+
+    def __str__(self):
+        return f"{self.sha} ({self.dt.strftime('%Y-%m-%d')})"

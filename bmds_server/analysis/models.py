@@ -69,6 +69,10 @@ class Analysis(models.Model):
         else:
             return str(self.id)
 
+    @property
+    def name(self) -> str:
+        return self.inputs.get("analysis_name", f"Analysis {self.pk}")
+
     def get_absolute_url(self):
         return reverse("analysis", args=(str(self.id),))
 
@@ -142,10 +146,17 @@ class Analysis(models.Model):
         return [executor.AnalysisSession.deserialize(output) for output in self.outputs["outputs"]]
 
     def get_excel_from_cache(self):
-        return ExcelReportCache(analysis=self).request_content()
+        reporter = ExcelReportCache(analysis=self)
+        if settings.ENABLE_REPORT_CACHE:
+            return reporter.request_content()
+        return reporter.create_content()
 
-    def get_docx_from_cache(self):
-        return DocxReportCache(analysis=self).request_content()
+    def get_docx_from_cache(self, request):
+        reporter = DocxReportCache(analysis=self)
+        uri = request.build_absolute_uri(self.get_absolute_url())
+        if settings.ENABLE_REPORT_CACHE:
+            return reporter.request_content()
+        return reporter.create_content(uri=uri)
 
     def to_batch(self) -> BmdsSessionBatch:
         # convert List[executor.AnalysisSession] to List[bmds.BmdsSession]
@@ -157,11 +168,48 @@ class Analysis(models.Model):
                 items.append(session.bayesian)
         return BmdsSessionBatch(sessions=items)
 
-    def to_word(self) -> BytesIO:
+    def to_word(self, uri: str) -> BytesIO:
         f = BytesIO()
 
+        import docx
+
+        def add_url_hyperlink(paragraph, url, text):
+            # This gets access to the document.xml.rels file and gets a new relation id value
+            part = paragraph.part
+            r_id = part.relate_to(
+                url, docx.opc.constants.RELATIONSHIP_TYPE.HYPERLINK, is_external=True
+            )
+
+            # Create the w:hyperlink tag and add needed values
+            hyperlink = docx.oxml.shared.OxmlElement("w:hyperlink")
+            hyperlink.set(docx.oxml.shared.qn("r:id"), r_id)
+
+            # Create a w:r element and a new w:rPr element
+            new_run = docx.oxml.shared.OxmlElement("w:r")
+            rPr = docx.oxml.shared.OxmlElement("w:rPr")
+
+            # Join all the xml elements together add add the required text to the w:r element
+            new_run.append(rPr)
+            new_run.text = text
+            hyperlink.append(new_run)
+
+            # Create a new Run object and add the hyperlink into it
+            r = paragraph.add_run()
+            r._r.append(hyperlink)
+
+            # A workaround for the lack of a hyperlink style (doesn't go purple after using the link)
+            # Delete this if using a template that has the hyperlink style in it
+            r.font.color.theme_color = docx.enum.dml.MSO_THEME_COLOR_INDEX.HYPERLINK
+            r.font.underline = True
+
         report = Report.build_default()
-        report.document.add_heading(self.inputs.get("analysis_name", str(self.pk)), 1)
+        report.document.add_heading(self.name, 1)
+        report.document.add_paragraph(self.inputs.get("analysis_description", ""))
+        report.document.add_paragraph(f"Report generated: {now()}")
+        p = report.document.add_paragraph(f"Analysis URL: ")
+        add_url_hyperlink(p, uri, "Link to my site")
+        report.document.add_paragraph(f"BMDS version: {self.inputs['bmds_version']}")
+        report.document.add_paragraph(f"BMDS online version: {settings.COMMIT}")
 
         if not self.is_finished:
             report.document.add_paragraph("Execution is incomplete; no report could be generated")

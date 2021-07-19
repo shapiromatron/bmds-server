@@ -45,7 +45,7 @@ class ReportCache:
         """
         raise NotImplementedError("Subclass requires implementation")
 
-    def create(self) -> Any:
+    def create(self, **kwargs) -> Any:
         """
         The expensive method which does all the work.
 
@@ -80,13 +80,14 @@ class ReportCache:
         self.invoke_celery_task()
         return response
 
-    def create_content(self) -> None:
+    def create_content(self, **kwargs) -> ReportResponse:
         """
         Generate and cache the content.
         """
         key = self.cache_key
-        content = self.create()
+        content = self.create(**kwargs)
         response = ReportResponse(
             status=ReportStatus.COMPLETE, content=content, header=None, message=None,
         )
         self.cache.set(key, response)
+        return response

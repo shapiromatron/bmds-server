@@ -13,8 +13,8 @@ export const options = {
         },
     },
     dichotomousBmrOptions = [
+        {value: 0, label: "Added Risk"},
         {value: 1, label: "Extra Risk"},
-        {value: 2, label: "Added Risk"},
     ],
     continuousBmrOptions = [
         {value: 2, label: "Std. Dev."},

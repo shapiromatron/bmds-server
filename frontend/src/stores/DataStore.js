@@ -3,7 +3,12 @@ import _ from "lodash";
 
 import * as dc from "../constants/dataConstants";
 import {getDrLayout, getDrDatasetPlotData} from "../constants/plotting";
-import {datasetTypesByModelType, getDefaultDataset, columns} from "../constants/dataConstants";
+import {
+    datasetTypesByModelType,
+    getDefaultDataset,
+    getExampleData,
+    columns,
+} from "../constants/dataConstants";
 
 let validateTabularData = function(text, columns) {
     let data = [],
@@ -90,6 +95,12 @@ class DataStore {
         this.datasets.push(dataset);
         this.rootStore.dataOptionStore.createOption(dataset);
         this.selectedDatasetId = id;
+    }
+
+    @action.bound loadExampleData() {
+        const dataset = getExampleData(this.model_type),
+            currentDataset = this.datasets[this.selectedDatasetId];
+        _.extend(currentDataset, dataset);
     }
 
     @action.bound addRow() {

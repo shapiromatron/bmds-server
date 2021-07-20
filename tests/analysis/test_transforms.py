@@ -18,9 +18,7 @@ class TestOptions:
         }
         dataset_options = {"dataset_id": 123, "enabled": True, "degree": 0, "adverse_direction": -1}
         res = transforms.build_model_settings(
-            bmds.constants.BMDS330,
             bmds.constants.CONTINUOUS,
-            bmds.constants.M_Power,
             transforms.PriorEnum.frequentist_restricted,
             options,
             dataset_options,
@@ -40,9 +38,7 @@ class TestOptions:
         }
         dataset_options = {"dataset_id": 123, "enabled": True, "degree": 1}
         res = transforms.build_model_settings(
-            bmds.constants.BMDS330,
             bmds.constants.DICHOTOMOUS,
-            bmds.constants.M_Gamma,
             transforms.PriorEnum.frequentist_restricted,
             options,
             dataset_options,

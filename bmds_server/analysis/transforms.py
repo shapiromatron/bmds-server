@@ -30,12 +30,7 @@ is_increasing_map = {
 
 
 def build_model_settings(
-    bmds_version: str,
-    dataset_type: str,
-    model_name: str,
-    prior_class: str,
-    options: Dict,
-    dataset_options: Dict,
+    dataset_type: str, prior_class: str, options: Dict, dataset_options: Dict,
 ) -> Union[DichotomousModelSettings, ContinuousModelSettings]:
     prior_class = bmd3_prior_map[prior_class]
     if dataset_type in bmds.constants.DICHOTOMOUS_DTYPES:
@@ -61,7 +56,8 @@ def build_model_settings(
         raise ValueError(f"Unknown dataset_type: {dataset_type}")
 
 
-def build_dataset(dataset_type: str, dataset: Dict[str, List[float]]) -> bmds.datasets.DatasetType:
+def build_dataset(dataset: Dict[str, List[float]]) -> bmds.datasets.DatasetType:
+    dataset_type = dataset["dtype"]
     if dataset_type == Dtype.CONTINUOUS:
         schema = bmds.datasets.ContinuousDatasetSchema
     elif dataset_type == Dtype.CONTINUOUS_INDIVIDUAL:

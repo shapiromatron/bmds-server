@@ -35,7 +35,7 @@ def build_frequentist_session(dataset, inputs, options, dataset_options) -> Opti
 
         for model_name in model_names:
             model_options = build_model_settings(
-                bmds_version, dataset_type, model_name, prior_type, options, dataset_options,
+                dataset_type, prior_type, options, dataset_options,
             )
             if model_name in bmds.constants.VARIABLE_POLYNOMIAL:
                 min_degree = 2 if model_name in bmds.constants.M_Polynomial else 1
@@ -78,7 +78,7 @@ def build_bayesian_session(
 
     for model_name in model_names:
         model_options = build_model_settings(
-            bmds_version, dataset_type, model_name, PriorEnum.bayesian, options, dataset_options,
+            dataset_type, PriorEnum.bayesian, options, dataset_options,
         )
         if model_name in bmds.constants.VARIABLE_POLYNOMIAL:
             model_options.degree = 2
@@ -114,7 +114,7 @@ class AnalysisSession(NamedTuple):
 
     @classmethod
     def create(cls, inputs: Dict, dataset_index: int, option_index: int) -> "AnalysisSession":
-        dataset = build_dataset(inputs["dataset_type"], inputs["datasets"][dataset_index])
+        dataset = build_dataset(inputs["datasets"][dataset_index])
         options = inputs["options"][option_index]
         dataset_options = inputs["dataset_options"][dataset_index]
         return cls(

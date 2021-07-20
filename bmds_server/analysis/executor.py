@@ -38,17 +38,21 @@ def build_frequentist_session(dataset, inputs, options, dataset_options) -> Opti
                 bmds_version, dataset_type, model_name, prior_type, options, dataset_options,
             )
             if model_name in bmds.constants.VARIABLE_POLYNOMIAL:
+                min_degree = 2 if model_name in bmds.constants.M_Polynomial else 1
                 max_degree = (
                     model_options.degree + 1
                     if model_options.degree > 0
                     else dataset.num_dose_groups
                 )
-                degrees = list(range(1, max(min(max_degree, 5), 2)))
+                degrees = list(range(min_degree, max(min(max_degree, 5), 2)))
                 for degree in degrees:
                     model_options = model_options.copy()
                     model_options.degree = degree
                     session.add_model(model_name, settings=model_options)
             else:
+                if model_name == bmds.constants.M_Linear:
+                    # a linear model must have a degree of 1
+                    model_options.degree = 1
                 session.add_model(model_name, settings=model_options)
 
     return session

@@ -16,7 +16,7 @@ const areAllModelsChecked = function(modelType, type, models) {
                 <label className="m-0">
                     <input
                         type="checkbox"
-                        disabled={store.getModelType === "C" ? disabled : false}
+                        disabled={disabled}
                         onChange={e => store.enableAll(type, e.target.checked)}
                         checked={areAllModelsChecked(store.getModelType, type, store.models)}
                     />
@@ -32,7 +32,8 @@ const ModelsCheckBoxHeader = observer(props => {
     const {store} = props,
         content =
             "Models were previewed in BMDS 3.2 and will be formally peer reviewed. EPA plans to release the final models in 2022.",
-        title = "Bayesian Model Averaging";
+        title = "Bayesian Model Averaging",
+        isContinuous = store.getModelType === mc.MODEL_CONTINUOUS;
     return (
         <thead className="bg-custom">
             <tr>
@@ -46,7 +47,7 @@ const ModelsCheckBoxHeader = observer(props => {
                 <th>Frequentist Unrestricted</th>
                 <th colSpan="2">
                     Bayesian Model Averaging
-                    {store.getModelType === "C" ? (
+                    {isContinuous ? (
                         <HelpTextPopover title={title} content={content}></HelpTextPopover>
                     ) : null}
                 </th>
@@ -55,12 +56,8 @@ const ModelsCheckBoxHeader = observer(props => {
                 <th>Models</th>
                 <SelectAllComponent store={store} type={"frequentist_restricted"} />
                 <SelectAllComponent store={store} type={"frequentist_unrestricted"} />
-                <SelectAllComponent store={store} type={"bayesian"} disabled={true} />
-                {store.getModelType === mc.MODEL_DICHOTOMOUS ? (
-                    <>
-                        <th>Prior Weights</th>
-                    </>
-                ) : null}
+                <SelectAllComponent store={store} type={"bayesian"} disabled={isContinuous} />
+                <th>Prior Weights</th>
             </tr>
         </thead>
     );

@@ -1,10 +1,17 @@
+from copy import deepcopy
 from typing import Dict, NamedTuple, Optional
 
 import bmds
 from bmds.bmds3.constants import DistType
 from bmds.bmds3.sessions import BmdsSession
 
-from .transforms import PriorEnum, build_dataset, build_model_settings, remap_exponential
+from .transforms import (
+    PriorEnum,
+    build_dataset,
+    build_model_settings,
+    remap_exponential,
+    remap_bayesian_exponential,
+)
 
 # excluded continuous models if distribution type is lognormal
 lognormal_disabled = {bmds.constants.M_Linear, bmds.constants.M_Polynomial, bmds.constants.M_Power}
@@ -63,17 +70,18 @@ def build_bayesian_session(
 ) -> Optional[BmdsSession]:
     models = inputs["models"].get(PriorEnum.bayesian, [])
 
+    # filter lognormal
+    if options.get("dist_type") == DistType.log_normal:
+        models = deepcopy(list(filter(lambda d: d["model"] not in lognormal_disabled, models)))
+
     # exit early if we have no bayesian models
     if len(models) == 0:
         return None
 
-    # TODO - enable for CMA
-    # - use remap_exponential()
-    # - if we unpack Exp => [Exp3, Exp5], do you split the prior weight?
-
     bmds_version = inputs["bmds_version"]
     dataset_type = inputs["dataset_type"]
     session = bmds.BMDS.version(bmds_version)(dataset=dataset)
+    models = remap_bayesian_exponential(models)
     prior_weights = list(map(lambda d: d["prior_weight"], models))
     for name in map(lambda d: d["model"], models):
         model_options = build_model_settings(

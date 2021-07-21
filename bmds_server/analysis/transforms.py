@@ -1,5 +1,6 @@
+from copy import deepcopy
 from enum import Enum
-from typing import Dict, List, Union
+from typing import Dict, List, Tuple, Union
 
 import bmds
 from bmds.bmds3.types.continuous import ContinuousModelSettings
@@ -75,4 +76,17 @@ def remap_exponential(models: List[str]) -> List[str]:
         models = models.copy()  # return a copy so inputs are unchanged
         pos = models.index(bmds.constants.M_Exponential)
         models[pos : pos + 1] = (bmds.constants.M_ExponentialM3, bmds.constants.M_ExponentialM5)
+    return models
+
+
+def remap_bayesian_exponential(models: List[Dict]) -> List[Dict]:
+    for i, model in enumerate(models):
+        if model["model"] == bmds.constants.M_Exponential:
+            models = deepcopy(models)
+            weight = model["prior_weight"] / 2  # TODO - revisit when CMA is live - is this right?
+            models[i : i + 1] = (
+                dict(model=bmds.constants.M_ExponentialM3, prior_weight=weight),
+                dict(model=bmds.constants.M_ExponentialM5, prior_weight=weight),
+            )
+            break
     return models

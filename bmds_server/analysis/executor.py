@@ -1,10 +1,17 @@
+from copy import deepcopy
 from typing import Dict, NamedTuple, Optional
 
 import bmds
 from bmds.bmds3.constants import DistType
 from bmds.bmds3.sessions import BmdsSession
 
-from .transforms import PriorEnum, build_dataset, build_model_settings, remap_exponential
+from .transforms import (
+    PriorEnum,
+    build_dataset,
+    build_model_settings,
+    remap_bayesian_exponential,
+    remap_exponential,
+)
 
 # excluded continuous models if distribution type is lognormal
 lognormal_disabled = {bmds.constants.M_Linear, bmds.constants.M_Polynomial, bmds.constants.M_Power}
@@ -35,20 +42,24 @@ def build_frequentist_session(dataset, inputs, options, dataset_options) -> Opti
 
         for model_name in model_names:
             model_options = build_model_settings(
-                bmds_version, dataset_type, model_name, prior_type, options, dataset_options,
+                dataset_type, prior_type, options, dataset_options,
             )
             if model_name in bmds.constants.VARIABLE_POLYNOMIAL:
+                min_degree = 2 if model_name in bmds.constants.M_Polynomial else 1
                 max_degree = (
                     model_options.degree + 1
                     if model_options.degree > 0
                     else dataset.num_dose_groups
                 )
-                degrees = list(range(1, max(min(max_degree, 5), 2)))
+                degrees = list(range(min_degree, max(min(max_degree, 5), 2)))
                 for degree in degrees:
                     model_options = model_options.copy()
                     model_options.degree = degree
                     session.add_model(model_name, settings=model_options)
             else:
+                if model_name == bmds.constants.M_Linear:
+                    # a linear model must have a degree of 1
+                    model_options.degree = 1
                 session.add_model(model_name, settings=model_options)
 
     return session
@@ -59,28 +70,28 @@ def build_bayesian_session(
 ) -> Optional[BmdsSession]:
     models = inputs["models"].get(PriorEnum.bayesian, [])
 
+    # filter lognormal
+    if options.get("dist_type") == DistType.log_normal:
+        models = deepcopy(list(filter(lambda d: d["model"] not in lognormal_disabled, models)))
+
     # exit early if we have no bayesian models
     if len(models) == 0:
         return None
 
     bmds_version = inputs["bmds_version"]
     dataset_type = inputs["dataset_type"]
-    model_names = [model["model"] for model in models]
-    model_names = remap_exponential(model_names)
     session = bmds.BMDS.version(bmds_version)(dataset=dataset)
-
-    if options.get("dist_type") == DistType.log_normal:
-        model_names = [model for model in model_names if model not in lognormal_disabled]
-
-    for model_name in model_names:
+    models = remap_bayesian_exponential(models)
+    prior_weights = list(map(lambda d: d["prior_weight"], models))
+    for name in map(lambda d: d["model"], models):
         model_options = build_model_settings(
-            bmds_version, dataset_type, model_name, PriorEnum.bayesian, options, dataset_options,
+            dataset_type, PriorEnum.bayesian, options, dataset_options,
         )
-        if model_name in bmds.constants.VARIABLE_POLYNOMIAL:
+        if name in bmds.constants.VARIABLE_POLYNOMIAL:
             model_options.degree = 2
-        session.add_model(model_name, settings=model_options)
+        session.add_model(name, settings=model_options)
 
-    # TODO: set prior weights to bayesian model averaging
+    session.set_ma_weights(prior_weights)
 
     return session
 
@@ -110,7 +121,7 @@ class AnalysisSession(NamedTuple):
 
     @classmethod
     def create(cls, inputs: Dict, dataset_index: int, option_index: int) -> "AnalysisSession":
-        dataset = build_dataset(inputs["dataset_type"], inputs["datasets"][dataset_index])
+        dataset = build_dataset(inputs["datasets"][dataset_index])
         options = inputs["options"][option_index]
         dataset_options = inputs["dataset_options"][dataset_index]
         return cls(

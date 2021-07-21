@@ -4,17 +4,19 @@ import {observer} from "mobx-react";
 
 import {allModelOptions} from "../../../constants/modelConstants";
 import * as mc from "../../../constants/mainConstants";
+import HelpTextPopover from "../../common/HelpTextPopover";
 
 const areAllModelsChecked = function(modelType, type, models) {
         return type in models && models[type].length === allModelOptions[modelType][type].length;
     },
     SelectAllComponent = observer(props => {
-        const {store, type} = props;
+        const {store, type, disabled} = props;
         return store.canEdit ? (
             <th>
                 <label className="m-0">
                     <input
                         type="checkbox"
+                        disabled={disabled}
                         onChange={e => store.enableAll(type, e.target.checked)}
                         checked={areAllModelsChecked(store.getModelType, type, store.models)}
                     />
@@ -27,7 +29,11 @@ const areAllModelsChecked = function(modelType, type, models) {
     });
 
 const ModelsCheckBoxHeader = observer(props => {
-    const {store} = props;
+    const {store} = props,
+        content =
+            "Models were previewed in BMDS 3.2 and will be formally peer reviewed. EPA plans to release the final models in 2022.",
+        title = "Bayesian Model Averaging",
+        isContinuous = store.getModelType === mc.MODEL_CONTINUOUS;
     return (
         <thead className="bg-custom">
             <tr>
@@ -39,18 +45,19 @@ const ModelsCheckBoxHeader = observer(props => {
                 <th></th>
                 <th>Frequentist Restricted</th>
                 <th>Frequentist Unrestricted</th>
-                <th colSpan="2">Bayesian </th>
+                <th colSpan="2">
+                    Bayesian Model Averaging
+                    {isContinuous ? (
+                        <HelpTextPopover title={title} content={content}></HelpTextPopover>
+                    ) : null}
+                </th>
             </tr>
             <tr>
                 <th>Models</th>
                 <SelectAllComponent store={store} type={"frequentist_restricted"} />
                 <SelectAllComponent store={store} type={"frequentist_unrestricted"} />
-                <SelectAllComponent store={store} type={"bayesian"} />
-                {store.getModelType === mc.MODEL_DICHOTOMOUS ? (
-                    <>
-                        <th>Prior Weights</th>
-                    </>
-                ) : null}
+                <SelectAllComponent store={store} type={"bayesian"} disabled={isContinuous} />
+                <th>Prior Weights</th>
             </tr>
         </thead>
     );

@@ -92,8 +92,9 @@ class ModelsStore {
     }
 
     @action.bound setDefaultPriorWeights() {
+        const value = parseFloat((this.prior_weight / this.models[mc.BAYESIAN].length).toFixed(3));
         this.models[mc.BAYESIAN].forEach(obj => {
-            obj.prior_weight = this.prior_weight / this.models[mc.BAYESIAN].length;
+            obj.prior_weight = value;
         });
     }
 

@@ -18,9 +18,7 @@ class TestOptions:
         }
         dataset_options = {"dataset_id": 123, "enabled": True, "degree": 0, "adverse_direction": -1}
         res = transforms.build_model_settings(
-            bmds.constants.BMDS330,
             bmds.constants.CONTINUOUS,
-            bmds.constants.M_Power,
             transforms.PriorEnum.frequentist_restricted,
             options,
             dataset_options,
@@ -34,15 +32,13 @@ class TestOptions:
 
     def test_bmds3_options_d(self, bmds3_complete_dichotomous):
         options = {
-            "bmr_type": 2,
+            "bmr_type": 0,
             "bmr_value": 0.15,
             "confidence_level": 0.95,
         }
         dataset_options = {"dataset_id": 123, "enabled": True, "degree": 1}
         res = transforms.build_model_settings(
-            bmds.constants.BMDS330,
             bmds.constants.DICHOTOMOUS,
-            bmds.constants.M_Gamma,
             transforms.PriorEnum.frequentist_restricted,
             options,
             dataset_options,

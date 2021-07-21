@@ -111,6 +111,46 @@ class TestAnalysisSession:
         assert model.bmd_model_class.id == DichotomousModelIds.d_multistage
         assert model.settings.degree == 2
 
+    def test_polynomial_unpacking(self, bmds3_complete_continuous):
+        # test linear; degree 0
+        data = deepcopy(bmds3_complete_continuous)
+        data["models"] = {"frequentist_unrestricted": ["Linear"]}
+        data["dataset_options"][0]["degree"] = 0
+        session = AnalysisSession.create(data, 0, 0)
+        assert len(session.frequentist.models) == 1
+        assert session.frequentist.models[0].settings.degree == 1
+        assert session.bayesian is None
+
+        # test polynomial; degree 2
+        data = deepcopy(bmds3_complete_continuous)
+        data["models"] = {"frequentist_unrestricted": ["Polynomial"]}
+        data["dataset_options"][0]["degree"] = 2
+        session = AnalysisSession.create(data, 0, 0)
+        assert len(session.frequentist.models) == 1
+        assert session.frequentist.models[0].settings.degree == 2
+        assert session.bayesian is None
+
+        # test polynomial; degree 3
+        data = deepcopy(bmds3_complete_continuous)
+        data["models"] = {"frequentist_unrestricted": ["Polynomial"]}
+        data["dataset_options"][0]["degree"] = 3
+        session = AnalysisSession.create(data, 0, 0)
+        assert len(session.frequentist.models) == 2
+        assert session.frequentist.models[0].settings.degree == 2
+        assert session.frequentist.models[1].settings.degree == 3
+        assert session.bayesian is None
+
+        # test linear + polynomial; degree 3
+        data = deepcopy(bmds3_complete_continuous)
+        data["models"] = {"frequentist_unrestricted": ["Linear", "Polynomial"]}
+        data["dataset_options"][0]["degree"] = 3
+        session = AnalysisSession.create(data, 0, 0)
+        assert len(session.frequentist.models) == 3
+        assert session.frequentist.models[0].settings.degree == 1
+        assert session.frequentist.models[1].settings.degree == 2
+        assert session.frequentist.models[2].settings.degree == 3
+        assert session.bayesian is None
+
     # disttype 3 Linear and power are not added
     def test_disttype(self, bmds3_complete_continuous):
 

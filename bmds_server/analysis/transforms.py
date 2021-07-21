@@ -1,3 +1,4 @@
+from copy import deepcopy
 from enum import Enum
 from typing import Dict, List, Union
 
@@ -30,12 +31,7 @@ is_increasing_map = {
 
 
 def build_model_settings(
-    bmds_version: str,
-    dataset_type: str,
-    model_name: str,
-    prior_class: str,
-    options: Dict,
-    dataset_options: Dict,
+    dataset_type: str, prior_class: str, options: Dict, dataset_options: Dict,
 ) -> Union[DichotomousModelSettings, ContinuousModelSettings]:
     prior_class = bmd3_prior_map[prior_class]
     if dataset_type in bmds.constants.DICHOTOMOUS_DTYPES:
@@ -61,7 +57,8 @@ def build_model_settings(
         raise ValueError(f"Unknown dataset_type: {dataset_type}")
 
 
-def build_dataset(dataset_type: str, dataset: Dict[str, List[float]]) -> bmds.datasets.DatasetType:
+def build_dataset(dataset: Dict[str, List[float]]) -> bmds.datasets.DatasetType:
+    dataset_type = dataset["dtype"]
     if dataset_type == Dtype.CONTINUOUS:
         schema = bmds.datasets.ContinuousDatasetSchema
     elif dataset_type == Dtype.CONTINUOUS_INDIVIDUAL:
@@ -79,4 +76,17 @@ def remap_exponential(models: List[str]) -> List[str]:
         models = models.copy()  # return a copy so inputs are unchanged
         pos = models.index(bmds.constants.M_Exponential)
         models[pos : pos + 1] = (bmds.constants.M_ExponentialM3, bmds.constants.M_ExponentialM5)
+    return models
+
+
+def remap_bayesian_exponential(models: List[Dict]) -> List[Dict]:
+    for i, model in enumerate(models):
+        if model["model"] == bmds.constants.M_Exponential:
+            models = deepcopy(models)
+            weight = model["prior_weight"] / 2  # TODO - revisit when CMA is live - is this right?
+            models[i : i + 1] = (
+                dict(model=bmds.constants.M_ExponentialM3, prior_weight=weight),
+                dict(model=bmds.constants.M_ExponentialM5, prior_weight=weight),
+            )
+            break
     return models

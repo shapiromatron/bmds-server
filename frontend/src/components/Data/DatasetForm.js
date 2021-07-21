@@ -133,10 +133,6 @@ class DatasetForm extends Component {
                         />
                     </div>
                 </div>
-                <button className="btn btn-sm btn-link" onClick={() => dataStore.loadExampleData()}>
-                    Load example data
-                </button>
-
                 <table className="table table-sm text-center">
                     <thead>
                         <tr className="bg-custom text-center">
@@ -175,6 +171,11 @@ class DatasetForm extends Component {
                         })}
                     </tbody>
                 </table>
+                <p>
+                    <button className="btn btn-link" onClick={dataStore.loadExampleData}>
+                        <i className="fa fa-fw fa-upload mr-1"></i>Load an example dataset
+                    </button>
+                </p>
                 <TabularDatasetModal />
             </div>
         );

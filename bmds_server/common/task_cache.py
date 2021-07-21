@@ -1,3 +1,4 @@
+import abc
 from enum import IntEnum
 from typing import Any, Optional
 
@@ -18,7 +19,7 @@ class ReportResponse(BaseModel):
     message: Optional[str]
 
 
-class ReportCache:
+class ReportCache(abc.ABC):
     """
     A cache designed for long-running report tasks.
     """
@@ -37,14 +38,16 @@ class ReportCache:
     def delete(self):
         self.cache.delete(self.cache_key)
 
+    @abc.abstractmethod
     def invoke_celery_task(self) -> None:
         """
         Invoke celery task to invoke which does the work in the create method.
 
         Returns None.
         """
-        raise NotImplementedError("Subclass requires implementation")
+        ...
 
+    @abc.abstractmethod
     def create(self) -> Any:
         """
         The expensive method which does all the work.
@@ -52,7 +55,7 @@ class ReportCache:
         Returns:
             Any: The content to be returned, and cached
         """
-        raise NotImplementedError("Subclass requires implementation")
+        ...
 
     def request_content(self) -> ReportResponse:
         """

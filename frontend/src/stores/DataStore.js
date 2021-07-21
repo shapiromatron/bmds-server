@@ -98,10 +98,11 @@ class DataStore {
     }
 
     @action.bound loadExampleData() {
-        const dataset = getExampleData(this.model_type);
-        const currentDataset = this.datasets[this.selectedDatasetId];
+        const dataset = getExampleData(this.model_type),
+            currentDataset = this.datasets[this.selectedDatasetId];
         _.extend(currentDataset, dataset);
     }
+
     @action.bound addRow() {
         const dataset = this.selectedDataset;
         Object.keys(dataset).map((key, i) => {

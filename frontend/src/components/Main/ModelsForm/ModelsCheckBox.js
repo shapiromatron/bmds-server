@@ -28,10 +28,11 @@ const isModelChecked = function(models, type, model) {
         return prior_weight;
     },
     PriorWeightTd = observer(props => {
-        const {store, model} = props;
+        const {store, model, disabled} = props;
         return store.canEdit ? (
             <td>
                 <input
+                    disabled={disabled}
                     value={getPriorWeightValue(store.models, model)}
                     onChange={e => store.setPriorWeight(model, e.target.value)}
                     type="number"
@@ -75,30 +76,35 @@ const ModelsCheckBox = observer(props => {
                     <CheckBoxTd store={store} type={fr} model={"Exponential"} />
                     <td></td>
                     <CheckBoxTd store={store} type={b} model={"Exponential"} disabled={true} />
+                    <PriorWeightTd store={store} model={"Exponential"} disabled={true} />
                 </tr>
                 <tr>
                     <td className="text-left align-middle">Hill</td>
                     <CheckBoxTd store={store} type={fr} model={"Hill"} />
                     <CheckBoxTd store={store} type={fu} model={"Hill"} />
                     <CheckBoxTd store={store} type={b} model={"Hill"} disabled={true} />
+                    <PriorWeightTd store={store} model={"Hill"} disabled={true} />
                 </tr>
                 <tr>
                     <td className="text-left align-middle">Linear</td>
                     <td></td>
                     <CheckBoxTd store={store} type={fu} model={"Linear"} />
                     <CheckBoxTd store={store} type={b} model={"Linear"} disabled={true} />
+                    <PriorWeightTd store={store} model={"Linear"} disabled={true} />
                 </tr>
                 <tr>
                     <td className="text-left align-middle">Polynomial</td>
                     <CheckBoxTd store={store} type={fr} model={"Polynomial"} />
                     <CheckBoxTd store={store} type={fu} model={"Polynomial"} />
                     <CheckBoxTd store={store} type={b} model={"Polynomial"} disabled={true} />
+                    <PriorWeightTd store={store} model={"Polynomial"} disabled={true} />
                 </tr>
                 <tr>
                     <td className="text-left align-middle">Power</td>
                     <CheckBoxTd store={store} type={fr} model={"Power"} />
                     <CheckBoxTd store={store} type={fu} model={"Power"} />
                     <CheckBoxTd store={store} type={b} model={"Power"} disabled={true} />
+                    <PriorWeightTd store={store} model={"Power"} disabled={true} />
                 </tr>
             </tbody>
         );

@@ -17,6 +17,8 @@ Make sure you have the following applications installed locally:
 
 If installing on Windows, all requirements are available via `conda`_ and do not require administrative access.
 
+.. _`conda`: https://docs.conda.io/
+
 Initial setup
 ~~~~~~~~~~~~~
 

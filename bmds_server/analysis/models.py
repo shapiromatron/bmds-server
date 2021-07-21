@@ -10,7 +10,6 @@ import pandas as pd
 from bmds.bmds3.batch import BmdsSessionBatch
 from bmds.bmds3.recommender.recommender import RecommenderSettings
 from bmds.constants import Dtype
-from bmds.reporting.styling import Report
 from django.conf import settings
 from django.core.cache import cache
 from django.core.exceptions import ValidationError
@@ -151,12 +150,11 @@ class Analysis(models.Model):
             return reporter.request_content()
         return reporter.create_content()
 
-    def get_docx_from_cache(self, request):
+    def get_docx_from_cache(self, fdqn: str):
         reporter = DocxReportCache(analysis=self)
-        uri = request.build_absolute_uri(self.get_absolute_url())
         if settings.ENABLE_REPORT_CACHE:
             return reporter.request_content()
-        return reporter.create_content(uri=uri)
+        return reporter.create_content(fdqn=fdqn)
 
     def to_batch(self) -> BmdsSessionBatch:
         # convert List[executor.AnalysisSession] to List[bmds.BmdsSession]
@@ -167,60 +165,6 @@ class Analysis(models.Model):
             if session.bayesian:
                 items.append(session.bayesian)
         return BmdsSessionBatch(sessions=items)
-
-    def to_word(self, uri: str) -> BytesIO:
-        f = BytesIO()
-
-        import docx
-
-        def add_url_hyperlink(paragraph, url, text):
-            # This gets access to the document.xml.rels file and gets a new relation id value
-            part = paragraph.part
-            r_id = part.relate_to(
-                url, docx.opc.constants.RELATIONSHIP_TYPE.HYPERLINK, is_external=True
-            )
-
-            # Create the w:hyperlink tag and add needed values
-            hyperlink = docx.oxml.shared.OxmlElement("w:hyperlink")
-            hyperlink.set(docx.oxml.shared.qn("r:id"), r_id)
-
-            # Create a w:r element and a new w:rPr element
-            new_run = docx.oxml.shared.OxmlElement("w:r")
-            rPr = docx.oxml.shared.OxmlElement("w:rPr")
-
-            # Join all the xml elements together add add the required text to the w:r element
-            new_run.append(rPr)
-            new_run.text = text
-            hyperlink.append(new_run)
-
-            # Create a new Run object and add the hyperlink into it
-            r = paragraph.add_run()
-            r._r.append(hyperlink)
-
-            # A workaround for the lack of a hyperlink style (doesn't go purple after using the link)
-            # Delete this if using a template that has the hyperlink style in it
-            r.font.color.theme_color = docx.enum.dml.MSO_THEME_COLOR_INDEX.HYPERLINK
-            r.font.underline = True
-
-        report = Report.build_default()
-        report.document.add_heading(self.name, 1)
-        report.document.add_paragraph(self.inputs.get("analysis_description", ""))
-        report.document.add_paragraph(f"Report generated: {now()}")
-        p = report.document.add_paragraph(f"Analysis URL: ")
-        add_url_hyperlink(p, uri, "Link to my site")
-        report.document.add_paragraph(f"BMDS version: {self.inputs['bmds_version']}")
-        report.document.add_paragraph(f"BMDS online version: {settings.COMMIT}")
-
-        if not self.is_finished:
-            report.document.add_paragraph("Execution is incomplete; no report could be generated")
-        elif self.has_errors:
-            report.document.add_paragraph("Execution generated errors; no report can be generated")
-        else:
-            batch = self.to_batch()
-            batch.to_docx(report=report)
-
-        report.document.save(f)
-        return f
 
     def to_df(self) -> pd.DataFrame:
         # exit early if we don't have data for a report

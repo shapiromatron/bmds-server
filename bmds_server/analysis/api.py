@@ -9,6 +9,7 @@ from ..common.task_cache import ReportStatus
 from ..common.validation import pydantic_validate
 from ..common.worker_health import worker_healthcheck
 from . import models, renderers, serializers, validators
+from .reporting.docx import add_update_url
 
 
 class HealthcheckViewset(viewsets.ViewSet):
@@ -171,7 +172,11 @@ class AnalysisViewset(mixins.CreateModelMixin, mixins.RetrieveModelMixin, viewse
         response = instance.get_docx_from_cache(request)
 
         if response.status is ReportStatus.COMPLETE:
-            data = renderers.BinaryFile(data=response.content, filename=instance.slug)
-            return Response(data)
+            data = (
+                add_update_url(instance, request.content, request.build_absolute_uri(""))
+                if instance.password == request.query_sparams.get("editKey", "")
+                else response.content
+            )
+            return Response(renderers.BinaryFile(data=data, filename=instance.slug))
 
         return Response(response.dict(), content_type="application/json")

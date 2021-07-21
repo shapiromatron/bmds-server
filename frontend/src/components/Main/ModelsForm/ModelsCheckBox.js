@@ -117,35 +117,35 @@ const ModelsCheckBox = observer(props => {
                     <CheckBoxTd store={store} type={fr} model={"Dichotomous-Hill"} />
                     <CheckBoxTd store={store} type={fu} model={"Dichotomous-Hill"} />
                     <CheckBoxTd store={store} type={b} model={"Dichotomous-Hill"} />
-                    <PriorWeightTd store={store} model={"Dichotomous-Hill"} disabled={true} />
+                    <PriorWeightTd store={store} model={"Dichotomous-Hill"} />
                 </tr>
                 <tr>
                     <td className="text-left align-middle">Gamma</td>
                     <CheckBoxTd store={store} type={fr} model={"Gamma"} />
                     <CheckBoxTd store={store} type={fu} model={"Gamma"} />
                     <CheckBoxTd store={store} type={b} model={"Gamma"} />
-                    <PriorWeightTd store={store} model={"Gamma"} disabled={true} />
+                    <PriorWeightTd store={store} model={"Gamma"} />
                 </tr>
                 <tr>
                     <td className="text-left align-middle">Logistic</td>
                     <td></td>
                     <CheckBoxTd store={store} type={fu} model={"Logistic"} />
                     <CheckBoxTd store={store} type={b} model={"Logistic"} />
-                    <PriorWeightTd store={store} model={"Logistic"} disabled={true} />
+                    <PriorWeightTd store={store} model={"Logistic"} />
                 </tr>
                 <tr>
                     <td className="text-left align-middle">Log Logistic</td>
                     <CheckBoxTd store={store} type={fr} model={"LogLogistic"} />
                     <CheckBoxTd store={store} type={fu} model={"LogLogistic"} />
                     <CheckBoxTd store={store} type={b} model={"LogLogistic"} />
-                    <PriorWeightTd store={store} model={"LogLogistic"} disabled={true} />
+                    <PriorWeightTd store={store} model={"LogLogistic"} />
                 </tr>
                 <tr>
                     <td className="text-left align-middle">LogProbit</td>
                     <CheckBoxTd store={store} type={fr} model={"LogProbit"} />
                     <CheckBoxTd store={store} type={fu} model={"LogProbit"} />
                     <CheckBoxTd store={store} type={b} model={"LogProbit"} />
-                    <PriorWeightTd store={store} model={"LogProbit"} disabled={true} />
+                    <PriorWeightTd store={store} model={"LogProbit"} />
                 </tr>
                 <tr>
                     <td className="text-left align-middle">
@@ -155,28 +155,28 @@ const ModelsCheckBox = observer(props => {
                     <CheckBoxTd store={store} type={fr} model={"Multistage"} />
                     <CheckBoxTd store={store} type={fu} model={"Multistage"} />
                     <CheckBoxTd store={store} type={b} model={"Multistage"} />
-                    <PriorWeightTd store={store} model={"Multistage"} disabled={true} />
+                    <PriorWeightTd store={store} model={"Multistage"} />
                 </tr>
                 <tr>
                     <td className="text-left align-middle">Probit</td>
                     <td></td>
                     <CheckBoxTd store={store} type={fu} model={"Probit"} />
                     <CheckBoxTd store={store} type={b} model={"Probit"} />
-                    <PriorWeightTd store={store} model={"Probit"} disabled={true} />
+                    <PriorWeightTd store={store} model={"Probit"} />
                 </tr>
                 <tr>
                     <td className="text-left align-middle">Quantal Linear</td>
                     <td></td>
                     <CheckBoxTd store={store} type={fu} model={"Quantal Linear"} />
                     <CheckBoxTd store={store} type={b} model={"Quantal Linear"} />
-                    <PriorWeightTd store={store} model={"Quantal Linear"} disabled={true} />
+                    <PriorWeightTd store={store} model={"Quantal Linear"} />
                 </tr>
                 <tr>
                     <td className="text-left align-middle">Weibull</td>
                     <CheckBoxTd store={store} type={fr} model={"Weibull"} />
                     <CheckBoxTd store={store} type={fu} model={"Weibull"} />
                     <CheckBoxTd store={store} type={b} model={"Weibull"} />
-                    <PriorWeightTd store={store} model={"Weibull"} disabled={true} />
+                    <PriorWeightTd store={store} model={"Weibull"} />
                 </tr>
             </tbody>
         );

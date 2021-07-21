@@ -67,24 +67,23 @@ def build_bayesian_session(
     if len(models) == 0:
         return None
 
+    # TODO - enable for CMA
+    # - use remap_exponential()
+    # - if we unpack Exp => [Exp3, Exp5], do you split the prior weight?
+
     bmds_version = inputs["bmds_version"]
     dataset_type = inputs["dataset_type"]
-    model_names = [model["model"] for model in models]
-    model_names = remap_exponential(model_names)
     session = bmds.BMDS.version(bmds_version)(dataset=dataset)
-
-    if options.get("dist_type") == DistType.log_normal:
-        model_names = [model for model in model_names if model not in lognormal_disabled]
-
-    for model_name in model_names:
+    prior_weights = list(map(lambda d: d["prior_weight"], models))
+    for name in map(lambda d: d["model"], models):
         model_options = build_model_settings(
             dataset_type, PriorEnum.bayesian, options, dataset_options,
         )
-        if model_name in bmds.constants.VARIABLE_POLYNOMIAL:
+        if name in bmds.constants.VARIABLE_POLYNOMIAL:
             model_options.degree = 2
-        session.add_model(model_name, settings=model_options)
+        session.add_model(name, settings=model_options)
 
-    # TODO: set prior weights to bayesian model averaging
+    session.set_ma_weights(prior_weights)
 
     return session
 

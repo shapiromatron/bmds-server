@@ -64,7 +64,7 @@ class ModelsStore {
                 if (obj === undefined) {
                     this.models[name].push(bma);
                 }
-                this.setPriorWeight();
+                this.setDefaultPriorWeights();
             } else {
                 if (!this.models[name].includes(model)) {
                     this.models[name].push(model);
@@ -76,7 +76,7 @@ class ModelsStore {
                 index = this.models[name].findIndex(obj => obj.model === model);
                 if (index > -1) {
                     this.models[name].splice(index, 1);
-                    this.setPriorWeight();
+                    this.setDefaultPriorWeights();
                 }
             } else {
                 index = this.models[name].indexOf(model);
@@ -91,10 +91,17 @@ class ModelsStore {
         }
     }
 
-    @action.bound setPriorWeight() {
+    @action.bound setDefaultPriorWeights() {
         this.models[mc.BAYESIAN].forEach(obj => {
             obj.prior_weight = this.prior_weight / this.models[mc.BAYESIAN].length;
         });
+    }
+
+    @action.bound setPriorWeight(model, value) {
+        let modelIndex = _.findIndex(this.models[mc.BAYESIAN], d => d.model === model);
+        if (modelIndex >= 0) {
+            this.models[mc.BAYESIAN][modelIndex].prior_weight = parseFloat(value);
+        }
     }
 }
 

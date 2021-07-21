@@ -1,19 +1,21 @@
-import React, {Component} from "react";
-import {observer} from "mobx-react";
+import React, { Component } from "react";
+import { observer } from "mobx-react";
 import PropTypes from "prop-types";
+import { toJS } from "mobx"
 
-import {Dtype} from "../../constants/dataConstants";
+import { Dtype } from "../../constants/dataConstants";
 import {
     dichotomousBmrOptions,
     continuousBmrOptions,
     distTypeOptions,
 } from "../../constants/optionsConstants";
-import {ff, getLabel} from "../../common";
+import { ff, getLabel } from "../../common";
 
 @observer
 class ModelOptionsTable extends Component {
     render() {
-        const {dtype, model} = this.props;
+        const { dtype, model } = this.props;
+        console.log("model settings", toJS(model))
         return (
             <table className="table table-bordered table-sm">
                 <thead>
@@ -25,7 +27,7 @@ class ModelOptionsTable extends Component {
                     {dtype == Dtype.DICHOTOMOUS ? (
                         <>
                             <tr>
-                                <td>Risk Type</td>
+                                <td>BMR Type</td>
                                 <td>{getLabel(model.settings.bmr_type, dichotomousBmrOptions)}</td>
                             </tr>
                             <tr>
@@ -33,8 +35,12 @@ class ModelOptionsTable extends Component {
                                 <td>{ff(model.settings.bmr)}</td>
                             </tr>
                             <tr>
-                                <td>Confidence Level</td>
+                                <td>Alpha</td>
                                 <td>{ff(1 - model.settings.alpha)}</td>
+                            </tr>
+                            <tr>
+                                <td>Degree</td>
+                                <td>{ff(1 - model.settings.degree)}</td>
                             </tr>
                         </>
                     ) : null}

@@ -1,6 +1,6 @@
 from copy import deepcopy
 from enum import Enum
-from typing import Dict, List, Tuple, Union
+from typing import Dict, List, Union
 
 import bmds
 from bmds.bmds3.types.continuous import ContinuousModelSettings

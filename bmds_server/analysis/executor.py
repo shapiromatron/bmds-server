@@ -9,8 +9,8 @@ from .transforms import (
     PriorEnum,
     build_dataset,
     build_model_settings,
-    remap_exponential,
     remap_bayesian_exponential,
+    remap_exponential,
 )
 
 # excluded continuous models if distribution type is lognormal

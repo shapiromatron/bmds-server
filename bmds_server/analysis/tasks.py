@@ -2,7 +2,7 @@ from celery import shared_task
 from celery.utils.log import get_task_logger
 from django.apps import apps
 
-from .cache import DocxReportCache, ExcelReportCache
+from .reporting.cache import DocxReportCache, ExcelReportCache
 
 logger = get_task_logger(__name__)
 

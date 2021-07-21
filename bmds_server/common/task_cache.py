@@ -48,6 +48,7 @@ class ReportCache(abc.ABC):
         """
         ...
 
+    @abc.abstractmethod
     def create(self) -> Any:
         """
         The expensive method which does all the work.

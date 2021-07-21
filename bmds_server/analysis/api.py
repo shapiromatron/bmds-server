@@ -9,6 +9,7 @@ from ..common.task_cache import ReportStatus
 from ..common.validation import pydantic_validate
 from ..common.worker_health import worker_healthcheck
 from . import models, renderers, serializers, validators
+from .reporting.cache import DocxReportCache, ExcelReportCache
 from .reporting.docx import add_update_url
 
 
@@ -155,8 +156,7 @@ class AnalysisViewset(mixins.CreateModelMixin, mixins.RetrieveModelMixin, viewse
         Return Excel export of outputs for selected analysis
         """
         instance = self.get_object()
-        response = instance.get_excel_from_cache()
-
+        response = ExcelReportCache(analysis=instance).request_content()
         if response.status is ReportStatus.COMPLETE:
             data = renderers.BinaryFile(data=response.content, filename=instance.slug)
             return Response(data)
@@ -170,7 +170,7 @@ class AnalysisViewset(mixins.CreateModelMixin, mixins.RetrieveModelMixin, viewse
         """
         instance: models.Analysis = self.get_object()
         uri = request.build_absolute_uri("/")[:-1]
-        response = instance.get_docx_from_cache(uri=uri)
+        response = DocxReportCache(analysis=instance, uri=uri).request_content()
         if response.status is ReportStatus.COMPLETE:
             edit = instance.password == request.query_params.get("editKey", "")
             data = add_update_url(instance, response.content, uri) if edit else response.content

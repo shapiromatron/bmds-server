@@ -16,14 +16,14 @@ if TYPE_CHECKING:
 ANALYSIS_URL = "Analysis URL: "
 
 
-def build_docx(analysis: Analysis, fdqn: str) -> BytesIO:
+def build_docx(analysis: Analysis, uri: str) -> BytesIO:
     f = BytesIO()
     report = Report.build_default()
     report.document.add_heading(analysis.name, 1)
     report.document.add_paragraph(analysis.inputs.get("analysis_description", ""))
     report.document.add_paragraph(f"Report generated: {now()}")
     p = report.document.add_paragraph(ANALYSIS_URL)
-    uri = fdqn + analysis.get_absolute_url()
+    uri += analysis.get_absolute_url()
     add_url_hyperlink(p, uri, "View")
     report.document.add_paragraph(f"BMDS version: {analysis.inputs['bmds_version']}")
     report.document.add_paragraph(f"BMDS online version: {settings.COMMIT}")
@@ -40,12 +40,12 @@ def build_docx(analysis: Analysis, fdqn: str) -> BytesIO:
     return f
 
 
-def add_update_url(analysis: Analysis, data: BytesIO, fdqn: str) -> BytesIO:
+def add_update_url(analysis: Analysis, data: BytesIO, uri: str) -> BytesIO:
     document = docx.Document(data)
     for p in document.paragraphs:
         if p.text.startswith(ANALYSIS_URL):
             p.add_run(" / ")
-            uri = fdqn + analysis.get_edit_url()
+            uri += analysis.get_edit_url()
             add_url_hyperlink(p, uri, "Update")
             break
 

@@ -19,7 +19,7 @@ class DocxReportCache(ReportCache):
     cache_prefix = "docx"
 
     def invoke_celery_task(self):
-        return tasks.generate_report.delay(str(self.analysis.id), ".../...")
+        return tasks.generate_report.delay(str(self.analysis.id), uri=self.kw["uri"])
 
-    def create(self, fqdn: str) -> BytesIO:
-        return build_docx(self.analysis, fqdn)
+    def create(self) -> BytesIO:
+        return build_docx(self.analysis, self.kw["uri"])

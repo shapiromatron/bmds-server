@@ -145,16 +145,10 @@ class Analysis(models.Model):
         return [executor.AnalysisSession.deserialize(output) for output in self.outputs["outputs"]]
 
     def get_excel_from_cache(self):
-        reporter = ExcelReportCache(analysis=self)
-        if settings.ENABLE_REPORT_CACHE:
-            return reporter.request_content()
-        return reporter.create_content()
+        return ExcelReportCache(analysis=self).request_content()
 
-    def get_docx_from_cache(self, fdqn: str):
-        reporter = DocxReportCache(analysis=self)
-        if settings.ENABLE_REPORT_CACHE:
-            return reporter.request_content()
-        return reporter.create_content(fdqn=fdqn)
+    def get_docx_from_cache(self, uri: str):
+        return DocxReportCache(analysis=self, uri=uri).request_content()
 
     def to_batch(self) -> BmdsSessionBatch:
         # convert List[executor.AnalysisSession] to List[bmds.BmdsSession]

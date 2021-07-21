@@ -168,15 +168,12 @@ class AnalysisViewset(mixins.CreateModelMixin, mixins.RetrieveModelMixin, viewse
         """
         Return Word report for the selected analysis
         """
-        instance = self.get_object()
-        response = instance.get_docx_from_cache(request)
-
+        instance: models.Analysis = self.get_object()
+        uri = request.build_absolute_uri("/")[:-1]
+        response = instance.get_docx_from_cache(uri=uri)
         if response.status is ReportStatus.COMPLETE:
-            data = (
-                add_update_url(instance, request.content, request.build_absolute_uri(""))
-                if instance.password == request.query_sparams.get("editKey", "")
-                else response.content
-            )
+            edit = instance.password == request.query_params.get("editKey", "")
+            data = add_update_url(instance, response.content, uri) if edit else response.content
             return Response(renderers.BinaryFile(data=data, filename=instance.slug))
 
         return Response(response.dict(), content_type="application/json")

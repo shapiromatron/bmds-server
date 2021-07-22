@@ -18,6 +18,15 @@ ANALYSIS_URL = "Analysis URL: "
 
 
 def build_docx(analysis: Analysis, uri: str) -> BytesIO:
+    """Generate a Microsoft Word binary file for an analysis
+
+    Args:
+        analysis (Analysis): An Analysis object
+        uri (str): The root URI for this site, eg: "https://example.com"
+
+    Returns:
+        BytesIO: A word document byte stream
+    """
     f = BytesIO()
     report = Report.build_default()
 
@@ -57,6 +66,16 @@ def build_docx(analysis: Analysis, uri: str) -> BytesIO:
 
 
 def add_update_url(analysis: Analysis, data: BytesIO, uri: str) -> BytesIO:
+    """Add an update URL to an existing BMDS report
+
+    Args:
+        analysis (Analysis): An Analysis object
+        data (BytesIO):  A word document byte stream
+        uri (str): The root URI for this site, eg: "https://example.com"
+
+    Returns:
+        BytesIO: A word document byte stream
+    """
     document = docx.Document(data)
     for p in document.paragraphs:
         if p.text.startswith(ANALYSIS_URL):

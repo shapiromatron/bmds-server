@@ -68,9 +68,8 @@ class Analysis(models.Model):
         else:
             return str(self.id)
 
-    @property
     def name(self) -> str:
-        return self.inputs.get("analysis_name", f"Analysis {self.pk}")
+        return self.inputs.get("analysis_name", "BMDS Analysis")
 
     def get_absolute_url(self):
         return reverse("analysis", args=(str(self.id),))

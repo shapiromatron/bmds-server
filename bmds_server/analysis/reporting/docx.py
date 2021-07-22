@@ -8,6 +8,7 @@ from bmds.reporting.styling import Report
 from django.conf import settings
 from django.utils.timezone import now
 
+from ...common.utils import to_timestamp
 from ...common.docx import add_url_hyperlink
 
 if TYPE_CHECKING:
@@ -19,14 +20,29 @@ ANALYSIS_URL = "Analysis URL: "
 def build_docx(analysis: Analysis, uri: str) -> BytesIO:
     f = BytesIO()
     report = Report.build_default()
-    report.document.add_heading(analysis.name, 1)
-    report.document.add_paragraph(analysis.inputs.get("analysis_description", ""))
-    report.document.add_paragraph(f"Report generated: {now()}")
-    p = report.document.add_paragraph(ANALYSIS_URL)
+
+    report.document.add_heading(analysis.name(), 1)
+
+    description = analysis.inputs.get("analysis_description")
+    if description:
+        report.document.add_paragraph(description)
+
+    p = report.document.add_paragraph()
+    p.add_run("Report generated: ").bold = True
+    p.add_run(to_timestamp(now()))
+
+    p = report.document.add_paragraph()
+    p.add_run(ANALYSIS_URL).bold = True
     uri += analysis.get_absolute_url()
     add_url_hyperlink(p, uri, "View")
-    report.document.add_paragraph(f"BMDS version: {analysis.inputs['bmds_version']}")
-    report.document.add_paragraph(f"BMDS online version: {settings.COMMIT}")
+
+    p = report.document.add_paragraph()
+    p.add_run("BMDS version: ").bold = True
+    p.add_run(analysis.inputs["bmds_version"] + "α2")  # TODO - change when live
+
+    p = report.document.add_paragraph()
+    p.add_run("BMDS online version: ").bold = True
+    p.add_run(str(settings.COMMIT))
 
     if not analysis.is_finished:
         report.document.add_paragraph("Execution is incomplete; no report could be generated")

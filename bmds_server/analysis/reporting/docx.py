@@ -8,8 +8,8 @@ from bmds.reporting.styling import Report
 from django.conf import settings
 from django.utils.timezone import now
 
-from ...common.utils import to_timestamp
 from ...common.docx import add_url_hyperlink
+from ...common.utils import to_timestamp
 
 if TYPE_CHECKING:
     from ..models import Analysis

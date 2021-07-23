@@ -20,6 +20,7 @@ from django.utils.timezone import now
 
 from . import executor, tasks, utils, validators
 from .reporting.cache import DocxReportCache, ExcelReportCache
+from .reporting.excel import build_excel
 
 logger = logging.getLogger(__name__)
 
@@ -160,11 +161,7 @@ class Analysis(models.Model):
                 data=["Analysis not finished or error occurred - cannot create report"],
                 name="Status",
             ).to_frame()
-
-        batch = self.to_batch()
-        df = batch.to_df()
-
-        return df
+        return build_excel(self)
 
     def to_excel(self) -> BytesIO:
         df = self.to_df()

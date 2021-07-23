@@ -27,9 +27,10 @@ class ReportCache(abc.ABC):
     cache_prefix: str = ""  # should be unique for each subclass
     status = ReportStatus
 
-    def __init__(self, analysis):
+    def __init__(self, analysis, **kw):
         self.cache = caches[settings.DISK_CACHE_NAME]
         self.analysis = analysis
+        self.kw = kw
 
     @property
     def cache_key(self):
@@ -66,7 +67,10 @@ class ReportCache(abc.ABC):
             ReportResponse:
         """
 
-        # try to get content
+        if not settings.ENABLE_REPORT_CACHE:
+            return self.create_content()
+
+        # try to get content from cache
         key = self.cache_key
         response = self.cache.get(key)
         if response:
@@ -83,7 +87,7 @@ class ReportCache(abc.ABC):
         self.invoke_celery_task()
         return response
 
-    def create_content(self) -> None:
+    def create_content(self) -> ReportResponse:
         """
         Generate and cache the content.
         """
@@ -93,3 +97,4 @@ class ReportCache(abc.ABC):
             status=ReportStatus.COMPLETE, content=content, header=None, message=None,
         )
         self.cache.set(key, response)
+        return response

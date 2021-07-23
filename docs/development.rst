@@ -1,22 +1,23 @@
 Development
 ===========
 
-TODO - update
-
 Make sure you have the following applications installed locally:
 
 - `Git`_
 - `Python`_ == 3.9
 - `Node.js`_
 - `Yarn`_
+- `PostgreSQL`_ == 12
 
 .. _`Git`: https://git-scm.com/
 .. _`Python`: https://www.python.org/
 .. _`Node.js`: https://nodejs.org
 .. _`Yarn`: https://yarnpkg.com/
-.. _`conda`: https://docs.conda.io/
+.. _`PostgreSQL`: https://www.postgresql.org/
 
 If installing on Windows, all requirements are available via `conda`_ and do not require administrative access.
+
+.. _`conda`: https://docs.conda.io/
 
 Initial setup
 ~~~~~~~~~~~~~

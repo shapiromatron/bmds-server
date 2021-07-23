@@ -2,7 +2,7 @@ from celery import shared_task
 from celery.utils.log import get_task_logger
 from django.apps import apps
 
-from .cache import DocxReportCache, ExcelReportCache
+from .reporting.cache import DocxReportCache, ExcelReportCache
 
 logger = get_task_logger(__name__)
 
@@ -22,10 +22,10 @@ def delete_old_analyses():
 
 
 @shared_task()
-def generate_report(id_: str):
+def generate_report(id_: str, uri: str):
     logger.info(f"starting report generation: {id_}")
     analysis = apps.get_model("analysis", "Analysis").objects.get(id=id_)
-    DocxReportCache(analysis).create_content()
+    DocxReportCache(analysis, uri=uri).create_content()
     logger.info(f"finishing report generation: {id_}")
 
 

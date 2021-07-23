@@ -34,6 +34,7 @@ class TestBmds3Execution:
         # test reporting (for completion)
         build_docx(analysis, "http://bmds-python.com")
         df = build_df(analysis)
+        df.to_excel("~/Desktop/output_c.xlsx", index=False)
 
     def test_ci(self, bmds3_complete_continuous_individual):
         analysis = Analysis.objects.create(inputs=bmds3_complete_continuous_individual)
@@ -55,6 +56,7 @@ class TestBmds3Execution:
         # test reporting (for completion)
         build_docx(analysis, "http://bmds-python.com")
         df = build_df(analysis)
+        df.to_excel("~/Desktop/output_ci.xlsx", index=False)
 
     def test_d(self, bmds3_complete_dichotomous):
         analysis = Analysis.objects.create(inputs=bmds3_complete_dichotomous)
@@ -76,3 +78,4 @@ class TestBmds3Execution:
         # test reporting (for completion)
         build_docx(analysis, "http://bmds-python.com")
         df = build_df(analysis)
+        df.to_excel("~/Desktop/output_d.xlsx", index=False)

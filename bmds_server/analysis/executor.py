@@ -150,7 +150,7 @@ class AnalysisSession(NamedTuple):
 
         if self.bayesian:
             if self.bayesian.dataset.dtype in bmds.constants.DICHOTOMOUS_DTYPES:
-                self.bayesian.add_model_averaging()
+                self.bayesian.add_model_averaging()  # ADD SETTINGS for addedrisk?
             self.bayesian.execute()
 
         return self.to_dict()

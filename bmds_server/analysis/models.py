@@ -1,6 +1,7 @@
 import logging
 import traceback
 import uuid
+from copy import deepcopy
 from datetime import timedelta
 from io import BytesIO
 from typing import Dict, List, Optional
@@ -20,6 +21,7 @@ from django.utils.timezone import now
 
 from . import executor, tasks, utils, validators
 from .reporting.cache import DocxReportCache, ExcelReportCache
+from .reporting.excel import build_df
 
 logger = logging.getLogger(__name__)
 
@@ -136,12 +138,15 @@ class Analysis(models.Model):
     def get_session(self, index: int) -> executor.AnalysisSession:
         if not self.is_finished or self.has_errors:
             raise ValueError("Session cannot be returned")
-        return executor.AnalysisSession.deserialize(self.outputs["outputs"][index])
+        return executor.AnalysisSession.deserialize(deepcopy(self.outputs["outputs"][index]))
 
     def get_sessions(self) -> List[executor.AnalysisSession]:
         if not self.is_finished or self.has_errors:
             raise ValueError("Session cannot be returned")
-        return [executor.AnalysisSession.deserialize(output) for output in self.outputs["outputs"]]
+        return [
+            executor.AnalysisSession.deserialize(output)
+            for output in deepcopy(self.outputs["outputs"])
+        ]
 
     def to_batch(self) -> BmdsSessionBatch:
         # convert List[executor.AnalysisSession] to List[bmds.BmdsSession]
@@ -160,11 +165,7 @@ class Analysis(models.Model):
                 data=["Analysis not finished or error occurred - cannot create report"],
                 name="Status",
             ).to_frame()
-
-        batch = self.to_batch()
-        df = batch.to_df()
-
-        return df
+        return build_df(self)
 
     def to_excel(self) -> BytesIO:
         df = self.to_df()

@@ -304,8 +304,11 @@ class MainStore {
     @observable toastHeader = "";
     @observable toastMessage = "";
     @action.bound downloadReport(url) {
-        const apiUrl = this.config[url],
-            fetchReport = () => {
+        let apiUrl = (apiUrl = this.config[url]);
+        if (this.canEdit) {
+            apiUrl = `${apiUrl}?editKey=${this.config.editSettings.editKey}`;
+        }
+        const fetchReport = () => {
                 fetch(apiUrl).then(processResponse);
             },
             processResponse = response => {

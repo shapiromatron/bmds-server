@@ -1,6 +1,7 @@
 import logging
 import traceback
 import uuid
+from copy import deepcopy
 from datetime import timedelta
 from io import BytesIO
 from typing import Dict, List, Optional
@@ -10,7 +11,6 @@ import pandas as pd
 from bmds.bmds3.batch import BmdsSessionBatch
 from bmds.bmds3.recommender.recommender import RecommenderSettings
 from bmds.constants import Dtype
-from bmds.reporting.styling import Report
 from django.conf import settings
 from django.core.cache import cache
 from django.core.exceptions import ValidationError
@@ -20,7 +20,8 @@ from django.utils.text import slugify
 from django.utils.timezone import now
 
 from . import executor, tasks, utils, validators
-from .cache import DocxReportCache, ExcelReportCache
+from .reporting.cache import DocxReportCache, ExcelReportCache
+from .reporting.excel import build_df
 
 logger = logging.getLogger(__name__)
 
@@ -68,6 +69,9 @@ class Analysis(models.Model):
             return slugify(self.inputs["analysis_name"])
         else:
             return str(self.id)
+
+    def name(self) -> str:
+        return self.inputs.get("analysis_name", "BMDS Analysis")
 
     def get_absolute_url(self):
         return reverse("analysis", args=(str(self.id),))
@@ -134,18 +138,15 @@ class Analysis(models.Model):
     def get_session(self, index: int) -> executor.AnalysisSession:
         if not self.is_finished or self.has_errors:
             raise ValueError("Session cannot be returned")
-        return executor.AnalysisSession.deserialize(self.outputs["outputs"][index])
+        return executor.AnalysisSession.deserialize(deepcopy(self.outputs["outputs"][index]))
 
     def get_sessions(self) -> List[executor.AnalysisSession]:
         if not self.is_finished or self.has_errors:
             raise ValueError("Session cannot be returned")
-        return [executor.AnalysisSession.deserialize(output) for output in self.outputs["outputs"]]
-
-    def get_excel_from_cache(self):
-        return ExcelReportCache(analysis=self).request_content()
-
-    def get_docx_from_cache(self):
-        return DocxReportCache(analysis=self).request_content()
+        return [
+            executor.AnalysisSession.deserialize(output)
+            for output in deepcopy(self.outputs["outputs"])
+        ]
 
     def to_batch(self) -> BmdsSessionBatch:
         # convert List[executor.AnalysisSession] to List[bmds.BmdsSession]
@@ -157,23 +158,6 @@ class Analysis(models.Model):
                 items.append(session.bayesian)
         return BmdsSessionBatch(sessions=items)
 
-    def to_word(self) -> BytesIO:
-        f = BytesIO()
-
-        report = Report.build_default()
-        report.document.add_heading(self.inputs.get("analysis_name", str(self.pk)), 1)
-
-        if not self.is_finished:
-            report.document.add_paragraph("Execution is incomplete; no report could be generated")
-        elif self.has_errors:
-            report.document.add_paragraph("Execution generated errors; no report can be generated")
-        else:
-            batch = self.to_batch()
-            batch.to_docx(report=report)
-
-        report.document.save(f)
-        return f
-
     def to_df(self) -> pd.DataFrame:
         # exit early if we don't have data for a report
         if not self.is_finished or self.has_errors:
@@ -181,11 +165,7 @@ class Analysis(models.Model):
                 data=["Analysis not finished or error occurred - cannot create report"],
                 name="Status",
             ).to_frame()
-
-        batch = self.to_batch()
-        df = batch.to_df()
-
-        return df
+        return build_df(self)
 
     def to_excel(self) -> BytesIO:
         df = self.to_df()

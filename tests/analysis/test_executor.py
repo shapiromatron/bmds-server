@@ -12,14 +12,21 @@ class TestAnalysisSession:
         data = deepcopy(bmds3_complete_dichotomous)
         session = AnalysisSession.create(data, 0, 0)
         assert len(session.frequentist.models) == 1
-        assert session.bayesian is None
+        assert len(session.bayesian.models) == 1
 
     def test_default_continuous(self, bmds3_complete_continuous):
         # assure a default dataset can be created
         data = deepcopy(bmds3_complete_continuous)
         session = AnalysisSession.create(data, 0, 0)
         assert len(session.frequentist.models) == 1
-        assert session.bayesian is None
+        assert len(session.bayesian.models) == 1
+
+    def test_default_continuous_individual(self, bmds3_complete_continuous_individual):
+        # assure a default dataset can be created
+        data = deepcopy(bmds3_complete_continuous_individual)
+        session = AnalysisSession.create(data, 0, 0)
+        assert len(session.frequentist.models) == 1
+        assert len(session.bayesian.models) == 1
 
     def test_prior_classes(self, bmds3_complete_dichotomous):
         # assure a default dataset can be created

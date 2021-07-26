@@ -1,7 +1,8 @@
 from io import BytesIO
 
-from ..common.task_cache import ReportCache
-from . import tasks
+from ...common.task_cache import ReportCache
+from .. import tasks
+from .docx import build_docx
 
 
 class ExcelReportCache(ReportCache):
@@ -18,7 +19,7 @@ class DocxReportCache(ReportCache):
     cache_prefix = "docx"
 
     def invoke_celery_task(self):
-        return tasks.generate_report.delay(str(self.analysis.id))
+        return tasks.generate_report.delay(str(self.analysis.id), self.kw["uri"])
 
     def create(self) -> BytesIO:
-        return self.analysis.to_word()
+        return build_docx(self.analysis, self.kw["uri"])

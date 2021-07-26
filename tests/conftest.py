@@ -29,7 +29,10 @@ def bmds3_complete_continuous():
     return {
         "bmds_version": "BMDS330",
         "dataset_type": "C",
-        "models": {"frequentist_restricted": ["Power"]},
+        "models": {
+            "frequentist_restricted": ["Power"],
+            "bayesian": [{"model": "Power", "prior_weight": 1}],
+        },
         "datasets": [
             {
                 "dtype": "C",
@@ -57,11 +60,65 @@ def bmds3_complete_continuous():
 
 
 @pytest.fixture
+def bmds3_complete_continuous_individual():
+    # fmt: off
+    return {
+        "bmds_version": "BMDS330",
+        "dataset_type": "C",
+        "models": {
+            "frequentist_restricted": ["Power"],
+            "bayesian": [{"model": "Power", "prior_weight": 1}],
+        },
+        "datasets": [
+            {
+                "dtype": "CI",
+                "metadata": {"id": 123},
+                "doses": [
+                    0, 0, 0, 0, 0, 0, 0, 0,
+                    0.1, 0.1, 0.1, 0.1, 0.1, 0.1,
+                    1, 1, 1, 1, 1, 1,
+                    10, 10, 10, 10, 10, 10,
+                    100, 100, 100, 100, 100, 100,
+                    300, 300, 300, 300, 300, 300,
+                    500, 500, 500, 500, 500, 500,
+                ],
+                "responses": [
+                    8.1079, 9.3063, 9.7431, 9.7814, 10.0517, 10.6132, 10.7509, 11.0567,
+                    9.1556, 9.6821, 9.8256, 10.2095, 10.2222, 12.0382,
+                    9.5661, 9.7059, 9.9905, 10.2716, 10.471, 11.0602,
+                    8.8514, 10.0107, 10.0854, 10.5683, 11.1394, 11.4875,
+                    9.5427, 9.7211, 9.8267, 10.0231, 10.1833, 10.8685,
+                    10.368, 10.5176, 11.3168, 12.002, 12.1186, 12.6368,
+                    9.9572, 10.1347, 10.7743, 11.0571, 11.1564, 12.0368,
+                ],
+            }
+        ],
+        "options": [
+            {
+                "bmr_type": 2,
+                "bmr_value": 1.0,
+                "tail_probability": 0.95,
+                "confidence_level": 0.95,
+                "dist_type": 1,
+            }
+        ],
+        "dataset_options": [
+            {"dataset_id": 123, "enabled": True, "degree": 0, "adverse_direction": -1}
+        ],
+        "recommender": RecommenderSettings.build_default().dict(),
+    }
+    # fmt: on
+
+
+@pytest.fixture
 def bmds3_complete_dichotomous():
     return {
         "bmds_version": "BMDS330",
         "dataset_type": "D",
-        "models": {"frequentist_restricted": ["LogLogistic"]},
+        "models": {
+            "frequentist_unrestricted": ["Logistic"],
+            "bayesian": [{"model": "Logistic", "prior_weight": 1}],
+        },
         "datasets": [
             {
                 "dtype": "D",

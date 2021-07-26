@@ -1,21 +1,20 @@
-import React, { Component } from "react";
-import { observer } from "mobx-react";
+import React, {Component} from "react";
+import {observer} from "mobx-react";
 import PropTypes from "prop-types";
-import { toJS } from "mobx"
-
-import { Dtype } from "../../constants/dataConstants";
+import {priorClassLabels} from "../../constants/outputConstants";
+import {Dtype} from "../../constants/dataConstants";
 import {
     dichotomousBmrOptions,
     continuousBmrOptions,
     distTypeOptions,
 } from "../../constants/optionsConstants";
-import { ff, getLabel } from "../../common";
+import {ff, getLabel} from "../../common";
 
 @observer
 class ModelOptionsTable extends Component {
     render() {
-        const { dtype, model } = this.props;
-        console.log("model settings", toJS(model))
+        const {dtype, model} = this.props;
+
         return (
             <table className="table table-bordered table-sm">
                 <thead>
@@ -36,16 +35,38 @@ class ModelOptionsTable extends Component {
                             </tr>
                             <tr>
                                 <td>Alpha</td>
-                                <td>{ff(1 - model.settings.alpha)}</td>
+                                <td>{ff(model.settings.alpha)}</td>
                             </tr>
                             <tr>
                                 <td>Degree</td>
-                                <td>{ff(1 - model.settings.degree)}</td>
+                                <td>{ff(model.settings.degree)}</td>
+                            </tr>
+                            <tr>
+                                <td>Samples</td>
+                                <td>{ff(model.settings.samples)}</td>
+                            </tr>
+                            <tr>
+                                <td>Burn In</td>
+                                <td>{ff(model.settings.burnin)}</td>
+                            </tr>
+                            <tr>
+                                <td>Prior Class</td>
+                                <td>
+                                    {getLabel(model.settings.priors.prior_class, priorClassLabels)}
+                                </td>
                             </tr>
                         </>
                     ) : null}
                     {dtype == Dtype.CONTINUOUS || dtype == Dtype.CONTINUOUS_INDIVIDUAL ? (
                         <>
+                            <tr>
+                                <td>Is increasing</td>
+                                <td>{model.settings.is_increasing}</td>
+                            </tr>
+                            <tr>
+                                <td>Distribution Type</td>
+                                <td>{getLabel(model.settings.disttype, distTypeOptions)}</td>
+                            </tr>
                             <tr>
                                 <td>BMR Type</td>
                                 <td>{getLabel(model.settings.bmr_type, continuousBmrOptions)}</td>
@@ -59,12 +80,26 @@ class ModelOptionsTable extends Component {
                                 <td>{ff(model.settings.tail_prob)}</td>
                             </tr>
                             <tr>
-                                <td>Confidence Level</td>
-                                <td>{ff(1 - model.settings.alpha)}</td>
+                                <td>Alpha</td>
+                                <td>{ff(model.settings.alpha)}</td>
                             </tr>
                             <tr>
-                                <td>Distribution + Variance</td>
-                                <td>{getLabel(model.settings.disttype, distTypeOptions)}</td>
+                                <td>Degree</td>
+                                <td>{ff(model.settings.degree)}</td>
+                            </tr>
+                            <tr>
+                                <td>Samples</td>
+                                <td>{model.settings.samples}</td>
+                            </tr>
+                            <tr>
+                                <td>Burn in</td>
+                                <td>{model.settings.burnin}</td>
+                            </tr>
+                            <tr>
+                                <td>Prior class</td>
+                                <td>
+                                    {getLabel(model.settings.priors.prior_class, priorClassLabels)}
+                                </td>
                             </tr>
                         </>
                     ) : null}

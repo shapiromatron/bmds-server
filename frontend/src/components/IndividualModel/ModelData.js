@@ -1,66 +1,41 @@
 import React, {Component} from "react";
 import {observer} from "mobx-react";
 import PropTypes from "prop-types";
+import {priorType} from "../../constants/outputConstants";
 
-import {Dtype} from "../../constants/dataConstants";
-
+import {ff, getLabel} from "../../common";
 @observer
 class ModelData extends Component {
     render() {
-        const {dtype, dataset} = this.props;
+        const {model} = this.props;
         return (
             <table className="table table-bordered table-sm">
                 <thead>
                     <tr className="bg-custom">
-                        <th colSpan="2">Model Data</th>
+                        <th colSpan="6">Priors</th>
+                    </tr>
+                    <tr>
+                        <th>Name</th>
+                        <th>Type</th>
+                        <th>Initial Value</th>
+                        <th>St. Dev.</th>
+                        <th>Min Value</th>
+                        <th>Max Value</th>
                     </tr>
                 </thead>
                 <tbody>
-                    {dtype == Dtype.DICHOTOMOUS ? (
-                        <>
-                            <tr>
-                                {/* TODO - pull from data */}
-                                <td>Dependent Variable</td>
-                                <td>Dose</td>
+                    {model.settings.priors.priors.map((prior, i) => {
+                        return (
+                            <tr key={i}>
+                                <td>{prior.name}</td>
+                                <td>{getLabel(prior.type, priorType)}</td>
+                                <td>{ff(prior.initial_value)}</td>
+                                <td>{ff(prior.stdev)}</td>
+                                <td>{ff(prior.min_value)}</td>
+                                <td>{ff(prior.max_value)}</td>
                             </tr>
-                            <tr>
-                                {/* TODO - pull from data */}
-                                <td>Independent Variable</td>
-                                <td>Fraction affected</td>
-                            </tr>
-                            <tr>
-                                <td>Number of Observations</td>
-                                <td>{dataset.doses.length}</td>
-                            </tr>
-                            <tr>
-                                <td>Adverse Direction</td>
-                                <td>Up</td>
-                            </tr>
-                        </>
-                    ) : null}
-                    {dtype == Dtype.CONTINUOUS || dtype == Dtype.CONTINUOUS_INDIVIDUAL ? (
-                        <>
-                            <tr>
-                                {/* TODO - pull from data */}
-                                <td>Dependent Variable</td>
-                                <td>Dose</td>
-                            </tr>
-                            <tr>
-                                {/* TODO - pull from data */}
-                                <td>Independent Variable</td>
-                                <td>Mean</td>
-                            </tr>
-                            <tr>
-                                <td>Number of Observations</td>
-                                <td>{dataset.doses.length}</td>
-                            </tr>
-                            <tr>
-                                {/* TODO - pull from data */}
-                                <td>Adverse Direction</td>
-                                <td>Up</td>
-                            </tr>
-                        </>
-                    ) : null}
+                        );
+                    })}
                 </tbody>
             </table>
         );
@@ -68,7 +43,6 @@ class ModelData extends Component {
 }
 
 ModelData.propTypes = {
-    dtype: PropTypes.string.isRequired,
-    dataset: PropTypes.object.isRequired,
+    model: PropTypes.object.isRequired,
 };
 export default ModelData;

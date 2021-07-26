@@ -17,4 +17,14 @@ export const getPValue = function(dataType, results) {
         frequentist: 0,
         bayesian: 1,
     },
-    maIndex = 999;
+    maIndex = 999,
+    priorClassLabels = [
+        {value: 0, label: "Frequentist Unrestricted"},
+        {value: 1, label: "Frequntist Restricted"},
+        {value: 2, label: "Bayesian"},
+    ],
+    priorType = [
+        {value: 0, label: "Uniform"},
+        {value: 1, label: "Normal"},
+        {value: 2, label: "Lognormal"},
+    ];

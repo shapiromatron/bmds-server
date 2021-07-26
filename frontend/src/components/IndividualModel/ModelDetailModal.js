@@ -1,6 +1,6 @@
-import React, { Component } from "react";
-import { Modal, Row, Col } from "react-bootstrap";
-import { inject, observer } from "mobx-react";
+import React, {Component} from "react";
+import {Modal, Row, Col} from "react-bootstrap";
+import {inject, observer} from "mobx-react";
 import PropTypes from "prop-types";
 
 import InfoTable from "./InfoTable";
@@ -24,7 +24,7 @@ import * as dc from "../../constants/dataConstants";
 @observer
 class IndividualModelBody extends Component {
     render() {
-        const { outputStore } = this.props,
+        const {outputStore} = this.props,
             dataset = outputStore.selectedDataset,
             model = outputStore.modalModel,
             dtype = dataset.dtype;
@@ -35,11 +35,11 @@ class IndividualModelBody extends Component {
                     <Col xs={4}>
                         <InfoTable />
                     </Col>
-                    <Col xs={4}>
+                    <Col xs={3}>
                         <ModelOptionsTable dtype={dtype} model={model} />
                     </Col>
-                    <Col xs={4}>
-                        <ModelData dtype={dtype} dataset={dataset} model={model} />
+                    <Col xs={5}>
+                        <ModelData model={model} />
                     </Col>
                 </Row>
                 <Row>
@@ -80,7 +80,7 @@ class IndividualModelBody extends Component {
                     </Row>
                 ) : null}
                 <Row>
-                    <Col xs={4} style={{ maxHeight: "50vh", overflowY: "scroll" }}>
+                    <Col xs={4} style={{maxHeight: "50vh", overflowY: "scroll"}}>
                         <CDFTable bmd_dist={model.results.fit.bmd_dist} />
                     </Col>
                     <Col xs={8}>
@@ -98,7 +98,7 @@ IndividualModelBody.propTypes = {
 @observer
 class ModelAverageBody extends Component {
     render() {
-        const { outputStore } = this.props,
+        const {outputStore} = this.props,
             dataset = outputStore.selectedDataset,
             model = outputStore.modalModel,
             bayesian_models = outputStore.selectedOutput.bayesian.models;
@@ -121,7 +121,7 @@ class ModelAverageBody extends Component {
                     </Col>
                 </Row>
                 <Row>
-                    <Col xs={4} style={{ maxHeight: "50vh", overflowY: "scroll" }}>
+                    <Col xs={4} style={{maxHeight: "50vh", overflowY: "scroll"}}>
                         <CDFTable bmd_dist={model.results.bmd_dist} />
                     </Col>
                     <Col xs={8}>
@@ -140,7 +140,7 @@ ModelAverageBody.propTypes = {
 @observer
 class ModelDetailModal extends Component {
     render() {
-        const { outputStore } = this.props,
+        const {outputStore} = this.props,
             model = outputStore.modalModel,
             isMA = outputStore.drModelModalIsMA;
 
@@ -162,7 +162,7 @@ class ModelDetailModal extends Component {
                     <Modal.Title id="contained-modal-title-vcenter">{name}</Modal.Title>
                     <button
                         className="btn btn-danger"
-                        style={{ float: "right" }}
+                        style={{float: "right"}}
                         onClick={() => outputStore.closeModal()}>
                         <i className="fa fa-times" aria-hidden="true"></i>
                     </button>

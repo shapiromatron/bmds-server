@@ -13,15 +13,14 @@ class DatasetTable extends Component {
             columnNames = columns[dataset.dtype],
             width = `${100 / columnNames.length}%`,
             dose_group = _.uniq(dataset.doses),
-            getResponseList = function(key) {
-                let response_array = [];
-                dataset.doses.map((dose, i) => {
-                    if (dose === key) {
-                        response_array.push(dataset.responses[i]);
-                    }
-                });
-                return response_array.toString().replace(/,(?=[^\s])/g, ",  ");
-            };
+            data_array = [];
+        dataset.doses.map((dose, i) => {
+            let obj = {};
+            obj["dose"] = dose;
+            obj["response"] = dataset.responses[i];
+            data_array.push(obj);
+        });
+        let grouped_data = _.groupBy(data_array, d => d.dose);
         return (
             <>
                 <div className="label">
@@ -48,7 +47,13 @@ class DatasetTable extends Component {
                                   return (
                                       <tr key={rowIdx}>
                                           <td>{dose_group[rowIdx]}</td>
-                                          <td>{getResponseList(dose_group[rowIdx])}</td>
+                                          <td>
+                                              {grouped_data[dose_group[rowIdx]]
+                                                  .map(function(el) {
+                                                      return el.response;
+                                                  })
+                                                  .join(" , ")}
+                                          </td>
                                       </tr>
                                   );
                               })

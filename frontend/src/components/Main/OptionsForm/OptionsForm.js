@@ -14,7 +14,6 @@ const OptionsForm = props => {
             {props.modelType === mc.MODEL_CONTINUOUS ? (
                 <td>
                     <select
-                        id="bmr_type"
                         className="form-control"
                         value={props.options.bmr_type}
                         onChange={e =>
@@ -33,7 +32,6 @@ const OptionsForm = props => {
             {props.modelType == mc.MODEL_DICHOTOMOUS ? (
                 <td>
                     <select
-                        id="bmr_type"
                         className="form-control"
                         value={props.options.bmr_type}
                         onChange={e =>
@@ -52,7 +50,6 @@ const OptionsForm = props => {
 
             <td>
                 <input
-                    id="bmr_value"
                     type="number"
                     className="form-control text-center"
                     value={props.options.bmr_value}
@@ -64,7 +61,6 @@ const OptionsForm = props => {
             {props.modelType === mc.MODEL_CONTINUOUS ? (
                 <td>
                     <input
-                        id="tail_probability"
                         type="number"
                         className="form-control text-center"
                         value={props.options.tail_probability}

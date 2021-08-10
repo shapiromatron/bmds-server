@@ -1,31 +1,33 @@
 import React, {Component} from "react";
 import {inject, observer} from "mobx-react";
 import PropTypes from "prop-types";
-import ModelDetailModal from "./ModelDetailModal";
-import ResultsTable from "./ResultsTable";
+
+import ModelDetailModal from "../IndividualModel/ModelDetailModal";
+import FrequentistResultTable from "./FrequentistResultTable";
+import BayesianResultTable from "./BayesianResultTable";
 import DatasetTable from "../Data/DatasetTable";
-import DatasetSelector from "../Data/DatasetSelector";
-import ResponsePlot from "./ResponsePlot";
+import SelectModel from "./SelectModel";
+import DoseResponsePlot from "../common/DoseResponsePlot";
 import "./Output.css";
+
+import SelectInput from "../common/SelectInput";
 
 @inject("outputStore")
 @observer
 class Output extends Component {
     render() {
-        const {outputStore} = this.props;
+        const {outputStore} = this.props,
+            {
+                canEdit,
+                selectedOutputErrorMessage,
+                selectedFrequentist,
+                selectedBayesian,
+            } = outputStore;
 
-        if (outputStore.getCurrentOutput === null) {
+        if (selectedOutputErrorMessage) {
             return (
                 <div className="container-fluid">
-                    <p>No results available.</p>
-                </div>
-            );
-        }
-
-        if ("error" in outputStore.getCurrentOutput) {
-            return (
-                <div className="container-fluid">
-                    <pre>{outputStore.getCurrentOutput.error}</pre>
+                    <pre>{selectedOutputErrorMessage}</pre>
                 </div>
             );
         }
@@ -33,30 +35,55 @@ class Output extends Component {
         return (
             <div className="container-fluid">
                 <div className="row">
-                    <div className="col-md-2">
-                        <DatasetSelector />
+                    <div className="col-lg-2">
+                        <SelectInput
+                            label="Select an output"
+                            onChange={value => outputStore.setSelectedOutputIndex(parseInt(value))}
+                            value={outputStore.selectedOutputIndex}
+                            choices={outputStore.outputs.map((output, idx) => {
+                                return {value: idx, text: outputStore.getOutputName(idx)};
+                            })}
+                        />
                     </div>
-                    <div className="col-md-6">
-                        <DatasetTable />
-                        <ResultsTable />
-                    </div>
-                    <div className="col-md-4">
-                        <ResponsePlot />
+                    <div className="col-lg-6">
+                        <DatasetTable dataset={outputStore.selectedDataset} />
                     </div>
                 </div>
-                <div>{outputStore.modelDetailModal ? <ModelDetailModal /> : null}</div>
+                {selectedFrequentist ? (
+                    <div className="row">
+                        <div className="col-lg-8">
+                            <h4>Frequentist Model Results</h4>
+                            <FrequentistResultTable />
+                            {canEdit ? <SelectModel /> : null}
+                        </div>
+                        <div className="align-items-center d-flex col-lg-4">
+                            <DoseResponsePlot
+                                layout={outputStore.drFrequentistPlotLayout}
+                                data={outputStore.drFrequentistPlotData}
+                            />
+                        </div>
+                    </div>
+                ) : null}
+                {selectedBayesian ? (
+                    <div className="row">
+                        <div className="col-lg-12">
+                            <h4>Bayesian Model Results</h4>
+                            <BayesianResultTable />
+                        </div>
+                        <div className="col-lg-12">
+                            <DoseResponsePlot
+                                layout={outputStore.drBayesianPlotLayout}
+                                data={outputStore.drBayesianPlotData}
+                            />
+                        </div>
+                    </div>
+                ) : null}
+                <div>{outputStore.showModelModal ? <ModelDetailModal /> : null}</div>
             </div>
         );
     }
 }
 Output.propTypes = {
     outputStore: PropTypes.object,
-    toggleModelDetailModal: PropTypes.func,
-    getCurrentOutput: PropTypes.func,
-    getMappedDatasets: PropTypes.func,
-    dataset: PropTypes.object,
-    removeBMDLine: PropTypes.func,
-    error: PropTypes.string,
-    modelDetailModal: PropTypes.bool,
 };
 export default Output;

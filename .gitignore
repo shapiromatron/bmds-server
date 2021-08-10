@@ -13,6 +13,8 @@ dist/
 docs/_build/
 node_modules/
 scripts/private/
+/public/
+/private/
 vendor/*.whl
 venv/
 
@@ -20,17 +22,17 @@ venv/
 *.log
 *.py[cod]
 *.sqlite3
-celerybeat-schedule
-*log
 *.txt
+*log
 .env
 .eslintcache
-.gitcommit
+bmds_server/gitcommit.json
 bmds_server/main/settings/local.py
+bmds_server/webpack-stats.json
+celerybeat-schedule
 compose/nginx/conf/nginx.conf
+frontend/yarn.lock
 settings.ini
-webpack-stats.json
-yarn.lock
 
 # keep folders, ignore contents
 logs/*

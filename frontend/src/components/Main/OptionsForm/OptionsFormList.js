@@ -1,27 +1,50 @@
 import React, {Component} from "react";
 import {inject, observer} from "mobx-react";
-import OptionsForm from "./OptionsForm";
-import OptionsReadOnly from "./OptionsReadOnly";
 import PropTypes from "prop-types";
 import {toJS} from "mobx";
+
+import OptionsForm from "./OptionsForm";
+import OptionsReadOnly from "./OptionsReadOnly";
+import HelpTextPopover from "../../common/HelpTextPopover";
+import {MODEL_CONTINUOUS, MODEL_DICHOTOMOUS} from "../../../constants/mainConstants";
 
 @inject("optionsStore")
 @observer
 class OptionsFormList extends Component {
     render() {
         const {optionsStore} = this.props,
-            optionsList = toJS(optionsStore.optionsList);
+            modelType = optionsStore.getModelType,
+            optionsList = toJS(optionsStore.optionsList),
+            distTypeHelpText =
+                "If lognormal is selected, only the Exponential and Hill models can be executed. Other models will be removed during the execution process and will not be shown in the outputs.";
         return (
             <div>
                 <div className="panel panel-default">
                     <form className="form-horizontal">
                         <table className="options-table table table-bordered table-sm text-center">
-                            <thead className="table-primary">
+                            <thead className="bg-custom">
                                 <tr>
-                                    {optionsStore.headers.map((item, index) => {
-                                        return <th key={index}>{item}</th>;
-                                    })}
-                                    {optionsStore.getEditSettings ? (
+                                    {modelType === MODEL_CONTINUOUS ? (
+                                        <>
+                                            <th>BMR Type</th>
+                                            <th>BMRF</th>
+                                            <th>Tail Probability</th>
+                                            <th>Confidence Level</th>
+                                            <th>
+                                                Distribution +<br />
+                                                Variance&nbsp;
+                                                <HelpTextPopover content={distTypeHelpText} />
+                                            </th>
+                                        </>
+                                    ) : null}
+                                    {modelType === MODEL_DICHOTOMOUS ? (
+                                        <>
+                                            <th>Risk Type</th>
+                                            <th>BMR</th>
+                                            <th>Confidence Level</th>
+                                        </>
+                                    ) : null}
+                                    {optionsStore.canEdit ? (
                                         <th>
                                             <button
                                                 type="button"
@@ -37,14 +60,14 @@ class OptionsFormList extends Component {
                                     ) : null}
                                 </tr>
                             </thead>
-                            {optionsStore.getEditSettings ? (
+                            {optionsStore.canEdit ? (
                                 <tbody>
                                     {optionsList.map((options, id) => (
                                         <OptionsForm
                                             key={id}
                                             idx={id}
                                             options={options}
-                                            dataset_type={optionsStore.getDatasetType}
+                                            modelType={modelType}
                                             deleteOptions={optionsStore.deleteOptions}
                                             saveOptions={optionsStore.saveOptions}
                                         />
@@ -53,7 +76,12 @@ class OptionsFormList extends Component {
                             ) : (
                                 <tbody>
                                     {optionsList.map((options, id) => (
-                                        <OptionsReadOnly key={id} idx={id} options={options} />
+                                        <OptionsReadOnly
+                                            key={id}
+                                            idx={id}
+                                            options={options}
+                                            modelType={modelType}
+                                        />
                                     ))}
                                 </tbody>
                             )}
@@ -67,11 +95,6 @@ class OptionsFormList extends Component {
 
 OptionsFormList.propTypes = {
     optionsStore: PropTypes.object,
-    saveOptions: PropTypes.func,
-    deleteOptions: PropTypes.func,
-    headers: PropTypes.array,
-    getEditSettings: PropTypes.func,
-    addOptions: PropTypes.func,
-    optionsList: PropTypes.array,
 };
+
 export default OptionsFormList;

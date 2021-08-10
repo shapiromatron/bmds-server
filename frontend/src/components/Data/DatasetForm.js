@@ -1,8 +1,9 @@
 import React, {Component} from "react";
 import {inject, observer} from "mobx-react";
 import PropTypes from "prop-types";
+import TabularDatasetModal from "./TabularDatasetModal";
 
-import {columnHeaders} from "../../constants/dataConstants";
+import {columnHeaders, columns} from "../../constants/dataConstants";
 
 const DatasetFormRow = props => {
     return (
@@ -15,17 +16,13 @@ const DatasetFormRow = props => {
                             type="number"
                             name={column}
                             value={props.row[column]}
-                            onChange={e =>
-                                props.onChange(column, e.target.value, props.dataset_id, props.idx)
-                            }
+                            onChange={e => props.onChange(column, e.target.value, props.rowIdx)}
                         />
                     </td>
                 );
             })}
             <td>
-                <button
-                    className="btn btn-danger btn-sm"
-                    onClick={e => props.delete(props.dataset_id, props.idx)}>
+                <button className="btn btn-danger btn-sm" onClick={e => props.delete(props.rowIdx)}>
                     <i className="fa fa-trash"></i>
                 </button>
             </td>
@@ -36,8 +33,7 @@ DatasetFormRow.propTypes = {
     columns: PropTypes.array.isRequired,
     row: PropTypes.object,
     onChange: PropTypes.func,
-    dataset_id: PropTypes.number,
-    idx: PropTypes.number,
+    rowIdx: PropTypes.number,
     delete: PropTypes.func,
 };
 
@@ -46,28 +42,27 @@ DatasetFormRow.propTypes = {
 class DatasetForm extends Component {
     render() {
         const {dataStore} = this.props,
-            columns = dataStore.getDatasetColumns,
-            dataset = dataStore.selectedDataset;
+            dataset = dataStore.selectedDataset,
+            columnNames = columns[dataset.dtype];
+
         return (
-            <>
-                <div className="form-group mt-2">
-                    <label className="col-sm-3 col-form-label col-form-label-sm">
-                        Dataset Name:
+            <div className="container-fluid">
+                <div className="form-group row mx-0">
+                    <label htmlFor="datasetName" className="col-md-3 px-0">
+                        Dataset name
                     </label>
-                    <div className="input-group">
+                    <div className="input-group col-md-9">
                         <input
+                            id="datasetName"
                             type="text"
-                            className="form-control form-control-sm"
-                            name="dataset_name"
-                            value={dataset.dataset_name}
-                            onChange={e =>
-                                dataStore.saveDatasetName("dataset_name", e.target.value)
-                            }
+                            className="form-control"
+                            value={dataset.metadata.name}
+                            onChange={e => dataStore.setDatasetMetadata("name", e.target.value)}
                         />
                         <div className="input-group-append">
                             <button
                                 type="button"
-                                className="btn btn-danger btn-sm float-right ml-1"
+                                className="btn btn-danger float-right ml-1"
                                 onClick={dataStore.deleteDataset}>
                                 <i className="fa fa-fw fa-trash"></i>
                                 Delete
@@ -76,37 +71,89 @@ class DatasetForm extends Component {
                     </div>
                 </div>
 
+                <div className="form-group row mx-0">
+                    <label htmlFor="doseName" className="col-md-2 px-0">
+                        Dose name
+                    </label>
+                    <div className="col-md-4">
+                        <input
+                            type="text"
+                            className="form-control"
+                            id="doseName"
+                            value={dataset.metadata.dose_name}
+                            onChange={e =>
+                                dataStore.setDatasetMetadata("dose_name", e.target.value)
+                            }
+                        />
+                    </div>
+                    <label htmlFor="responseName" className="col-md-2 px-0">
+                        Response name
+                    </label>
+                    <div className="col-md-4">
+                        <input
+                            type="text"
+                            className="form-control"
+                            id="responseName"
+                            value={dataset.metadata.response_name}
+                            onChange={e =>
+                                dataStore.setDatasetMetadata("response_name", e.target.value)
+                            }
+                        />
+                    </div>
+                </div>
+
+                <div className="form-group row mx-0">
+                    <label htmlFor="doseUnits" className="col-md-2 px-0">
+                        Dose units
+                    </label>
+                    <div className="col-md-4">
+                        <input
+                            type="text"
+                            className="form-control"
+                            id="doseUnits"
+                            value={dataset.metadata.dose_units}
+                            onChange={e =>
+                                dataStore.setDatasetMetadata("dose_units", e.target.value)
+                            }
+                        />
+                    </div>
+
+                    <label htmlFor="responseUnits" className="col-md-2 px-0">
+                        Response units
+                    </label>
+                    <div className="col-md-4">
+                        <input
+                            type="text"
+                            className="form-control"
+                            id="responseUnits"
+                            value={dataset.metadata.response_units}
+                            onChange={e =>
+                                dataStore.setDatasetMetadata("response_units", e.target.value)
+                            }
+                        />
+                    </div>
+                </div>
                 <table className="table table-sm text-center">
                     <thead>
-                        <tr className="table-primary text-center">
-                            {columns.map((item, index) => (
+                        <tr className="bg-custom text-center">
+                            {columnNames.map((item, index) => (
                                 <th key={index}>{columnHeaders[item]}</th>
                             ))}
-                            <td>
+                            <td style={{width: 100}}>
+                                <button
+                                    className="btn btn-info mr-1"
+                                    title="Load dataset from Excel"
+                                    onClick={() => dataStore.toggleDatasetModal()}>
+                                    <i className="fa fa-file-excel-o"></i>
+                                </button>
                                 <button
                                     type="button"
                                     className="btn btn-primary"
-                                    onClick={() => dataStore.addRows()}>
+                                    title="Add row"
+                                    onClick={() => dataStore.addRow()}>
                                     <i className="fa fa-plus-square" aria-hidden="true"></i>{" "}
                                 </button>
                             </td>
-                        </tr>
-                        <tr>
-                            {columns.map((column, i) => {
-                                return (
-                                    <td key={i}>
-                                        <input
-                                            className="text-center form-control"
-                                            name={column}
-                                            value={dataset.column_names[column]}
-                                            onChange={e =>
-                                                dataStore.changeColumnName(column, e.target.value)
-                                            }
-                                        />
-                                    </td>
-                                );
-                            })}
-                            <td></td>
                         </tr>
                     </thead>
                     <tbody>
@@ -114,18 +161,23 @@ class DatasetForm extends Component {
                             return (
                                 <DatasetFormRow
                                     key={i}
-                                    idx={i}
-                                    columns={columns}
+                                    rowIdx={i}
+                                    columns={columnNames}
                                     row={obj}
-                                    dataset_id={dataset.dataset_id}
-                                    onChange={dataStore.saveDataset}
+                                    onChange={dataStore.saveDatasetCellItem}
                                     delete={dataStore.deleteRow}
                                 />
                             );
                         })}
                     </tbody>
                 </table>
-            </>
+                <p>
+                    <button className="btn btn-link" onClick={dataStore.loadExampleData}>
+                        <i className="fa fa-fw fa-upload mr-1"></i>Load an example dataset
+                    </button>
+                </p>
+                <TabularDatasetModal />
+            </div>
         );
     }
 }

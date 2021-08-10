@@ -25,3 +25,27 @@ input[type=number] {
   position: absolute;
   z-index: -1;
 }
+
+/* base header/footer */
+.base-footer-div {
+  background-color: #646D76;
+  padding-top: 2em;
+  padding-bottom: 3em;
+
+}
+.last-updated {
+    font-size: 0.7em;
+    font-weight: 500;
+    padding: 0.8333em 0 0;
+}
+
+/* originally from bootstrap3 */
+.well {
+  border: 1px solid #e3e3e3;
+  background-color: #f5f5f5;
+}
+
+/* background fill */
+.bg-custom {
+  background-color: #b8daff;
+}

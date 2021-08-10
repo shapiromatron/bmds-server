@@ -2,8 +2,8 @@ import {saveAs} from "file-saver";
 import slugify from "slugify";
 import {observable, action, computed} from "mobx";
 import _ from "lodash";
-import {modelTypes} from "../constants/mainConstants";
 
+import * as mc from "../constants/mainConstants";
 import {simulateClick, getHeaders} from "../common";
 
 class MainStore {
@@ -16,7 +16,7 @@ class MainStore {
 
     @observable analysis_name = "";
     @observable analysis_description = "";
-    @observable dataset_type = modelTypes[0].value;
+    @observable model_type = mc.MODEL_CONTINUOUS;
     @observable errorMessage = "";
     @observable hasEditSettings = false;
     @observable executionOutputs = null;
@@ -25,30 +25,29 @@ class MainStore {
     @action.bound setConfig(config) {
         this.config = config;
     }
-    @action changeAnalysisName(value) {
+    @action.bound changeAnalysisName(value) {
         this.analysis_name = value;
     }
-    @action changeAnalysisDescription(value) {
+    @action.bound changeAnalysisDescription(value) {
         this.analysis_description = value;
     }
-    @action changeDatasetType(value) {
-        this.dataset_type = value;
-        this.rootStore.modelsStore.setDefaultsByDatasetType();
-        this.rootStore.optionsStore.setDefaultsByDatasetType();
+    @action.bound changeDatasetType(value) {
+        this.model_type = value;
+        this.rootStore.modelsStore.setDefaultsByDatasetType(true);
+        this.rootStore.optionsStore.setDefaultsByDatasetType(true);
         this.rootStore.dataStore.setDefaultsByDatasetType();
+        this.rootStore.dataOptionStore.options = [];
+    }
+    @action.bound resetModelSelection() {
+        this.rootStore.modelsStore.resetModelSelection();
     }
 
     @computed get getOptions() {
         return this.rootStore.optionsStore.optionsList;
     }
-    @computed get getEnabledModels() {
-        return this.rootStore.modelsStore.getEnabledModels;
-    }
+
     @computed get getEnabledDatasets() {
         return this.rootStore.dataStore.getEnabledDatasets;
-    }
-    @computed get getLogic() {
-        return this.rootStore.logicStore.getLogic;
     }
     @computed get getPayload() {
         const editKey = this.config.editSettings ? this.config.editSettings.editKey : null;
@@ -56,19 +55,20 @@ class MainStore {
             editKey,
             partial: true,
             data: {
-                bmds_version: "BMDS330",
+                bmds_version: mc.VERSION_330,
                 analysis_name: this.analysis_name,
                 analysis_description: this.analysis_description,
-                dataset_type: this.dataset_type,
-                models: this.getEnabledModels,
-                datasets: this.getEnabledDatasets,
+                dataset_type: this.model_type,
+                models: this.rootStore.modelsStore.models,
+                datasets: this.rootStore.dataStore.datasets,
+                dataset_options: this.rootStore.dataOptionStore.options,
                 options: this.getOptions,
-                logic: this.getLogic,
+                recommender: this.rootStore.logicStore.logic,
             },
         };
     }
 
-    @action
+    @action.bound
     async saveAnalysis() {
         const url = this.config.editSettings.patchInputUrl,
             {csrfToken} = this.config.editSettings;
@@ -94,7 +94,7 @@ class MainStore {
     @observable isReadyToExecute = false;
     @observable isExecuting = false;
 
-    @action
+    @action.bound
     async executeAnalysis() {
         if (!this.isReadyToExecute) {
             // don't execute if we're not ready
@@ -109,12 +109,26 @@ class MainStore {
 
         const apiUrl = this.config.apiUrl,
             {csrfToken} = this.config.editSettings,
+            handleServerError = error => {
+                console.error("error", error);
+                if (error.status == 500) {
+                    this.errorMessage =
+                        "A server error occurred... if the error continues or your analysis does not complete please contact us.";
+                    return;
+                }
+                this.errorMessage = error;
+            },
             pollForResults = () => {
                 fetch(apiUrl, {
                     method: "GET",
                     mode: "cors",
                 })
-                    .then(response => response.json())
+                    .then(response => {
+                        if (!response.ok) {
+                            throw response;
+                        }
+                        return response.json();
+                    })
                     .then(data => {
                         if (data.is_executing) {
                             setTimeout(pollForResults, 5000);
@@ -123,10 +137,7 @@ class MainStore {
                             simulateClick(document.getElementById("navlink-output"));
                         }
                     })
-                    .catch(error => {
-                        this.errorMessage = error;
-                        console.error("error", error);
-                    });
+                    .catch(handleServerError);
             };
 
         await fetch(this.config.editSettings.executeUrl, {
@@ -137,7 +148,12 @@ class MainStore {
                 editKey: this.config.editSettings.editKey,
             }),
         })
-            .then(response => response.json())
+            .then(response => {
+                if (!response.ok) {
+                    throw response;
+                }
+                return response.json();
+            })
             .then(data => {
                 if (data.is_executing) {
                     setTimeout(pollForResults, 5000);
@@ -146,12 +162,31 @@ class MainStore {
                     simulateClick(document.getElementById("navlink-output"));
                 }
             })
+            .catch(handleServerError);
+    }
+    @action.bound
+    async executeResetAnalysis() {
+        const {csrfToken, executeResetUrl} = this.config.editSettings;
+        await fetch(executeResetUrl, {
+            method: "POST",
+            mode: "cors",
+            headers: getHeaders(csrfToken),
+            body: JSON.stringify({
+                editKey: this.config.editSettings.editKey,
+            }),
+        })
+            .then(response => response.json())
+            .then(data => {
+                this.isExecuting = false;
+                this.errorMessage = "";
+                this.updateModelStateFromApi(data);
+            })
             .catch(error => {
                 this.errorMessage = error;
                 console.error("error", error);
             });
     }
-    @action
+    @action.bound
     async fetchSavedAnalysis() {
         const apiUrl = this.config.apiUrl;
         this.errorMessage = "";
@@ -168,13 +203,14 @@ class MainStore {
     }
     @action.bound
     updateModelStateFromApi(data) {
-        if (data.errors.length > 2) {
+        if (data.errors.length > 0) {
             this.errorMessage = data.errors;
             this.isUpdateComplete = true;
         }
 
         const inputs = data.inputs;
         if (_.isEmpty(inputs)) {
+            this.changeDatasetType(this.model_type);
             this.isUpdateComplete = true;
             return;
         }
@@ -187,11 +223,13 @@ class MainStore {
         // unpack general settings
         this.analysis_name = inputs.analysis_name;
         this.analysis_description = inputs.analysis_description;
-        this.dataset_type = inputs.dataset_type;
+        this.model_type = inputs.dataset_type;
+        this.changeDatasetType(this.model_type);
         this.rootStore.optionsStore.setOptions(inputs.options);
         this.rootStore.dataStore.setDatasets(inputs.datasets);
+        this.rootStore.dataOptionStore.setDatasetOptions(inputs.dataset_options);
         this.rootStore.modelsStore.setModels(inputs.models);
-        this.rootStore.logicStore.setLogic(inputs);
+        this.rootStore.logicStore.setLogic(inputs.recommender);
         this.isUpdateComplete = true;
     }
     @action.bound loadAnalysisFromFile(file) {
@@ -218,12 +256,8 @@ class MainStore {
             });
     }
 
-    @computed get getEditSettings() {
-        let editSettings = false;
-        if ("editSettings" in this.config) {
-            editSettings = true;
-        }
-        return editSettings;
+    @computed get canEdit() {
+        return this.config.editSettings !== undefined;
     }
     @computed get getExecutionOutputs() {
         return this.executionOutputs;
@@ -234,12 +268,16 @@ class MainStore {
     @computed get getDatasetLength() {
         return this.rootStore.dataStore.getDataLength;
     }
-    @computed get getDatasetTypeName() {
-        return modelTypes.find(item => item.value == this.dataset_type);
+    @computed get getModelTypeName() {
+        return _.find(mc.modelTypes, {value: this.model_type}).name;
+    }
+
+    @computed get getModels() {
+        return this.rootStore.modelsStore.models;
     }
 
     @computed get hasAtLeastOneModelSelected() {
-        return !_.isEmpty(this.getEnabledModels);
+        return !_.isEmpty(this.getModels);
     }
 
     @computed get hasAtLeastOneDatasetSelected() {
@@ -260,6 +298,44 @@ class MainStore {
     @computed get hasOutputs() {
         return this.executionOutputs !== null;
     }
+
+    // *** TOAST ***
+    @observable showToast = false;
+    @observable toastHeader = "";
+    @observable toastMessage = "";
+    @action.bound downloadReport(url) {
+        let apiUrl = (apiUrl = this.config[url]);
+        if (this.canEdit) {
+            apiUrl = `${apiUrl}?editKey=${this.config.editSettings.editKey}`;
+        }
+        const fetchReport = () => {
+                fetch(apiUrl).then(processResponse);
+            },
+            processResponse = response => {
+                let contentType = response.headers.get("content-type");
+                if (contentType.includes("application/json")) {
+                    response.json().then(json => {
+                        this.toastHeader = json.header;
+                        this.toastMessage = json.message;
+                    });
+                    this.showToast = true;
+                    setTimeout(fetchReport, 5000);
+                } else {
+                    const filename = response.headers
+                        .get("content-disposition")
+                        .match(/filename="(.*)"/)[1];
+                    response.blob().then(blob => {
+                        saveAs(blob, filename);
+                        this.showToast = false;
+                    });
+                }
+            };
+        fetchReport();
+    }
+    @action.bound closeToast() {
+        this.showToast = false;
+    }
+    // *** END TOAST ***
 }
 
 export default MainStore;

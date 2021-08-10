@@ -1,46 +1,68 @@
 import React from "react";
 import PropTypes from "prop-types";
-import {model} from "../../../constants/modelConstants";
+import {observer} from "mobx-react";
 
-const ModelsCheckBoxHeader = props => {
+import {allModelOptions} from "../../../constants/modelConstants";
+import * as mc from "../../../constants/mainConstants";
+import HelpTextPopover from "../../common/HelpTextPopover";
+
+const areAllModelsChecked = function(modelType, type, models) {
+        return type in models && models[type].length === allModelOptions[modelType][type].length;
+    },
+    SelectAllComponent = observer(props => {
+        const {store, type, disabled} = props;
+        return store.canEdit ? (
+            <th>
+                <label className="m-0">
+                    <input
+                        type="checkbox"
+                        disabled={disabled}
+                        onChange={e => store.enableAll(type, e.target.checked)}
+                        checked={areAllModelsChecked(store.getModelType, type, store.models)}
+                    />
+                    &nbsp;Select all
+                </label>
+            </th>
+        ) : (
+            <th></th>
+        );
+    });
+
+const ModelsCheckBoxHeader = observer(props => {
+    const {store} = props,
+        content =
+            "Models were previewed in BMDS 3.2 and will be formally peer reviewed. EPA plans to release the final models in 2022.",
+        title = "Bayesian Model Averaging",
+        isContinuous = store.getModelType === mc.MODEL_CONTINUOUS;
     return (
-        <thead className="table-primary">
-            {Object.keys(props.model_headers).map((item, index) => {
-                return (
-                    <tr key={index}>
-                        <th>{props.model_headers[item].model}</th>
-                        {props.model_headers[item].values.map((dev, index) => {
-                            return (
-                                <th key={index} colSpan={dev.colspan}>
-                                    {dev.name}{" "}
-                                    {(dev.name === "Enable") & props.isEditSettings ? (
-                                        <input
-                                            type="checkbox"
-                                            onChange={e =>
-                                                props.enableAll(dev.model_name, e.target.checked)
-                                            }
-                                            checked={dev.isChecked}
-                                        />
-                                    ) : null}
-                                    &emsp;
-                                    {dev.model_name === model.Bayesian_Model_Average
-                                        ? dev.prior_weight
-                                        : null}
-                                </th>
-                            );
-                        })}
-                    </tr>
-                );
-            })}
+        <thead className="bg-custom">
+            <tr>
+                <th></th>
+                <th colSpan="2">MLE</th>
+                <th colSpan="3">Alternatives</th>
+            </tr>
+            <tr>
+                <th></th>
+                <th>Frequentist Restricted</th>
+                <th>Frequentist Unrestricted</th>
+                <th colSpan="2">
+                    Bayesian Model Averaging
+                    {isContinuous ? (
+                        <HelpTextPopover title={title} content={content}></HelpTextPopover>
+                    ) : null}
+                </th>
+            </tr>
+            <tr>
+                <th>Models</th>
+                <SelectAllComponent store={store} type={"frequentist_restricted"} />
+                <SelectAllComponent store={store} type={"frequentist_unrestricted"} />
+                <SelectAllComponent store={store} type={"bayesian"} disabled={isContinuous} />
+                <th>Prior Weights</th>
+            </tr>
         </thead>
     );
-};
+});
 ModelsCheckBoxHeader.propTypes = {
-    model_headers: PropTypes.object,
-    model: PropTypes.string,
-    values: PropTypes.array,
-    isEditSettings: PropTypes.bool,
-    onChange: PropTypes.func,
-    enableAll: PropTypes.func,
+    store: PropTypes.object,
 };
 export default ModelsCheckBoxHeader;

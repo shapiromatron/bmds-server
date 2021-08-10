@@ -1,83 +1,82 @@
-{% load cache %}
 {% load static %}
 {% load render_bundle from webpack_loader %}
 
 <!DOCTYPE html>
-<html lang="en">
+<html class="js" lang="en">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <title>{% block title %}BMDS Online{% endblock title %}</title>
-    <link rel="icon" type="image/png" href="data:image/png;base64,iVBORw0KGgo=">
-    <link rel="stylesheet" type="text/css" href="{% static 'vendor/bootstrap-4.5.3/css/bootstrap.min.css' %}">
+
+    {% if SKIN == 0 %}
+      <link rel="shortcut icon" type="image/png" href="data:image/png;base64,iVBORw0KGgo=">
+    {% elif SKIN == 1 %}
+      <link rel="shortcut icon" href="https://www.epa.gov/sites/all/themes/epa/favicon.ico" type="image/vnd.microsoft.icon" />
+    {% endif %}
+
+    <link rel="stylesheet" type="text/css" href="{% static 'vendor/bootstrap-4.6.0/css/bootstrap.min.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'vendor/font-awesome-4.7.0/css/font-awesome.min.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'css/site.css' %}">
+
     {% if SKIN == 1 %}
-      <link rel="stylesheet" type="text/css" href="{% static 'css/epa-styles.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/epa/core/style.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'css/epa/accordions.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'css/epa/boxes.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'css/epa/tables.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'css/epa/tabs.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'css/epa-bootstrap.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'css/epa-bmds.css' %}" />
     {% endif %}
+
   {% if user.is_superuser or SERVER_ROLE != 'production' %}
     {% include "./includes/environment_banner.html" %}
   {% endif %}
+
+  {% if GTM_ID %}
+    <!-- Google Tag Manager -->
+    <script>(function (w, d, s, l, i) { w[l] = w[l] || []; w[l].push({ "gtm.start": new Date().getTime(), event: "gtm.js" }); var f = d.getElementsByTagName(s)[0], j = d.createElement(s), dl = l != "dataLayer" ? "&l=" + l : ""; j.async = true; j.src = "//www.googletagmanager.com/gtm.js?id=" + i + dl; f.parentNode.insertBefore(j, f); })(window, document, "script", "dataLayer", "{{GTM_ID}}");</script>
+    <!-- End Google Tag Manager -->
+  {% endif %}
 </head>
-<body>
-{% if SKIN == 1 %}
+<body class="html">
+
+{% if GTM_ID %}
+  <!-- Google Tag Manager -->
+  <noscript><iframe src="//www.googletagmanager.com/ns.html?id={{GTM_ID}}" height="0" width="0"
+      style="display:none;visibility:hidden"></iframe></noscript>
+  <!-- End Google Tag Manager -->
+{% endif %}
+
+{% if SKIN == 0 %}
+  {% include "./includes/base-header.html" %}
+{% elif SKIN == 1 %}
   {% include "./includes/epa-header.html" %}
 {% endif %}
-<nav class="navbar navbar-expand-md navbar-dark bg-dark">
-  <a class="navbar-brand" href="{% url 'home' %}">BMDS Online</a>
+<section class="main-content clearfix" id="main-content">
+  <div class="container-fluid" style="min-height: 90vh !important;">
 
-  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
-    aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-    <span class="navbar-toggler-icon"></span>
-  </button>
+  {% if messages %}
+    {% for message in messages %}
+      <div {% if message.tags %} class="{{ message.tags }} {% endif %}">
+        <button type="button" class="close" data-dismiss="alert">&times;</button>
+        {{ message|safe }}
+      </div>
+    {% endfor %}
+  {% endif %}
 
-  <div class="collapse navbar-collapse" id="navbarSupportedContent">
-    <ul class="nav navbar-nav ml-auto">
-      <li class="nav-item">
-        <a class="nav-link" href="https://github.com/shapiromatron/bmds-server"><i class="fa fa-inverse fa-github"></i>&nbsp;Source code</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" href="http://bmds-server.readthedocs.io/en/latest/"><i class="fa fa-inverse fa-book"></i>&nbsp;Documentation</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" href="{% url 'api:api-root' %}"><i class="fa fa-inverse fa-code"></i>&nbsp;API</a>
-      </li>
-      {% if user.is_staff or debug %}
-      <li class="nav-item">
-        <a class="nav-link" href="{% url 'admin:index' %}"><i class="fa fa-inverse fa-user"></i>&nbsp;Admin</a>
-      </li>
-      {% endif %}
-    </ul>
+  {% block content %}
+  {% endblock content %}
   </div>
-</nav>
-
-<div class="container-fluid" style="min-height: 70vh !important;">
-
-{% if messages %}
-  {% for message in messages %}
-    <div {% if message.tags %} class="{{ message.tags }} {% endif %}">
-      <button type="button" class="close" data-dismiss="alert">&times;</button>
-      {{ message|safe }}
-    </div>
-  {% endfor %}
-{% endif %}
-
-{% block content %}
-{% endblock content %}
-</div>
-
-{% cache 3600 footer %}
-<div class="col py-1 px-3 text-white text-right" style="background-color: #646D76">
-  <b>BMDS Online build {{commit.sha}} / {{commit.dt|date:"M d Y"}}</b>
-</div>
-{% if SKIN == 1 %}
+</section>
+{% if SKIN == 0 %}
+  {% include "./includes/base-footer.html" %}
+{% elif SKIN == 1 %}
   {% include "./includes/epa-footer.html" %}
 {% endif %}
-{% endcache %}
 
-<script src="{% static 'vendor/jquery-3.5.1/jquery.min.js' %}"></script>
-<script src="{% static 'vendor/bootstrap-4.5.3/js/bootstrap.bundle.min.js' %}"></script>
+<script src="{% static 'vendor/jquery-3.6.0.min.js' %}"></script>
+<script src="{% static 'vendor/bootstrap-4.6.0/js/bootstrap.bundle.min.js' %}"></script>
 {% render_bundle 'main' %}
 {% block extra-js %}
 {% endblock %}

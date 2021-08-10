@@ -24,55 +24,54 @@ class ShareActions extends Component {
                     style={{minWidth: 300}}
                     className="dropdown-menu dropdown-menu-right"
                     aria-labelledby="bmdSessionShare">
-                    <form className="px-3">
-                        <p className="text-muted py-2">
-                            Analyses are kept for six months; current deletion date:
-                            <br />
-                            <b>{editSettings.deleteDateStr}</b>
+                    <form>
+                        {/* READ ONLY LINK */}
+                        <span className="dropdown-header">Read-only link</span>
+                        <div
+                            className="dropdown-item btn-group btn-block"
+                            role="group"
+                            aria-label="Basic example">
+                            <ClipboardButton
+                                text="Copy link"
+                                textToCopy={editSettings.viewUrl}
+                                className="btn btn-secondary mr-1"
+                            />
+                            <a
+                                href={editSettings.viewUrl}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="btn btn-secondary text-white">
+                                <i className="fa fa-fw fa-external-link"></i>
+                                &nbsp;Open
+                            </a>
+                        </div>
+                        <p className="dropdown-item text-muted" style={{whiteSpace: "normal"}}>
+                            Anyone with this link can view the analysis and download reports.
                         </p>
-                        <div className="form-group">
-                            <label>Edit link</label>
-                            <div className="input-group">
-                                <input
-                                    type="text"
-                                    className="form-control"
-                                    value={editSettings.editUrl}
-                                    readOnly={true}
-                                    placeholder="Recipient's username"
-                                />
-                                <div className="input-group-append">
-                                    <ClipboardButton
-                                        textToCopy={editSettings.editUrl}
-                                        className="btn btn-outline-secondary"
-                                    />
-                                </div>
-                            </div>
-                            <p className="text-muted">
-                                Anyone with this link can edit the analysis.
-                            </p>
+                        {/* EDIT LINK */}
+                        <div className="dropdown-divider"></div>
+                        <span className="dropdown-header">Edit link</span>
+                        <div
+                            className="dropdown-item btn-group btn-block"
+                            role="group"
+                            aria-label="Basic example">
+                            <ClipboardButton
+                                text="Copy link"
+                                textToCopy={editSettings.editUrl}
+                                className="btn btn-warning mr-1"
+                            />
+                            <a
+                                href={editSettings.editUrl}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="btn btn-warning">
+                                <i className="fa fa-fw fa-external-link"></i>
+                                &nbsp;Open
+                            </a>
                         </div>
-                        <div className="form-group">
-                            <label>Read-only link</label>
-                            <div className="input-group">
-                                <input
-                                    type="text"
-                                    className="form-control"
-                                    value={editSettings.viewUrl}
-                                    readOnly={true}
-                                    placeholder="Recipient's username"
-                                />
-                                <div className="input-group-append">
-                                    <ClipboardButton
-                                        textToCopy={editSettings.viewUrl}
-                                        className="btn btn-outline-secondary"
-                                    />
-                                </div>
-                            </div>
-                            <p className="text-muted">
-                                Anyone with this link can view the analysis, download reports, but
-                                not edit it.
-                            </p>
-                        </div>
+                        <p className="dropdown-item text-muted" style={{whiteSpace: "normal"}}>
+                            Anyone with this link can edit the analysis.
+                        </p>
                     </form>
                 </div>
             </div>

@@ -5,24 +5,22 @@ import * as constant from "../constants/optionsConstants";
 class OptionsStore {
     constructor(rootStore) {
         this.rootStore = rootStore;
-        this.setDefaultsByDatasetType();
     }
 
     @observable optionsList = [];
-    @observable headers = [];
-
-    @computed get getEditSettings() {
-        return this.rootStore.mainStore.getEditSettings;
+    @computed get canEdit() {
+        return this.rootStore.mainStore.canEdit;
     }
 
-    @action.bound setDefaultsByDatasetType() {
-        const option = _.cloneDeep(constant.options[this.getDatasetType]);
-        this.optionsList = [option];
-        this.headers = constant.headers[this.getDatasetType];
+    @action.bound setDefaultsByDatasetType(force) {
+        if (this.optionsList.length === 0 || force) {
+            const option = _.cloneDeep(constant.options[this.getModelType]);
+            this.optionsList = [option];
+        }
     }
 
     @action.bound addOptions() {
-        const option = _.cloneDeep(constant.options[this.getDatasetType]);
+        const option = _.cloneDeep(constant.options[this.getModelType]);
         this.optionsList.push(option);
     }
 
@@ -33,13 +31,13 @@ class OptionsStore {
     @action.bound deleteOptions(val) {
         this.optionsList.splice(val, 1);
     }
-    @action setOptions(options) {
+    @action.bound setOptions(options) {
         this.optionsList = options;
-        this.headers = constant.headers[this.getDatasetType];
+        this.setDefaultsByDatasetType();
     }
 
-    @computed get getDatasetType() {
-        return this.rootStore.mainStore.dataset_type;
+    @computed get getModelType() {
+        return this.rootStore.mainStore.model_type;
     }
 
     @computed get canAddNewOption() {

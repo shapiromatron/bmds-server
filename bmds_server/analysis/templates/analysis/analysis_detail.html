@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div id='main'></div>
+{% endblock content %}
+
+{% block extra-js %}
+{{ config|json_script:"config" }}
+<script type="text/javascript">
+    window.app.appStartup(document.getElementById("main"))
+</script>
+{% endblock %}

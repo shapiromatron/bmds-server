@@ -1,80 +1,89 @@
+import _ from "lodash";
 import React, {Component} from "react";
 import {inject, observer} from "mobx-react";
 import PropTypes from "prop-types";
-import {decision_logic} from "../../constants/logicConstants";
+import {checkOrEmpty} from "../../common";
 
 @inject("logicStore")
 @observer
 class DecisionLogic extends Component {
     render() {
-        const {logicStore} = this.props;
+        const {logicStore} = this.props,
+            {canEdit, resetLogic, updateLogic, logic} = logicStore,
+            renderBooleanRow = (label, field) => {
+                return (
+                    <tr>
+                        <td>{label}</td>
+                        <td className="text-center" style={{minWidth: 50}}>
+                            {canEdit ? (
+                                <input
+                                    type="checkbox"
+                                    onChange={e => updateLogic(field, e.target.checked)}
+                                    checked={logic[field]}
+                                />
+                            ) : (
+                                checkOrEmpty(logic[field])
+                            )}
+                        </td>
+                    </tr>
+                );
+            };
+
         return (
             <div>
-                <div className="row">
-                    <div className="col col-md-6">
-                        <button
-                            className="btn btn-info btn-sm"
-                            onClick={e => logicStore.setDefaultState()}>
-                            Reset to Default Logic
-                        </button>
+                {canEdit ? (
+                    <div className="row">
+                        <div className="col col-md-6">
+                            <button className="btn btn-warning btn-sm" onClick={() => resetLogic()}>
+                                Reset to Default Logic
+                            </button>
+                        </div>
                     </div>
-                </div>
-
+                ) : null}
                 <div className="row mt-2">
                     <div className="col col-lg-6">
                         <table className="table table-bordered table-sm">
                             <thead>
-                                <tr className="table-primary">
+                                <tr className="bg-custom">
                                     <th colSpan="2">Decision-Logic</th>
                                 </tr>
                             </thead>
                             <tbody>
+                                {renderBooleanRow("Enabled", "enabled")}
+                                {renderBooleanRow(
+                                    "Recommend model in Viable Bin",
+                                    "recommend_viable"
+                                )}
+                                {renderBooleanRow(
+                                    "Recommend model in Questionable Bin",
+                                    "recommend_questionable"
+                                )}
                                 <tr>
-                                    <td>{decision_logic.recommend_viable}</td>
-                                    <td className="text-center" style={{minWidth: 50}}>
-                                        <input
-                                            type="checkbox"
-                                            id="recommend_viable"
-                                            onChange={e =>
-                                                logicStore.changeDecisionLogicValues(
-                                                    "recommend_viable",
-                                                    e.target.checked
-                                                )
-                                            }
-                                            checked={logicStore.logic.recommend_viable}
-                                        />
+                                    <td>
+                                        Maximum BMDL range deemed &ldquo;sufficiently close&rdquo;
+                                        <br />
+                                        to use lowest AIC instead of lowest BMDL in viable models
                                     </td>
-                                </tr>
-                                <tr>
-                                    <td>{decision_logic.recommend_questionable}</td>
                                     <td className="text-center">
-                                        <input
-                                            type="checkbox"
-                                            onChange={e =>
-                                                logicStore.changeDecisionLogicValues(
-                                                    "recommend_questionable",
-                                                    e.target.checked
-                                                )
-                                            }
-                                            checked={logicStore.logic.recommend_questionable}
-                                        />
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>{decision_logic.sufficiently_close_bmdl}</td>
-                                    <td className="text-center">
-                                        <input
-                                            className=" text-center form-control p-0"
-                                            type="number"
-                                            id="sufficiently_close_bmdl"
-                                            value={logicStore.logic.sufficiently_close_bmdl}
-                                            onChange={e =>
-                                                logicStore.changeDecisionLogicValues(
-                                                    "sufficiently_close_bmdl",
-                                                    parseInt(e.target.value)
-                                                )
-                                            }
-                                        />
+                                        {canEdit ? (
+                                            <input
+                                                className=" text-center form-control p-0"
+                                                type="number"
+                                                id="sufficiently_close_bmdl"
+                                                value={logic.sufficiently_close_bmdl}
+                                                onChange={e => {
+                                                    const value = parseFloat(e.target.value);
+                                                    if (_.isNumber(value)) {
+                                                        updateLogic(
+                                                            "sufficiently_close_bmdl",
+                                                            parseFloat(e.target.value)
+                                                        );
+                                                    }
+                                                }}
+                                            />
+                                        ) : (
+                                            <span>{logic.sufficiently_close_bmdl}</span>
+                                        )}
                                     </td>
                                 </tr>
                             </tbody>
@@ -88,8 +97,6 @@ class DecisionLogic extends Component {
 
 DecisionLogic.propTypes = {
     logicStore: PropTypes.object,
-    setDefaultState: PropTypes.func,
-    getDecisionLogic: PropTypes.func,
-    logic: PropTypes.object,
 };
+
 export default DecisionLogic;

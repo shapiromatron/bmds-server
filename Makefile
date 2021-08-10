@@ -32,7 +32,7 @@ build:  ## build application for containerization
 	rm -rf build/ dist/
 	npm --prefix ./frontend run build
 	python setup.py build
-	python setup.py sdist
+	python setup.py bdist_wheel
 
 dev: ## Start developer environment.
 	./bin/dev.sh

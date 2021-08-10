@@ -2,39 +2,27 @@ import React, {Component} from "react";
 import {inject, observer} from "mobx-react";
 import PropTypes from "prop-types";
 
+import SelectInput from "../common/SelectInput";
+
 @inject("dataStore")
 @observer
 class DatasetSelector extends Component {
     render() {
-        const {dataStore} = this.props;
+        const {dataStore, store} = this.props;
         return (
-            <div className="nav flex-column nav-fill nav-pills nav-stacked mt-2">
-                {dataStore.datasets.map(dataset => {
-                    return (
-                        <a
-                            key={dataset.dataset_id}
-                            className={
-                                dataset.dataset_id === dataStore.selectedDatasetIndex
-                                    ? "nav-link btn-sm active"
-                                    : "nav-link btn-sm"
-                            }
-                            data-toggle="pill"
-                            href="#"
-                            role="tab"
-                            aria-selected="true"
-                            onClick={e => {
-                                e.preventDefault();
-                                dataStore.setSelectedDatasetIndex(dataset.dataset_id);
-                            }}>
-                            {dataset.dataset_name}
-                        </a>
-                    );
+            <SelectInput
+                label="Existing datasets"
+                onChange={value => store.setSelectedDataset(parseInt(value))}
+                value={store.selectedDatasetId}
+                choices={dataStore.datasets.map(dataset => {
+                    return {value: dataset.metadata.id, text: dataset.metadata.name};
                 })}
-            </div>
+            />
         );
     }
 }
 DatasetSelector.propTypes = {
     dataStore: PropTypes.object,
+    store: PropTypes.object,
 };
 export default DatasetSelector;

@@ -1,0 +1,9 @@
+from django.core.cache import cache
+from django.core.management.base import BaseCommand
+
+
+class Command(BaseCommand):
+    help = """Completely clear cache."""
+
+    def handle(self, *args, **options):
+        cache.clear()

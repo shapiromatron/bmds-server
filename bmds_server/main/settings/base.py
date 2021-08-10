@@ -14,10 +14,12 @@ ROOT_DIR = Path(__file__).parents[3].resolve()
 
 # data paths
 PUBLIC_DATA_ROOT = Path(os.environ.get("PUBLIC_DATA_ROOT", ROOT_DIR / "public"))
+PRIVATE_DATA_ROOT = Path(os.environ.get("PRIVATE_DATA_ROOT", ROOT_DIR / "private"))
 LOGS_PATH = Path(os.environ.get("LOGS_PATH", ROOT_DIR / "logs"))
 
 # make sure these paths exist
 PUBLIC_DATA_ROOT.mkdir(exist_ok=True, parents=False)
+PRIVATE_DATA_ROOT.mkdir(exist_ok=True, parents=False)
 LOGS_PATH.mkdir(exist_ok=True, parents=False)
 
 SKIN = SkinStyle.Base
@@ -34,7 +36,8 @@ INSTALLED_APPS = [
     "rest_framework.authtoken",
     "webpack_loader",
     # Custom apps
-    "bmds_server.jobrunner",
+    "bmds_server.common",
+    "bmds_server.analysis",
 ]
 
 MIDDLEWARE = [
@@ -47,7 +50,7 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
 
-ROOT_URLCONF = "bmds_server.jobrunner.urls"
+ROOT_URLCONF = "bmds_server.analysis.urls"
 
 TEMPLATES = [
     {
@@ -79,6 +82,7 @@ DATABASES = {
         "PORT": os.getenv("DJANGO_DB_PORT", "5432"),
     }
 }
+DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 LOGIN_URL = "admin:login"
 
 # add randomness to url prefix to prevent easy access
@@ -153,11 +157,18 @@ CELERY_WORKER_MAX_TASKS_PER_CHILD = 100
 CELERY_WORKER_PREFETCH_MULTIPLIER = 1
 
 # Cache settings
+ENABLE_REPORT_CACHE = True
+DISK_CACHE_NAME = "disk"
 CACHES = {
     "default": {
         "BACKEND": "django.core.cache.backends.locmem.LocMemCache",
         "TIMEOUT": 60 * 10,  # 10 minutes (in seconds)
-    }
+    },
+    DISK_CACHE_NAME: {
+        "BACKEND": "diskcache.DjangoCache",
+        "LOCATION": f"{PRIVATE_DATA_ROOT}/diskcache/",
+        "TIMEOUT": 60 * 60 * 24 * 7,  # 1 week
+    },
 }
 
 REST_FRAMEWORK = {
@@ -175,26 +186,30 @@ REST_FRAMEWORK = {
 WEBPACK_LOADER = {
     "DEFAULT": {
         "BUNDLE_DIR_NAME": "bundles/",
-        "STATS_FILE": str(ROOT_DIR / "webpack-stats.json"),
+        "STATS_FILE": str(BASE_DIR / "webpack-stats.json"),
         "POLL_INTERVAL": 0.1,
         "IGNORE": [".+/.map"],
     }
 }
 
-DAYS_TO_KEEP_JOBS = 7
+DAYS_TO_KEEP_ANALYSES = 180
 
 
 # commit information
 def get_git_commit() -> Commit:
+    if GIT_COMMIT_FILE.exists():
+        return Commit.parse_file(GIT_COMMIT_FILE)
     try:
         return Commit.current(str(ROOT_DIR))
     except (CalledProcessError, FileNotFoundError):
-        if GIT_COMMIT_FILE.exists():
-            return Commit.parse_file(GIT_COMMIT_FILE)
-    return Commit(sha="<undefined>", dt=datetime.now())
+        return Commit(sha="<undefined>", dt=datetime.now())
 
 
-GIT_COMMIT_FILE = ROOT_DIR / ".gitcommit"
+GIT_COMMIT_FILE = BASE_DIR / "gitcommit.json"
 COMMIT = get_git_commit()
 
+# Google Tag Manager settings
+GTM_ID = os.getenv("GTM_ID")
+
 TEST_DB_FIXTURE = ROOT_DIR / "tests/data/db.yaml"
+CONTACT_US_LINK = os.getenv("CONTACT_US_LINK", "")

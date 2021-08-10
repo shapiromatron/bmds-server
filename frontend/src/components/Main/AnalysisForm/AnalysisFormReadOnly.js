@@ -9,7 +9,7 @@ class AnalysisFormReadOnly extends Component {
         const {mainStore} = this.props;
         return (
             <div className="mt-2">
-                <table className="table table-bordered table-primary table-sm analysis-readonly">
+                <table className="table table-bordered bg-custom table-sm analysis-readonly">
                     <tbody>
                         <tr>
                             <th>Analysis Name:</th>
@@ -21,7 +21,7 @@ class AnalysisFormReadOnly extends Component {
                         </tr>
                         <tr>
                             <th>Model Type:</th>
-                            <td>{mainStore.getDatasetTypeName.name}</td>
+                            <td>{mainStore.getModelTypeName}</td>
                         </tr>
                     </tbody>
                 </table>
@@ -31,9 +31,5 @@ class AnalysisFormReadOnly extends Component {
 }
 AnalysisFormReadOnly.propTypes = {
     mainStore: PropTypes.object,
-    analysis_name: PropTypes.string,
-    analysis_description: PropTypes.string,
-    getDatasetTypeName: PropTypes.func,
-    name: PropTypes.string,
 };
 export default AnalysisFormReadOnly;

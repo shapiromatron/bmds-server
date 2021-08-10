@@ -1,99 +1,100 @@
-import {observable, action, computed} from "mobx";
+import {observable, action, computed, toJS} from "mobx";
 import _ from "lodash";
-import * as constant from "../constants/outputConstants";
-import {model_type} from "../constants/dataConstants";
+import {getHeaders} from "../common";
+
+import {modelClasses, maIndex} from "../constants/outputConstants";
+import {
+    getDrLayout,
+    getDrDatasetPlotData,
+    getDrBmdLine,
+    colorCodes,
+    bmaColor,
+    getBayesianBMDLine,
+} from "../constants/plotting";
 
 class OutputStore {
+    /*
+    An `Output` are the modeling results that are a permutation of a dataset and an option-set.
+    */
     constructor(rootStore) {
         this.rootStore = rootStore;
     }
 
-    @observable modelDetailModal = false;
-    @observable selectedModel = null;
-    @observable selectedDatasetIndex = "";
-    @observable plotData = [];
+    @observable showModelModal = false;
+    @observable modalModel = null;
+    @observable modalModelClass = null;
+    @observable currentOutput = {};
+    @observable selectedOutputIndex = 0;
+    @observable drModelHover = null;
+    @observable drModelModal = null;
+    @observable drModelModalIsMA = false;
+    @observable drModelAverageModal = false;
+
     @observable showBMDLine = false;
 
-    @action setSelectedModel(model) {
-        this.selectedModel = model;
-    }
-    @action setSelectedDatasetIndex(dataset_id) {
-        this.selectedDatasetIndex = dataset_id;
-    }
-    @action toggleModelDetailModal(model) {
-        this.setSelectedModel(model);
-        this.modelDetailModal = !this.modelDetailModal;
+    @observable showInlineNotes = false;
+    @action.bound toggleInlineNotes() {
+        this.showInlineNotes = !this.showInlineNotes;
     }
 
-    @computed get getCurrentOutput() {
-        let outputs = this.rootStore.mainStore.getExecutionOutputs;
-        let current_output = null;
-        if (outputs) {
-            current_output = outputs.find(
-                item => item.dataset.dataset_id == this.selectedDatasetIndex
-            );
+    @action.bound setSelectedOutputIndex(output_id) {
+        this.selectedOutputIndex = output_id;
+    }
+
+    @computed get globalErrorMessage() {
+        return this.rootStore.mainStore.errorMessage;
+    }
+
+    @computed get selectedOutputErrorMessage() {
+        if (this.globalErrorMessage) {
+            return this.globalErrorMessage;
+        } else if (this.selectedOutput === null) {
+            return "No results available.";
+        } else if ("error" in this.selectedOutput) {
+            return this.selectedOutput.error;
+        } else {
+            return null;
         }
-        return current_output;
     }
 
-    @computed get getMappedDatasets() {
-        let datasetInputForm = [];
-        Object.keys(this.getCurrentOutput.dataset).map(key => {
-            if (Array.isArray(this.getCurrentOutput.dataset[key])) {
-                this.getCurrentOutput.dataset[key].map((val, i) => {
-                    if (!datasetInputForm[i]) {
-                        datasetInputForm.push({[key]: val});
-                    } else {
-                        datasetInputForm[i][key] = val;
-                    }
-                });
-            }
-        });
-        return datasetInputForm;
+    @computed get canEdit() {
+        return this.rootStore.mainStore.canEdit;
     }
 
-    @computed get getInfoTable() {
-        let infoTable = _.cloneDeep(constant.infoTable);
-        infoTable.model_name.value = this.selectedModel.model_name;
-        infoTable.dataset_name.value = this.getCurrentOutput.dataset.dataset_name;
-        infoTable.dose_response_model.value = this.selectedModel.results.fit.model.model_form_str;
-        return infoTable;
+    @computed get outputs() {
+        return this.rootStore.mainStore.getExecutionOutputs;
+    }
+    @computed get selectedOutput() {
+        const outputs = this.outputs;
+        if (!_.isObject(outputs)) {
+            return null;
+        }
+        return outputs[this.selectedOutputIndex];
+    }
+    @computed get selectedFrequentist() {
+        const output = this.selectedOutput;
+        if (output && output.frequentist) {
+            return output.frequentist;
+        }
+        return null;
+    }
+    @computed get selectedBayesian() {
+        const output = this.selectedOutput;
+        if (output && output.bayesian) {
+            return output.bayesian;
+        }
+        return null;
+    }
+    @computed get selectedDataset() {
+        const dataset_index = this.selectedOutput.metadata.dataset_index;
+        return this.rootStore.dataStore.datasets[dataset_index];
     }
 
-    @computed get getModelOptions() {
-        let modelOptions = _.cloneDeep(
-            constant.model_options[this.getCurrentOutput.dataset.model_type]
+    @computed get recommendationEnabled() {
+        return (
+            this.selectedOutput.frequentist &&
+            this.selectedOutput.frequentist.recommender.settings.enabled
         );
-        modelOptions.map(option => {
-            option.value = this.selectedModel.settings[option.name];
-            if (option.name == "bmrType") {
-                option.value = constant.bmrType[option.value];
-            }
-            if (option.name == "distType") {
-                option.value = constant.distType[option.value];
-            }
-            if (option.name == "varType") {
-                option.value = constant.varType[option.value];
-            }
-        });
-        return modelOptions;
-    }
-
-    @computed get getModelData() {
-        let modelData = _.cloneDeep(constant.modelData);
-        modelData.number_of_observations.value = this.getCurrentOutput.dataset.doses.length;
-        modelData.adverse_direction.value =
-            constant.adverse_direction[this.selectedModel.settings.adverseDirection];
-        return modelData;
-    }
-
-    @computed get getLoglikelihoods() {
-        return this.selectedModel.results.loglikelihoods;
-    }
-
-    @computed get getTestofInterest() {
-        let rows = this.selectedModel.results.test_rows;
-        return rows;
     }
 
     @computed get getPValue() {
@@ -104,70 +105,9 @@ class OutputStore {
         return pValue;
     }
 
-    @computed get getResponse() {
-        let responses = [];
-        let dataset = this.getCurrentOutput.dataset;
-        let ns = dataset.ns;
-        let incidences = dataset.incidences;
-        if (dataset.model_type === model_type.Continuous_Summarized) {
-            responses = dataset.means;
-        } else if (dataset.model_type === model_type.Dichotomous) {
-            for (var i = 0; i < ns.length; i++) {
-                var response = incidences[i] / ns[i];
-                responses.push(response);
-            }
-        }
-        return responses;
-    }
-
-    @computed get getLayout() {
-        let layout = _.cloneDeep(constant.layout);
-        let currentDataset = this.rootStore.dataStore.selectedDataset;
-        layout.title.text = currentDataset.dataset_name;
-        return layout;
-    }
-
-    @action setPlotData() {
-        this.plotData = [];
-        var trace1 = {
-            x: this.getCurrentOutput.dataset.doses.slice(),
-            y: this.getResponse.slice(),
-            mode: "markers",
-            type: "scatter",
-            name: "Response",
-        };
-        this.plotData.push(trace1);
-    }
-
-    @action addBMDLine(model) {
-        const bmdLine = {
-            x: model.results.dr_x,
-            y: model.results.dr_y,
-            mode: "lines",
-            name: model.model_name,
-            line: {
-                width: 4,
-            },
-        };
-
-        this.plotData.push(bmdLine);
-    }
-
-    @action removeBMDLine() {
-        if (this.plotData.length > 1) {
-            this.plotData.pop();
-        }
-    }
-
-    @computed get selectedParams() {
-        let names = this.selectedModel.results.fit.model.params,
-            values = this.selectedModel.results.fit.params.toJS();
-        return _.zipObject(names, values);
-    }
-
     @computed get doseArray() {
-        let maxDose = _.max(this.getCurrentOutput.dataset.doses);
-        let minDose = _.min(this.getCurrentOutput.dataset.doses);
+        let maxDose = _.max(this.selectedDataset.doses);
+        let minDose = _.min(this.selectedDataset.doses);
         let number_of_values = 100;
         var doseArr = [];
         var step = (maxDose - minDose) / (number_of_values - 1);
@@ -175,6 +115,206 @@ class OutputStore {
             doseArr.push(minDose + step * i);
         }
         return doseArr;
+    }
+
+    @computed get drModelSelected() {
+        const output = this.selectedOutput;
+        if (output && output.frequentist && _.isNumber(output.frequentist.selected.model_index)) {
+            const model = output.frequentist.models[output.frequentist.selected.model_index];
+            return getDrBmdLine(model, "#4a9f2f");
+        }
+        return null;
+    }
+
+    // start modal methods
+    getModel(index) {
+        if (this.modalModelClass === modelClasses.frequentist) {
+            return this.selectedFrequentist.models[index];
+        } else if (this.modalModelClass === modelClasses.bayesian) {
+            if (index === maIndex) {
+                return this.selectedBayesian.model_average;
+            }
+            return this.selectedBayesian.models[index];
+        } else {
+            throw `Unknown modelClass: ${this.modalModelClass}`;
+        }
+    }
+
+    @action.bound showModalDetail(modelClass, index) {
+        this.modalModelClass = modelClass;
+        const model = this.getModel(index);
+        this.modalModel = model;
+        this.drModelModalIsMA = index === maIndex;
+        if (
+            !this.drModelModalIsMA &&
+            (!this.drModelSelected || this.drModelSelected.name !== model.name)
+        ) {
+            this.drModelModal = getDrBmdLine(model, "#0000FF");
+        }
+        this.showModelModal = true;
+    }
+    @action.bound closeModal() {
+        this.modalModel = null;
+        this.drModelModal = null;
+        this.showModelModal = false;
+    }
+    // end modal methods
+
+    // start dose-response plotting data methods
+    @computed get showSelectedModelInModalPlot() {
+        return this.modalModelClass === modelClasses.frequentist;
+    }
+    @computed get drIndividualPlotData() {
+        // a single model, shown in the modal
+        const data = [getDrDatasetPlotData(this.selectedDataset)];
+        if (this.showSelectedModelInModalPlot && this.drModelSelected) {
+            data.push(this.drModelSelected);
+        }
+        if (this.drModelModal) {
+            data.push(this.drModelModal);
+        }
+        if (this.drModelHover) {
+            data.push(this.drModelHover);
+        }
+        return data;
+    }
+    @computed get drIndividualPlotLayout() {
+        // a single model, shown in the modal
+        const selectedModel = this.showSelectedModelInModalPlot ? this.drModelSelected : null;
+        return getDrLayout(
+            this.selectedDataset,
+            selectedModel,
+            this.drModelModal,
+            this.drModelHover
+        );
+    }
+    @computed get drFrequentistPlotData() {
+        const data = [getDrDatasetPlotData(this.selectedDataset)];
+        if (this.drModelSelected) {
+            data.push(this.drModelSelected);
+        }
+        if (this.drModelModal) {
+            data.push(this.drModelModal);
+        }
+        if (this.drModelHover) {
+            data.push(this.drModelHover);
+        }
+        return data;
+    }
+    @computed get drFrequentistPlotLayout() {
+        // the main frequentist plot shown on the output page
+        return getDrLayout(
+            this.selectedDataset,
+            this.drModelSelected,
+            this.drModelModal,
+            this.drModelHover
+        );
+    }
+    @computed get drBayesianPlotData() {
+        const bayesian_plot_data = [getDrDatasetPlotData(this.selectedDataset)],
+            output = this.selectedOutput;
+        output.bayesian.models.map((model, index) => {
+            let bayesian_model = {
+                x: model.results.plotting.dr_x,
+                y: model.results.plotting.dr_y,
+                name: model.name,
+                line: {
+                    width: 2,
+                    color: colorCodes[index],
+                },
+            };
+            bayesian_plot_data.push(bayesian_model);
+        });
+        if (output.bayesian.model_average) {
+            let bma_data = getBayesianBMDLine(output.bayesian.model_average, bmaColor);
+            bayesian_plot_data.push(bma_data);
+        }
+        return bayesian_plot_data;
+    }
+    @computed get drBayesianPlotLayout() {
+        // the bayesian plot shown on the output page and modal
+        let layout = _.cloneDeep(this.drFrequentistPlotLayout),
+            output = this.selectedOutput;
+        layout.annotations = output.bayesian.model_average
+            ? getBayesianBMDLine(output.bayesian.model_average, bmaColor).annotations
+            : [];
+        return layout;
+    }
+
+    @computed get drPlotModalData() {
+        const data = [getDrDatasetPlotData(this.selectedDataset)];
+        if (this.drModelModal) {
+            data.push(this.drModelModal);
+        }
+        if (this.drModelSelected) {
+            data.push(this.drModelSelected);
+        }
+        return data;
+    }
+    @action.bound drPlotAddHover(model) {
+        if (this.drModelSelected && this.drModelSelected.name === model.name) {
+            return;
+        }
+        this.drModelHover = getDrBmdLine(model, "#DA2CDA");
+    }
+    @action.bound drPlotRemoveHover() {
+        this.drModelHover = null;
+    }
+    // end dose-response plotting data methods
+
+    // start model selection methods
+    @action.bound saveSelectedModelIndex(idx) {
+        this.selectedOutput.frequentist.selected.model_index = idx === -1 ? null : idx;
+    }
+    @action.bound saveSelectedIndexNotes(value) {
+        this.selectedOutput.frequentist.selected.notes = value.length > 0 ? value : null;
+    }
+    @action.bound saveSelectedModel() {
+        const output = this.selectedOutput,
+            {csrfToken, editKey} = this.rootStore.mainStore.config.editSettings,
+            payload = toJS({
+                editKey,
+                data: {
+                    dataset_index: output.metadata.dataset_index,
+                    option_index: output.metadata.option_index,
+                    selected: {
+                        model_index: output.frequentist.selected.model_index,
+                        notes: output.frequentist.selected.notes,
+                    },
+                },
+            }),
+            url = `${this.rootStore.mainStore.config.apiUrl}select-model/`;
+
+        fetch(url, {
+            method: "POST",
+            mode: "cors",
+            headers: getHeaders(csrfToken),
+            body: JSON.stringify(payload),
+        })
+            .then(response => {
+                if (!response.ok) {
+                    console.error(response.text());
+                }
+            })
+            .catch(error => {
+                console.error(error);
+            });
+    }
+    // end model selection methods
+
+    getOutputName(idx) {
+        /*
+        Not @computed because it has a parameter, this is still observable; prevents caching;
+        source: https://mobx.js.org/computeds-with-args.html
+        */
+        const output = this.outputs[idx],
+            dataset = this.rootStore.dataStore.datasets[output.metadata.dataset_index];
+
+        if (this.rootStore.optionsStore.optionsList.length > 1) {
+            return `${dataset.metadata.name}: Option Set ${output.metadata.option_index + 1}`;
+        } else {
+            return dataset.metadata.name;
+        }
     }
 }
 

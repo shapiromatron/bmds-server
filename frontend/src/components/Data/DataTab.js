@@ -1,11 +1,13 @@
 import React, {Component} from "react";
 import {inject, observer} from "mobx-react";
 import PropTypes from "prop-types";
+
 import DatasetForm from "./DatasetForm";
 import DatasetSelector from "./DatasetSelector";
 import SelectModelType from "./SelectModelType";
-import DoseResponsePlot from "./DoseResponsePlot";
+import DoseResponsePlot from "../common/DoseResponsePlot";
 import DatasetTable from "./DatasetTable";
+
 @inject("dataStore")
 @observer
 class Data extends Component {
@@ -13,22 +15,27 @@ class Data extends Component {
         const {dataStore} = this.props;
         return (
             <div className="container-fluid">
-                <div className="row mt-2">
+                <div className="row">
                     <div className="col-md-2">
-                        {dataStore.getEditSettings ? <SelectModelType /> : null}
-                        {dataStore.getDataLength ? <DatasetSelector /> : null}
+                        {dataStore.canEdit ? <SelectModelType /> : null}
+                        {dataStore.getDataLength ? <DatasetSelector store={dataStore} /> : null}
                     </div>
                     <div className="col-md-6">
                         {dataStore.hasSelectedDataset ? (
-                            dataStore.getEditSettings ? (
+                            dataStore.canEdit ? (
                                 <DatasetForm />
                             ) : (
-                                <DatasetTable />
+                                <DatasetTable dataset={dataStore.selectedDataset} />
                             )
                         ) : null}
                     </div>
                     <div className="col-md-4">
-                        {dataStore.hasSelectedDataset ? <DoseResponsePlot /> : null}
+                        {dataStore.hasSelectedDataset ? (
+                            <DoseResponsePlot
+                                layout={dataStore.drPlotLayout}
+                                data={dataStore.drPlotData}
+                            />
+                        ) : null}
                     </div>
                 </div>
             </div>

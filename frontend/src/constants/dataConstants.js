@@ -1,159 +1,164 @@
-const modelTypes = [
-        {value: "CS", name: "Continuous Summarized"},
-        {value: "CI", name: "Continuous Individual"},
-        {value: "DM", name: "Dichotomous"},
-        {value: "N", name: "Nested"},
-    ],
+import _ from "lodash";
+import * as mc from "./mainConstants";
+
+const Dtype = {
+    DICHOTOMOUS: "D",
+    CONTINUOUS: "C",
+    CONTINUOUS_INDIVIDUAL: "CI",
+};
+
+export {Dtype};
+export const DATA_CONTINUOUS_SUMMARY = "CS",
+    DATA_CONTINUOUS_INDIVIDUAL = "I",
+    DATA_DICHOTOMOUS = "DM",
+    datasetTypesByModelType = function(modelType) {
+        switch (modelType) {
+            case mc.MODEL_DICHOTOMOUS:
+                return [{value: DATA_DICHOTOMOUS, name: "Dichotomous"}];
+            case mc.MODEL_CONTINUOUS:
+                return [
+                    {value: DATA_CONTINUOUS_SUMMARY, name: "Summarized"},
+                    {value: DATA_CONTINUOUS_INDIVIDUAL, name: "Individual"},
+                ];
+            default:
+                throw `Unknown modelType: ${modelType}`;
+        }
+    },
     columns = {
-        CS: ["doses", "ns", "means", "stdevs"],
-        CI: ["doses", "responses"],
-        DM: ["doses", "ns", "incidences"],
-        N: ["doses", "litter_sizes", "incidences", "litter_specific_covariates"],
+        [Dtype.CONTINUOUS]: ["doses", "ns", "means", "stdevs"],
+        [Dtype.CONTINUOUS_INDIVIDUAL]: ["doses", "responses"],
+        [Dtype.DICHOTOMOUS]: ["doses", "ns", "incidences"],
     },
     columnNames = {
-        CS: {
+        [DATA_CONTINUOUS_SUMMARY]: {
             doses: "Dose",
             ns: "N",
             means: "Mean",
-            stdevs: "St. Dev.",
+            stdevs: "Std. Dev.",
         },
-        CI: {
+        [DATA_CONTINUOUS_INDIVIDUAL]: {
             doses: "Dose",
             responses: "Response",
         },
-        DM: {
+        [DATA_DICHOTOMOUS]: {
             doses: "Dose",
             ns: "N",
             incidences: "Incidence",
-        },
-        N: {
-            doses: "Dose",
-            litter_sizes: "LItter Size",
-            incidences: "Incidence",
-            litter_specific_covariates: "Litter Specific Covariate",
         },
     },
     columnHeaders = {
         doses: "Dose",
         ns: "N",
         means: "Mean",
-        stdevs: "St. Dev.",
+        stdevs: "Std. Dev.",
         responses: "Response",
         incidences: "Incidence",
-        litter_sizes: "Litter Size",
-        litter_specific_covariates: "Litter Specific Covariate",
     },
-    datasetForm = {
-        CS: {
-            doses: [0, 7, 37, 186],
-            ns: [25, 25, 25, 24],
-            means: [55.8, 52.9, 64.8, 119.9],
-            stdevs: [12.5, 15.4, 17.4, 32.5],
-            adverse_direction: "automatic",
-        },
-        CI: {
-            doses: ["", "", "", "", ""],
-            responses: ["", "", "", "", ""],
-        },
-        DM: {
-            doses: [0, 0.46, 1.39, 4.17, 12.5],
-            ns: [9, 9, 11, 10, 7],
-            incidences: [0, 0, 3, 2, 3],
-        },
-        N: {
-            doses: ["", "", "", "", ""],
-            litter_sizes: ["", "", "", "", ""],
-            incidences: ["", "", "", "", ""],
-            litter_specific_covariates: ["", "", "", "", ""],
-        },
+    getDefaultDataset = function(dtype) {
+        switch (dtype) {
+            case DATA_CONTINUOUS_SUMMARY:
+                return {
+                    dtype: Dtype.CONTINUOUS,
+                    metadata: {
+                        id: null,
+                        name: "",
+                        dose_units: "",
+                        response_units: "",
+                        dose_name: "Dose",
+                        response_name: "Response",
+                    },
+                    doses: ["", "", "", "", ""],
+                    ns: ["", "", "", "", ""],
+                    means: ["", "", "", "", ""],
+                    stdevs: ["", "", "", "", ""],
+                };
+            case DATA_CONTINUOUS_INDIVIDUAL:
+                return {
+                    dtype: Dtype.CONTINUOUS_INDIVIDUAL,
+                    metadata: {
+                        id: null,
+                        name: "",
+                        dose_units: "",
+                        response_units: "",
+                        dose_name: "Dose",
+                        response_name: "Response",
+                    },
+                    doses: ["", "", "", "", ""],
+                    responses: ["", "", "", "", ""],
+                };
+            case DATA_DICHOTOMOUS:
+                return {
+                    dtype: Dtype.DICHOTOMOUS,
+                    metadata: {
+                        id: null,
+                        name: "",
+                        dose_units: "",
+                        response_units: "",
+                        dose_name: "Dose",
+                        response_name: "Incidence",
+                    },
+                    doses: ["", "", "", "", ""],
+                    ns: ["", "", "", "", ""],
+                    incidences: ["", "", "", "", ""],
+                };
+            default:
+                throw `Unknown dataset type ${dtype}`;
+        }
     },
-    datasetNamesHeaders = {
-        C: ["Enable", "Datasets", "Adverse Direction"],
-        D: ["Enable", "Datasets"],
-        DM: ["Enable", "Datasets", "Degree", "Background"],
-        N: ["Enable", "Datasets"],
+    getExampleData = function(dtype) {
+        switch (dtype) {
+            case DATA_CONTINUOUS_SUMMARY:
+                return {
+                    doses: [0, 50, 100, 150, 200],
+                    ns: [100, 100, 100, 100, 100],
+                    means: [10, 18, 32, 38, 70],
+                    stdevs: [3.2, 4.8, 6.5, 7.2, 8.4],
+                };
+            case DATA_CONTINUOUS_INDIVIDUAL:
+                /* eslint-disable */
+                return {
+                    doses: [
+                        0, 0, 0, 0, 0, 0, 0, 0, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1,
+                        1, 1, 1, 1, 1, 1, 10, 10, 10, 10, 10, 10, 100, 100, 100, 100, 100, 100,
+                        300, 300, 300, 300, 300, 300, 500, 500, 500, 500, 500, 500
+                    ],
+                    responses: [
+                        8.1079, 9.3063, 9.7431, 9.7814, 10.0517, 10.6132, 10.7509, 11.0567,
+                        9.1556, 9.6821, 9.8256, 10.2095, 10.2222, 12.0382, 9.5661, 9.7059,
+                        9.9905, 10.2716, 10.471, 11.0602, 8.8514, 10.0107, 10.0854, 10.5683,
+                        11.1394, 11.4875, 9.5427, 9.7211, 9.8267, 10.0231, 10.1833, 10.8685,
+                        11.368, 13.5176, 12.3168, 14.002, 17.1186, 13.6368, 19.9572, 20.1347,
+                        16.7743, 20.0571, 15.1564, 15.0368
+                    ],
+                };
+                /* eslint-enable */
+            case DATA_DICHOTOMOUS:
+                return {
+                    doses: [0, 10, 50, 150, 400],
+                    ns: [20, 20, 20, 20, 20],
+                    incidences: [0, 0, 1, 4, 11],
+                };
+            default:
+                throw `Unknown dataset type ${dtype}`;
+        }
     },
-    AdverseDirectionList = [
-        {value: "automatic", name: "Automatic"},
-        {value: "up", name: "Up"},
-        {value: "down", name: "Down"},
+    adverseDirectionOptions = [
+        {value: -1, label: "Automatic"},
+        {value: 1, label: "Up"},
+        {value: 0, label: "Down"},
     ],
-    degree = [
-        {value: "auto-select", name: "auto-select"},
-        {value: "1", name: "1"},
-        {value: "2", name: "2"},
-        {value: "3", name: "3"},
+    allDegreeOptions = [
+        {value: 0, label: "N-1"},
+        {value: 1, label: "1"},
+        {value: 2, label: "2"},
+        {value: 3, label: "3"},
+        {value: 4, label: "4"},
+        {value: 5, label: "5"},
+        {value: 6, label: "6"},
+        {value: 7, label: "7"},
+        {value: 8, label: "8"},
     ],
-    background = [
-        {value: "Estimated", name: "Esimated"},
-        {value: "0", name: "Zero"},
-    ],
-    scatter_plot_layout = {
-        showlegend: true,
-        title: {
-            text: "Scatter Plot",
-            font: {
-                family: "Courier New, monospace",
-                size: 12,
-            },
-            xref: "paper",
-        },
-        xaxis: {
-            linecolor: "black",
-            linewidth: 1,
-            mirror: true,
-            title: {
-                text: "",
-                font: {
-                    family: "Courier New, monospace",
-                    size: 12,
-                    color: "#7f7f7f",
-                },
-            },
-        },
-        yaxis: {
-            linecolor: "black",
-            linewidth: 1,
-            mirror: true,
-            title: {
-                text: "",
-                font: {
-                    family: "Courier New, monospace",
-                    size: 12,
-                    color: "#7f7f7f",
-                },
-            },
-        },
-        plot_bgcolor: "",
-        paper_bgcolor: "#eee",
-        width: 400,
-        height: 400,
-        autosize: true,
-    },
-    yAxisTitle = {
-        CI: "responses",
-        CS: "means",
-        DM: "incidences",
-        N: "incidences",
-    },
-    model_type = {
-        Continuous_Summarized: "CS",
-        Continuous_Individual: "CI",
-        Dichotomous: "DM",
-        Nested: "N",
+    getDegreeOptions = function(dataset) {
+        const maxDegree = Math.max(Math.min(4, _.uniq(dataset.doses).length - 1), 1);
+        return allDegreeOptions.filter(d => d.value <= maxDegree);
     };
-
-export {
-    modelTypes,
-    columns,
-    columnNames,
-    columnHeaders,
-    datasetForm,
-    datasetNamesHeaders,
-    AdverseDirectionList,
-    degree,
-    background,
-    scatter_plot_layout,
-    yAxisTitle,
-    model_type,
-};

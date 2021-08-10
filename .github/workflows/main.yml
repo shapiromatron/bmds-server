@@ -75,8 +75,7 @@ jobs:
           bmds_server/webpack-stats.json
           bmds_server/static/bundles/
 
-
-integration:
+  integration:
     name: integration
     needs: [backend, frontend]
     runs-on: ubuntu-20.04

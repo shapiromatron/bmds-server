@@ -1,38 +1,29 @@
-from urllib.parse import urlparse
-
 import helium as h
 
 
 def test_dichotomous(driver, root_url, can_execute: bool):
     h.set_driver(driver)
     h.go_to(root_url)
-    h.click("Create a new BMDS session")
+    h.click("Create a new BMDS analysis")
 
-    h.wait_until(h.Text("Settings").exists, timeout_secs=60)
-    h.click("Settings")
-    assert urlparse(driver.current_url).fragment == "/"
-    h.wait_until(h.Button("Save Analysis").exists)
-    driver.find_element_by_xpath(
-        "//select[@id='dataset-type']/option[text()='Dichotomous']"
-    ).click()
+    # click main
+    # update settings and select a model frequentist modal and a bayesian model
+    # create an option set
 
-    h.click("Data")
-    h.click("Add Dataset")
-    assert urlparse(driver.current_url).fragment == "/data"
+    # create new dataset; load default
 
-    h.click("Settings")
-    assert urlparse(driver.current_url).fragment == "/"
-    driver.find_element_by_name("frequentist_restricted-Gamma").click()
-    assert driver.find_element_by_id("enable-model").is_selected()
-    assert driver.find_element_by_name("frequentist_restricted-Gamma").is_selected()
-
-    h.click("Save Analysis")
-    h.wait_until(h.Button("Run Analysis").exists)
-    h.click("Run Analysis")
+    # click logic tab; confirm content exists
 
     if can_execute:
-        h.click("Output")
-        assert urlparse(driver.current_url).fragment == "/output"
-        h.wait_until(h.S("#results-table").exists)
-        h.click(h.Text("Gamma"))
-        h.wait_until(h.Text("Gamma - Details").exists)
+        pass
+        # click main tab
+        # execute; wait until results works
+        # confirm a modal popup exists
+
+    # navigate to the read-only URL
+    # click main/dataset/logic tabs and confirm all visible and content is shown
+    if can_execute:
+        # confirm content is shown
+        pass
+
+    h.go_to(root_url)

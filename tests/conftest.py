@@ -5,8 +5,8 @@ from pathlib import Path
 
 import helium
 import pytest
-from django.conf import settings
 from bmds.bmds3.recommender import RecommenderSettings
+from django.conf import settings
 from django.core.management import call_command
 from selenium import webdriver
 from selenium.webdriver.common.desired_capabilities import DesiredCapabilities

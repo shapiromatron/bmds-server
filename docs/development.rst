@@ -175,6 +175,8 @@ Integration tests
 
 Integration tests use selenium and Firefox or Chrome for for testing. By default, integration tests are skipped. Firefox appears to be more stable based on initial investigation for these tests To run, you'll need to set a few environment variables.
 
+Make sure your javascript has been compiled or you are running the webpack server before running integration tests locally.
+
 .. code-block:: bash
 
     export BMDS_INTEGRATION_TESTS=1

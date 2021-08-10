@@ -27,15 +27,15 @@ class TestIntegration(StaticLiveServerTestCase, TestCase):
     host = os.environ.get("LIVESERVER_HOST", "localhost")
     port = int(os.environ.get("LIVESERVER_PORT", 0))
 
-    def test_continuous(self):
-        continuous.test_continuous(self.driver, self.live_server_url)
-        continuous.test_analysisName(self.driver, self.live_server_url)
-        continuous.test_analysisDescription(self.driver, self.live_server_url)
-        continuous.test_changeBMRType(self.driver, self.live_server_url)
-        continuous.test_dataPath(self.driver, self.live_server_url)
-        continuous.test_logicPath(self.driver, self.live_server_url)
-        continuous.test_mainPath(self.driver, self.live_server_url)
-        continuous.test_ouputPath(self.driver, self.live_server_url)
-
     def test_dichotomous(self):
-        dichotomous.test_dichotomous(self.driver, self.live_server_url, can_execute)
+        dichotomous.test_dichotomous(self.driver, self.live_server_url, can_execute=can_execute)
+
+    def test_continuous_summary(self):
+        continuous.test_continuous_summary(
+            self.driver, self.live_server_url, can_execute=can_execute
+        )
+
+    def test_continuous_individual(self):
+        continuous.test_continuous_individual(
+            self.driver, self.live_server_url, can_execute=can_execute
+        )

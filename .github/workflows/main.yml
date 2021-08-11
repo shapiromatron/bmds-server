@@ -18,13 +18,6 @@ jobs:
         ports:
         - 5432/tcp
 
-    env:
-      DJANGO_DB_NAME: bmds-online-test
-      DJANGO_DB_USER: bmds
-      DJANGO_DB_PW: password
-      DJANGO_DB_HOST: localhost
-      DJANGO_DB_PORT: ${{ job.services.postgres.ports[5432] }} # get randomly assigned published port
-
     steps:
     - uses: actions/checkout@v2
     - uses: actions/setup-python@v2
@@ -47,6 +40,12 @@ jobs:
       run: |
         make lint-py
     - name: test
+      env:
+        DJANGO_DB_NAME: bmds-online-test
+        DJANGO_DB_USER: bmds
+        DJANGO_DB_PW: password
+        DJANGO_DB_HOST: localhost
+        DJANGO_DB_PORT: ${{ job.services.postgres.ports[5432] }} # get randomly assigned published port
       run: |
         py.test --vcr-record=none
 

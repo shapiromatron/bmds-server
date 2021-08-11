@@ -10,8 +10,8 @@ from .tests import continuous, dichotomous
 SKIP_INTEGRATION = os.environ.get("BMDS_INTEGRATION_TESTS") is None
 BROWSER = os.environ.get("BROWSER", "firefox")  # default to firefox; seems more stable
 
-# TODO remove this restriction
-can_execute = platform.system() == "Darwin" and os.getenv("CI") is None
+# TODO remove this restriction once we can package dll with python library
+can_execute = platform.system() == "Darwin"
 
 
 @pytest.mark.skipif(SKIP_INTEGRATION, reason="integration test")

@@ -129,6 +129,8 @@ jobs:
         path: bmds_server
     - name: install
       run: |
+        apt-get update
+        apt-get install git
         pip install -U pip
         pip install -r requirements/ci.txt
     # https://github.community/t/how-to-retry-a-failed-step-in-github-actions-workflow/125880

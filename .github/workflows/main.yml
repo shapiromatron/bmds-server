@@ -106,7 +106,7 @@ jobs:
       DJANGO_DB_PORT: 5432
       DJANGO_DB_PW: password
       DJANGO_DB_USER: bmds
-      HAWC_INTEGRATION_TESTS: 1
+      BMDS_INTEGRATION_TESTS: 1
       BROWSER: firefox
       LIVESERVER_HOST: container
       LIVESERVER_PORT: 8000

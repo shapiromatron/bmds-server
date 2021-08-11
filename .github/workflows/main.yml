@@ -138,13 +138,13 @@ jobs:
       id: test
       continue-on-error: true
       run: |
-        py.test -sv tests/frontend/integration/
+        py.test -sv tests/integration/
     - name: run selenium tests (retry)
       if: steps.test.outcome=='failure'
       id: retry
       continue-on-error: true
       run: |
-        py.test -sv tests/frontend/integration/
+        py.test -sv tests/integration/
     - name: set status
       if: always()
       run: |

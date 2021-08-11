@@ -130,7 +130,7 @@ jobs:
     - name: install
       run: |
         pip install -U pip
-        pip install -r requirements/dev.txt
+        pip install -r requirements/ci.txt
     # https://github.community/t/how-to-retry-a-failed-step-in-github-actions-workflow/125880
     - name: run selenium tests
       id: test

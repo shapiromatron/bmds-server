@@ -140,12 +140,17 @@ Building a test database
 A test database is loaded to run unit tests. The database may need to be periodically updated as new feature are added. To load, make edits, and export the test database:
 
 .. code-block:: bash
+
     # specify that we're using the unit-test settings
     export "DJANGO_SETTINGS_MODULE=bmds_server.main.settings.testing"
+
     # load existing test
     createdb bmds-online-test
     manage.py load_test_db
-    # now make edits to the database using the GUI or via command line
+
+    # make edits to the database using the GUI or via command line
+    # ...
+
     # export database
     manage.py dump_test_db
 
@@ -163,3 +168,20 @@ This is an optional step in development, but required in production. To run work
     # start a crontab
     source venv/bin/activate
     celery beat --app=bmds_server.main.celery --loglevel=info
+
+
+Integration tests
+-----------------
+
+Integration tests use selenium and Firefox or Chrome for for testing. By default, integration tests are skipped. Firefox appears to be more stable based on initial investigation for these tests To run, you'll need to set a few environment variables.
+
+Make sure your javascript has been compiled or you are running the webpack server before running integration tests locally.
+
+.. code-block:: bash
+
+    export BMDS_INTEGRATION_TESTS=1
+    export SHOW_BROWSER=1            # or 0 for headless
+    export BROWSER="firefox"         # or "chrome"
+    py.test -sv tests/integration/ --pdb
+
+When writing these tests, it's often easiest to write the tests in an interactive scripting environment like ipython or jupyter. This allows you to interact with the DOM and the requests much easier than manually re-running tests as they're written.

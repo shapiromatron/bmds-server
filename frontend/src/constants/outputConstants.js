@@ -7,6 +7,9 @@ export const getPValue = function(dataType, results) {
             return results.tests.p_values[3];
         }
     },
+    isFrequentist = function(priorClass) {
+        return priorClass < 2;
+    },
     priorClass = {
         frequentist_unrestricted: 0,
         frequentist_restricted: 1,
@@ -20,10 +23,10 @@ export const getPValue = function(dataType, results) {
     maIndex = 999,
     priorClassLabels = [
         {value: 0, label: "Frequentist Unrestricted"},
-        {value: 1, label: "Frequntist Restricted"},
+        {value: 1, label: "Frequentist Restricted"},
         {value: 2, label: "Bayesian"},
     ],
-    priorType = [
+    priorTypeLabels = [
         {value: 0, label: "Uniform"},
         {value: 1, label: "Normal"},
         {value: 2, label: "Lognormal"},

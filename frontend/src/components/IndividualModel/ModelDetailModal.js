@@ -5,7 +5,7 @@ import PropTypes from "prop-types";
 
 import InfoTable from "./InfoTable";
 import ModelOptionsTable from "./ModelOptionsTable";
-import ModelData from "./ModelData";
+import ParameterPriorTable from "./ParameterPriorTable";
 import ModelParameters from "./ModelParameters";
 import GoodnessFit from "./GoodnessFit";
 import CDFTable from "./CDFTable";
@@ -39,7 +39,7 @@ class IndividualModelBody extends Component {
                         <ModelOptionsTable dtype={dtype} model={model} />
                     </Col>
                     <Col xs={5}>
-                        <ModelData model={model} />
+                        <ParameterPriorTable priors={model.settings.priors} />
                     </Col>
                 </Row>
                 <Row>

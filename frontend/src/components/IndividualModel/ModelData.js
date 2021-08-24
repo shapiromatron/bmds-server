@@ -18,7 +18,7 @@ class ModelData extends Component {
                         <th>Name</th>
                         <th>Type</th>
                         <th>Initial Value</th>
-                        <th>St. Dev.</th>
+                        <th>Std. Dev.</th>
                         <th>Min Value</th>
                         <th>Max Value</th>
                     </tr>

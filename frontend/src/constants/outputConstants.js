@@ -20,7 +20,7 @@ export const getPValue = function(dataType, results) {
     maIndex = 999,
     priorClassLabels = [
         {value: 0, label: "Frequentist Unrestricted"},
-        {value: 1, label: "Frequntist Restricted"},
+        {value: 1, label: "Frequentist Restricted"},
         {value: 2, label: "Bayesian"},
     ],
     priorType = [

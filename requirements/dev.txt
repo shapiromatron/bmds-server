@@ -17,6 +17,10 @@ pytest-django==4.4.0
 vcrpy==4.1.1
 pytest-vcr==1.0.2
 
+# integration tests
+helium==3.0.5
+selenium==3.141.0
+
 # lint and formatting tools
 black==19.10b0
 flake8==3.9.2

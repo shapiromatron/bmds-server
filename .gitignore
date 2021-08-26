@@ -12,7 +12,7 @@ build/
 dist/
 docs/_build/
 node_modules/
-scripts/private/
+scripts/private
 /public/
 /private/
 vendor/*.whl

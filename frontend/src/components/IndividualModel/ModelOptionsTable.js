@@ -14,6 +14,34 @@ import {ff, getLabel} from "../../common";
 class ModelOptionsTable extends Component {
     render() {
         const {dtype, model} = this.props;
+        let data = [];
+
+        if (dtype == Dtype.DICHOTOMOUS) {
+            data = [
+                ["BMR Type", getLabel(model.settings.bmr_type, dichotomousBmrOptions)],
+                ["BMR", ff(model.settings.bmr)],
+                ["Alpha", ff(model.settings.alpha)],
+                ["Degree", ff(model.settings.degree)],
+                ["Samples", ff(model.settings.samples)],
+                ["Burn In", ff(model.settings.burnin)],
+                ["Prior Class", getLabel(model.settings.priors.prior_class, priorClassLabels)],
+            ];
+        } else if (dtype == Dtype.CONTINUOUS || dtype == Dtype.CONTINUOUS_INDIVIDUAL) {
+            data = [
+                ["Is Increasing", model.settings.is_increasing],
+                ["Distribution Type", getLabel(model.settings.disttype, distTypeOptions)],
+                ["BMR Type", getLabel(model.settings.bmr_type, continuousBmrOptions)],
+                ["BMRF", ff(model.settings.bmr)],
+                ["Tail Probability", ff(model.settings.tail_prob)],
+                ["Alpha", ff(model.settings.alpha)],
+                ["Degree", ff(model.settings.degree)],
+                ["Samples", model.settings.samples],
+                ["Burn In", model.settings.burnin],
+                ["Prior Class", getLabel(model.settings.priors.prior_class, priorClassLabels)],
+            ];
+        } else {
+            throw "Unknown dtype";
+        }
 
         return (
             <table className="table table-bordered table-sm">
@@ -23,86 +51,14 @@ class ModelOptionsTable extends Component {
                     </tr>
                 </thead>
                 <tbody>
-                    {dtype == Dtype.DICHOTOMOUS ? (
-                        <>
-                            <tr>
-                                <td>BMR Type</td>
-                                <td>{getLabel(model.settings.bmr_type, dichotomousBmrOptions)}</td>
+                    {data.map((d, i) => {
+                        return (
+                            <tr key={i}>
+                                <td>{d[0]}</td>
+                                <td>{d[1]}</td>
                             </tr>
-                            <tr>
-                                <td>BMR</td>
-                                <td>{ff(model.settings.bmr)}</td>
-                            </tr>
-                            <tr>
-                                <td>Alpha</td>
-                                <td>{ff(model.settings.alpha)}</td>
-                            </tr>
-                            <tr>
-                                <td>Degree</td>
-                                <td>{ff(model.settings.degree)}</td>
-                            </tr>
-                            <tr>
-                                <td>Samples</td>
-                                <td>{ff(model.settings.samples)}</td>
-                            </tr>
-                            <tr>
-                                <td>Burn In</td>
-                                <td>{ff(model.settings.burnin)}</td>
-                            </tr>
-                            <tr>
-                                <td>Prior Class</td>
-                                <td>
-                                    {getLabel(model.settings.priors.prior_class, priorClassLabels)}
-                                </td>
-                            </tr>
-                        </>
-                    ) : null}
-                    {dtype == Dtype.CONTINUOUS || dtype == Dtype.CONTINUOUS_INDIVIDUAL ? (
-                        <>
-                            <tr>
-                                <td>Is increasing</td>
-                                <td>{model.settings.is_increasing}</td>
-                            </tr>
-                            <tr>
-                                <td>Distribution Type</td>
-                                <td>{getLabel(model.settings.disttype, distTypeOptions)}</td>
-                            </tr>
-                            <tr>
-                                <td>BMR Type</td>
-                                <td>{getLabel(model.settings.bmr_type, continuousBmrOptions)}</td>
-                            </tr>
-                            <tr>
-                                <td>BMRF</td>
-                                <td>{ff(model.settings.bmr)}</td>
-                            </tr>
-                            <tr>
-                                <td>Tail Probability</td>
-                                <td>{ff(model.settings.tail_prob)}</td>
-                            </tr>
-                            <tr>
-                                <td>Alpha</td>
-                                <td>{ff(model.settings.alpha)}</td>
-                            </tr>
-                            <tr>
-                                <td>Degree</td>
-                                <td>{ff(model.settings.degree)}</td>
-                            </tr>
-                            <tr>
-                                <td>Samples</td>
-                                <td>{model.settings.samples}</td>
-                            </tr>
-                            <tr>
-                                <td>Burn in</td>
-                                <td>{model.settings.burnin}</td>
-                            </tr>
-                            <tr>
-                                <td>Prior class</td>
-                                <td>
-                                    {getLabel(model.settings.priors.prior_class, priorClassLabels)}
-                                </td>
-                            </tr>
-                        </>
-                    ) : null}
+                        );
+                    })}
                 </tbody>
             </table>
         );

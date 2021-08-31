@@ -37,7 +37,7 @@ class AnalysisForm extends Component {
                             }></textarea>
                     </div>
                     <SelectInput
-                        label="Model Class"
+                        label="Model Type"
                         onChange={value => mainStore.changeDatasetType(value)}
                         value={mainStore.model_type}
                         choices={modelTypes.map((item, i) => {

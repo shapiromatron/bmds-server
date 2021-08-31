@@ -1,5 +1,4 @@
 import os
-from datetime import timedelta
 
 from celery import Celery
 
@@ -18,10 +17,12 @@ app.autodiscover_tasks()
 app.conf.beat_schedule = {
     "worker-healthcheck": {
         "task": "bmds_server.common.tasks.worker_healthcheck_push",
-        "schedule": timedelta(minutes=5),
+        "schedule": 5 * 60,  # every 5 min
+        "options": {"expires": 5 * 60},
     },
     "ten-minutes-delete-old-analyses": {
         "task": "bmds_server.analysis.tasks.delete_old_analyses",
-        "schedule": timedelta(minutes=10),
+        "schedule": 60 * 60,  # every hour
+        "options": {"expires": 60 * 60},
     },
 }

@@ -118,11 +118,7 @@ class TestPatchInputs:
         url = analysis.get_api_patch_inputs_url()
 
         # complete bmds3 continuous
-        payload = {
-            "editKey": analysis.password,
-            "data": bmds3_complete_continuous,
-        }
-
+        payload = {"editKey": analysis.password, "data": bmds3_complete_continuous}
         response = client.patch(url, payload, format="json")
         assert response.status_code == 200
         assert response.json()["inputs"] == payload["data"]
@@ -133,21 +129,85 @@ class TestPatchInputs:
         url = analysis.get_api_patch_inputs_url()
 
         # complete bmds3 dichotomous
-        payload = {
-            "editKey": analysis.password,
-            "data": bmds3_complete_dichotomous,
-        }
-
+        payload = {"editKey": analysis.password, "data": bmds3_complete_dichotomous}
         response = client.patch(url, payload, format="json")
         assert response.status_code == 200
         assert response.json()["inputs"] == payload["data"]
 
 
+@pytest.mark.django_db
 class TestExecute:
-    # TODO - add
-    pass
+    def test_execute(self, bmds3_complete_dichotomous):
+        client = APIClient()
+        analysis = Analysis.objects.create(inputs=bmds3_complete_dichotomous)
+        assert analysis.started is None
+        url = analysis.get_api_execute_url()
+
+        # invalid key
+        payload = {"editKey": analysis.password + "123"}
+        response = client.post(url, payload, format="json")
+        assert response.status_code == 403
+
+        # valid key
+        payload = {"editKey": analysis.password}
+        response = client.post(url, payload, format="json")
+        assert response.status_code == 200
+        bmd = response.data["outputs"]["outputs"][0]["frequentist"]["models"][0]["results"]["bmd"]
+        assert response.data["is_finished"] is True
+        assert response.data["has_errors"] is False
+        assert bmd == pytest.approsx(164.3, rel=0.05)
+
+    def test_reset_execute(self, bmds3_complete_dichotomous):
+        client = APIClient()
+        analysis = Analysis.objects.create(inputs=bmds3_complete_dichotomous)
+        analysis.execute()
+        url = analysis.get_api_execute_reset_url()
+
+        # invalid key
+        payload = {"editKey": analysis.password + "123"}
+        response = client.post(url, payload, format="json")
+        assert response.status_code == 403
+
+        # valid key
+        payload = {"editKey": analysis.password}
+        response = client.post(url, payload, format="json")
+        assert response.status_code == 200
+        assert response.data["is_finished"] is False
+        assert response.data["has_errors"] is False
+        assert response.data["outputs"] == {}
 
 
+@pytest.mark.django_db
 class TestModelSelection:
-    # TODO - add
-    pass
+    def test_model_selection(self, bmds3_complete_dichotomous):
+        client = APIClient()
+        analysis = Analysis.objects.create(inputs=bmds3_complete_dichotomous)
+        analysis.execute()
+
+        url = analysis.get_api_url() + "select-model/"
+        payload = {
+            "data": {
+                "dataset_index": 0,
+                "option_index": 0,
+                "selected": {"model_index": 0, "notes": "notes"},
+            },
+        }
+
+        # invalid key
+        payload["editKey"] = analysis.password + "123"
+        response = client.post(url, payload, format="json")
+        assert response.status_code == 403
+
+        # selected model
+        payload["editKey"] = analysis.password
+        response = client.post(url, payload, format="json")
+        assert response.status_code == 200
+        value = response.data["outputs"]["outputs"][0]["frequentist"]["selected"]
+        assert value == {"notes": "notes", "model_index": 0}
+
+        # deselect model
+        payload["data"]["selected"] = {"model_index": None, "notes": "no notes"}
+        response = client.post(url, payload, format="json")
+        assert response.status_code == 200
+        value = response.data["outputs"]["outputs"][0]["frequentist"]["selected"]
+        assert value == {"model_index": None, "notes": "no notes"}

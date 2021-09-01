@@ -10,8 +10,10 @@ def test_dichotomous(driver, root_url, can_execute: bool):
 
     # h.click(("Settings"))
 
-    driver.find_element_by_id("frequentist_unrestricted_Logistic").click()
-    assert driver.find_element_by_id("frequentist_unrestricted_Logistic").is_selected()
+    driver.find_element_by_xpath("//input[@id='frequentist_unrestricted_Logistic']").click()
+    assert driver.find_element_by_xpath(
+        "//input[@id='frequentist_unrestricted_Logistic']"
+    ).is_selected()
 
     h.wait_until(h.Text("Data").exists)
     h.click(("Data"))

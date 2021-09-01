@@ -49,6 +49,7 @@ const isModelChecked = function(models, type, model) {
         return store.canEdit ? (
             <td>
                 <input
+                    id={type + "_" + model}
                     type="checkbox"
                     disabled={disabled}
                     onChange={e => store.setModelSelection(type, model, e.target.checked)}

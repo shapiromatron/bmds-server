@@ -8,8 +8,8 @@ def test_continuous_individual(driver, root_url, can_execute: bool):
 
     # h.click(("Settings"))
     # h.wait_until(driver.find_element_by_name("frequentist_unrestricted_Power").exists)
-    driver.find_element_by_name("frequentist_unrestricted_Power").click()
-    assert driver.find_element_by_name("frequentist_unrestricted_Power").is_selected()
+    driver.find_element_by_id("frequentist_unrestricted_Power").click()
+    assert driver.find_element_by_id("frequentist_unrestricted_Power").is_selected()
 
     h.wait_until(h.Text("Data").exists)
     h.click(("Data"))
@@ -78,8 +78,8 @@ def test_continuous_summary(driver, root_url, can_execute: bool):
     h.wait_until(h.Text("Settings").exists)
     h.click(("Settings"))
 
-    driver.find_element_by_name("frequentist_unrestricted_Power").click()
-    assert driver.find_element_by_name("frequentist_unrestricted_Power").is_selected()
+    driver.find_element_by_id("frequentist_unrestricted_Power").click()
+    assert driver.find_element_by_id("frequentist_unrestricted_Power").is_selected()
 
     h.wait_until(h.Text("Save Analysis").exists)
     h.click(("Save Analysis"))

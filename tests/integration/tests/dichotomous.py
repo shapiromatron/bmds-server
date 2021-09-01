@@ -1,5 +1,6 @@
 import helium as h
 from selenium.webdriver.remote.webelement import WebElement
+from selenium.common.exceptions import NoSuchElementException
 
 
 def test_dichotomous(driver, root_url, can_execute: bool):
@@ -7,9 +8,10 @@ def test_dichotomous(driver, root_url, can_execute: bool):
     h.go_to(root_url)
     h.click("Create a new BMDS analysis")
 
-    h.click(("Settings"))
-    driver.find_element_by_name("frequentist_unrestricted_Logistic").click()
-    assert driver.find_element_by_name("frequentist_unrestricted_Logistic").is_selected()
+    # h.click(("Settings"))
+
+    driver.find_element_by_id("frequentist_unrestricted_Logistic").click()
+    assert driver.find_element_by_id("frequentist_unrestricted_Logistic").is_selected()
 
     h.wait_until(h.Text("Data").exists)
     h.click(("Data"))

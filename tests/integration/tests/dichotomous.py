@@ -8,12 +8,7 @@ def test_dichotomous(driver, root_url, can_execute: bool):
     h.go_to(root_url)
     h.click("Create a new BMDS analysis")
 
-    # h.click(("Settings"))
-
-    driver.find_element_by_xpath("//input[@id='frequentist_unrestricted_Logistic']").click()
-    assert driver.find_element_by_xpath(
-        "//input[@id='frequentist_unrestricted_Logistic']"
-    ).is_selected()
+    assert "/analysis/" in driver.current_url
 
     h.wait_until(h.Text("Data").exists)
     h.click(("Data"))
@@ -26,23 +21,20 @@ def test_dichotomous(driver, root_url, can_execute: bool):
     h.wait_until(h.Text("Load an example dataset").exists)
     h.click(("Load an example dataset"))
 
+    h.click(("Settings"))
+
+    # click model
+    driver.find_element_by_id("frequentist_unrestricted_Logistic").click()
+    assert driver.find_element_by_id("frequentist_unrestricted_Logistic").is_selected()
+
     h.wait_until(h.Text("Save Analysis").exists)
     h.click(("Save Analysis"))
 
     h.wait_until(h.Text("Run Analysis").exists)
     h.click(("Run Analysis"))
-
     h.click(("Output"))
 
     assert "/output" in driver.current_url
-
-    # click main
-    # update settings and select a model frequentist modal and a bayesian model
-    # create an option set
-
-    # create new dataset; load default
-
-    # click logic tab; confirm content exists
 
     if can_execute:
         pass

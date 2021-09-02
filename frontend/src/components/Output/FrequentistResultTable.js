@@ -148,7 +148,7 @@ class FrequentistRow extends Component {
                 className={rowClass}>
                 <td>
                     <a
-                        id={data.model.name}
+                        id={`freq-result-${data.index}`}
                         href="#"
                         onClick={e => {
                             e.preventDefault();

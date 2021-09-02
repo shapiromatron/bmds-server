@@ -46,6 +46,7 @@ class BayesianResultTable extends Component {
                             <tr key={index}>
                                 <td>
                                     <a
+                                        id={`bayesian-result-${index}`}
                                         href="#"
                                         onClick={e => {
                                             e.preventDefault();
@@ -69,6 +70,7 @@ class BayesianResultTable extends Component {
                         <tr className="table-warning">
                             <td>
                                 <a
+                                    id={`bayesian-result-ma`}
                                     href="#"
                                     onClick={e => {
                                         e.preventDefault();

@@ -21,7 +21,7 @@ class BayesianResultTable extends Component {
             ma = selectedBayesian.model_average;
 
         return (
-            <table className="table table-sm">
+            <table id="bayesian-model-result" className="table table-sm">
                 <colgroup>
                     {_.map(colWidths).map((value, idx) => (
                         <col key={idx} width={`${value}%`}></col>
@@ -46,6 +46,7 @@ class BayesianResultTable extends Component {
                             <tr key={index}>
                                 <td>
                                     <a
+                                        id={`bayesian-result-${index}`}
                                         href="#"
                                         onClick={e => {
                                             e.preventDefault();
@@ -69,6 +70,7 @@ class BayesianResultTable extends Component {
                         <tr className="table-warning">
                             <td>
                                 <a
+                                    id={`bayesian-result-ma`}
                                     href="#"
                                     onClick={e => {
                                         e.preventDefault();

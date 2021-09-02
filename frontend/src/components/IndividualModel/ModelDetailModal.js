@@ -161,6 +161,7 @@ class ModelDetailModal extends Component {
                 <Modal.Header>
                     <Modal.Title id="contained-modal-title-vcenter">{name}</Modal.Title>
                     <button
+                        id="close-modal"
                         className="btn btn-danger"
                         style={{float: "right"}}
                         onClick={() => outputStore.closeModal()}>

@@ -10,7 +10,7 @@ class InfoTable extends Component {
             model = outputStore.modalModel,
             dataset = outputStore.selectedDataset;
         return (
-            <table className="table table-bordered table-sm">
+            <table id="info-table" className="table table-bordered table-sm">
                 <thead>
                     <tr className="bg-custom">
                         <th colSpan="2" className="text-center">

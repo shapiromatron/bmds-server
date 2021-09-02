@@ -93,12 +93,14 @@ class AnalysisForm extends Component {
                         {mainStore.isValid && !mainStore.isExecuting ? (
                             <div className="card-footer btn-toolbar btn-group">
                                 <button
+                                    id="saveAnalysis"
                                     type="button"
                                     className="btn btn-primary mr-2"
                                     onClick={() => mainStore.saveAnalysis()}>
                                     Save Analysis
                                 </button>
                                 <button
+                                    id="runAnalysis"
                                     type="button"
                                     className="btn btn-primary"
                                     disabled={!mainStore.isReadyToExecute}

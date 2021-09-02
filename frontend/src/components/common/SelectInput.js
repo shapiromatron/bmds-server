@@ -17,6 +17,7 @@ class SelectInput extends Component {
                 {label ? <label htmlFor={this._id}>{label}</label> : null}
                 <select
                     id={this._id}
+                    name="dataset-type"
                     className="form-control"
                     onChange={e => onChange(e.target.value)}
                     value={value}>

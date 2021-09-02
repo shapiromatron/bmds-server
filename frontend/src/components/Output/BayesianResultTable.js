@@ -21,7 +21,7 @@ class BayesianResultTable extends Component {
             ma = selectedBayesian.model_average;
 
         return (
-            <table className="table table-sm">
+            <table className="table table-sm" id="bayesian-model-result">
                 <colgroup>
                     {_.map(colWidths).map((value, idx) => (
                         <col key={idx} width={`${value}%`}></col>

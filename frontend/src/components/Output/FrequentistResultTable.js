@@ -148,6 +148,7 @@ class FrequentistRow extends Component {
                 className={rowClass}>
                 <td>
                     <a
+                        id={data.model.name}
                         href="#"
                         onClick={e => {
                             e.preventDefault();
@@ -228,7 +229,7 @@ class FrequentistResultTable extends Component {
             footnotes = getFootnotes(recommendedModelIndex, selectedFrequentist.selected);
 
         return (
-            <table className="table table-sm">
+            <table className="table table-sm" id="frequentist-model-result">
                 <colgroup>
                     {_.map(colWidths).map((value, idx) => (
                         <col key={idx} width={`${value}%`}></col>

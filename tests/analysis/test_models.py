@@ -1,18 +1,13 @@
-import os
-import platform
-
 import pytest
+from run3 import RunBmds3
 
 from bmds_server.analysis.models import Analysis
 from bmds_server.analysis.reporting.docx import build_docx
 from bmds_server.analysis.reporting.excel import build_df
 
-# TODO remove this restriction
-should_run = platform.system() != "Windows" and os.getenv("CI") is None
-
 
 @pytest.mark.django_db()
-@pytest.mark.skipif(not should_run, reason="dlls only exist for Mac")
+@pytest.mark.skipif(not RunBmds3.should_run, reason=RunBmds3.skip_reason)
 class TestBmds3Execution:
     def test_c(self, bmds3_complete_continuous):
         analysis = Analysis.objects.create(inputs=bmds3_complete_continuous)

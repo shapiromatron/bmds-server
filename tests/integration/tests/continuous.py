@@ -7,11 +7,11 @@ def test_continuous_individual(driver, root_url, can_execute: bool):
 
     # create a new analysis
     h.click("Create a new BMDS analysis")
-    h.wait_until(h.Text("Model Class").exists)
+    h.wait_until(h.Text("Model Type").exists)
     assert "/analysis/" in driver.current_url
 
     # set main settings pages
-    h.select("Model Class", "Continuous")
+    h.select("Model Type", "Continuous")
 
     # load example dataset
     h.wait_until(h.Text("Data").exists)
@@ -62,11 +62,11 @@ def test_continuous_summary(driver, root_url, can_execute: bool):
 
     # create a new analysis
     h.click("Create a new BMDS analysis")
-    h.wait_until(h.Text("Model Class").exists)
+    h.wait_until(h.Text("Model Type").exists)
     assert "/analysis/" in driver.current_url
 
     # set main settings pages
-    h.select("Model Class", "Continuous")
+    h.select("Model Type", "Continuous")
 
     # load example dataset
     h.wait_until(h.Text("Data").exists)

@@ -155,7 +155,7 @@ class TestExecute:
         bmd = response.data["outputs"]["outputs"][0]["frequentist"]["models"][0]["results"]["bmd"]
         assert response.data["is_finished"] is True
         assert response.data["has_errors"] is False
-        assert bmd == pytest.approsx(164.3, rel=0.05)
+        assert bmd == pytest.approx(164.3, rel=0.05)
 
     def test_reset_execute(self, bmds3_complete_dichotomous):
         client = APIClient()

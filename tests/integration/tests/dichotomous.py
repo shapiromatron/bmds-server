@@ -7,11 +7,11 @@ def test_dichotomous(driver, root_url, can_execute: bool):
 
     # create a new analysis
     h.click("Create a new BMDS analysis")
-    h.wait_until(h.Text("Model Class").exists)
+    h.wait_until(h.Text("Model Type").exists)
     assert "/analysis/" in driver.current_url
 
     # set main settings pages
-    h.select("Model Class", "Dichotomous")
+    h.select("Model Type", "Dichotomous")
 
     # select a bayesian
     h.click(h.S("#bayesian-Logistic"))

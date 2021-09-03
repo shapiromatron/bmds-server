@@ -3,6 +3,7 @@ import json
 import pytest
 from bmds.bmds3.recommender import RecommenderSettings
 from rest_framework.test import APIClient
+from run3 import RunBmds3
 
 from bmds_server.analysis.models import Analysis
 
@@ -135,6 +136,7 @@ class TestPatchInputs:
         assert response.json()["inputs"] == payload["data"]
 
 
+@pytest.mark.skipif(not RunBmds3.should_run, reason=RunBmds3.skip_reason)
 @pytest.mark.django_db
 class TestExecute:
     def test_execute(self, bmds3_complete_dichotomous):
@@ -177,6 +179,7 @@ class TestExecute:
         assert response.data["outputs"] == {}
 
 
+@pytest.mark.skipif(not RunBmds3.should_run, reason=RunBmds3.skip_reason)
 @pytest.mark.django_db
 class TestModelSelection:
     def test_model_selection(self, bmds3_complete_dichotomous):

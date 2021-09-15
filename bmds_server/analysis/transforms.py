@@ -17,7 +17,6 @@ class PriorEnum(str, Enum):
     bayesian = "bayesian"
 
 
-# TODO - remove these maps; use contants from bmds
 bmd3_prior_map = {
     PriorEnum.frequentist_restricted: PriorClass.frequentist_restricted,
     PriorEnum.frequentist_unrestricted: PriorClass.frequentist_unrestricted,
@@ -83,7 +82,7 @@ def remap_bayesian_exponential(models: List[Dict]) -> List[Dict]:
     for i, model in enumerate(models):
         if model["model"] == bmds.constants.M_Exponential:
             models = deepcopy(models)
-            weight = model["prior_weight"] / 2  # TODO - revisit when CMA is live - is this right?
+            weight = model["prior_weight"] / 2  # TODO - revisit when CMA is live
             models[i : i + 1] = (
                 dict(model=bmds.constants.M_ExponentialM3, prior_weight=weight),
                 dict(model=bmds.constants.M_ExponentialM5, prior_weight=weight),

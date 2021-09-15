@@ -4,97 +4,108 @@ import helium as h
 def test_continuous_individual(driver, root_url, can_execute: bool):
     h.set_driver(driver)
     h.go_to(root_url)
+
+    # create a new analysis
     h.click("Create a new BMDS analysis")
-    h.wait_until(lambda: h.Text("Model Class").exists())
+    h.wait_until(h.Text("Model Type").exists)
     assert "/analysis/" in driver.current_url
 
-    dataset_selector = driver.find_element_by_xpath("//select[@name='dataset-type']")
-    dataset_selector.send_keys("Continuous")
+    # set main settings pages
+    h.select("Model Type", "Continuous")
 
+    # load example dataset
     h.wait_until(h.Text("Data").exists)
-    h.click(("Data"))
+    h.click("Data")
     assert "/data" in driver.current_url
 
-    datasetType_selector = driver.find_element_by_xpath("//select[@id='selectModel']")
-    datasetType_selector.send_keys("Individual")
-
     h.wait_until(h.Text("Create").exists)
-    h.click(("Create"))
+    h.select("New dataset", "Individual")
+    h.click("Create")
 
     h.wait_until(h.Text("Load an example dataset").exists)
-    h.click(("Load an example dataset"))
+    h.click("Load an example dataset")
 
-    h.click("Logic")
-    decision_table_row = driver.find_elements_by_xpath("//*[@id='decision-logic']/tbody/tr")
-    assert len(decision_table_row) == 4
-
-    decision_table_row = driver.find_elements_by_xpath("//*[@id='rule-table']/tbody/tr")
-    assert len(decision_table_row) == 22
-
-    h.click(("Settings"))
-
+    # save
+    h.click("Settings")
     h.wait_until(h.Text("Save Analysis").exists)
-    h.click(("Save Analysis"))
+    h.click("Save Analysis")
 
+    # only proceed if we can execute
     if can_execute:
+        # execution works
         h.click("Run Analysis")
         h.wait_until(lambda: not h.Text("Executing, please wait...").exists())
+
+        # outputs are available
         h.click("Output")
         assert "/output" in driver.current_url
+        assert len(h.find_all(h.S("#frequentist-model-result tbody tr"))) == 10
 
-    if can_execute:
-        row = driver.find_elements_by_xpath("//*[@id='frequentist-model-result']/tbody/tr")
-        assert len(row) == 10
+        # display frequentist modal
+        h.click(h.S("#freq-result-2"))
+        h.wait_until(h.S(".modal-body").exists)
+        assert len(h.find_all(h.S("#info-table tbody tr"))) == 3
+        h.click(h.S("#close-modal"))
 
-        driver.find_element_by_id("Hill").click()
-        row = driver.find_elements_by_xpath("//*[@id='info-table']/tbody/tr")
+    # check logic visibility
+    h.click("Logic")
+    assert len(h.find_all(h.S("#decision-logic tbody tr"))) == 4
+    assert len(h.find_all(h.S("#rule-table tbody tr"))) == 22
 
+    # done!
     h.go_to(root_url)
 
 
 def test_continuous_summary(driver, root_url, can_execute: bool):
     h.set_driver(driver)
     h.go_to(root_url)
+
+    # create a new analysis
     h.click("Create a new BMDS analysis")
-    h.wait_until(lambda: h.Text("Model Class").exists())
+    h.wait_until(h.Text("Model Type").exists)
     assert "/analysis/" in driver.current_url
 
-    dataset_selector = driver.find_element_by_xpath("//select[@name='dataset-type']")
-    dataset_selector.send_keys("Continuous")
+    # set main settings pages
+    h.select("Model Type", "Continuous")
 
+    # load example dataset
     h.wait_until(h.Text("Data").exists)
-    h.click(("Data"))
+    h.click("Data")
     assert "/data" in driver.current_url
 
     h.wait_until(h.Text("Create").exists)
-    h.click(("Create"))
+    h.select("New dataset", "Summarized")
+    h.click("Create")
 
     h.wait_until(h.Text("Load an example dataset").exists)
-    h.click(("Load an example dataset"))
+    h.click("Load an example dataset")
 
-    h.click("Logic")
-    decision_table_row = driver.find_elements_by_xpath("//*[@id='decision-logic']/tbody/tr")
-    assert len(decision_table_row) == 4
-
-    decision_table_row = driver.find_elements_by_xpath("//*[@id='rule-table']/tbody/tr")
-    assert len(decision_table_row) == 22
-
-    h.click(("Settings"))
-
+    # save
+    h.click("Settings")
     h.wait_until(h.Text("Save Analysis").exists)
-    h.click(("Save Analysis"))
+    h.click("Save Analysis")
 
+    # only proceed if we can execute
     if can_execute:
+        # execution works
         h.click("Run Analysis")
         h.wait_until(lambda: not h.Text("Executing, please wait...").exists())
+
+        # outputs are available
         h.click("Output")
         assert "/output" in driver.current_url
+        assert len(h.find_all(h.S("#frequentist-model-result tbody tr"))) == 10
 
-    if can_execute:
-        row = driver.find_elements_by_xpath("//*[@id='frequentist-model-result']/tbody/tr")
-        assert len(row) == 10
-        driver.find_element_by_id("Hill").click()
-        row = driver.find_elements_by_xpath("//*[@id='info-table']/tbody/tr")
-        assert len(row) == 3
+        # display frequentist modal
+        h.click(h.S("#freq-result-2"))
+        h.wait_until(h.S(".modal-body").exists)
+        assert len(h.find_all(h.S("#info-table tbody tr"))) == 3
+        h.click(h.S("#close-modal"))
 
+    # check logic visibility
+    h.click("Logic")
+    assert len(h.find_all(h.S("#decision-logic tbody tr"))) == 4
+    assert len(h.find_all(h.S("#rule-table tbody tr"))) == 22
+
+    # done!
     h.go_to(root_url)

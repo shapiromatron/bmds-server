@@ -32,6 +32,7 @@ class OutputStore {
 
     @observable showBMDLine = false;
 
+    @observable zoomedRange = {};
     @observable showInlineNotes = false;
     @action.bound toggleInlineNotes() {
         this.showInlineNotes = !this.showInlineNotes;
@@ -203,12 +204,17 @@ class OutputStore {
     }
     @computed get drFrequentistPlotLayout() {
         // the main frequentist plot shown on the output page
-        return getDrLayout(
+        let layout = getDrLayout(
             this.selectedDataset,
             this.drModelSelected,
             this.drModelModal,
             this.drModelHover
         );
+        if (!_.isEmpty(this.zoomedRange) && this.zoomedRange.xaxis[0] != undefined) {
+            layout.xaxis.range = this.zoomedRange.xaxis;
+            layout.yaxis.range = this.zoomedRange.yaxis;
+        }
+        return layout;
     }
     @computed get drBayesianPlotData() {
         const bayesian_plot_data = [getDrDatasetPlotData(this.selectedDataset)],
@@ -315,6 +321,11 @@ class OutputStore {
         } else {
             return dataset.metadata.name;
         }
+    }
+
+    @action.bound setNewAxis(e) {
+        this.zoomedRange["xaxis"] = [e["xaxis.range[0]"], e["xaxis.range[1]"]];
+        this.zoomedRange["yaxis"] = [e["yaxis.range[0]"], e["yaxis.range[1]"]];
     }
 }
 

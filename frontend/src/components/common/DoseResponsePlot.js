@@ -9,7 +9,7 @@ import {getConfig} from "../../constants/plotting";
 @observer
 class DoseResponsePlot extends Component {
     render() {
-        const {layout, data} = this.props;
+        const {layout, data, store} = this.props;
 
         return (
             <Plot
@@ -17,6 +17,7 @@ class DoseResponsePlot extends Component {
                 data={toJS(data)}
                 config={getConfig()}
                 style={{width: "100%"}}
+                onRelayout={e => store.setNewAxis(e)}
                 useResizeHandler={true}
             />
         );
@@ -25,5 +26,6 @@ class DoseResponsePlot extends Component {
 DoseResponsePlot.propTypes = {
     layout: PropTypes.object.isRequired,
     data: PropTypes.array.isRequired,
+    store: PropTypes.object,
 };
 export default DoseResponsePlot;

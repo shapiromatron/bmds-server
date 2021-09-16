@@ -67,12 +67,17 @@ export const getDrLayout = function(dataset, selected, modal, hover) {
         layout.title.text = dataset.metadata.name;
         layout.xaxis.title.text = xlabel;
         layout.yaxis.title.text = ylabel;
-
         const xmin = _.min(dataset.doses) || 0,
             xmax = _.max(dataset.doses) || 0,
             response = getResponse(dataset),
-            ymin = _.min(response) || 0,
-            ymax = _.max(response) || 0,
+            ymin =
+                dataset.dtype == Dtype.CONTINUOUS
+                    ? _.min(response) - _.max(dataset.stdevs)
+                    : _.min(response) || 0,
+            ymax =
+                dataset.dtype == Dtype.CONTINUOUS
+                    ? _.max(response) + _.max(dataset.stdevs)
+                    : _.max(response) || 0,
             xbuff = Math.abs(xmax - xmin) * 0.05,
             ybuff = Math.abs(ymax - ymin) * 0.05;
 
@@ -82,6 +87,13 @@ export const getDrLayout = function(dataset, selected, modal, hover) {
                 ? [0, 1]
                 : [ymin == 0 ? -ybuff : ymin - ybuff, ymax == 0 ? ybuff : ymax + ybuff];
 
+        let indx = response.indexOf(_.max(response));
+        let dose_index = dataset.doses[indx];
+
+        if (dose_index < (_.max(dataset.doses) - _.min(dataset.doses)) / 2) {
+            layout.legend.xanchor = "right";
+            layout.legend.x = 1;
+        }
         return layout;
     },
     getCdfLayout = function(dataset) {

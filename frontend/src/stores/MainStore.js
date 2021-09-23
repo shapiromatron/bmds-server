@@ -91,12 +91,12 @@ class MainStore {
             });
     }
 
-    @observable isReadyToExecute = false;
+    @observable analysisSavedAndValidated = false;
     @observable isExecuting = false;
 
     @action.bound
     async executeAnalysis() {
-        if (!this.isReadyToExecute) {
+        if (!this.analysisSavedAndValidated) {
             // don't execute if we're not ready
             return;
         }
@@ -216,7 +216,7 @@ class MainStore {
         }
 
         this.isExecuting = data.is_executing;
-        this.isReadyToExecute = data.inputs_valid;
+        this.analysisSavedAndValidated = data.inputs_valid;
         if (data.outputs) {
             this.executionOutputs = data.outputs.outputs;
         }

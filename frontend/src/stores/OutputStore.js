@@ -32,6 +32,7 @@ class OutputStore {
 
     @observable showBMDLine = false;
 
+    @observable userPlotSettings = {};
     @observable showInlineNotes = false;
     @action.bound toggleInlineNotes() {
         this.showInlineNotes = !this.showInlineNotes;
@@ -39,6 +40,7 @@ class OutputStore {
 
     @action.bound setSelectedOutputIndex(output_id) {
         this.selectedOutputIndex = output_id;
+        this.userPlotSettings = {};
     }
 
     @computed get globalErrorMessage() {
@@ -203,12 +205,19 @@ class OutputStore {
     }
     @computed get drFrequentistPlotLayout() {
         // the main frequentist plot shown on the output page
-        return getDrLayout(
+        let layout = getDrLayout(
             this.selectedDataset,
             this.drModelSelected,
             this.drModelModal,
             this.drModelHover
         );
+        if (this.userPlotSettings && this.userPlotSettings.xaxis) {
+            layout.xaxis.range = this.userPlotSettings.xaxis;
+        }
+        if (this.userPlotSettings && this.userPlotSettings.yaxis) {
+            layout.yaxis.range = this.userPlotSettings.yaxis;
+        }
+        return layout;
     }
     @computed get drBayesianPlotData() {
         const bayesian_plot_data = [getDrDatasetPlotData(this.selectedDataset)],
@@ -314,6 +323,22 @@ class OutputStore {
             return `${dataset.metadata.name}: Option Set ${output.metadata.option_index + 1}`;
         } else {
             return dataset.metadata.name;
+        }
+    }
+
+    @action.bound saveUserPlotSettings(e) {
+        // set user configurable plot settings
+        if (_.has(e, "xaxis.range[0]") && _.has(e, "xaxis.range[1]")) {
+            this.userPlotSettings["xaxis"] = [e["xaxis.range[0]"], e["xaxis.range[1]"]];
+        }
+        if (_.has(e, "yaxis.range[0]") && _.has(e, "yaxis.range[1]")) {
+            this.userPlotSettings["yaxis"] = [e["yaxis.range[0]"], e["yaxis.range[1]"]];
+        }
+        if (_.has(e, "yaxis.autorange")) {
+            this.userPlotSettings["yaxis"] = undefined;
+        }
+        if (_.has(e, "xaxis.autorange")) {
+            this.userPlotSettings["xaxis"] = undefined;
         }
     }
 }

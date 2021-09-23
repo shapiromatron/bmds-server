@@ -1,5 +1,4 @@
 import _ from "lodash";
-
 import {Dtype} from "./dataConstants";
 import {continuousErrorBars, dichotomousErrorBars} from "../utils/errorBars";
 
@@ -67,21 +66,38 @@ export const getDrLayout = function(dataset, selected, modal, hover) {
         layout.title.text = dataset.metadata.name;
         layout.xaxis.title.text = xlabel;
         layout.yaxis.title.text = ylabel;
-
         const xmin = _.min(dataset.doses) || 0,
             xmax = _.max(dataset.doses) || 0,
             response = getResponse(dataset),
-            ymin = _.min(response) || 0,
-            ymax = _.max(response) || 0,
+            ymin =
+                dataset.dtype == Dtype.CONTINUOUS
+                    ? _.min(response) - _.max(continuousErrorBars(dataset).uppers)
+                    : _.min(response) || 0,
+            ymax =
+                dataset.dtype == Dtype.CONTINUOUS
+                    ? _.max(response) + _.max(continuousErrorBars(dataset).uppers)
+                    : _.max(response) || 0,
             xbuff = Math.abs(xmax - xmin) * 0.05,
             ybuff = Math.abs(ymax - ymin) * 0.05;
 
         layout.xaxis.range = [xmin == 0 ? -xbuff : xmin - xbuff, xmax == 0 ? xbuff : xmax + xbuff];
         layout.yaxis.range =
             dataset.dtype == Dtype.DICHOTOMOUS
-                ? [0, 1]
+                ? [-0.05, 1.05]
                 : [ymin == 0 ? -ybuff : ymin - ybuff, ymax == 0 ? ybuff : ymax + ybuff];
 
+        // determine whether to position legend to the left or right; auto doesn't work
+        const maxResponseIndex = response.indexOf(_.max(response)),
+            maxResponseDose = dataset.doses[maxResponseIndex],
+            doseRange = _.max(dataset.doses) - _.min(dataset.doses);
+
+        if (maxResponseDose < doseRange / 2) {
+            layout.legend.xanchor = "right";
+            layout.legend.x = 1;
+        } else {
+            layout.legend.xanchor = "left";
+            layout.legend.x = 0.05;
+        }
         return layout;
     },
     getCdfLayout = function(dataset) {

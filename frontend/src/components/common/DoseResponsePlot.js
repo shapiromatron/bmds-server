@@ -17,7 +17,7 @@ class DoseResponsePlot extends Component {
                 data={toJS(data)}
                 config={getConfig()}
                 style={{width: "100%"}}
-                onRelayout={e => store.setNewAxis(e)}
+                onRelayout={e => store.saveUserPlotSettings(e)}
                 useResizeHandler={true}
             />
         );

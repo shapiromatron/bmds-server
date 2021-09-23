@@ -153,7 +153,6 @@ class ModelDetailModal extends Component {
 
         return (
             <Modal
-                id="contained-modal"
                 show={outputStore.showModelModal}
                 onHide={() => outputStore.closeModal()}
                 size="xl"

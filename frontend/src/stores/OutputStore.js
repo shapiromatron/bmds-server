@@ -32,7 +32,7 @@ class OutputStore {
 
     @observable showBMDLine = false;
 
-    @observable zoomedRange = {};
+    @observable userPlotSettings = {};
     @observable showInlineNotes = false;
     @action.bound toggleInlineNotes() {
         this.showInlineNotes = !this.showInlineNotes;
@@ -40,6 +40,7 @@ class OutputStore {
 
     @action.bound setSelectedOutputIndex(output_id) {
         this.selectedOutputIndex = output_id;
+        this.userPlotSettings = {};
     }
 
     @computed get globalErrorMessage() {
@@ -210,9 +211,11 @@ class OutputStore {
             this.drModelModal,
             this.drModelHover
         );
-        if (!_.isEmpty(this.zoomedRange) && this.zoomedRange.xaxis[0] != undefined) {
-            layout.xaxis.range = this.zoomedRange.xaxis;
-            layout.yaxis.range = this.zoomedRange.yaxis;
+        if (this.userPlotSettings && this.userPlotSettings.xaxis) {
+            layout.xaxis.range = this.userPlotSettings.xaxis;
+        }
+        if (this.userPlotSettings && this.userPlotSettings.yaxis) {
+            layout.yaxis.range = this.userPlotSettings.yaxis;
         }
         return layout;
     }
@@ -323,9 +326,20 @@ class OutputStore {
         }
     }
 
-    @action.bound setNewAxis(e) {
-        this.zoomedRange["xaxis"] = [e["xaxis.range[0]"], e["xaxis.range[1]"]];
-        this.zoomedRange["yaxis"] = [e["yaxis.range[0]"], e["yaxis.range[1]"]];
+    @action.bound saveUserPlotSettings(e) {
+        // set user configurable plot settings
+        if (_.has(e, "xaxis.range[0]") && _.has(e, "xaxis.range[1]")) {
+            this.userPlotSettings["xaxis"] = [e["xaxis.range[0]"], e["xaxis.range[1]"]];
+        }
+        if (_.has(e, "yaxis.range[0]") && _.has(e, "yaxis.range[1]")) {
+            this.userPlotSettings["yaxis"] = [e["yaxis.range[0]"], e["yaxis.range[1]"]];
+        }
+        if (_.has(e, "yaxis.autorange")) {
+            this.userPlotSettings["yaxis"] = undefined;
+        }
+        if (_.has(e, "xaxis.autorange")) {
+            this.userPlotSettings["xaxis"] = undefined;
+        }
     }
 }
 

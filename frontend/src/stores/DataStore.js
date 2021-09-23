@@ -284,8 +284,8 @@ class DataStore {
         this.datasets[index] = dataset;
         this.toggleDatasetModal();
     }
-    @action setNewAxis(e) {
-        this.rootStore.outputStore.setNewAxis(e);
+    @action saveUserPlotSettings(e) {
+        this.rootStore.outputStore.saveUserPlotSettings(e);
     }
     // *** END TABULAR MODAL DATASET ***
 }

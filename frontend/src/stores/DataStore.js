@@ -284,9 +284,6 @@ class DataStore {
         this.datasets[index] = dataset;
         this.toggleDatasetModal();
     }
-    @action saveUserPlotSettings(e) {
-        this.rootStore.outputStore.saveUserPlotSettings(e);
-    }
     // *** END TABULAR MODAL DATASET ***
 }
 

@@ -32,7 +32,6 @@ class Data extends Component {
                     <div className="col-md-4">
                         {dataStore.hasSelectedDataset ? (
                             <DoseResponsePlot
-                                store={dataStore}
                                 layout={dataStore.drPlotLayout}
                                 data={dataStore.drPlotData}
                             />

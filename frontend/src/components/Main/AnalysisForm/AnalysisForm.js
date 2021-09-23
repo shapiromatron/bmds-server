@@ -6,6 +6,23 @@ import {modelTypes} from "../../../constants/mainConstants";
 import Spinner from "../../common/Spinner";
 import SelectInput from "../../common/SelectInput";
 
+@observer
+class RunChecklist extends Component {
+    render() {
+        const {complete, message} = this.props,
+            color = complete ? "text-success" : "text-danger";
+        return (
+            <p>
+                <i className={`fa fa-check-circle fa-lg ${color}`}></i>&ensp;{message}
+            </p>
+        );
+    }
+}
+RunChecklist.propTypes = {
+    complete: PropTypes.bool.isRequired,
+    message: PropTypes.string.isRequired,
+};
+
 @inject("mainStore")
 @observer
 class AnalysisForm extends Component {
@@ -61,32 +78,24 @@ class AnalysisForm extends Component {
                         ) : (
                             <div className="card-body">
                                 <p>
-                                    <b>Steps required to save and/or execute:</b>
+                                    <b>Steps required to run the analysis:</b>
                                 </p>
-                                <p>
-                                    {mainStore.hasAtLeastOneModelSelected ? (
-                                        <i className="fa fa-check-circle fa-lg text-success"></i>
-                                    ) : (
-                                        <i className="fa fa-times-circle fa-lg text-danger"></i>
-                                    )}
-                                    &nbsp; At least one model is selected
-                                </p>
-                                <p>
-                                    {mainStore.hasAtLeastOneDatasetSelected ? (
-                                        <i className="fa fa-check-circle fa-lg text-success"></i>
-                                    ) : (
-                                        <i className="fa fa-times-circle fa-lg text-danger"></i>
-                                    )}
-                                    &nbsp; At least one dataset is selected
-                                </p>
-                                <p>
-                                    {mainStore.hasAtLeastOneOptionSelected ? (
-                                        <i className="fa fa-check-circle fa-lg text-success"></i>
-                                    ) : (
-                                        <i className="fa fa-times-circle fa-lg text-danger"></i>
-                                    )}
-                                    &nbsp; At least one option is selected
-                                </p>
+                                <RunChecklist
+                                    complete={mainStore.hasAtLeastOneModelSelected}
+                                    message="At least one model is selected"
+                                />
+                                <RunChecklist
+                                    complete={mainStore.hasAtLeastOneDatasetSelected}
+                                    message="At least one dataset is selected"
+                                />
+                                <RunChecklist
+                                    complete={mainStore.hasAtLeastOneOptionSelected}
+                                    message="At least one option is selected"
+                                />
+                                <RunChecklist
+                                    complete={mainStore.analysisSavedAndValidated}
+                                    message="The analysis has been saved"
+                                />
                             </div>
                         )}
 
@@ -101,7 +110,7 @@ class AnalysisForm extends Component {
                                 <button
                                     type="button"
                                     className="btn btn-primary"
-                                    disabled={!mainStore.isReadyToExecute}
+                                    disabled={!mainStore.analysisSavedAndValidated}
                                     onClick={() => mainStore.executeAnalysis()}>
                                     Run Analysis
                                 </button>

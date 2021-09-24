@@ -53,9 +53,6 @@ docs: ## generate Sphinx HTML documentation, including API docs
 	$(MAKE) -C docs html
 	$(BROWSER) docs/_build/html/index.html
 
-servedocs: docs ## compile the docs watching for changes
-	watchmedo shell-command -p '*.rst' -c '$(MAKE) -C docs html' -R -D .
-
 lint: lint-py lint-js  ## Check for javascript/python for linting issues
 
 format: format-py format-js  ## Modify javascript/python code

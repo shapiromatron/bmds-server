@@ -83,15 +83,20 @@ export const getDrLayout = function(dataset, selected, modal, hover) {
         layout.xaxis.range = [xmin == 0 ? -xbuff : xmin - xbuff, xmax == 0 ? xbuff : xmax + xbuff];
         layout.yaxis.range =
             dataset.dtype == Dtype.DICHOTOMOUS
-                ? [0, 1]
+                ? [-0.05, 1.05]
                 : [ymin == 0 ? -ybuff : ymin - ybuff, ymax == 0 ? ybuff : ymax + ybuff];
 
-        let indx = response.indexOf(_.max(response));
-        let dose_index = dataset.doses[indx];
+        // determine whether to position legend to the left or right; auto doesn't work
+        const maxResponseIndex = response.indexOf(_.max(response)),
+            maxResponseDose = dataset.doses[maxResponseIndex],
+            doseRange = _.max(dataset.doses) - _.min(dataset.doses);
 
-        if (dose_index < (_.max(dataset.doses) - _.min(dataset.doses)) / 2) {
+        if (maxResponseDose < doseRange / 2) {
             layout.legend.xanchor = "right";
             layout.legend.x = 1;
+        } else {
+            layout.legend.xanchor = "left";
+            layout.legend.x = 0.05;
         }
         return layout;
     },

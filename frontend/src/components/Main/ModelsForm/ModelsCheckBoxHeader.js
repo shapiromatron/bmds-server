@@ -62,7 +62,14 @@ const ModelsCheckBoxHeader = observer(props => {
                 <SelectAllComponent store={store} type={"frequentist_restricted"} />
                 <SelectAllComponent store={store} type={"frequentist_unrestricted"} />
                 {isNestedDichotomous ? null : (
-                    <SelectAllComponent store={store} type={"bayesian"} disabled={isContinuous} />
+                    <>
+                        <SelectAllComponent
+                            store={store}
+                            type={"bayesian"}
+                            disabled={isContinuous}
+                        />
+                        <th>Prior Weights</th>
+                    </>
                 )}
                 {isNestedDichotomous ? null : <th>Prior Weights</th>}
             </tr>

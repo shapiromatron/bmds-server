@@ -6,6 +6,9 @@ import {
     dichotomousBmrOptions,
     continuousBmrOptions,
     distTypeOptions,
+    lscOptions,
+    backgroundOptions,
+    bootstrapSeedOptions,
 } from "../../../constants/optionsConstants";
 
 const OptionsForm = props => {
@@ -29,7 +32,8 @@ const OptionsForm = props => {
                     </select>
                 </td>
             ) : null}
-            {props.modelType == mc.MODEL_DICHOTOMOUS ? (
+            {props.modelType == mc.MODEL_DICHOTOMOUS ||
+            props.modelType == mc.MODEL_NESTED_DICHOTOMOUS ? (
                 <td>
                     <select
                         className="form-control"
@@ -101,6 +105,76 @@ const OptionsForm = props => {
                         })}
                     </select>
                 </td>
+            ) : null}
+            {props.modelType === mc.MODEL_NESTED_DICHOTOMOUS ? (
+                <>
+                    <td>
+                        <select
+                            className="form-control"
+                            value={props.options.lsc}
+                            onChange={e =>
+                                props.saveOptions("lsc", parseInt(e.target.value), props.idx)
+                            }>
+                            {lscOptions.map(d => {
+                                return (
+                                    <option key={d.value} value={d.value}>
+                                        {d.label}
+                                    </option>
+                                );
+                            })}
+                        </select>
+                    </td>
+                    <td>
+                        <select
+                            className="form-control"
+                            value={props.options.background}
+                            onChange={e =>
+                                props.saveOptions("background", parseInt(e.target.value), props.idx)
+                            }>
+                            {backgroundOptions.map(d => {
+                                return (
+                                    <option key={d.value} value={d.value}>
+                                        {d.label}
+                                    </option>
+                                );
+                            })}
+                        </select>
+                    </td>
+                    <td>
+                        <input
+                            type="number"
+                            className="form-control text-center"
+                            value={props.options.bootstrap_iterations}
+                            onChange={e =>
+                                props.saveOptions(
+                                    "bootstrap_iterations",
+                                    parseFloat(e.target.value),
+                                    props.idx
+                                )
+                            }
+                        />
+                    </td>
+                    <td>
+                        <select
+                            className="form-control"
+                            value={props.options.bootstrap_seed}
+                            onChange={e =>
+                                props.saveOptions(
+                                    "bootstrap_seed",
+                                    parseInt(e.target.value),
+                                    props.idx
+                                )
+                            }>
+                            {bootstrapSeedOptions.map(d => {
+                                return (
+                                    <option key={d.value} value={d.value}>
+                                        {d.label}
+                                    </option>
+                                );
+                            })}
+                        </select>
+                    </td>
+                </>
             ) : null}
             <td>
                 <button

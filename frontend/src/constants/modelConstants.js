@@ -11,6 +11,7 @@ const modelsList = {
             "Quantal Linear",
             "Weibull",
         ],
+        ND: ["NestedLogistic", "NCTR"],
     },
     models = {
         C: {
@@ -26,6 +27,10 @@ const modelsList = {
                 "Weibull",
             ],
             frequentist_unrestricted: ["Logistic", "LogProbit", "Probit"],
+        },
+        ND: {
+            frequentist_restricted: ["Nested Logistic"],
+            frequentist_unrestricted: [],
         },
     },
     allModelOptions = {
@@ -45,6 +50,10 @@ const modelsList = {
             ],
             frequentist_unrestricted: modelsList.D,
             bayesian: modelsList.D,
+        },
+        ND: {
+            frequentist_restricted: ["Nested Logistic", "NCTR"],
+            frequentist_unrestricted: ["Nested Logistic", "NCTR"],
         },
     };
 

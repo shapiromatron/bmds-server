@@ -11,6 +11,15 @@ export const options = {
             bmr_value: 0.1,
             confidence_level: 0.95,
         },
+        ND: {
+            bmr_type: 1,
+            bmr_value: 0.1,
+            confidence_level: 0.95,
+            lsc: 1,
+            background: 1,
+            bootstrap_iterations: 1,
+            bootstrap_seed: 0,
+        },
     },
     dichotomousBmrOptions = [
         {value: 0, label: "Added Risk"},
@@ -28,4 +37,13 @@ export const options = {
         {value: 1, label: "Normal + Constant"},
         {value: 2, label: "Normal + Non-constant"},
         {value: 3, label: "Lognormal"},
-    ];
+    ],
+    lscOptions = [
+        {value: 0, label: "Overall Mean"},
+        {value: 1, label: "Control Group Mean"},
+    ],
+    backgroundOptions = [
+        {value: 0, label: "Zero"},
+        {value: 1, label: "Estimated"},
+    ],
+    bootstrapSeedOptions = [{value: 0, label: "Default"}];

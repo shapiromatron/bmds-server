@@ -33,6 +33,10 @@ const doseResponseLayout = {
                 ns = dataset.ns;
                 incidences = dataset.incidences;
                 return _.range(ns.length).map(idx => incidences[idx] / ns[idx]);
+            case Dtype.NESTED_DICHOTOMOUS:
+                ns = dataset.litter_n;
+                incidences = dataset.incidences;
+                return _.range(ns.length).map(idx => incidences[idx] / ns[idx]);
             default:
                 throw `Unknown dtype: ${dataset.dtype}`;
         }
@@ -82,7 +86,7 @@ export const getDrLayout = function(dataset, selected, modal, hover) {
 
         layout.xaxis.range = [xmin == 0 ? -xbuff : xmin - xbuff, xmax == 0 ? xbuff : xmax + xbuff];
         layout.yaxis.range =
-            dataset.dtype == Dtype.DICHOTOMOUS
+            dataset.dtype == Dtype.DICHOTOMOUS || dataset.dtype == Dtype.NESTED_DICHOTOMOUS
                 ? [-0.05, 1.05]
                 : [ymin == 0 ? -ybuff : ymin - ybuff, ymax == 0 ? ybuff : ymax + ybuff];
 

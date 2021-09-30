@@ -238,4 +238,9 @@ export const RULES = Object.freeze({
         [BINS.NO_CHANGE]: "Viable",
         [BINS.WARNING]: "Questionable",
         [BINS.FAILURE]: "Unusable",
-    };
+    },
+    logicBinOptions = [
+        {value: 0, label: "No bin change (warning)"},
+        {value: 1, label: "Questionable bin"},
+        {value: 2, label: "Unusable bin"},
+    ];

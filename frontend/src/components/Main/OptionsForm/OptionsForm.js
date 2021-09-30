@@ -2,104 +2,79 @@ import React from "react";
 import PropTypes from "prop-types";
 
 import * as mc from "../../../constants/mainConstants";
+import SelectInput from "../../common/SelectInput";
 import {
     dichotomousBmrOptions,
     continuousBmrOptions,
     distTypeOptions,
 } from "../../../constants/optionsConstants";
+import IntegerInput from "../../common/IntegerInput";
 
 const OptionsForm = props => {
     return (
         <tr className="form-group">
             {props.modelType === mc.MODEL_CONTINUOUS ? (
                 <td>
-                    <select
-                        className="form-control"
-                        value={props.options.bmr_type}
-                        onChange={e =>
-                            props.saveOptions("bmr_type", parseInt(e.target.value), props.idx)
-                        }>
-                        {continuousBmrOptions.map(d => {
-                            return (
-                                <option key={d.value} value={d.value}>
-                                    {d.label}
-                                </option>
-                            );
+                    <SelectInput
+                        choices={continuousBmrOptions.map(option => {
+                            return {value: option.value, text: option.label};
                         })}
-                    </select>
+                        onChange={value =>
+                            props.saveOptions("bmr_type", parseInt(value), props.idx)
+                        }
+                        value={props.options.bmr_type}
+                    />
                 </td>
             ) : null}
             {props.modelType == mc.MODEL_DICHOTOMOUS ? (
                 <td>
-                    <select
-                        className="form-control"
-                        value={props.options.bmr_type}
-                        onChange={e =>
-                            props.saveOptions("bmr_type", parseInt(e.target.value), props.idx)
-                        }>
-                        {dichotomousBmrOptions.map(d => {
-                            return (
-                                <option key={d.value} value={d.value}>
-                                    {d.label}
-                                </option>
-                            );
+                    <SelectInput
+                        choices={dichotomousBmrOptions.map(option => {
+                            return {value: option.value, text: option.label};
                         })}
-                    </select>
+                        onChange={value =>
+                            props.saveOptions("bmr_type", parseInt(value), props.idx)
+                        }
+                        value={props.options.bmr_type}
+                    />
                 </td>
             ) : null}
 
             <td>
-                <input
-                    type="number"
-                    className="form-control text-center"
+                <IntegerInput
+                    onChange={value => props.saveOptions("bmr_value", parseFloat(value), props.idx)}
                     value={props.options.bmr_value}
-                    onChange={e =>
-                        props.saveOptions("bmr_value", parseFloat(e.target.value), props.idx)
-                    }
                 />
             </td>
             {props.modelType === mc.MODEL_CONTINUOUS ? (
                 <td>
-                    <input
-                        type="number"
-                        className="form-control text-center"
+                    <IntegerInput
                         value={props.options.tail_probability}
-                        onChange={e =>
-                            props.saveOptions(
-                                "tail_probability",
-                                parseFloat(e.target.value),
-                                props.idx
-                            )
+                        onChange={value =>
+                            props.saveOptions("tail_probability", parseFloat(value), props.idx)
                         }
                     />
                 </td>
             ) : null}
             <td>
-                <input
-                    className="form-control text-center"
-                    type="number"
+                <IntegerInput
                     value={props.options.confidence_level}
-                    onChange={e =>
-                        props.saveOptions("confidence_level", parseFloat(e.target.value), props.idx)
+                    onChange={value =>
+                        props.saveOptions("confidence_level", parseFloat(value), props.idx)
                     }
                 />
             </td>
             {props.modelType === mc.MODEL_CONTINUOUS ? (
                 <td>
-                    <select
-                        className="form-control"
-                        value={props.options.dist_type}
-                        onChange={e =>
-                            props.saveOptions("dist_type", parseInt(e.target.value), props.idx)
-                        }>
-                        {distTypeOptions.map(d => {
-                            return (
-                                <option key={d.value} value={d.value}>
-                                    {d.label}
-                                </option>
-                            );
+                    <SelectInput
+                        choices={distTypeOptions.map(option => {
+                            return {value: option.value, text: option.label};
                         })}
-                    </select>
+                        onChange={value =>
+                            props.saveOptions("bmr_type", parseInt(value), props.idx)
+                        }
+                        value={props.options.dist_type}
+                    />
                 </td>
             ) : null}
             <td>

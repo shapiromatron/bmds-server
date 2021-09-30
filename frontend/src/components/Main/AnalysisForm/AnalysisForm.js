@@ -5,6 +5,7 @@ import {modelTypes} from "../../../constants/mainConstants";
 
 import Spinner from "../../common/Spinner";
 import SelectInput from "../../common/SelectInput";
+import TextInput from "../../common/TextInput";
 
 @observer
 class RunChecklist extends Component {
@@ -32,13 +33,10 @@ class AnalysisForm extends Component {
             <div>
                 <form className="bg-custom p-3 mt-2">
                     <div className="form-group">
-                        <label htmlFor="analysisName">Analysis Name</label>
-                        <input
-                            id="analysisName"
-                            className="form-control"
-                            type="text"
-                            value={mainStore.analysis_name}
-                            onChange={e => mainStore.changeAnalysisName(e.target.value)}
+                        <TextInput
+                            label={"Analysis Name"}
+                            value={mainStore.analysisName}
+                            onChange={value => mainStore.changeAnalysisName(value)}
                         />
                     </div>
                     <div className="form-group">

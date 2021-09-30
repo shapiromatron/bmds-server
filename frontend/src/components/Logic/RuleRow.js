@@ -4,7 +4,9 @@ import {observer} from "mobx-react";
 import PropTypes from "prop-types";
 
 import {checkOrEmpty} from "../../common";
-import {BIN_NAMES, BINS, ruleLookups} from "../../constants/logicConstants";
+import {BIN_NAMES, ruleLookups, logicBinOptions} from "../../constants/logicConstants";
+import SelectInput from "../common/SelectInput";
+import FloatInput from "../common/FloatInput";
 
 @observer
 class RuleRow extends Component {
@@ -31,12 +33,12 @@ class RuleRow extends Component {
                 <td>{ruleLookup.enabledNested ? renderCheckbox("enabled_nested") : "-"}</td>
                 <td>
                     {ruleLookup.hasThreshold ? (
-                        <input
-                            className="form-control form-control-sm"
-                            type="number"
+                        <FloatInput
+                            name={rule.rule_class}
+                            id={ruleIndex}
                             value={rule.threshold}
-                            onChange={e =>
-                                updateRule(ruleIndex, "threshold", parseFloat(e.target.value))
+                            onChange={value =>
+                                updateRule(ruleIndex, "threshold", parseFloat(value))
                             }
                         />
                     ) : (
@@ -44,16 +46,13 @@ class RuleRow extends Component {
                     )}
                 </td>
                 <td>
-                    <select
-                        className="form-control form-control-sm"
+                    <SelectInput
+                        choices={logicBinOptions.map(option => {
+                            return {value: option.value, text: option.label};
+                        })}
+                        onChange={value => updateRule(ruleIndex, "failure_bin", parseInt(value))}
                         value={rule.failure_bin}
-                        onChange={e =>
-                            updateRule(ruleIndex, "failure_bin", parseInt(e.target.value))
-                        }>
-                        <option value={BINS.NO_CHANGE}>No Bin-Change (warning)</option>
-                        <option value={BINS.WARNING}>Questionable Bin</option>
-                        <option value={BINS.FAILURE}>Unusable Bin</option>
-                    </select>
+                    />
                 </td>
                 <td>{ruleLookup.notes(rule.threshold)}</td>
             </tr>

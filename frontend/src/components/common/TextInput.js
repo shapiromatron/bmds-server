@@ -11,24 +11,20 @@ class TextInput extends Component {
         this._id = randomString();
     }
     render() {
-        const {onChange, label, value} = this.props;
+        const {onChange, value} = this.props;
         return (
-            <>
-                {label ? <label htmlFor={this._id}>{label}</label> : null}
-                <input
-                    id={this._id}
-                    className="form-control"
-                    type="text"
-                    value={value}
-                    onChange={e => onChange(e.target.value)}
-                />
-            </>
+            <input
+                id={this._id}
+                className="form-control"
+                type="text"
+                value={value}
+                onChange={e => onChange(e.target.value)}
+            />
         );
     }
 }
 
 TextInput.propTypes = {
-    label: PropTypes.string,
     onChange: PropTypes.func.isRequired,
     value: PropTypes.string,
 };

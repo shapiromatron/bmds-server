@@ -3,6 +3,7 @@ import React, {Component} from "react";
 import {inject, observer} from "mobx-react";
 import PropTypes from "prop-types";
 import {checkOrEmpty} from "../../common";
+import CheckboxInput from "../common/CheckboxInput";
 
 @inject("logicStore")
 @observer
@@ -16,9 +17,8 @@ class DecisionLogic extends Component {
                         <td>{label}</td>
                         <td className="text-center" style={{minWidth: 50}}>
                             {canEdit ? (
-                                <input
-                                    type="checkbox"
-                                    onChange={e => updateLogic(field, e.target.checked)}
+                                <CheckboxInput
+                                    onChange={value => updateLogic(field, value)}
                                     checked={logic[field]}
                                 />
                             ) : (

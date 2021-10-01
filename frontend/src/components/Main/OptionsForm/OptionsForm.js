@@ -8,7 +8,7 @@ import {
     continuousBmrOptions,
     distTypeOptions,
 } from "../../../constants/optionsConstants";
-import IntegerInput from "../../common/IntegerInput";
+import FloatInput from "../../common/FloatInput";
 
 const OptionsForm = props => {
     return (
@@ -41,14 +41,14 @@ const OptionsForm = props => {
             ) : null}
 
             <td>
-                <IntegerInput
+                <FloatInput
                     onChange={value => props.saveOptions("bmr_value", parseFloat(value), props.idx)}
                     value={props.options.bmr_value}
                 />
             </td>
             {props.modelType === mc.MODEL_CONTINUOUS ? (
                 <td>
-                    <IntegerInput
+                    <FloatInput
                         value={props.options.tail_probability}
                         onChange={value =>
                             props.saveOptions("tail_probability", parseFloat(value), props.idx)
@@ -57,7 +57,7 @@ const OptionsForm = props => {
                 </td>
             ) : null}
             <td>
-                <IntegerInput
+                <FloatInput
                     value={props.options.confidence_level}
                     onChange={value =>
                         props.saveOptions("confidence_level", parseFloat(value), props.idx)
@@ -71,7 +71,7 @@ const OptionsForm = props => {
                             return {value: option.value, text: option.label};
                         })}
                         onChange={value =>
-                            props.saveOptions("bmr_type", parseInt(value), props.idx)
+                            props.saveOptions("dist_type", parseInt(value), props.idx)
                         }
                         value={props.options.dist_type}
                     />

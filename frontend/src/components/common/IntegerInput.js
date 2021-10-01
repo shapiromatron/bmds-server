@@ -19,6 +19,7 @@ class IntegerInput extends Component {
                     id={this._id}
                     className="form-control"
                     type="number"
+                    step="1"
                     value={value}
                     onChange={e => onChange(e.target.value)}
                 />

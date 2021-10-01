@@ -35,7 +35,7 @@ class DatasetModelOption extends Component {
                         choices={getDegreeOptions(dataset).map(option => {
                             return {value: option.value, text: option.label};
                         })}
-                        onChange={value => updateOption(datasetId, "degree", parseInt(value))}
+                        onChange={value => updateOption(datasetId, "degree", value)}
                         value={option.degree}
                     />
                 </td>
@@ -45,9 +45,7 @@ class DatasetModelOption extends Component {
                             choices={adverseDirectionOptions.map(option => {
                                 return {value: option.value, text: option.label};
                             })}
-                            onChange={value =>
-                                updateOption(datasetId, "adverse_direction", parseInt(value))
-                            }
+                            onChange={value => updateOption(datasetId, "adverse_direction", value)}
                             value={option.adverse_direction}
                         />
                     </td>

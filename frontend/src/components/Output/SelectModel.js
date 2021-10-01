@@ -4,6 +4,7 @@ import {inject, observer} from "mobx-react";
 import PropTypes from "prop-types";
 
 import SelectInput from "../common/SelectInput";
+import LabelInput from "../common/LabelInput";
 
 @inject("outputStore")
 @observer
@@ -32,7 +33,7 @@ class SelectModelIndex extends Component {
                     />
                 </div>
                 <div className="col-md-4">
-                    <label htmlFor="selectedNotes">Selection notes</label>
+                    <LabelInput label="Selection notes" />
                     <textarea
                         id="selectedNotes"
                         className="form-control"

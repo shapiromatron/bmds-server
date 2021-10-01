@@ -7,6 +7,7 @@ import {checkOrEmpty} from "../../common";
 import {BIN_NAMES, ruleLookups, logicBinOptions} from "../../constants/logicConstants";
 import SelectInput from "../common/SelectInput";
 import FloatInput from "../common/FloatInput";
+import CheckboxInput from "../common/CheckboxInput";
 
 @observer
 class RuleRow extends Component {
@@ -15,10 +16,9 @@ class RuleRow extends Component {
             ruleLookup = ruleLookups[rule.rule_class],
             renderCheckbox = attribute => {
                 return (
-                    <input
-                        type="checkbox"
+                    <CheckboxInput
                         checked={rule[attribute]}
-                        onChange={e => updateRule(ruleIndex, attribute, e.target.checked)}
+                        onChange={value => updateRule(ruleIndex, attribute, value)}
                     />
                 );
             };

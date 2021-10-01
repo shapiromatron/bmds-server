@@ -11,30 +11,26 @@ class SelectInput extends Component {
         this._id = randomString();
     }
     render() {
-        const {onChange, label, value, choices} = this.props;
+        const {onChange, value, choices} = this.props;
         return (
-            <div className="form-group">
-                {label ? <label htmlFor={this._id}>{label}</label> : null}
-                <select
-                    id={this._id}
-                    className="form-control"
-                    onChange={e => onChange(e.target.value)}
-                    value={value}>
-                    {choices.map(choice => {
-                        return (
-                            <option key={choice.value} value={choice.value}>
-                                {choice.text}
-                            </option>
-                        );
-                    })}
-                </select>
-            </div>
+            <select
+                id={this._id}
+                className="form-control p-0"
+                onChange={e => onChange(e.target.value)}
+                value={value}>
+                {choices.map(choice => {
+                    return (
+                        <option key={choice.value} value={choice.value}>
+                            {choice.text}
+                        </option>
+                    );
+                })}
+            </select>
         );
     }
 }
 
 SelectInput.propTypes = {
-    label: PropTypes.string,
     choices: PropTypes.arrayOf(
         PropTypes.shape({
             value: PropTypes.any.isRequired,

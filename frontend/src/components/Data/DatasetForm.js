@@ -5,6 +5,7 @@ import TabularDatasetModal from "./TabularDatasetModal";
 
 import {columnHeaders, columns} from "../../constants/dataConstants";
 import TextInput from "../common/TextInput";
+import FloatInput from "../common/FloatInput";
 
 const DatasetFormRow = props => {
     return (
@@ -12,12 +13,9 @@ const DatasetFormRow = props => {
             {props.columns.map((column, index) => {
                 return (
                     <td key={index}>
-                        <input
-                            className="text-center form-control"
-                            type="number"
-                            name={column}
+                        <FloatInput
                             value={props.row[column]}
-                            onChange={e => props.onChange(column, e.target.value, props.rowIdx)}
+                            onChange={value => props.onChange(column, value, props.rowIdx)}
                         />
                     </td>
                 );
@@ -61,7 +59,7 @@ class DatasetForm extends Component {
                         <div className="input-group-append">
                             <button
                                 type="button"
-                                className="btn btn-danger float-right ml-1"
+                                className="btn btn-danger btn-sm float-right ml-1"
                                 onClick={dataStore.deleteDataset}>
                                 <i className="fa fa-fw fa-trash"></i>
                                 Delete

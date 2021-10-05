@@ -3,6 +3,8 @@ import {inject, observer} from "mobx-react";
 import PropTypes from "prop-types";
 import {Modal} from "react-bootstrap";
 
+import TextAreaInput from "../common/TextAreaInput";
+
 @inject("dataStore")
 @observer
 class TabularDatasetModal extends Component {
@@ -22,12 +24,11 @@ class TabularDatasetModal extends Component {
                             </div>
                         ) : null}
 
-                        <textarea
+                        <TextAreaInput
                             className="form-control"
-                            rows="16"
-                            onChange={e =>
-                                dataStore.changeDatasetFromModal(e.target.value)
-                            }></textarea>
+                            rows={16}
+                            onChange={dataStore.changeDatasetFromModal}
+                        />
 
                         <p className="text-muted">
                             Copy/paste data from Excel into the box below. Data must be all numeric

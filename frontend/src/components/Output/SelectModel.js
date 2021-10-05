@@ -4,6 +4,7 @@ import {inject, observer} from "mobx-react";
 import PropTypes from "prop-types";
 
 import SelectInput from "../common/SelectInput";
+import TextAreaInput from "../common/TextAreaInput";
 
 @inject("outputStore")
 @observer
@@ -32,23 +33,18 @@ class SelectModelIndex extends Component {
                     />
                 </div>
                 <div className="col-md-4">
-                    <label htmlFor="selectedNotes">Selection notes</label>
-                    <textarea
-                        id="selectedNotes"
-                        className="form-control"
-                        type="textarea"
-                        rows="3"
+                    <TextAreaInput
+                        label="Selection notes"
                         value={textValue}
-                        onChange={e =>
-                            outputStore.saveSelectedIndexNotes(e.target.value)
-                        }></textarea>
+                        onChange={outputStore.saveSelectedIndexNotes}
+                    />
                 </div>
                 <div className="col-md-4">
                     <label>&nbsp;</label>
                     <button
                         type="button"
                         className="btn btn-primary btn-block mt-1"
-                        onClick={() => outputStore.saveSelectedModel()}>
+                        onClick={outputStore.saveSelectedModel}>
                         Save model selection
                     </button>
                 </div>

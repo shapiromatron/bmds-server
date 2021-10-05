@@ -5,6 +5,8 @@ import {modelTypes} from "../../../constants/mainConstants";
 
 import Spinner from "../../common/Spinner";
 import SelectInput from "../../common/SelectInput";
+import TextInput from "../../common/TextInput";
+import TextAreaInput from "../../common/TextAreaInput";
 
 @observer
 class RunChecklist extends Component {
@@ -32,35 +34,30 @@ class AnalysisForm extends Component {
             <div>
                 <form className="bg-custom p-3 mt-2">
                     <div className="form-group">
-                        <label htmlFor="analysisName">Analysis Name</label>
-                        <input
-                            id="analysisName"
-                            className="form-control"
-                            type="text"
+                        <TextInput
+                            label="Analysis Name"
                             value={mainStore.analysis_name}
-                            onChange={e => mainStore.changeAnalysisName(e.target.value)}
+                            onChange={mainStore.changeAnalysisName}
                         />
                     </div>
                     <div className="form-group">
-                        <label htmlFor="analysisDescription">Analysis Description</label>
-                        <textarea
-                            id="analysisDescription"
-                            className="form-control"
-                            type="textarea"
-                            rows="3"
+                        <TextAreaInput
+                            label="Analysis Description"
                             value={mainStore.analysis_description}
-                            onChange={e =>
-                                mainStore.changeAnalysisDescription(e.target.value)
-                            }></textarea>
+                            onChange={mainStore.changeAnalysisDescription}
+                        />
                     </div>
-                    <SelectInput
-                        label="Model Type"
-                        onChange={value => mainStore.changeDatasetType(value)}
-                        value={mainStore.model_type}
-                        choices={modelTypes.map((item, i) => {
-                            return {value: item.value, text: item.name};
-                        })}
-                    />
+                    <div className="form-group">
+                        <SelectInput
+                            label="Model Type"
+                            onChange={mainStore.changeDatasetType}
+                            value={mainStore.model_type}
+                            choices={modelTypes.map((item, i) => {
+                                return {value: item.value, text: item.name};
+                            })}
+                        />
+                    </div>
+
                     {mainStore.errorMessage ? (
                         <div className="alert alert-danger">{mainStore.errorMessage}</div>
                     ) : null}
@@ -70,7 +67,7 @@ class AnalysisForm extends Component {
                                 <button
                                     type="button"
                                     className="btn btn-warning float-right"
-                                    onClick={() => mainStore.executeResetAnalysis()}>
+                                    onClick={mainStore.executeResetAnalysis}>
                                     Cancel execution
                                 </button>
                                 <Spinner text="Executing, please wait..." />
@@ -105,7 +102,7 @@ class AnalysisForm extends Component {
                                     id="saveAnalysis"
                                     type="button"
                                     className="btn btn-primary mr-2"
-                                    onClick={() => mainStore.saveAnalysis()}>
+                                    onClick={mainStore.saveAnalysis}>
                                     Save Analysis
                                 </button>
                                 <button
@@ -113,7 +110,7 @@ class AnalysisForm extends Component {
                                     type="button"
                                     className="btn btn-primary"
                                     disabled={!mainStore.analysisSavedAndValidated}
-                                    onClick={() => mainStore.executeAnalysis()}>
+                                    onClick={mainStore.executeAnalysis}>
                                     Run Analysis
                                 </button>
                             </div>

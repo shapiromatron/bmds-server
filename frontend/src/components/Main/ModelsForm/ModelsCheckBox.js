@@ -5,6 +5,8 @@ import {observer} from "mobx-react";
 import * as mc from "../../../constants/mainConstants";
 import {checkOrEmpty} from "../../../common";
 import HelpTextPopover from "../../common/HelpTextPopover";
+import CheckboxInput from "../../common/CheckboxInput";
+import FloatInput from "../../common/FloatInput";
 
 const isModelChecked = function(models, type, model) {
         let checked = false;
@@ -31,12 +33,10 @@ const isModelChecked = function(models, type, model) {
         const {store, model, disabled} = props;
         return store.canEdit ? (
             <td>
-                <input
+                <FloatInput
                     disabled={disabled}
                     value={getPriorWeightValue(store.models, model)}
-                    onChange={e => store.setPriorWeight(model, e.target.value)}
-                    type="number"
-                    className="form-control form-control-sm align-middle  pl-1"
+                    onChange={value => store.setPriorWeight(model, value)}
                 />
             </td>
         ) : (
@@ -48,12 +48,12 @@ const isModelChecked = function(models, type, model) {
 
         return store.canEdit ? (
             <td>
-                <input
+                <CheckboxInput
                     id={type + "-" + model}
-                    type="checkbox"
                     disabled={disabled}
-                    onChange={e => store.setModelSelection(type, model, e.target.checked)}
-                    checked={isModelChecked(store.models, type, model)}></input>
+                    onChange={value => store.setModelSelection(type, model, value)}
+                    checked={isModelChecked(store.models, type, model)}
+                />
             </td>
         ) : (
             <td>{checkOrEmpty(isModelChecked(store.models, type, model))}</td>

@@ -6,21 +6,20 @@ import {randomString} from "../../common";
 import LabelInput from "./LabelInput";
 
 @observer
-class FloatInput extends Component {
+class TextInput extends Component {
     constructor(props) {
         super(props);
         this._id = props.id || randomString();
     }
     render() {
-        const {label, className, value, onChange, disabled} = this.props;
+        const {label, onChange, value} = this.props;
         return (
             <>
                 {label ? <LabelInput label={label} htmlFor={this._id} /> : null}
                 <input
                     id={this._id}
-                    disabled={disabled}
-                    className={className}
-                    type="number"
+                    className="form-control"
+                    type="text"
                     value={value}
                     onChange={e => onChange(e.target.value)}
                 />
@@ -29,17 +28,11 @@ class FloatInput extends Component {
     }
 }
 
-FloatInput.propTypes = {
+TextInput.propTypes = {
     id: PropTypes.string,
     label: PropTypes.string,
-    className: PropTypes.string,
-    value: PropTypes.number.isRequired,
     onChange: PropTypes.func.isRequired,
-    disabled: PropTypes.bool,
-};
-FloatInput.defaultProps = {
-    className: "form-control",
-    disabled: false,
+    value: PropTypes.string,
 };
 
-export default FloatInput;
+export default TextInput;

@@ -4,7 +4,10 @@ import {observer} from "mobx-react";
 import PropTypes from "prop-types";
 
 import {checkOrEmpty} from "../../common";
-import {BIN_NAMES, BINS, ruleLookups} from "../../constants/logicConstants";
+import {BIN_NAMES, ruleLookups, logicBinOptions} from "../../constants/logicConstants";
+import CheckboxInput from "../common/CheckboxInput";
+import FloatInput from "../common/FloatInput";
+import SelectInput from "../common/SelectInput";
 
 @observer
 class RuleRow extends Component {
@@ -13,10 +16,9 @@ class RuleRow extends Component {
             ruleLookup = ruleLookups[rule.rule_class],
             renderCheckbox = attribute => {
                 return (
-                    <input
-                        type="checkbox"
+                    <CheckboxInput
                         checked={rule[attribute]}
-                        onChange={e => updateRule(ruleIndex, attribute, e.target.checked)}
+                        onChange={value => updateRule(ruleIndex, attribute, value)}
                     />
                 );
             };
@@ -31,29 +33,22 @@ class RuleRow extends Component {
                 <td>{ruleLookup.enabledNested ? renderCheckbox("enabled_nested") : "-"}</td>
                 <td>
                     {ruleLookup.hasThreshold ? (
-                        <input
-                            className="form-control form-control-sm"
-                            type="number"
+                        <FloatInput
                             value={rule.threshold}
-                            onChange={e =>
-                                updateRule(ruleIndex, "threshold", parseFloat(e.target.value))
-                            }
+                            onChange={value => updateRule(ruleIndex, "threshold", value)}
                         />
                     ) : (
                         "N/A"
                     )}
                 </td>
                 <td>
-                    <select
-                        className="form-control form-control-sm"
+                    <SelectInput
+                        choices={logicBinOptions.map(option => {
+                            return {value: option.value, text: option.label};
+                        })}
+                        onChange={value => updateRule(ruleIndex, "failure_bin", value)}
                         value={rule.failure_bin}
-                        onChange={e =>
-                            updateRule(ruleIndex, "failure_bin", parseInt(e.target.value))
-                        }>
-                        <option value={BINS.NO_CHANGE}>No Bin-Change (warning)</option>
-                        <option value={BINS.WARNING}>Questionable Bin</option>
-                        <option value={BINS.FAILURE}>Unusable Bin</option>
-                    </select>
+                    />
                 </td>
                 <td>{ruleLookup.notes(rule.threshold)}</td>
             </tr>

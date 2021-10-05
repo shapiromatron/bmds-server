@@ -5,6 +5,7 @@ import {observer} from "mobx-react";
 import {allModelOptions} from "../../../constants/modelConstants";
 import * as mc from "../../../constants/mainConstants";
 import HelpTextPopover from "../../common/HelpTextPopover";
+import CheckboxInput from "../../common/CheckboxInput";
 
 const areAllModelsChecked = function(modelType, type, models) {
         return type in models && models[type].length === allModelOptions[modelType][type].length;
@@ -14,10 +15,9 @@ const areAllModelsChecked = function(modelType, type, models) {
         return store.canEdit ? (
             <th>
                 <label className="m-0">
-                    <input
-                        type="checkbox"
+                    <CheckboxInput
                         disabled={disabled}
-                        onChange={e => store.enableAll(type, e.target.checked)}
+                        onChange={value => store.enableAll(type, value)}
                         checked={areAllModelsChecked(store.getModelType, type, store.models)}
                     />
                     &nbsp;Select all

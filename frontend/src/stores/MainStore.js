@@ -259,6 +259,9 @@ class MainStore {
     @computed get canEdit() {
         return this.config.editSettings !== undefined;
     }
+    @computed get isFuture() {
+        return this.config.future;
+    }
     @computed get getExecutionOutputs() {
         return this.executionOutputs;
     }
@@ -270,6 +273,15 @@ class MainStore {
     }
     @computed get getModelTypeName() {
         return _.find(mc.modelTypes, {value: this.model_type}).name;
+    }
+    @computed get getModelTypeChoices() {
+        let choices = mc.modelTypes.map((item, i) => {
+            return {value: item.value, text: item.name};
+        });
+        if (!this.isFuture) {
+            return choices.filter(d => d.value != mc.MODEL_NESTED_DICHOTOMOUS);
+        }
+        return choices;
     }
 
     @computed get getModels() {

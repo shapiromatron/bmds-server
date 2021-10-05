@@ -5,12 +5,14 @@ const Dtype = {
     DICHOTOMOUS: "D",
     CONTINUOUS: "C",
     CONTINUOUS_INDIVIDUAL: "CI",
+    NESTED_DICHOTOMOUS: "ND",
 };
 
 export {Dtype};
 export const DATA_CONTINUOUS_SUMMARY = "CS",
     DATA_CONTINUOUS_INDIVIDUAL = "I",
     DATA_DICHOTOMOUS = "DM",
+    DATA_NESTED_DICHOTOMOUS = "ND",
     datasetTypesByModelType = function(modelType) {
         switch (modelType) {
             case mc.MODEL_DICHOTOMOUS:
@@ -20,6 +22,8 @@ export const DATA_CONTINUOUS_SUMMARY = "CS",
                     {value: DATA_CONTINUOUS_SUMMARY, name: "Summarized"},
                     {value: DATA_CONTINUOUS_INDIVIDUAL, name: "Individual"},
                 ];
+            case mc.MODEL_NESTED_DICHOTOMOUS:
+                return [{value: DATA_NESTED_DICHOTOMOUS, name: "Nested Dichotomous"}];
             default:
                 throw `Unknown modelType: ${modelType}`;
         }
@@ -28,6 +32,7 @@ export const DATA_CONTINUOUS_SUMMARY = "CS",
         [Dtype.CONTINUOUS]: ["doses", "ns", "means", "stdevs"],
         [Dtype.CONTINUOUS_INDIVIDUAL]: ["doses", "responses"],
         [Dtype.DICHOTOMOUS]: ["doses", "ns", "incidences"],
+        [Dtype.NESTED_DICHOTOMOUS]: ["doses", "litter_n", "incidences", "litter_covariate"],
     },
     columnNames = {
         [DATA_CONTINUOUS_SUMMARY]: {
@@ -45,6 +50,12 @@ export const DATA_CONTINUOUS_SUMMARY = "CS",
             ns: "N",
             incidences: "Incidence",
         },
+        [DATA_NESTED_DICHOTOMOUS]: {
+            doses: "Dose",
+            litter_n: "Litter Size",
+            incidences: "Incidence",
+            litter_covariate: "Litter Specific Covariate",
+        },
     },
     columnHeaders = {
         doses: "Dose",
@@ -53,6 +64,8 @@ export const DATA_CONTINUOUS_SUMMARY = "CS",
         stdevs: "Std. Dev.",
         responses: "Response",
         incidences: "Incidence",
+        litter_n: "Litter Size",
+        litter_covariate: "Litter Specific Covariate",
     },
     getDefaultDataset = function(dtype) {
         switch (dtype) {
@@ -101,11 +114,28 @@ export const DATA_CONTINUOUS_SUMMARY = "CS",
                     ns: ["", "", "", "", ""],
                     incidences: ["", "", "", "", ""],
                 };
+            case DATA_NESTED_DICHOTOMOUS:
+                return {
+                    dtype: Dtype.NESTED_DICHOTOMOUS,
+                    metadata: {
+                        id: null,
+                        name: "",
+                        dose_units: "",
+                        response_units: "",
+                        dose_name: "Dose",
+                        response_name: "Incidence",
+                    },
+                    doses: ["", "", "", "", ""],
+                    litter_n: ["", "", "", "", ""],
+                    incidences: ["", "", "", "", ""],
+                    litter_covariate: ["", "", "", "", ""],
+                };
             default:
                 throw `Unknown dataset type ${dtype}`;
         }
     },
     getExampleData = function(dtype) {
+        /* eslint-disable */
         switch (dtype) {
             case DATA_CONTINUOUS_SUMMARY:
                 return {
@@ -115,32 +145,73 @@ export const DATA_CONTINUOUS_SUMMARY = "CS",
                     stdevs: [3.2, 4.8, 6.5, 7.2, 8.4],
                 };
             case DATA_CONTINUOUS_INDIVIDUAL:
-                /* eslint-disable */
                 return {
                     doses: [
-                        0, 0, 0, 0, 0, 0, 0, 0, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1,
-                        1, 1, 1, 1, 1, 1, 10, 10, 10, 10, 10, 10, 100, 100, 100, 100, 100, 100,
-                        300, 300, 300, 300, 300, 300, 500, 500, 500, 500, 500, 500
+                        0, 0, 0, 0, 0, 0, 0, 0,
+                        0.1, 0.1, 0.1, 0.1, 0.1, 0.1,
+                        1, 1, 1, 1, 1, 1,
+                        10, 10, 10, 10, 10, 10,
+                        100, 100, 100, 100, 100, 100,
+                        300, 300, 300, 300, 300, 300,
+                        500, 500, 500, 500, 500, 500
                     ],
                     responses: [
                         8.1079, 9.3063, 9.7431, 9.7814, 10.0517, 10.6132, 10.7509, 11.0567,
-                        9.1556, 9.6821, 9.8256, 10.2095, 10.2222, 12.0382, 9.5661, 9.7059,
-                        9.9905, 10.2716, 10.471, 11.0602, 8.8514, 10.0107, 10.0854, 10.5683,
-                        11.1394, 11.4875, 9.5427, 9.7211, 9.8267, 10.0231, 10.1833, 10.8685,
-                        11.368, 13.5176, 12.3168, 14.002, 17.1186, 13.6368, 19.9572, 20.1347,
-                        16.7743, 20.0571, 15.1564, 15.0368
+                        9.1556, 9.6821, 9.8256, 10.2095, 10.2222, 12.0382,
+                        9.5661, 9.7059, 9.9905, 10.2716, 10.471, 11.0602,
+                        8.8514, 10.0107, 10.0854, 10.5683, 11.1394, 11.4875,
+                        9.5427, 9.7211, 9.8267, 10.0231, 10.1833, 10.8685,
+                        11.368, 13.5176, 12.3168, 14.002, 17.1186, 13.6368,
+                        19.9572, 20.1347, 16.7743, 20.0571, 15.1564, 15.0368
                     ],
                 };
-                /* eslint-enable */
             case DATA_DICHOTOMOUS:
                 return {
                     doses: [0, 10, 50, 150, 400],
                     ns: [20, 20, 20, 20, 20],
                     incidences: [0, 0, 1, 4, 11],
                 };
+            case DATA_NESTED_DICHOTOMOUS:
+                return {
+                    doses: [
+                        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+                        25, 25, 25, 25, 25, 25, 25, 25, 25,
+                        50, 50, 50, 50, 50, 50, 50, 50, 50,
+                    ],
+                    litter_n: [
+                        16, 9, 15, 14, 13, 9, 10, 14, 10, 11, 14,
+                        9, 14, 9, 13, 12, 10, 10, 11, 14,
+                        11, 11, 14, 11, 10, 11, 10, 15, 7,
+                    ],
+                    incidences: [
+                        1, 1, 2, 3, 3, 0, 2, 2, 1, 2, 4,
+                        5, 6, 2, 6, 3, 1, 2, 4, 3,
+                        4, 5, 5, 4, 5, 4, 5, 6, 2,
+                    ],
+                    litter_covariate: [
+                        16, 9, 15, 14, 13, 9, 10, 14, 10, 11, 14,
+                        9, 14, 9, 13, 12, 10, 10, 11, 14,
+                        11, 11, 14, 11, 10, 11, 10, 15, 7,
+                    ],
+                };
             default:
                 throw `Unknown dataset type ${dtype}`;
         }
+        /* eslint-enable */
+    },
+    datasetOptions = {
+        [mc.MODEL_CONTINUOUS]: {
+            enabled: true,
+            degree: 0,
+            adverse_direction: -1,
+        },
+        [mc.MODEL_DICHOTOMOUS]: {
+            enabled: true,
+            degree: 0,
+        },
+        [mc.MODEL_NESTED_DICHOTOMOUS]: {
+            enabled: true,
+        },
     },
     adverseDirectionOptions = [
         {value: -1, label: "Automatic"},

@@ -6,7 +6,11 @@ import {toJS} from "mobx";
 import OptionsForm from "./OptionsForm";
 import OptionsReadOnly from "./OptionsReadOnly";
 import HelpTextPopover from "../../common/HelpTextPopover";
-import {MODEL_CONTINUOUS, MODEL_DICHOTOMOUS} from "../../../constants/mainConstants";
+import {
+    MODEL_CONTINUOUS,
+    MODEL_DICHOTOMOUS,
+    MODEL_NESTED_DICHOTOMOUS,
+} from "../../../constants/mainConstants";
 
 @inject("optionsStore")
 @observer
@@ -44,6 +48,25 @@ class OptionsFormList extends Component {
                                             <th>Confidence Level</th>
                                         </>
                                     ) : null}
+                                    {modelType === MODEL_NESTED_DICHOTOMOUS ? (
+                                        <>
+                                            <th>Risk Type</th>
+                                            <th>BMR</th>
+                                            <th>Confidence Level</th>
+                                            <th>
+                                                Litter Specific
+                                                <br />
+                                                Covariate
+                                            </th>
+                                            <th>Background</th>
+                                            <th>
+                                                Bootstrap
+                                                <br />
+                                                Iterations
+                                            </th>
+                                            <th>Bootstrap Seed</th>
+                                        </>
+                                    ) : null}
                                     {optionsStore.canEdit ? (
                                         <th>
                                             <button
@@ -53,7 +76,7 @@ class OptionsFormList extends Component {
                                                 title="Add New Option Set"
                                                 className="btn btn-primary "
                                                 disabled={!optionsStore.canAddNewOption}
-                                                onClick={() => optionsStore.addOptions()}>
+                                                onClick={optionsStore.addOptions}>
                                                 <i className="fa fa-plus"></i>{" "}
                                             </button>
                                         </th>

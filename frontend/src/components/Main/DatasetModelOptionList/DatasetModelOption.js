@@ -18,6 +18,7 @@ class DatasetModelOption extends Component {
             option = store.options[datasetId],
             dataset = store.getDataset(option),
             {canEdit, updateOption} = store,
+            hasDegree = option.degree !== undefined,
             hasAdverseDirection = option.adverse_direction !== undefined;
 
         return canEdit ? (
@@ -29,15 +30,17 @@ class DatasetModelOption extends Component {
                     />
                 </td>
                 <td>{dataset.metadata.name}</td>
-                <td>
-                    <SelectInput
-                        choices={getDegreeOptions(dataset).map(option => {
-                            return {value: option.value, text: option.label};
-                        })}
-                        onChange={value => updateOption(datasetId, "degree", value)}
-                        value={option.degree}
-                    />
-                </td>
+                {hasDegree ? (
+                    <td>
+                        <SelectInput
+                            choices={getDegreeOptions(dataset).map(option => {
+                                return {value: option.value, text: option.label};
+                            })}
+                            onChange={value => updateOption(datasetId, "degree", value)}
+                            value={option.degree}
+                        />
+                    </td>
+                ) : null}
                 {hasAdverseDirection ? (
                     <td>
                         <SelectInput

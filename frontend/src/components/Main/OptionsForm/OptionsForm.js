@@ -7,7 +7,10 @@ import {
     dichotomousBmrOptions,
     continuousBmrOptions,
     distTypeOptions,
+    litterSpecificCovariateOptions,
+    backgroundOptions,
 } from "../../../constants/optionsConstants";
+import IntegerInput from "../../common/IntegerInput";
 import FloatInput from "../../common/FloatInput";
 
 const OptionsForm = props => {
@@ -24,7 +27,8 @@ const OptionsForm = props => {
                     />
                 </td>
             ) : null}
-            {props.modelType == mc.MODEL_DICHOTOMOUS ? (
+            {props.modelType == mc.MODEL_DICHOTOMOUS ||
+            props.modelType == mc.MODEL_NESTED_DICHOTOMOUS ? (
                 <td>
                     <SelectInput
                         choices={dichotomousBmrOptions.map(option => {
@@ -66,6 +70,46 @@ const OptionsForm = props => {
                         value={props.options.dist_type}
                     />
                 </td>
+            ) : null}
+            {props.modelType === mc.MODEL_NESTED_DICHOTOMOUS ? (
+                <>
+                    <td>
+                        <SelectInput
+                            value={props.options.litter_specific_covariate}
+                            onChange={value =>
+                                props.saveOptions("litter_specific_covariate", value, props.idx)
+                            }
+                            choices={litterSpecificCovariateOptions.map(option => {
+                                return {value: option.value, text: option.label};
+                            })}
+                        />
+                    </td>
+                    <td>
+                        <SelectInput
+                            value={props.options.background}
+                            onChange={value => props.saveOptions("background", value, props.idx)}
+                            choices={backgroundOptions.map(option => {
+                                return {value: option.value, text: option.label};
+                            })}
+                        />
+                    </td>
+                    <td>
+                        <IntegerInput
+                            value={props.options.bootstrap_iterations}
+                            onChange={value =>
+                                props.saveOptions("bootstrap_iterations", value, props.idx)
+                            }
+                        />
+                    </td>
+                    <td>
+                        <IntegerInput
+                            value={props.options.bootstrap_seed}
+                            onChange={value =>
+                                props.saveOptions("bootstrap_seed", value, props.idx)
+                            }
+                        />
+                    </td>
+                </>
             ) : null}
             <td>
                 <button

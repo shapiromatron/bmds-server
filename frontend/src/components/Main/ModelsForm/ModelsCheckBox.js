@@ -182,6 +182,22 @@ const ModelsCheckBox = observer(props => {
             </tbody>
         );
     }
+    if (store.getModelType === mc.MODEL_NESTED_DICHOTOMOUS) {
+        return (
+            <tbody>
+                <tr>
+                    <td className="text-left align-middle">Nested Logistic</td>
+                    <CheckBoxTd store={store} type={fr} model={"Nested Logistic"} />
+                    <CheckBoxTd store={store} type={fu} model={"Nested Logistic"} />
+                </tr>
+                <tr>
+                    <td className="text-left align-middle">NCTR</td>
+                    <CheckBoxTd store={store} type={fr} model={"NCTR"} />
+                    <CheckBoxTd store={store} type={fu} model={"NCTR"} />
+                </tr>
+            </tbody>
+        );
+    }
 
     throw `Unknown modelType: ${store.getModelType}`;
 });

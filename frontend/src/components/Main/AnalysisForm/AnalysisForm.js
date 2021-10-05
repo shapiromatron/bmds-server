@@ -1,7 +1,6 @@
 import React, {Component} from "react";
 import {inject, observer} from "mobx-react";
 import PropTypes from "prop-types";
-import {modelTypes} from "../../../constants/mainConstants";
 
 import Spinner from "../../common/Spinner";
 import SelectInput from "../../common/SelectInput";
@@ -52,9 +51,7 @@ class AnalysisForm extends Component {
                             label="Model Type"
                             onChange={mainStore.changeDatasetType}
                             value={mainStore.model_type}
-                            choices={modelTypes.map((item, i) => {
-                                return {value: item.value, text: item.name};
-                            })}
+                            choices={mainStore.getModelTypeChoices}
                         />
                     </div>
 

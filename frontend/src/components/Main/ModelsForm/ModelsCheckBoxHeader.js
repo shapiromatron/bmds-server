@@ -33,31 +33,42 @@ const ModelsCheckBoxHeader = observer(props => {
         content =
             "Models were previewed in BMDS 3.2 and will be formally peer reviewed. EPA plans to release the final models in 2022.",
         title = "Bayesian Model Averaging",
-        isContinuous = store.getModelType === mc.MODEL_CONTINUOUS;
+        isContinuous = store.getModelType === mc.MODEL_CONTINUOUS,
+        isNestedDichotomous = store.getModelType === mc.MODEL_NESTED_DICHOTOMOUS;
     return (
         <thead className="bg-custom">
             <tr>
                 <th></th>
                 <th colSpan="2">MLE</th>
-                <th colSpan="3">Alternatives</th>
+                {isNestedDichotomous ? null : <th colSpan="3">Alternatives</th>}
             </tr>
             <tr>
                 <th></th>
                 <th>Frequentist Restricted</th>
                 <th>Frequentist Unrestricted</th>
-                <th colSpan="2">
-                    Bayesian Model Averaging
-                    {isContinuous ? (
-                        <HelpTextPopover title={title} content={content}></HelpTextPopover>
-                    ) : null}
-                </th>
+                {isNestedDichotomous ? null : (
+                    <th colSpan="2">
+                        Bayesian Model Averaging
+                        {isContinuous ? (
+                            <HelpTextPopover title={title} content={content}></HelpTextPopover>
+                        ) : null}
+                    </th>
+                )}
             </tr>
             <tr>
                 <th>Models</th>
                 <SelectAllComponent store={store} type={"frequentist_restricted"} />
                 <SelectAllComponent store={store} type={"frequentist_unrestricted"} />
-                <SelectAllComponent store={store} type={"bayesian"} disabled={isContinuous} />
-                <th>Prior Weights</th>
+                {isNestedDichotomous ? null : (
+                    <>
+                        <SelectAllComponent
+                            store={store}
+                            type={"bayesian"}
+                            disabled={isContinuous}
+                        />
+                        <th>Prior Weights</th>
+                    </>
+                )}
             </tr>
         </thead>
     );

@@ -47,6 +47,12 @@ class DatasetModelOptionList extends Component {
                             </th>
                         </tr>
                     ) : null}
+                    {dtype == Dtype.NESTED_DICHOTOMOUS ? (
+                        <tr className="bg-custom">
+                            <th>Enabled</th>
+                            <th>Dataset</th>
+                        </tr>
+                    ) : null}
                 </thead>
                 <tbody>
                     {options.map(option => {

@@ -1,7 +1,7 @@
 import _ from "lodash";
 import {computed, observable, action} from "mobx";
 
-import {adverseDirectionOptions, Dtype} from "../constants/dataConstants";
+import {datasetOptions} from "../constants/dataConstants";
 
 class DatasetModelOptionStore {
     constructor(rootStore) {
@@ -30,13 +30,10 @@ class DatasetModelOptionStore {
         this.options.splice(index, 1);
     }
     @action.bound createOption(dataset) {
-        const opts = {dataset_id: dataset.metadata.id, enabled: true, degree: 0};
-        if (dataset.dtype === Dtype.CONTINUOUS || dataset.dtype === Dtype.CONTINUOUS_INDIVIDUAL) {
-            opts.adverse_direction = adverseDirectionOptions[0].value;
-        }
-        this.options.push(opts);
+        const option = _.cloneDeep(datasetOptions[this.getModelType]);
+        option.dataset_id = dataset.metadata.id;
+        this.options.push(option);
     }
-
     @action.bound getDataset(option) {
         return _.find(this.rootStore.dataStore.datasets, d => d.metadata.id === option.dataset_id);
     }

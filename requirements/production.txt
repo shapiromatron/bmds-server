@@ -2,5 +2,5 @@
 
 gunicorn==20.1.0
 
-./vendor/bmds-1.0.0-py3-none-any.whl
+./vendor/bmds-1.0.0.dev0-py3-none-any.whl
 ./dist/bmds_server-0.8-py3-none-any.whl

@@ -3,8 +3,8 @@ import React, {Component} from "react";
 import {inject, observer} from "mobx-react";
 import PropTypes from "prop-types";
 
-import SelectInput from "../common/SelectInput";
 import LabelInput from "../common/LabelInput";
+import SelectInput from "../common/SelectInput";
 
 @inject("outputStore")
 @observer
@@ -25,8 +25,8 @@ class SelectModelIndex extends Component {
         return (
             <form className="form-group row well py-2">
                 <div className="col-md-4">
+                    <LabelInput label="Selected best-fitting model" />
                     <SelectInput
-                        label="Selected best-fitting model"
                         onChange={value => outputStore.saveSelectedModelIndex(parseInt(value))}
                         value={selectValue}
                         choices={choices}

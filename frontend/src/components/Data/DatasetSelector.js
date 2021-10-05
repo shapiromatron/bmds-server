@@ -14,7 +14,6 @@ class DatasetSelector extends Component {
             <>
                 <LabelInput label="Existing datasets" />
                 <SelectInput
-                    label="Existing datasets"
                     onChange={value => store.setSelectedDataset(parseInt(value))}
                     value={store.selectedDatasetId}
                     choices={dataStore.datasets.map(dataset => {

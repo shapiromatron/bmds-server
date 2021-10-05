@@ -11,10 +11,10 @@ class SelectModelType extends Component {
         const {dataStore} = this.props;
         return (
             <div className="model-type mb-2">
+                {/* ADD label back; htmlFor is broken */}
                 <LabelInput label="New dataset" />
                 <div className="input-group">
                     <SelectInput
-                        label="New dataset"
                         onChange={value => dataStore.setModelType(value)}
                         value={dataStore.model_type}
                         choices={dataStore.getFilteredDatasetTypes.map(item => {
@@ -26,7 +26,7 @@ class SelectModelType extends Component {
                             type="button"
                             className="btn btn-primary btn-sm float-right"
                             disabled={dataStore.checkDatasetsLength}
-                            onClick={() => dataStore.addDataset()}>
+                            onClick={dataStore.addDataset}>
                             <i className="fa fa-fw fa-plus" />
                             Create
                         </button>

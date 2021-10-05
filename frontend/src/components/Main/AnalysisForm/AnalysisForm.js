@@ -36,7 +36,6 @@ class AnalysisForm extends Component {
                     <div className="form-group">
                         <LabelInput label="Analysis Name" />
                         <TextInput
-                            label={"Analysis Name"}
                             value={mainStore.analysis_name}
                             onChange={value => mainStore.changeAnalysisName(value)}
                         />
@@ -56,7 +55,6 @@ class AnalysisForm extends Component {
                     <div className="form-group">
                         <LabelInput label="Model Type" />
                         <SelectInput
-                            label="Model Type"
                             onChange={value => mainStore.changeDatasetType(value)}
                             value={mainStore.model_type}
                             choices={modelTypes.map((item, i) => {

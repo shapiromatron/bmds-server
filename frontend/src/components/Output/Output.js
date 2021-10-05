@@ -10,6 +10,7 @@ import SelectModel from "./SelectModel";
 import DoseResponsePlot from "../common/DoseResponsePlot";
 import "./Output.css";
 
+import LabelInput from "../common/LabelInput";
 import SelectInput from "../common/SelectInput";
 
 @inject("outputStore")
@@ -36,8 +37,8 @@ class Output extends Component {
             <div className="container-fluid">
                 <div className="row">
                     <div className="col-lg-2">
+                        <LabelInput label="Select an output" />
                         <SelectInput
-                            label="Select an output"
                             onChange={value => outputStore.setSelectedOutputIndex(parseInt(value))}
                             value={outputStore.selectedOutputIndex}
                             choices={outputStore.outputs.map((output, idx) => {

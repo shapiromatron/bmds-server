@@ -1,6 +1,7 @@
 import React, {Component} from "react";
 import {inject, observer} from "mobx-react";
 import PropTypes from "prop-types";
+
 import SelectInput from "../common/SelectInput";
 import LabelInput from "../common/LabelInput";
 

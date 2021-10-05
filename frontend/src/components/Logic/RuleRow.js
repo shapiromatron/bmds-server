@@ -5,9 +5,9 @@ import PropTypes from "prop-types";
 
 import {checkOrEmpty} from "../../common";
 import {BIN_NAMES, ruleLookups, logicBinOptions} from "../../constants/logicConstants";
-import SelectInput from "../common/SelectInput";
-import FloatInput from "../common/FloatInput";
 import CheckboxInput from "../common/CheckboxInput";
+import FloatInput from "../common/FloatInput";
+import SelectInput from "../common/SelectInput";
 
 @observer
 class RuleRow extends Component {
@@ -34,8 +34,6 @@ class RuleRow extends Component {
                 <td>
                     {ruleLookup.hasThreshold ? (
                         <FloatInput
-                            name={rule.rule_class}
-                            id={ruleIndex}
                             value={rule.threshold}
                             onChange={value => updateRule(ruleIndex, "threshold", value)}
                         />

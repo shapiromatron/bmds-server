@@ -2,13 +2,19 @@ import React, {Component} from "react";
 import {observer} from "mobx-react";
 import PropTypes from "prop-types";
 
+import {randomString} from "../../common";
+
 @observer
 class CheckboxInput extends Component {
+    constructor(props) {
+        super(props);
+        this._id = props.id || randomString();
+    }
     render() {
-        const {id, onChange, checked, disabled} = this.props;
+        const {onChange, checked, disabled} = this.props;
         return (
             <input
-                id={id}
+                id={this._id}
                 type="checkbox"
                 checked={checked}
                 disabled={disabled}

@@ -1,9 +1,11 @@
 import React, {Component} from "react";
+import {observer} from "mobx-react";
 import PropTypes from "prop-types";
 
 import {randomString} from "../../common";
 import LabelInput from "./LabelInput";
 
+@observer
 class FloatInput extends Component {
     constructor(props) {
         super(props);
@@ -37,6 +39,7 @@ FloatInput.propTypes = {
 };
 FloatInput.defaultProps = {
     className: "form-control",
+    disabled: false,
 };
 
 export default FloatInput;

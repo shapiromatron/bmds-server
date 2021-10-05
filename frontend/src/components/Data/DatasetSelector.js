@@ -11,8 +11,8 @@ class DatasetSelector extends Component {
         const {dataStore, store} = this.props;
         return (
             <SelectInput
-                label="Existing datasets"
                 onChange={value => store.setSelectedDataset(parseInt(value))}
+                label="Existing datasets"
                 value={store.selectedDatasetId}
                 choices={dataStore.datasets.map(dataset => {
                     return {value: dataset.metadata.id, text: dataset.metadata.name};

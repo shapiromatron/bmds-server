@@ -1,8 +1,9 @@
-import _ from "lodash";
 import React, {Component} from "react";
 import {inject, observer} from "mobx-react";
 import PropTypes from "prop-types";
 import {checkOrEmpty} from "../../common";
+import CheckboxInput from "../common/CheckboxInput";
+import FloatInput from "../common/FloatInput";
 
 @inject("logicStore")
 @observer
@@ -16,9 +17,8 @@ class DecisionLogic extends Component {
                         <td>{label}</td>
                         <td className="text-center" style={{minWidth: 50}}>
                             {canEdit ? (
-                                <input
-                                    type="checkbox"
-                                    onChange={e => updateLogic(field, e.target.checked)}
+                                <CheckboxInput
+                                    onChange={value => updateLogic(field, value)}
                                     checked={logic[field]}
                                 />
                             ) : (
@@ -64,22 +64,14 @@ class DecisionLogic extends Component {
                                         <br />
                                         to use lowest AIC instead of lowest BMDL in viable models
                                     </td>
-                                    <td className="text-center">
+                                    <td>
                                         {canEdit ? (
-                                            <input
-                                                className=" text-center form-control p-0"
-                                                type="number"
-                                                id="sufficiently_close_bmdl"
+                                            <FloatInput
+                                                className="form-control text-center"
                                                 value={logic.sufficiently_close_bmdl}
-                                                onChange={e => {
-                                                    const value = parseFloat(e.target.value);
-                                                    if (_.isNumber(value)) {
-                                                        updateLogic(
-                                                            "sufficiently_close_bmdl",
-                                                            parseFloat(e.target.value)
-                                                        );
-                                                    }
-                                                }}
+                                                onChange={value =>
+                                                    updateLogic("sufficiently_close_bmdl", value)
+                                                }
                                             />
                                         ) : (
                                             <span>{logic.sufficiently_close_bmdl}</span>

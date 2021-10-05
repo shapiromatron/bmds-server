@@ -6,45 +6,34 @@ import {randomString} from "../../common";
 import LabelInput from "./LabelInput";
 
 @observer
-class SelectInput extends Component {
+class IntegerInput extends Component {
     constructor(props) {
         super(props);
         this._id = props.id || randomString();
     }
     render() {
-        const {label, onChange, value, choices} = this.props;
+        const {label, onChange, value} = this.props;
         return (
             <>
                 {label ? <LabelInput label={label} htmlFor={this._id} /> : null}
-                <select
+                <input
                     id={this._id}
                     className="form-control"
+                    type="number"
+                    step="1"
+                    value={value}
                     onChange={e => onChange(e.target.value)}
-                    value={value}>
-                    {choices.map(choice => {
-                        return (
-                            <option key={choice.value} value={choice.value}>
-                                {choice.text}
-                            </option>
-                        );
-                    })}
-                </select>
+                />
             </>
         );
     }
 }
 
-SelectInput.propTypes = {
+IntegerInput.propTypes = {
     id: PropTypes.string,
     label: PropTypes.string,
-    choices: PropTypes.arrayOf(
-        PropTypes.shape({
-            value: PropTypes.any.isRequired,
-            text: PropTypes.string.isRequired,
-        })
-    ).isRequired,
     onChange: PropTypes.func.isRequired,
     value: PropTypes.any.isRequired,
 };
 
-export default SelectInput;
+export default IntegerInput;

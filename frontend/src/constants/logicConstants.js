@@ -113,7 +113,7 @@ export const RULES = Object.freeze({
         },
         [RULES.GOF_CANCER]: {
             name: "Goodness of fit p-test (cancer)",
-            notes: val => `BGoodness of fit p-value < ${val}`,
+            notes: val => `Goodness of fit p-value < ${val}`,
             hasThreshold: true,
             enabledContinuous: false,
             enabledDichotomous: true,
@@ -238,4 +238,9 @@ export const RULES = Object.freeze({
         [BINS.NO_CHANGE]: "Viable",
         [BINS.WARNING]: "Questionable",
         [BINS.FAILURE]: "Unusable",
-    };
+    },
+    logicBinOptions = [
+        {value: 0, label: "No bin change (warning)"},
+        {value: 1, label: "Questionable bin"},
+        {value: 2, label: "Unusable bin"},
+    ];

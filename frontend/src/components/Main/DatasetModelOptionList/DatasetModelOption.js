@@ -8,6 +8,8 @@ import {
     allDegreeOptions,
 } from "../../../constants/dataConstants";
 import {getLabel, checkOrEmpty} from "../../../common";
+import CheckboxInput from "../../common/CheckboxInput";
+import SelectInput from "../../common/SelectInput";
 
 @observer
 class DatasetModelOption extends Component {
@@ -21,44 +23,30 @@ class DatasetModelOption extends Component {
         return canEdit ? (
             <tr>
                 <td>
-                    <input
-                        id="enable-model"
-                        type="checkbox"
+                    <CheckboxInput
                         checked={option.enabled}
-                        onChange={e => updateOption(datasetId, "enabled", e.target.checked)}
+                        onChange={checked => updateOption(datasetId, "enabled", checked)}
                     />
                 </td>
                 <td>{dataset.metadata.name}</td>
                 <td>
-                    <select
-                        className="form-control"
+                    <SelectInput
+                        choices={getDegreeOptions(dataset).map(option => {
+                            return {value: option.value, text: option.label};
+                        })}
+                        onChange={value => updateOption(datasetId, "degree", value)}
                         value={option.degree}
-                        onChange={e => updateOption(datasetId, "degree", parseInt(e.target.value))}>
-                        {getDegreeOptions(dataset).map(item => (
-                            <option key={item.value} value={item.value}>
-                                {item.label}
-                            </option>
-                        ))}
-                    </select>
+                    />
                 </td>
                 {hasAdverseDirection ? (
                     <td>
-                        <select
-                            className="form-control"
+                        <SelectInput
+                            choices={adverseDirectionOptions.map(option => {
+                                return {value: option.value, text: option.label};
+                            })}
+                            onChange={value => updateOption(datasetId, "adverse_direction", value)}
                             value={option.adverse_direction}
-                            onChange={e =>
-                                updateOption(
-                                    datasetId,
-                                    "adverse_direction",
-                                    parseInt(e.target.value)
-                                )
-                            }>
-                            {adverseDirectionOptions.map(item => (
-                                <option key={item.value} value={item.value}>
-                                    {item.label}
-                                </option>
-                            ))}
-                        </select>
+                        />
                     </td>
                 ) : null}
             </tr>

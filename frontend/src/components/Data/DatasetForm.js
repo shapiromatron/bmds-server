@@ -4,6 +4,8 @@ import PropTypes from "prop-types";
 import TabularDatasetModal from "./TabularDatasetModal";
 
 import {columnHeaders, columns} from "../../constants/dataConstants";
+import TextInput from "../common/TextInput";
+import FloatInput from "../common/FloatInput";
 
 const DatasetFormRow = props => {
     return (
@@ -11,19 +13,16 @@ const DatasetFormRow = props => {
             {props.columns.map((column, index) => {
                 return (
                     <td key={index}>
-                        <input
-                            className="text-center form-control"
-                            type="number"
-                            name={column}
+                        <FloatInput
                             value={props.row[column]}
-                            onChange={e => props.onChange(column, e.target.value, props.rowIdx)}
+                            onChange={value => props.onChange(column, value, props.rowIdx)}
                         />
                     </td>
                 );
             })}
             <td>
                 <button className="btn btn-danger btn-sm" onClick={e => props.delete(props.rowIdx)}>
-                    <i className="fa fa-trash"></i>
+                    <i className="fa fa-fw fa-trash"></i>
                 </button>
             </td>
         </tr>
@@ -52,17 +51,15 @@ class DatasetForm extends Component {
                         Dataset name
                     </label>
                     <div className="input-group col-md-9">
-                        <input
-                            id="datasetName"
-                            type="text"
-                            className="form-control"
+                        <TextInput
                             value={dataset.metadata.name}
-                            onChange={e => dataStore.setDatasetMetadata("name", e.target.value)}
+                            onChange={value => dataStore.setDatasetMetadata("name", value)}
                         />
+
                         <div className="input-group-append">
                             <button
                                 type="button"
-                                className="btn btn-danger float-right ml-1"
+                                className="btn btn-danger btn-sm float-right ml-1"
                                 onClick={dataStore.deleteDataset}>
                                 <i className="fa fa-fw fa-trash"></i>
                                 Delete
@@ -76,28 +73,18 @@ class DatasetForm extends Component {
                         Dose name
                     </label>
                     <div className="col-md-4">
-                        <input
-                            type="text"
-                            className="form-control"
-                            id="doseName"
+                        <TextInput
                             value={dataset.metadata.dose_name}
-                            onChange={e =>
-                                dataStore.setDatasetMetadata("dose_name", e.target.value)
-                            }
+                            onChange={value => dataStore.setDatasetMetadata("dose_name", value)}
                         />
                     </div>
                     <label htmlFor="responseName" className="col-md-2 px-0">
                         Response name
                     </label>
                     <div className="col-md-4">
-                        <input
-                            type="text"
-                            className="form-control"
-                            id="responseName"
+                        <TextInput
                             value={dataset.metadata.response_name}
-                            onChange={e =>
-                                dataStore.setDatasetMetadata("response_name", e.target.value)
-                            }
+                            onChange={value => dataStore.setDatasetMetadata("response_name", value)}
                         />
                     </div>
                 </div>
@@ -107,14 +94,9 @@ class DatasetForm extends Component {
                         Dose units
                     </label>
                     <div className="col-md-4">
-                        <input
-                            type="text"
-                            className="form-control"
-                            id="doseUnits"
+                        <TextInput
                             value={dataset.metadata.dose_units}
-                            onChange={e =>
-                                dataStore.setDatasetMetadata("dose_units", e.target.value)
-                            }
+                            onChange={value => dataStore.setDatasetMetadata("dose_units", value)}
                         />
                     </div>
 
@@ -122,13 +104,10 @@ class DatasetForm extends Component {
                         Response units
                     </label>
                     <div className="col-md-4">
-                        <input
-                            type="text"
-                            className="form-control"
-                            id="responseUnits"
+                        <TextInput
                             value={dataset.metadata.response_units}
-                            onChange={e =>
-                                dataStore.setDatasetMetadata("response_units", e.target.value)
+                            onChange={value =>
+                                dataStore.setDatasetMetadata("response_units", value)
                             }
                         />
                     </div>
@@ -143,15 +122,15 @@ class DatasetForm extends Component {
                                 <button
                                     className="btn btn-info mr-1"
                                     title="Load dataset from Excel"
-                                    onClick={() => dataStore.toggleDatasetModal()}>
+                                    onClick={dataStore.toggleDatasetModal}>
                                     <i className="fa fa-file-excel-o"></i>
                                 </button>
                                 <button
                                     type="button"
                                     className="btn btn-primary"
                                     title="Add row"
-                                    onClick={() => dataStore.addRow()}>
-                                    <i className="fa fa-plus-square" aria-hidden="true"></i>{" "}
+                                    onClick={dataStore.addRow}>
+                                    <i className="fa fa-plus-square" aria-hidden="true"></i>
                                 </button>
                             </td>
                         </tr>

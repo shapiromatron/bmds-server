@@ -7,6 +7,7 @@ import Spinner from "../../common/Spinner";
 import SelectInput from "../../common/SelectInput";
 import TextInput from "../../common/TextInput";
 import LabelInput from "../../common/LabelInput";
+import TextAreaInput from "../../common/TextAreaInput";
 
 @observer
 class RunChecklist extends Component {
@@ -37,25 +38,20 @@ class AnalysisForm extends Component {
                         <LabelInput label="Analysis Name" />
                         <TextInput
                             value={mainStore.analysis_name}
-                            onChange={value => mainStore.changeAnalysisName(value)}
+                            onChange={mainStore.changeAnalysisName}
                         />
                     </div>
                     <div className="form-group">
                         <LabelInput label="Analysis Description" />
-                        <textarea
-                            id="analysisDescription"
-                            className="form-control"
-                            type="textarea"
-                            rows="3"
+                        <TextAreaInput
                             value={mainStore.analysis_description}
-                            onChange={e =>
-                                mainStore.changeAnalysisDescription(e.target.value)
-                            }></textarea>
+                            onChange={mainStore.changeAnalysisDescription}
+                        />
                     </div>
                     <div className="form-group">
                         <LabelInput label="Model Type" />
                         <SelectInput
-                            onChange={value => mainStore.changeDatasetType(value)}
+                            onChange={mainStore.changeDatasetType}
                             value={mainStore.model_type}
                             choices={modelTypes.map((item, i) => {
                                 return {value: item.value, text: item.name};
@@ -72,7 +68,7 @@ class AnalysisForm extends Component {
                                 <button
                                     type="button"
                                     className="btn btn-warning float-right"
-                                    onClick={() => mainStore.executeResetAnalysis()}>
+                                    onClick={mainStore.executeResetAnalysis}>
                                     Cancel execution
                                 </button>
                                 <Spinner text="Executing, please wait..." />
@@ -106,14 +102,14 @@ class AnalysisForm extends Component {
                                 <button
                                     type="button"
                                     className="btn btn-primary mr-2"
-                                    onClick={() => mainStore.saveAnalysis()}>
+                                    onClick={mainStore.saveAnalysis}>
                                     Save Analysis
                                 </button>
                                 <button
                                     type="button"
                                     className="btn btn-primary"
                                     disabled={!mainStore.analysisSavedAndValidated}
-                                    onClick={() => mainStore.executeAnalysis()}>
+                                    onClick={mainStore.executeAnalysis}>
                                     Run Analysis
                                 </button>
                             </div>

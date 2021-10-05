@@ -113,7 +113,7 @@ export const RULES = Object.freeze({
         },
         [RULES.GOF_CANCER]: {
             name: "Goodness of fit p-test (cancer)",
-            notes: val => `BGoodness of fit p-value < ${val}`,
+            notes: val => `Goodness of fit p-value < ${val}`,
             hasThreshold: true,
             enabledContinuous: false,
             enabledDichotomous: true,

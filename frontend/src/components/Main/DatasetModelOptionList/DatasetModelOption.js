@@ -8,6 +8,7 @@ import {
     allDegreeOptions,
 } from "../../../constants/dataConstants";
 import {getLabel, checkOrEmpty} from "../../../common";
+import CheckboxInput from "../../common/CheckboxInput";
 import SelectInput from "../../common/SelectInput";
 
 @observer
@@ -22,11 +23,9 @@ class DatasetModelOption extends Component {
         return canEdit ? (
             <tr>
                 <td>
-                    <input
-                        id="enable-model"
-                        type="checkbox"
+                    <CheckboxInput
                         checked={option.enabled}
-                        onChange={e => updateOption(datasetId, "enabled", e.target.checked)}
+                        onChange={checked => updateOption(datasetId, "enabled", checked)}
                     />
                 </td>
                 <td>{dataset.metadata.name}</td>

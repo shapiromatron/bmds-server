@@ -3,12 +3,12 @@ import PropTypes from "prop-types";
 
 class FloatInput extends Component {
     render() {
-        const {value, onChange, disabled} = this.props;
+        const {className, value, onChange, disabled} = this.props;
         return (
             <input
                 id={this._id}
                 disabled={disabled}
-                className="form-control"
+                className={className}
                 type="number"
                 value={value}
                 onChange={e => onChange(e.target.value)}
@@ -18,9 +18,13 @@ class FloatInput extends Component {
 }
 
 FloatInput.propTypes = {
+    className: PropTypes.string,
     value: PropTypes.number.isRequired,
     onChange: PropTypes.func.isRequired,
     disabled: PropTypes.bool,
+};
+FloatInput.defaultProps = {
+    className: "form-control",
 };
 
 export default FloatInput;

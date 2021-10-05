@@ -24,5 +24,8 @@ CheckboxInput.propTypes = {
     checked: PropTypes.any.isRequired,
     disabled: PropTypes.bool,
 };
+CheckboxInput.defaultProps = {
+    disabled: false,
+};
 
 export default CheckboxInput;

@@ -19,9 +19,7 @@ const OptionsForm = props => {
                         choices={continuousBmrOptions.map(option => {
                             return {value: option.value, text: option.label};
                         })}
-                        onChange={value =>
-                            props.saveOptions("bmr_type", parseInt(value), props.idx)
-                        }
+                        onChange={value => props.saveOptions("bmr_type", value, props.idx)}
                         value={props.options.bmr_type}
                     />
                 </td>
@@ -32,9 +30,7 @@ const OptionsForm = props => {
                         choices={dichotomousBmrOptions.map(option => {
                             return {value: option.value, text: option.label};
                         })}
-                        onChange={value =>
-                            props.saveOptions("bmr_type", parseInt(value), props.idx)
-                        }
+                        onChange={value => props.saveOptions("bmr_type", value, props.idx)}
                         value={props.options.bmr_type}
                     />
                 </td>
@@ -42,7 +38,7 @@ const OptionsForm = props => {
 
             <td>
                 <FloatInput
-                    onChange={value => props.saveOptions("bmr_value", parseFloat(value), props.idx)}
+                    onChange={value => props.saveOptions("bmr_value", value, props.idx)}
                     value={props.options.bmr_value}
                 />
             </td>
@@ -50,18 +46,14 @@ const OptionsForm = props => {
                 <td>
                     <FloatInput
                         value={props.options.tail_probability}
-                        onChange={value =>
-                            props.saveOptions("tail_probability", parseFloat(value), props.idx)
-                        }
+                        onChange={value => props.saveOptions("tail_probability", value, props.idx)}
                     />
                 </td>
             ) : null}
             <td>
                 <FloatInput
                     value={props.options.confidence_level}
-                    onChange={value =>
-                        props.saveOptions("confidence_level", parseFloat(value), props.idx)
-                    }
+                    onChange={value => props.saveOptions("confidence_level", value, props.idx)}
                 />
             </td>
             {props.modelType === mc.MODEL_CONTINUOUS ? (
@@ -70,9 +62,7 @@ const OptionsForm = props => {
                         choices={distTypeOptions.map(option => {
                             return {value: option.value, text: option.label};
                         })}
-                        onChange={value =>
-                            props.saveOptions("dist_type", parseInt(value), props.idx)
-                        }
+                        onChange={value => props.saveOptions("dist_type", value, props.idx)}
                         value={props.options.dist_type}
                     />
                 </td>

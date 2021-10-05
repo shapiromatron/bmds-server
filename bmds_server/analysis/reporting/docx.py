@@ -10,6 +10,7 @@ from django.utils.timezone import now
 
 from ...common.docx import add_url_hyperlink
 from ...common.utils import to_timestamp
+from ..utils import get_citation
 
 if TYPE_CHECKING:
     from ..models import Analysis
@@ -59,10 +60,23 @@ def build_docx(analysis: Analysis, uri: str) -> BytesIO:
         report.document.add_paragraph("Execution generated errors; no report can be generated")
     else:
         batch = analysis.to_batch()
-        batch.to_docx(report=report)
+        batch.to_docx(report=report, header_level=1, citation=False)
+
+    write_citation(report, 1)
 
     report.document.save(f)
     return f
+
+
+def write_citation(report: Report, header_level: int):
+    styles = report.styles
+    header_style = styles.get_header_style(header_level)
+    report.document.add_paragraph("Recommended citation", header_style)
+    report.document.add_paragraph(
+        "Please adapt as appropriate; the citations below capture the package version and "
+        "timestamps for easier reproducibility of the analysis."
+    )
+    report.document.add_paragraph(get_citation(), styles.fixed_width)
 
 
 def add_update_url(analysis: Analysis, data: BytesIO, uri: str) -> BytesIO:

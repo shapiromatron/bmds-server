@@ -3768,7 +3768,7 @@
           dataset_name: Kidney
         bmds_version: BMDS330
         dataset_index: 0
-        bmds_python_version: 1.0.0
+        bmds_python_version: 1.0.0.dev
         recommended_model_index: null
       - models:
         - results:
@@ -6813,7 +6813,7 @@
           dataset_name: Liver
         bmds_version: BMDS330
         dataset_index: 1
-        bmds_python_version: 1.0.0
+        bmds_python_version: 1.0.0.dev
         recommended_model_index: null
     errors: []
     created: 2020-12-15 23:28:36.947965+00:00

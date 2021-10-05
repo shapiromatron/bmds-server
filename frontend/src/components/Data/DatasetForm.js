@@ -22,7 +22,7 @@ const DatasetFormRow = props => {
             })}
             <td>
                 <button className="btn btn-danger btn-sm" onClick={e => props.delete(props.rowIdx)}>
-                    <i className="fa fa-trash"></i>
+                    <i className="fa fa-fw fa-trash"></i>
                 </button>
             </td>
         </tr>
@@ -122,15 +122,15 @@ class DatasetForm extends Component {
                                 <button
                                     className="btn btn-info mr-1"
                                     title="Load dataset from Excel"
-                                    onClick={() => dataStore.toggleDatasetModal()}>
+                                    onClick={dataStore.toggleDatasetModal}>
                                     <i className="fa fa-file-excel-o"></i>
                                 </button>
                                 <button
                                     type="button"
                                     className="btn btn-primary"
                                     title="Add row"
-                                    onClick={() => dataStore.addRow()}>
-                                    <i className="fa fa-plus-square" aria-hidden="true"></i>{" "}
+                                    onClick={dataStore.addRow}>
+                                    <i className="fa fa-plus-square" aria-hidden="true"></i>
                                 </button>
                             </td>
                         </tr>

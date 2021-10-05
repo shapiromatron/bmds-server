@@ -37,9 +37,7 @@ class RuleRow extends Component {
                             name={rule.rule_class}
                             id={ruleIndex}
                             value={rule.threshold}
-                            onChange={value =>
-                                updateRule(ruleIndex, "threshold", parseFloat(value))
-                            }
+                            onChange={value => updateRule(ruleIndex, "threshold", value)}
                         />
                     ) : (
                         "N/A"
@@ -50,7 +48,7 @@ class RuleRow extends Component {
                         choices={logicBinOptions.map(option => {
                             return {value: option.value, text: option.label};
                         })}
-                        onChange={value => updateRule(ruleIndex, "failure_bin", parseInt(value))}
+                        onChange={value => updateRule(ruleIndex, "failure_bin", value)}
                         value={rule.failure_bin}
                     />
                 </td>

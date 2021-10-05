@@ -1,7 +1,6 @@
 from typing import Optional, Tuple
 
 from django.conf import settings
-from django.core.cache import cache
 from django.middleware.csrf import get_token
 from django.shortcuts import get_object_or_404
 from django.template import RequestContext, Template

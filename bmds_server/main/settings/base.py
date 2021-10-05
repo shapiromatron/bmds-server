@@ -213,3 +213,4 @@ GTM_ID = os.getenv("GTM_ID")
 
 TEST_DB_FIXTURE = ROOT_DIR / "tests/data/db.yaml"
 CONTACT_US_LINK = os.getenv("CONTACT_US_LINK", "")
+WEBSITE_URI = os.getenv("WEBSITE_URI", "https://example.com")

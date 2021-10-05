@@ -2,6 +2,7 @@ import random
 import string
 from textwrap import dedent
 
+from bmds.utils import get_latest_dll_version
 from django.conf import settings
 from django.utils.timezone import now
 
@@ -19,14 +20,15 @@ def random_string(samples: str = _random_string_pool, length: int = 12) -> str:
     return "".join(random.choices(_random_string_pool, k=length))
 
 
-def get_citation(uri: str) -> str:
+def get_citation() -> str:
     """
     Return a citation for the software.
     """
     year = now().strftime("%Y")
     accessed = now().strftime("%B %d, %Y")
     sha = settings.COMMIT.sha
-    bmds_version = "2021.09"
+    bmds_version = get_latest_dll_version()
+    uri = settings.WEBSITE_URI
     return dedent(
         f"""\
         United States Environmental Protection Agency. ({year}). BMDS-Online (Build {sha}; Model

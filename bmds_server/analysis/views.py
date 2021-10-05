@@ -25,17 +25,10 @@ class Home(CreateView):
         content = models.Content.get_cached_content(models.ContentType.HOMEPAGE)
         return Template(content["template"]).render(context)
 
-    def _get_citation(self):
-        citation = cache.get("bmds-citation")
-        if citation is None:
-            citation = get_citation(self.request.build_absolute_uri("/"))
-            cache.set("bmds-citation", citation, 60 * 60)
-        return citation
-
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["days_to_keep_analyses"] = settings.DAYS_TO_KEEP_ANALYSES
-        context["citation"] = self._get_citation()
+        context["citation"] = get_citation()
         context["page"] = self._render_template(context)
         return context
 

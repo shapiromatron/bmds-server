@@ -260,7 +260,7 @@ class MainStore {
         return this.config.editSettings !== undefined;
     }
     @computed get isFuture() {
-        return this.config.isFuture;
+        return this.config.future;
     }
     @computed get getExecutionOutputs() {
         return this.executionOutputs;

@@ -1,7 +1,7 @@
 import _ from "lodash";
 import {computed, observable, action} from "mobx";
 
-import {adverseDirectionOptions, Dtype, datasetOptions} from "../constants/dataConstants";
+import {datasetOptions} from "../constants/dataConstants";
 
 class DatasetModelOptionStore {
     constructor(rootStore) {

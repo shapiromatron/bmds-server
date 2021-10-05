@@ -39,7 +39,11 @@ class TestAnalysisDetail:
             "url": f"/analysis/{pk}/",
             "excelUrl": f"/api/v1/analysis/{pk}/excel/",
             "wordUrl": f"/api/v1/analysis/{pk}/word/",
+            "future": False,
         }
+
+        response = client.get(analysis.get_absolute_url() + "?future=1")
+        assert response.context["config"]["future"] is True
 
         # write view should have edit context
         response = client.get(analysis.get_edit_url())
@@ -51,6 +55,7 @@ class TestAnalysisDetail:
             "url": f"/analysis/{pk}/",
             "excelUrl": f"/api/v1/analysis/{pk}/excel/",
             "wordUrl": f"/api/v1/analysis/{pk}/word/",
+            "future": False,
             "editSettings": {
                 "editKey": pw,
                 "viewUrl": f"http://testserver/analysis/{pk}/",

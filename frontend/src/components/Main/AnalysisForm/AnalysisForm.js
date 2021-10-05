@@ -1,7 +1,6 @@
 import React, {Component} from "react";
 import {inject, observer} from "mobx-react";
 import PropTypes from "prop-types";
-import {modelTypes} from "../../../constants/mainConstants";
 
 import Spinner from "../../common/Spinner";
 import SelectInput from "../../common/SelectInput";

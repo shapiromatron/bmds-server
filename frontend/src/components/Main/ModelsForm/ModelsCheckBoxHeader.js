@@ -47,14 +47,12 @@ const ModelsCheckBoxHeader = observer(props => {
                 <th>Frequentist Restricted</th>
                 <th>Frequentist Unrestricted</th>
                 {isNestedDichotomous ? null : (
-                    <>
-                        <th colSpan="2">
-                            Bayesian Model Averaging
-                            {isContinuous ? (
-                                <HelpTextPopover title={title} content={content}></HelpTextPopover>
-                            ) : null}
-                        </th>
-                    </>
+                    <th colSpan="2">
+                        Bayesian Model Averaging
+                        {isContinuous ? (
+                            <HelpTextPopover title={title} content={content}></HelpTextPopover>
+                        ) : null}
+                    </th>
                 )}
             </tr>
             <tr>

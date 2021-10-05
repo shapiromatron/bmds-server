@@ -52,9 +52,7 @@ class AnalysisForm extends Component {
                             label="Model Type"
                             onChange={mainStore.changeDatasetType}
                             value={mainStore.model_type}
-                            choices={modelTypes.map((item, i) => {
-                                return {value: item.value, text: item.name};
-                            })}
+                            choices={mainStore.getModelTypeChoices}
                         />
                     </div>
 

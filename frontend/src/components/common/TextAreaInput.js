@@ -3,28 +3,34 @@ import {observer} from "mobx-react";
 import PropTypes from "prop-types";
 
 import {randomString} from "../../common";
+import LabelInput from "./LabelInput";
 
 @observer
 class TextAreaInput extends Component {
     constructor(props) {
         super(props);
-        this._id = randomString();
+        this._id = props.id || randomString();
     }
     render() {
-        const {onChange, rows, value} = this.props;
+        const {label, onChange, rows, value} = this.props;
         return (
-            <textarea
-                id={this._id}
-                rows={rows}
-                className="form-control"
-                value={value}
-                onChange={e => onChange(e.target.value)}
-            />
+            <>
+                {label ? <LabelInput label={label} htmlFor={this._id} /> : null}
+                <textarea
+                    id={this._id}
+                    rows={rows}
+                    className="form-control"
+                    value={value}
+                    onChange={e => onChange(e.target.value)}
+                />
+            </>
         );
     }
 }
 
 TextAreaInput.propTypes = {
+    id: PropTypes.string,
+    label: PropTypes.string,
     rows: PropTypes.number,
     onChange: PropTypes.func.isRequired,
     value: PropTypes.string,

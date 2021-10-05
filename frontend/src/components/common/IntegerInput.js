@@ -3,18 +3,19 @@ import {observer} from "mobx-react";
 import PropTypes from "prop-types";
 
 import {randomString} from "../../common";
+import LabelInput from "./LabelInput";
 
 @observer
 class IntegerInput extends Component {
     constructor(props) {
         super(props);
-        this._id = randomString();
+        this._id = props.id || randomString();
     }
     render() {
-        const {onChange, label, value} = this.props;
+        const {label, onChange, value} = this.props;
         return (
-            <div className="form-group">
-                {label ? <label htmlFor={this._id}>{label}</label> : null}
+            <>
+                {label ? <LabelInput label={label} htmlFor={this._id} /> : null}
                 <input
                     id={this._id}
                     className="form-control"
@@ -23,12 +24,13 @@ class IntegerInput extends Component {
                     value={value}
                     onChange={e => onChange(e.target.value)}
                 />
-            </div>
+            </>
         );
     }
 }
 
 IntegerInput.propTypes = {
+    id: PropTypes.string,
     label: PropTypes.string,
     onChange: PropTypes.func.isRequired,
     value: PropTypes.any.isRequired,

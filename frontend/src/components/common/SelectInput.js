@@ -3,34 +3,40 @@ import {observer} from "mobx-react";
 import PropTypes from "prop-types";
 
 import {randomString} from "../../common";
+import LabelInput from "./LabelInput";
 
 @observer
 class SelectInput extends Component {
     constructor(props) {
         super(props);
-        this._id = randomString();
+        this._id = props.id || randomString();
     }
     render() {
-        const {onChange, value, choices} = this.props;
+        const {label, onChange, value, choices} = this.props;
         return (
-            <select
-                id={this._id}
-                className="form-control p-0"
-                onChange={e => onChange(e.target.value)}
-                value={value}>
-                {choices.map(choice => {
-                    return (
-                        <option key={choice.value} value={choice.value}>
-                            {choice.text}
-                        </option>
-                    );
-                })}
-            </select>
+            <>
+                {label ? <LabelInput label={label} htmlFor={this._id} /> : null}
+                <select
+                    id={this._id}
+                    className="form-control"
+                    onChange={e => onChange(e.target.value)}
+                    value={value}>
+                    {choices.map(choice => {
+                        return (
+                            <option key={choice.value} value={choice.value}>
+                                {choice.text}
+                            </option>
+                        );
+                    })}
+                </select>
+            </>
         );
     }
 }
 
 SelectInput.propTypes = {
+    id: PropTypes.string,
+    label: PropTypes.string,
     choices: PropTypes.arrayOf(
         PropTypes.shape({
             value: PropTypes.any.isRequired,

@@ -11,10 +11,10 @@ class SelectModelType extends Component {
         const {dataStore} = this.props;
         return (
             <div className="model-type mb-2">
-                {/* ADD label back; htmlFor is broken */}
-                <LabelInput label="New dataset" />
+                <LabelInput label="New dataset" htmlFor="idFilteredDatasets" />
                 <div className="input-group">
                     <SelectInput
+                        id="idFilteredDatasets"
                         onChange={value => dataStore.setModelType(value)}
                         value={dataStore.model_type}
                         choices={dataStore.getFilteredDatasetTypes.map(item => {

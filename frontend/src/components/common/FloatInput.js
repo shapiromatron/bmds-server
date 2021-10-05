@@ -1,23 +1,35 @@
 import React, {Component} from "react";
 import PropTypes from "prop-types";
 
+import {randomString} from "../../common";
+import LabelInput from "./LabelInput";
+
 class FloatInput extends Component {
+    constructor(props) {
+        super(props);
+        this._id = props.id || randomString();
+    }
     render() {
-        const {className, value, onChange, disabled} = this.props;
+        const {label, className, value, onChange, disabled} = this.props;
         return (
-            <input
-                id={this._id}
-                disabled={disabled}
-                className={className}
-                type="number"
-                value={value}
-                onChange={e => onChange(e.target.value)}
-            />
+            <>
+                {label ? <LabelInput label={label} htmlFor={this._id} /> : null}
+                <input
+                    id={this._id}
+                    disabled={disabled}
+                    className={className}
+                    type="number"
+                    value={value}
+                    onChange={e => onChange(e.target.value)}
+                />
+            </>
         );
     }
 }
 
 FloatInput.propTypes = {
+    id: PropTypes.string,
+    label: PropTypes.string,
     className: PropTypes.string,
     value: PropTypes.number.isRequired,
     onChange: PropTypes.func.isRequired,

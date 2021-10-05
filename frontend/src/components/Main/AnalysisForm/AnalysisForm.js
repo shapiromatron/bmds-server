@@ -6,7 +6,6 @@ import {modelTypes} from "../../../constants/mainConstants";
 import Spinner from "../../common/Spinner";
 import SelectInput from "../../common/SelectInput";
 import TextInput from "../../common/TextInput";
-import LabelInput from "../../common/LabelInput";
 import TextAreaInput from "../../common/TextAreaInput";
 
 @observer
@@ -35,22 +34,22 @@ class AnalysisForm extends Component {
             <div>
                 <form className="bg-custom p-3 mt-2">
                     <div className="form-group">
-                        <LabelInput label="Analysis Name" />
                         <TextInput
+                            label="Analysis Name"
                             value={mainStore.analysis_name}
                             onChange={mainStore.changeAnalysisName}
                         />
                     </div>
                     <div className="form-group">
-                        <LabelInput label="Analysis Description" />
                         <TextAreaInput
+                            label="Analysis Description"
                             value={mainStore.analysis_description}
                             onChange={mainStore.changeAnalysisDescription}
                         />
                     </div>
                     <div className="form-group">
-                        <LabelInput label="Model Type" />
                         <SelectInput
+                            label="Model Type"
                             onChange={mainStore.changeDatasetType}
                             value={mainStore.model_type}
                             choices={modelTypes.map((item, i) => {

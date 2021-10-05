@@ -7,10 +7,10 @@ import {
     dichotomousBmrOptions,
     continuousBmrOptions,
     distTypeOptions,
-    lscOptions,
+    litterSpecificCovariateOptions,
     backgroundOptions,
-    bootstrapSeedOptions,
 } from "../../../constants/optionsConstants";
+import IntegerInput from "../../common/IntegerInput";
 import FloatInput from "../../common/FloatInput";
 
 const OptionsForm = props => {
@@ -74,70 +74,40 @@ const OptionsForm = props => {
             {props.modelType === mc.MODEL_NESTED_DICHOTOMOUS ? (
                 <>
                     <td>
-                        <select
-                            className="form-control"
-                            value={props.options.lsc}
-                            onChange={e =>
-                                props.saveOptions("lsc", parseInt(e.target.value), props.idx)
-                            }>
-                            {lscOptions.map(d => {
-                                return (
-                                    <option key={d.value} value={d.value}>
-                                        {d.label}
-                                    </option>
-                                );
+                        <SelectInput
+                            value={props.options.litter_specific_covariate}
+                            onChange={value =>
+                                props.saveOptions("litter_specific_covariate", value, props.idx)
+                            }
+                            choices={litterSpecificCovariateOptions.map(option => {
+                                return {value: option.value, text: option.label};
                             })}
-                        </select>
+                        />
                     </td>
                     <td>
-                        <select
-                            className="form-control"
+                        <SelectInput
                             value={props.options.background}
-                            onChange={e =>
-                                props.saveOptions("background", parseInt(e.target.value), props.idx)
-                            }>
-                            {backgroundOptions.map(d => {
-                                return (
-                                    <option key={d.value} value={d.value}>
-                                        {d.label}
-                                    </option>
-                                );
+                            onChange={value => props.saveOptions("background", value, props.idx)}
+                            choices={backgroundOptions.map(option => {
+                                return {value: option.value, text: option.label};
                             })}
-                        </select>
+                        />
                     </td>
                     <td>
-                        <input
-                            type="number"
-                            className="form-control text-center"
+                        <IntegerInput
                             value={props.options.bootstrap_iterations}
-                            onChange={e =>
-                                props.saveOptions(
-                                    "bootstrap_iterations",
-                                    parseFloat(e.target.value),
-                                    props.idx
-                                )
+                            onChange={value =>
+                                props.saveOptions("bootstrap_iterations", value, props.idx)
                             }
                         />
                     </td>
                     <td>
-                        <select
-                            className="form-control"
+                        <IntegerInput
                             value={props.options.bootstrap_seed}
-                            onChange={e =>
-                                props.saveOptions(
-                                    "bootstrap_seed",
-                                    parseInt(e.target.value),
-                                    props.idx
-                                )
-                            }>
-                            {bootstrapSeedOptions.map(d => {
-                                return (
-                                    <option key={d.value} value={d.value}>
-                                        {d.label}
-                                    </option>
-                                );
-                            })}
-                        </select>
+                            onChange={value =>
+                                props.saveOptions("bootstrap_seed", value, props.idx)
+                            }
+                        />
                     </td>
                 </>
             ) : null}

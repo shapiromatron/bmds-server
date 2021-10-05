@@ -1,6 +1,8 @@
+import {MODEL_CONTINUOUS, MODEL_DICHOTOMOUS, MODEL_NESTED_DICHOTOMOUS} from "./mainConstants";
+
 const modelsList = {
-        C: ["Exponential", "Hill", "Linear", "Polynomial", "Power"],
-        D: [
+        [MODEL_CONTINUOUS]: ["Exponential", "Hill", "Linear", "Polynomial", "Power"],
+        [MODEL_DICHOTOMOUS]: [
             "Dichotomous-Hill",
             "Gamma",
             "Logistic",
@@ -11,14 +13,14 @@ const modelsList = {
             "Quantal Linear",
             "Weibull",
         ],
-        ND: ["NestedLogistic", "NCTR"],
+        [MODEL_NESTED_DICHOTOMOUS]: ["NestedLogistic", "NCTR"],
     },
     models = {
-        C: {
+        [MODEL_CONTINUOUS]: {
             frequentist_restricted: ["Exponential", "Hill", "Polynomial", "Power"],
             frequentist_unrestricted: ["Linear"],
         },
-        D: {
+        [MODEL_DICHOTOMOUS]: {
             frequentist_restricted: [
                 "Dichotomous-Hill",
                 "Gamma",
@@ -28,18 +30,18 @@ const modelsList = {
             ],
             frequentist_unrestricted: ["Logistic", "LogProbit", "Probit"],
         },
-        ND: {
+        [MODEL_NESTED_DICHOTOMOUS]: {
             frequentist_restricted: ["Nested Logistic"],
             frequentist_unrestricted: [],
         },
     },
     allModelOptions = {
-        C: {
+        [MODEL_CONTINUOUS]: {
             frequentist_restricted: ["Exponential", "Hill", "Polynomial", "Power"],
             frequentist_unrestricted: ["Hill", "Linear", "Polynomial", "Power"],
             bayesian: modelsList.C,
         },
-        D: {
+        [MODEL_DICHOTOMOUS]: {
             frequentist_restricted: [
                 "Dichotomous-Hill",
                 "Gamma",
@@ -51,7 +53,7 @@ const modelsList = {
             frequentist_unrestricted: modelsList.D,
             bayesian: modelsList.D,
         },
-        ND: {
+        [MODEL_NESTED_DICHOTOMOUS]: {
             frequentist_restricted: ["Nested Logistic", "NCTR"],
             frequentist_unrestricted: ["Nested Logistic", "NCTR"],
         },

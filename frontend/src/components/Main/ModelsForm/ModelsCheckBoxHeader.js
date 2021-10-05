@@ -71,7 +71,6 @@ const ModelsCheckBoxHeader = observer(props => {
                         <th>Prior Weights</th>
                     </>
                 )}
-                {isNestedDichotomous ? null : <th>Prior Weights</th>}
             </tr>
         </thead>
     );

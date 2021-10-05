@@ -1,21 +1,23 @@
+import {MODEL_CONTINUOUS, MODEL_DICHOTOMOUS, MODEL_NESTED_DICHOTOMOUS} from "./mainConstants";
+
 export const options = {
-        C: {
+        [MODEL_CONTINUOUS]: {
             bmr_type: 2,
             bmr_value: 1,
             tail_probability: 0.01,
             confidence_level: 0.95,
             dist_type: 1,
         },
-        D: {
+        [MODEL_DICHOTOMOUS]: {
             bmr_type: 1,
             bmr_value: 0.1,
             confidence_level: 0.95,
         },
-        ND: {
+        [MODEL_NESTED_DICHOTOMOUS]: {
             bmr_type: 1,
             bmr_value: 0.1,
             confidence_level: 0.95,
-            lsc: 1,
+            litter_specific_covariate: 1,
             background: 1,
             bootstrap_iterations: 1,
             bootstrap_seed: 0,
@@ -38,12 +40,11 @@ export const options = {
         {value: 2, label: "Normal + Non-constant"},
         {value: 3, label: "Lognormal"},
     ],
-    lscOptions = [
+    litterSpecificCovariateOptions = [
         {value: 0, label: "Overall Mean"},
         {value: 1, label: "Control Group Mean"},
     ],
     backgroundOptions = [
         {value: 0, label: "Zero"},
         {value: 1, label: "Estimated"},
-    ],
-    bootstrapSeedOptions = [{value: 0, label: "Default"}];
+    ];

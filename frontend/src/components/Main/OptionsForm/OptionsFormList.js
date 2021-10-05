@@ -60,7 +60,9 @@ class OptionsFormList extends Component {
                                             </th>
                                             <th>Background</th>
                                             <th>
-                                                Bootstrap <br /> Iterations
+                                                Bootstrap
+                                                <br />
+                                                Iterations
                                             </th>
                                             <th>Bootstrap Seed</th>
                                         </>
@@ -74,7 +76,7 @@ class OptionsFormList extends Component {
                                                 title="Add New Option Set"
                                                 className="btn btn-primary "
                                                 disabled={!optionsStore.canAddNewOption}
-                                                onClick={() => optionsStore.addOptions()}>
+                                                onClick={optionsStore.addOptions}>
                                                 <i className="fa fa-plus"></i>{" "}
                                             </button>
                                         </th>

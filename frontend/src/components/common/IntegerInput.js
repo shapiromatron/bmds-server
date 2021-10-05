@@ -1,3 +1,4 @@
+import _ from "lodash";
 import React, {Component} from "react";
 import {observer} from "mobx-react";
 import PropTypes from "prop-types";
@@ -20,9 +21,12 @@ class IntegerInput extends Component {
                     id={this._id}
                     className="form-control"
                     type="number"
-                    step="1"
+                    step={1}
                     value={value}
-                    onChange={e => onChange(e.target.value)}
+                    onChange={e => {
+                        const value = parseInt(e.target.value);
+                        onChange(_.isFinite(value) ? value : "");
+                    }}
                 />
             </>
         );

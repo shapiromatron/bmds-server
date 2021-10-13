@@ -21,6 +21,8 @@ class MainStore {
     @observable hasEditSettings = false;
     @observable executionOutputs = null;
     @observable isUpdateComplete = false;
+    @observable showModal = false;
+    @observable selectedModel = 0;
 
     @action.bound setConfig(config) {
         this.config = config;
@@ -316,9 +318,13 @@ class MainStore {
     @observable toastHeader = "";
     @observable toastMessage = "";
     @action.bound downloadReport(url) {
+        this.showModal = false;
         let apiUrl = (apiUrl = this.config[url]);
         if (this.canEdit) {
             apiUrl = `${apiUrl}?editKey=${this.config.editSettings.editKey}`;
+        }
+        if (url === "wordUrl") {
+            apiUrl = apiUrl + "&example=" + this.selectedModel;
         }
         const fetchReport = () => {
                 fetch(apiUrl).then(processResponse);
@@ -348,6 +354,18 @@ class MainStore {
         this.showToast = false;
     }
     // *** END TOAST ***
+    @action showActionModal() {
+        this.showModal = true;
+    }
+
+    @action closeActionModal() {
+        this.showModal = false;
+    }
+
+    @action.bound updateSelectedModel(value) {
+        //TODO
+        this.selectedModel = value;
+    }
 }
 
 export default MainStore;

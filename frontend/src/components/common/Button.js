@@ -1,8 +1,8 @@
-import React, { Component } from "react";
-import { observer } from "mobx-react";
+import React, {Component} from "react";
+import {observer} from "mobx-react";
 import PropTypes from "prop-types";
 
-import { randomString } from "../../common";
+import {randomString} from "../../common";
 
 @observer
 class Button extends Component {

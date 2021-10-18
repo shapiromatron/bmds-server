@@ -11,6 +11,7 @@ import {
     MODEL_DICHOTOMOUS,
     MODEL_NESTED_DICHOTOMOUS,
 } from "../../../constants/mainConstants";
+import Button from "../../common/Button";
 
 @inject("optionsStore")
 @observer
@@ -69,16 +70,14 @@ class OptionsFormList extends Component {
                                     ) : null}
                                     {optionsStore.canEdit ? (
                                         <th>
-                                            <button
-                                                type="button"
-                                                data-toggle="tooltip"
-                                                data-placement="right"
-                                                title="Add New Option Set"
-                                                className="btn btn-primary "
+                                            <Button
+                                                datatoggle="tooltip"
+                                                placement="right"
+                                                className="btn btn-primary"
                                                 disabled={!optionsStore.canAddNewOption}
-                                                onClick={optionsStore.addOptions}>
-                                                <i className="fa fa-plus"></i>{" "}
-                                            </button>
+                                                onClick={optionsStore.addOptions}
+                                                faClass="fa fa-plus"
+                                            />
                                         </th>
                                     ) : null}
                                 </tr>

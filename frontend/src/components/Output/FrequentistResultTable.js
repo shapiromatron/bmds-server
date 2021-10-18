@@ -9,6 +9,7 @@ import {getPValue, modelClasses, priorClass} from "../../constants/outputConstan
 import {ff} from "../../common";
 
 import Popover from "../common/Popover";
+import Button from "../common/Button";
 
 const getModelBinLabel = function(output, index) {
         if (output.recommender.results.recommended_model_index == index) {
@@ -247,17 +248,15 @@ class FrequentistResultTable extends Component {
                         <th>Scaled Residual for Control Dose Group</th>
                         {store.recommendationEnabled ? (
                             <th>
-                                <button
+                                <Button
                                     title="Toggle showing notes inline or popover"
                                     className="btn btn-info btn-sm pull-right"
-                                    onClick={store.toggleInlineNotes}>
-                                    <i
-                                        className={`fa fa-fw ${
-                                            store.showInlineNotes ? "fa-eye-slash" : "fa-eye"
-                                        }`}></i>
-                                    &nbsp;
-                                    {store.showInlineNotes ? "Hide" : "Show"}
-                                </button>
+                                    onClick={store.toggleInlineNotes}
+                                    text={store.showInlineNotes ? "Hide" : "Show"}
+                                    faClass={`fa fa-fw ${
+                                        store.showInlineNotes ? "fa-eye-slash" : "fa-eye"
+                                    }`}
+                                />
                                 Recommendation
                                 <br />
                                 and Notes

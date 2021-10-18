@@ -8,6 +8,7 @@ import PropTypes from "prop-types";
 import {inject, observer} from "mobx-react";
 import DatasetModelOptionList from "./DatasetModelOptionList/DatasetModelOptionList";
 import AnalysisFormReadOnly from "./AnalysisForm/AnalysisFormReadOnly";
+import Button from "../common/Button";
 
 @inject("mainStore")
 @observer
@@ -24,11 +25,11 @@ class Main extends Component {
                 </div>
                 <div className="col-lg-8">
                     {mainStore.canEdit ? (
-                        <button
+                        <Button
                             className="btn btn-sm btn-warning"
-                            onClick={e => mainStore.resetModelSelection()}>
-                            Reset Model Selection
-                        </button>
+                            onClick={e => mainStore.resetModelSelection()}
+                            text="Reset Model Selection"
+                        />
                     ) : null}
                     <ModelsCheckBoxList />
                     <OptionsFormList />

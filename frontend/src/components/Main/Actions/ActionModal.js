@@ -4,6 +4,7 @@ import {Modal, Row, Col} from "react-bootstrap";
 import SelectInput from "../../common/SelectInput";
 import {optionType} from "../../../constants/mainConstants";
 import PropTypes from "prop-types";
+import Button from "../../common/Button";
 
 @inject("mainStore")
 @observer
@@ -19,13 +20,14 @@ class ActionModal extends Component {
                 centered>
                 <Modal.Header>
                     <Modal.Title id="contained-modal-title-vcenter">Download Report</Modal.Title>
-                    <button
-                        id="close-modal"
+
+                    <Button
                         className="btn btn-danger"
                         style={{float: "right"}}
-                        onClick={() => mainStore.closeActionModal()}>
-                        <i className="fa fa-times" aria-hidden="true"></i>
-                    </button>
+                        onClick={() => mainStore.closeActionModal()}
+                        faClass="fa fa-times"
+                        hidden="true"
+                    />
                 </Modal.Header>
                 <Modal.Body>
                     <Row>
@@ -42,18 +44,17 @@ class ActionModal extends Component {
                     </Row>
                     <Row className="mt-2">
                         <Col>
-                            <button
-                                id="close-modal"
+                            <Button
                                 className="btn btn-primary mr-2"
-                                onClick={() => mainStore.downloadReport("wordUrl")}>
-                                Download Report
-                            </button>
-                            <button
+                                onClick={() => mainStore.downloadReport("wordUrl")}
+                                text="Download Report"
+                            />
+                            <Button
                                 id="close-modal"
                                 className="btn btn-danger"
-                                onClick={() => mainStore.closeActionModal()}>
-                                Cancel
-                            </button>
+                                onClick={() => mainStore.closeActionModal()}
+                                text="Cancel"
+                            />
                         </Col>
                     </Row>
                 </Modal.Body>

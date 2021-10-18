@@ -3,6 +3,7 @@ import {inject, observer} from "mobx-react";
 import PropTypes from "prop-types";
 
 import ClipboardButton from "../../common/ClipboardButton";
+import Button from "../../common/Button";
 
 @inject("mainStore")
 @observer
@@ -11,15 +12,15 @@ class ShareActions extends Component {
         const {editSettings} = this.props.mainStore.config;
         return (
             <div className="dropdown">
-                <button
+                <Button
+                    text="Share"
                     className="btn btn-success dropdown-toggle"
                     type="button"
-                    id="bmdSessionShare"
-                    data-toggle="dropdown"
-                    aria-haspopup="true"
-                    aria-expanded="false">
-                    Share
-                </button>
+                    id="bmdSessionActions"
+                    datatoggle="dropdown"
+                    haspopup="true"
+                    expanded="false"
+                />
                 <div
                     style={{minWidth: 300}}
                     className="dropdown-menu dropdown-menu-right"

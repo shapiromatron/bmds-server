@@ -5,6 +5,7 @@ import PropTypes from "prop-types";
 
 import SelectInput from "../common/SelectInput";
 import TextAreaInput from "../common/TextAreaInput";
+import Button from "../common/Button";
 
 @inject("outputStore")
 @observer
@@ -41,12 +42,11 @@ class SelectModelIndex extends Component {
                 </div>
                 <div className="col-md-4">
                     <label>&nbsp;</label>
-                    <button
-                        type="button"
+                    <Button
                         className="btn btn-primary btn-block mt-1"
-                        onClick={outputStore.saveSelectedModel}>
-                        Save model selection
-                    </button>
+                        onClick={outputStore.saveSelectedModel}
+                        text="Save model selection"
+                    />
                 </div>
             </form>
         );

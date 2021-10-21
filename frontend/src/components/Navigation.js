@@ -1,6 +1,6 @@
-import React, {Component} from "react";
-import {Route, NavLink} from "react-router-dom";
-import {inject, observer} from "mobx-react";
+import React, { Component } from "react";
+import { Route, NavLink } from "react-router-dom";
+import { inject, observer } from "mobx-react";
 import Main from "./Main/Main";
 import DataTab from "./Data/DataTab";
 import LogicRoot from "./Logic/LogicRoot";
@@ -10,13 +10,13 @@ import PropTypes from "prop-types";
 import Actions from "./Main/Actions/Actions";
 import ShareActions from "./Main/Actions/ShareActions";
 import DownloadToast from "./Main/Actions/DownloadToast";
-import ActionModal from "./Main/Actions/ActionModal";
+import WordReportOptionsModal from "./Main/Actions/WordReportOptionsModal";
 
 @inject("mainStore")
 @observer
 class Navigation extends Component {
     render() {
-        const {mainStore} = this.props;
+        const { mainStore } = this.props;
         return (
             <>
                 <ul className="nav nav-tabs d-flex mt-3">
@@ -47,10 +47,10 @@ class Navigation extends Component {
                     ) : null}
                     <li
                         className={mainStore.canEdit ? "nav-item" : "nav-item ml-auto"}
-                        style={{position: "relative"}}>
+                        style={{ position: "relative" }}>
                         <Actions />
                         <DownloadToast />
-                        <ActionModal />
+                        <WordReportOptionsModal />
                     </li>
                 </ul>
                 <div className="content mt-2">
@@ -59,7 +59,7 @@ class Navigation extends Component {
                     <Route path="/logic" component={LogicRoot} />
                     <Route path="/output" component={Output} />
                 </div>
-                <div id="payload" style={{color: "white", height: "1px", overflow: "hidden"}}>
+                <div id="payload" style={{ color: "white", height: "1px", overflow: "hidden" }}>
                     {JSON.stringify(mainStore.getPayload, undefined, 2)}
                 </div>
             </>

@@ -1,10 +1,10 @@
-import { saveAs } from "file-saver";
+import {saveAs} from "file-saver";
 import slugify from "slugify";
-import { observable, action, computed } from "mobx";
+import {observable, action, computed} from "mobx";
 import _ from "lodash";
 
 import * as mc from "../constants/mainConstants";
-import { simulateClick, getHeaders } from "../common";
+import {simulateClick, getHeaders} from "../common";
 
 class MainStore {
     constructor(rootStore) {
@@ -73,7 +73,7 @@ class MainStore {
     @action.bound
     async saveAnalysis() {
         const url = this.config.editSettings.patchInputUrl,
-            { csrfToken } = this.config.editSettings;
+            {csrfToken} = this.config.editSettings;
         this.errorMessage = "";
         await fetch(url, {
             method: "PATCH",
@@ -110,7 +110,7 @@ class MainStore {
         this.errorMessage = "";
 
         const apiUrl = this.config.apiUrl,
-            { csrfToken } = this.config.editSettings,
+            {csrfToken} = this.config.editSettings,
             handleServerError = error => {
                 console.error("error", error);
                 if (error.status == 500) {
@@ -168,7 +168,7 @@ class MainStore {
     }
     @action.bound
     async executeResetAnalysis() {
-        const { csrfToken, executeResetUrl } = this.config.editSettings;
+        const {csrfToken, executeResetUrl} = this.config.editSettings;
         await fetch(executeResetUrl, {
             method: "POST",
             mode: "cors",
@@ -274,11 +274,11 @@ class MainStore {
         return this.rootStore.dataStore.getDataLength;
     }
     @computed get getModelTypeName() {
-        return _.find(mc.modelTypes, { value: this.model_type }).name;
+        return _.find(mc.modelTypes, {value: this.model_type}).name;
     }
     @computed get getModelTypeChoices() {
         let choices = mc.modelTypes.map((item, i) => {
-            return { value: item.value, text: item.name };
+            return {value: item.value, text: item.name};
         });
         if (!this.isFuture) {
             return choices.filter(d => d.value != mc.MODEL_NESTED_DICHOTOMOUS);
@@ -327,8 +327,8 @@ class MainStore {
             apiUrl = `${apiUrl}&example=${this.selectedModel}`;
         }
         const fetchReport = () => {
-            fetch(apiUrl).then(processResponse);
-        },
+                fetch(apiUrl).then(processResponse);
+            },
             processResponse = response => {
                 let contentType = response.headers.get("content-type");
                 if (contentType.includes("application/json")) {

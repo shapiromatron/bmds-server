@@ -1,20 +1,22 @@
-import React, { Component } from "react";
-import { inject, observer } from "mobx-react";
-import { Modal, Row, Col } from "react-bootstrap";
+import React, {Component} from "react";
+import {inject, observer} from "mobx-react";
+import {Modal, Row, Col} from "react-bootstrap";
 import SelectInput from "../../common/SelectInput";
-import { modelOptions } from "../../../constants/mainConstants";
+import {modelOptions} from "../../../constants/mainConstants";
 import PropTypes from "prop-types";
 
 @inject("mainStore")
 @observer
 class WordReportOptionsModal extends Component {
     render() {
-        const { mainStore } = this.props;
+        const {mainStore} = this.props;
         return (
             <>
-                <Modal show={mainStore.showWordReportOptionModal} >
+                <Modal show={mainStore.showWordReportOptionModal}>
                     <Modal.Header>
-                        <Modal.Title id="contained-modal-title-vcenter">Download Report</Modal.Title>
+                        <Modal.Title id="contained-modal-title-vcenter">
+                            Download Report
+                        </Modal.Title>
                         <button
                             id="close-modal"
                             className="btn btn-danger float-right"
@@ -28,7 +30,7 @@ class WordReportOptionsModal extends Component {
                                 <SelectInput
                                     label="Select Option"
                                     choices={modelOptions.map(option => {
-                                        return { value: option.value, text: option.name };
+                                        return {value: option.value, text: option.name};
                                     })}
                                     onChange={value => mainStore.updateSelectedModel(value)}
                                     value={mainStore.selectedModel}
@@ -40,7 +42,7 @@ class WordReportOptionsModal extends Component {
                                 <button
                                     id="close-modal"
                                     className="btn btn-primary mr-2"
-                                    onClick={() => mainStore.downloadReport('wordUrl')}>
+                                    onClick={() => mainStore.downloadReport("wordUrl")}>
                                     Download Report
                                 </button>
                                 <button
@@ -52,7 +54,7 @@ class WordReportOptionsModal extends Component {
                             </Col>
                         </Row>
                     </Modal.Body>
-                </Modal >
+                </Modal>
             </>
         );
     }

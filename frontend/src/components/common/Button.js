@@ -20,11 +20,8 @@ class Button extends Component {
             faClass,
             datatoggle,
             haspopup,
-            expanded,
-            placement,
             title,
             hidden,
-            style,
         } = this.props;
         return (
             <button
@@ -34,11 +31,8 @@ class Button extends Component {
                 disabled={disabled}
                 data-toggle={datatoggle ? datatoggle : null}
                 aria-haspopup={haspopup ? haspopup : null}
-                aria-expanded={expanded ? expanded : null}
-                placement={placement ? placement : null}
                 title={title ? title : null}
                 aria-hidden={hidden ? hidden : null}
-                style={style ? style : null}
                 onClick={onClick}>
                 {faClass ? <i className={faClass} /> : null}
                 {text}
@@ -49,18 +43,15 @@ class Button extends Component {
 
 Button.propTypes = {
     id: PropTypes.string,
-    text: PropTypes.string,
-    className: PropTypes.string,
+    text: PropTypes.string.isRequired,
+    title: PropTypes.string.isRequired,
+    className: PropTypes.string.isRequired,
     disabled: PropTypes.bool,
     onClick: PropTypes.func,
     faClass: PropTypes.string,
     datatoggle: PropTypes.string,
     haspopup: PropTypes.bool,
-    expanded: PropTypes.bool,
-    placement: PropTypes.string,
-    title: PropTypes.string,
     hidden: PropTypes.bool,
-    style: PropTypes.object,
 };
 Button.defaultProps = {
     disabled: false,

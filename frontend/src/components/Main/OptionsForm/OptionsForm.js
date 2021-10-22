@@ -115,11 +115,9 @@ const OptionsForm = props => {
             <td>
                 <Button
                     className="btn btn-danger"
-                    datatoggle="tooltip"
-                    placement="top"
                     title="Delete Option Set"
                     onClick={e => props.deleteOptions(props.idx)}
-                    faClass=" fa fa-trash"
+                    faClass="fa fa-trash"
                 />
             </td>
         </tr>

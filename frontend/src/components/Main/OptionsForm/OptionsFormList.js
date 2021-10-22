@@ -71,8 +71,6 @@ class OptionsFormList extends Component {
                                     {optionsStore.canEdit ? (
                                         <th>
                                             <Button
-                                                datatoggle="tooltip"
-                                                placement="right"
                                                 className="btn btn-primary"
                                                 disabled={!optionsStore.canAddNewOption}
                                                 onClick={optionsStore.addOptions}

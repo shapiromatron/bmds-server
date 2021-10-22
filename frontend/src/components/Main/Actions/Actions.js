@@ -19,13 +19,12 @@ class Actions extends Component {
         return (
             <div className="dropdown">
                 <Button
-                    text="Actions"
+                    text="Actions&nbsp;"
                     className="btn btn-primary dropdown-toggle"
                     type="button"
                     id="bmdSessionActions"
                     datatoggle="dropdown"
                     haspopup={true}
-                    expanded={false}
                 />
                 <div
                     className="dropdown-menu dropdown-menu-right"
@@ -83,13 +82,13 @@ class Actions extends Component {
                             <Button
                                 className="dropdown-item"
                                 onClick={() => mainStore.downloadReport("excelUrl")}
-                                faclass="fa fa-fw fa-file-excel-o"
+                                faClass="fa fa-fw fa-file-excel-o"
                                 text="Download data"
                             />
                             <Button
                                 className="dropdown-item"
                                 onClick={mainStore.showWordReportOptionModal}
-                                faclass="fa fa-fw fa-file-word-o"
+                                faClass="fa fa-fw fa-file-word-o"
                                 text="Download report"
                             />
                             <a

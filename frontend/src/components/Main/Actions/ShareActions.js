@@ -13,12 +13,11 @@ class ShareActions extends Component {
         return (
             <div className="dropdown">
                 <Button
-                    text="Share"
+                    text="Share&nbsp;"
                     className="btn btn-success dropdown-toggle"
                     id="bmdSessionActions"
                     datatoggle="dropdown"
                     haspopup={true}
-                    expanded={false}
                 />
                 <div
                     style={{minWidth: 300}}

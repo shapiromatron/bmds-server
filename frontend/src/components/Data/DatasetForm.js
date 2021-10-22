@@ -126,14 +126,13 @@ class DatasetForm extends Component {
                                     title="Add row"
                                     onClick={dataStore.addRow}
                                     faClass="fa fa-plus-square"
-                                    hidden={true}
                                 />
+                                &nbsp;
                                 <Button
                                     className="btn btn-info mr-1"
                                     title="Load dataset from Excel"
                                     onClick={dataStore.toggleDatasetModal}
                                     faClass="fa fa-file-excel-o"
-                                    hidden={true}
                                 />
                             </td>
                         </tr>

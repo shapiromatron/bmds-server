@@ -10,6 +10,7 @@ import PropTypes from "prop-types";
 import Actions from "./Main/Actions/Actions";
 import ShareActions from "./Main/Actions/ShareActions";
 import DownloadToast from "./Main/Actions/DownloadToast";
+import WordReportOptionsModal from "./Main/Actions/WordReportOptionsModal";
 
 @inject("mainStore")
 @observer
@@ -49,6 +50,7 @@ class Navigation extends Component {
                         style={{position: "relative"}}>
                         <Actions />
                         <DownloadToast />
+                        <WordReportOptionsModal />
                     </li>
                 </ul>
                 <div className="content mt-2">

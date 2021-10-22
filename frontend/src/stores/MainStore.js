@@ -316,7 +316,6 @@ class MainStore {
     @observable toastHeader = "";
     @observable toastMessage = "";
     @action.bound downloadReport(url) {
-        this.showWordReportOptionModal = false;
         let apiUrl = (apiUrl = this.config[url]);
         if (this.canEdit) {
             apiUrl = `${apiUrl}?editKey=${this.config.editSettings.editKey}`;

@@ -2,6 +2,7 @@ import React, {Component} from "react";
 import {inject, observer} from "mobx-react";
 import PropTypes from "prop-types";
 import {Modal} from "react-bootstrap";
+import Button from "../common/Button";
 
 import TextAreaInput from "../common/TextAreaInput";
 
@@ -38,17 +39,18 @@ class TabularDatasetModal extends Component {
                 </Modal.Body>
 
                 <Modal.Footer>
-                    <button className="btn btn-secondary" onClick={dataStore.toggleDatasetModal}>
-                        Cancel
-                    </button>
-
-                    <button
+                    <Button
+                        className="btn btn-secondary"
+                        onClick={dataStore.toggleDatasetModal}
+                        text="Cancel"
+                    />
+                    <Button
                         className="btn btn-primary"
                         onClick={dataStore.updateDatasetFromModal}
-                        disabled={!dataStore.tabularModalDataValidated}>
-                        <i className="fa fa-fw fa-save mr-1"></i>
-                        Load
-                    </button>
+                        disabled={!dataStore.tabularModalDataValidated}
+                        text="Load"
+                        faClass="fa fa-fw fa-save mr-1"
+                    />
                 </Modal.Footer>
             </Modal>
         );

@@ -4,6 +4,7 @@ import PropTypes from "prop-types";
 
 import SelectInput from "../common/SelectInput";
 import LabelInput from "../common/LabelInput";
+import Button from "../common/Button";
 
 @inject("dataStore")
 @observer
@@ -23,14 +24,13 @@ class SelectModelType extends Component {
                         })}
                     />
                     <div className="input-group-append">
-                        <button
-                            type="button"
+                        <Button
                             className="btn btn-primary btn-sm float-right"
                             disabled={dataStore.checkDatasetsLength}
-                            onClick={dataStore.addDataset}>
-                            <i className="fa fa-fw fa-plus" />
-                            Create
-                        </button>
+                            faClass="fa fa-fw fa-plus"
+                            text="Create"
+                            onClick={dataStore.addDataset}
+                        />
                     </div>
                 </div>
             </div>

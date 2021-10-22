@@ -2,6 +2,7 @@ import _ from "lodash";
 import React, {Component} from "react";
 import {inject, observer} from "mobx-react";
 import PropTypes from "prop-types";
+import Button from "../../common/Button";
 
 const getDeletionDateText = function(editSettings) {
     const date = editSettings.deleteDateStr,
@@ -17,15 +18,15 @@ class Actions extends Component {
             {config} = mainStore;
         return (
             <div className="dropdown">
-                <button
+                <Button
+                    text="Actions"
                     className="btn btn-primary dropdown-toggle"
                     type="button"
                     id="bmdSessionActions"
-                    data-toggle="dropdown"
-                    aria-haspopup="true"
-                    aria-expanded="false">
-                    Actions
-                </button>
+                    datatoggle="dropdown"
+                    haspopup={true}
+                    expanded={false}
+                />
                 <div
                     className="dropdown-menu dropdown-menu-right"
                     style={{minWidth: 360}}
@@ -79,20 +80,18 @@ class Actions extends Component {
                     {mainStore.hasOutputs ? (
                         <>
                             <span className="dropdown-header">Reporting</span>
-                            <button
+                            <Button
                                 className="dropdown-item"
-                                type="button"
-                                onClick={() => mainStore.downloadReport("excelUrl")}>
-                                <i className="fa fa-fw fa-file-excel-o"></i>
-                                &nbsp;Download data
-                            </button>
-                            <button
+                                onClick={() => mainStore.downloadReport("excelUrl")}
+                                faclass="fa fa-fw fa-file-excel-o"
+                                text="Download data"
+                            />
+                            <Button
                                 className="dropdown-item"
-                                type="button"
-                                onClick={() => mainStore.downloadReport("wordUrl")}>
-                                <i className="fa fa-fw fa-file-word-o"></i>
-                                &nbsp;Download report
-                            </button>
+                                onClick={() => mainStore.downloadReport("excelUrl")}
+                                faclass="fa fa-fw fa-file-word-o"
+                                text="Download report"
+                            />
                             <a
                                 className="dropdown-item"
                                 href="#"

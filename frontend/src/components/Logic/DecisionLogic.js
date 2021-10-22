@@ -4,6 +4,7 @@ import PropTypes from "prop-types";
 import {checkOrEmpty} from "../../common";
 import CheckboxInput from "../common/CheckboxInput";
 import FloatInput from "../common/FloatInput";
+import Button from "../common/Button";
 
 @inject("logicStore")
 @observer
@@ -34,9 +35,11 @@ class DecisionLogic extends Component {
                 {canEdit ? (
                     <div className="row">
                         <div className="col col-md-6">
-                            <button className="btn btn-warning btn-sm" onClick={() => resetLogic()}>
-                                Reset to Default Logic
-                            </button>
+                            <Button
+                                className="btn btn-warning btn-sm"
+                                onClick={() => resetLogic()}
+                                text="Reset to Default Logic"
+                            />
                         </div>
                     </div>
                 ) : null}

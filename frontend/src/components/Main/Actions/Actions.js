@@ -88,7 +88,7 @@ class Actions extends Component {
                             />
                             <Button
                                 className="dropdown-item"
-                                onClick={() => mainStore.downloadReport("excelUrl")}
+                                onClick={mainStore.showWordReportOptionModal}
                                 faclass="fa fa-fw fa-file-word-o"
                                 text="Download report"
                             />

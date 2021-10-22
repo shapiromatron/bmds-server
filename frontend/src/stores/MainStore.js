@@ -320,6 +320,9 @@ class MainStore {
         if (this.canEdit) {
             apiUrl = `${apiUrl}?editKey=${this.config.editSettings.editKey}`;
         }
+        if (url === "wordUrl") {
+            apiUrl = `${apiUrl}&example=123`;
+        }
         const fetchReport = () => {
                 fetch(apiUrl).then(processResponse);
             },
@@ -348,6 +351,20 @@ class MainStore {
         this.showToast = false;
     }
     // *** END TOAST ***
+
+    // *** REPORT OPTIONS ***
+    @observable displayWordReportOptionModal = false;
+    @action.bound showWordReportOptionModal() {
+        this.displayWordReportOptionModal = true;
+    }
+    @action.bound closeWordReportOptionModal() {
+        this.displayWordReportOptionModal = false;
+    }
+    @action.bound submitWordReportRequest() {
+        this.closeWordReportOptionModal();
+        this.downloadReport("wordUrl");
+    }
+    // *** END REPORT OPTIONS ***
 }
 
 export default MainStore;

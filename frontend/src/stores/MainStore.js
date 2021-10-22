@@ -21,8 +21,6 @@ class MainStore {
     @observable hasEditSettings = false;
     @observable executionOutputs = null;
     @observable isUpdateComplete = false;
-    @observable showWordReportOptionModal = false;
-    @observable selectedModel = 0;
 
     @action.bound setConfig(config) {
         this.config = config;
@@ -324,7 +322,7 @@ class MainStore {
             apiUrl = `${apiUrl}?editKey=${this.config.editSettings.editKey}`;
         }
         if (url === "wordUrl") {
-            apiUrl = `${apiUrl}&example=${this.selectedModel}`;
+            apiUrl = `${apiUrl}&example=123`;
         }
         const fetchReport = () => {
                 fetch(apiUrl).then(processResponse);
@@ -355,17 +353,19 @@ class MainStore {
     }
     // *** END TOAST ***
 
-    @action.bound showActionModal() {
-        this.showWordReportOptionModal = true;
+    // *** REPORT OPTIONS ***
+    @observable displayWordReportOptionModal = false;
+    @action.bound showWordReportOptionModal() {
+        this.displayWordReportOptionModal = true;
     }
-
-    @action.bound closeActionModal() {
-        this.showWordReportOptionModal = false;
+    @action.bound closeWordReportOptionModal() {
+        this.displayWordReportOptionModal = false;
     }
-
-    @action.bound updateSelectedModel(value) {
-        this.selectedModel = value;
+    @action.bound submitWordReportRequest() {
+        this.closeWordReportOptionModal();
+        this.downloadReport("wordUrl");
     }
+    // *** END REPORT OPTIONS ***
 }
 
 export default MainStore;

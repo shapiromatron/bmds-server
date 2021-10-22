@@ -7,8 +7,4 @@ export const VERSION_330 = "BMDS330",
         {name: "Continuous", value: MODEL_CONTINUOUS},
         {name: "Dichotomous", value: MODEL_DICHOTOMOUS},
         {name: "Nested Dichotomous", value: MODEL_NESTED_DICHOTOMOUS},
-    ],
-    modelOptions = [
-        {name: "Option1", value: "0"},
-        {name: "Option2", value: "1"},
     ];

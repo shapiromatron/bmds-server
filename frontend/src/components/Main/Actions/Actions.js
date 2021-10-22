@@ -89,7 +89,7 @@ class Actions extends Component {
                             <button
                                 className="dropdown-item"
                                 type="button"
-                                onClick={() => mainStore.showActionModal()}>
+                                onClick={mainStore.showWordReportOptionModal}>
                                 <i className="fa fa-fw fa-file-word-o"></i>
                                 &nbsp;Download report
                             </button>

@@ -154,17 +154,16 @@ class ModelDetailModal extends Component {
         return (
             <Modal
                 show={outputStore.showModelModal}
-                onHide={() => outputStore.closeModal()}
+                onHide={outputStore.closeModal}
                 size="xl"
-                aria-labelledby="contained-modal-title-vcenter"
                 centered>
                 <Modal.Header>
-                    <Modal.Title id="contained-modal-title-vcenter">{name}</Modal.Title>
+                    <Modal.Title>{name}</Modal.Title>
                     <button
                         id="close-modal"
                         className="btn btn-danger"
                         style={{float: "right"}}
-                        onClick={() => outputStore.closeModal()}>
+                        onClick={outputStore.closeModal}>
                         <i className="fa fa-times" aria-hidden="true"></i>
                     </button>
                 </Modal.Header>

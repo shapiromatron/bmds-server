@@ -11,7 +11,7 @@ class DichotomousSummary extends Component {
             results = store.modalModel.results;
 
         return (
-            <table className="table table-bordered table-sm">
+            <table className="table table-sm table-bordered">
                 <thead>
                     <tr className="bg-custom">
                         <th colSpan="2">Summary</th>

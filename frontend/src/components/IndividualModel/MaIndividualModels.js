@@ -9,7 +9,7 @@ class MaIndividualModels extends Component {
     render() {
         const {model_average, models} = this.props;
         return (
-            <table className="table table-bordered table-sm">
+            <table className="table table-sm table-bordered">
                 <colgroup>
                     <col width="25%" />
                     <col width="15%" />

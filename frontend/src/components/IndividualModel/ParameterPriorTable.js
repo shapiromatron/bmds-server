@@ -35,7 +35,7 @@ class ParameterPriorTable extends Component {
             rowFunction = isFreq ? renderFrequentistRow : renderPriorRow;
 
         return (
-            <table className="table table-bordered table-sm">
+            <table className="table table-sm table-bordered">
                 <thead>
                     <tr className="bg-custom">
                         <th colSpan={isFreq ? 4 : 6}>Priors</th>

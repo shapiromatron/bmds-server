@@ -6,6 +6,7 @@ import TabularDatasetModal from "./TabularDatasetModal";
 import {columnHeaders, columns} from "../../constants/dataConstants";
 import TextInput from "../common/TextInput";
 import FloatInput from "../common/FloatInput";
+import Button from "../common/Button";
 
 const DatasetFormRow = props => {
     return (
@@ -21,9 +22,11 @@ const DatasetFormRow = props => {
                 );
             })}
             <td>
-                <button className="btn btn-danger btn-sm" onClick={e => props.delete(props.rowIdx)}>
-                    <i className="fa fa-fw fa-trash"></i>
-                </button>
+                <Button
+                    className="btn btn-danger btn-sm"
+                    onClick={e => props.delete(props.rowIdx)}
+                    faClass="fa fa-fw fa-trash"
+                />
             </td>
         </tr>
     );
@@ -57,13 +60,12 @@ class DatasetForm extends Component {
                         />
 
                         <div className="input-group-append">
-                            <button
-                                type="button"
+                            <Button
                                 className="btn btn-danger btn-sm float-right ml-1"
-                                onClick={dataStore.deleteDataset}>
-                                <i className="fa fa-fw fa-trash"></i>
-                                Delete
-                            </button>
+                                onClick={dataStore.deleteDataset}
+                                text="Delete"
+                                faClass="fa fa-fw fa-trash"
+                            />
                         </div>
                     </div>
                 </div>
@@ -119,19 +121,19 @@ class DatasetForm extends Component {
                                 <th key={index}>{columnHeaders[item]}</th>
                             ))}
                             <td style={{width: 100}}>
-                                <button
-                                    className="btn btn-info mr-1"
-                                    title="Load dataset from Excel"
-                                    onClick={dataStore.toggleDatasetModal}>
-                                    <i className="fa fa-file-excel-o"></i>
-                                </button>
-                                <button
-                                    type="button"
+                                <Button
                                     className="btn btn-primary"
                                     title="Add row"
-                                    onClick={dataStore.addRow}>
-                                    <i className="fa fa-plus-square" aria-hidden="true"></i>
-                                </button>
+                                    onClick={dataStore.addRow}
+                                    faClass="fa fa-plus-square"
+                                />
+                                &nbsp;
+                                <Button
+                                    className="btn btn-info mr-1"
+                                    title="Load dataset from Excel"
+                                    onClick={dataStore.toggleDatasetModal}
+                                    faClass="fa fa-file-excel-o"
+                                />
                             </td>
                         </tr>
                     </thead>
@@ -151,9 +153,12 @@ class DatasetForm extends Component {
                     </tbody>
                 </table>
                 <p>
-                    <button className="btn btn-link" onClick={dataStore.loadExampleData}>
-                        <i className="fa fa-fw fa-upload mr-1"></i>Load an example dataset
-                    </button>
+                    <Button
+                        className="btn btn-link"
+                        onClick={dataStore.loadExampleData}
+                        faClass="fa fa-fw fa-upload mr-1"
+                        text="Load an example dataset"
+                    />
                 </p>
                 <TabularDatasetModal />
             </div>

@@ -55,7 +55,7 @@ class DatasetTable extends Component {
                     {dataset.metadata.name}
                 </div>
 
-                <table className="table table-bordered table-sm">
+                <table className="table table-sm table-bordered">
                     <colgroup>
                         {_.range(columnNames).map(i => (
                             <col key={i} width={width}></col>

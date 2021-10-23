@@ -12,6 +12,7 @@ import {
 } from "../../../constants/optionsConstants";
 import IntegerInput from "../../common/IntegerInput";
 import FloatInput from "../../common/FloatInput";
+import Button from "../../common/Button";
 
 const OptionsForm = props => {
     return (
@@ -112,15 +113,12 @@ const OptionsForm = props => {
                 </>
             ) : null}
             <td>
-                <button
-                    type="button"
+                <Button
                     className="btn btn-danger"
-                    data-toggle="tooltip"
-                    data-placement="top"
                     title="Delete Option Set"
-                    onClick={e => props.deleteOptions(props.idx)}>
-                    <i className="fa fa-trash"></i>
-                </button>
+                    onClick={e => props.deleteOptions(props.idx)}
+                    faClass="fa fa-trash"
+                />
             </td>
         </tr>
     );

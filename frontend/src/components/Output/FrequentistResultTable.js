@@ -7,6 +7,7 @@ import PropTypes from "prop-types";
 import {BIN_LABELS} from "../../constants/logicConstants";
 import {getPValue, modelClasses, priorClass} from "../../constants/outputConstants";
 import {ff} from "../../common";
+import Button from "../common/Button";
 
 import Popover from "../common/Popover";
 
@@ -144,7 +145,7 @@ class FrequentistRow extends Component {
             <tr
                 key={data.index}
                 onMouseEnter={() => store.drPlotAddHover(data.model)}
-                onMouseLeave={() => store.drPlotRemoveHover()}
+                onMouseLeave={store.drPlotRemoveHover}
                 className={rowClass}>
                 <td>
                     <a
@@ -247,17 +248,15 @@ class FrequentistResultTable extends Component {
                         <th>Scaled Residual for Control Dose Group</th>
                         {store.recommendationEnabled ? (
                             <th>
-                                <button
+                                <Button
                                     title="Toggle showing notes inline or popover"
                                     className="btn btn-info btn-sm pull-right"
-                                    onClick={store.toggleInlineNotes}>
-                                    <i
-                                        className={`fa fa-fw ${
-                                            store.showInlineNotes ? "fa-eye-slash" : "fa-eye"
-                                        }`}></i>
-                                    &nbsp;
-                                    {store.showInlineNotes ? "Hide" : "Show"}
-                                </button>
+                                    onClick={store.toggleInlineNotes}
+                                    text={store.showInlineNotes ? "Hide" : "Show"}
+                                    faClass={`fa fa-fw ${
+                                        store.showInlineNotes ? "fa-eye-slash" : "fa-eye"
+                                    }`}
+                                />
                                 Recommendation
                                 <br />
                                 and Notes

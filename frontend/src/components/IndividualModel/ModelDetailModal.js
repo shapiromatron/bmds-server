@@ -20,6 +20,7 @@ import MaBenchmarkDose from "./MaBenchmarkDose";
 import MaIndividualModels from "./MaIndividualModels";
 
 import * as dc from "../../constants/dataConstants";
+import Button from "../common/Button";
 
 @observer
 class IndividualModelBody extends Component {
@@ -159,13 +160,12 @@ class ModelDetailModal extends Component {
                 centered>
                 <Modal.Header>
                     <Modal.Title>{name}</Modal.Title>
-                    <button
+                    <Button
                         id="close-modal"
-                        className="btn btn-danger"
-                        style={{float: "right"}}
-                        onClick={outputStore.closeModal}>
-                        <i className="fa fa-times" aria-hidden="true"></i>
-                    </button>
+                        className="btn btn-secondary float-right"
+                        onClick={outputStore.closeModal}
+                        faClass="fa fa-fw fa-times"
+                    />
                 </Modal.Header>
                 <Body outputStore={outputStore} />
             </Modal>

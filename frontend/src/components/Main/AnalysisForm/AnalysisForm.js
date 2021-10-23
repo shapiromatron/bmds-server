@@ -6,6 +6,7 @@ import Spinner from "../../common/Spinner";
 import SelectInput from "../../common/SelectInput";
 import TextInput from "../../common/TextInput";
 import TextAreaInput from "../../common/TextAreaInput";
+import Button from "../../common/Button";
 
 @observer
 class RunChecklist extends Component {
@@ -61,12 +62,11 @@ class AnalysisForm extends Component {
                     <div className="card bg-light">
                         {mainStore.isExecuting ? (
                             <div className="card-body">
-                                <button
-                                    type="button"
+                                <Button
                                     className="btn btn-warning float-right"
-                                    onClick={mainStore.executeResetAnalysis}>
-                                    Cancel execution
-                                </button>
+                                    onClick={mainStore.executeResetAnalysis}
+                                    text="Cancel execution"
+                                />
                                 <Spinner text="Executing, please wait..." />
                             </div>
                         ) : (
@@ -95,19 +95,17 @@ class AnalysisForm extends Component {
 
                         {mainStore.isValid && !mainStore.isExecuting ? (
                             <div className="card-footer btn-toolbar btn-group">
-                                <button
-                                    type="button"
+                                <Button
                                     className="btn btn-primary mr-2"
-                                    onClick={mainStore.saveAnalysis}>
-                                    Save Analysis
-                                </button>
-                                <button
-                                    type="button"
+                                    onClick={mainStore.saveAnalysis}
+                                    text="Save Analysis"
+                                />
+                                <Button
                                     className="btn btn-primary"
+                                    onClick={mainStore.executeAnalysis}
                                     disabled={!mainStore.analysisSavedAndValidated}
-                                    onClick={mainStore.executeAnalysis}>
-                                    Run Analysis
-                                </button>
+                                    text="Run Analysis"
+                                />
                             </div>
                         ) : null}
                     </div>

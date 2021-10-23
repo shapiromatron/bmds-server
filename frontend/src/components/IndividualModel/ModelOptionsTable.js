@@ -44,7 +44,7 @@ class ModelOptionsTable extends Component {
         }
 
         return (
-            <table className="table table-bordered table-sm">
+            <table className="table table-sm table-bordered">
                 <thead>
                     <tr className="bg-custom">
                         <th colSpan="2">Model Options</th>

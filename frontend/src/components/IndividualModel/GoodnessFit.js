@@ -13,7 +13,7 @@ class GoodnessFit extends Component {
             dataset = store.selectedDataset,
             {dtype} = dataset;
         return (
-            <table className="table table-bordered table-sm">
+            <table className="table table-sm table-bordered">
                 <thead className="bg-custom">
                     <tr>
                         <th colSpan="9">Goodness of Fit</th>

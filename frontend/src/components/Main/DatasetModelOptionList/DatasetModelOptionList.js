@@ -24,7 +24,7 @@ class DatasetModelOptionList extends Component {
         }
 
         return (
-            <table className="table table-bordered table-sm">
+            <table className="table table-sm table-bordered">
                 <thead>
                     {dtype == Dtype.CONTINUOUS || dtype == Dtype.CONTINUOUS_INDIVIDUAL ? (
                         <tr className="bg-custom">

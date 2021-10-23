@@ -11,7 +11,7 @@ class CSTestofInterest extends Component {
             testInterest = store.modalModel.results.tests;
 
         return (
-            <table className="table table-bordered table-sm">
+            <table className="table table-sm table-bordered">
                 <thead className="bg-custom">
                     <tr>
                         <th colSpan="4">Test of Interest</th>

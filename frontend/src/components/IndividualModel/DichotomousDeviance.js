@@ -11,7 +11,7 @@ class DichotomousDeviance extends Component {
             deviances = store.modalModel.results.deviance;
 
         return (
-            <table className="table table-bordered table-sm">
+            <table className="table table-sm table-bordered">
                 <thead className="bg-custom">
                     <tr>
                         <th colSpan="9">Analysis of Deviance</th>

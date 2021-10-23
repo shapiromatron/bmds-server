@@ -10,7 +10,7 @@ class ModelParameters extends Component {
     render() {
         const {parameters} = this.props;
         return (
-            <table className="table table-bordered table-sm">
+            <table className="table table-sm table-bordered">
                 <thead>
                     <tr className="bg-custom">
                         <th colSpan="3">Model Parameters</th>

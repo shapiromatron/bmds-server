@@ -14,7 +14,7 @@ class ModelsCheckBoxList extends Component {
         return (
             <div className="mt-2 text-center">
                 {!(typeof models === "undefined") ? (
-                    <table className="modelscheckbox table table-bordered table-sm">
+                    <table className="table table-sm table-bordered">
                         <ModelsCheckBoxHeader store={modelsStore} />
                         <ModelsCheckBox store={modelsStore} />
                     </table>

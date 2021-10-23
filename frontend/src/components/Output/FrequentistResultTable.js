@@ -145,7 +145,7 @@ class FrequentistRow extends Component {
             <tr
                 key={data.index}
                 onMouseEnter={() => store.drPlotAddHover(data.model)}
-                onMouseLeave={() => store.drPlotRemoveHover()}
+                onMouseLeave={store.drPlotRemoveHover}
                 className={rowClass}>
                 <td>
                     <a

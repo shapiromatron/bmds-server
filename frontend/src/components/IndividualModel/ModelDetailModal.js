@@ -159,7 +159,7 @@ class ModelDetailModal extends Component {
                 size="xl"
                 centered>
                 <Modal.Header>
-                    <Modal.Title id="contained-modal-title-vcenter">{name}</Modal.Title>
+                    <Modal.Title>{name}</Modal.Title>
                     <Button
                         id="close-modal"
                         className="btn btn-secondary float-right"

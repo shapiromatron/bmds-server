@@ -37,7 +37,7 @@ class DecisionLogic extends Component {
                         <div className="col col-md-6">
                             <Button
                                 className="btn btn-warning btn-sm"
-                                onClick={() => resetLogic()}
+                                onClick={resetLogic}
                                 text="Reset to Default Logic"
                             />
                         </div>

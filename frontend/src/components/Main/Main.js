@@ -27,7 +27,7 @@ class Main extends Component {
                     {mainStore.canEdit ? (
                         <Button
                             className="btn btn-sm btn-warning"
-                            onClick={e => mainStore.resetModelSelection()}
+                            onClick={mainStore.resetModelSelection}
                             text="Reset Model Selection"
                         />
                     ) : null}

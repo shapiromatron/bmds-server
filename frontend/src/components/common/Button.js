@@ -2,40 +2,22 @@ import React, {Component} from "react";
 import {observer} from "mobx-react";
 import PropTypes from "prop-types";
 
-import {randomString} from "../../common";
-
 @observer
 class Button extends Component {
-    constructor(props) {
-        super(props);
-        this._id = props.id || randomString();
-    }
     render() {
-        const {
-            id,
-            text,
-            className,
-            onClick,
-            disabled,
-            faClass,
-            datatoggle,
-            haspopup,
-            title,
-            hidden,
-        } = this.props;
+        const {props} = this;
         return (
             <button
-                id={id ? id : this._id}
+                id={props.id || null}
                 type="button"
-                className={className}
-                disabled={disabled}
-                data-toggle={datatoggle ? datatoggle : null}
-                aria-haspopup={haspopup ? haspopup : null}
-                title={title ? title : null}
-                aria-hidden={hidden ? hidden : null}
-                onClick={onClick}>
-                {faClass ? <i className={faClass} /> : null}
-                {text}
+                className={props.className}
+                disabled={props.disabled}
+                data-toggle={props.dataToggle || null}
+                aria-haspopup={props.hasPopup || null}
+                title={props.title || null}
+                onClick={props.onClick}>
+                {props.faClass ? <i className={props.faClass} /> : null}
+                {props.text}
             </button>
         );
     }
@@ -49,9 +31,8 @@ Button.propTypes = {
     disabled: PropTypes.bool,
     onClick: PropTypes.func,
     faClass: PropTypes.string,
-    datatoggle: PropTypes.string,
-    haspopup: PropTypes.bool,
-    hidden: PropTypes.bool,
+    dataToggle: PropTypes.string,
+    hasPopup: PropTypes.bool,
 };
 Button.defaultProps = {
     disabled: false,

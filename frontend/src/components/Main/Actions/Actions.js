@@ -23,8 +23,8 @@ class Actions extends Component {
                     className="btn btn-primary dropdown-toggle"
                     type="button"
                     id="bmdSessionActions"
-                    datatoggle="dropdown"
-                    haspopup={true}
+                    dataToggle="dropdown"
+                    hasPopup={true}
                 />
                 <div
                     className="dropdown-menu dropdown-menu-right"

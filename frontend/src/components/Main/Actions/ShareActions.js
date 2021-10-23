@@ -15,9 +15,8 @@ class ShareActions extends Component {
                 <Button
                     text="Share&nbsp;"
                     className="btn btn-success dropdown-toggle"
-                    id="bmdSessionActions"
-                    datatoggle="dropdown"
-                    haspopup={true}
+                    dataToggle="dropdown"
+                    hasPopup={true}
                 />
                 <div
                     style={{minWidth: 300}}

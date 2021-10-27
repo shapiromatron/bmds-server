@@ -6,6 +6,7 @@ const Dtype = {
     CONTINUOUS: "C",
     CONTINUOUS_INDIVIDUAL: "CI",
     NESTED_DICHOTOMOUS: "ND",
+    MULTI_TUMOR: "MT",
 };
 
 export {Dtype};
@@ -13,6 +14,7 @@ export const DATA_CONTINUOUS_SUMMARY = "CS",
     DATA_CONTINUOUS_INDIVIDUAL = "I",
     DATA_DICHOTOMOUS = "DM",
     DATA_NESTED_DICHOTOMOUS = "ND",
+    DATA_MULTI_TUMOR = "MT",
     datasetTypesByModelType = function(modelType) {
         switch (modelType) {
             case mc.MODEL_DICHOTOMOUS:
@@ -24,6 +26,8 @@ export const DATA_CONTINUOUS_SUMMARY = "CS",
                 ];
             case mc.MODEL_NESTED_DICHOTOMOUS:
                 return [{value: DATA_NESTED_DICHOTOMOUS, name: "Nested Dichotomous"}];
+            case mc.MODEL_MULTI_TUMOR:
+                return [{value: DATA_DICHOTOMOUS, name: "Dichotomous"}];
             default:
                 throw `Unknown modelType: ${modelType}`;
         }
@@ -211,6 +215,10 @@ export const DATA_CONTINUOUS_SUMMARY = "CS",
         },
         [mc.MODEL_NESTED_DICHOTOMOUS]: {
             enabled: true,
+        },
+        [mc.MODEL_MULTI_TUMOR]: {
+            enabled: true,
+            degree: 0,
         },
     },
     adverseDirectionOptions = [

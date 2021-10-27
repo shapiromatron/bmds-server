@@ -22,7 +22,6 @@ class DatasetModelOptionList extends Component {
         if (options.length == 0) {
             return null;
         }
-
         return (
             <table className="table table-sm table-bordered">
                 <thead>
@@ -37,7 +36,7 @@ class DatasetModelOptionList extends Component {
                             <th>Adverse Direction</th>
                         </tr>
                     ) : null}
-                    {dtype == Dtype.DICHOTOMOUS ? (
+                    {dtype == Dtype.DICHOTOMOUS || dtype == Dtype.MULTI_TUMOR ? (
                         <tr className="bg-custom">
                             <th>Enabled</th>
                             <th>Dataset</th>

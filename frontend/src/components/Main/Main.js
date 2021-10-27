@@ -9,12 +9,15 @@ import {inject, observer} from "mobx-react";
 import DatasetModelOptionList from "./DatasetModelOptionList/DatasetModelOptionList";
 import AnalysisFormReadOnly from "./AnalysisForm/AnalysisFormReadOnly";
 import Button from "../common/Button";
+import HelpText from "../common/HelpText";
 
 @inject("mainStore")
 @observer
 class Main extends Component {
     render() {
-        const {mainStore} = this.props;
+        const {mainStore} = this.props,
+            multiTumorMessage =
+                "If multiple tumor datasets are evaluated, this tool will output individual and combined tumor risk estimates. The combined tumor risk estimates will only be relevant for tumors from the same study and the model assumes that the tumors develop independently, eg. one tumor does not progress to or influence the development of another.";
         return mainStore.isUpdateComplete ? (
             <div className="row">
                 <div className="col-lg-4 analysis">
@@ -24,14 +27,18 @@ class Main extends Component {
                     <div>{mainStore.getDatasetLength ? <DatasetModelOptionList /> : null}</div>
                 </div>
                 <div className="col-lg-8">
-                    {mainStore.canEdit ? (
+                    {mainStore.canEdit & !mainStore.isMultiTumor ? (
                         <Button
                             className="btn btn-sm btn-warning"
                             onClick={mainStore.resetModelSelection}
                             text="Reset Model Selection"
                         />
                     ) : null}
-                    <ModelsCheckBoxList />
+                    {mainStore.isMultiTumor ? (
+                        <HelpText content={multiTumorMessage} />
+                    ) : (
+                        <ModelsCheckBoxList />
+                    )}
                     <OptionsFormList />
                 </div>
             </div>

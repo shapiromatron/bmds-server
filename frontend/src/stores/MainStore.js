@@ -279,7 +279,9 @@ class MainStore {
             return {value: item.value, text: item.name};
         });
         if (!this.isFuture) {
-            return choices.filter(d => d.value != mc.MODEL_NESTED_DICHOTOMOUS);
+            return choices.filter(
+                d => d.value != mc.MODEL_NESTED_DICHOTOMOUS && d.value != mc.MODEL_MULTI_TUMOR
+            );
         }
         return choices;
     }
@@ -296,11 +298,18 @@ class MainStore {
         return !_.isEmpty(this.getEnabledDatasets);
     }
 
+    @computed get hasAtLeastTwoDatasetSelected() {
+        return this.getEnabledDatasets.length >= 2;
+    }
+
     @computed get hasAtLeastOneOptionSelected() {
         return !_.isEmpty(this.getOptions);
     }
 
     @computed get isValid() {
+        if (this.model_type === mc.MODEL_MULTI_TUMOR) {
+            return this.hasAtLeastTwoDatasetSelected && this.hasAtLeastOneOptionSelected;
+        }
         return (
             this.hasAtLeastOneModelSelected &&
             this.hasAtLeastOneDatasetSelected &&
@@ -309,6 +318,10 @@ class MainStore {
     }
     @computed get hasOutputs() {
         return this.executionOutputs !== null;
+    }
+
+    @computed get isMultiTumor() {
+        return this.model_type === mc.MODEL_MULTI_TUMOR;
     }
 
     // *** TOAST ***

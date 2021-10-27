@@ -13,6 +13,7 @@ class RunChecklist extends Component {
     render() {
         const {complete, message} = this.props,
             color = complete ? "text-success" : "text-danger";
+
         return (
             <p>
                 <i className={`fa fa-check-circle fa-lg ${color}`}></i>&ensp;{message}
@@ -74,14 +75,24 @@ class AnalysisForm extends Component {
                                 <p>
                                     <b>Steps required to run the analysis:</b>
                                 </p>
-                                <RunChecklist
-                                    complete={mainStore.hasAtLeastOneModelSelected}
-                                    message="At least one model is selected"
-                                />
-                                <RunChecklist
-                                    complete={mainStore.hasAtLeastOneDatasetSelected}
-                                    message="At least one dataset is selected"
-                                />
+
+                                {mainStore.isMultiTumor ? (
+                                    <RunChecklist
+                                        complete={mainStore.hasAtLeastTwoDatasetSelected}
+                                        message="At least two dataset is selected"
+                                    />
+                                ) : (
+                                    <>
+                                        <RunChecklist
+                                            complete={mainStore.hasAtLeastOneModelSelected}
+                                            message="At least one model is selected"
+                                        />
+                                        <RunChecklist
+                                            complete={mainStore.hasAtLeastOneDatasetSelected}
+                                            message="At least one dataset is selected"
+                                        />
+                                    </>
+                                )}
                                 <RunChecklist
                                     complete={mainStore.hasAtLeastOneOptionSelected}
                                     message="At least one option is selected"

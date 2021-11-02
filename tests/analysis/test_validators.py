@@ -75,6 +75,89 @@ class TestInputValidation:
         data["recommender"] = RecommenderSettings.build_default().dict()
         assert validators.validate_input(data, partial=True) is None
         assert validators.validate_input(data) is None
+    
+
+    def test_nested_dichotomous(self):
+        data: Dict[str, Any] = {
+            "bmds_version": bmds.constants.BMDS330,
+            "dataset_type": bmds.constants.NESTED_DICHOTOMOUS,
+        }
+        print(data)
+        assert validators.validate_input(data, partial=True) is None
+
+          # but fails when complete
+        with pytest.raises(ValidationError) as err:
+            validators.validate_input(data)
+        _missing_field(err, "datasets")
+
+        # add datasets, try again
+        data["datasets"] = [
+            {
+                "dtype": "C",
+                "metadata": {"id": 123},
+                "doses": [
+                        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+                        25, 25, 25, 25, 25, 25, 25, 25, 25,
+                        50, 50, 50, 50, 50, 50, 50, 50, 50,
+                    ],
+                "litter_ns":[
+                        16, 9, 15, 14, 13, 9, 10, 14, 10, 11, 14,
+                        9, 14, 9, 13, 12, 10, 10, 11, 14,
+                        11, 11, 14, 11, 10, 11, 10, 15, 7,
+                    ],
+                "incidences":[
+                        1, 1, 2, 3, 3, 0, 2, 2, 1, 2, 4,
+                        5, 6, 2, 6, 3, 1, 2, 4, 3,
+                        4, 5, 5, 4, 5, 4, 5, 6, 2,
+                    ],
+                "litter_covariates": [
+                        16, 9, 15, 14, 13, 9, 10, 14, 10, 11, 14,
+                        9, 14, 9, 13, 12, 10, 10, 11, 14,
+                        11, 11, 14, 11, 10, 11, 10, 15, 7,
+                    ],
+            }
+        ]
+
+        data["dataset_options"] = [
+            {"dataset_id": 123, "enabled": True}
+        ]
+
+        assert validators.validate_input(data, partial=True) is None
+
+        with pytest.raises(ValidationError) as err:
+            validators.validate_input(data)
+        _missing_field(err, "models")
+
+        # add models, try again
+        data["models"] = {"frequentist_restricted": [bmds.constants.M_NESTED_LOGISTIC]}
+        assert validators.validate_input(data, partial=True) is None
+
+        with pytest.raises(ValidationError) as err:
+            validators.validate_input(data)
+        _missing_field(err, "options")
+
+        # add options, try again
+        data["options"] = [
+            {
+                "bmr_type": 1,
+                "bmr_value": 1.0,
+                "confidence_level": 0.95,
+                "litter_specific_covariate": 1,
+                "background":1,
+                "bootstrap_iterations":1,
+                "bootstrap_seed":0
+            }
+        ]
+
+        assert validators.validate_input(data, partial=True) is None
+
+        with pytest.raises(ValidationError) as err:
+            validators.validate_input(data)
+        _missing_field(err, "rules")
+
+        data["recommender"] = RecommenderSettings.build_default().dict()
+        assert validators.validate_input(data, partial=True) is None
+        assert validators.validate_input(data) is None
 
 
 class TestModelValidation:

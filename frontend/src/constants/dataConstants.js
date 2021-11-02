@@ -8,22 +8,22 @@ const Dtype = {
     NESTED_DICHOTOMOUS: "ND",
 };
 
-export {Dtype};
+export { Dtype };
 export const DATA_CONTINUOUS_SUMMARY = "CS",
     DATA_CONTINUOUS_INDIVIDUAL = "I",
     DATA_DICHOTOMOUS = "DM",
     DATA_NESTED_DICHOTOMOUS = "ND",
-    datasetTypesByModelType = function(modelType) {
+    datasetTypesByModelType = function (modelType) {
         switch (modelType) {
             case mc.MODEL_DICHOTOMOUS:
-                return [{value: DATA_DICHOTOMOUS, name: "Dichotomous"}];
+                return [{ value: DATA_DICHOTOMOUS, name: "Dichotomous" }];
             case mc.MODEL_CONTINUOUS:
                 return [
-                    {value: DATA_CONTINUOUS_SUMMARY, name: "Summarized"},
-                    {value: DATA_CONTINUOUS_INDIVIDUAL, name: "Individual"},
+                    { value: DATA_CONTINUOUS_SUMMARY, name: "Summarized" },
+                    { value: DATA_CONTINUOUS_INDIVIDUAL, name: "Individual" },
                 ];
             case mc.MODEL_NESTED_DICHOTOMOUS:
-                return [{value: DATA_NESTED_DICHOTOMOUS, name: "Nested Dichotomous"}];
+                return [{ value: DATA_NESTED_DICHOTOMOUS, name: "Nested Dichotomous" }];
             default:
                 throw `Unknown modelType: ${modelType}`;
         }
@@ -67,7 +67,7 @@ export const DATA_CONTINUOUS_SUMMARY = "CS",
         litter_n: "Litter Size",
         litter_covariate: "Litter Specific Covariate",
     },
-    getDefaultDataset = function(dtype) {
+    getDefaultDataset = function (dtype) {
         switch (dtype) {
             case DATA_CONTINUOUS_SUMMARY:
                 return {
@@ -126,15 +126,15 @@ export const DATA_CONTINUOUS_SUMMARY = "CS",
                         response_name: "Incidence",
                     },
                     doses: ["", "", "", "", ""],
-                    litter_n: ["", "", "", "", ""],
+                    litter_ns: ["", "", "", "", ""],
                     incidences: ["", "", "", "", ""],
-                    litter_covariate: ["", "", "", "", ""],
+                    litter_covariates: ["", "", "", "", ""],
                 };
             default:
                 throw `Unknown dataset type ${dtype}`;
         }
     },
-    getExampleData = function(dtype) {
+    getExampleData = function (dtype) {
         /* eslint-disable */
         switch (dtype) {
             case DATA_CONTINUOUS_SUMMARY:
@@ -178,7 +178,7 @@ export const DATA_CONTINUOUS_SUMMARY = "CS",
                         25, 25, 25, 25, 25, 25, 25, 25, 25,
                         50, 50, 50, 50, 50, 50, 50, 50, 50,
                     ],
-                    litter_n: [
+                    litter_ns: [
                         16, 9, 15, 14, 13, 9, 10, 14, 10, 11, 14,
                         9, 14, 9, 13, 12, 10, 10, 11, 14,
                         11, 11, 14, 11, 10, 11, 10, 15, 7,
@@ -188,7 +188,7 @@ export const DATA_CONTINUOUS_SUMMARY = "CS",
                         5, 6, 2, 6, 3, 1, 2, 4, 3,
                         4, 5, 5, 4, 5, 4, 5, 6, 2,
                     ],
-                    litter_covariate: [
+                    litter_covariates: [
                         16, 9, 15, 14, 13, 9, 10, 14, 10, 11, 14,
                         9, 14, 9, 13, 12, 10, 10, 11, 14,
                         11, 11, 14, 11, 10, 11, 10, 15, 7,
@@ -214,22 +214,22 @@ export const DATA_CONTINUOUS_SUMMARY = "CS",
         },
     },
     adverseDirectionOptions = [
-        {value: -1, label: "Automatic"},
-        {value: 1, label: "Up"},
-        {value: 0, label: "Down"},
+        { value: -1, label: "Automatic" },
+        { value: 1, label: "Up" },
+        { value: 0, label: "Down" },
     ],
     allDegreeOptions = [
-        {value: 0, label: "N-1"},
-        {value: 1, label: "1"},
-        {value: 2, label: "2"},
-        {value: 3, label: "3"},
-        {value: 4, label: "4"},
-        {value: 5, label: "5"},
-        {value: 6, label: "6"},
-        {value: 7, label: "7"},
-        {value: 8, label: "8"},
+        { value: 0, label: "N-1" },
+        { value: 1, label: "1" },
+        { value: 2, label: "2" },
+        { value: 3, label: "3" },
+        { value: 4, label: "4" },
+        { value: 5, label: "5" },
+        { value: 6, label: "6" },
+        { value: 7, label: "7" },
+        { value: 8, label: "8" },
     ],
-    getDegreeOptions = function(dataset) {
+    getDegreeOptions = function (dataset) {
         const maxDegree = Math.max(Math.min(4, _.uniq(dataset.doses).length - 1), 1);
         return allDegreeOptions.filter(d => d.value <= maxDegree);
     };

@@ -6,6 +6,7 @@ from bmds.datasets import (
     ContinuousDatasetSchema,
     ContinuousIndividualDatasetSchema,
     DichotomousDatasetSchema,
+    NestedDichotomousDatasetSchema
 )
 from django.core.exceptions import ValidationError
 from pydantic import BaseModel, conlist, root_validator
@@ -43,6 +44,9 @@ class ContinuousModelOptions(BaseModel):
     adverse_direction: AdverseDirection = AdverseDirection.AUTOMATIC
     degree: MaxDegree = MaxDegree.N_MINUS_ONE
 
+class NestedDichotomousModelOptions(BaseModel):
+    dataset_id:int
+    enabled:bool=True
 
 class DatasetValidator(BaseModel):
     @root_validator(skip_on_failure=True)
@@ -67,12 +71,18 @@ class ContinuousDatasets(DatasetValidator):
         Union[ContinuousDatasetSchema, ContinuousIndividualDatasetSchema], min_items=1, max_items=10
     )
 
+class NestedDichotomousDataset(DatasetValidator):
+    dataset_options: conlist(NestedDichotomousModelOptions, min_items=1, max_items=10)
+    datasets: conlist(NestedDichotomousDatasetSchema, min_items=1, max_items=10)
+
 
 def validate_datasets(dataset_type: str, datasets: Any, datasetOptions: Any):
     if dataset_type in bmds.constants.CONTINUOUS_DTYPES:
         schema = ContinuousDatasets
     elif dataset_type in bmds.constants.DICHOTOMOUS_DTYPES:
         schema = DichotomousDatasets
+    elif dataset_type == bmds.constants.NESTED_DICHOTOMOUS:
+        schema = NestedDichotomousDataset
     else:
         raise ValidationError(f"Unknown dataset type: {dataset_type}")
 

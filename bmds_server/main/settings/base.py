@@ -76,8 +76,8 @@ DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql",
         "NAME": os.getenv("DJANGO_DB_NAME", "bmds-online"),
-        "USER": os.getenv("DJANGO_DB_USER", "bmds-online"),
-        "PASSWORD": os.getenv("DJANGO_DB_PW", "password"),
+        "USER": os.getenv("DJANGO_DB_USER", "postgres"),
+        "PASSWORD": os.getenv("DJANGO_DB_PW", "Pokhara2020%"),
         "HOST": os.getenv("DJANGO_DB_HOST", "localhost"),
         "PORT": os.getenv("DJANGO_DB_PORT", "5432"),
     }

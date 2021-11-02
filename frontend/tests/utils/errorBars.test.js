@@ -19,21 +19,16 @@ describe("utils/errorBars", function() {
 
     describe("continuousErrorBars", function() {
         it("works with invalid data", function() {
-            const endpoint = {
-                data: {
-                    groups: [
-                        {n: undefined, response: 10, stdev: 1},
-                        {n: 0, response: 10, stdev: 1},
-                        {n: 30, response: undefined, stdev: 1},
-                        {n: 30, response: 10, stdev: undefined},
-                    ],
+            const dataset = {
+                    doses: [1, 2, 3, 4],
+                    ns: [undefined, 0, 30, 30],
+                    means: [10, 10, undefined, 10],
+                    stdevs: [1, 1, 1, undefined],
                 },
-            };
-            continuousErrorBars(endpoint);
-            endpoint.data.groups.forEach(d => {
-                assert.ok(d.lower_ci === undefined);
-                assert.ok(d.upper_ci === undefined);
-            });
+                resp = continuousErrorBars(dataset);
+
+            resp.array.forEach(d => assert.ok(d === undefined));
+            resp.arrayminus.forEach(d => assert.ok(d === undefined));
         });
         it("works with valid data", function() {
             const dataset = {
@@ -51,20 +46,15 @@ describe("utils/errorBars", function() {
 
     describe("dichotomousErrorBars", function() {
         it("works with invalid data", function() {
-            const endpoint = {
-                data: {
-                    groups: [
-                        {n: undefined, incidence: 10},
-                        {n: 0, incidence: 10},
-                        {n: 30, incidence: undefined},
-                    ],
+            const dataset = {
+                    doses: [1, 2, 3],
+                    ns: [undefined, 0, 30],
+                    incidences: [10, 10, undefined],
                 },
-            };
-            dichotomousErrorBars(endpoint);
-            endpoint.data.groups.forEach(d => {
-                assert.ok(d.lower_ci === undefined);
-                assert.ok(d.upper_ci === undefined);
-            });
+                resp = dichotomousErrorBars(dataset);
+
+            resp.array.forEach(d => assert.ok(d === undefined));
+            resp.arrayminus.forEach(d => assert.ok(d === undefined));
         });
         it("works with valid data", function() {
             const dataset = {

@@ -36,21 +36,16 @@ describe("utils/errorBars", function() {
             });
         });
         it("works with valid data", function() {
-            const endpoint = {
-                data: {
-                    groups: [
-                        {n: 30, response: 10, stdev: 1},
-                        {n: 10, response: 10, stdev: 1},
-                    ],
+            const dataset = {
+                    doses: [0, 1],
+                    ns: [30, 10],
+                    stdevs: [1, 1],
+                    means: [10, 10],
                 },
-            };
-            continuousErrorBars(endpoint);
+                resp = continuousErrorBars(dataset);
 
-            const lowers = endpoint.data.groups.map(d => d.lower_ci),
-                uppers = endpoint.data.groups.map(d => d.upper_ci);
-
-            assert.allClose(lowers, [9.62, 9.28], 0.1);
-            assert.allClose(uppers, [10.37, 10.72], 0.1);
+            assert.allClose(resp.arrayminus, [0.38, 0.72], 0.01);
+            assert.allClose(resp.array, [0.37, 0.72], 0.01);
         });
     });
 
@@ -72,23 +67,15 @@ describe("utils/errorBars", function() {
             });
         });
         it("works with valid data", function() {
-            const endpoint = {
-                data: {
-                    groups: [
-                        {n: 10, incidence: 0},
-                        {n: 10, incidence: 10},
-                        {n: 100, incidence: 0},
-                        {n: 100, incidence: 100},
-                    ],
+            const dataset = {
+                    doses: [1, 2, 3, 4],
+                    ns: [10, 10, 100, 1000],
+                    incidences: [0, 3, 50, 100],
                 },
-            };
-            dichotomousErrorBars(endpoint);
+                resp = dichotomousErrorBars(dataset);
 
-            const lowers = endpoint.data.groups.map(d => d.lower_ci),
-                uppers = endpoint.data.groups.map(d => d.upper_ci);
-
-            assert.allClose(lowers, [0.0092, 0.6554, 0.0009, 0.9538], 0.001);
-            assert.allClose(uppers, [0.3474, 0.996, 0.0461, 0.9991], 0.001);
+            assert.allClose(resp.arrayminus, [-0.009, 0.219, 0.101, 0.018], 0.01);
+            assert.allClose(resp.array, [0.347, 0.348, 0.101, 0.021], 0.01);
         });
     });
 });

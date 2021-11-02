@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% block title %}{{block.super}} | Swagger UI{% endblock title %}
+
+{% block extra-head %}
+<link rel="stylesheet" type="text/css" href="//unpkg.com/swagger-ui-dist@3/swagger-ui.css" />
+<script src="//unpkg.com/swagger-ui-dist@3/swagger-ui-bundle.js"></script>
+{% endblock extra-head %}
+
+{% block content %}
+<div id="swagger-ui"></div>
+{% endblock content %}
+
+{% block extra-js %}
+<script>
+    const ui = SwaggerUIBundle({
+        url: "{% url 'openapi' %}",
+        dom_id: '#swagger-ui',
+        presets: [
+            SwaggerUIBundle.presets.apis,
+            SwaggerUIBundle.SwaggerUIStandalonePreset
+        ],
+        layout: "BaseLayout",
+        requestInterceptor: (request) => {
+            request.headers['X-CSRFToken'] = "{{ csrf_token }}"
+            return request;
+        }
+    })
+</script>
+{% endblock extra-js %}

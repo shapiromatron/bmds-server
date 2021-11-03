@@ -1,7 +1,6 @@
 from django.contrib.auth import get_user_model
 from django.contrib.sessions.middleware import SessionMiddleware
 from django.test import RequestFactory, TestCase
-from django.test.client import Client
 from django.urls import reverse
 
 from bmds_server.common.views import ExternalAuth

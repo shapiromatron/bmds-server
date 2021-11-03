@@ -35,6 +35,7 @@ INSTALLED_APPS = [
     "rest_framework",
     "rest_framework.authtoken",
     "webpack_loader",
+    "reversion",
     # Custom apps
     "bmds_server.common",
     "bmds_server.analysis",
@@ -48,6 +49,7 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "reversion.middleware.RevisionMiddleware",
 ]
 
 ROOT_URLCONF = "bmds_server.analysis.urls"

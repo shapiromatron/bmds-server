@@ -2,6 +2,7 @@
 Django==3.2.5
 django-webpack-loader==1.1.0
 djangorestframework==3.12.4
+django-reversion==4.0.0
 
 # db
 psycopg2-binary==2.9.1

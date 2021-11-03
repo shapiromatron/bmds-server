@@ -65,6 +65,9 @@ In one terminal, start the the python webserver:
     cd ~/dev/bmds-server
     source ./venv/bin/activate
 
+    # install latest packages and requirements from code
+    make sync-dev
+
     # sync db state with application state
     manage.py migrate
 

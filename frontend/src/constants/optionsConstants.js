@@ -1,4 +1,9 @@
-import {MODEL_CONTINUOUS, MODEL_DICHOTOMOUS, MODEL_NESTED_DICHOTOMOUS} from "./mainConstants";
+import {
+    MODEL_CONTINUOUS,
+    MODEL_DICHOTOMOUS,
+    MODEL_MULTI_TUMOR,
+    MODEL_NESTED_DICHOTOMOUS,
+} from "./mainConstants";
 
 export const options = {
         [MODEL_CONTINUOUS]: {
@@ -21,6 +26,11 @@ export const options = {
             background: 1,
             bootstrap_iterations: 1,
             bootstrap_seed: 0,
+        },
+        [MODEL_MULTI_TUMOR]: {
+            bmr_type: 1,
+            bmr_value: 0.1,
+            confidence_level: 0.95,
         },
     },
     dichotomousBmrOptions = [

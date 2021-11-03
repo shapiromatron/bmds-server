@@ -29,7 +29,8 @@ const OptionsForm = props => {
                 </td>
             ) : null}
             {props.modelType == mc.MODEL_DICHOTOMOUS ||
-            props.modelType == mc.MODEL_NESTED_DICHOTOMOUS ? (
+            props.modelType == mc.MODEL_NESTED_DICHOTOMOUS ||
+            props.modelType == mc.MODEL_MULTI_TUMOR ? (
                 <td>
                     <SelectInput
                         choices={dichotomousBmrOptions.map(option => {

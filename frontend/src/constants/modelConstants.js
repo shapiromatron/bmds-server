@@ -1,4 +1,9 @@
-import {MODEL_CONTINUOUS, MODEL_DICHOTOMOUS, MODEL_NESTED_DICHOTOMOUS} from "./mainConstants";
+import {
+    MODEL_CONTINUOUS,
+    MODEL_DICHOTOMOUS,
+    MODEL_NESTED_DICHOTOMOUS,
+    MODEL_MULTI_TUMOR,
+} from "./mainConstants";
 
 const modelsList = {
         [MODEL_CONTINUOUS]: ["Exponential", "Hill", "Linear", "Polynomial", "Power"],
@@ -34,6 +39,10 @@ const modelsList = {
             frequentist_restricted: ["Nested Logistic"],
             frequentist_unrestricted: [],
         },
+        [MODEL_MULTI_TUMOR]: {
+            frequentist_restricted: ["Multistage"],
+            frequentist_unrestricted: [],
+        },
     },
     allModelOptions = {
         [MODEL_CONTINUOUS]: {
@@ -56,6 +65,11 @@ const modelsList = {
         [MODEL_NESTED_DICHOTOMOUS]: {
             frequentist_restricted: ["Nested Logistic", "NCTR"],
             frequentist_unrestricted: ["Nested Logistic", "NCTR"],
+        },
+
+        [MODEL_MULTI_TUMOR]: {
+            frequentist_restricted: ["Multistage"],
+            frequentist_unrestricted: [],
         },
     };
 

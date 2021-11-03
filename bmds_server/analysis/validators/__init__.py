@@ -27,7 +27,7 @@ def validate_input(data: Dict, partial: bool = False) -> None:
     validate_session(data, partial=partial)
     bmds_version = data["bmds_version"]
     dataset_type = data["dataset_type"]
-    
+
     # check dataset schema
     datasets = data.get("datasets")
     dataset_options = data.get("dataset_options")

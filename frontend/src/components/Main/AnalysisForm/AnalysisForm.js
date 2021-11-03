@@ -2,6 +2,7 @@ import React, {Component} from "react";
 import {inject, observer} from "mobx-react";
 import PropTypes from "prop-types";
 
+import * as mc from "../../../constants/mainConstants";
 import Spinner from "../../common/Spinner";
 import SelectInput from "../../common/SelectInput";
 import TextInput from "../../common/TextInput";
@@ -13,6 +14,7 @@ class RunChecklist extends Component {
     render() {
         const {complete, message} = this.props,
             color = complete ? "text-success" : "text-danger";
+
         return (
             <p>
                 <i className={`fa fa-check-circle fa-lg ${color}`}></i>&ensp;{message}
@@ -78,10 +80,17 @@ class AnalysisForm extends Component {
                                     complete={mainStore.hasAtLeastOneModelSelected}
                                     message="At least one model is selected"
                                 />
-                                <RunChecklist
-                                    complete={mainStore.hasAtLeastOneDatasetSelected}
-                                    message="At least one dataset is selected"
-                                />
+                                {mainStore.model_type === mc.MODEL_MULTI_TUMOR ? (
+                                    <RunChecklist
+                                        complete={mainStore.hasAtLeastTwoDatasetsSelected}
+                                        message="At least two datasets are selected"
+                                    />
+                                ) : (
+                                    <RunChecklist
+                                        complete={mainStore.hasAtLeastOneDatasetSelected}
+                                        message="At least one dataset is selected"
+                                    />
+                                )}
                                 <RunChecklist
                                     complete={mainStore.hasAtLeastOneOptionSelected}
                                     message="At least one option is selected"

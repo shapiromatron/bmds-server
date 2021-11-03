@@ -15,6 +15,7 @@ import Button from "../common/Button";
 class Main extends Component {
     render() {
         const {mainStore} = this.props;
+
         return mainStore.isUpdateComplete ? (
             <div className="row">
                 <div className="col-lg-4 analysis">

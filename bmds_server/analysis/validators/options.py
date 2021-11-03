@@ -45,6 +45,7 @@ class DichotomousOptions(BaseModel):
 class ContinuousOptions(BaseModel):
     options: conlist(ContinuousOption, min_items=1, max_items=10)
 
+
 class NestedDichotomousOptions(BaseModel):
     options: conlist(NestedDichotomousOption, min_items=1, max_items=10)
 

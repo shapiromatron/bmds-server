@@ -42,7 +42,10 @@ class DatasetModelOptionList extends Component {
                             <th>Enabled</th>
                             <th>Dataset</th>
                             <th>
-                                Maximum multistage degree&nbsp;
+                                {dtype == Dtype.DICHOTOMOUS
+                                    ? "Maximum multistage degree"
+                                    : "Multistage degree"}
+                                &nbsp;
                                 <HelpTextPopover content={maxDegreeText} />
                             </th>
                         </tr>

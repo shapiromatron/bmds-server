@@ -9,6 +9,7 @@ import HelpTextPopover from "../../common/HelpTextPopover";
 import {
     MODEL_CONTINUOUS,
     MODEL_DICHOTOMOUS,
+    MODEL_MULTI_TUMOR,
     MODEL_NESTED_DICHOTOMOUS,
 } from "../../../constants/mainConstants";
 import Button from "../../common/Button";
@@ -42,7 +43,8 @@ class OptionsFormList extends Component {
                                             </th>
                                         </>
                                     ) : null}
-                                    {modelType === MODEL_DICHOTOMOUS ? (
+                                    {modelType === MODEL_DICHOTOMOUS ||
+                                    modelType === MODEL_MULTI_TUMOR ? (
                                         <>
                                             <th>Risk Type</th>
                                             <th>BMR</th>

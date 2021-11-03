@@ -279,7 +279,9 @@ class MainStore {
             return {value: item.value, text: item.name};
         });
         if (!this.isFuture) {
-            return choices.filter(d => d.value != mc.MODEL_NESTED_DICHOTOMOUS);
+            return choices.filter(
+                d => d.value != mc.MODEL_NESTED_DICHOTOMOUS && d.value != mc.MODEL_MULTI_TUMOR
+            );
         }
         return choices;
     }
@@ -289,11 +291,20 @@ class MainStore {
     }
 
     @computed get hasAtLeastOneModelSelected() {
-        return !_.isEmpty(this.getModels);
+        return (
+            _.chain(this.getModels)
+                .values()
+                .map(d => d.length)
+                .sum() > 0
+        );
     }
 
     @computed get hasAtLeastOneDatasetSelected() {
         return !_.isEmpty(this.getEnabledDatasets);
+    }
+
+    @computed get hasAtLeastTwoDatasetsSelected() {
+        return this.getEnabledDatasets.length >= 2;
     }
 
     @computed get hasAtLeastOneOptionSelected() {
@@ -301,6 +312,13 @@ class MainStore {
     }
 
     @computed get isValid() {
+        if (this.model_type === mc.MODEL_MULTI_TUMOR) {
+            return (
+                this.hasAtLeastOneModelSelected &&
+                this.hasAtLeastTwoDatasetsSelected &&
+                this.hasAtLeastOneOptionSelected
+            );
+        }
         return (
             this.hasAtLeastOneModelSelected &&
             this.hasAtLeastOneDatasetSelected &&
@@ -309,6 +327,10 @@ class MainStore {
     }
     @computed get hasOutputs() {
         return this.executionOutputs !== null;
+    }
+
+    @computed get isMultiTumor() {
+        return this.model_type === mc.MODEL_MULTI_TUMOR;
     }
 
     // *** TOAST ***

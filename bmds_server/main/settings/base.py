@@ -148,7 +148,7 @@ LOGGING = {
             "level": "ERROR",
             "propagate": True,
         },
-        "bmdsonline.request": {"handlers": ["null"], "propagate": False, "level": "INFO"},
+        "bmds-server.request": {"handlers": ["null"], "propagate": False, "level": "INFO"},
         "": {"handlers": ["file"], "level": "DEBUG"},
     },
 }

@@ -14,7 +14,7 @@ EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 
 LOGGING["loggers"][""]["handlers"] = ["console"]
 LOGGING["loggers"][""]["level"] = "INFO"
-LOGGING["loggers"]["bmdsonline.request"]["handlers"] = ["console"]
+LOGGING["loggers"]["bmds-server.request"]["handlers"] = ["console"]
 
 CELERY_TASK_ALWAYS_EAGER = True
 CELERY_TASK_EAGER_PROPAGATES = True

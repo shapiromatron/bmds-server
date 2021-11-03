@@ -15,7 +15,7 @@ class TestRequestLogMiddleware:
         client.get("/")
 
         # make sure we have a record and it matches expected pattern
-        matches = [rec for rec in caplog.records if rec.name == "bmdsonline.request"]
+        matches = [rec for rec in caplog.records if rec.name == "bmds-server.request"]
         assert len(matches) > 0
         message = matches[0].message
         assert "GET / 200" in message

@@ -33,33 +33,38 @@ const ModelsCheckBoxHeader = observer(props => {
         content =
             "Models were previewed in BMDS 3.2 and will be formally peer reviewed. EPA plans to release the final models in 2022.",
         title = "Bayesian Model Averaging",
+        {hasBayesianModels} = store,
         isContinuous = store.getModelType === mc.MODEL_CONTINUOUS,
-        isNestedDichotomous = store.getModelType === mc.MODEL_NESTED_DICHOTOMOUS;
+        isMultiTumor = store.getModelType === mc.MODEL_MULTI_TUMOR;
     return (
         <thead className="bg-custom">
             <tr>
                 <th></th>
                 <th colSpan="2">MLE</th>
-                {isNestedDichotomous ? null : <th colSpan="3">Alternatives</th>}
+                {hasBayesianModels ? <th colSpan="3">Alternatives</th> : null}
             </tr>
             <tr>
                 <th></th>
                 <th>Frequentist Restricted</th>
                 <th>Frequentist Unrestricted</th>
-                {isNestedDichotomous ? null : (
+                {hasBayesianModels ? (
                     <th colSpan="2">
                         Bayesian Model Averaging
                         {isContinuous ? (
                             <HelpTextPopover title={title} content={content}></HelpTextPopover>
                         ) : null}
                     </th>
-                )}
+                ) : null}
             </tr>
             <tr>
                 <th>Models</th>
                 <SelectAllComponent store={store} type={"frequentist_restricted"} />
-                <SelectAllComponent store={store} type={"frequentist_unrestricted"} />
-                {isNestedDichotomous ? null : (
+                <SelectAllComponent
+                    store={store}
+                    type={"frequentist_unrestricted"}
+                    disabled={isMultiTumor}
+                />
+                {hasBayesianModels ? (
                     <>
                         <SelectAllComponent
                             store={store}
@@ -68,7 +73,7 @@ const ModelsCheckBoxHeader = observer(props => {
                         />
                         <th>Prior Weights</th>
                     </>
-                )}
+                ) : null}
             </tr>
         </thead>
     );

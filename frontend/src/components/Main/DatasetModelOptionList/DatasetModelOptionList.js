@@ -37,12 +37,15 @@ class DatasetModelOptionList extends Component {
                             <th>Adverse Direction</th>
                         </tr>
                     ) : null}
-                    {dtype == Dtype.DICHOTOMOUS ? (
+                    {dtype == Dtype.DICHOTOMOUS || dtype == Dtype.MULTI_TUMOR ? (
                         <tr className="bg-custom">
                             <th>Enabled</th>
                             <th>Dataset</th>
                             <th>
-                                Maximum multistage degree&nbsp;
+                                {dtype == Dtype.DICHOTOMOUS
+                                    ? "Maximum multistage degree"
+                                    : "Multistage degree"}
+                                &nbsp;
                                 <HelpTextPopover content={maxDegreeText} />
                             </th>
                         </tr>

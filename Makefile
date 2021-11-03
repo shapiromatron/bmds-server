@@ -1,4 +1,4 @@
-.PHONY: build clean clean-test clean-pyc clean-build docs help lint lint-py lint-js format format-py format-js sync-dev
+.PHONY: build clean clean-test clean-pyc clean-build docs help lint lint-py lint-js format format-py format-js
 .DEFAULT_GOAL := help
 
 define BROWSER_PYSCRIPT
@@ -46,8 +46,7 @@ test: ## This runs all of the tests.
 	#	- Use -k <MATCH> for test matching (e.g. -k test_this_thing)
 	#	- Use -s for displaying print statements (or use pdb)
 	#
-	@py.test
-	@npm --prefix ./frontend run test
+	py.test
 
 docs: ## generate Sphinx HTML documentation, including API docs
 	$(MAKE) -C docs clean
@@ -69,9 +68,3 @@ lint-js:  ## Check for javascript formatting issues
 
 format-js:  ## Modify javascript code if possible using linters/formatters
 	@npm --prefix ./frontend run format
-
-sync-dev:  ## Sync dev environment after code checkout
-	python -m pip install -U pip
-	pip install -r requirements/dev.txt
-	yarn --cwd frontend
-	manage.py migrate

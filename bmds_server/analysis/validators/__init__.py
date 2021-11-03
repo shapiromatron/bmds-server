@@ -2,6 +2,7 @@ from typing import Dict
 
 import bmds
 from bmds.bmds3.recommender import RecommenderSettings
+from bmds.datasets.base import DatasetType
 
 from ...common.validation import pydantic_validate
 from .datasets import validate_datasets
@@ -26,7 +27,7 @@ def validate_input(data: Dict, partial: bool = False) -> None:
     validate_session(data, partial=partial)
     bmds_version = data["bmds_version"]
     dataset_type = data["dataset_type"]
-
+    
     # check dataset schema
     datasets = data.get("datasets")
     dataset_options = data.get("dataset_options")
@@ -34,9 +35,10 @@ def validate_input(data: Dict, partial: bool = False) -> None:
         validate_datasets(dataset_type, datasets, dataset_options)
 
     # check model schema
-    models = data.get("models")
-    if models or partial is False:
-        validate_models(dataset_type, models)
+    if dataset_type != bmds.constants.MULTI_TUMOR:
+        models = data.get("models")
+        if models or partial is False:
+            validate_models(dataset_type, models)
 
     options = data.get("options")
     if options or (partial is False and bmds_version in bmds.constants.BMDS_THREES):

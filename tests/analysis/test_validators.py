@@ -159,6 +159,66 @@ class TestInputValidation:
         assert validators.validate_input(data, partial=True) is None
         assert validators.validate_input(data) is None
 
+    def test_multi_tumor(self):
+        data: Dict[str, Any] = {
+            "bmds_version": bmds.constants.BMDS330,
+            "dataset_type": bmds.constants.MULTI_TUMOR,
+        }
+        print(data)
+        assert validators.validate_input(data, partial=True) is None
+
+          # but fails when complete
+        with pytest.raises(ValidationError) as err:
+            validators.validate_input(data)
+        _missing_field(err, "datasets")
+
+        # add datasets, try again
+        data["datasets"] = [
+            {
+                "dtype": "MT",
+                "metadata": {"id": 123},
+                "doses": [0, 10, 50, 150, 400],
+                "ns": [20, 20, 20, 20, 20],
+                "incidences": [0, 0, 1, 4, 11],
+            }
+        ]
+
+        data["dataset_options"] = [
+            {"dataset_id": 123, "enabled": True, "degree":0}
+        ]
+
+        assert validators.validate_input(data, partial=True) is None
+
+        with pytest.raises(ValidationError) as err:
+            validators.validate_input(data)
+        _missing_field(err, "models")
+
+        # add models, try again
+        data["models"] = {"frequentist_restricted": [bmds.constants.M_NESTED_LOGISTIC]}
+        assert validators.validate_input(data, partial=True) is None
+
+        with pytest.raises(ValidationError) as err:
+            validators.validate_input(data)
+        _missing_field(err, "options")
+
+        # add options, try again
+        data["options"] = [
+            {
+                "bmr_type": 1,
+                "bmr_value": 1.0,
+                "confidence_level": 0.95,
+            }
+        ]
+        assert validators.validate_input(data, partial=True) is None
+
+        with pytest.raises(ValidationError) as err:
+            validators.validate_input(data)
+        _missing_field(err, "rules")
+
+        data["recommender"] = RecommenderSettings.build_default().dict()
+        assert validators.validate_input(data, partial=True) is None
+        assert validators.validate_input(data) is None
+
 
 class TestModelValidation:
     def test_bmds3_dichotomous(self):

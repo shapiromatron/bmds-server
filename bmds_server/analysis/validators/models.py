@@ -30,8 +30,9 @@ ContinuousModelSchema = ModelTypeSchema(
 NestedDichotomousModelSchema = ModelTypeSchema(
     restricted=set(bmds.constants.ND_MODELS),
     unrestricted=set(bmds.constants.ND_MODELS),
-    bayesian=[]
+    bayesian=[],
 )
+
 
 class BayesianModelSchema(BaseModel):
     model: str
@@ -98,8 +99,10 @@ class DichotomousModelListSchema(ModelListSchema):
 class ContinuousModelListSchema(ModelListSchema):
     model_schema: ModelTypeSchema = ContinuousModelSchema
 
+
 class NestedDichotomousModelListSchema(ModelListSchema):
     model_schema: ModelTypeSchema = NestedDichotomousModelSchema
+
 
 schema_map = {
     bmds.constants.DICHOTOMOUS: DichotomousModelListSchema,

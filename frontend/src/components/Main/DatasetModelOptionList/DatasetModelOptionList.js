@@ -22,6 +22,7 @@ class DatasetModelOptionList extends Component {
         if (options.length == 0) {
             return null;
         }
+
         return (
             <table className="table table-sm table-bordered">
                 <thead>

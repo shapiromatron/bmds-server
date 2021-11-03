@@ -291,14 +291,19 @@ class MainStore {
     }
 
     @computed get hasAtLeastOneModelSelected() {
-        return !_.isEmpty(this.getModels);
+        return (
+            _.chain(this.getModels)
+                .values()
+                .map(d => d.length)
+                .sum() > 0
+        );
     }
 
     @computed get hasAtLeastOneDatasetSelected() {
         return !_.isEmpty(this.getEnabledDatasets);
     }
 
-    @computed get hasAtLeastTwoDatasetSelected() {
+    @computed get hasAtLeastTwoDatasetsSelected() {
         return this.getEnabledDatasets.length >= 2;
     }
 
@@ -308,7 +313,11 @@ class MainStore {
 
     @computed get isValid() {
         if (this.model_type === mc.MODEL_MULTI_TUMOR) {
-            return this.hasAtLeastTwoDatasetSelected && this.hasAtLeastOneOptionSelected;
+            return (
+                this.hasAtLeastOneModelSelected &&
+                this.hasAtLeastTwoDatasetsSelected &&
+                this.hasAtLeastOneOptionSelected
+            );
         }
         return (
             this.hasAtLeastOneModelSelected &&

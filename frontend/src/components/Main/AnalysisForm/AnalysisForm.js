@@ -2,6 +2,7 @@ import React, {Component} from "react";
 import {inject, observer} from "mobx-react";
 import PropTypes from "prop-types";
 
+import * as mc from "../../../constants/mainConstants";
 import Spinner from "../../common/Spinner";
 import SelectInput from "../../common/SelectInput";
 import TextInput from "../../common/TextInput";
@@ -75,23 +76,20 @@ class AnalysisForm extends Component {
                                 <p>
                                     <b>Steps required to run the analysis:</b>
                                 </p>
-
-                                {mainStore.isMultiTumor ? (
+                                <RunChecklist
+                                    complete={mainStore.hasAtLeastOneModelSelected}
+                                    message="At least one model is selected"
+                                />
+                                {mainStore.model_type === mc.MODEL_MULTI_TUMOR ? (
                                     <RunChecklist
-                                        complete={mainStore.hasAtLeastTwoDatasetSelected}
-                                        message="At least two dataset is selected"
+                                        complete={mainStore.hasAtLeastTwoDatasetsSelected}
+                                        message="At least two datasets are selected"
                                     />
                                 ) : (
-                                    <>
-                                        <RunChecklist
-                                            complete={mainStore.hasAtLeastOneModelSelected}
-                                            message="At least one model is selected"
-                                        />
-                                        <RunChecklist
-                                            complete={mainStore.hasAtLeastOneDatasetSelected}
-                                            message="At least one dataset is selected"
-                                        />
-                                    </>
+                                    <RunChecklist
+                                        complete={mainStore.hasAtLeastOneDatasetSelected}
+                                        message="At least one dataset is selected"
+                                    />
                                 )}
                                 <RunChecklist
                                     complete={mainStore.hasAtLeastOneOptionSelected}

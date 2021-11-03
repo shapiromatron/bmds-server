@@ -92,15 +92,8 @@ class ExternalAuth(View):
         User = get_user_model()
         try:
             user = User.objects.get(username=username)
-            # Save external ID if this is our first access
-            if user.username is None:
-                user.username = username
-                # Set unusable password if only external auth is allowed
-                if settings.AUTH_PROVIDERS == {AuthProvider.external}:
-                    user.set_unusable_password()
-                user.save()
-            # Ensure external id in db matches that returned from service
-            elif user.username != username:
+            # Ensure email in db matches that returned from service
+            if user.email != email:
                 self.mail_bad_auth(email, username)
                 return HttpResponseRedirect(reverse("401"))
         except User.DoesNotExist:

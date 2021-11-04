@@ -2,7 +2,6 @@ from typing import Dict
 
 import bmds
 from bmds.bmds3.recommender import RecommenderSettings
-from bmds.datasets.base import DatasetType
 
 from ...common.validation import pydantic_validate
 from .datasets import validate_datasets

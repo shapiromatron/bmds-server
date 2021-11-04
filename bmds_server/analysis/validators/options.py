@@ -5,8 +5,8 @@ from bmds.bmds3.constants import DistType
 from bmds.bmds3.types.continuous import ContinuousRiskType
 from bmds.bmds3.types.dichotomous import DichotomousRiskType
 from bmds.bmds3.types.nested_dichotomous import (
-    NestedDichotomousLSCType,
     NestedDichotomousBackgroundType,
+    NestedDichotomousLSCType,
 )
 from django.core.exceptions import ValidationError
 from pydantic import BaseModel, confloat, conlist

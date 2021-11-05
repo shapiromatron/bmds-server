@@ -46,7 +46,8 @@ test: ## This runs all of the tests.
 	#	- Use -k <MATCH> for test matching (e.g. -k test_this_thing)
 	#	- Use -s for displaying print statements (or use pdb)
 	#
-	py.test
+	@py.test
+	@npm --prefix ./frontend run test
 
 docs: ## generate Sphinx HTML documentation, including API docs
 	$(MAKE) -C docs clean

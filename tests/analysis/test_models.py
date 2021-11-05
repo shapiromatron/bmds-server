@@ -1,9 +1,10 @@
 import pytest
-from run3 import RunBmds3
 
 from bmds_server.analysis.models import Analysis
 from bmds_server.analysis.reporting.docx import build_docx
 from bmds_server.analysis.reporting.excel import build_df
+
+from .run3 import RunBmds3
 
 
 @pytest.mark.django_db()

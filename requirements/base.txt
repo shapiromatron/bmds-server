@@ -1,16 +1,16 @@
 # website
-Django==3.2.5
+Django==3.2.9
 django-webpack-loader==1.1.0
 djangorestframework==3.12.4
+    uritemplate==4.1.1  # schema dependencies
+    PyYAML==5.4.1
+django-reversion==4.0.0
 
 # db
 psycopg2-binary==2.9.1
 
 # celery
 celery==5.1.2
-
-# fixtures
-PyYAML==5.4.1
 
 # cache/queue
 django-redis==5.0.0

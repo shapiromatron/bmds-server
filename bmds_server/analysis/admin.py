@@ -2,6 +2,7 @@ from django.contrib import admin
 from django.contrib.admin import SimpleListFilter
 from django.db.models import TextChoices
 from django.utils.html import format_html
+from reversion.admin import VersionAdmin
 
 from . import models
 
@@ -23,7 +24,7 @@ class CustomQuerysetsFilter(SimpleListFilter):
 
 
 @admin.register(models.Analysis)
-class AnalysisAdmin(admin.ModelAdmin):
+class AnalysisAdmin(VersionAdmin):
     list_display = ("__str__", "view_url", "edit_url", "created", "is_finished", "deletion_date")
     readonly_fields = ("password",)
     list_filter = (
@@ -45,6 +46,6 @@ class AnalysisAdmin(admin.ModelAdmin):
 
 
 @admin.register(models.Content)
-class Content(admin.ModelAdmin):
+class Content(VersionAdmin):
     list_display = ("id", "content_type", "subject", "created", "last_updated")
     list_filter = ("content_type",)

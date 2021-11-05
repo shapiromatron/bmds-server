@@ -18,7 +18,7 @@ tmux split-window -h
 # run commands
 tmux send-keys -t 0 "source venv/bin/activate" enter
 tmux send-keys -t 1 "source venv/bin/activate && manage.py shell" enter
-tmux send-keys -t 2 "source venv/bin/activate && manage.py runserver 5550" enter
+tmux send-keys -t 2 "source venv/bin/activate && manage.py runserver 8100" enter
 tmux send-keys -t 3 "npm --prefix ./frontend run start" enter
 
 # attach to shell

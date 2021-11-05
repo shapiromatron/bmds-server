@@ -1,5 +1,5 @@
 var config = require("./webpack.base.js"),
-    port = 8001;
+    port = 8110;
 
 config.devtool = "cheap-module-eval-source-map";
 

@@ -63,16 +63,17 @@ export const inv_tdist_05 = function(df) {
             lowers = [],
             bounds = [];
         dataset.doses.map((dose, idx) => {
-            let n = dataset.ns[idx],
+            let mean = dataset.means[idx],
+                n = dataset.ns[idx],
                 stdev = dataset.stdevs[idx];
 
-            if (_.isFinite(n) && _.isFinite(stdev)) {
+            if (_.isFinite(mean) && _.isFinite(n) && _.isFinite(stdev) && n > 0) {
                 const se = stdev / Math.sqrt(n),
                     z = inv_tdist_05(n - 1) || 2.04,
                     change = se * z;
                 uppers.push(change);
                 lowers.push(change);
-                bounds.push([dataset.means[idx] - change, dataset.means[idx] + change]);
+                bounds.push([mean - change, mean + change]);
             } else {
                 uppers.push(undefined);
                 lowers.push(undefined);

@@ -104,7 +104,7 @@ class ExternalAuth(View):
             # Create user
             user = User.objects.create_user(email=email, username=username, **metadata)
         login(request, user)
-        return HttpResponseRedirect(reverse("home"))
+        return HttpResponseRedirect(reverse("admin:index"))
 
 
 @method_decorator(staff_member_required, name="dispatch")

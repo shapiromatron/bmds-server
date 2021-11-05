@@ -57,6 +57,8 @@ def validate_options(dataset_type: str, data: Any):
         schema = ContinuousOptions
     elif dataset_type == bmds.constants.NESTED_DICHOTOMOUS:
         schema = NestedDichotomousOptions
+    elif dataset_type == bmds.constants.MULTI_TUMOR:
+        schema = DichotomousOptions
     else:
         ValidationError(f"Unknown `dataset_type`: {dataset_type}")
 

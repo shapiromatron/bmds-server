@@ -79,6 +79,11 @@ class NestedDichotomousDataset(DatasetValidator):
     datasets: conlist(NestedDichotomousDatasetSchema, min_items=1, max_items=10)
 
 
+class MultiTumorDatasets(DatasetValidator):
+    dataset_options: conlist(DichotomousModelOptions, min_items=2, max_items=10)
+    datasets: conlist(DichotomousDatasetSchema, min_items=2, max_items=10)
+
+
 def validate_datasets(dataset_type: str, datasets: Any, datasetOptions: Any):
     if dataset_type in bmds.constants.CONTINUOUS_DTYPES:
         schema = ContinuousDatasets
@@ -86,8 +91,9 @@ def validate_datasets(dataset_type: str, datasets: Any, datasetOptions: Any):
         schema = DichotomousDatasets
     elif dataset_type == bmds.constants.NESTED_DICHOTOMOUS:
         schema = NestedDichotomousDataset
+    elif dataset_type == bmds.constants.MULTI_TUMOR:
+        schema = MultiTumorDatasets
     else:
         raise ValidationError(f"Unknown dataset type: {dataset_type}")
-
     data = {"datasets": datasets, "dataset_options": datasetOptions}
     pydantic_validate(data, schema)

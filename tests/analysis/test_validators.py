@@ -1,4 +1,5 @@
 import json
+from copy import deepcopy
 from typing import Any, Dict
 
 import bmds
@@ -76,12 +77,11 @@ class TestInputValidation:
         assert validators.validate_input(data, partial=True) is None
         assert validators.validate_input(data) is None
 
-    def test_nested_dichotomous(self):
+    def test_nested_dichotomous(self, nested_dichotomous_datasets):
         data: Dict[str, Any] = {
             "bmds_version": bmds.constants.BMDS330,
             "dataset_type": bmds.constants.NESTED_DICHOTOMOUS,
         }
-        print(data)
         assert validators.validate_input(data, partial=True) is None
 
         # but fails when complete
@@ -90,136 +90,7 @@ class TestInputValidation:
         _missing_field(err, "datasets")
 
         # add datasets, try again
-        data["datasets"] = [
-            {
-                "dtype": "C",
-                "metadata": {"id": 123},
-                "doses": [
-                    0,
-                    0,
-                    0,
-                    0,
-                    0,
-                    0,
-                    0,
-                    0,
-                    0,
-                    0,
-                    0,
-                    25,
-                    25,
-                    25,
-                    25,
-                    25,
-                    25,
-                    25,
-                    25,
-                    25,
-                    50,
-                    50,
-                    50,
-                    50,
-                    50,
-                    50,
-                    50,
-                    50,
-                    50,
-                ],
-                "litter_ns": [
-                    16,
-                    9,
-                    15,
-                    14,
-                    13,
-                    9,
-                    10,
-                    14,
-                    10,
-                    11,
-                    14,
-                    9,
-                    14,
-                    9,
-                    13,
-                    12,
-                    10,
-                    10,
-                    11,
-                    14,
-                    11,
-                    11,
-                    14,
-                    11,
-                    10,
-                    11,
-                    10,
-                    15,
-                    7,
-                ],
-                "incidences": [
-                    1,
-                    1,
-                    2,
-                    3,
-                    3,
-                    0,
-                    2,
-                    2,
-                    1,
-                    2,
-                    4,
-                    5,
-                    6,
-                    2,
-                    6,
-                    3,
-                    1,
-                    2,
-                    4,
-                    3,
-                    4,
-                    5,
-                    5,
-                    4,
-                    5,
-                    4,
-                    5,
-                    6,
-                    2,
-                ],
-                "litter_covariates": [
-                    16,
-                    9,
-                    15,
-                    14,
-                    13,
-                    9,
-                    10,
-                    14,
-                    10,
-                    11,
-                    14,
-                    9,
-                    14,
-                    9,
-                    13,
-                    12,
-                    10,
-                    10,
-                    11,
-                    14,
-                    11,
-                    11,
-                    14,
-                    11,
-                    10,
-                    11,
-                    10,
-                    15,
-                    7,
-                ],
-            }
-        ]
+        data["datasets"] = deepcopy(nested_dichotomous_datasets)
 
         data["dataset_options"] = [{"dataset_id": 123, "enabled": True}]
 
@@ -265,7 +136,7 @@ class TestInputValidation:
             "bmds_version": bmds.constants.BMDS330,
             "dataset_type": bmds.constants.MULTI_TUMOR,
         }
-        print(data)
+
         assert validators.validate_input(data, partial=True) is None
 
         # but fails when complete
@@ -281,10 +152,20 @@ class TestInputValidation:
                 "doses": [0, 10, 50, 150, 400],
                 "ns": [20, 20, 20, 20, 20],
                 "incidences": [0, 0, 1, 4, 11],
-            }
+            },
+            {
+                "dtype": "MT",
+                "metadata": {"id": 124},
+                "doses": [0, 10, 50, 150, 400],
+                "ns": [20, 20, 20, 20, 20],
+                "incidences": [0, 0, 1, 4, 11],
+            },
         ]
 
-        data["dataset_options"] = [{"dataset_id": 123, "enabled": True, "degree": 0}]
+        data["dataset_options"] = [
+            {"dataset_id": 123, "enabled": True, "degree": 0},
+            {"dataset_id": 124, "enabled": True, "degree": 0},
+        ]
 
         assert validators.validate_input(data, partial=True) is None
 
@@ -301,7 +182,9 @@ class TestInputValidation:
         _missing_field(err, "options")
 
         # add options, try again
-        data["options"] = [{"bmr_type": 1, "bmr_value": 1.0, "confidence_level": 0.95}]
+        data["options"] = [
+            {"bmr_type": 1, "bmr_value": 1.0, "confidence_level": 0.95},
+        ]
         assert validators.validate_input(data, partial=True) is None
 
         with pytest.raises(ValidationError) as err:

@@ -29,6 +29,9 @@
     <link rel="stylesheet" type="text/css" href="{% static 'css/epa-bmds.css' %}" />
     {% endif %}
 
+    {% block extra-head %}
+    {% endblock extra-head %}
+
   {% if user.is_superuser or SERVER_ROLE != 'production' %}
     {% include "./includes/environment_banner.html" %}
   {% endif %}

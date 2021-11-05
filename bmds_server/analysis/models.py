@@ -8,6 +8,7 @@ from typing import Dict, List, Optional
 
 import bmds
 import pandas as pd
+import reversion
 from bmds.bmds3.batch import BmdsSessionBatch
 from bmds.bmds3.recommender.recommender import RecommenderSettings
 from bmds.constants import Dtype
@@ -33,6 +34,7 @@ def get_deletion_date(current_deletion_date=None):
     return date
 
 
+@reversion.register()
 class Analysis(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     password = models.CharField(max_length=12, default=utils.random_string, editable=False)
@@ -290,6 +292,7 @@ class ContentType(models.IntegerChoices):
     HOMEPAGE = 1
 
 
+@reversion.register()
 class Content(models.Model):
     content_type = models.PositiveIntegerField(choices=ContentType.choices, unique=True)
     subject = models.CharField(max_length=128)

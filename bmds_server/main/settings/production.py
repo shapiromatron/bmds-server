@@ -1,6 +1,7 @@
 # flake8: noqa
 
 import os
+from pathlib import Path
 
 from ..constants import SkinStyle
 from .base import *
@@ -79,7 +80,7 @@ CELERY_RESULT_BACKEND = os.environ["DJANGO_CELERY_RESULT_BACKEND"]
 LOAD_TEST_DB = bool(os.environ.get("LOAD_TEST_DB") == "True")
 if LOAD_TEST_DB:
     PASSWORD_HASHERS = ("django.contrib.auth.hashers.MD5PasswordHasher",)
-    TEST_DB_FIXTURE = ROOT_DIR / "test-db-fixture.yaml"
+    TEST_DB_FIXTURE = Path("/app/test-db-fixture.yaml")
 
 
 if DJANGO_EMAIL_BACKEND == "SMTP" and EMAIL_MESSAGEID_FQDN is not None:

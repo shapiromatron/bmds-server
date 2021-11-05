@@ -2,22 +2,26 @@
 
 if "%~1" == "" goto :help
 if /I %1 == help goto :help
+if /I %1 == test goto :test
 if /I %1 == lint goto :lint
 if /I %1 == format goto :format
+if /I %1 == test-py goto :test-py
 if /I %1 == lint-py goto :lint-py
 if /I %1 == format-py goto :format-py
+if /I %1 == test-js goto :test-js
 if /I %1 == lint-js goto :lint-js
 if /I %1 == format-js goto :format-js
-if /I %1 == test goto :test
 goto :help
 
 :help
 echo.Please use `make ^<target^>` where ^<target^> is one of
-echo.  test         run python tests
+echo.  test         perform both test-py and test-js
 echo.  lint         perform both lint-py and lint-js
 echo.  format       perform both format-py and lint-js
+echo.  test-py      run python tests
 echo.  lint-py      check for pytho formatting issues via black and flake8
 echo.  format-py    modify python code using black and show flake8 issues
+echo.  test-js      run javascript tests
 echo.  lint-js      check for javascript formatting issues
 echo.  format-js    modify javascript code if possible using linters and formatters
 goto :eof
@@ -28,7 +32,7 @@ npm --prefix .\frontend run lint
 goto :eof
 
 :format
-black . && isort -rc -y && flake8 .
+black . && isort . && flake8 .
 npm --prefix .\frontend run format
 goto :eof
 
@@ -37,7 +41,7 @@ black . --check && flake8 .
 goto :eof
 
 :format-py
-black . && isort -rc -y && flake8 .
+black . && isort . && flake8 .
 goto :eof
 
 :lint-js
@@ -50,4 +54,13 @@ goto :eof
 
 :test
 py.test
+npm --prefix .\frontend run test-windows
+goto :eof
+
+:test-py
+py.test
+goto :eof
+
+:test-js
+npm --prefix .\frontend run test-windows
 goto :eof

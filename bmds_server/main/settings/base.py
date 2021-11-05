@@ -6,7 +6,7 @@ from pathlib import Path
 from subprocess import CalledProcessError
 
 from ...common.git import Commit
-from ..constants import SkinStyle
+from ..constants import AuthProvider, SkinStyle
 
 PROJECT_NAME = "bmds-server"
 BASE_DIR = Path(__file__).parents[2].resolve()
@@ -51,7 +51,7 @@ MIDDLEWARE = [
     "bmds_server.common.middleware.RequestLogMiddleware",
 ]
 
-ROOT_URLCONF = "bmds_server.analysis.urls"
+ROOT_URLCONF = "bmds_server.main.urls"
 
 TEMPLATES = [
     {
@@ -85,10 +85,13 @@ DATABASES = {
 }
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 LOGIN_URL = "admin:login"
+LOGOUT_REDIRECT_URL = os.getenv("LOGOUT_REDIRECT", "home")
+
 
 # add randomness to url prefix to prevent easy access
 ADMIN_URL_PREFIX = "8v99wgnw7"
 
+AUTH_PROVIDERS = {AuthProvider(p) for p in os.getenv("AUTH_PROVIDERS", "django").split("|")}
 AUTH_PASSWORD_VALIDATORS = [
     {"NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator"},
     {"NAME": "django.contrib.auth.password_validation.MinimumLengthValidator"},
@@ -155,6 +158,7 @@ LOGGING = {
 
 # Session and authentication
 SESSION_ENGINE = "django.contrib.sessions.backends.cached_db"
+SESSION_COOKIE_AGE = int(os.getenv("SESSION_DURATION", "28800"))  # 8 hours
 
 # Celery
 CELERYD_HIJACK_ROOT_LOGGER = False
@@ -186,11 +190,8 @@ REST_FRAMEWORK = {
         "rest_framework.throttling.AnonRateThrottle",
         "rest_framework.throttling.UserRateThrottle",
     ),
-    "DEFAULT_THROTTLE_RATES": {"anon": "120/minute", "user": "120/minute"},
-    "DEFAULT_AUTHENTICATION_CLASSES": (
-        "rest_framework.authentication.SessionAuthentication",
-        "rest_framework.authentication.TokenAuthentication",
-    ),
+    "DEFAULT_THROTTLE_RATES": {"anon": "10/minute", "user": "10/minute"},
+    "DEFAULT_AUTHENTICATION_CLASSES": ("rest_framework.authentication.SessionAuthentication",),
 }
 
 WEBPACK_LOADER = {
@@ -224,3 +225,4 @@ GTM_ID = os.getenv("GTM_ID")
 TEST_DB_FIXTURE = ROOT_DIR / "tests/data/db.yaml"
 CONTACT_US_LINK = os.getenv("CONTACT_US_LINK", "")
 WEBSITE_URI = os.getenv("WEBSITE_URI", "https://example.com")
+INCLUDE_ADMIN = bool(os.environ.get("INCLUDE_ADMIN", "True") == "True")

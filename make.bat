@@ -32,7 +32,7 @@ npm --prefix .\frontend run lint
 goto :eof
 
 :format
-black . && isort -rc -y && flake8 .
+black . && isort . && flake8 .
 npm --prefix .\frontend run format
 goto :eof
 
@@ -41,7 +41,7 @@ black . --check && flake8 .
 goto :eof
 
 :format-py
-black . && isort -rc -y && flake8 .
+black . && isort . && flake8 .
 goto :eof
 
 :lint-js

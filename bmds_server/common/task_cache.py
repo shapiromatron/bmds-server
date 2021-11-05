@@ -37,7 +37,8 @@ class ReportCache(abc.ABC):
         return f"{self.cache_prefix}-{self.analysis.id}"
 
     def delete(self):
-        self.cache.delete(self.cache_key)
+        if settings.ENABLE_REPORT_CACHE:
+            self.cache.delete(self.cache_key)
 
     @abc.abstractmethod
     def invoke_celery_task(self) -> None:
@@ -96,5 +97,6 @@ class ReportCache(abc.ABC):
         response = ReportResponse(
             status=ReportStatus.COMPLETE, content=content, header=None, message=None,
         )
-        self.cache.set(key, response)
+        if settings.ENABLE_REPORT_CACHE:
+            self.cache.set(key, response)
         return response

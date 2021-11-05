@@ -69,6 +69,9 @@ CACHES["default"] = dict(
     TIMEOUT=60 * 10,  # 10 minutes (in seconds)
 )
 
+# Logging settings
+LOGGING["loggers"]["bmds-server.request"]["handlers"] = ["requests"]
+
 # Celery settings
 CELERY_BROKER_URL = os.environ["DJANGO_CELERY_BROKER_URL"]
 CELERY_RESULT_BACKEND = os.environ["DJANGO_CELERY_RESULT_BACKEND"]

@@ -48,6 +48,7 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "bmds_server.common.middleware.RequestLogMiddleware",
 ]
 
 ROOT_URLCONF = "bmds_server.main.urls"
@@ -117,7 +118,7 @@ LOGGING = {
     "version": 1,
     "disable_existing_loggers": False,
     "filters": {"require_debug_false": {"()": "django.utils.log.RequireDebugFalse"}},
-    "formatters": {"basic": {"format": "%(asctime)s %(name)-20s %(levelname)-8s %(message)s"}},
+    "formatters": {"basic": {"format": "%(levelname)s %(asctime)s %(name)s %(message)s"}},
     "handlers": {
         "mail_admins": {
             "level": "ERROR",
@@ -133,6 +134,14 @@ LOGGING = {
             "maxBytes": 10 * 1024 * 1024,  # 10 MB
             "backupCount": 10,
         },
+        "requests": {
+            "level": "INFO",
+            "class": "logging.handlers.RotatingFileHandler",
+            "formatter": "basic",
+            "filename": str(LOGS_PATH / "requests.log"),
+            "maxBytes": 10 * 1024 * 1024,  # 10 MB
+            "backupCount": 10,
+        },
         "null": {"class": "logging.NullHandler"},
     },
     "loggers": {
@@ -142,6 +151,7 @@ LOGGING = {
             "level": "ERROR",
             "propagate": True,
         },
+        "bmds-server.request": {"handlers": ["null"], "propagate": False, "level": "INFO"},
         "": {"handlers": ["file"], "level": "DEBUG"},
     },
 }

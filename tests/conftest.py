@@ -240,7 +240,7 @@ def nested_dichotomous_datasets():
     # fmt: off
     return [
         {
-            "dtype": "C",
+            "dtype": "ND",
             "metadata": {"id": 123},
             "doses": [
                 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -264,3 +264,4 @@ def nested_dichotomous_datasets():
             ],
         }
     ]
+    # fmt: on

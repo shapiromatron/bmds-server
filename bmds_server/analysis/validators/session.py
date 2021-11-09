@@ -6,7 +6,6 @@ from pydantic.typing import Literal
 
 from ...common.validation import pydantic_validate
 
-_dtypes = Literal[bmds.constants.DTYPES]
 _versions = Literal[bmds.constants.BMDS330]
 
 
@@ -14,7 +13,7 @@ class BaseSession(BaseModel):
     id: Optional[Union[int, str]]
     bmds_version: _versions
     description: str = ""
-    dataset_type: _dtypes
+    dataset_type: bmds.constants.ModelClass
 
 
 class BaseSessionComplete(BaseSession):

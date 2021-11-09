@@ -101,7 +101,7 @@ class TestInputValidation:
         _missing_field(err, "models")
 
         # add models, try again
-        data["models"] = {"frequentist_restricted": [bmds.constants.M_NESTED_LOGISTIC]}
+        data["models"] = {"frequentist_restricted": [bmds.constants.M_NestedLogistic]}
         assert validators.validate_input(data, partial=True) is None
 
         with pytest.raises(ValidationError) as err:
@@ -147,14 +147,14 @@ class TestInputValidation:
         # add datasets, try again
         data["datasets"] = [
             {
-                "dtype": "MT",
+                "dtype": "D",
                 "metadata": {"id": 123},
                 "doses": [0, 10, 50, 150, 400],
                 "ns": [20, 20, 20, 20, 20],
                 "incidences": [0, 0, 1, 4, 11],
             },
             {
-                "dtype": "MT",
+                "dtype": "D",
                 "metadata": {"id": 124},
                 "doses": [0, 10, 50, 150, 400],
                 "ns": [20, 20, 20, 20, 20],
@@ -174,7 +174,7 @@ class TestInputValidation:
         _missing_field(err, "models")
 
         # add models, try again
-        data["models"] = {"frequentist_restricted": [bmds.constants.M_NESTED_LOGISTIC]}
+        data["models"] = {"frequentist_restricted": [bmds.constants.M_Multistage]}
         assert validators.validate_input(data, partial=True) is None
 
         with pytest.raises(ValidationError) as err:

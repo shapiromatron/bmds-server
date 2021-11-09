@@ -95,5 +95,6 @@ def validate_datasets(dataset_type: str, datasets: Any, datasetOptions: Any):
         schema = MultiTumorDatasets
     else:
         raise ValidationError(f"Unknown dataset type: {dataset_type}")
+
     data = {"datasets": datasets, "dataset_options": datasetOptions}
     pydantic_validate(data, schema)

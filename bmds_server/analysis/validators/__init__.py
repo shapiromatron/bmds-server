@@ -34,10 +34,9 @@ def validate_input(data: Dict, partial: bool = False) -> None:
         validate_datasets(dataset_type, datasets, dataset_options)
 
     # check model schema
-    if dataset_type != bmds.constants.MULTI_TUMOR:
-        models = data.get("models")
-        if models or partial is False:
-            validate_models(dataset_type, models)
+    models = data.get("models")
+    if models or partial is False:
+        validate_models(dataset_type, models)
 
     options = data.get("options")
     if options or (partial is False and bmds_version in bmds.constants.BMDS_THREES):

@@ -71,6 +71,7 @@ class AnalysisViewset(mixins.CreateModelMixin, mixins.RetrieveModelMixin, viewse
 
         if not isinstance(data, dict):
             raise exceptions.ValidationError("A `data` object is required")
+
         try:
             validators.validate_input(data, partial=partial)
         except ValidationError as err:

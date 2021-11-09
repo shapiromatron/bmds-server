@@ -36,7 +36,7 @@ export const DATA_CONTINUOUS_SUMMARY = "CS",
         [Dtype.CONTINUOUS]: ["doses", "ns", "means", "stdevs"],
         [Dtype.CONTINUOUS_INDIVIDUAL]: ["doses", "responses"],
         [Dtype.DICHOTOMOUS]: ["doses", "ns", "incidences"],
-        [Dtype.NESTED_DICHOTOMOUS]: ["doses", "litter_n", "incidences", "litter_covariate"],
+        [Dtype.NESTED_DICHOTOMOUS]: ["doses", "litter_ns", "incidences", "litter_covariates"],
     },
     columnNames = {
         [DATA_CONTINUOUS_SUMMARY]: {
@@ -56,9 +56,9 @@ export const DATA_CONTINUOUS_SUMMARY = "CS",
         },
         [DATA_NESTED_DICHOTOMOUS]: {
             doses: "Dose",
-            litter_n: "Litter Size",
+            litter_ns: "Litter Size",
             incidences: "Incidence",
-            litter_covariate: "Litter Specific Covariate",
+            litter_covariates: "Litter Specific Covariate",
         },
     },
     columnHeaders = {
@@ -68,8 +68,8 @@ export const DATA_CONTINUOUS_SUMMARY = "CS",
         stdevs: "Std. Dev.",
         responses: "Response",
         incidences: "Incidence",
-        litter_n: "Litter Size",
-        litter_covariate: "Litter Specific Covariate",
+        litter_ns: "Litter Size",
+        litter_covariates: "Litter Specific Covariate",
     },
     getDefaultDataset = function(dtype) {
         switch (dtype) {

@@ -1,7 +1,9 @@
+import itertools
 from copy import deepcopy
 from typing import Dict, NamedTuple, Optional
 
 import bmds
+import numpy as np
 from bmds.bmds3.constants import DistType
 from bmds.bmds3.sessions import BmdsSession
 
@@ -115,6 +117,13 @@ class AnalysisSession(NamedTuple):
 
     @classmethod
     def run(cls, inputs: Dict, dataset_index: int, option_index: int) -> Dict:
+
+        # TODO - remove mocks when functional
+        if inputs["dataset_type"] == bmds.constants.NESTED_DICHOTOMOUS:
+            return _mock_nested_dichotomous(inputs, dataset_index, option_index)
+        elif inputs["dataset_type"] == bmds.constants.MULTI_TUMOR:
+            return _mock_multitumor(inputs, dataset_index, option_index)
+
         session = cls.create(inputs, dataset_index, option_index)
         session.execute()
         return session.to_dict()
@@ -161,3 +170,45 @@ class AnalysisSession(NamedTuple):
             frequentist=self.frequentist.to_dict() if self.frequentist else None,
             bayesian=self.bayesian.to_dict() if self.bayesian else None,
         )
+
+
+def _mock_results(inputs: Dict, dataset_index: int, option_index: int) -> dict:
+    # TODO - remove once we have a real method
+    models = []
+    for model_name in itertools.chain(inputs["models"]["frequentist_restricted"]):
+        doses = np.array(inputs["datasets"][dataset_index]["doses"])
+        median = np.percentile(doses, 50)
+        models.append(
+            {
+                "name": model_name,
+                "results": {"bmd": median, "bmdl": 0.9 * median, "bmdu": 1.1 * median},
+                "settings": {},
+                "model_class": {},
+            }
+        )
+
+    return {
+        "metadata": {"dataset_index": dataset_index, "option_index": option_index},
+        "bayesian": None,
+        "frequentist": {
+            "models": models,
+            "dataset": inputs["datasets"][dataset_index],
+            "version": {},
+            "selected": {"notes": "", "model_index": None},
+            "recommender": None,
+            "model_average": None,
+        },
+    }
+
+
+def _mock_nested_dichotomous(inputs: Dict, dataset_index: int, option_index: int) -> dict:
+    # TODO - remove once we have a real method
+    return _mock_results(inputs, dataset_index, option_index)
+
+
+def _mock_multitumor(inputs: Dict, dataset_index: int, option_index: int) -> dict:
+    # TODO - remove once we have a real method
+    results = _mock_results(inputs, dataset_index, option_index)
+    # TODO - this logically needs to change b/c datasets are combined
+    results["frequentist"]["combined"] = deepcopy(results["frequentist"]["models"][0]["results"])
+    return results

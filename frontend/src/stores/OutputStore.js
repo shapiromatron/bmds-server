@@ -43,6 +43,10 @@ class OutputStore {
         this.userPlotSettings = {};
     }
 
+    @computed get getModelType() {
+        return this.rootStore.mainStore.model_type;
+    }
+
     @computed get globalErrorMessage() {
         return this.rootStore.mainStore.errorMessage;
     }

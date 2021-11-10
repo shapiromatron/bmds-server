@@ -319,6 +319,7 @@
     - content
     codename: view_content
 - model: auth.user
+  pk: 1
   fields:
     password: md5$rkrC7MTwzfRQ$8583b60efb5645130b2c7862fb007592   # clear-text = "pw"
     last_login: 2021-03-01 22:41:15.270081+00:00

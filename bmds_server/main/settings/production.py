@@ -77,7 +77,7 @@ CELERY_BROKER_URL = os.environ["DJANGO_CELERY_BROKER_URL"]
 CELERY_RESULT_BACKEND = os.environ["DJANGO_CELERY_RESULT_BACKEND"]
 
 # load test db for dev/staging?
-LOAD_TEST_DB = bool(os.environ.get("LOAD_TEST_DB") == "True")
+LOAD_TEST_DB = int(os.environ.get("LOAD_TEST_DB", 0))  # 0 = no; 1 = ifempty; 2 = always
 if LOAD_TEST_DB:
     PASSWORD_HASHERS = ("django.contrib.auth.hashers.MD5PasswordHasher",)
     TEST_DB_FIXTURE = Path("/app/test-db-fixture.yaml")

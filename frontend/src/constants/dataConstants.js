@@ -36,7 +36,7 @@ export const DATA_CONTINUOUS_SUMMARY = "CS",
         [Dtype.CONTINUOUS]: ["doses", "ns", "means", "stdevs"],
         [Dtype.CONTINUOUS_INDIVIDUAL]: ["doses", "responses"],
         [Dtype.DICHOTOMOUS]: ["doses", "ns", "incidences"],
-        [Dtype.NESTED_DICHOTOMOUS]: ["doses", "litter_n", "incidences", "litter_covariate"],
+        [Dtype.NESTED_DICHOTOMOUS]: ["doses", "litter_ns", "incidences", "litter_covariates"],
     },
     columnNames = {
         [DATA_CONTINUOUS_SUMMARY]: {
@@ -56,9 +56,9 @@ export const DATA_CONTINUOUS_SUMMARY = "CS",
         },
         [DATA_NESTED_DICHOTOMOUS]: {
             doses: "Dose",
-            litter_n: "Litter Size",
+            litter_ns: "Litter Size",
             incidences: "Incidence",
-            litter_covariate: "Litter Specific Covariate",
+            litter_covariates: "Litter Specific Covariate",
         },
     },
     columnHeaders = {
@@ -68,8 +68,8 @@ export const DATA_CONTINUOUS_SUMMARY = "CS",
         stdevs: "Std. Dev.",
         responses: "Response",
         incidences: "Incidence",
-        litter_n: "Litter Size",
-        litter_covariate: "Litter Specific Covariate",
+        litter_ns: "Litter Size",
+        litter_covariates: "Litter Specific Covariate",
     },
     getDefaultDataset = function(dtype) {
         switch (dtype) {
@@ -130,9 +130,9 @@ export const DATA_CONTINUOUS_SUMMARY = "CS",
                         response_name: "Incidence",
                     },
                     doses: ["", "", "", "", ""],
-                    litter_n: ["", "", "", "", ""],
+                    litter_ns: ["", "", "", "", ""],
                     incidences: ["", "", "", "", ""],
-                    litter_covariate: ["", "", "", "", ""],
+                    litter_covariates: ["", "", "", "", ""],
                 };
             default:
                 throw `Unknown dataset type ${dtype}`;
@@ -182,7 +182,7 @@ export const DATA_CONTINUOUS_SUMMARY = "CS",
                         25, 25, 25, 25, 25, 25, 25, 25, 25,
                         50, 50, 50, 50, 50, 50, 50, 50, 50,
                     ],
-                    litter_n: [
+                    litter_ns: [
                         16, 9, 15, 14, 13, 9, 10, 14, 10, 11, 14,
                         9, 14, 9, 13, 12, 10, 10, 11, 14,
                         11, 11, 14, 11, 10, 11, 10, 15, 7,
@@ -192,7 +192,7 @@ export const DATA_CONTINUOUS_SUMMARY = "CS",
                         5, 6, 2, 6, 3, 1, 2, 4, 3,
                         4, 5, 5, 4, 5, 4, 5, 6, 2,
                     ],
-                    litter_covariate: [
+                    litter_covariates: [
                         16, 9, 15, 14, 13, 9, 10, 14, 10, 11, 14,
                         9, 14, 9, 13, 12, 10, 10, 11, 14,
                         11, 11, 14, 11, 10, 11, 10, 15, 7,

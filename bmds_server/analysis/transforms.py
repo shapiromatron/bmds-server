@@ -5,6 +5,7 @@ from typing import Dict, List, Union
 import bmds
 from bmds.bmds3.types.continuous import ContinuousModelSettings
 from bmds.bmds3.types.dichotomous import DichotomousModelSettings
+from bmds.bmds3.types.nested_dichotomous import NestedDichotomousModelSettings
 from bmds.bmds3.types.priors import PriorClass
 from bmds.constants import Dtype
 
@@ -52,6 +53,16 @@ def build_model_settings(
             is_increasing=is_increasing_map[dataset_options["adverse_direction"]],
             priors=prior_class,
         )
+    elif dataset_type == bmds.constants.NESTED_DICHOTOMOUS:
+        return NestedDichotomousModelSettings(
+            bmr=options["bmr_value"],
+            alpha=1.0 - options["confidence_level"],
+            bmr_type=options["bmr_type"],
+            litter_specific_covariate=options["litter_specific_covariate"],
+            background=options["background"],
+            bootstrap_iterations=options["bootstrap_iterations"],
+            bootstrap_seed=options["bootstrap_seed"],
+        )
     else:
         raise ValueError(f"Unknown dataset_type: {dataset_type}")
 
@@ -64,6 +75,8 @@ def build_dataset(dataset: Dict[str, List[float]]) -> bmds.datasets.DatasetType:
         schema = bmds.datasets.ContinuousIndividualDatasetSchema
     elif dataset_type == Dtype.DICHOTOMOUS:
         schema = bmds.datasets.DichotomousDatasetSchema
+    elif dataset_type == Dtype.NESTED_DICHOTOMOUS:
+        schema = bmds.datasets.NestedDichotomousDatasetSchema
     else:
         raise ValueError(f"Unknown dataset type: {dataset_type}")
     return schema.parse_obj(dataset).deserialize()

@@ -65,7 +65,7 @@ class TestAnalysisDetail:
                 "deleteUrl": f"http://testserver/analysis/{pk}/{pw}/delete/",
                 "executeUrl": f"/api/v1/analysis/{pk}/execute/",
                 "executeResetUrl": f"/api/v1/analysis/{pk}/execute-reset/",
-                "deleteDateStr": "December 15, 2021",
+                "deleteDateStr": "May 14, 2022",
             },
         }
 

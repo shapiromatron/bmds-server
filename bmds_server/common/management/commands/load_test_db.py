@@ -17,16 +17,20 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
 
-        if "test" not in settings.DATABASES["default"]["NAME"]:
+        if not any(_ in settings.DATABASES["default"]["NAME"] for _ in ["fixture", "test"]):
             raise CommandError("Must be using a test database to execute.")
 
         call_command("migrate", verbosity=0)
 
         if options["ifempty"] and get_user_model().objects.count() > 0:
-            message = "Migrations complete; fixtures not loaded (db not empty)"
+            message = "Migrations complete"
         else:
+            self.stdout.write(self.style.HTTP_INFO("Flushing data..."))
             call_command("flush", verbosity=0, interactive=False)
+
+            self.stdout.write(self.style.HTTP_INFO("Loading database fixture..."))
             call_command("loaddata", str(settings.TEST_DB_FIXTURE), verbosity=1)
-            message = "Migrations complete; fixture loaded"
+
+            message = "Migrations complete; fixtures reapplied"
 
         self.stdout.write(self.style.SUCCESS(message))

@@ -2,6 +2,7 @@ import json
 
 import pytest
 from bmds.bmds3.recommender import RecommenderSettings
+from django.urls import reverse
 from rest_framework.test import APIClient
 
 from bmds_server.analysis.models import Analysis
@@ -215,3 +216,19 @@ class TestModelSelection:
         assert response.status_code == 200
         value = response.data["outputs"]["outputs"][0]["frequentist"]["selected"]
         assert value == {"model_index": None, "notes": "no notes"}
+
+
+@pytest.mark.django_db
+class TestOpenApiSchema:
+    def test_schema(self):
+        client = APIClient()
+        url = reverse("openapi")
+
+        # admin required
+        assert client.get(url).status_code == 403
+
+        # with admin, success
+        client.login(username="admin@bmdsonline.org", password="pw")
+        resp = client.get(url)
+        assert resp.status_code == 200
+        assert "openapi" in resp.data

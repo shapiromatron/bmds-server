@@ -2,8 +2,8 @@ import uuid
 
 from django.db import migrations, models
 
+from ...common.utils import random_string
 from ..models import get_deletion_date
-from ..utils import random_string
 
 
 class Migration(migrations.Migration):

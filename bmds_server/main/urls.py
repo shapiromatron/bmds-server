@@ -7,13 +7,15 @@ from rest_framework import permissions
 from rest_framework.routers import DefaultRouter
 from rest_framework.schemas import get_schema_view
 
-from ..analysis import api, views
+from ..analysis import schema, views
+from ..analysis.api import AnalysisViewset
 from ..common import views as common_views
+from ..common.api import HealthcheckViewset
 from .constants import AuthProvider
 
 router = DefaultRouter()
-router.register("analysis", api.AnalysisViewset, basename="analysis")
-router.register("healthcheck", api.HealthcheckViewset, basename="healthcheck")
+router.register("analysis", AnalysisViewset, basename="analysis")
+router.register("healthcheck", HealthcheckViewset, basename="healthcheck")
 
 edit_pattern = "analysis/<uuid:pk>/<str:password>/"
 api_paths = path("api/v1/", include((router.urls, "analysis"), namespace="api"))
@@ -46,6 +48,7 @@ if settings.INCLUDE_ADMIN:
                 version="v1",
                 patterns=(api_paths,),
                 permission_classes=(permissions.IsAdminUser,),
+                generator_class=schema.ApiSchemaGenerator,
             ),
             name="openapi",
         ),

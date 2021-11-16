@@ -20,7 +20,8 @@ from django.urls import reverse
 from django.utils.text import slugify
 from django.utils.timezone import now
 
-from . import executor, tasks, utils, validators
+from ..common.utils import random_string
+from . import executor, tasks, validators
 from .reporting.cache import DocxReportCache, ExcelReportCache
 from .reporting.excel import build_df
 
@@ -37,7 +38,7 @@ def get_deletion_date(current_deletion_date=None):
 @reversion.register()
 class Analysis(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    password = models.CharField(max_length=12, default=utils.random_string, editable=False)
+    password = models.CharField(max_length=12, default=random_string, editable=False)
     inputs = models.JSONField(default=dict)
     outputs = models.JSONField(default=dict, blank=True)
     errors = models.JSONField(default=dict, blank=True)

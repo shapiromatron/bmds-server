@@ -13,4 +13,5 @@ exclude =
   notebooks,
   public,
   requirements,
+  scripts/private,
   venv

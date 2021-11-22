@@ -15,6 +15,7 @@ class Migration(migrations.Migration):
     dependencies = [
         ("analysis", "0002_fixtures"),
         ("reversion", "0001_squashed_0004_auto_20160611_1202"),
+        ("contenttypes", "0002_remove_content_type_name"),
         ("auth", "0012_alter_user_first_name_max_length"),
     ]
 

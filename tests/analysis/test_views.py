@@ -42,9 +42,6 @@ class TestAnalysisDetail:
             "future": False,
         }
 
-        response = client.get(analysis.get_absolute_url() + "?future=1")
-        assert response.context["config"]["future"] is True
-
         # write view should have edit context
         response = client.get(analysis.get_edit_url())
         config = response.context["config"]
@@ -68,6 +65,21 @@ class TestAnalysisDetail:
                 "deleteDateStr": "May 14, 2022",
             },
         }
+
+    def test_future(self):
+        client = Client()
+        pk = "cc3ca355-a57a-4fba-9dc3-99657562df68"
+        analysis = Analysis.objects.get(pk=pk)
+        url = analysis.get_absolute_url() + "?future=1"
+
+        # no staff access; no future flag
+        response = client.get(url)
+        assert response.context["config"]["future"] is False
+
+        # staff access; future flag
+        assert client.login(username="admin@bmdsonline.org", password="pw")
+        response = client.get(url)
+        assert response.context["config"]["future"] is True
 
 
 @pytest.mark.django_db

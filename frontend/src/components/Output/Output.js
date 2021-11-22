@@ -80,6 +80,24 @@ class Output extends Component {
                         </div>
                     </div>
                 ) : null}
+                <div className="row">
+                    {selectedFrequentist ? (
+                        <div className="col col-lg-6">
+                            <DoseResponsePlot
+                                layout={outputStore.drFrequentistLollipopPlotLayout}
+                                data={outputStore.drFrequentistLollipopPlotDataset}
+                            />
+                        </div>
+                    ) : null}
+                    {selectedBayesian ? (
+                        <div className="col col-lg-6">
+                            <DoseResponsePlot
+                                layout={outputStore.drBayesianLollipopPlotLayout}
+                                data={outputStore.drBayesianLollipopPlotDataset}
+                            />
+                        </div>
+                    ) : null}
+                </div>
                 <div>{outputStore.showModelModal ? <ModelDetailModal /> : null}</div>
             </div>
         );

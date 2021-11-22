@@ -10,6 +10,8 @@ import {
     colorCodes,
     bmaColor,
     getBayesianBMDLine,
+    getLollipopDataset,
+    getLollipopPlotLayout,
 } from "../constants/plotting";
 
 class OutputStore {
@@ -203,6 +205,50 @@ class OutputStore {
         }
         return data;
     }
+
+    @computed get drFrequentistLollipopPlotDataset() {
+        let plotData = [];
+        let models = this.selectedOutput.frequentist.models;
+        models.map(model => {
+            let dataArray = [];
+            let modelArray = new Array(3);
+            modelArray.fill(model.name);
+            dataArray.push(model.results.bmdl);
+            dataArray.push(model.results.bmd);
+            dataArray.push(model.results.bmdu);
+            let data = getLollipopDataset(dataArray, modelArray, model.name);
+            plotData.push(data);
+        });
+        return plotData;
+    }
+    @computed get drBayesianLollipopPlotDataset() {
+        let plotData = [];
+        let models = this.selectedOutput.bayesian.models;
+        models.map(model => {
+            let dataArray = [];
+            let modelArray = new Array(3);
+            modelArray.fill(model.name);
+            dataArray.push(model.results.bmdl);
+            dataArray.push(model.results.bmd);
+            dataArray.push(model.results.bmdu);
+            let data = getLollipopDataset(dataArray, modelArray, model.name);
+            plotData.push(data);
+        });
+        return plotData;
+    }
+
+    @computed get drFrequentistLollipopPlotLayout() {
+        let layout = _.cloneDeep(getLollipopPlotLayout);
+        layout.title = "Frequentist bmd/bmdl/bmdu Plot";
+        return layout;
+    }
+
+    @computed get drBayesianLollipopPlotLayout() {
+        let layout = _.cloneDeep(getLollipopPlotLayout);
+        layout.title = "Bayesian bmd/bmdl/bmdu Plot ";
+        return layout;
+    }
+
     @computed get drFrequentistPlotLayout() {
         // the main frequentist plot shown on the output page
         let layout = getDrLayout(

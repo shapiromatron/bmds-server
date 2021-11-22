@@ -234,6 +234,33 @@ export const getDrLayout = function(dataset, selected, modal, hover) {
         };
         return bma_data;
     },
+    getLollipopDataset = function(dataArray, modelArray, modelName) {
+        return {
+            x: dataArray,
+            y: modelArray,
+            mode: "line",
+            type: "scatter",
+            line: {
+                width: 5,
+                color: "#696969",
+            },
+            marker: {
+                size: 10,
+                color: ["#FFFFFF", "#0000FF", "#FFFFFF"],
+            },
+            name: modelName,
+        };
+    },
+    getLollipopPlotLayout = {
+        title: "",
+        showlegend: false,
+        xaxis: {
+            showline: true,
+        },
+        yaxis: {
+            showline: true,
+        },
+    },
     getConfig = function() {
         return {
             modeBarButtonsToRemove: [

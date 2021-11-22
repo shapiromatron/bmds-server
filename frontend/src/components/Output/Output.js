@@ -1,5 +1,5 @@
-import React, { Component } from "react";
-import { inject, observer } from "mobx-react";
+import React, {Component} from "react";
+import {inject, observer} from "mobx-react";
 import PropTypes from "prop-types";
 
 import ModelDetailModal from "../IndividualModel/ModelDetailModal";
@@ -16,7 +16,7 @@ import SelectInput from "../common/SelectInput";
 @observer
 class Output extends Component {
     render() {
-        const { outputStore } = this.props,
+        const {outputStore} = this.props,
             {
                 canEdit,
                 selectedOutputErrorMessage,
@@ -41,7 +41,7 @@ class Output extends Component {
                             onChange={value => outputStore.setSelectedOutputIndex(parseInt(value))}
                             value={outputStore.selectedOutputIndex}
                             choices={outputStore.outputs.map((output, idx) => {
-                                return { value: idx, text: outputStore.getOutputName(idx) };
+                                return {value: idx, text: outputStore.getOutputName(idx)};
                             })}
                         />
                     </div>

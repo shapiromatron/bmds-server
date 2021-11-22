@@ -1,8 +1,8 @@
-import { observable, action, computed, toJS } from "mobx";
+import {observable, action, computed, toJS} from "mobx";
 import _ from "lodash";
-import { getHeaders } from "../common";
+import {getHeaders} from "../common";
 
-import { modelClasses, maIndex } from "../constants/outputConstants";
+import {modelClasses, maIndex} from "../constants/outputConstants";
 import {
     getDrLayout,
     getDrDatasetPlotData,
@@ -107,7 +107,7 @@ class OutputStore {
 
     @computed get getPValue() {
         let percentileValue = _.range(0.01, 1, 0.01);
-        let pValue = percentileValue.map(function (each_element) {
+        let pValue = percentileValue.map(function(each_element) {
             return Number(each_element.toFixed(2));
         });
         return pValue;
@@ -328,7 +328,7 @@ class OutputStore {
     }
     @action.bound saveSelectedModel() {
         const output = this.selectedOutput,
-            { csrfToken, editKey } = this.rootStore.mainStore.config.editSettings,
+            {csrfToken, editKey} = this.rootStore.mainStore.config.editSettings,
             payload = toJS({
                 editKey,
                 data: {

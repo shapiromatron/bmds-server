@@ -4,6 +4,7 @@ import {inject, observer} from "mobx-react";
 import React, {Component} from "react";
 import PropTypes from "prop-types";
 
+import {MODEL_NESTED_DICHOTOMOUS, MODEL_MULTI_TUMOR} from "../../constants/mainConstants";
 import {BIN_LABELS} from "../../constants/logicConstants";
 import {getPValue, modelClasses, priorClass} from "../../constants/outputConstants";
 import {ff} from "../../common";
@@ -197,10 +198,17 @@ class FrequentistResultTable extends Component {
     render() {
         const store = this.props.outputStore,
             dataset = store.selectedDataset,
-            {selectedFrequentist} = store;
+            {selectedFrequentist} = store,
+            modelType = store.getModelType;
 
         if (!selectedFrequentist) {
             return null;
+        }
+
+        if (modelType === MODEL_NESTED_DICHOTOMOUS) {
+            return <p>TODO - nested dichotomous.</p>;
+        } else if (modelType === MODEL_MULTI_TUMOR) {
+            return <p>TODO - multi tumor.</p>;
         }
 
         const {models} = selectedFrequentist,

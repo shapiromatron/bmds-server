@@ -34,7 +34,7 @@ const doseResponseLayout = {
                 incidences = dataset.incidences;
                 return _.range(ns.length).map(idx => incidences[idx] / ns[idx]);
             case Dtype.NESTED_DICHOTOMOUS:
-                ns = dataset.litter_n;
+                ns = dataset.litter_ns;
                 incidences = dataset.incidences;
                 return _.range(ns.length).map(idx => incidences[idx] / ns[idx]);
             default:

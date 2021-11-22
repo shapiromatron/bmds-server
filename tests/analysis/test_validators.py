@@ -1,4 +1,5 @@
 import json
+from copy import deepcopy
 from typing import Any, Dict
 
 import bmds
@@ -68,6 +69,124 @@ class TestInputValidation:
                 "dist_type": 1,
             }
         ]
+        with pytest.raises(ValidationError) as err:
+            validators.validate_input(data)
+        _missing_field(err, "rules")
+
+        data["recommender"] = RecommenderSettings.build_default().dict()
+        assert validators.validate_input(data, partial=True) is None
+        assert validators.validate_input(data) is None
+
+    def test_nested_dichotomous(self, nested_dichotomous_datasets):
+        data: Dict[str, Any] = {
+            "bmds_version": bmds.constants.BMDS330,
+            "dataset_type": bmds.constants.NESTED_DICHOTOMOUS,
+        }
+        assert validators.validate_input(data, partial=True) is None
+
+        # but fails when complete
+        with pytest.raises(ValidationError) as err:
+            validators.validate_input(data)
+        _missing_field(err, "datasets")
+
+        # add datasets, try again
+        data["datasets"] = deepcopy(nested_dichotomous_datasets)
+
+        data["dataset_options"] = [{"dataset_id": 123, "enabled": True}]
+
+        assert validators.validate_input(data, partial=True) is None
+
+        with pytest.raises(ValidationError) as err:
+            validators.validate_input(data)
+        _missing_field(err, "models")
+
+        # add models, try again
+        data["models"] = {"frequentist_restricted": [bmds.constants.M_NestedLogistic]}
+        assert validators.validate_input(data, partial=True) is None
+
+        with pytest.raises(ValidationError) as err:
+            validators.validate_input(data)
+        _missing_field(err, "options")
+
+        # add options, try again
+        data["options"] = [
+            {
+                "bmr_type": 1,
+                "bmr_value": 1.0,
+                "confidence_level": 0.95,
+                "litter_specific_covariate": 1,
+                "background": 1,
+                "bootstrap_iterations": 1,
+                "bootstrap_seed": 0,
+            }
+        ]
+
+        assert validators.validate_input(data, partial=True) is None
+
+        with pytest.raises(ValidationError) as err:
+            validators.validate_input(data)
+        _missing_field(err, "rules")
+
+        data["recommender"] = RecommenderSettings.build_default().dict()
+        assert validators.validate_input(data, partial=True) is None
+        assert validators.validate_input(data) is None
+
+    def test_multi_tumor(self):
+        data: Dict[str, Any] = {
+            "bmds_version": bmds.constants.BMDS330,
+            "dataset_type": bmds.constants.MULTI_TUMOR,
+        }
+
+        assert validators.validate_input(data, partial=True) is None
+
+        # but fails when complete
+        with pytest.raises(ValidationError) as err:
+            validators.validate_input(data)
+        _missing_field(err, "datasets")
+
+        # add datasets, try again
+        data["datasets"] = [
+            {
+                "dtype": "D",
+                "metadata": {"id": 123},
+                "doses": [0, 10, 50, 150, 400],
+                "ns": [20, 20, 20, 20, 20],
+                "incidences": [0, 0, 1, 4, 11],
+            },
+            {
+                "dtype": "D",
+                "metadata": {"id": 124},
+                "doses": [0, 10, 50, 150, 400],
+                "ns": [20, 20, 20, 20, 20],
+                "incidences": [0, 0, 1, 4, 11],
+            },
+        ]
+
+        data["dataset_options"] = [
+            {"dataset_id": 123, "enabled": True, "degree": 0},
+            {"dataset_id": 124, "enabled": True, "degree": 0},
+        ]
+
+        assert validators.validate_input(data, partial=True) is None
+
+        with pytest.raises(ValidationError) as err:
+            validators.validate_input(data)
+        _missing_field(err, "models")
+
+        # add models, try again
+        data["models"] = {"frequentist_restricted": [bmds.constants.M_Multistage]}
+        assert validators.validate_input(data, partial=True) is None
+
+        with pytest.raises(ValidationError) as err:
+            validators.validate_input(data)
+        _missing_field(err, "options")
+
+        # add options, try again
+        data["options"] = [
+            {"bmr_type": 1, "bmr_value": 1.0, "confidence_level": 0.95},
+        ]
+        assert validators.validate_input(data, partial=True) is None
+
         with pytest.raises(ValidationError) as err:
             validators.validate_input(data)
         _missing_field(err, "rules")

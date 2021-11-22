@@ -1,46 +1,20 @@
 from django.core.exceptions import ValidationError
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_protect
-from rest_framework import exceptions, mixins, permissions, status, viewsets
+from rest_framework import exceptions, mixins, status, viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
 
+from ..common import renderers
 from ..common.task_cache import ReportStatus
 from ..common.validation import pydantic_validate
-from ..common.worker_health import worker_healthcheck
-from . import models, renderers, serializers, validators
+from . import models, serializers, validators
 from .reporting.cache import DocxReportCache, ExcelReportCache
 from .reporting.docx import add_update_url
 
 
-class HealthcheckViewset(viewsets.ViewSet):
-    @action(detail=False)
-    def web(self, request):
-        return Response({"healthy": True})
-
-    @action(detail=False)
-    def worker(self, request):
-        is_healthy = worker_healthcheck.healthy()
-        status_code = status.HTTP_200_OK if is_healthy else status.HTTP_503_SERVICE_UNAVAILABLE
-        return Response({"healthy": is_healthy}, status=status_code)
-
-    @action(
-        detail=False,
-        url_path="worker-plot",
-        renderer_classes=(renderers.SvgRenderer,),
-        permission_classes=(permissions.IsAdminUser,),
-    )
-    def worker_plot(self, request):
-        ax = worker_healthcheck.plot()
-        return Response(ax)
-
-    @action(detail=False, url_path="worker-stats", permission_classes=(permissions.IsAdminUser,))
-    def worker_stats(self, request):
-        return Response(worker_healthcheck.stats())
-
-
 @method_decorator(csrf_protect, name="dispatch")
-class AnalysisViewset(mixins.CreateModelMixin, mixins.RetrieveModelMixin, viewsets.GenericViewSet):
+class AnalysisViewset(mixins.RetrieveModelMixin, viewsets.GenericViewSet):
     serializer_class = serializers.AnalysisSerializer
     queryset = models.Analysis.objects.all()
 

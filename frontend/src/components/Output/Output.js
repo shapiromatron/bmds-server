@@ -1,5 +1,5 @@
-import React, {Component} from "react";
-import {inject, observer} from "mobx-react";
+import React, { Component } from "react";
+import { inject, observer } from "mobx-react";
 import PropTypes from "prop-types";
 
 import ModelDetailModal from "../IndividualModel/ModelDetailModal";
@@ -16,7 +16,7 @@ import SelectInput from "../common/SelectInput";
 @observer
 class Output extends Component {
     render() {
-        const {outputStore} = this.props,
+        const { outputStore } = this.props,
             {
                 canEdit,
                 selectedOutputErrorMessage,
@@ -41,7 +41,7 @@ class Output extends Component {
                             onChange={value => outputStore.setSelectedOutputIndex(parseInt(value))}
                             value={outputStore.selectedOutputIndex}
                             choices={outputStore.outputs.map((output, idx) => {
-                                return {value: idx, text: outputStore.getOutputName(idx)};
+                                return { value: idx, text: outputStore.getOutputName(idx) };
                             })}
                         />
                     </div>
@@ -80,6 +80,26 @@ class Output extends Component {
                         </div>
                     </div>
                 ) : null}
+
+                <div className="row">
+                    {selectedFrequentist ? (
+                        <div className="col col-lg-6">
+                            <DoseResponsePlot
+                                layout={outputStore.drFrequentistLollipopPlotLayout}
+                                data={outputStore.drFrequentistLollipopPlotDataset}
+                            />
+                        </div>
+                    ) : null}
+                    {selectedBayesian ? (
+                        <div className="col col-lg-6">
+                            <DoseResponsePlot
+                                layout={outputStore.drBayesianLollipopPlotLayout}
+                                data={outputStore.drBayesianLollipopPlotDataset}
+                            />
+                        </div>
+                    ) : null}
+                </div>
+
                 <div>{outputStore.showModelModal ? <ModelDetailModal /> : null}</div>
             </div>
         );

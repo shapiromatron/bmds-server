@@ -225,7 +225,7 @@ class TestOpenApiSchema:
         url = reverse("openapi")
 
         # admin required
-        assert client.get(url).status_code == 403
+        assert client.get(url).status_code == 401
 
         # with admin, success
         client.login(username="admin@bmdsonline.org", password="pw")

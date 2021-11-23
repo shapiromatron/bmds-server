@@ -414,6 +414,84 @@
     - analysis
     - job
     codename: view_job
+- model: auth.group
+  pk: 1
+  fields:
+    name: base-view
+    permissions:
+    - - view_logentry
+      - admin
+      - logentry
+    - - view_analysis
+      - analysis
+      - analysis
+    - - view_content
+      - analysis
+      - content
+    - - view_job
+      - analysis
+      - job
+    - - view_group
+      - auth
+      - group
+    - - view_permission
+      - auth
+      - permission
+    - - view_user
+      - auth
+      - user
+    - - view_token
+      - authtoken
+      - token
+    - - view_tokenproxy
+      - authtoken
+      - tokenproxy
+    - - view_contenttype
+      - contenttypes
+      - contenttype
+    - - view_revision
+      - reversion
+      - revision
+    - - view_version
+      - reversion
+      - version
+    - - view_session
+      - sessions
+      - session
+- model: auth.group
+  pk: 2
+  fields:
+    name: edit-analyses
+    permissions:
+    - - add_analysis
+      - analysis
+      - analysis
+    - - change_analysis
+      - analysis
+      - analysis
+    - - delete_analysis
+      - analysis
+      - analysis
+    - - view_analysis
+      - analysis
+      - analysis
+- model: auth.group
+  pk: 3
+  fields:
+    name: edit-content
+    permissions:
+    - - add_content
+      - analysis
+      - content
+    - - change_content
+      - analysis
+      - content
+    - - delete_content
+      - analysis
+      - content
+    - - view_content
+      - analysis
+      - content
 - model: auth.user
   pk: 1
   fields:

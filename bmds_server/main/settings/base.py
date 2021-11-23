@@ -193,7 +193,11 @@ REST_FRAMEWORK = {
         "rest_framework.throttling.UserRateThrottle",
     ),
     "DEFAULT_THROTTLE_RATES": {"anon": "10/minute", "user": "10/minute"},
-    "DEFAULT_AUTHENTICATION_CLASSES": ("rest_framework.authentication.SessionAuthentication",),
+    "DEFAULT_AUTHENTICATION_CLASSES": (
+        "rest_framework.authentication.TokenAuthentication",
+        "bmds_server.common.auth.SessionCsrfAuthentication",
+    ),
+    "DEFAULT_PERMISSION_CLASSES": ["bmds_server.common.auth.SafeOrAuthenticatedOrCsrfToken"],
 }
 
 WEBPACK_LOADER = {

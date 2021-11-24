@@ -11,14 +11,14 @@ from .run3 import RunBmds3
 
 
 @pytest.mark.django_db
-class TestAnalysisViewset:
-    def test_csrf(self, bmds3_complete_continuous):
+class TestApiAuthentication:
+    def test_session_csrf(self, bmds3_complete_continuous):
         """By default CSRF validation is not applied when using APIClient."""
         client = APIClient(enforce_csrf_checks=True)
         client.defaults.update(SERVER_NAME="testserver")
-
         analysis = Analysis.objects.create()
-        url = analysis.get_api_patch_inputs_url()
+        write_url = analysis.get_api_patch_inputs_url()
+        read_url = analysis.get_api_url()
 
         # complete bmds3 continuous
         payload = {
@@ -26,8 +26,12 @@ class TestAnalysisViewset:
             "data": bmds3_complete_continuous,
         }
 
-        # first test without token
-        response = client.patch(url, payload, format="json")
+        # can GET from api w/o csrftoken
+        response = client.get(read_url)
+        assert response.status_code == 200
+
+        # cannot PATCH from api w/o csrftoken
+        response = client.patch(write_url, payload, format="json")
         assert response.status_code == 403
 
         # get csrftoken
@@ -35,9 +39,20 @@ class TestAnalysisViewset:
         assert response.status_code == 200
         csrftoken = response.cookies["csrftoken"]
 
-        # test with token (required some renaming of headers to match test client)
-        response = client.patch(url, payload, format="json", HTTP_X_CSRFTOKEN=csrftoken.value)
-        assert response.status_code == 200
+        client_token = APIClient(
+            enforce_csrf_checks=True,
+            HTTP_AUTHORIZATION="Token cef32b9abcbe1a6e9c8460099403e9cd77e12c79",
+        )
+        client_token.defaults.update(SERVER_NAME="testserver")
+        client_csrf = APIClient(enforce_csrf_checks=True, HTTP_X_CSRFTOKEN=csrftoken.value)
+        client_csrf.defaults.update(SERVER_NAME="testserver")
+
+        for client in [client_csrf, client_token]:
+            response = client.get(read_url)
+            assert response.status_code == 200
+
+            response = client.patch(write_url, payload, format="json")
+            assert response.status_code == 200
 
 
 @pytest.mark.django_db

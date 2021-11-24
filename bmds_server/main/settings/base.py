@@ -197,7 +197,6 @@ REST_FRAMEWORK = {
         "rest_framework.authentication.TokenAuthentication",
         "bmds_server.common.auth.SessionCsrfAuthentication",
     ),
-    "DEFAULT_PERMISSION_CLASSES": ["bmds_server.common.auth.SafeOrAuthenticatedOrCsrfToken"],
 }
 
 WEBPACK_LOADER = {

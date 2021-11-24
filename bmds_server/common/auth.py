@@ -20,12 +20,3 @@ class SessionCsrfAuthentication(authentication.SessionAuthentication):
 
         # CSRF passed with authenticated user
         return (user, None)
-
-
-class SafeOrAuthenticatedOrCsrfToken(permissions.BasePermission):
-    def has_permission(self, request, view):
-        return bool(
-            request.method in permissions.SAFE_METHODS
-            or (request.user and request.user.is_authenticated)
-            or getattr(request, "csrf_processing_done", False) is True
-        )

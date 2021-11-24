@@ -59,10 +59,7 @@ class TestAnalysisViewSet:
             response = client.patch(write_url, payload, format="json")
             assert response.status_code == 200
 
-
-@pytest.mark.django_db
-class TestPatchInputs:
-    def test_auth(self):
+    def test_patch_auth(self):
         client = APIClient()
         analysis = Analysis.objects.create()
         url = analysis.get_api_patch_inputs_url()
@@ -86,7 +83,7 @@ class TestPatchInputs:
         assert response.status_code == 400
         assert response.json() == ["A `data` object is required"]
 
-    def test_partial(self):
+    def test_patch_partial(self):
         client = APIClient()
         analysis = Analysis.objects.create()
         url = analysis.get_api_patch_inputs_url()
@@ -135,7 +132,7 @@ class TestPatchInputs:
         assert response.status_code == 200
         assert response.json()["inputs"] == payload["data"]
 
-    def test_complete_continuous(self, bmds3_complete_continuous):
+    def test_patch_complete_continuous(self, bmds3_complete_continuous):
         client = APIClient()
         analysis = Analysis.objects.create()
         url = analysis.get_api_patch_inputs_url()
@@ -146,7 +143,7 @@ class TestPatchInputs:
         assert response.status_code == 200
         assert response.json()["inputs"] == payload["data"]
 
-    def test_complete_dichotomous(self, bmds3_complete_dichotomous):
+    def test_patch_complete_dichotomous(self, bmds3_complete_dichotomous):
         client = APIClient()
         analysis = Analysis.objects.create()
         url = analysis.get_api_patch_inputs_url()
@@ -157,10 +154,7 @@ class TestPatchInputs:
         assert response.status_code == 200
         assert response.json()["inputs"] == payload["data"]
 
-
-@pytest.mark.skipif(not RunBmds3.should_run, reason=RunBmds3.skip_reason)
-@pytest.mark.django_db
-class TestExecute:
+    @pytest.mark.skipif(not RunBmds3.should_run, reason=RunBmds3.skip_reason)
     def test_execute(self, bmds3_complete_dichotomous):
         client = APIClient()
         analysis = Analysis.objects.create(inputs=bmds3_complete_dichotomous)
@@ -181,6 +175,7 @@ class TestExecute:
         assert response.data["has_errors"] is False
         assert bmd == pytest.approx(164.3, rel=0.05)
 
+    @pytest.mark.skipif(not RunBmds3.should_run, reason=RunBmds3.skip_reason)
     def test_reset_execute(self, bmds3_complete_dichotomous):
         client = APIClient()
         analysis = Analysis.objects.create(inputs=bmds3_complete_dichotomous)
@@ -200,10 +195,7 @@ class TestExecute:
         assert response.data["has_errors"] is False
         assert response.data["outputs"] == {}
 
-
-@pytest.mark.skipif(not RunBmds3.should_run, reason=RunBmds3.skip_reason)
-@pytest.mark.django_db
-class TestModelSelection:
+    @pytest.mark.skipif(not RunBmds3.should_run, reason=RunBmds3.skip_reason)
     def test_model_selection(self, bmds3_complete_dichotomous):
         client = APIClient()
         analysis = Analysis.objects.create(inputs=bmds3_complete_dichotomous)

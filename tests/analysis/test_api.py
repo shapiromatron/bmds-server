@@ -11,20 +11,26 @@ from .run3 import RunBmds3
 
 
 @pytest.mark.django_db
-class TestApiAuthentication:
-    def test_session_csrf(self, bmds3_complete_continuous):
-        """By default CSRF validation is not applied when using APIClient."""
-        client = APIClient(enforce_csrf_checks=True)
-        client.defaults.update(SERVER_NAME="testserver")
+class TestAnalysisViewSet:
+    def test_auth(self, bmds3_complete_continuous):
+        """
+        Check API auth cases.
+
+        - For write operations, CSRF required for unauthenticated
+        - For read operations, CSRF is not required
+        - Token auth should work fine for all read/write operations.
+        """
         analysis = Analysis.objects.create()
         write_url = analysis.get_api_patch_inputs_url()
         read_url = analysis.get_api_url()
-
-        # complete bmds3 continuous
         payload = {
             "editKey": analysis.password,
             "data": bmds3_complete_continuous,
         }
+
+        # client; no CSRF
+        client = APIClient(enforce_csrf_checks=True)
+        client.defaults.update(SERVER_NAME="testserver")
 
         # can GET from api w/o csrftoken
         response = client.get(read_url)
@@ -34,20 +40,19 @@ class TestApiAuthentication:
         response = client.patch(write_url, payload, format="json")
         assert response.status_code == 403
 
-        # get csrftoken
-        response = client.get(analysis.get_edit_url())
-        assert response.status_code == 200
-        csrftoken = response.cookies["csrftoken"]
-
+        # setup token client
         client_token = APIClient(
             enforce_csrf_checks=True,
+            SERVER_NAME="testserver",
             HTTP_AUTHORIZATION="Token cef32b9abcbe1a6e9c8460099403e9cd77e12c79",
         )
-        client_token.defaults.update(SERVER_NAME="testserver")
-        client_csrf = APIClient(enforce_csrf_checks=True, HTTP_X_CSRFTOKEN=csrftoken.value)
-        client_csrf.defaults.update(SERVER_NAME="testserver")
 
-        for client in [client_csrf, client_token]:
+        # setup CSRF client
+        client_csrf = APIClient(enforce_csrf_checks=True, SERVER_NAME="testserver")
+        response = client_csrf.get(analysis.get_edit_url())
+        client_csrf.defaults.update(HTTP_X_CSRFTOKEN=response.cookies["csrftoken"].value)
+
+        for client in (client_token, client_csrf):
             response = client.get(read_url)
             assert response.status_code == 200
 

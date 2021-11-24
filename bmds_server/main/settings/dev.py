@@ -20,7 +20,7 @@ CELERY_TASK_ALWAYS_EAGER = True
 CELERY_TASK_EAGER_PROPAGATES = True
 
 # disable throttling
-REST_FRAMEWORK = {"DEFAULT_THROTTLE_CLASSES": (), "DEFAULT_THROTTLE_RATES": {}}
+REST_FRAMEWORK.update({"DEFAULT_THROTTLE_CLASSES": (), "DEFAULT_THROTTLE_RATES": {}})
 
 try:
     # load local settings from `local.py` if they exist

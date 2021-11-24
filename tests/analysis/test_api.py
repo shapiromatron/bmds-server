@@ -11,38 +11,55 @@ from .run3 import RunBmds3
 
 
 @pytest.mark.django_db
-class TestAnalysisViewset:
-    def test_csrf(self, bmds3_complete_continuous):
-        """By default CSRF validation is not applied when using APIClient."""
-        client = APIClient(enforce_csrf_checks=True)
-        client.defaults.update(SERVER_NAME="testserver")
+class TestAnalysisViewSet:
+    def test_auth(self, bmds3_complete_continuous):
+        """
+        Check API auth cases.
 
+        - For write operations, CSRF required for unauthenticated
+        - For read operations, CSRF is not required
+        - Token auth should work fine for all read/write operations.
+        """
         analysis = Analysis.objects.create()
-        url = analysis.get_api_patch_inputs_url()
-
-        # complete bmds3 continuous
+        write_url = analysis.get_api_patch_inputs_url()
+        read_url = analysis.get_api_url()
         payload = {
             "editKey": analysis.password,
             "data": bmds3_complete_continuous,
         }
 
-        # first test without token
-        response = client.patch(url, payload, format="json")
+        # client; no CSRF
+        client = APIClient(enforce_csrf_checks=True)
+        client.defaults.update(SERVER_NAME="testserver")
+
+        # can GET from api w/o csrftoken
+        response = client.get(read_url)
+        assert response.status_code == 200
+
+        # cannot PATCH from api w/o csrftoken
+        response = client.patch(write_url, payload, format="json")
         assert response.status_code == 403
 
-        # get csrftoken
-        response = client.get(analysis.get_edit_url())
-        assert response.status_code == 200
-        csrftoken = response.cookies["csrftoken"]
+        # setup token client
+        client_token = APIClient(
+            enforce_csrf_checks=True,
+            SERVER_NAME="testserver",
+            HTTP_AUTHORIZATION="Token cef32b9abcbe1a6e9c8460099403e9cd77e12c79",
+        )
 
-        # test with token (required some renaming of headers to match test client)
-        response = client.patch(url, payload, format="json", HTTP_X_CSRFTOKEN=csrftoken.value)
-        assert response.status_code == 200
+        # setup CSRF client
+        client_csrf = APIClient(enforce_csrf_checks=True, SERVER_NAME="testserver")
+        response = client_csrf.get(analysis.get_edit_url())
+        client_csrf.defaults.update(HTTP_X_CSRFTOKEN=response.cookies["csrftoken"].value)
 
+        for client in (client_token, client_csrf):
+            response = client.get(read_url)
+            assert response.status_code == 200
 
-@pytest.mark.django_db
-class TestPatchInputs:
-    def test_auth(self):
+            response = client.patch(write_url, payload, format="json")
+            assert response.status_code == 200
+
+    def test_patch_auth(self):
         client = APIClient()
         analysis = Analysis.objects.create()
         url = analysis.get_api_patch_inputs_url()
@@ -66,7 +83,7 @@ class TestPatchInputs:
         assert response.status_code == 400
         assert response.json() == ["A `data` object is required"]
 
-    def test_partial(self):
+    def test_patch_partial(self):
         client = APIClient()
         analysis = Analysis.objects.create()
         url = analysis.get_api_patch_inputs_url()
@@ -115,7 +132,7 @@ class TestPatchInputs:
         assert response.status_code == 200
         assert response.json()["inputs"] == payload["data"]
 
-    def test_complete_continuous(self, bmds3_complete_continuous):
+    def test_patch_complete_continuous(self, bmds3_complete_continuous):
         client = APIClient()
         analysis = Analysis.objects.create()
         url = analysis.get_api_patch_inputs_url()
@@ -126,7 +143,7 @@ class TestPatchInputs:
         assert response.status_code == 200
         assert response.json()["inputs"] == payload["data"]
 
-    def test_complete_dichotomous(self, bmds3_complete_dichotomous):
+    def test_patch_complete_dichotomous(self, bmds3_complete_dichotomous):
         client = APIClient()
         analysis = Analysis.objects.create()
         url = analysis.get_api_patch_inputs_url()
@@ -137,10 +154,7 @@ class TestPatchInputs:
         assert response.status_code == 200
         assert response.json()["inputs"] == payload["data"]
 
-
-@pytest.mark.skipif(not RunBmds3.should_run, reason=RunBmds3.skip_reason)
-@pytest.mark.django_db
-class TestExecute:
+    @pytest.mark.skipif(not RunBmds3.should_run, reason=RunBmds3.skip_reason)
     def test_execute(self, bmds3_complete_dichotomous):
         client = APIClient()
         analysis = Analysis.objects.create(inputs=bmds3_complete_dichotomous)
@@ -161,6 +175,7 @@ class TestExecute:
         assert response.data["has_errors"] is False
         assert bmd == pytest.approx(164.3, rel=0.05)
 
+    @pytest.mark.skipif(not RunBmds3.should_run, reason=RunBmds3.skip_reason)
     def test_reset_execute(self, bmds3_complete_dichotomous):
         client = APIClient()
         analysis = Analysis.objects.create(inputs=bmds3_complete_dichotomous)
@@ -180,10 +195,7 @@ class TestExecute:
         assert response.data["has_errors"] is False
         assert response.data["outputs"] == {}
 
-
-@pytest.mark.skipif(not RunBmds3.should_run, reason=RunBmds3.skip_reason)
-@pytest.mark.django_db
-class TestModelSelection:
+    @pytest.mark.skipif(not RunBmds3.should_run, reason=RunBmds3.skip_reason)
     def test_model_selection(self, bmds3_complete_dichotomous):
         client = APIClient()
         analysis = Analysis.objects.create(inputs=bmds3_complete_dichotomous)
@@ -225,7 +237,7 @@ class TestOpenApiSchema:
         url = reverse("openapi")
 
         # admin required
-        assert client.get(url).status_code == 403
+        assert client.get(url).status_code == 401
 
         # with admin, success
         client.login(username="admin@bmdsonline.org", password="pw")

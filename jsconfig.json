@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+    "baseUrl": "frontend/src",
     "target": "ES6",
     "module": "commonjs",
     "experimentalDecorators": true

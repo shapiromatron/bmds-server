@@ -3,7 +3,7 @@ from enum import IntEnum
 from typing import Any, Optional
 
 from django.conf import settings
-from django.core.cache import caches
+from django.core.cache import cache
 from pydantic import BaseModel
 
 
@@ -28,7 +28,7 @@ class ReportCache(abc.ABC):
     status = ReportStatus
 
     def __init__(self, analysis, **kw):
-        self.cache = caches[settings.REPORT_CACHE_NAME]
+        self.cache = cache
         self.analysis = analysis
         self.kw = kw
 
@@ -98,5 +98,5 @@ class ReportCache(abc.ABC):
             status=ReportStatus.COMPLETE, content=content, header=None, message=None,
         )
         if settings.ENABLE_REPORT_CACHE:
-            self.cache.set(key, response)
+            self.cache.set(key, response, timeout=60 * 60 * 8)
         return response

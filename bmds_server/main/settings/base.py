@@ -174,17 +174,11 @@ CELERY_WORKER_PREFETCH_MULTIPLIER = 1
 
 # Cache settings
 ENABLE_REPORT_CACHE = True
-REPORT_CACHE_NAME = "report"
 CACHES = {
     "default": {
         "BACKEND": "django.core.cache.backends.locmem.LocMemCache",
         "TIMEOUT": 60 * 10,  # 10 minutes (in seconds)
-    },
-    REPORT_CACHE_NAME: {
-        "BACKEND": "django.core.cache.backends.locmem.LocMemCache",
-        "LOCATION": "report",
-        "TIMEOUT": 60 * 60 * 24,  # 1 day (in seconds)
-    },
+    }
 }
 
 REST_FRAMEWORK = {

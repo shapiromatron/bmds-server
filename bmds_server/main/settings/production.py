@@ -67,11 +67,6 @@ CACHES["default"].update(
     LOCATION=os.environ["DJANGO_CACHE_LOCATION"],
     OPTIONS={"CLIENT_CLASS": "django_redis.client.DefaultClient"},
 )
-CACHES["report"].update(
-    BACKEND="django_redis.cache.RedisCache",
-    LOCATION=os.environ["DJANGO_CACHE_LOCATION"],
-    OPTIONS={"CLIENT_CLASS": "django_redis.client.DefaultClient"},
-)
 
 # Logging settings
 LOGGING["loggers"]["bmds-server.request"]["handlers"] = ["requests"]

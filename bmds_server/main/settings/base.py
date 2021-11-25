@@ -147,14 +147,15 @@ LOGGING = {
         "null": {"class": "logging.NullHandler"},
     },
     "loggers": {
-        "django.security.DisallowedHost": {"handlers": ["null"], "propagate": False},
+        "": {"handlers": ["null"], "level": "INFO"},
+        "django": {"handlers": ["null"], "propagate": False, "level": "INFO"},
         "django.request": {
             "handlers": ["console", "mail_admins"],
             "level": "ERROR",
             "propagate": True,
         },
-        "bmds-server.request": {"handlers": ["null"], "propagate": False, "level": "INFO"},
-        "": {"handlers": ["file"], "level": "DEBUG"},
+        "bmds_server": {"handlers": ["console"], "propagate": False, "level": "INFO"},
+        "bmds_server.request": {"handlers": ["console"], "propagate": False, "level": "INFO"},
     },
 }
 

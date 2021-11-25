@@ -69,7 +69,7 @@ CACHES["default"].update(
 )
 
 # Logging settings
-LOGGING["loggers"]["bmds-server.request"]["handlers"] = ["requests"]
+LOGGING["loggers"]["bmds_server.request"]["handlers"] = ["console", "requests"]
 
 # Celery settings
 CELERY_BROKER_URL = os.environ["DJANGO_CELERY_BROKER_URL"]

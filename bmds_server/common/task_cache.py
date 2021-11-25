@@ -28,7 +28,7 @@ class ReportCache(abc.ABC):
     status = ReportStatus
 
     def __init__(self, analysis, **kw):
-        self.cache = caches[settings.DISK_CACHE_NAME]
+        self.cache = caches[settings.REPORT_CACHE_NAME]
         self.analysis = analysis
         self.kw = kw
 

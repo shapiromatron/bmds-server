@@ -174,16 +174,16 @@ CELERY_WORKER_PREFETCH_MULTIPLIER = 1
 
 # Cache settings
 ENABLE_REPORT_CACHE = True
-DISK_CACHE_NAME = "disk"
+REPORT_CACHE_NAME = "report"
 CACHES = {
     "default": {
         "BACKEND": "django.core.cache.backends.locmem.LocMemCache",
         "TIMEOUT": 60 * 10,  # 10 minutes (in seconds)
     },
-    DISK_CACHE_NAME: {
-        "BACKEND": "diskcache.DjangoCache",
-        "LOCATION": f"{PRIVATE_DATA_ROOT}/diskcache/",
-        "TIMEOUT": 60 * 60 * 24 * 7,  # 1 week
+    REPORT_CACHE_NAME: {
+        "BACKEND": "django.core.cache.backends.locmem.LocMemCache",
+        "LOCATION": "report",
+        "TIMEOUT": 60 * 60 * 24,  # 1 day (in seconds)
     },
 }
 

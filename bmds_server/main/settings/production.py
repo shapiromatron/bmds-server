@@ -62,11 +62,15 @@ DATABASES["default"] = dict(
 )
 
 # Cache settings
-CACHES["default"] = dict(
+CACHES["default"].update(
     BACKEND="django_redis.cache.RedisCache",
     LOCATION=os.environ["DJANGO_CACHE_LOCATION"],
     OPTIONS={"CLIENT_CLASS": "django_redis.client.DefaultClient"},
-    TIMEOUT=60 * 10,  # 10 minutes (in seconds)
+)
+CACHES["report"].update(
+    BACKEND="django_redis.cache.RedisCache",
+    LOCATION=os.environ["DJANGO_CACHE_LOCATION"],
+    OPTIONS={"CLIENT_CLASS": "django_redis.client.DefaultClient"},
 )
 
 # Logging settings

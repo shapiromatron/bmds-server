@@ -62,15 +62,14 @@ DATABASES["default"] = dict(
 )
 
 # Cache settings
-CACHES["default"] = dict(
+CACHES["default"].update(
     BACKEND="django_redis.cache.RedisCache",
     LOCATION=os.environ["DJANGO_CACHE_LOCATION"],
     OPTIONS={"CLIENT_CLASS": "django_redis.client.DefaultClient"},
-    TIMEOUT=60 * 10,  # 10 minutes (in seconds)
 )
 
 # Logging settings
-LOGGING["loggers"]["bmds-server.request"]["handlers"] = ["requests"]
+LOGGING["loggers"]["bmds_server.request"]["handlers"] = ["console", "requests"]
 
 # Celery settings
 CELERY_BROKER_URL = os.environ["DJANGO_CELERY_BROKER_URL"]

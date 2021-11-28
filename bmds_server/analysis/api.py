@@ -1,6 +1,4 @@
 from django.core.exceptions import ValidationError
-from django.utils.decorators import method_decorator
-from django.views.decorators.csrf import csrf_protect
 from rest_framework import exceptions, mixins, status, viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
@@ -13,7 +11,6 @@ from .reporting.cache import DocxReportCache, ExcelReportCache
 from .reporting.docx import add_update_url
 
 
-@method_decorator(csrf_protect, name="dispatch")
 class AnalysisViewset(mixins.RetrieveModelMixin, viewsets.GenericViewSet):
     serializer_class = serializers.AnalysisSerializer
     queryset = models.Analysis.objects.all()

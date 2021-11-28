@@ -14,7 +14,6 @@ celery==5.1.2
 
 # cache/queue
 django-redis==5.0.0
-diskcache==5.2.1
 redis==3.5.3
 
 # email

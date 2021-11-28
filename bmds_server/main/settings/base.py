@@ -147,14 +147,15 @@ LOGGING = {
         "null": {"class": "logging.NullHandler"},
     },
     "loggers": {
-        "django.security.DisallowedHost": {"handlers": ["null"], "propagate": False},
+        "": {"handlers": ["null"], "level": "INFO"},
+        "django": {"handlers": ["null"], "propagate": False, "level": "INFO"},
         "django.request": {
             "handlers": ["console", "mail_admins"],
             "level": "ERROR",
             "propagate": True,
         },
-        "bmds-server.request": {"handlers": ["null"], "propagate": False, "level": "INFO"},
-        "": {"handlers": ["file"], "level": "DEBUG"},
+        "bmds_server": {"handlers": ["console"], "propagate": False, "level": "INFO"},
+        "bmds_server.request": {"handlers": ["console"], "propagate": False, "level": "INFO"},
     },
 }
 
@@ -174,17 +175,11 @@ CELERY_WORKER_PREFETCH_MULTIPLIER = 1
 
 # Cache settings
 ENABLE_REPORT_CACHE = True
-DISK_CACHE_NAME = "disk"
 CACHES = {
     "default": {
         "BACKEND": "django.core.cache.backends.locmem.LocMemCache",
         "TIMEOUT": 60 * 10,  # 10 minutes (in seconds)
-    },
-    DISK_CACHE_NAME: {
-        "BACKEND": "diskcache.DjangoCache",
-        "LOCATION": f"{PRIVATE_DATA_ROOT}/diskcache/",
-        "TIMEOUT": 60 * 60 * 24 * 7,  # 1 week
-    },
+    }
 }
 
 REST_FRAMEWORK = {
@@ -192,7 +187,7 @@ REST_FRAMEWORK = {
         "rest_framework.throttling.AnonRateThrottle",
         "rest_framework.throttling.UserRateThrottle",
     ),
-    "DEFAULT_THROTTLE_RATES": {"anon": "10/minute", "user": "10/minute"},
+    "DEFAULT_THROTTLE_RATES": {"anon": "10/minute", "user": "120/minute"},
     "DEFAULT_AUTHENTICATION_CLASSES": (
         "rest_framework.authentication.TokenAuthentication",
         "bmds_server.common.auth.SessionCsrfAuthentication",

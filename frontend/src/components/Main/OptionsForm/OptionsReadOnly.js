@@ -11,6 +11,7 @@ import {ff, getLabel} from "../../../common";
 
 const OptionsReadOnly = props => {
     const {options, modelType} = props;
+    console.log(options)
     return (
         <tr>
             {modelType === MODEL_CONTINUOUS ? (

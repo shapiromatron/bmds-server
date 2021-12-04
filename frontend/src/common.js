@@ -49,8 +49,5 @@ export const simulateClick = function(el) {
         }
     },
     getLabel = function(value, mapping) {
-        // TODO - temporary fix; fix correctly by determining why the value is str not int
-        // http://127.0.0.1:8100/analysis/123e6f90-326c-4950-9131-0bd416443a8d/#/
-        // - continuous; 2 option sets
-        return _.find(mapping, d => d.value == value).label;
+        return _.find(mapping, d => d.value === value).label;
     };

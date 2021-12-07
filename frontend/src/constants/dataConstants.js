@@ -240,6 +240,10 @@ export const DATA_CONTINUOUS_SUMMARY = "CS",
     getNumDoseGroups = function(dataset) {
         return _.uniq(dataset.doses).length;
     },
+    getDefaultDegree = function(dataset) {
+        const n = getNumDoseGroups(dataset) - 1;
+        return Math.max(1, Math.min(n, 4));
+    },
     getDegreeOptions = function(dataset) {
         const maxDegree = Math.max(Math.min(8, getNumDoseGroups(dataset) - 1), 1);
         return allDegreeOptions.filter(d => d.value <= maxDegree);

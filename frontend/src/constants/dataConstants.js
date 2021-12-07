@@ -143,10 +143,10 @@ export const DATA_CONTINUOUS_SUMMARY = "CS",
         switch (dtype) {
             case DATA_CONTINUOUS_SUMMARY:
                 return {
-                    doses: [0, 50, 100, 150, 200],
-                    ns: [100, 100, 100, 100, 100],
-                    means: [10, 18, 32, 38, 70],
-                    stdevs: [3.2, 4.8, 6.5, 7.2, 8.4],
+                    doses: [0, 50, 100, 200, 400],
+                    ns: [20, 20, 20, 20, 20],
+                    means: [5.26, 5.76, 6.13, 8.24, 9.23],
+                    stdevs: [2.23, 1.47, 2.47, 2.24, 1.56],
                 };
             case DATA_CONTINUOUS_INDIVIDUAL:
                 return {
@@ -171,9 +171,9 @@ export const DATA_CONTINUOUS_SUMMARY = "CS",
                 };
             case DATA_DICHOTOMOUS:
                 return {
-                    doses: [0, 10, 50, 150, 400],
+                    doses: [0, 50, 100, 200, 400],
                     ns: [20, 20, 20, 20, 20],
-                    incidences: [0, 0, 1, 4, 11],
+                    incidences: [0, 1, 2, 10, 19],
                 };
             case DATA_NESTED_DICHOTOMOUS:
                 return {

@@ -1,6 +1,7 @@
 import {observable, action, computed} from "mobx";
 import _ from "lodash";
 import * as constant from "../constants/optionsConstants";
+import {MODEL_CONTINUOUS} from "../constants/mainConstants";
 
 class OptionsStore {
     constructor(rootStore) {
@@ -26,6 +27,9 @@ class OptionsStore {
 
     @action.bound saveOptions(name, value, id) {
         this.optionsList[id][name] = value;
+        if (name === constant.BMR_TYPE && this.getModelType === MODEL_CONTINUOUS) {
+            this.optionsList[id][constant.BMR_VALUE] = constant.bmrforBmrf[value];
+        }
     }
 
     @action.bound deleteOptions(val) {

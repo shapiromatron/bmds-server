@@ -29,6 +29,7 @@ class OutputStore {
     @observable drModelModal = null;
     @observable drModelModalIsMA = false;
     @observable drModelAverageModal = false;
+    @observable selectedModelSaved = false;
 
     @observable showBMDLine = false;
 
@@ -307,6 +308,11 @@ class OutputStore {
             .then(response => {
                 if (!response.ok) {
                     console.error(response.text());
+                } else {
+                    this.selectedModelSaved = true;
+                    setTimeout(() => {
+                        this.selectedModelSaved = false;
+                    }, 3000);
                 }
             })
             .catch(error => {

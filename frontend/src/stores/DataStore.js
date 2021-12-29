@@ -284,6 +284,12 @@ class DataStore {
         this.datasets[index] = dataset;
         this.toggleDatasetModal();
     }
+
+    @computed get getSelectedDataTabularForm() {
+        return this.getMappedArray.reduce((acc, cur) => {
+            return acc + Object.values(cur).join("\t") + "\n";
+        }, "");
+    }
     // *** END TABULAR MODAL DATASET ***
 }
 

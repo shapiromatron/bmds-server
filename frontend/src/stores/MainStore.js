@@ -27,9 +27,11 @@ class MainStore {
     }
     @action.bound changeAnalysisName(value) {
         this.analysis_name = value;
+        this.analysisSavedAndValidated = false;
     }
     @action.bound changeAnalysisDescription(value) {
         this.analysis_description = value;
+        this.analysisSavedAndValidated = false;
     }
     @action.bound changeDatasetType(value) {
         this.model_type = value;
@@ -37,6 +39,7 @@ class MainStore {
         this.rootStore.optionsStore.setDefaultsByDatasetType(true);
         this.rootStore.dataStore.setDefaultsByDatasetType();
         this.rootStore.dataOptionStore.options = [];
+        this.analysisSavedAndValidated = false;
     }
     @action.bound resetModelSelection() {
         this.rootStore.modelsStore.resetModelSelection();
@@ -216,7 +219,6 @@ class MainStore {
         }
 
         this.isExecuting = data.is_executing;
-        this.analysisSavedAndValidated = data.inputs_valid;
         if (data.outputs) {
             this.executionOutputs = data.outputs.outputs;
         }
@@ -231,6 +233,7 @@ class MainStore {
         this.rootStore.modelsStore.setModels(inputs.models);
         this.rootStore.logicStore.setLogic(inputs.recommender);
         this.isUpdateComplete = true;
+        this.analysisSavedAndValidated = data.inputs_valid;
     }
     @action.bound loadAnalysisFromFile(file) {
         let reader = new FileReader();

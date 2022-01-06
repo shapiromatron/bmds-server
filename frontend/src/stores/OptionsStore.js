@@ -22,14 +22,17 @@ class OptionsStore {
     @action.bound addOptions() {
         const option = _.cloneDeep(constant.options[this.getModelType]);
         this.optionsList.push(option);
+        this.rootStore.mainStore.analysisSavedAndValidated = false;
     }
 
     @action.bound saveOptions(name, value, id) {
         this.optionsList[id][name] = value;
+        this.rootStore.mainStore.analysisSavedAndValidated = false;
     }
 
     @action.bound deleteOptions(val) {
         this.optionsList.splice(val, 1);
+        this.rootStore.mainStore.analysisSavedAndValidated = false;
     }
     @action.bound setOptions(options) {
         this.optionsList = options;

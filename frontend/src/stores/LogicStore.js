@@ -24,12 +24,15 @@ class LogicStore {
             .then(json => {
                 this.logic = json.recommender;
             });
+        this.rootStore.mainStore.analysisSavedAndValidated = false;
     }
     @action.bound updateLogic(key, value) {
         this.logic[key] = value;
+        this.rootStore.mainStore.analysisSavedAndValidated = false;
     }
     @action.bound updateRule(ruleIndex, key, value) {
         this.logic.rules[ruleIndex][key] = value;
+        this.rootStore.mainStore.analysisSavedAndValidated = false;
     }
 }
 export default LogicStore;

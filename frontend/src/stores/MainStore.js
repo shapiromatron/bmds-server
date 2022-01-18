@@ -110,7 +110,6 @@ class MainStore {
         const apiUrl = this.config.apiUrl,
             {csrfToken} = this.config.editSettings,
             handleServerError = error => {
-                console.log("error", error);
                 if (error.status == 500) {
                     this.errorMessage =
                         "A server error occurred... if the error continues or your analysis does not complete please contact us.";
@@ -183,7 +182,6 @@ class MainStore {
             })
             .catch(error => {
                 this.errorMessage = error;
-                console.log("error", error);
             });
     }
     @action.bound
@@ -198,7 +196,6 @@ class MainStore {
             .then(data => this.updateModelStateFromApi(data))
             .catch(error => {
                 this.errorMessage = error;
-                console.log("error", error);
             });
     }
     @action.bound
@@ -343,7 +340,7 @@ class MainStore {
             apiUrl = `${apiUrl}?editKey=${this.config.editSettings.editKey}`;
         }
         if (url === "wordUrl") {
-            apiUrl = `${apiUrl}&datasetFormat=${this.reportOptions.datasetFormat}&verboseModelOutput=${this.reportOptions.modelOutput}&cdfTable=${this.reportOptions.cdfTable}`;
+            apiUrl = `${apiUrl}&datasetFormatLong=${this.wordReportOptions.datasetFormatLong}&verboseModelOutputs=${this.wordReportOptions.verboseModelOutputs}&bmdCdfTable=${this.wordReportOptions.bmdCdfTable}`;
         }
         const fetchReport = () => {
                 fetch(apiUrl).then(processResponse);
@@ -375,13 +372,13 @@ class MainStore {
     // *** END TOAST ***
 
     // *** REPORT OPTIONS ***
-    @observable reportOptions = {
-        datasetFormat: true,
-        modelOutput: false,
-        cdfTable: false,
+    @observable wordReportOptions = {
+        datasetFormatLong: true,
+        verboseModelOutputs: false,
+        bmdCdfTable: false,
     };
     @action.bound changeReportOptions(name, value) {
-        this.reportOptions[name] = value;
+        this.wordReportOptions[name] = value;
     }
 
     @observable displayWordReportOptionModal = false;

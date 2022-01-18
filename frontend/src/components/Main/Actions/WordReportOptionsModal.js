@@ -27,17 +27,11 @@ class WordReportOptionsModal extends Component {
                         </Form.Label>
                         <Col>
                             <CheckboxInput
-                                checked={mainStore.reportOptions.datasetFormat}
+                                checked={mainStore.wordReportOptions.datasetFormatLong}
                                 onChange={checked =>
-                                    mainStore.changeReportOptions("datasetFormat", checked)
+                                    mainStore.changeReportOptions("datasetFormatLong", checked)
                                 }
                             />
-                            {/* <Form.Check
-                                name="datasetFormat"
-                                checked={mainStore.reportOptions.datasetFormat}
-                                type='checkbox'
-                                onChange={(e) => mainStore.changeReportOptions('datasetFormat', e.target.value)}
-                            /> */}
                         </Col>
                     </Row>
                     <br />
@@ -47,17 +41,11 @@ class WordReportOptionsModal extends Component {
                         </Form.Label>
                         <Col>
                             <CheckboxInput
-                                checked={mainStore.reportOptions.modelOutput}
+                                checked={mainStore.wordReportOptions.verboseModelOutput}
                                 onChange={checked =>
-                                    mainStore.changeReportOptions("modelOutput", checked)
+                                    mainStore.changeReportOptions("verboseModelOutput", checked)
                                 }
                             />
-                            {/* <Form.Check
-                                name="modelOutput"
-                                checked={mainStore.reportOptions.modelOutput}
-                                type='checkbox'
-                                onChange={checked => mainStore.changeReportOptions('modelOutput', checked)}
-                            /> */}
                         </Col>
                     </Row>
                     <br />
@@ -68,17 +56,11 @@ class WordReportOptionsModal extends Component {
 
                         <Col>
                             <CheckboxInput
-                                checked={mainStore.reportOptions.cdfTable}
+                                checked={mainStore.wordReportOptions.bmdCdfTable}
                                 onChange={checked =>
-                                    mainStore.changeReportOptions("cdfTable", checked)
+                                    mainStore.changeReportOptions("bmdCdfTable", checked)
                                 }
                             />
-                            {/* <Form.Check
-                                name="cdfTable"
-                                checked={mainStore.reportOptions.cdfTable}
-                                type='checkbox'
-                                onChange={(e) => mainStore.changeReportOptions('cdfTable', e.target.value)}
-                            /> */}
                         </Col>
                     </Row>
                     <Row className="mt-2">

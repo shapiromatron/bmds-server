@@ -19,7 +19,11 @@ ANALYSIS_URL = "Analysis URL: "
 
 
 def build_docx(
-    analysis: Analysis, uri: str, dataset_format: bool, model_output: bool, cdf_table: bool
+    analysis: Analysis,
+    uri: str,
+    dataset_format_long: bool,
+    verbose_model_outputs: bool,
+    bmd_cdf_table: bool,
 ) -> BytesIO:
     """Generate a Microsoft Word binary file for an analysis
 
@@ -66,9 +70,9 @@ def build_docx(
             report=report,
             header_level=1,
             citation=False,
-            dataset_format_long=dataset_format,
-            verbose_model_outputs=model_output,
-            bmd_cdf_table=cdf_table,
+            dataset_format_long=dataset_format_long,
+            verbose_model_outputs=verbose_model_outputs,
+            bmd_cdf_table=bmd_cdf_table,
         )
 
     write_citation(report, 1)

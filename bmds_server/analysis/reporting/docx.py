@@ -18,7 +18,9 @@ if TYPE_CHECKING:
 ANALYSIS_URL = "Analysis URL: "
 
 
-def build_docx(analysis: Analysis, uri: str) -> BytesIO:
+def build_docx(
+    analysis: Analysis, uri: str, dataset_format: bool, model_output: bool, cdf_table: bool
+) -> BytesIO:
     """Generate a Microsoft Word binary file for an analysis
 
     Args:
@@ -60,7 +62,14 @@ def build_docx(analysis: Analysis, uri: str) -> BytesIO:
         report.document.add_paragraph("Execution generated errors; no report can be generated")
     else:
         batch = analysis.to_batch()
-        batch.to_docx(report=report, header_level=1, citation=False)
+        batch.to_docx(
+            report=report,
+            header_level=1,
+            citation=False,
+            dataset_format_long=dataset_format,
+            verbose_model_outputs=model_output,
+            bmd_cdf_table=cdf_table,
+        )
 
     write_citation(report, 1)
 

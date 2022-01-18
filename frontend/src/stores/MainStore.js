@@ -110,7 +110,7 @@ class MainStore {
         const apiUrl = this.config.apiUrl,
             {csrfToken} = this.config.editSettings,
             handleServerError = error => {
-                console.error("error", error);
+                console.log("error", error);
                 if (error.status == 500) {
                     this.errorMessage =
                         "A server error occurred... if the error continues or your analysis does not complete please contact us.";
@@ -183,7 +183,7 @@ class MainStore {
             })
             .catch(error => {
                 this.errorMessage = error;
-                console.error("error", error);
+                console.log("error", error);
             });
     }
     @action.bound
@@ -198,7 +198,7 @@ class MainStore {
             .then(data => this.updateModelStateFromApi(data))
             .catch(error => {
                 this.errorMessage = error;
-                console.error("error", error);
+                console.log("error", error);
             });
     }
     @action.bound
@@ -343,7 +343,7 @@ class MainStore {
             apiUrl = `${apiUrl}?editKey=${this.config.editSettings.editKey}`;
         }
         if (url === "wordUrl") {
-            apiUrl = `${apiUrl}&example=123`;
+            apiUrl = `${apiUrl}&datasetFormat=${this.reportOptions.datasetFormat}&verboseModelOutput=${this.reportOptions.modelOutput}&cdfTable=${this.reportOptions.cdfTable}`;
         }
         const fetchReport = () => {
                 fetch(apiUrl).then(processResponse);
@@ -375,6 +375,15 @@ class MainStore {
     // *** END TOAST ***
 
     // *** REPORT OPTIONS ***
+    @observable reportOptions = {
+        datasetFormat: true,
+        modelOutput: false,
+        cdfTable: false,
+    };
+    @action.bound changeReportOptions(name, value) {
+        this.reportOptions[name] = value;
+    }
+
     @observable displayWordReportOptionModal = false;
     @action.bound showWordReportOptionModal() {
         this.displayWordReportOptionModal = true;

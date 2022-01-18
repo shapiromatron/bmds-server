@@ -22,4 +22,10 @@ class DocxReportCache(ReportCache):
         return tasks.generate_report.delay(str(self.analysis.id), self.kw["uri"])
 
     def create(self) -> BytesIO:
-        return build_docx(self.analysis, self.kw["uri"])
+        return build_docx(
+            self.analysis,
+            self.kw["uri"],
+            self.kw["dataset_format_long"],
+            self.kw["verbose_model_outputs"],
+            self.kw["bmd_cdf_table"],
+        )

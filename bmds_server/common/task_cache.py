@@ -27,9 +27,12 @@ class ReportCache(abc.ABC):
     cache_prefix: str = ""  # should be unique for each subclass
     status = ReportStatus
 
-    def __init__(self, analysis, **kw):
+    def __init__(self, analysis, dataset_format_long, verbose_model_outputs, bmd_cdf_table, **kw):
         self.cache = cache
         self.analysis = analysis
+        self.dataset_format_long = dataset_format_long
+        self.verbose_model_outputs = verbose_model_outputs
+        self.bmd_cdf_table = bmd_cdf_table
         self.kw = kw
 
     @property

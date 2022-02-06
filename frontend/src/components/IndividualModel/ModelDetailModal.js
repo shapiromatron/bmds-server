@@ -18,6 +18,10 @@ import ContinuousSummary from "./ContinuousSummary";
 import ContinuousDeviance from "./ContinuousDeviance";
 import MaBenchmarkDose from "./MaBenchmarkDose";
 import MaIndividualModels from "./MaIndividualModels";
+import BootstrapRuns from "./BootstrapRuns";
+import ScaledResidual from "./ScaledResidual";
+import LitterData from "./LitterData";
+import BootstrapResults from "./BootstrapResults";
 
 import * as dc from "../../constants/dataConstants";
 import Button from "../common/Button";
@@ -80,14 +84,42 @@ class IndividualModelBody extends Component {
                         </Col>
                     </Row>
                 ) : null}
-                <Row>
-                    <Col xs={4} style={{maxHeight: "50vh", overflowY: "scroll"}}>
-                        <CDFTable bmd_dist={model.results.fit.bmd_dist} />
-                    </Col>
-                    <Col xs={8}>
-                        <CDFPlot dataset={dataset} cdf={model.results.fit.bmd_dist} />
-                    </Col>
-                </Row>
+                {dtype != dc.Dtype.NESTED_DICHOTOMOUS ? (
+                    <Row>
+                        <Col xs={4} style={{maxHeight: "50vh", overflowY: "scroll"}}>
+                            <CDFTable bmd_dist={model.results.fit.bmd_dist} />
+                        </Col>
+                        <Col xs={8}>
+                            <CDFPlot dataset={dataset} cdf={model.results.fit.bmd_dist} />
+                        </Col>
+                    </Row>
+                ) : null}
+                {dtype == dc.Dtype.NESTED_DICHOTOMOUS ? (
+                    <>
+                        <Row>
+                            <Col xs={4} style={{maxHeight: "50vh", overflowY: "scroll"}}>
+                                <LitterData bmd_dist={model.results.litter_Data} />
+                            </Col>
+                        </Row>
+                        <Row>
+                            <Col xs={4}>
+                                <BootstrapResults
+                                    bootstrap_results={model.results.bootstrap_results}
+                                />
+                            </Col>
+                        </Row>
+                        <Row>
+                            <Col xs={4}>
+                                <BootstrapRuns bootstrap_runs={model.results.bootstrap_runs} />
+                            </Col>
+                        </Row>
+                        <Row>
+                            <Col xs={4}>
+                                <ScaledResidual scaled_residual={model.results.scaled_residual} />
+                            </Col>
+                        </Row>
+                    </>
+                ) : null}
             </Modal.Body>
         );
     }

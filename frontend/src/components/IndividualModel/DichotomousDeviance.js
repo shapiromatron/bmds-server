@@ -2,7 +2,7 @@ import React, {Component} from "react";
 import {observer} from "mobx-react";
 import PropTypes from "prop-types";
 
-import {ff} from "../../common";
+import {ff, fourDecimalFormatter} from "../../common";
 
 @observer
 class DichotomousDeviance extends Component {
@@ -34,7 +34,7 @@ class DichotomousDeviance extends Component {
                                 <td>{deviances.params[i]}</td>
                                 <td>{ff(deviances.deviance[i])}</td>
                                 <td>{ff(deviances.df[i])}</td>
-                                <td>{ff(deviances.p_value[i])}</td>
+                                <td>{fourDecimalFormatter(deviances.p_value[i])} </td>
                             </tr>
                         );
                     })}

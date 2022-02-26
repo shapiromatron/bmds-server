@@ -48,6 +48,13 @@ export const simulateClick = function(el) {
             return value.toExponential(2);
         }
     },
+    fourDecimalFormatter = function(value) {
+        if (value > 0 && value < 0.0001) {
+            return "<0.0001";
+        } else {
+            return value.toFixed(4);
+        }
+    },
     getLabel = function(value, mapping) {
         return _.find(mapping, d => d.value === value).label;
     };

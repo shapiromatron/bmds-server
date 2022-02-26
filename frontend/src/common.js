@@ -49,7 +49,9 @@ export const simulateClick = function(el) {
         }
     },
     fourDecimalFormatter = function(value) {
-        if (value > 0 && value < 0.0001) {
+        if (value > 100) {
+            return ff(value);
+        } else if (value > 0 && value < 0.0001) {
             return "<0.0001";
         } else {
             return value.toFixed(4);

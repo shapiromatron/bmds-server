@@ -13,11 +13,12 @@ import Button from "../../common/Button";
 class RunChecklist extends Component {
     render() {
         const {complete, message} = this.props,
-            color = complete ? "text-success" : "text-danger";
+            color = complete ? "text-success" : "text-danger",
+            icon = complete ? "fa-check-circle" : "fa-times-circle";
 
         return (
             <p>
-                <i className={`fa fa-check-circle fa-lg ${color}`}></i>&ensp;{message}
+                <i className={`fa fa-lg ${icon} ${color}`}></i>&ensp;{message}
             </p>
         );
     }

@@ -1,26 +1,26 @@
 import _ from "lodash";
-import { Dtype } from "./dataConstants";
-import { continuousErrorBars, dichotomousErrorBars } from "../utils/errorBars";
+import {Dtype} from "./dataConstants";
+import {continuousErrorBars, dichotomousErrorBars} from "../utils/errorBars";
 
 const doseResponseLayout = {
-    autosize: true,
-    legend: { yanchor: "top", y: 0.99, xanchor: "left", x: 0.01 },
-    margin: { l: 50, r: 5, t: 50, b: 50 },
-    showlegend: true,
-    title: {
-        text: "ADD",
-    },
-    xaxis: {
+        autosize: true,
+        legend: {yanchor: "top", y: 0.99, xanchor: "left", x: 0.01},
+        margin: {l: 50, r: 5, t: 50, b: 50},
+        showlegend: true,
         title: {
             text: "ADD",
         },
-    },
-    yaxis: {
-        title: {
-            text: "ADD",
+        xaxis: {
+            title: {
+                text: "ADD",
+            },
+        },
+        yaxis: {
+            title: {
+                text: "ADD",
+            },
         },
     },
-},
     getResponse = dataset => {
         let incidences, ns;
 
@@ -42,69 +42,69 @@ const doseResponseLayout = {
         }
     };
 
-export const getDrLayout = function (dataset, selected, modal, hover) {
-    let layout = _.cloneDeep(doseResponseLayout),
-        xlabel = dataset.metadata.dose_name,
-        ylabel = dataset.metadata.response_name;
+export const getDrLayout = function(dataset, selected, modal, hover) {
+        let layout = _.cloneDeep(doseResponseLayout),
+            xlabel = dataset.metadata.dose_name,
+            ylabel = dataset.metadata.response_name;
 
-    if (dataset.metadata.dose_units) {
-        xlabel = `${xlabel} (${dataset.metadata.dose_units})`;
-    }
+        if (dataset.metadata.dose_units) {
+            xlabel = `${xlabel} (${dataset.metadata.dose_units})`;
+        }
 
-    if (dataset.metadata.response_units) {
-        ylabel = `${ylabel} (${dataset.metadata.response_units})`;
-    }
+        if (dataset.metadata.response_units) {
+            ylabel = `${ylabel} (${dataset.metadata.response_units})`;
+        }
 
-    const annotations = [];
-    if (selected && selected.annotations) {
-        annotations.push(selected.annotations);
-    }
-    if (modal && modal.annotations) {
-        annotations.push(modal.annotations);
-    }
-    if (hover && hover.annotations) {
-        annotations.push(hover.annotations);
-    }
-    layout.annotations = _.flatten(annotations);
+        const annotations = [];
+        if (selected && selected.annotations) {
+            annotations.push(selected.annotations);
+        }
+        if (modal && modal.annotations) {
+            annotations.push(modal.annotations);
+        }
+        if (hover && hover.annotations) {
+            annotations.push(hover.annotations);
+        }
+        layout.annotations = _.flatten(annotations);
 
-    layout.title.text = dataset.metadata.name;
-    layout.xaxis.title.text = xlabel;
-    layout.yaxis.title.text = ylabel;
-    const xmin = _.min(dataset.doses) || 0,
-        xmax = _.max(dataset.doses) || 0,
-        response = getResponse(dataset),
-        ymin =
-            dataset.dtype == Dtype.CONTINUOUS
-                ? _.min(response) - _.max(continuousErrorBars(dataset).array)
-                : _.min(response) || 0,
-        ymax =
-            dataset.dtype == Dtype.CONTINUOUS
-                ? _.max(response) + _.max(continuousErrorBars(dataset).array)
-                : _.max(response) || 0,
-        xbuff = Math.abs(xmax - xmin) * 0.05,
-        ybuff = Math.abs(ymax - ymin) * 0.05;
+        layout.title.text = dataset.metadata.name;
+        layout.xaxis.title.text = xlabel;
+        layout.yaxis.title.text = ylabel;
+        const xmin = _.min(dataset.doses) || 0,
+            xmax = _.max(dataset.doses) || 0,
+            response = getResponse(dataset),
+            ymin =
+                dataset.dtype == Dtype.CONTINUOUS
+                    ? _.min(response) - _.max(continuousErrorBars(dataset).array)
+                    : _.min(response) || 0,
+            ymax =
+                dataset.dtype == Dtype.CONTINUOUS
+                    ? _.max(response) + _.max(continuousErrorBars(dataset).array)
+                    : _.max(response) || 0,
+            xbuff = Math.abs(xmax - xmin) * 0.05,
+            ybuff = Math.abs(ymax - ymin) * 0.05;
 
-    layout.xaxis.range = [xmin == 0 ? -xbuff : xmin - xbuff, xmax == 0 ? xbuff : xmax + xbuff];
-    layout.yaxis.range =
-        dataset.dtype == Dtype.DICHOTOMOUS || dataset.dtype == Dtype.NESTED_DICHOTOMOUS
-            ? [-0.05, 1.05]
-            : [ymin == 0 ? -ybuff : ymin - ybuff, ymax == 0 ? ybuff : ymax + ybuff];
+        layout.xaxis.range = [xmin == 0 ? -xbuff : xmin - xbuff, xmax == 0 ? xbuff : xmax + xbuff];
+        layout.yaxis.range =
+            dataset.dtype == Dtype.DICHOTOMOUS || dataset.dtype == Dtype.NESTED_DICHOTOMOUS
+                ? [-0.05, 1.05]
+                : [ymin == 0 ? -ybuff : ymin - ybuff, ymax == 0 ? ybuff : ymax + ybuff];
 
-    // determine whether to position legend to the left or right; auto doesn't work
-    const maxResponseIndex = response.indexOf(_.max(response)),
-        maxResponseDose = dataset.doses[maxResponseIndex],
-        doseRange = _.max(dataset.doses) - _.min(dataset.doses);
+        // determine whether to position legend to the left or right; auto doesn't work
+        const maxResponseIndex = response.indexOf(_.max(response)),
+            maxResponseDose = dataset.doses[maxResponseIndex],
+            doseRange = _.max(dataset.doses) - _.min(dataset.doses);
 
-    if (maxResponseDose < doseRange / 2) {
-        layout.legend.xanchor = "right";
-        layout.legend.x = 1;
-    } else {
-        layout.legend.xanchor = "left";
-        layout.legend.x = 0.05;
-    }
-    return layout;
-},
-    getCdfLayout = function (dataset) {
+        if (maxResponseDose < doseRange / 2) {
+            layout.legend.xanchor = "right";
+            layout.legend.x = 1;
+        } else {
+            layout.legend.xanchor = "left";
+            layout.legend.x = 0.05;
+        }
+        return layout;
+    },
+    getCdfLayout = function(dataset) {
         let layout = _.cloneDeep(doseResponseLayout),
             xlabel = dataset.metadata.dose_name;
 
@@ -118,7 +118,7 @@ export const getDrLayout = function (dataset, selected, modal, hover) {
 
         return layout;
     },
-    getDrDatasetPlotData = function (dataset) {
+    getDrDatasetPlotData = function(dataset) {
         let errorBars, hovertemplate;
         if (dataset.dtype == Dtype.CONTINUOUS) {
             errorBars = continuousErrorBars(dataset);
@@ -143,7 +143,7 @@ export const getDrLayout = function (dataset, selected, modal, hover) {
             name: "Response",
         };
     },
-    getDrBmdLine = function (model, hexColor) {
+    getDrBmdLine = function(model, hexColor) {
         const annotations = [];
         if (model.results.bmd) {
             // https://plotly.com/javascript/reference/layout/annotations/#layout-annotations
@@ -189,7 +189,7 @@ export const getDrLayout = function (dataset, selected, modal, hover) {
             annotations,
         };
     },
-    getBayesianBMDLine = function (model, hexColor) {
+    getBayesianBMDLine = function(model, hexColor) {
         const annotations = [];
         if (model.results.bmd) {
             // https://plotly.com/javascript/reference/layout/annotations/#layout-annotations
@@ -234,7 +234,7 @@ export const getDrLayout = function (dataset, selected, modal, hover) {
         };
         return bma_data;
     },
-    getConfig = function () {
+    getConfig = function() {
         return {
             modeBarButtonsToRemove: [
                 "pan2d",

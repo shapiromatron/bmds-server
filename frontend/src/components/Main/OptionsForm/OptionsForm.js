@@ -24,7 +24,9 @@ const OptionsForm = props => {
                         choices={continuousBmrOptions.map(option => {
                             return {value: option.value, text: option.label};
                         })}
-                        onChange={value => props.saveOptions("bmr_type", value, props.idx)}
+                        onChange={value =>
+                            props.saveOptions("bmr_type", parseInt(value), props.idx)
+                        }
                         value={props.options.bmr_type}
                     />
                 </td>
@@ -37,7 +39,9 @@ const OptionsForm = props => {
                         choices={dichotomousBmrOptions.map(option => {
                             return {value: option.value, text: option.label};
                         })}
-                        onChange={value => props.saveOptions("bmr_type", value, props.idx)}
+                        onChange={value =>
+                            props.saveOptions("bmr_type", parseInt(value), props.idx)
+                        }
                         value={props.options.bmr_type}
                     />
                 </td>
@@ -69,7 +73,9 @@ const OptionsForm = props => {
                         choices={distTypeOptions.map(option => {
                             return {value: option.value, text: option.label};
                         })}
-                        onChange={value => props.saveOptions("dist_type", value, props.idx)}
+                        onChange={value =>
+                            props.saveOptions("dist_type", parseInt(value), props.idx)
+                        }
                         value={props.options.dist_type}
                     />
                 </td>
@@ -80,7 +86,11 @@ const OptionsForm = props => {
                         <SelectInput
                             value={props.options.litter_specific_covariate}
                             onChange={value =>
-                                props.saveOptions("litter_specific_covariate", value, props.idx)
+                                props.saveOptions(
+                                    "litter_specific_covariate",
+                                    parseInt(value),
+                                    props.idx
+                                )
                             }
                             choices={litterSpecificCovariateOptions.map(option => {
                                 return {value: option.value, text: option.label};
@@ -90,7 +100,9 @@ const OptionsForm = props => {
                     <td>
                         <SelectInput
                             value={props.options.background}
-                            onChange={value => props.saveOptions("background", value, props.idx)}
+                            onChange={value =>
+                                props.saveOptions("background", parseInt(value), props.idx)
+                            }
                             choices={backgroundOptions.map(option => {
                                 return {value: option.value, text: option.label};
                             })}

@@ -46,7 +46,7 @@ class RuleRow extends Component {
                         choices={logicBinOptions.map(option => {
                             return {value: option.value, text: option.label};
                         })}
-                        onChange={value => updateRule(ruleIndex, "failure_bin", value)}
+                        onChange={value => updateRule(ruleIndex, "failure_bin", parseInt(value))}
                         value={rule.failure_bin}
                     />
                 </td>

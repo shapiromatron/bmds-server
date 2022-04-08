@@ -75,11 +75,11 @@ export const getDrLayout = function(dataset, selected, modal, hover) {
             response = getResponse(dataset),
             ymin =
                 dataset.dtype == Dtype.CONTINUOUS
-                    ? _.min(response) - _.max(continuousErrorBars(dataset).uppers)
+                    ? _.min(response) - _.max(continuousErrorBars(dataset).array)
                     : _.min(response) || 0,
             ymax =
                 dataset.dtype == Dtype.CONTINUOUS
-                    ? _.max(response) + _.max(continuousErrorBars(dataset).uppers)
+                    ? _.max(response) + _.max(continuousErrorBars(dataset).array)
                     : _.max(response) || 0,
             xbuff = Math.abs(xmax - xmin) * 0.05,
             ybuff = Math.abs(ymax - ymin) * 0.05;

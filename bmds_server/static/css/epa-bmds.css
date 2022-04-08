@@ -19,3 +19,8 @@
     background-color: #5b616b;
     border-radius: 0;
 }
+
+/* always above toast container */
+.toast-container {
+  top: 140px;
+}

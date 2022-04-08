@@ -1,7 +1,7 @@
 # website
-Django==3.2.9
+Django==3.2.12
 django-webpack-loader==1.1.0
-djangorestframework==3.12.4
+djangorestframework==3.13.1
     uritemplate==4.1.1  # schema dependencies
     PyYAML==5.4.1
 django-reversion==4.0.0

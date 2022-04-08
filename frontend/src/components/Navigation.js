@@ -9,7 +9,7 @@ import PropTypes from "prop-types";
 
 import Actions from "./Main/Actions/Actions";
 import ShareActions from "./Main/Actions/ShareActions";
-import DownloadToast from "./Main/Actions/DownloadToast";
+import StatusToast from "./Main/Actions/StatusToast";
 import WordReportOptionsModal from "./Main/Actions/WordReportOptionsModal";
 
 @inject("mainStore")
@@ -49,7 +49,6 @@ class Navigation extends Component {
                         className={mainStore.canEdit ? "nav-item" : "nav-item ml-auto"}
                         style={{position: "relative"}}>
                         <Actions />
-                        <DownloadToast />
                         <WordReportOptionsModal />
                     </li>
                 </ul>
@@ -59,8 +58,9 @@ class Navigation extends Component {
                     <Route path="/logic" component={LogicRoot} />
                     <Route path="/output" component={Output} />
                 </div>
-                <div id="payload" style={{color: "white", height: "1px", overflow: "hidden"}}>
-                    {JSON.stringify(mainStore.getPayload, undefined, 2)}
+                <div className="toast-container">
+                    {/* put toasts at the end so it's above everything else */}
+                    <StatusToast />
                 </div>
             </>
         );

@@ -17,6 +17,7 @@ import Button from "../../common/Button";
 const OptionsForm = props => {
     return (
         <tr className="form-group">
+            <td>{props.idx + 1}</td>
             {props.modelType === mc.MODEL_CONTINUOUS ? (
                 <td>
                     <SelectInput

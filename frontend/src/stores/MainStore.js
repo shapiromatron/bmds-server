@@ -27,9 +27,11 @@ class MainStore {
     }
     @action.bound changeAnalysisName(value) {
         this.analysis_name = value;
+        this.setInputsChangedFlag();
     }
     @action.bound changeAnalysisDescription(value) {
         this.analysis_description = value;
+        this.setInputsChangedFlag();
     }
     @action.bound changeDatasetType(value) {
         this.model_type = value;
@@ -37,6 +39,7 @@ class MainStore {
         this.rootStore.optionsStore.setDefaultsByDatasetType(true);
         this.rootStore.dataStore.setDefaultsByDatasetType();
         this.rootStore.dataOptionStore.options = [];
+        this.setInputsChangedFlag();
     }
     @action.bound resetModelSelection() {
         this.rootStore.modelsStore.resetModelSelection();
@@ -201,8 +204,11 @@ class MainStore {
                 console.error("error", error);
             });
     }
-    @action.bound
-    updateModelStateFromApi(data) {
+    @action.bound setInputsChangedFlag() {
+        // inputs have changed and have not yet been saved or validated; prevent execution
+        this.analysisSavedAndValidated = false;
+    }
+    @action.bound updateModelStateFromApi(data) {
         if (data.errors.length > 0) {
             this.errorMessage = data.errors;
             this.isUpdateComplete = true;
@@ -216,7 +222,6 @@ class MainStore {
         }
 
         this.isExecuting = data.is_executing;
-        this.analysisSavedAndValidated = data.inputs_valid;
         if (data.outputs) {
             this.executionOutputs = data.outputs.outputs;
         }
@@ -231,6 +236,7 @@ class MainStore {
         this.rootStore.modelsStore.setModels(inputs.models);
         this.rootStore.logicStore.setLogic(inputs.recommender);
         this.isUpdateComplete = true;
+        this.analysisSavedAndValidated = data.inputs_valid;
     }
     @action.bound loadAnalysisFromFile(file) {
         let reader = new FileReader();

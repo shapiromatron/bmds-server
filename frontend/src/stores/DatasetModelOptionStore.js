@@ -24,6 +24,7 @@ class DatasetModelOptionStore {
     @action.bound updateOption(dataset_id, key, value) {
         const index = _.findIndex(this.options, d => d.dataset_id === dataset_id);
         this.options[index][key] = value;
+        this.rootStore.mainStore.setInputsChangedFlag();
     }
     @action.bound deleteOption(dataset_id) {
         const index = _.findIndex(this.options, d => d.dataset_id === dataset_id);

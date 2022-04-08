@@ -23,10 +23,12 @@ class OptionsStore {
     @action.bound addOptions() {
         const option = _.cloneDeep(constant.options[this.getModelType]);
         this.optionsList.push(option);
+        this.rootStore.mainStore.setInputsChangedFlag();
     }
 
     @action.bound saveOptions(name, value, id) {
         this.optionsList[id][name] = value;
+        this.rootStore.mainStore.setInputsChangedFlag();
         if (name === constant.BMR_TYPE && this.getModelType === MODEL_CONTINUOUS) {
             //  change default BMR value if the BMR type was changed for continuous datasets
             this.optionsList[id][constant.BMR_VALUE] = constant.bmrForBmrTypeContinuous[value];
@@ -35,6 +37,7 @@ class OptionsStore {
 
     @action.bound deleteOptions(val) {
         this.optionsList.splice(val, 1);
+        this.rootStore.mainStore.setInputsChangedFlag();
     }
     @action.bound setOptions(options) {
         this.optionsList = options;

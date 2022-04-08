@@ -79,6 +79,7 @@ class DataStore {
 
     @action.bound setDatasetMetadata(key, value) {
         this.selectedDataset.metadata[key] = value;
+        this.rootStore.mainStore.setInputsChangedFlag();
     }
 
     @action.bound addDataset() {
@@ -95,6 +96,7 @@ class DataStore {
         this.datasets.push(dataset);
         this.rootStore.dataOptionStore.createOption(dataset);
         this.selectedDatasetId = id;
+        this.rootStore.mainStore.setInputsChangedFlag();
     }
 
     @action.bound loadExampleData() {
@@ -110,6 +112,7 @@ class DataStore {
                 dataset[key].push("");
             }
         });
+        this.rootStore.mainStore.setInputsChangedFlag();
     }
 
     @action.bound deleteRow = index => {
@@ -119,6 +122,7 @@ class DataStore {
                 dataset[key].splice(index, 1);
             }
         });
+        this.rootStore.mainStore.setInputsChangedFlag();
     };
 
     @action.bound saveDatasetCellItem(key, value, rowIdx) {
@@ -132,10 +136,12 @@ class DataStore {
         if (_.isNumber(parsedValue)) {
             dataset[key][rowIdx] = parsedValue;
         }
+        this.rootStore.mainStore.setInputsChangedFlag();
     }
 
     @action.bound changeColumnName(name, value) {
         this.selectedDataset.column_names[name] = value;
+        this.rootStore.mainStore.setInputsChangedFlag();
     }
 
     @action.bound deleteDataset() {
@@ -149,6 +155,7 @@ class DataStore {
         if (this.datasets.length > 0) {
             this.selectedDatasetId = this.datasets[this.datasets.length - 1].metadata.id;
         }
+        this.rootStore.mainStore.setInputsChangedFlag();
     }
 
     @action.bound setDatasets(datasets) {

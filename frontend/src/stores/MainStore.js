@@ -337,7 +337,7 @@ class MainStore {
     }
 
     // *** TOAST ***
-    @observable showToast = false;
+    @observable toastVisible = false;
     @observable toastHeader = "";
     @observable toastMessage = "";
     @action.bound downloadReport(url) {
@@ -355,10 +355,8 @@ class MainStore {
                 let contentType = response.headers.get("content-type");
                 if (contentType.includes("application/json")) {
                     response.json().then(json => {
-                        this.toastHeader = json.header;
-                        this.toastMessage = json.message;
+                        this.showToast(json.header, json.message);
                     });
-                    this.showToast = true;
                     setTimeout(fetchReport, 5000);
                 } else {
                     const filename = response.headers
@@ -366,14 +364,21 @@ class MainStore {
                         .match(/filename="(.*)"/)[1];
                     response.blob().then(blob => {
                         saveAs(blob, filename);
-                        this.showToast = false;
+                        this.hideToast();
                     });
                 }
             };
         fetchReport();
     }
-    @action.bound closeToast() {
-        this.showToast = false;
+    @action.bound showToast(header, message) {
+        this.toastHeader = header;
+        this.toastMessage = message;
+        this.toastVisible = true;
+    }
+    @action.bound hideToast() {
+        this.toastVisible = false;
+        this.toastHeader = "";
+        this.toastMessage = "";
     }
     // *** END TOAST ***
 

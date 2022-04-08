@@ -291,6 +291,14 @@ class DataStore {
         this.datasets[index] = dataset;
         this.toggleDatasetModal();
     }
+
+    @computed get getSelectedDataTabularForm() {
+        const expectedColumns = columns[this.selectedDataset.dtype],
+            value = _.map(this.getMappedArray, row => {
+                return _.map(expectedColumns, col => row[col].toString()).join("\t");
+            }).join("\n");
+        return value;
+    }
     // *** END TABULAR MODAL DATASET ***
 }
 

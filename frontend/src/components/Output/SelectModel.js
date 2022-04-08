@@ -47,11 +47,6 @@ class SelectModelIndex extends Component {
                         onClick={outputStore.saveSelectedModel}
                         text="Save model selection"
                     />
-                    {outputStore.selectedModelSaved ? (
-                        <div className="alert alert-success  mt-1" role="alert">
-                            Model Saved Successfully
-                        </div>
-                    ) : null}
                 </div>
             </form>
         );

@@ -22,7 +22,7 @@ class FloatInput extends Component {
                     className={className}
                     type="number"
                     value={value}
-                    onChange={e => onChange(e.target.value)}
+                    onChange={e => onChange(parseFloat(e.target.value))}
                 />
             </>
         );

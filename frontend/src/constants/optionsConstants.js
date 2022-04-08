@@ -58,7 +58,7 @@ export const options = {
         {value: 0, label: "Zero"},
         {value: 1, label: "Estimated"},
     ],
-    bmrforBmrf = {
+    bmrForBmrTypeContinuous = {
         2: 1,
         3: 0.1,
         1: 1,

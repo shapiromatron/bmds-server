@@ -28,7 +28,8 @@ class OptionsStore {
     @action.bound saveOptions(name, value, id) {
         this.optionsList[id][name] = value;
         if (name === constant.BMR_TYPE && this.getModelType === MODEL_CONTINUOUS) {
-            this.optionsList[id][constant.BMR_VALUE] = constant.bmrforBmrf[value];
+            //  change default BMR value if the BMR type was changed for continuous datasets
+            this.optionsList[id][constant.BMR_VALUE] = constant.bmrForBmrTypeContinuous[value];
         }
     }
 

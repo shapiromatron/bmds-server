@@ -30,6 +30,7 @@ class OptionsFormList extends Component {
                         <table className="table table-sm table-bordered text-center">
                             <thead className="bg-custom">
                                 <tr>
+                                    <th>Option Set #</th>
                                     {modelType === MODEL_CONTINUOUS ? (
                                         <>
                                             <th>BMR Type</th>

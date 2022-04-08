@@ -79,6 +79,7 @@ class DataStore {
 
     @action.bound setDatasetMetadata(key, value) {
         this.selectedDataset.metadata[key] = value;
+        this.rootStore.mainStore.setInputsChangedFlag();
     }
 
     @action.bound addDataset() {
@@ -101,6 +102,7 @@ class DataStore {
     @action.bound updateOptionDegree() {
         // whenever the number of doses change, change the default degree
         this.rootStore.dataOptionStore.updateDefaultDegree(this.selectedDataset);
+        this.rootStore.mainStore.setInputsChangedFlag();
     }
 
     @action.bound loadExampleData() {
@@ -117,6 +119,7 @@ class DataStore {
                 dataset[key].push("");
             }
         });
+        this.rootStore.mainStore.setInputsChangedFlag();
     }
 
     @action.bound deleteRow = index => {
@@ -127,6 +130,7 @@ class DataStore {
             }
         });
         this.updateOptionDegree(dataset);
+        this.rootStore.mainStore.setInputsChangedFlag();
     };
 
     @action.bound saveDatasetCellItem(key, value, rowIdx) {
@@ -140,10 +144,12 @@ class DataStore {
         if (_.isNumber(parsedValue)) {
             dataset[key][rowIdx] = parsedValue;
         }
+        this.rootStore.mainStore.setInputsChangedFlag();
     }
 
     @action.bound changeColumnName(name, value) {
         this.selectedDataset.column_names[name] = value;
+        this.rootStore.mainStore.setInputsChangedFlag();
     }
 
     @action.bound deleteDataset() {
@@ -157,6 +163,7 @@ class DataStore {
         if (this.datasets.length > 0) {
             this.selectedDatasetId = this.datasets[this.datasets.length - 1].metadata.id;
         }
+        this.rootStore.mainStore.setInputsChangedFlag();
     }
 
     @action.bound setDatasets(datasets) {
@@ -292,6 +299,14 @@ class DataStore {
         this.datasets[index] = dataset;
         this.updateOptionDegree(dataset);
         this.toggleDatasetModal();
+    }
+
+    @computed get getSelectedDataTabularForm() {
+        const expectedColumns = columns[this.selectedDataset.dtype],
+            value = _.map(this.getMappedArray, row => {
+                return _.map(expectedColumns, col => row[col].toString()).join("\t");
+            }).join("\n");
+        return value;
     }
     // *** END TABULAR MODAL DATASET ***
 }

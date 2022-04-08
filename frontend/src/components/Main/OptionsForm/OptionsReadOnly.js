@@ -10,9 +10,10 @@ import {
 import {ff, getLabel} from "../../../common";
 
 const OptionsReadOnly = props => {
-    const {options, modelType} = props;
+    const {options, modelType, idx} = props;
     return (
         <tr>
+            <td>{idx + 1}</td>
             {modelType === MODEL_CONTINUOUS ? (
                 <>
                     <td>{getLabel(options.bmr_type, continuousBmrOptions)}</td>
@@ -35,5 +36,6 @@ const OptionsReadOnly = props => {
 OptionsReadOnly.propTypes = {
     options: PropTypes.object,
     modelType: PropTypes.string.isRequired,
+    idx: PropTypes.number,
 };
 export default OptionsReadOnly;

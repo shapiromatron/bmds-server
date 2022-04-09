@@ -27,9 +27,11 @@ class MainStore {
     }
     @action.bound changeAnalysisName(value) {
         this.analysis_name = value;
+        this.setInputsChangedFlag();
     }
     @action.bound changeAnalysisDescription(value) {
         this.analysis_description = value;
+        this.setInputsChangedFlag();
     }
     @action.bound changeDatasetType(value) {
         this.model_type = value;
@@ -37,6 +39,7 @@ class MainStore {
         this.rootStore.optionsStore.setDefaultsByDatasetType(true);
         this.rootStore.dataStore.setDefaultsByDatasetType();
         this.rootStore.dataOptionStore.options = [];
+        this.setInputsChangedFlag();
     }
     @action.bound resetModelSelection() {
         this.rootStore.modelsStore.resetModelSelection();
@@ -198,8 +201,11 @@ class MainStore {
                 this.errorMessage = error;
             });
     }
-    @action.bound
-    updateModelStateFromApi(data) {
+    @action.bound setInputsChangedFlag() {
+        // inputs have changed and have not yet been saved or validated; prevent execution
+        this.analysisSavedAndValidated = false;
+    }
+    @action.bound updateModelStateFromApi(data) {
         if (data.errors.length > 0) {
             this.errorMessage = data.errors;
             this.isUpdateComplete = true;
@@ -213,7 +219,6 @@ class MainStore {
         }
 
         this.isExecuting = data.is_executing;
-        this.analysisSavedAndValidated = data.inputs_valid;
         if (data.outputs) {
             this.executionOutputs = data.outputs.outputs;
         }
@@ -228,6 +233,7 @@ class MainStore {
         this.rootStore.modelsStore.setModels(inputs.models);
         this.rootStore.logicStore.setLogic(inputs.recommender);
         this.isUpdateComplete = true;
+        this.analysisSavedAndValidated = data.inputs_valid;
     }
     @action.bound loadAnalysisFromFile(file) {
         let reader = new FileReader();
@@ -331,7 +337,7 @@ class MainStore {
     }
 
     // *** TOAST ***
-    @observable showToast = false;
+    @observable toastVisible = false;
     @observable toastHeader = "";
     @observable toastMessage = "";
     @action.bound downloadReport(url) {
@@ -349,10 +355,8 @@ class MainStore {
                 let contentType = response.headers.get("content-type");
                 if (contentType.includes("application/json")) {
                     response.json().then(json => {
-                        this.toastHeader = json.header;
-                        this.toastMessage = json.message;
+                        this.showToast(json.header, json.message);
                     });
-                    this.showToast = true;
                     setTimeout(fetchReport, 5000);
                 } else {
                     const filename = response.headers
@@ -360,14 +364,21 @@ class MainStore {
                         .match(/filename="(.*)"/)[1];
                     response.blob().then(blob => {
                         saveAs(blob, filename);
-                        this.showToast = false;
+                        this.hideToast();
                     });
                 }
             };
         fetchReport();
     }
-    @action.bound closeToast() {
-        this.showToast = false;
+    @action.bound showToast(header, message) {
+        this.toastHeader = header;
+        this.toastMessage = message;
+        this.toastVisible = true;
+    }
+    @action.bound hideToast() {
+        this.toastVisible = false;
+        this.toastHeader = "";
+        this.toastMessage = "";
     }
     // *** END TOAST ***
 

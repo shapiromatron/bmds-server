@@ -81,7 +81,7 @@ class TestInputValidation:
         assert validators.validate_input(bmds3_complete_dichotomous) is None
 
         # but it must be complete if included
-        recommender["rules"] = "_INVALID_"
+        recommender.pop("rules")
         with pytest.raises(ValidationError) as err:
             validators.validate_input(bmds3_complete_dichotomous)
         _missing_field(err, "rules")

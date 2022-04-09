@@ -53,6 +53,7 @@ class ModelsStore {
 
     @action.bound resetModelSelection() {
         this.setDefaultsByDatasetType(true);
+        this.rootStore.mainStore.setInputsChangedFlag();
     }
 
     @action.bound setModelSelection(name, model, checked) {
@@ -94,6 +95,7 @@ class ModelsStore {
                 delete this.models[name];
             }
         }
+        this.rootStore.mainStore.setInputsChangedFlag();
     }
 
     @action.bound setDefaultPriorWeights() {

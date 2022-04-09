@@ -143,6 +143,18 @@ class TestAnalysisViewSet:
         assert response.status_code == 200
         assert response.json()["inputs"] == payload["data"]
 
+    def test_optional_recommender(self, bmds3_complete_continuous):
+        client = APIClient()
+        analysis = Analysis.objects.create()
+        url = analysis.get_api_patch_inputs_url()
+
+        # complete bmds3 continuous
+        payload = {"editKey": analysis.password, "data": bmds3_complete_continuous}
+        del payload["data"]["recommender"]
+        response = client.patch(url, payload, format="json")
+        assert response.status_code == 200
+        assert response.json()["inputs"] == payload["data"]
+
     def test_patch_complete_dichotomous(self, bmds3_complete_dichotomous):
         client = APIClient()
         analysis = Analysis.objects.create()

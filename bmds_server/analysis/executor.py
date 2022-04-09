@@ -53,7 +53,7 @@ def build_frequentist_session(dataset, inputs, options, dataset_options) -> Opti
                     if model_options.degree > 0
                     else dataset.num_dose_groups
                 )
-                degrees = list(range(min_degree, max(min(max_degree, 5), 2)))
+                degrees = list(range(min_degree, max(min(max_degree, 9), 2)))
                 for degree in degrees:
                     model_options = model_options.copy()
                     model_options.degree = degree

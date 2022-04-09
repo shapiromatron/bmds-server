@@ -96,6 +96,12 @@ class DataStore {
         this.datasets.push(dataset);
         this.rootStore.dataOptionStore.createOption(dataset);
         this.selectedDatasetId = id;
+        this.updateOptionDegree(dataset);
+    }
+
+    @action.bound updateOptionDegree() {
+        // whenever the number of doses change, change the default degree
+        this.rootStore.dataOptionStore.updateDefaultDegree(this.selectedDataset);
         this.rootStore.mainStore.setInputsChangedFlag();
     }
 
@@ -103,6 +109,7 @@ class DataStore {
         const dataset = getExampleData(this.model_type),
             currentDataset = this.datasets[this.selectedDatasetId];
         _.extend(currentDataset, dataset);
+        this.updateOptionDegree(dataset);
     }
 
     @action.bound addRow() {
@@ -122,6 +129,7 @@ class DataStore {
                 dataset[key].splice(index, 1);
             }
         });
+        this.updateOptionDegree(dataset);
         this.rootStore.mainStore.setInputsChangedFlag();
     };
 
@@ -289,6 +297,7 @@ class DataStore {
             dataset[key] = value;
         });
         this.datasets[index] = dataset;
+        this.updateOptionDegree(dataset);
         this.toggleDatasetModal();
     }
 

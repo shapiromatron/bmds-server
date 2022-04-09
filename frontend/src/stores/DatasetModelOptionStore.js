@@ -1,7 +1,7 @@
 import _ from "lodash";
 import {computed, observable, action} from "mobx";
 
-import {datasetOptions} from "../constants/dataConstants";
+import {datasetOptions, getDefaultDegree} from "../constants/dataConstants";
 
 class DatasetModelOptionStore {
     constructor(rootStore) {
@@ -34,6 +34,12 @@ class DatasetModelOptionStore {
         const option = _.cloneDeep(datasetOptions[this.getModelType]);
         option.dataset_id = dataset.metadata.id;
         this.options.push(option);
+    }
+    @action.bound updateDefaultDegree(dataset) {
+        const index = _.findIndex(this.options, d => d.dataset_id === dataset.metadata.id);
+        if (this.options[index].degree !== undefined) {
+            this.options[index].degree = getDefaultDegree(dataset);
+        }
     }
     @action.bound getDataset(option) {
         return _.find(this.rootStore.dataStore.datasets, d => d.metadata.id === option.dataset_id);

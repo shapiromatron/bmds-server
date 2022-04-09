@@ -4,7 +4,6 @@ from typing import Any, Dict
 
 import bmds
 import pytest
-from bmds.bmds3.recommender import RecommenderSettings
 from django.core.exceptions import ValidationError
 
 from bmds_server.analysis import validators
@@ -69,13 +68,23 @@ class TestInputValidation:
                 "dist_type": 1,
             }
         ]
-        with pytest.raises(ValidationError) as err:
-            validators.validate_input(data)
-        _missing_field(err, "rules")
-
-        data["recommender"] = RecommenderSettings.build_default().dict()
         assert validators.validate_input(data, partial=True) is None
         assert validators.validate_input(data) is None
+
+    def test_recommender(self, bmds3_complete_dichotomous):
+        # ensure recommender is optional
+        recommender = bmds3_complete_dichotomous.pop("recommender")
+        assert validators.validate_input(bmds3_complete_dichotomous) is None
+
+        # but if it's included it validates
+        bmds3_complete_dichotomous["recommender"] = recommender
+        assert validators.validate_input(bmds3_complete_dichotomous) is None
+
+        # but it must be complete if included
+        recommender["rules"] = "_INVALID_"
+        with pytest.raises(ValidationError) as err:
+            validators.validate_input(bmds3_complete_dichotomous)
+        _missing_field(err, "rules")
 
     def test_nested_dichotomous(self, nested_dichotomous_datasets):
         data: Dict[str, Any] = {
@@ -120,14 +129,6 @@ class TestInputValidation:
                 "bootstrap_seed": 0,
             }
         ]
-
-        assert validators.validate_input(data, partial=True) is None
-
-        with pytest.raises(ValidationError) as err:
-            validators.validate_input(data)
-        _missing_field(err, "rules")
-
-        data["recommender"] = RecommenderSettings.build_default().dict()
         assert validators.validate_input(data, partial=True) is None
         assert validators.validate_input(data) is None
 
@@ -185,13 +186,6 @@ class TestInputValidation:
         data["options"] = [
             {"bmr_type": 1, "bmr_value": 1.0, "confidence_level": 0.95},
         ]
-        assert validators.validate_input(data, partial=True) is None
-
-        with pytest.raises(ValidationError) as err:
-            validators.validate_input(data)
-        _missing_field(err, "rules")
-
-        data["recommender"] = RecommenderSettings.build_default().dict()
         assert validators.validate_input(data, partial=True) is None
         assert validators.validate_input(data) is None
 

@@ -389,7 +389,7 @@ class MainStore {
     // *** REPORT OPTIONS ***
     @observable wordReportOptions = {
         datasetFormatLong: true,
-        allModels: true,
+        allModels: false,
         bmdCdfTable: false,
     };
     @action.bound changeReportOptions(name, value) {

@@ -142,19 +142,15 @@ class AnalysisViewset(mixins.RetrieveModelMixin, viewsets.GenericViewSet):
         """
         instance: models.Analysis = self.get_object()
         uri = request.build_absolute_uri("/")[:-1]
-
-        dataset_format_long = get_bool(request.query_params.get("datasetFormatLong"))
-        all_models = get_bool(request.query_params.get("allModels"))
-        bmd_cdf_table = get_bool(request.query_params.get("bmdCdfTable"))
-
         kwargs = {
-            "dataset_format_long": dataset_format_long,
-            "all_models": all_models,
-            "bmd_cdf_table": bmd_cdf_table,
+            "dataset_format_long": get_bool(request.query_params.get("datasetFormatLong")),
+            "all_models": get_bool(request.query_params.get("allModels")),
+            "bmd_cdf_table": get_bool(request.query_params.get("bmdCdfTable")),
         }
         response = DocxReportCache(analysis=instance, uri=uri, **kwargs).request_content()
         if response.status is ReportStatus.COMPLETE:
             edit = instance.password == request.query_params.get("editKey", "")
             data = add_update_url(instance, response.content, uri) if edit else response.content
             return Response(renderers.BinaryFile(data=data, filename=instance.slug))
+
         return Response(response.dict(), content_type="application/json")

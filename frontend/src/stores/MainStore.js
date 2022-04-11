@@ -1,6 +1,6 @@
 import {saveAs} from "file-saver";
 import slugify from "slugify";
-import {observable, action, computed} from "mobx";
+import {observable, action, computed, toJS} from "mobx";
 import _ from "lodash";
 
 import * as mc from "../constants/mainConstants";
@@ -113,6 +113,7 @@ class MainStore {
         const apiUrl = this.config.apiUrl,
             {csrfToken} = this.config.editSettings,
             handleServerError = error => {
+                console.error("error", error);
                 if (error.status == 500) {
                     this.errorMessage =
                         "A server error occurred... if the error continues or your analysis does not complete please contact us.";
@@ -185,6 +186,7 @@ class MainStore {
             })
             .catch(error => {
                 this.errorMessage = error;
+                console.error("error", error);
             });
     }
     @action.bound
@@ -199,6 +201,7 @@ class MainStore {
             .then(data => this.updateModelStateFromApi(data))
             .catch(error => {
                 this.errorMessage = error;
+                console.error("error", error);
             });
     }
     @action.bound setInputsChangedFlag() {
@@ -341,15 +344,16 @@ class MainStore {
     @observable toastHeader = "";
     @observable toastMessage = "";
     @action.bound downloadReport(url) {
-        let apiUrl = (apiUrl = this.config[url]);
+        let apiUrl = (apiUrl = this.config[url]),
+            params = {};
         if (this.canEdit) {
-            apiUrl = `${apiUrl}?editKey=${this.config.editSettings.editKey}`;
+            params.editKey = this.config.editSettings.editKey;
         }
         if (url === "wordUrl") {
-            apiUrl = `${apiUrl}&datasetFormatLong=${this.wordReportOptions.datasetFormatLong}&verboseModelOutputs=${this.wordReportOptions.verboseModelOutputs}&bmdCdfTable=${this.wordReportOptions.bmdCdfTable}`;
+            _.extend(params, toJS(this.wordReportOptions));
         }
         const fetchReport = () => {
-                fetch(apiUrl).then(processResponse);
+                fetch(apiUrl + "?" + new URLSearchParams(params).toString()).then(processResponse);
             },
             processResponse = response => {
                 let contentType = response.headers.get("content-type");
@@ -385,13 +389,12 @@ class MainStore {
     // *** REPORT OPTIONS ***
     @observable wordReportOptions = {
         datasetFormatLong: true,
-        verboseModelOutputs: false,
+        allModels: true,
         bmdCdfTable: false,
     };
     @action.bound changeReportOptions(name, value) {
         this.wordReportOptions[name] = value;
     }
-
     @observable displayWordReportOptionModal = false;
     @action.bound showWordReportOptionModal() {
         this.displayWordReportOptionModal = true;

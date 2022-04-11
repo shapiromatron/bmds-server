@@ -26,6 +26,6 @@ class DocxReportCache(ReportCache):
             self.analysis,
             self.kw["uri"],
             self.kw["dataset_format_long"],
-            self.kw["verbose_model_outputs"],
+            self.kw["all_models"],
             self.kw["bmd_cdf_table"],
         )

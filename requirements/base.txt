@@ -1,5 +1,5 @@
 # website
-Django==3.2.12
+Django==3.2.13
 django-webpack-loader==1.1.0
 djangorestframework==3.13.1
     uritemplate==4.1.1  # schema dependencies

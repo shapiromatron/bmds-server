@@ -22,10 +22,10 @@ def delete_old_analyses():
 
 
 @shared_task()
-def generate_report(id_: str, uri: str):
+def generate_report(id_: str, **kw):
     logger.info(f"starting report generation: {id_}")
     analysis = apps.get_model("analysis", "Analysis").objects.get(id=id_)
-    DocxReportCache(analysis, uri=uri).create_content()
+    DocxReportCache(analysis, **kw).create_content()
     logger.info(f"finishing report generation: {id_}")
 
 

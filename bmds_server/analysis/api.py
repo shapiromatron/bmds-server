@@ -5,6 +5,7 @@ from rest_framework.response import Response
 
 from ..common import renderers
 from ..common.task_cache import ReportStatus
+from ..common.utils import get_bool
 from ..common.validation import pydantic_validate
 from . import models, serializers, validators
 from .reporting.cache import DocxReportCache, ExcelReportCache
@@ -141,7 +142,12 @@ class AnalysisViewset(mixins.RetrieveModelMixin, viewsets.GenericViewSet):
         """
         instance: models.Analysis = self.get_object()
         uri = request.build_absolute_uri("/")[:-1]
-        response = DocxReportCache(analysis=instance, uri=uri).request_content()
+        kwargs = {
+            "dataset_format_long": get_bool(request.query_params.get("datasetFormatLong")),
+            "all_models": get_bool(request.query_params.get("allModels")),
+            "bmd_cdf_table": get_bool(request.query_params.get("bmdCdfTable")),
+        }
+        response = DocxReportCache(analysis=instance, uri=uri, **kwargs).request_content()
         if response.status is ReportStatus.COMPLETE:
             edit = instance.password == request.query_params.get("editKey", "")
             data = add_update_url(instance, response.content, uri) if edit else response.content

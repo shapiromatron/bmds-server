@@ -1,6 +1,6 @@
 import {saveAs} from "file-saver";
 import slugify from "slugify";
-import {observable, action, computed} from "mobx";
+import {observable, action, computed, toJS} from "mobx";
 import _ from "lodash";
 
 import * as mc from "../constants/mainConstants";
@@ -344,15 +344,16 @@ class MainStore {
     @observable toastHeader = "";
     @observable toastMessage = "";
     @action.bound downloadReport(url) {
-        let apiUrl = (apiUrl = this.config[url]);
+        let apiUrl = (apiUrl = this.config[url]),
+            params = {};
         if (this.canEdit) {
-            apiUrl = `${apiUrl}?editKey=${this.config.editSettings.editKey}`;
+            params.editKey = this.config.editSettings.editKey;
         }
         if (url === "wordUrl") {
-            apiUrl = `${apiUrl}&example=123`;
+            _.extend(params, toJS(this.wordReportOptions));
         }
         const fetchReport = () => {
-                fetch(apiUrl).then(processResponse);
+                fetch(apiUrl + "?" + new URLSearchParams(params).toString()).then(processResponse);
             },
             processResponse = response => {
                 let contentType = response.headers.get("content-type");
@@ -386,6 +387,14 @@ class MainStore {
     // *** END TOAST ***
 
     // *** REPORT OPTIONS ***
+    @observable wordReportOptions = {
+        datasetFormatLong: true,
+        allModels: false,
+        bmdCdfTable: false,
+    };
+    @action.bound changeReportOptions(name, value) {
+        this.wordReportOptions[name] = value;
+    }
     @observable displayWordReportOptionModal = false;
     @action.bound showWordReportOptionModal() {
         this.displayWordReportOptionModal = true;

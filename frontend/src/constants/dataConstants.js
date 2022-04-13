@@ -242,7 +242,7 @@ export const DATA_CONTINUOUS_SUMMARY = "CS",
     },
     getDefaultDegree = function(dataset) {
         const n = getNumDoseGroups(dataset) - 1;
-        return Math.max(1, Math.min(n, 4));
+        return _.clamp(n, 1, 3);
     },
     getDegreeOptions = function(dataset) {
         const maxDegree = Math.max(Math.min(8, getNumDoseGroups(dataset) - 1), 1);

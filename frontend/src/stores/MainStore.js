@@ -285,7 +285,9 @@ class MainStore {
             return {value: item.value, text: item.name};
         });
         if (!this.isFuture) {
-            return choices.filter(d => d.value != mc.MODEL_MULTI_TUMOR);
+            return choices.filter(
+                d => d.value != mc.MODEL_NESTED_DICHOTOMOUS && d.value != mc.MODEL_MULTI_TUMOR
+            );
         }
         return choices;
     }

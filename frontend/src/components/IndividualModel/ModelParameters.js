@@ -2,7 +2,7 @@ import React, {Component} from "react";
 import {observer} from "mobx-react";
 import PropTypes from "prop-types";
 
-import {ff} from "../../common";
+import {fourDecimalFormatter} from "../../common";
 import {checkOrTimes} from "../../common";
 
 @observer
@@ -27,9 +27,9 @@ class ModelParameters extends Component {
                             <tr key={i}>
                                 <td>{name}</td>
                                 <td>
-                                    {ff(parameters.values[i])}
-                                    <br />({ff(parameters.lower_ci[i])},{ff(parameters.upper_ci[i])}
-                                    )
+                                    {fourDecimalFormatter(parameters.values[i])}
+                                    <br />({fourDecimalFormatter(parameters.lower_ci[i])},
+                                    {fourDecimalFormatter(parameters.upper_ci[i])})
                                 </td>
                                 <td>{checkOrTimes(parameters.bounded[i])}</td>
                             </tr>

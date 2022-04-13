@@ -49,3 +49,16 @@ input[type=number] {
 .bg-custom {
   background-color: #b8daff;
 }
+
+/* always above toast container */
+.toast-container {
+  position: fixed;
+  top: 120px;
+  right: 0px;
+  left: 0px;
+  bottom: 0px;
+  visibility: hidden;
+}
+.toast-container > * {
+  visibility: visible;
+}

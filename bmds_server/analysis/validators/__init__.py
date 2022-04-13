@@ -42,6 +42,6 @@ def validate_input(data: Dict, partial: bool = False) -> None:
     if options or (partial is False and bmds_version in bmds.constants.BMDS_THREES):
         validate_options(dataset_type, data.get("options"))
 
-    recommender = data.get("recommender", {})
-    if recommender or partial is False:
+    recommender = data.get("recommender")
+    if recommender:
         pydantic_validate(recommender, RecommenderSettings)

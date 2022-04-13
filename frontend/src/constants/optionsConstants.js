@@ -57,4 +57,14 @@ export const options = {
     backgroundOptions = [
         {value: 0, label: "Zero"},
         {value: 1, label: "Estimated"},
-    ];
+    ],
+    bmrForBmrTypeContinuous = {
+        2: 1,
+        3: 0.1,
+        1: 1,
+        4: 1,
+        6: 0.1,
+        7: 0.1,
+    },
+    BMR_TYPE = "bmr_type",
+    BMR_VALUE = "bmr_value";

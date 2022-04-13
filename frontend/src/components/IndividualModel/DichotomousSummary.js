@@ -2,7 +2,7 @@ import React, {Component} from "react";
 import {observer} from "mobx-react";
 import PropTypes from "prop-types";
 
-import {ff} from "../../common";
+import {ff, fourDecimalFormatter} from "../../common";
 
 @observer
 class DichotomousSummary extends Component {
@@ -44,7 +44,7 @@ class DichotomousSummary extends Component {
                     </tr>
                     <tr>
                         <td>p-value</td>
-                        <td>{ff(results.gof.p_value)}</td>
+                        <td>{fourDecimalFormatter(results.gof.p_value)}</td>
                     </tr>
                     <tr>
                         <td>DOF</td>

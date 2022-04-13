@@ -292,12 +292,13 @@ class OutputStore {
                     option_index: output.metadata.option_index,
                     selected: {
                         model_index: output.frequentist.selected.model_index,
-                        notes: output.frequentist.selected.notes,
+                        notes: output.frequentist.selected.notes || "",
                     },
                 },
             }),
             url = `${this.rootStore.mainStore.config.apiUrl}select-model/`;
 
+        this.rootStore.mainStore.hideToast();
         fetch(url, {
             method: "POST",
             mode: "cors",
@@ -307,6 +308,12 @@ class OutputStore {
             .then(response => {
                 if (!response.ok) {
                     console.error(response.text());
+                } else {
+                    this.rootStore.mainStore.showToast(
+                        "Updated model selection",
+                        "Model selection updated."
+                    );
+                    setTimeout(this.rootStore.mainStore.hideToast, 3000);
                 }
             })
             .catch(error => {

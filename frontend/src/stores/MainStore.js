@@ -1,6 +1,6 @@
 import {saveAs} from "file-saver";
 import slugify from "slugify";
-import {observable, action, computed} from "mobx";
+import {observable, action, computed, toJS} from "mobx";
 import _ from "lodash";
 
 import * as mc from "../constants/mainConstants";
@@ -27,9 +27,11 @@ class MainStore {
     }
     @action.bound changeAnalysisName(value) {
         this.analysis_name = value;
+        this.setInputsChangedFlag();
     }
     @action.bound changeAnalysisDescription(value) {
         this.analysis_description = value;
+        this.setInputsChangedFlag();
     }
     @action.bound changeDatasetType(value) {
         this.model_type = value;
@@ -37,6 +39,7 @@ class MainStore {
         this.rootStore.optionsStore.setDefaultsByDatasetType(true);
         this.rootStore.dataStore.setDefaultsByDatasetType();
         this.rootStore.dataOptionStore.options = [];
+        this.setInputsChangedFlag();
     }
     @action.bound resetModelSelection() {
         this.rootStore.modelsStore.resetModelSelection();
@@ -201,8 +204,11 @@ class MainStore {
                 console.error("error", error);
             });
     }
-    @action.bound
-    updateModelStateFromApi(data) {
+    @action.bound setInputsChangedFlag() {
+        // inputs have changed and have not yet been saved or validated; prevent execution
+        this.analysisSavedAndValidated = false;
+    }
+    @action.bound updateModelStateFromApi(data) {
         if (data.errors.length > 0) {
             this.errorMessage = data.errors;
             this.isUpdateComplete = true;
@@ -216,7 +222,6 @@ class MainStore {
         }
 
         this.isExecuting = data.is_executing;
-        this.analysisSavedAndValidated = data.inputs_valid;
         if (data.outputs) {
             this.executionOutputs = data.outputs.outputs;
         }
@@ -231,6 +236,7 @@ class MainStore {
         this.rootStore.modelsStore.setModels(inputs.models);
         this.rootStore.logicStore.setLogic(inputs.recommender);
         this.isUpdateComplete = true;
+        this.analysisSavedAndValidated = data.inputs_valid;
     }
     @action.bound loadAnalysisFromFile(file) {
         let reader = new FileReader();
@@ -332,28 +338,27 @@ class MainStore {
     }
 
     // *** TOAST ***
-    @observable showToast = false;
+    @observable toastVisible = false;
     @observable toastHeader = "";
     @observable toastMessage = "";
     @action.bound downloadReport(url) {
-        let apiUrl = (apiUrl = this.config[url]);
+        let apiUrl = (apiUrl = this.config[url]),
+            params = {};
         if (this.canEdit) {
-            apiUrl = `${apiUrl}?editKey=${this.config.editSettings.editKey}`;
+            params.editKey = this.config.editSettings.editKey;
         }
         if (url === "wordUrl") {
-            apiUrl = `${apiUrl}&example=123`;
+            _.extend(params, toJS(this.wordReportOptions));
         }
         const fetchReport = () => {
-                fetch(apiUrl).then(processResponse);
+                fetch(apiUrl + "?" + new URLSearchParams(params).toString()).then(processResponse);
             },
             processResponse = response => {
                 let contentType = response.headers.get("content-type");
                 if (contentType.includes("application/json")) {
                     response.json().then(json => {
-                        this.toastHeader = json.header;
-                        this.toastMessage = json.message;
+                        this.showToast(json.header, json.message);
                     });
-                    this.showToast = true;
                     setTimeout(fetchReport, 5000);
                 } else {
                     const filename = response.headers
@@ -361,18 +366,33 @@ class MainStore {
                         .match(/filename="(.*)"/)[1];
                     response.blob().then(blob => {
                         saveAs(blob, filename);
-                        this.showToast = false;
+                        this.hideToast();
                     });
                 }
             };
         fetchReport();
     }
-    @action.bound closeToast() {
-        this.showToast = false;
+    @action.bound showToast(header, message) {
+        this.toastHeader = header;
+        this.toastMessage = message;
+        this.toastVisible = true;
+    }
+    @action.bound hideToast() {
+        this.toastVisible = false;
+        this.toastHeader = "";
+        this.toastMessage = "";
     }
     // *** END TOAST ***
 
     // *** REPORT OPTIONS ***
+    @observable wordReportOptions = {
+        datasetFormatLong: true,
+        allModels: false,
+        bmdCdfTable: false,
+    };
+    @action.bound changeReportOptions(name, value) {
+        this.wordReportOptions[name] = value;
+    }
     @observable displayWordReportOptionModal = false;
     @action.bound showWordReportOptionModal() {
         this.displayWordReportOptionModal = true;

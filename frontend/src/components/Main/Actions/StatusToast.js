@@ -5,33 +5,33 @@ import PropTypes from "prop-types";
 
 @inject("mainStore")
 @observer
-class DownloadToast extends Component {
+class StatusToast extends Component {
     render() {
         const {mainStore} = this.props;
         return (
             <Toast
                 style={
-                    mainStore.showToast
+                    mainStore.toastVisible
                         ? {
                               position: "absolute",
-                              top: 0,
-                              right: 100,
-                              width: 300,
+                              top: "1em",
+                              right: "1em",
+                              width: 400,
                               zIndex: 1000,
                           }
                         : {display: "none"}
                 }
-                show={mainStore.showToast}
+                show={mainStore.toastVisible}
                 onClose={mainStore.closeToast}>
-                <Toast.Header className="bg-primary text-white" closeButton={false}>
+                <Toast.Header className="bg-danger text-white" closeButton={false}>
                     {mainStore.toastHeader}
                 </Toast.Header>
-                <Toast.Body>{mainStore.toastMessage}</Toast.Body>
+                <Toast.Body className="bg-white">{mainStore.toastMessage}</Toast.Body>
             </Toast>
         );
     }
 }
-DownloadToast.propTypes = {
+StatusToast.propTypes = {
     mainStore: PropTypes.object,
 };
-export default DownloadToast;
+export default StatusToast;

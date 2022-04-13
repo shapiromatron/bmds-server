@@ -1,6 +1,7 @@
 import random
 import string
 from datetime import datetime
+from typing import Optional
 
 _random_string_pool = string.ascii_lowercase + string.digits
 
@@ -18,3 +19,7 @@ def random_string(samples: str = _random_string_pool, length: int = 12) -> str:
 
 def to_timestamp(dt: datetime) -> str:
     return dt.strftime("%Y-%b-%d %H:%m %Z")
+
+
+def get_bool(value: Optional[str]) -> bool:
+    return value is not None and value.lower() == "true"

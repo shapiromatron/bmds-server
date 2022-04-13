@@ -44,7 +44,11 @@ class Migration(migrations.Migration):
                 ),
                 (
                     "password",
-                    models.CharField(default=random_string, editable=False, max_length=12,),
+                    models.CharField(
+                        default=random_string,
+                        editable=False,
+                        max_length=12,
+                    ),
                 ),
                 ("inputs", models.JSONField(default=dict)),
                 ("outputs", models.JSONField(blank=True, default=dict)),

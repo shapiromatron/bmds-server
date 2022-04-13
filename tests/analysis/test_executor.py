@@ -89,7 +89,7 @@ class TestAnalysisSession:
 
         # 3 dose-groups; degree = N-1; expected 2
         for num_doses in range(3, 8):
-            expected_degree = min(max(num_doses - 1, 2), 4)
+            expected_degree = min(max(num_doses - 1, 2), 8)
             data = deepcopy(bmds3_complete_dichotomous)
             data["datasets"] = [
                 {

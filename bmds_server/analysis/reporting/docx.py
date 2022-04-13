@@ -18,12 +18,21 @@ if TYPE_CHECKING:
 ANALYSIS_URL = "Analysis URL: "
 
 
-def build_docx(analysis: Analysis, uri: str) -> BytesIO:
+def build_docx(
+    analysis: Analysis,
+    uri: str,
+    dataset_format_long: bool = True,
+    all_models: bool = False,
+    bmd_cdf_table: bool = False,
+) -> BytesIO:
     """Generate a Microsoft Word binary file for an analysis
 
     Args:
         analysis (Analysis): An Analysis object
         uri (str): The root URI for this site, eg: "https://example.com"
+        dataset_format_long (bool, default True): long or wide dataset table format
+        all_models (bool, default False):  Show all models, not just selected
+        bmd_cdf_table (bool, default False): Export BMD CDF table
 
     Returns:
         BytesIO: A word document byte stream
@@ -60,7 +69,14 @@ def build_docx(analysis: Analysis, uri: str) -> BytesIO:
         report.document.add_paragraph("Execution generated errors; no report can be generated")
     else:
         batch = analysis.to_batch()
-        batch.to_docx(report=report, header_level=1, citation=False)
+        batch.to_docx(
+            report=report,
+            header_level=1,
+            citation=False,
+            dataset_format_long=dataset_format_long,
+            all_models=all_models,
+            bmd_cdf_table=bmd_cdf_table,
+        )
 
     write_citation(report, 1)
 

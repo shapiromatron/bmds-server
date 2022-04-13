@@ -44,7 +44,10 @@ def build_frequentist_session(dataset, inputs, options, dataset_options) -> Opti
 
         for model_name in model_names:
             model_options = build_model_settings(
-                dataset_type, prior_type, options, dataset_options,
+                dataset_type,
+                prior_type,
+                options,
+                dataset_options,
             )
             if model_name in bmds.constants.VARIABLE_POLYNOMIAL:
                 min_degree = 2 if model_name in bmds.constants.M_Polynomial else 1
@@ -53,7 +56,7 @@ def build_frequentist_session(dataset, inputs, options, dataset_options) -> Opti
                     if model_options.degree > 0
                     else dataset.num_dose_groups
                 )
-                degrees = list(range(min_degree, max(min(max_degree, 5), 2)))
+                degrees = list(range(min_degree, max(min(max_degree, 9), 2)))
                 for degree in degrees:
                     model_options = model_options.copy()
                     model_options.degree = degree
@@ -87,7 +90,10 @@ def build_bayesian_session(
     prior_weights = list(map(lambda d: d["prior_weight"], models))
     for name in map(lambda d: d["model"], models):
         model_options = build_model_settings(
-            dataset_type, PriorEnum.bayesian, options, dataset_options,
+            dataset_type,
+            PriorEnum.bayesian,
+            options,
+            dataset_options,
         )
         if name in bmds.constants.VARIABLE_POLYNOMIAL:
             model_options.degree = 2

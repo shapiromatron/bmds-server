@@ -62,14 +62,14 @@ class ExternalAuth(View):
         raise NotImplementedError("Deployment specific; requires implementation")
 
     def mail_bad_headers(self, request):
-        """ Mail admins when headers don't return valid user metadata """
+        """Mail admins when headers don't return valid user metadata"""
         subject = "[External auth]: Bad headers"
         data = pformat(request.headers._store)
         body = f"External authentication failed with the following headers:\n{data}"
         mail_admins(subject, body)
 
     def mail_bad_auth(self, email, username):
-        """ Mail admins when the email / username pair clashes with user in database """
+        """Mail admins when the email / username pair clashes with user in database"""
         subject = "[External auth]: Invalid credentials"
         body = dedent(
             f"""\

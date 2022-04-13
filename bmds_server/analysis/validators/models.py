@@ -34,7 +34,9 @@ NestedDichotomousModelSchema = ModelTypeSchema(
 )
 
 MultiTumorModelSchema = ModelTypeSchema(
-    restricted=set(bmds.constants.MT_MODELS), unrestricted=set(), bayesian=set(),
+    restricted=set(bmds.constants.MT_MODELS),
+    unrestricted=set(),
+    bayesian=set(),
 )
 
 

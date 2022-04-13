@@ -26,7 +26,9 @@ class AnalysisViewset(mixins.RetrieveModelMixin, viewsets.GenericViewSet):
         return Response(data)
 
     @action(
-        detail=True, methods=("patch",), url_path="patch-inputs",
+        detail=True,
+        methods=("patch",),
+        url_path="patch-inputs",
     )
     def patch_inputs(self, request, *args, **kwargs):
         """

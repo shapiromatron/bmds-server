@@ -31,7 +31,10 @@ is_increasing_map = {
 
 
 def build_model_settings(
-    dataset_type: str, prior_class: str, options: Dict, dataset_options: Dict,
+    dataset_type: str,
+    prior_class: str,
+    options: Dict,
+    dataset_options: Dict,
 ) -> Union[DichotomousModelSettings, ContinuousModelSettings]:
     prior_class = bmd3_prior_map[prior_class]
     if dataset_type in bmds.constants.DICHOTOMOUS_DTYPES:

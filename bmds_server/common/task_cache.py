@@ -95,7 +95,10 @@ class ReportCache(abc.ABC):
         key = self.cache_key
         content = self.create()
         response = ReportResponse(
-            status=ReportStatus.COMPLETE, content=content, header=None, message=None,
+            status=ReportStatus.COMPLETE,
+            content=content,
+            header=None,
+            message=None,
         )
         if settings.ENABLE_REPORT_CACHE:
             self.cache.set(key, response, timeout=60 * 60 * 8)

@@ -197,26 +197,35 @@ class TestModelValidation:
         logprobit = bmds.constants.M_LogProbit
 
         # test success
-        assert validators.validate_models(dtype, {"frequentist_restricted": [logprobit]},) is None
+        assert (
+            validators.validate_models(
+                dtype,
+                {"frequentist_restricted": [logprobit]},
+            )
+            is None
+        )
 
         # assert wrong model type
         with pytest.raises(ValidationError) as err:
             validators.validate_models(
-                dtype, {"frequentist_restricted": [bmds.constants.M_Power]},
+                dtype,
+                {"frequentist_restricted": [bmds.constants.M_Power]},
             )
         assert "Invalid model(s) in frequentist_restricted: Power" in str(err)
 
         # assert duplicates model type
         with pytest.raises(ValidationError) as err:
             validators.validate_models(
-                dtype, {"frequentist_restricted": [logprobit, logprobit]},
+                dtype,
+                {"frequentist_restricted": [logprobit, logprobit]},
             )
         assert "Models in frequentist_restricted are not unique" in str(err)
 
         # assert empty
         with pytest.raises(ValidationError) as err:
             validators.validate_models(
-                dtype, {"frequentist_restricted": []},
+                dtype,
+                {"frequentist_restricted": []},
             )
         assert "At least one model must be selected" in str(err)
 
@@ -253,26 +262,35 @@ class TestModelValidation:
         linear = bmds.constants.M_Linear
 
         # test success
-        assert validators.validate_models(dtype, {"frequentist_restricted": [power]},) is None
+        assert (
+            validators.validate_models(
+                dtype,
+                {"frequentist_restricted": [power]},
+            )
+            is None
+        )
 
         # assert wrong model type
         with pytest.raises(ValidationError) as err:
             validators.validate_models(
-                dtype, {"frequentist_restricted": [bmds.constants.M_Probit]},
+                dtype,
+                {"frequentist_restricted": [bmds.constants.M_Probit]},
             )
         assert "Invalid model(s) in frequentist_restricted: Probit" in str(err)
 
         # assert duplicates model type
         with pytest.raises(ValidationError) as err:
             validators.validate_models(
-                dtype, {"frequentist_restricted": [power, power]},
+                dtype,
+                {"frequentist_restricted": [power, power]},
             )
         assert "Models in frequentist_restricted are not unique" in str(err)
 
         # assert empty
         with pytest.raises(ValidationError) as err:
             validators.validate_models(
-                dtype, {"frequentist_restricted": []},
+                dtype,
+                {"frequentist_restricted": []},
             )
         assert "At least one model must be selected" in str(err)
 

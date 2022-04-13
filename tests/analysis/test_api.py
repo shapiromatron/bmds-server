@@ -92,7 +92,11 @@ class TestAnalysisViewSet:
             "editKey": analysis.password,
             "data": {"bmds_version": "BMDS330", "dataset_type": "C"},
         }
-        response = client.patch(url, payload, format="json",)
+        response = client.patch(
+            url,
+            payload,
+            format="json",
+        )
         assert response.status_code == 400
         assert json.loads(response.json()[0])[0] == {
             "loc": ["datasets"],
@@ -105,7 +109,11 @@ class TestAnalysisViewSet:
             "data": {"bmds_version": "BMDS330", "dataset_type": "C"},
             "partial": True,
         }
-        response = client.patch(url, payload, format="json",)
+        response = client.patch(
+            url,
+            payload,
+            format="json",
+        )
         assert response.status_code == 200
         assert response.json()["inputs"] == payload["data"]
 
@@ -114,7 +122,11 @@ class TestAnalysisViewSet:
             "dataset_type": "C",
             "models": {"frequentist_restricted": ["ZZZ"]},
         }
-        response = client.patch(url, payload, format="json",)
+        response = client.patch(
+            url,
+            payload,
+            format="json",
+        )
         assert response.status_code == 400
         assert json.loads(response.json()[0])[0] == {
             "loc": ["__root__"],
@@ -128,7 +140,11 @@ class TestAnalysisViewSet:
             "models": {"frequentist_restricted": ["Power"]},
             "recommender": RecommenderSettings.build_default().dict(),
         }
-        response = client.patch(url, payload, format="json",)
+        response = client.patch(
+            url,
+            payload,
+            format="json",
+        )
         assert response.status_code == 200
         assert response.json()["inputs"] == payload["data"]
 

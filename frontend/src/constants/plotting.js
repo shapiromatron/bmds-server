@@ -42,19 +42,22 @@ const doseResponseLayout = {
         }
     };
 
-export const getDrLayout = function(dataset, selected, modal, hover) {
-        let layout = _.cloneDeep(doseResponseLayout),
-            xlabel = dataset.metadata.dose_name,
-            ylabel = dataset.metadata.response_name;
-
+export const getDoseLabel = function(dataset) {
+        let label = dataset.metadata.dose_name;
         if (dataset.metadata.dose_units) {
-            xlabel = `${xlabel} (${dataset.metadata.dose_units})`;
+            label = `${label} (${dataset.metadata.dose_units})`;
         }
-
+        return label;
+    },
+    getResponseLabel = function(dataset) {
+        let label = dataset.metadata.response_name;
         if (dataset.metadata.response_units) {
-            ylabel = `${ylabel} (${dataset.metadata.response_units})`;
+            label = `${label} (${dataset.metadata.response_units})`;
         }
-
+        return label;
+    },
+    getDrLayout = function(dataset, selected, modal, hover) {
+        let layout = _.cloneDeep(doseResponseLayout);
         const annotations = [];
         if (selected && selected.annotations) {
             annotations.push(selected.annotations);
@@ -68,8 +71,8 @@ export const getDrLayout = function(dataset, selected, modal, hover) {
         layout.annotations = _.flatten(annotations);
 
         layout.title.text = dataset.metadata.name;
-        layout.xaxis.title.text = xlabel;
-        layout.yaxis.title.text = ylabel;
+        layout.xaxis.title.text = getDoseLabel(dataset);
+        layout.yaxis.title.text = getResponseLabel(dataset);
         const xmin = _.min(dataset.doses) || 0,
             xmax = _.max(dataset.doses) || 0,
             response = getResponse(dataset),
@@ -105,17 +108,11 @@ export const getDrLayout = function(dataset, selected, modal, hover) {
         return layout;
     },
     getCdfLayout = function(dataset) {
-        let layout = _.cloneDeep(doseResponseLayout),
-            xlabel = dataset.metadata.dose_name;
-
-        if (dataset.metadata.dose_units) {
-            xlabel = `${xlabel} (${dataset.metadata.dose_units})`;
-        }
+        let layout = _.cloneDeep(doseResponseLayout);
         layout.title.text = "BMD Cumulative distribution function";
-        layout.xaxis.title.text = xlabel;
+        layout.xaxis.title.text = getDoseLabel(dataset);
         layout.yaxis.title.text = "Percentile";
         layout.yaxis.range = [0, 1];
-
         return layout;
     },
     getDrDatasetPlotData = function(dataset) {
@@ -251,15 +248,22 @@ export const getDrLayout = function(dataset, selected, modal, hover) {
             name: modelName,
         };
     },
-    getLollipopPlotLayout = {
-        title: "",
-        showlegend: false,
-        xaxis: {
-            showline: true,
-        },
-        yaxis: {
-            showline: true,
-        },
+    getLollipopPlotLayout = function(title, dataset) {
+        const layout = {
+            title: {
+                text: title,
+            },
+            margin: {l: 100, r: 5, t: 30, b: 40},
+            showlegend: false,
+            xaxis: {
+                showline: true,
+                title: getDoseLabel(dataset),
+            },
+            yaxis: {
+                showline: true,
+            },
+        };
+        return layout;
     },
     getConfig = function() {
         return {

@@ -307,15 +307,11 @@ class OutputStore {
     }
 
     @computed get drFrequentistLollipopPlotLayout() {
-        let layout = _.cloneDeep(getLollipopPlotLayout);
-        layout.title = "Frequentist bmd/bmdl/bmdu Plot";
-        return layout;
+        return getLollipopPlotLayout("Frequentist bmd/bmdl/bmdu Plot", this.selectedDataset);
     }
 
     @computed get drBayesianLollipopPlotLayout() {
-        let layout = _.cloneDeep(getLollipopPlotLayout);
-        layout.title = "Bayesian bmd/bmdl/bmdu Plot ";
-        return layout;
+        return getLollipopPlotLayout("Bayesian bmd/bmdl/bmdu Plot", this.selectedDataset);
     }
     // end dose-response plotting data methods
 

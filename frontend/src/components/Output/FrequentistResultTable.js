@@ -206,7 +206,7 @@ class FrequentistResultTable extends Component {
         }
 
         if (modelType === MODEL_MULTI_TUMOR) {
-            return <p>TODO - nested dichotomous.</p>;
+            return <p>TODO - multi tumor.</p>;
         }
 
         const {models} = selectedFrequentist,

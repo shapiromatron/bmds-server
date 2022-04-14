@@ -187,7 +187,12 @@ def _mock_results(inputs: Dict, dataset_index: int, option_index: int) -> dict:
         models.append(
             {
                 "name": model_name,
-                "results": {"bmd": median, "bmdl": 0.9 * median, "bmdu": 1.1 * median},
+                "results": {
+                    "bmd": median,
+                    "bmdl": 0.9 * median,
+                    "bmdu": 1.1 * median,
+                    "plotting": {"dr_x": [0, 10, 20], "dr_y": [0, 0.5, 1]},
+                },
                 "settings": {},
                 "model_class": {},
             }

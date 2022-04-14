@@ -5,7 +5,6 @@ import PropTypes from "prop-types";
 @observer
 class ScaledResidual extends Component {
     render() {
-        const {scaled_residual} = this.props;
         return (
             <table id="info-table" className="table table-sm table-bordered">
                 <thead>
@@ -18,27 +17,27 @@ class ScaledResidual extends Component {
                 <tbody>
                     <tr>
                         <td>Minimum scaled residual for dose group nearest the BMD</td>
-                        <td>{scaled_residual.bmd1}</td>
+                        <td>{1}</td>
                     </tr>
                     <tr>
                         <td>Minimum ABS(scaled residual) for dose group nearest the BMD</td>
-                        <td>{scaled_residual.bmd2}</td>
+                        <td>{1}</td>
                     </tr>
                     <tr>
                         <td>Average Scaled residual for dose group nearest the BMD</td>
-                        <td>{scaled_residual.bmd3}</td>
+                        <td>{1}</td>
                     </tr>
                     <tr>
                         <td>Average ABS(scaled residual) for dose group nearest the BMD</td>
-                        <td>{scaled_residual.bmd4}</td>
+                        <td>{1}</td>
                     </tr>
                     <tr>
                         <td>Maximum scaled residual for dose group nearest the BMD</td>
-                        <td>{scaled_residual.bmd5}</td>
+                        <td>{1}</td>
                     </tr>
                     <tr>
                         <td>Maximum ABS(scaled residual) for dose group nearest the BMD</td>
-                        <td>{scaled_residual.bmd6}</td>
+                        <td>{1}</td>
                     </tr>
                 </tbody>
             </table>
@@ -46,7 +45,7 @@ class ScaledResidual extends Component {
     }
 }
 ScaledResidual.propTypes = {
-    scaled_residual: PropTypes.object,
+    model: PropTypes.object,
 };
 
 export default ScaledResidual;

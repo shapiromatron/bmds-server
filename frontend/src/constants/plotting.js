@@ -253,7 +253,7 @@ export const getDoseLabel = function(dataset) {
             title: {
                 text: title,
             },
-            margin: {l: 100, r: 5, t: 30, b: 40},
+            margin: {l: 100, r: 5, t: 35, b: 65},
             showlegend: false,
             xaxis: {
                 showline: true,

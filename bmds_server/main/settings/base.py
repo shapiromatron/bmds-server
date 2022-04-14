@@ -187,7 +187,7 @@ REST_FRAMEWORK = {
         "rest_framework.throttling.AnonRateThrottle",
         "rest_framework.throttling.UserRateThrottle",
     ),
-    "DEFAULT_THROTTLE_RATES": {"anon": "10/minute", "user": "120/minute"},
+    "DEFAULT_THROTTLE_RATES": {"anon": "20/minute", "user": "120/minute"},
     "DEFAULT_AUTHENTICATION_CLASSES": (
         "rest_framework.authentication.TokenAuthentication",
         "bmds_server.common.auth.SessionCsrfAuthentication",

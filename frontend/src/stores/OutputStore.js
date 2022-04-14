@@ -10,6 +10,8 @@ import {
     colorCodes,
     bmaColor,
     getBayesianBMDLine,
+    getLollipopDataset,
+    getLollipopPlotLayout,
 } from "../constants/plotting";
 
 class OutputStore {
@@ -272,6 +274,44 @@ class OutputStore {
     }
     @action.bound drPlotRemoveHover() {
         this.drModelHover = null;
+    }
+    @computed get drFrequentistLollipopPlotDataset() {
+        let plotData = [];
+        let models = this.selectedOutput.frequentist.models;
+        models.map(model => {
+            let dataArray = [];
+            let modelArray = new Array(3);
+            modelArray.fill(model.name);
+            dataArray.push(model.results.bmdl);
+            dataArray.push(model.results.bmd);
+            dataArray.push(model.results.bmdu);
+            let data = getLollipopDataset(dataArray, modelArray, model.name);
+            plotData.push(data);
+        });
+        return plotData;
+    }
+    @computed get drBayesianLollipopPlotDataset() {
+        let plotData = [];
+        let models = this.selectedOutput.bayesian.models;
+        models.map(model => {
+            let dataArray = [];
+            let modelArray = new Array(3);
+            modelArray.fill(model.name);
+            dataArray.push(model.results.bmdl);
+            dataArray.push(model.results.bmd);
+            dataArray.push(model.results.bmdu);
+            let data = getLollipopDataset(dataArray, modelArray, model.name);
+            plotData.push(data);
+        });
+        return plotData;
+    }
+
+    @computed get drFrequentistLollipopPlotLayout() {
+        return getLollipopPlotLayout("Frequentist bmd/bmdl/bmdu Plot", this.selectedDataset);
+    }
+
+    @computed get drBayesianLollipopPlotLayout() {
+        return getLollipopPlotLayout("Bayesian bmd/bmdl/bmdu Plot", this.selectedDataset);
     }
     // end dose-response plotting data methods
 

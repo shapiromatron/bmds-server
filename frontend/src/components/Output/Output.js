@@ -2,8 +2,11 @@ import React, {Component} from "react";
 import {inject, observer} from "mobx-react";
 import PropTypes from "prop-types";
 
+import {MODEL_NESTED_DICHOTOMOUS} from "../../constants/mainConstants";
+
 import ModelDetailModal from "../IndividualModel/ModelDetailModal";
 import FrequentistResultTable from "./FrequentistResultTable";
+import NestedDichotomousResultTable from "./NestedDichotomous/ResultTable";
 import BayesianResultTable from "./BayesianResultTable";
 import DatasetTable from "../Data/DatasetTable";
 import SelectModel from "./SelectModel";
@@ -22,7 +25,8 @@ class Output extends Component {
                 selectedOutputErrorMessage,
                 selectedFrequentist,
                 selectedBayesian,
-            } = outputStore;
+            } = outputStore,
+            modelType = outputStore.getModelType;
 
         if (selectedOutputErrorMessage) {
             return (
@@ -53,7 +57,11 @@ class Output extends Component {
                     <div className="row">
                         <div className="col-lg-8">
                             <h4>Frequentist Model Results</h4>
-                            <FrequentistResultTable />
+                            {modelType === MODEL_NESTED_DICHOTOMOUS ? (
+                                <NestedDichotomousResultTable />
+                            ) : (
+                                <FrequentistResultTable />
+                            )}
                             {canEdit ? <SelectModel /> : null}
                         </div>
                         <div className="align-items-center d-flex col-lg-4">

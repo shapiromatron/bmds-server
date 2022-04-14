@@ -83,16 +83,14 @@ class IndividualModelBody extends Component {
                         </Col>
                     </Row>
                 ) : null}
-                {dtype != dc.Dtype.NESTED_DICHOTOMOUS ? (
-                    <Row>
-                        <Col xs={4} style={{maxHeight: "50vh", overflowY: "scroll"}}>
-                            <CDFTable bmd_dist={model.results.fit.bmd_dist} />
-                        </Col>
-                        <Col xs={8}>
-                            <CDFPlot dataset={dataset} cdf={model.results.fit.bmd_dist} />
-                        </Col>
-                    </Row>
-                ) : null}
+                <Row>
+                    <Col xs={4} style={{maxHeight: "50vh", overflowY: "scroll"}}>
+                        <CDFTable bmd_dist={model.results.fit.bmd_dist} />
+                    </Col>
+                    <Col xs={8}>
+                        <CDFPlot dataset={dataset} cdf={model.results.fit.bmd_dist} />
+                    </Col>
+                </Row>
             </Modal.Body>
         );
     }

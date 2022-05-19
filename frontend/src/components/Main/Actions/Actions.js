@@ -76,9 +76,9 @@ class Actions extends Component {
                             <div className="dropdown-divider"></div>
                         </>
                     ) : null}
-                    {mainStore.hasOutputs ? (
+                    <span className="dropdown-header">Reporting</span>
+                    {mainStore.analysisSavedAndValidated && mainStore.hasOutputs ? (
                         <>
-                            <span className="dropdown-header">Reporting</span>
                             <Button
                                 className="dropdown-item"
                                 onClick={() => mainStore.downloadReport("excelUrl")}
@@ -102,7 +102,9 @@ class Actions extends Component {
                                 &nbsp;Download analysis
                             </a>
                         </>
-                    ) : null}
+                    ) : (
+                        <p className="text-muted pl-4 mb-0">Please save and execute analysis.</p>
+                    )}
                 </div>
             </div>
         );

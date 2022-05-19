@@ -29,7 +29,7 @@ class TabularDatasetModal extends Component {
                             className="form-control"
                             rows={16}
                             onChange={dataStore.changeDatasetFromModal}
-                            value={dataStore.getSelectedDataTabularForm}
+                            value={dataStore.tabularModalText}
                         />
 
                         <p className="text-muted">

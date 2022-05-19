@@ -30,8 +30,7 @@ const areAllModelsChecked = function(modelType, type, models) {
 
 const ModelsCheckBoxHeader = observer(props => {
     const {store} = props,
-        content =
-            "Models were previewed in BMDS 3.2 and will be formally peer reviewed. EPA plans to release the final models in 2022.",
+        content = "Models were previewed in BMDS Excel 3.2 and will be formally peer reviewed.",
         title = "Bayesian Model Averaging",
         {hasBayesianModels} = store,
         isContinuous = store.getModelType === mc.MODEL_CONTINUOUS,

@@ -243,6 +243,12 @@ class MainStore {
         reader.readAsText(file);
         reader.onload = e => {
             let settings = JSON.parse(e.target.result);
+            /*
+            Set `inputs_valid` to false to show that the data has not yet been saved and validated
+            from the server. This is required so that even though you can view results in the
+            user interface, you cannot download reports or other things from the server.
+            */
+            settings.inputs_valid = false;
             this.updateModelStateFromApi(settings);
         };
     }
@@ -332,7 +338,7 @@ class MainStore {
         );
     }
     @computed get hasOutputs() {
-        return this.executionOutputs !== null;
+        return _.isArray(this.executionOutputs);
     }
 
     @computed get isMultiTumor() {

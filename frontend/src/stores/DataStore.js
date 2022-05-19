@@ -257,11 +257,21 @@ class DataStore {
     @observable tabularModalData = null;
     @observable tabularModalDataValidated = false;
     @action.bound toggleDatasetModal() {
-        this.showTabularModal = !this.showTabularModal;
+        const getDefaultText = () => {
+                const expectedColumns = columns[this.selectedDataset.dtype],
+                    value = _.map(this.getMappedArray, row => {
+                        return _.map(expectedColumns, col => row[col].toString()).join("\t");
+                    }).join("\n");
+                return value;
+            },
+            willShow = !this.showTabularModal,
+            tabularModalText = willShow ? getDefaultText() : "";
+
         this.tabularModalDataValidated = false;
-        this.tabularModalText = "";
+        this.tabularModalText = tabularModalText;
         this.tabularModalError = "";
         this.tabularModalData = null;
+        this.showTabularModal = willShow;
     }
     @action.bound changeDatasetFromModal(text) {
         text = text.trim();
@@ -299,14 +309,6 @@ class DataStore {
         this.datasets[index] = dataset;
         this.updateOptionDegree(dataset);
         this.toggleDatasetModal();
-    }
-
-    @computed get getSelectedDataTabularForm() {
-        const expectedColumns = columns[this.selectedDataset.dtype],
-            value = _.map(this.getMappedArray, row => {
-                return _.map(expectedColumns, col => row[col].toString()).join("\t");
-            }).join("\n");
-        return value;
     }
     // *** END TABULAR MODAL DATASET ***
 }

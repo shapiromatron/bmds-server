@@ -29,13 +29,10 @@ class Error401(TemplateView):
 class AppLoginView(LoginView):
     def dispatch(self, request, *args, **kwargs):
         if request.user.is_authenticated:
-            print("a")
             return HttpResponseRedirect(settings.LOGIN_REDIRECT_URL)
         if settings.AUTH_PROVIDERS == {AuthProvider.external}:
-            print("b")
             url = reverse("external_auth")
             return HttpResponseRedirect(url)
-        print("c")
         return super().dispatch(request, *args, **kwargs)
 
 

@@ -164,6 +164,8 @@ LOGGING = {
 # Session and authentication
 SESSION_ENGINE = "django.contrib.sessions.backends.cached_db"
 SESSION_COOKIE_AGE = int(os.getenv("SESSION_DURATION", "28800"))  # 8 hours
+SESSION_COOKIE_DOMAIN = os.getenv("DJANGO_SESSION_COOKIE_DOMAIN", None)
+SESSION_COOKIE_NAME = os.getenv("DJANGO_SESSION_COOKIE_NAME", "sessionid")
 
 # Celery
 CELERYD_HIJACK_ROOT_LOGGER = False

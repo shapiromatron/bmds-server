@@ -86,12 +86,14 @@ DATABASES = {
     }
 }
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
-LOGIN_URL = "admin:login"
+LOGIN_URL = "login"
+LOGIN_REDIRECT_URL = "home"
 LOGOUT_REDIRECT_URL = os.getenv("LOGOUT_REDIRECT", "home")
 
 
 # add randomness to url prefix to prevent easy access
 ADMIN_URL_PREFIX = "8v99wgnw7"
+ADMIN_ROOT = os.environ.get("ADMIN_ROOT", "")
 
 AUTH_PROVIDERS = {AuthProvider(p) for p in os.getenv("AUTH_PROVIDERS", "django").split("|")}
 AUTH_PASSWORD_VALIDATORS = [
@@ -108,7 +110,7 @@ USE_L10N = True
 USE_TZ = True
 
 EMAIL_SUBJECT_PREFIX = f"[{PROJECT_NAME}] "
-DEFAULT_FROM_EMAIL = f"webmaster@{PROJECT_NAME}.com"
+DEFAULT_FROM_EMAIL = f"admin@{PROJECT_NAME}.com"
 
 STATIC_URL = "/static/"
 STATICFILES_DIRS = [str(BASE_DIR / "static")]

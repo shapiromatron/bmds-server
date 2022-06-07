@@ -5,6 +5,7 @@ from .constants import SkinStyle
 
 def from_settings(request):
     return dict(
+        ADMIN_ROOT=settings.ADMIN_ROOT,
         SKIN=settings.SKIN,
         SkinStyleEnum=SkinStyle,
         SERVER_ROLE=settings.SERVER_ROLE,

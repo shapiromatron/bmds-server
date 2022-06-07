@@ -1,3 +1,4 @@
+import logging
 from pprint import pformat
 from textwrap import dedent
 from typing import Any, Dict
@@ -9,12 +10,15 @@ from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.views import LoginView, LogoutView
 from django.core.mail import mail_admins
 from django.http import HttpResponseRedirect
+from django.shortcuts import resolve_url
 from django.template.response import TemplateResponse
 from django.urls import reverse
 from django.utils.decorators import method_decorator
 from django.views.generic import TemplateView, View
 
 from ..main.constants import AuthProvider
+
+logger = logging.getLogger(__name__)
 
 
 class Error401Response(TemplateResponse):
@@ -32,7 +36,7 @@ class AppLoginView(LoginView):
             return HttpResponseRedirect(settings.LOGIN_REDIRECT_URL)
         if settings.AUTH_PROVIDERS == {AuthProvider.external}:
             url = reverse("external_auth")
-            return HttpResponseRedirect(url)
+            return HttpResponseRedirect(resolve_url(settings.LOGIN_REDIRECT_URL))
         return super().dispatch(request, *args, **kwargs)
 
 
@@ -100,6 +104,7 @@ class ExternalAuth(View):
             metadata = self.get_user_metadata(request)
         except Exception:
             self.mail_bad_headers(request)
+            logger.warning("Cannot fetch auth data; bad headers")
             return HttpResponseRedirect(reverse("401"))
         email = metadata.pop("email")
         username = metadata.pop("username")
@@ -108,17 +113,21 @@ class ExternalAuth(View):
             user = User.objects.get(username=username)
             # Ensure email in db matches that returned from service
             if user.email != email:
+                logger.warning(f"User already exists {username} / {email}")
                 self.mail_bad_auth(email, username)
                 return HttpResponseRedirect(reverse("401"))
         except User.DoesNotExist:
             # Ensure email is unique
             if User.objects.filter(email=email).exists():
+                logger.warning(f"User already exists {username} / {email}")
                 self.mail_bad_auth(email, username)
                 return HttpResponseRedirect(reverse("401"))
             # Create user
             user = User.objects.create_user(email=email, username=username, **metadata)
+            logger.info(f"Creating user {user.id}: {email}")
+        logger.info(f"Successfully logging in user {user}")
         login(request, user)
-        return HttpResponseRedirect(reverse("admin:index"))
+        return HttpResponseRedirect(resolve_url(settings.LOGIN_REDIRECT_URL))
 
 
 @method_decorator(staff_member_required, name="dispatch")

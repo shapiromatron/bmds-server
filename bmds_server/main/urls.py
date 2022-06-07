@@ -43,6 +43,9 @@ urlpatterns = [
     path("403/", TemplateView.as_view(template_name="403.html"), name="403"),
     path("404/", TemplateView.as_view(template_name="404.html"), name="404"),
     path("500/", TemplateView.as_view(template_name="500.html"), name="500"),
+    # auth
+    path("user/login/", common_views.AppLoginView.as_view(), name="login"),
+    path("user/logout/", common_views.AppLogoutView.as_view(), name="logout"),
 ]
 
 if settings.INCLUDE_ADMIN:

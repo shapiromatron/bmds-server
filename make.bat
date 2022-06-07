@@ -50,7 +50,7 @@ black . --check && flake8 .
 goto :eof
 
 :format-py
-black . && isort . && flake8 .
+black . && isort -q . && flake8 .
 goto :eof
 
 :lint-js

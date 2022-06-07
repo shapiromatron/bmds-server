@@ -6,7 +6,7 @@ from django.conf import settings
 from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth import get_user_model, login
 from django.contrib.auth.forms import AuthenticationForm
-from django.contrib.auth.views import LoginView
+from django.contrib.auth.views import LoginView, LogoutView
 from django.core.mail import mail_admins
 from django.http import HttpResponseRedirect
 from django.template.response import TemplateResponse
@@ -24,6 +24,20 @@ class Error401Response(TemplateResponse):
 class Error401(TemplateView):
     response_class = Error401Response
     template_name = "401.html"
+
+
+class AppLoginView(LoginView):
+    def dispatch(self, request, *args, **kwargs):
+        if request.user.is_authenticated:
+            return HttpResponseRedirect(settings.LOGIN_REDIRECT_URL)
+        if settings.AUTH_PROVIDERS == {AuthProvider.external}:
+            url = reverse("external_auth")
+            return HttpResponseRedirect(url)
+        return super().dispatch(request, *args, **kwargs)
+
+
+class AppLogoutView(LogoutView):
+    pass
 
 
 class AdminLoginView(LoginView):

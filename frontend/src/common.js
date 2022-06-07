@@ -32,5 +32,5 @@ export const simulateClick = function(el) {
         return <i className={bool ? "fa fa-check-square-o" : "fa fa-times-rectangle-o"}></i>;
     },
     getLabel = function(value, mapping) {
-        return _.find(mapping, d => d.value === value).label;
+        return _.find(mapping, d => d.value == value).label;
     };

@@ -96,8 +96,8 @@ class TestAnalysisSession:
                     "dtype": "D",
                     "metadata": {"id": 123},
                     "doses": list(range(num_doses)),
-                    "ns": list(range(num_doses)),
-                    "incidences": list(range(num_doses)),
+                    "ns": [10] * num_doses,
+                    "incidences": list(range(1, num_doses + 1)),
                 }
             ]
             assert len(data["datasets"][0]["doses"]) == num_doses

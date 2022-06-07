@@ -3,8 +3,8 @@
 set -xe
 
 manage.py clear_cache
-manage.py clearsessions
 manage.py migrate --noinput
+manage.py clearsessions
 manage.py collectstatic --noinput
 
 if [[ $LOAD_TEST_DB == "2" ]]; then

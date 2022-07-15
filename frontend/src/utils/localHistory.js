@@ -75,7 +75,8 @@ class LocalHistory {
             if (_.keys(data.history).length >= 120) {
                 data.history = _.chain(data.history)
                     .toPairs()
-                    .orderBy(["lastAccess"], ["desc"])
+                    .sortBy(d => d[1])
+                    .reverse()
                     .slice(0, 100)
                     .fromPairs()
                     .value();

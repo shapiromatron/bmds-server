@@ -2,7 +2,7 @@ import React from "react";
 import ReactDOM from "react-dom";
 import App from "./App";
 
-import tracker from "./utils/runTracker";
+import history from "./utils/localHistory";
 import {Provider} from "mobx-react";
 import rootStore from "./stores/RootStore";
 
@@ -22,9 +22,10 @@ const Root = (
 
 const appStartup = function(el) {
     ReactDOM.render(Root, el);
+    history.log();
 };
 
 window.app = {
     appStartup,
-    tracker,
+    history,
 };

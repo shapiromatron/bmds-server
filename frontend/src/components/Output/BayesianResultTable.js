@@ -35,7 +35,9 @@ class BayesianResultTable extends Component {
                         <th>BMDL</th>
                         <th>BMD</th>
                         <th>BMDU</th>
-                        <th>P Value</th>
+                        <th>
+                            <i>P</i>-Value
+                        </th>
                         <th>Scaled Residual for Dose Group near BMD</th>
                         <th>Scaled Residual for Control Dose Group</th>
                     </tr>

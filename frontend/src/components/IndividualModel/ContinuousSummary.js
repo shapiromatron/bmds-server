@@ -39,7 +39,7 @@ class ContinuousSummary extends Component {
                         <td>{ff(results.fit.loglikelihood)}</td>
                     </tr>
                     <tr>
-                        <td>model_df</td>
+                        <td>Model DOF</td>
                         <td>{ff(results.fit.model_df)}</td>
                     </tr>
                     <tr>

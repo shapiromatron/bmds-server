@@ -5,7 +5,7 @@ from django.middleware.csrf import get_token
 from django.shortcuts import get_object_or_404
 from django.template import RequestContext, Template
 from django.urls import reverse_lazy
-from django.views.generic import CreateView, DeleteView, DetailView, RedirectView
+from django.views.generic import CreateView, DeleteView, DetailView, RedirectView, TemplateView
 
 from . import forms, models
 from .utils import get_citation
@@ -30,6 +30,10 @@ class Home(CreateView):
         context["citation"] = get_citation()
         context["page"] = self._render_template(context)
         return context
+
+
+class AnalysisHistory(TemplateView):
+    template_name: str = "analysis/analysis_history.html"
 
 
 def get_analysis_or_404(pk: str, password: Optional[str] = "") -> Tuple[models.Analysis, bool]:

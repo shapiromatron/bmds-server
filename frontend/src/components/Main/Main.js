@@ -1,9 +1,9 @@
+import PropTypes from "prop-types";
 import React, {Component} from "react";
 
 import AnalysisForm from "./AnalysisForm/AnalysisForm";
 import ModelsCheckBoxList from "./ModelsForm/ModelsCheckBoxList";
 import OptionsFormList from "./OptionsForm/OptionsFormList";
-import PropTypes from "prop-types";
 
 import {inject, observer} from "mobx-react";
 import DatasetModelOptionList from "./DatasetModelOptionList/DatasetModelOptionList";

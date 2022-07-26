@@ -1,8 +1,9 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import App from "./App";
-
 import {Provider} from "mobx-react";
+
+import App from "./App";
+import history from "./utils/localHistory";
 import rootStore from "./stores/RootStore";
 
 const Root = (
@@ -20,9 +21,11 @@ const Root = (
 );
 
 const appStartup = function(el) {
+    history.log();
     ReactDOM.render(Root, el);
 };
 
 window.app = {
     appStartup,
+    history,
 };

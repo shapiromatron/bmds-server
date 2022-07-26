@@ -21,8 +21,8 @@ const Root = (
 );
 
 const appStartup = function(el) {
-    ReactDOM.render(Root, el);
     history.log();
+    ReactDOM.render(Root, el);
 };
 
 window.app = {

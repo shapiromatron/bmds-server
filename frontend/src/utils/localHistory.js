@@ -67,17 +67,19 @@ class LocalHistory {
     }
     log() {
         const data = this.getData(),
-            {protocol, host, pathname} = window.location;
+            {protocol, host, pathname} = window.location,
+            MAX_SIZE = 120,
+            TRIM_SIZE = 100;
         if (data.enabled) {
             const url = `${protocol}//${host}${pathname}`;
             data.history[url] = Date.now();
-            // trim 120 runs down to 100
-            if (_.keys(data.history).length >= 120) {
+            // trim MAX_SIZE runs down to TRIM_SIZE
+            if (_.keys(data.history).length >= MAX_SIZE) {
                 data.history = _.chain(data.history)
                     .toPairs()
                     .sortBy(d => d[1])
                     .reverse()
-                    .slice(0, 100)
+                    .slice(0, TRIM_SIZE)
                     .fromPairs()
                     .value();
             }

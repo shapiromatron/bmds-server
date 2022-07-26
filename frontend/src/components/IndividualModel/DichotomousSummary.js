@@ -40,7 +40,7 @@ class DichotomousSummary extends Component {
                     </tr>
                     <tr>
                         <td>
-                            <i>P</i>-Value
+                            <i>p</i>-value
                         </td>
                         <td>{fourDecimalFormatter(results.gof.p_value)}</td>
                     </tr>

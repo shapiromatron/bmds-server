@@ -57,7 +57,9 @@ def build_docx(
 
     p = report.document.add_paragraph()
     p.add_run("BMDS version: ").bold = True
-    p.add_run(analysis.inputs["bmds_version"] + "α2")  # TODO - change when live
+    p.add_run(
+        analysis.inputs["bmds_version"] + "α2"
+    )  # TODO - change when live # change now? should have rc?
 
     p = report.document.add_paragraph()
     p.add_run("BMDS online version: ").bold = True

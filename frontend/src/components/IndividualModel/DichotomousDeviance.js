@@ -22,7 +22,9 @@ class DichotomousDeviance extends Component {
                         <th>Num Params</th>
                         <th>Deviance</th>
                         <th>Test DF</th>
-                        <th>P Value</th>
+                        <th>
+                            <i>P</i>-Value
+                        </th>
                     </tr>
                 </thead>
                 <tbody>

@@ -39,15 +39,17 @@ class DichotomousSummary extends Component {
                         <td>{ff(results.fit.loglikelihood)}</td>
                     </tr>
                     <tr>
-                        <td>model_df</td>
-                        <td>{ff(results.fit.model_df)}</td>
-                    </tr>
-                    <tr>
-                        <td>p-value</td>
+                        <td>
+                            <i>P</i>-Value
+                        </td>
                         <td>{fourDecimalFormatter(results.gof.p_value)}</td>
                     </tr>
                     <tr>
-                        <td>DOF</td>
+                        <td>Model DOF</td>
+                        <td>{ff(results.fit.model_df)}</td>
+                    </tr>
+                    <tr>
+                        <td>Total DOF</td>
                         <td>{ff(results.fit.total_df)}</td>
                     </tr>
                     <tr>

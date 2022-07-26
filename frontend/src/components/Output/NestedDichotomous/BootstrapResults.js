@@ -31,7 +31,7 @@ class BootstrapResult extends Component {
                     </tr>
                     <tr>
                         <th>
-                            Combined <i>p</i>-value
+                            Combined <i>P</i>-Value
                         </th>
                         <td>{1}</td>
                     </tr>

@@ -249,7 +249,7 @@ class FrequentistResultTable extends Component {
                         <th>BMD</th>
                         <th>BMDU</th>
                         <th>
-                            <i>p</i>-value
+                            <i>P</i>-Value
                         </th>
                         <th>AIC</th>
                         <th>Scaled Residual for Dose Group near BMD</th>

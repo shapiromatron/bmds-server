@@ -14,7 +14,7 @@ class BootstrapRuns extends Component {
                     <tr>
                         <th>Run</th>
                         <th>
-                            <i>p</i>-value
+                            <i>P</i>-Value
                         </th>
                         <th>50th</th>
                         <th>90th</th>

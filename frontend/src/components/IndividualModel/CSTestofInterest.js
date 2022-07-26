@@ -21,7 +21,7 @@ class CSTestofInterest extends Component {
                         <th>Likelihood Ratio</th>
                         <th>DF</th>
                         <th>
-                            <i>p</i>-value
+                            <i>P</i>-Value
                         </th>
                     </tr>
                 </thead>

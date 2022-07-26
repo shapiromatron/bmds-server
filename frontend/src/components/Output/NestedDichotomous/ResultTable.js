@@ -34,7 +34,7 @@ class ResultTable extends Component {
                         <th>BMD</th>
                         <th>BMDU</th>
                         <th>
-                            <i>p</i>-value
+                            <i>P</i>-Value
                         </th>
                         <th>AIC</th>
                         <th>Unnormalized Log Posterior Probability</th>

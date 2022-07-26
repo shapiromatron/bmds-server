@@ -50,7 +50,7 @@ class RuleRow extends Component {
                         value={rule.failure_bin}
                     />
                 </td>
-                <td>{ruleLookup.notes(rule.threshold)}</td>
+                <td dangerouslySetInnerHTML={{__html: ruleLookup.notes(rule.threshold)}} />
             </tr>
         ) : (
             <tr>
@@ -66,7 +66,7 @@ class RuleRow extends Component {
                 </td>
                 <td>{_.isNumber(rule.threshold) ? rule.threshold : "-"}</td>
                 <td>{BIN_NAMES[rule.failure_bin]}</td>
-                <td>{ruleLookup.notes(rule.threshold)}</td>
+                <td dangerouslySetInnerHTML={{__html: ruleLookup.notes(rule.threshold)}} />
             </tr>
         );
     }

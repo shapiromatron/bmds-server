@@ -88,7 +88,7 @@ export const RULES = Object.freeze({
             enabledNested: true,
         },
         [RULES.VARIANCE_TYPE]: {
-            notes: val => `Constant variance test failed (Test 2 p-value < ${val})`,
+            notes: val => `Constant variance test failed (Test 2 <i>P</i>-Value < ${val})`,
             name: "Constant Variance",
             hasThreshold: true,
             enabledContinuous: true,
@@ -97,7 +97,7 @@ export const RULES = Object.freeze({
         },
         [RULES.VARIANCE_FIT]: {
             name: "Non-Constant Variance",
-            notes: val => `Non-Constant variance test failed (Test 3 p-value < ${val})`,
+            notes: val => `Non-Constant variance test failed (Test 3 <i>P</i>-Value < ${val})`,
             hasThreshold: true,
             enabledContinuous: true,
             enabledDichotomous: false,
@@ -105,7 +105,7 @@ export const RULES = Object.freeze({
         },
         [RULES.GOF]: {
             name: "Goodness of fit p-test",
-            notes: val => `Goodness of fit p-value < ${val} `,
+            notes: val => `Goodness of fit <i>P</i>-Value < ${val} `,
             hasThreshold: true,
             enabledContinuous: true,
             enabledDichotomous: true,
@@ -113,7 +113,7 @@ export const RULES = Object.freeze({
         },
         [RULES.GOF_CANCER]: {
             name: "Goodness of fit p-test (cancer)",
-            notes: val => `Goodness of fit p-value < ${val}`,
+            notes: val => `Goodness of fit <i>P</i>-Value < ${val}`,
             hasThreshold: true,
             enabledContinuous: false,
             enabledDichotomous: true,

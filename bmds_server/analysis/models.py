@@ -237,7 +237,7 @@ class Analysis(models.Model):
             analysis_id=str(self.id),
             analysis_schema_version="1.0",
             bmds_server_version=settings.COMMIT.sha,
-            bmds_python_version=bmds.__version__,
+            bmds_python_version=outputs[0]["frequentist"]["version"],
             outputs=outputs,
         )
         self.outputs = obj

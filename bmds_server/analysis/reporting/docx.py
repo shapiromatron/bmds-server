@@ -57,6 +57,9 @@ def build_docx(
 
     p = report.document.add_paragraph()
     p.add_run("BMDS version: ").bold = True
+    import pdb
+
+    pdb.set_trace()
     p.add_run(
         analysis.inputs["bmds_version"] + "α2"
     )  # TODO - change when live # change now? should have rc?

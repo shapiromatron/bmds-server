@@ -1,5 +1,6 @@
-from typing import List
+from typing import List, Optional
 
+from bmds.bmds3.types.sessions import VersionSchema
 from pydantic import BaseModel
 from pydantic.schema import schema as pyschema
 from rest_framework.schemas.openapi import SchemaGenerator
@@ -14,6 +15,22 @@ class EditKeySchema(BaseModel):
 class WrappedAnalysisSelectedSchema(BaseModel):
     editKey: str
     data: AnalysisSelectedSchema
+
+
+class AnalysisSessionSchema(BaseModel):
+    dataset_index: int
+    option_index: int
+    frequentist: Optional[dict]
+    bayesian: Optional[dict]
+    error: Optional[str]
+
+
+class AnalysisOutput(BaseModel):
+    analysis_id: str
+    analysis_schema_version: str = "1.0"
+    bmds_server_version: str
+    bmds_python_version: Optional[VersionSchema]
+    outputs: list[AnalysisSessionSchema]
 
 
 def add_schemas(schema: dict, models: List):

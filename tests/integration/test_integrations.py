@@ -13,7 +13,7 @@ class RunBmds3:
     skip_reason = "DLLs not present on CI"
 
 
-SKIP_INTEGRATION = os.environ.get("BMDS_INTEGRATION_TESTS") is None
+SKIP_INTEGRATION = os.environ.get("INTEGRATION_TESTS") is None
 BROWSER = os.environ.get("BROWSER", "firefox")  # default to firefox; seems more stable
 CAN_EXECUTE = RunBmds3.should_run
 

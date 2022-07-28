@@ -182,7 +182,7 @@ Make sure your javascript has been compiled or you are running the webpack serve
 
 .. code-block:: bash
 
-    export BMDS_INTEGRATION_TESTS=1
+    export INTEGRATION_TESTS=1
     export SHOW_BROWSER=1            # or 0 for headless
     export BROWSER="firefox"         # or "chrome"
     py.test -sv tests/integration/ --pdb

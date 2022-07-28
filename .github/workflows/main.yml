@@ -83,10 +83,6 @@ jobs:
     needs: [backend, frontend]
     runs-on: ubuntu-20.04
 
-    container:
-      image: python:3.9-slim
-      options: --network-alias container
-
     services:
       postgres:
         image: postgres:12-alpine
@@ -98,26 +94,21 @@ jobs:
         - 5432:5432
         options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
 
-      selenium-server:
-        image: selenium/standalone-firefox:latest
-        ports:
-        - 4444:4444
-
     env:
-      DJANGO_DB_HOST: postgres
+      DJANGO_DB_HOST: localhost
       DJANGO_DB_NAME: bmds-online-test
-      DJANGO_DB_PORT: 5432
       DJANGO_DB_PW: password
       DJANGO_DB_USER: bmds
-      BMDS_INTEGRATION_TESTS: 1
-      BROWSER: firefox
-      LIVESERVER_HOST: container
+      INTEGRATION_TESTS: 1
+      LIVESERVER_HOST: localhost
       LIVESERVER_PORT: 8000
-      SELENIUM_HOST: selenium-server
-      SELENIUM_PORT: 4444
 
     steps:
     - uses: actions/checkout@v2
+    - uses: actions/setup-python@v2
+      with:
+        python-version: '3.9'
+        architecture: 'x64'
     - name: try to restore pip cache
       uses: actions/cache@v2
       with:
@@ -132,22 +123,21 @@ jobs:
         path: bmds_server
     - name: install
       run: |
-        apt-get update
-        apt-get install -y git
         pip install -U pip
         pip install -r requirements/ci.txt
+        playwright install --with-deps chromium
     # https://github.community/t/how-to-retry-a-failed-step-in-github-actions-workflow/125880
-    - name: run selenium tests
+    - name: run integration tests
       id: test
       continue-on-error: true
       run: |
-        py.test -sv tests/integration/
-    - name: run selenium tests (retry)
+        INTEGRATION_TESTS=1 py.test -sv tests/integration/
+    - name: run integration tests (retry)
       if: steps.test.outcome=='failure'
       id: retry
       continue-on-error: true
       run: |
-        py.test -sv tests/integration/
+        INTEGRATION_TESTS=1 py.test -sv tests/integration/
     - name: set status
       if: always()
       run: |

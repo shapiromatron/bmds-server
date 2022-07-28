@@ -38,6 +38,7 @@ class AnalysisForm extends Component {
                 <form className="bg-custom p-3 mt-2">
                     <div className="form-group">
                         <TextInput
+                            id="analysis_name"
                             label="Analysis Name"
                             value={mainStore.analysis_name}
                             onChange={mainStore.changeAnalysisName}
@@ -45,6 +46,7 @@ class AnalysisForm extends Component {
                     </div>
                     <div className="form-group">
                         <TextAreaInput
+                            id="analysis_description"
                             label="Analysis Description"
                             value={mainStore.analysis_description}
                             onChange={mainStore.changeAnalysisDescription}
@@ -52,6 +54,7 @@ class AnalysisForm extends Component {
                     </div>
                     <div className="form-group">
                         <SelectInput
+                            id="analysis_model_type"
                             label="Model Type"
                             onChange={mainStore.changeDatasetType}
                             value={mainStore.model_type}
@@ -62,7 +65,7 @@ class AnalysisForm extends Component {
                     {mainStore.errorMessage ? (
                         <div className="alert alert-danger">{mainStore.errorMessage}</div>
                     ) : null}
-                    <div className="card bg-light">
+                    <div id="controlPanel" className="card bg-light">
                         {mainStore.isExecuting ? (
                             <div className="card-body">
                                 <Button

@@ -16,6 +16,7 @@ const areAllModelsChecked = function(modelType, type, models) {
             <th>
                 <label className="m-0">
                     <CheckboxInput
+                        id={`select_all_${type}`}
                         disabled={disabled}
                         onChange={value => store.enableAll(type, value)}
                         checked={areAllModelsChecked(store.getModelType, type, store.models)}

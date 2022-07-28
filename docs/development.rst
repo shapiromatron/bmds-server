@@ -176,15 +176,27 @@ This is an optional step in development, but required in production. To run work
 Integration tests
 -----------------
 
-Integration tests use selenium and Firefox or Chrome for for testing. By default, integration tests are skipped. Firefox appears to be more stable based on initial investigation for these tests To run, you'll need to set a few environment variables.
+Integration tests use playwright_. By default, integration tests are skipped when running pytest locally by default, but are always executed in github actions. To run:
 
-Make sure your javascript has been compiled or you are running the webpack server before running integration tests locally.
+.. _playwright: https://playwright.dev/python/
+
+On mac/linux:
 
 .. code-block:: bash
 
-    export INTEGRATION_TESTS=1
-    export SHOW_BROWSER=1            # or 0 for headless
-    export BROWSER="firefox"         # or "chrome"
-    py.test -sv tests/integration/ --pdb
+    # to run all
+    make test-integration
 
-When writing these tests, it's often easiest to write the tests in an interactive scripting environment like ipython or jupyter. This allows you to interact with the DOM and the requests much easier than manually re-running tests as they're written.
+    # or a custom method to run a single test
+    INTEGRATION_TESTS=1 py.test -sv tests/integration/test_dichotomous.py --pdb
+
+When editing integration tests, use the interactive mode to capture user operations:
+
+.. code-block:: bash
+
+    make test-integration-debug
+
+    # use set instead of export on windows
+    export INTEGRATION_TESTS=1
+    export PWDEBUG=1
+    py.test -sv tests/integration/test_dichotomous.py --pdb

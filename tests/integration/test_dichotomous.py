@@ -30,21 +30,21 @@ class TestDichotomousIntegration(PlaywrightTestCase):
         if self.can_execute:
             page.locator("text=Run Analysis").click()
 
-        page.locator('a:has-text("Output")').click()
-        page.locator("#freq-result-0").click()
-        expect(page.locator("#info-table tbody tr")).to_have_count(3)
-        page.locator("#close-modal").click()
+            page.locator('a:has-text("Output")').click()
+            page.locator("#freq-result-0").click()
+            expect(page.locator("#info-table tbody tr")).to_have_count(3)
+            page.locator("#close-modal").click()
 
-        page.locator("#bayesian-result-0").click()
-        expect(page.locator("#info-table tbody tr")).to_have_count(3)
-        page.locator("#close-modal").click()
+            page.locator("#bayesian-result-0").click()
+            expect(page.locator("#info-table tbody tr")).to_have_count(3)
+            page.locator("#close-modal").click()
 
-        # check model average renders
-        page.locator("text=Model Average").click()
-        expect(page.locator("#ma-result-summary tbody tr")).to_have_count(3)
-        page.locator("#close-modal").click()
+            # check model average renders
+            page.locator("text=Model Average").click()
+            expect(page.locator("#ma-result-summary tbody tr")).to_have_count(3)
+            page.locator("#close-modal").click()
 
-        # TODO - add best-fitting model
+            # TODO - add best-fitting model
 
         page.locator('a:has-text("Logic")').click()
         expect(page.locator("#decision-logic tbody tr")).to_have_count(4)

@@ -44,7 +44,7 @@ class ContinuousSummary extends Component {
                     </tr>
                     <tr>
                         <td>Chi-squared</td>
-                        <td>{results.fit.chisq}</td>
+                        <td>{ff(results.fit.chisq)}</td>
                     </tr>
                 </tbody>
             </table>

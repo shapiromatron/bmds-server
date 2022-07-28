@@ -132,13 +132,13 @@ jobs:
       id: test
       continue-on-error: true
       run: |
-        INTEGRATION_TESTS=1 py.test -sv tests/integration2/
+        py.test -sv tests/integration/
     - name: run integration tests (retry)
       if: steps.test.outcome=='failure'
       id: retry
       continue-on-error: true
       run: |
-        INTEGRATION_TESTS=1 py.test -sv tests/integration2/
+        py.test -sv tests/integration/
     - name: set status
       if: always()
       run: |

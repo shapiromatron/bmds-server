@@ -42,10 +42,6 @@ class ContinuousSummary extends Component {
                         <td>Model DOF</td>
                         <td>{ff(results.fit.model_df)}</td>
                     </tr>
-                    <tr>
-                        <td>Chi-squared</td>
-                        <td>{ff(results.fit.chisq)}</td>
-                    </tr>
                 </tbody>
             </table>
         );

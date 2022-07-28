@@ -80,8 +80,7 @@ jobs:
 
   integration:
     name: integration
-    # needs: [backend, frontend]  # TODO - remove
-    needs: [frontend]  # TODO - remove
+    needs: [backend, frontend]
     runs-on: ubuntu-20.04
 
     services:

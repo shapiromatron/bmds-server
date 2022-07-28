@@ -1,12 +1,8 @@
-import os
 from pathlib import Path
 
 import pytest
 from bmds.bmds3.recommender import RecommenderSettings
 from django.core.management import call_command
-
-CI = os.environ.get("CI") == "true"
-SHOW_BROWSER = bool(os.environ.get("SHOW_BROWSER", None))
 
 
 @pytest.fixture(scope="session", autouse=True)

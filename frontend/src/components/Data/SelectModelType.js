@@ -13,26 +13,22 @@ class SelectModelType extends Component {
         const {dataStore} = this.props;
         return (
             <div className="model-type mb-2">
-                <LabelInput label="New dataset" htmlFor="idFilteredDatasets" />
-                <div className="input-group">
-                    <SelectInput
-                        id="idFilteredDatasets"
-                        onChange={value => dataStore.setModelType(value)}
-                        value={dataStore.model_type}
-                        choices={dataStore.getFilteredDatasetTypes.map(item => {
-                            return {value: item.value, text: item.name};
-                        })}
-                    />
-                    <div className="input-group-append">
-                        <Button
-                            className="btn btn-primary btn-sm float-right"
-                            disabled={dataStore.checkDatasetsLength}
-                            faClass="fa fa-fw fa-plus"
-                            text="Create"
-                            onClick={dataStore.addDataset}
-                        />
-                    </div>
-                </div>
+                <Button
+                    className="btn btn-primary btn-sm float-right"
+                    disabled={dataStore.checkDatasetsLength}
+                    faClass="fa fa-fw fa-plus-square"
+                    text="New"
+                    onClick={dataStore.addDataset}
+                />
+                <LabelInput label="New dataset" htmlFor="idFilteredDatasets" />{" "}
+                <SelectInput
+                    id="idFilteredDatasets"
+                    onChange={value => dataStore.setModelType(value)}
+                    value={dataStore.model_type}
+                    choices={dataStore.getFilteredDatasetTypes.map(item => {
+                        return {value: item.value, text: item.name};
+                    })}
+                />
             </div>
         );
     }

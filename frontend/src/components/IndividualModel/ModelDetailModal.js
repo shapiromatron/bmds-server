@@ -13,7 +13,7 @@ import GoodnessFit from "./GoodnessFit";
 import CDFTable from "./CDFTable";
 import CDFPlot from "./CDFPlot";
 import DoseResponsePlot from "../common/DoseResponsePlot";
-import CSTestofInterest from "./CSTestofInterest";
+import CSTestOfInterest from "./CSTestOfInterest";
 import DichotomousSummary from "./DichotomousSummary";
 import DichotomousDeviance from "./DichotomousDeviance";
 import ContinuousSummary from "./ContinuousSummary";
@@ -36,18 +36,18 @@ class IndividualModelBody extends Component {
         return (
             <Modal.Body>
                 <Row>
-                    <Col xs={4}>
+                    <Col xl={4}>
                         <InfoTable />
                     </Col>
-                    <Col xs={3}>
+                    <Col xl={3}>
                         <ModelOptionsTable dtype={dtype} model={model} />
                     </Col>
-                    <Col xs={5}>
+                    <Col xl={5}>
                         <ParameterPriorTable priors={model.settings.priors} />
                     </Col>
                 </Row>
                 <Row>
-                    <Col xs={4}>
+                    <Col xl={4}>
                         {dtype == dc.Dtype.DICHOTOMOUS ? (
                             <DichotomousSummary store={outputStore} />
                         ) : null}
@@ -56,7 +56,7 @@ class IndividualModelBody extends Component {
                         ) : null}
                         <ModelParameters parameters={model.results.parameters} />
                     </Col>
-                    <Col xs={8}>
+                    <Col xl={8}>
                         <DoseResponsePlot
                             layout={outputStore.drIndividualPlotLayout}
                             data={outputStore.drIndividualPlotData}
@@ -64,30 +64,30 @@ class IndividualModelBody extends Component {
                     </Col>
                 </Row>
                 <Row>
-                    <Col xs={12}>
+                    <Col xl={12}>
                         <GoodnessFit store={outputStore} />
                     </Col>
                 </Row>
                 {dtype == dc.Dtype.DICHOTOMOUS ? (
                     <Row>
-                        <Col xs={12}>
+                        <Col xl={12}>
                             <DichotomousDeviance store={outputStore} />
                         </Col>
                     </Row>
                 ) : null}
                 {dtype == dc.Dtype.CONTINUOUS ? (
                     <Row>
-                        <Col xs={12}>
+                        <Col xl={12}>
                             <ContinuousDeviance store={outputStore} />
-                            <CSTestofInterest store={outputStore} />
+                            <CSTestOfInterest store={outputStore} />
                         </Col>
                     </Row>
                 ) : null}
                 <Row>
-                    <Col xs={4} style={{maxHeight: "50vh", overflowY: "scroll"}}>
+                    <Col xl={4} style={{maxHeight: "50vh", overflowY: "scroll"}}>
                         <CDFTable bmd_dist={model.results.fit.bmd_dist} />
                     </Col>
-                    <Col xs={8}>
+                    <Col xl={8}>
                         <CDFPlot dataset={dataset} cdf={model.results.fit.bmd_dist} />
                     </Col>
                 </Row>
@@ -109,10 +109,10 @@ class ModelAverageBody extends Component {
         return (
             <Modal.Body>
                 <Row>
-                    <Col xs={3}>
+                    <Col xl={3}>
                         <MaBenchmarkDose results={model.results} />
                     </Col>
-                    <Col>
+                    <Col xl={9}>
                         <DoseResponsePlot
                             layout={outputStore.drBayesianPlotLayout}
                             data={outputStore.drBayesianPlotData}
@@ -120,15 +120,15 @@ class ModelAverageBody extends Component {
                     </Col>
                 </Row>
                 <Row>
-                    <Col>
+                    <Col xl={12}>
                         <MaIndividualModels model_average={model} models={bayesian_models} />
                     </Col>
                 </Row>
                 <Row>
-                    <Col xs={4} style={{maxHeight: "50vh", overflowY: "scroll"}}>
+                    <Col xl={4} style={{maxHeight: "50vh", overflowY: "scroll"}}>
                         <CDFTable bmd_dist={model.results.bmd_dist} />
                     </Col>
-                    <Col xs={8}>
+                    <Col xl={8}>
                         <CDFPlot dataset={dataset} cdf={model.results.bmd_dist} />
                     </Col>
                 </Row>

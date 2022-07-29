@@ -5,7 +5,7 @@ import PropTypes from "prop-types";
 import {ff, fourDecimalFormatter} from "../../common";
 
 @observer
-class CSTestofInterest extends Component {
+class CSTestOfInterest extends Component {
     render() {
         const {store} = this.props,
             testInterest = store.modalModel.results.tests;
@@ -41,7 +41,7 @@ class CSTestofInterest extends Component {
         );
     }
 }
-CSTestofInterest.propTypes = {
+CSTestOfInterest.propTypes = {
     store: PropTypes.object,
 };
-export default CSTestofInterest;
+export default CSTestOfInterest;

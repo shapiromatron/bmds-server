@@ -13,9 +13,7 @@ class InfoTable extends Component {
             <table id="info-table" className="table table-sm table-bordered">
                 <thead>
                     <tr className="bg-custom">
-                        <th colSpan="2" className="text-center">
-                            Info
-                        </th>
+                        <th colSpan="2">Info</th>
                     </tr>
                 </thead>
                 <tbody>

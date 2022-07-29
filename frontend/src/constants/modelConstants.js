@@ -71,6 +71,7 @@ const modelsList = {
             frequentist_restricted: ["Multistage"],
             frequentist_unrestricted: [],
         },
-    };
+    },
+    hasDegrees = new Set(["Multistage", "Polynomial"]);
 
-export {allModelOptions, modelsList, models};
+export {allModelOptions, modelsList, models, hasDegrees};

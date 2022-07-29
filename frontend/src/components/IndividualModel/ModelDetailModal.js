@@ -13,7 +13,7 @@ import GoodnessFit from "./GoodnessFit";
 import CDFTable from "./CDFTable";
 import CDFPlot from "./CDFPlot";
 import DoseResponsePlot from "../common/DoseResponsePlot";
-import CSTestOfInterest from "./CSTestOfInterest";
+import ContinuousTestOfInterest from "./ContinuousTestOfInterest";
 import DichotomousSummary from "./DichotomousSummary";
 import DichotomousDeviance from "./DichotomousDeviance";
 import ContinuousSummary from "./ContinuousSummary";
@@ -79,7 +79,7 @@ class IndividualModelBody extends Component {
                     <Row>
                         <Col xl={12}>
                             <ContinuousDeviance store={outputStore} />
-                            <CSTestOfInterest store={outputStore} />
+                            <ContinuousTestOfInterest store={outputStore} />
                         </Col>
                     </Row>
                 ) : null}

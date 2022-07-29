@@ -3,6 +3,7 @@ import {observer} from "mobx-react";
 import PropTypes from "prop-types";
 import {priorClassLabels} from "../../constants/outputConstants";
 import {Dtype} from "../../constants/dataConstants";
+import {hasDegrees} from "../../constants/modelConstants";
 import {
     dichotomousBmrOptions,
     continuousBmrOptions,
@@ -13,7 +14,9 @@ import {ff, getLabel} from "../../common";
 @observer
 class ModelOptionsTable extends Component {
     render() {
-        const {dtype, model} = this.props;
+        const {dtype, model} = this.props,
+            priorClass = getLabel(model.settings.priors.prior_class, priorClassLabels),
+            isBayesian = priorClass === "Bayesian";
         let data = [];
 
         if (dtype == Dtype.DICHOTOMOUS) {
@@ -21,10 +24,12 @@ class ModelOptionsTable extends Component {
                 ["BMR Type", getLabel(model.settings.bmr_type, dichotomousBmrOptions)],
                 ["BMR", ff(model.settings.bmr)],
                 ["Alpha", ff(model.settings.alpha)],
-                ["Degree", ff(model.settings.degree)],
-                ["Samples", ff(model.settings.samples)],
-                ["Burn In", ff(model.settings.burnin)],
-                ["Prior Class", getLabel(model.settings.priors.prior_class, priorClassLabels)],
+                hasDegrees.has(model.model_class.verbose)
+                    ? ["Degree", ff(model.settings.degree)]
+                    : null,
+                ["Parameter Class", priorClass],
+                isBayesian ? ["Samples", ff(model.settings.samples)] : null,
+                isBayesian ? ["Burn In", ff(model.settings.burnin)] : null,
             ];
         } else if (dtype == Dtype.CONTINUOUS || dtype == Dtype.CONTINUOUS_INDIVIDUAL) {
             data = [
@@ -34,10 +39,12 @@ class ModelOptionsTable extends Component {
                 ["BMRF", ff(model.settings.bmr)],
                 ["Tail Probability", ff(model.settings.tail_prob)],
                 ["Alpha", ff(model.settings.alpha)],
-                ["Degree", ff(model.settings.degree)],
-                ["Samples", model.settings.samples],
-                ["Burn In", model.settings.burnin],
-                ["Prior Class", getLabel(model.settings.priors.prior_class, priorClassLabels)],
+                hasDegrees.has(model.model_class.verbose)
+                    ? ["Degree", ff(model.settings.degree)]
+                    : null,
+                ["Prior Class", priorClass],
+                isBayesian ? ["Samples", model.settings.samples] : null,
+                isBayesian ? ["Burn In", model.settings.burnin] : null,
             ];
         } else {
             throw "Unknown dtype";
@@ -52,6 +59,9 @@ class ModelOptionsTable extends Component {
                 </thead>
                 <tbody>
                     {data.map((d, i) => {
+                        if (!d) {
+                            return null;
+                        }
                         return (
                             <tr key={i}>
                                 <td>{d[0]}</td>

@@ -33,7 +33,7 @@ const modelsList = {
                 "Multistage",
                 "Weibull",
             ],
-            frequentist_unrestricted: ["Logistic", "LogProbit", "Probit"],
+            frequentist_unrestricted: ["Logistic", "LogProbit", "Probit", "Quantal Linear"],
         },
         [MODEL_NESTED_DICHOTOMOUS]: {
             frequentist_restricted: ["Nested Logistic"],

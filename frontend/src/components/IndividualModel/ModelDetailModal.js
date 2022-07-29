@@ -51,7 +51,7 @@ class IndividualModelBody extends Component {
                         {dtype == dc.Dtype.DICHOTOMOUS ? (
                             <DichotomousSummary store={outputStore} />
                         ) : null}
-                        {dtype == dc.Dtype.CONTINUOUS ? (
+                        {dtype == dc.Dtype.CONTINUOUS || dtype == dc.Dtype.CONTINUOUS_INDIVIDUAL ? (
                             <ContinuousSummary store={outputStore} />
                         ) : null}
                         <ModelParameters parameters={model.results.parameters} />

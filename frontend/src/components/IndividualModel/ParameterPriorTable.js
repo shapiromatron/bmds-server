@@ -1,6 +1,7 @@
 import React, {Component} from "react";
 import {observer} from "mobx-react";
 import PropTypes from "prop-types";
+import {ExponentialM3} from "../../constants/modelConstants";
 import {isFrequentist, priorTypeLabels} from "../../constants/outputConstants";
 
 const renderPriorRow = prior => {
@@ -30,8 +31,15 @@ import {ff, getLabel} from "../../common";
 @observer
 class ParameterPriorTable extends Component {
     render() {
-        const {priors} = this.props,
+        const {name, priors} = this.props,
             isFreq = isFrequentist(priors.prior_class),
+            filteredPriors = priors.priors.filter(d => {
+                // special-case - hide the `d` prior
+                if (name === ExponentialM3 && d.name === "d") {
+                    return false;
+                }
+                return true;
+            }),
             rowFunction = isFreq ? renderFrequentistRow : renderPriorRow;
 
         return (
@@ -59,7 +67,7 @@ class ParameterPriorTable extends Component {
                     )}
                 </thead>
                 <tbody>
-                    {priors.priors.map(rowFunction)}
+                    {filteredPriors.map(rowFunction)}
                     {priors.variance_priors ? priors.variance_priors.map(rowFunction) : null}
                 </tbody>
             </table>
@@ -68,6 +76,7 @@ class ParameterPriorTable extends Component {
 }
 
 ParameterPriorTable.propTypes = {
+    name: PropTypes.string.isRequired,
     priors: PropTypes.object.isRequired,
 };
 export default ParameterPriorTable;

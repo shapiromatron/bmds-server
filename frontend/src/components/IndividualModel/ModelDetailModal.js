@@ -43,7 +43,7 @@ class IndividualModelBody extends Component {
                         <ModelOptionsTable dtype={dtype} model={model} />
                     </Col>
                     <Col xl={5}>
-                        <ParameterPriorTable priors={model.settings.priors} />
+                        <ParameterPriorTable name={model.name} priors={model.settings.priors} />
                     </Col>
                 </Row>
                 <Row>
@@ -54,7 +54,7 @@ class IndividualModelBody extends Component {
                         {dtype == dc.Dtype.CONTINUOUS || dtype == dc.Dtype.CONTINUOUS_INDIVIDUAL ? (
                             <ContinuousSummary store={outputStore} />
                         ) : null}
-                        <ModelParameters parameters={model.results.parameters} />
+                        <ModelParameters name={model.name} parameters={model.results.parameters} />
                     </Col>
                     <Col xl={8}>
                         <DoseResponsePlot

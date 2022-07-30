@@ -28,14 +28,15 @@ class GoodnessFit extends Component {
                     </tr>
                 </thead>
                 <tbody>
-                    {dtype == Dtype.CONTINUOUS
+                    {dtype == Dtype.CONTINUOUS || dtype == Dtype.CONTINUOUS_INDIVIDUAL
                         ? gof.dose.map((item, i) => {
+                              const useFF = dtype === Dtype.CONTINUOUS_INDIVIDUAL;
                               return (
                                   <tr key={i}>
                                       <td>{item}</td>
                                       <td>{ff(gof.est_mean[i])}</td>
                                       <td>{ff(gof.calc_mean[i])}</td>
-                                      <td>{gof.obs_mean[i]}</td>
+                                      <td>{useFF ? ff(gof.obs_mean[i]) : gof.obs_mean[i]}</td>
                                       <td>{gof.size[i]}</td>
                                       <td>{ff(gof.residual[i])}</td>
                                   </tr>

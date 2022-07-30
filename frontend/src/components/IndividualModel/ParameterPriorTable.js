@@ -1,8 +1,11 @@
+import _ from "lodash";
 import React, {Component} from "react";
 import {observer} from "mobx-react";
 import PropTypes from "prop-types";
+
 import {ExponentialM3} from "../../constants/modelConstants";
 import {isFrequentist, priorTypeLabels} from "../../constants/outputConstants";
+import {ff, getLabel} from "../../common";
 
 const renderPriorRow = prior => {
         return (
@@ -27,20 +30,29 @@ const renderPriorRow = prior => {
         );
     };
 
-import {ff, getLabel} from "../../common";
 @observer
 class ParameterPriorTable extends Component {
     render() {
-        const {name, priors} = this.props,
-            isFreq = isFrequentist(priors.prior_class),
-            filteredPriors = priors.priors.filter(d => {
-                // special-case - hide the `d` prior
-                if (name === ExponentialM3 && d.name === "d") {
-                    return false;
-                }
-                return true;
-            }),
-            rowFunction = isFreq ? renderFrequentistRow : renderPriorRow;
+        const {name, parameters, priorClass} = this.props,
+            isFreq = isFrequentist(priorClass),
+            rowFunction = isFreq ? renderFrequentistRow : renderPriorRow,
+            rows = _.range(parameters.names.length)
+                .map(idx => {
+                    return {
+                        name: parameters.names[idx],
+                        type: parameters.prior_type[idx],
+                        initial_value: parameters.prior_initial_value[idx],
+                        stdev: parameters.prior_stdev[idx],
+                        min_value: parameters.prior_min_value[idx],
+                        max_value: parameters.prior_max_value[idx],
+                    };
+                })
+                .filter(d => {
+                    if (name === ExponentialM3 && d.name === "c") {
+                        return false;
+                    }
+                    return true;
+                });
 
         return (
             <table className="table table-sm table-bordered">
@@ -66,10 +78,7 @@ class ParameterPriorTable extends Component {
                         </tr>
                     )}
                 </thead>
-                <tbody>
-                    {filteredPriors.map(rowFunction)}
-                    {priors.variance_priors ? priors.variance_priors.map(rowFunction) : null}
-                </tbody>
+                <tbody>{rows.map(rowFunction)}</tbody>
             </table>
         );
     }
@@ -77,6 +86,7 @@ class ParameterPriorTable extends Component {
 
 ParameterPriorTable.propTypes = {
     name: PropTypes.string.isRequired,
-    priors: PropTypes.object.isRequired,
+    parameters: PropTypes.object.isRequired,
+    priorClass: PropTypes.number.isRequired,
 };
 export default ParameterPriorTable;

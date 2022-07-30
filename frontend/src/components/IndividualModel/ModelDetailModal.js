@@ -26,12 +26,13 @@ import * as dc from "../../constants/dataConstants";
 import Button from "../common/Button";
 
 @observer
-class IndividualModelBody extends Component {
+class ModelBody extends Component {
     render() {
         const {outputStore} = this.props,
             dataset = outputStore.selectedDataset,
             model = outputStore.modalModel,
-            dtype = dataset.dtype;
+            dtype = dataset.dtype,
+            priorClass = model.settings.priors.prior_class;
 
         return (
             <Modal.Body>
@@ -43,7 +44,11 @@ class IndividualModelBody extends Component {
                         <ModelOptionsTable dtype={dtype} model={model} />
                     </Col>
                     <Col xl={5}>
-                        <ParameterPriorTable name={model.name} priors={model.settings.priors} />
+                        <ParameterPriorTable
+                            name={model.name}
+                            parameters={model.results.parameters}
+                            priorClass={priorClass}
+                        />
                     </Col>
                 </Row>
                 <Row>
@@ -95,7 +100,7 @@ class IndividualModelBody extends Component {
         );
     }
 }
-IndividualModelBody.propTypes = {
+ModelBody.propTypes = {
     outputStore: PropTypes.object,
 };
 
@@ -158,7 +163,7 @@ class ModelDetailModal extends Component {
                 ? ModelAverageBody
                 : modelType === MODEL_NESTED_DICHOTOMOUS
                 ? NestedDichotomousModalBody
-                : IndividualModelBody;
+                : ModelBody;
 
         return (
             <Modal

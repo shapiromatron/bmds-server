@@ -91,9 +91,12 @@ LOGIN_REDIRECT_URL = "home"
 LOGOUT_REDIRECT_URL = os.getenv("LOGOUT_REDIRECT", "home")
 
 
-# add randomness to url prefix to prevent easy access
+# add randomness to admin url
 ADMIN_URL_PREFIX = "8v99wgnw7"
 ADMIN_ROOT = os.environ.get("ADMIN_ROOT", "")
+
+# add randomness to healthcheck url
+HEALTHCHECK_URL_PREFIX = os.getenv("HEALTHCHECK_URL_PREFIX", "e9eaf4dabac7")
 
 AUTH_PROVIDERS = {AuthProvider(p) for p in os.getenv("AUTH_PROVIDERS", "django").split("|")}
 AUTH_PASSWORD_VALIDATORS = [

@@ -49,6 +49,14 @@ test: ## This runs all of the tests.
 	@py.test
 	@npm --prefix ./frontend run test
 
+test-integration:  ## Run integration tests (requires `npm run start`)
+	@playwright install --with-deps chromium
+	@INTEGRATION_TESTS=1 py.test -sv tests/integration/
+
+test-integration-debug:  ## Run integration tests in debug mode (requires npm run start)
+	@playwright install --with-deps chromium
+	@INTEGRATION_TESTS=1 PWDEBUG=1 py.test -sv tests/integration/
+
 docs: ## generate Sphinx HTML documentation, including API docs
 	$(MAKE) -C docs clean
 	$(MAKE) -C docs html

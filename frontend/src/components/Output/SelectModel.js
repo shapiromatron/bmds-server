@@ -27,6 +27,7 @@ class SelectModelIndex extends Component {
             <form className="form-group row well py-2">
                 <div className="col-md-4">
                     <SelectInput
+                        id="selection_model"
                         label="Selected best-fitting model"
                         onChange={value => outputStore.saveSelectedModelIndex(parseInt(value))}
                         value={selectValue}
@@ -35,6 +36,7 @@ class SelectModelIndex extends Component {
                 </div>
                 <div className="col-md-4">
                     <TextAreaInput
+                        id="selection_notes"
                         label="Selection notes"
                         value={textValue}
                         onChange={outputStore.saveSelectedIndexNotes}
@@ -43,6 +45,7 @@ class SelectModelIndex extends Component {
                 <div className="col-md-4">
                     <label>&nbsp;</label>
                     <Button
+                        id="selection_submit"
                         className="btn btn-primary btn-block mt-1"
                         onClick={outputStore.saveSelectedModel}
                         text="Save model selection"

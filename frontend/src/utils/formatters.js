@@ -29,4 +29,15 @@ export const ff = function(value) {
         } else {
             return value.toFixed(4);
         }
+    },
+    parameterFormatter = function(value) {
+        if (value === 0) {
+            return value.toString();
+        } else if (value == BMDS_BLANK_VALUE || !_.isFinite(value)) {
+            return "-";
+        } else if (Math.abs(value) >= 1000 || Math.abs(value) <= 0.01) {
+            return value.toExponential(3);
+        } else {
+            return value.toPrecision(4);
+        }
     };

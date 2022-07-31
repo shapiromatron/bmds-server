@@ -3,7 +3,7 @@ import {observer} from "mobx-react";
 import PropTypes from "prop-types";
 
 import {ExponentialM3} from "../../constants/modelConstants";
-import {fourDecimalFormatter} from "../../common";
+import {parameterFormatter} from "../../utils/formatters";
 import {checkOrTimes} from "../../common";
 
 @observer
@@ -36,9 +36,9 @@ class ModelParameters extends Component {
                             <tr key={i}>
                                 <td>{parameters.names[i]}</td>
                                 <td>
-                                    {fourDecimalFormatter(parameters.values[i])}
-                                    <br />({fourDecimalFormatter(parameters.lower_ci[i])},&nbsp;
-                                    {fourDecimalFormatter(parameters.upper_ci[i])})
+                                    {parameterFormatter(parameters.values[i])}
+                                    <br />({parameterFormatter(parameters.lower_ci[i])},&nbsp;
+                                    {parameterFormatter(parameters.upper_ci[i])})
                                 </td>
                                 <td>{checkOrTimes(parameters.bounded[i])}</td>
                             </tr>

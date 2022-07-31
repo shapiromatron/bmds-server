@@ -24,7 +24,7 @@ class TestContinuousIntegration(PlaywrightTestCase):
 
         # view data tab
         page.locator('a:has-text("Data")').click()
-        page.locator("text=Create").click()
+        page.locator('button:has-text("New")').click()
         page.locator("text=Load an example dataset").click()
 
         # save current settings
@@ -54,7 +54,7 @@ class TestContinuousIntegration(PlaywrightTestCase):
         expect(page.locator("#decision-logic tbody tr")).to_have_count(4)
         expect(page.locator("#rule-table tbody tr")).to_have_count(22)
 
-        # TODO - check read only view and downloads
+        # TODO - add read-only views
 
     def test_dichotomous(self):
         page = self.page
@@ -76,7 +76,7 @@ class TestContinuousIntegration(PlaywrightTestCase):
 
         # view data tab
         page.locator('a:has-text("Data")').click()
-        page.locator("text=Create").click()
+        page.locator('button:has-text("New")').click()
         page.locator("text=Load an example dataset").click()
 
         # save current settings
@@ -117,4 +117,4 @@ class TestContinuousIntegration(PlaywrightTestCase):
         expect(page.locator("#decision-logic tbody tr")).to_have_count(4)
         expect(page.locator("#rule-table tbody tr")).to_have_count(22)
 
-        # TODO - check read only view and downloads
+        # TODO - add read-only views

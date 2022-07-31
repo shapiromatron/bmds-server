@@ -12,8 +12,8 @@ class DichotomousDeviance extends Component {
 
         return (
             <table className="table table-sm table-bordered">
-                <thead className="bg-custom">
-                    <tr>
+                <thead>
+                    <tr className="bg-custom">
                         <th colSpan="9">Analysis of Deviance</th>
                     </tr>
                     <tr>

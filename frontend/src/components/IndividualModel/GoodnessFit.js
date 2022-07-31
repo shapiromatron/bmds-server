@@ -14,8 +14,8 @@ class GoodnessFit extends Component {
             {dtype} = dataset;
         return (
             <table className="table table-sm table-bordered">
-                <thead className="bg-custom">
-                    <tr>
+                <thead>
+                    <tr className="bg-custom">
                         <th colSpan="9">Goodness of Fit</th>
                     </tr>
                     <tr>
@@ -28,14 +28,15 @@ class GoodnessFit extends Component {
                     </tr>
                 </thead>
                 <tbody>
-                    {dtype == Dtype.CONTINUOUS
+                    {dtype == Dtype.CONTINUOUS || dtype == Dtype.CONTINUOUS_INDIVIDUAL
                         ? gof.dose.map((item, i) => {
+                              const useFF = dtype === Dtype.CONTINUOUS_INDIVIDUAL;
                               return (
                                   <tr key={i}>
                                       <td>{item}</td>
                                       <td>{ff(gof.est_mean[i])}</td>
                                       <td>{ff(gof.calc_mean[i])}</td>
-                                      <td>{gof.obs_mean[i]}</td>
+                                      <td>{useFF ? ff(gof.obs_mean[i]) : gof.obs_mean[i]}</td>
                                       <td>{gof.size[i]}</td>
                                       <td>{ff(gof.residual[i])}</td>
                                   </tr>

@@ -5,15 +5,15 @@ import PropTypes from "prop-types";
 import {ff, fourDecimalFormatter} from "../../common";
 
 @observer
-class CSTestofInterest extends Component {
+class ContinuousTestOfInterest extends Component {
     render() {
         const {store} = this.props,
             testInterest = store.modalModel.results.tests;
 
         return (
             <table className="table table-sm table-bordered">
-                <thead className="bg-custom">
-                    <tr>
+                <thead>
+                    <tr className="bg-custom">
                         <th colSpan="4">Test of Interest</th>
                     </tr>
                     <tr>
@@ -41,7 +41,7 @@ class CSTestofInterest extends Component {
         );
     }
 }
-CSTestofInterest.propTypes = {
+ContinuousTestOfInterest.propTypes = {
     store: PropTypes.object,
 };
-export default CSTestofInterest;
+export default ContinuousTestOfInterest;

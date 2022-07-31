@@ -98,7 +98,7 @@ def remap_bayesian_exponential(models: List[Dict]) -> List[Dict]:
     for i, model in enumerate(models):
         if model["model"] == bmds.constants.M_Exponential:
             models = deepcopy(models)
-            weight = model["prior_weight"] / 2  # TODO - revisit when CMA is live
+            weight = model["prior_weight"] / 2  # TODO - replace in BMDS 3.4
             models[i : i + 1] = (
                 dict(model=bmds.constants.M_ExponentialM3, prior_weight=weight),
                 dict(model=bmds.constants.M_ExponentialM5, prior_weight=weight),

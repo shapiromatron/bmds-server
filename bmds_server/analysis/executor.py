@@ -124,7 +124,7 @@ class AnalysisSession(NamedTuple):
 
     @classmethod
     def run(cls, inputs: Dict, dataset_index: int, option_index: int) -> AnalysisSessionSchema:
-        # TODO - remove mocks when functional
+        # TODO - replace in BMDS 3.4
         if inputs["dataset_type"] == bmds.constants.NESTED_DICHOTOMOUS:
             return _mock_nested_dichotomous(inputs, dataset_index, option_index)
         elif inputs["dataset_type"] == bmds.constants.MULTI_TUMOR:
@@ -180,7 +180,7 @@ class AnalysisSession(NamedTuple):
 
 
 def _mock_results(inputs: Dict, dataset_index: int, option_index: int) -> dict:
-    # TODO - remove once we have a real method
+    # TODO - replace in BMDS 3.4
     models = []
     for model_name in itertools.chain(inputs["models"]["frequentist_restricted"]):
         doses = np.array(inputs["datasets"][dataset_index]["doses"])
@@ -214,13 +214,12 @@ def _mock_results(inputs: Dict, dataset_index: int, option_index: int) -> dict:
 
 
 def _mock_nested_dichotomous(inputs: Dict, dataset_index: int, option_index: int) -> dict:
-    # TODO - remove once we have a real method
+    # TODO - replace in BMDS 3.4
     return _mock_results(inputs, dataset_index, option_index)
 
 
 def _mock_multitumor(inputs: Dict, dataset_index: int, option_index: int) -> dict:
-    # TODO - remove once we have a real method
+    # TODO - replace in BMDS 3.4
     results = _mock_results(inputs, dataset_index, option_index)
-    # TODO - this logically needs to change b/c datasets are combined
     results["frequentist"]["combined"] = deepcopy(results["frequentist"]["models"][0]["results"])
     return results

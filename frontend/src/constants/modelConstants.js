@@ -33,7 +33,7 @@ const modelsList = {
                 "Multistage",
                 "Weibull",
             ],
-            frequentist_unrestricted: ["Logistic", "LogProbit", "Probit"],
+            frequentist_unrestricted: ["Logistic", "LogProbit", "Probit", "Quantal Linear"],
         },
         [MODEL_NESTED_DICHOTOMOUS]: {
             frequentist_restricted: ["Nested Logistic"],
@@ -71,6 +71,8 @@ const modelsList = {
             frequentist_restricted: ["Multistage"],
             frequentist_unrestricted: [],
         },
-    };
+    },
+    hasDegrees = new Set(["Multistage", "Polynomial"]),
+    ExponentialM3 = "ExponentialM3";
 
-export {allModelOptions, modelsList, models};
+export {allModelOptions, modelsList, models, hasDegrees, ExponentialM3};

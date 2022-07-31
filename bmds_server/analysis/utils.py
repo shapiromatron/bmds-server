@@ -15,7 +15,7 @@ def get_citation() -> str:
     try:
         bmds_version = get_latest_dll_version()
     except FileNotFoundError:
-        bmds_version = "<ADD>"  # TODO remove when dll released
+        bmds_version = "<ADD>"  # TODO: remove try/catch when DLL released
     uri = settings.WEBSITE_URI
     return dedent(
         f"""\

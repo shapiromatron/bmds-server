@@ -9,10 +9,13 @@ import SelectInput from "../common/SelectInput";
 class DatasetSelector extends Component {
     render() {
         const {dataStore, store} = this.props;
+        if (dataStore.datasets.length < 2) {
+            return null;
+        }
         return (
             <SelectInput
                 onChange={value => store.setSelectedDataset(parseInt(value))}
-                label="Existing datasets"
+                label="Select existing"
                 value={store.selectedDatasetId}
                 choices={dataStore.datasets.map(dataset => {
                     return {value: dataset.metadata.id, text: dataset.metadata.name};

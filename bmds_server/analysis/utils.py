@@ -12,7 +12,10 @@ def get_citation() -> str:
     year = now().strftime("%Y")
     accessed = now().strftime("%B %d, %Y")
     sha = settings.COMMIT.sha
-    bmds_version = get_latest_dll_version()
+    try:
+        bmds_version = get_latest_dll_version()
+    except FileNotFoundError:
+        bmds_version = "<ADD>"  # TODO: remove try/catch when DLL released
     uri = settings.WEBSITE_URI
     return dedent(
         f"""\

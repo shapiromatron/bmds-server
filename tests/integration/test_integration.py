@@ -24,7 +24,7 @@ class TestContinuousIntegration(PlaywrightTestCase):
 
         # view data tab
         page.locator('a:has-text("Data")').click()
-        page.locator("text=New").click()
+        page.locator('button:has-text("New")').click()
         page.locator("text=Load an example dataset").click()
 
         # save current settings
@@ -76,7 +76,7 @@ class TestContinuousIntegration(PlaywrightTestCase):
 
         # view data tab
         page.locator('a:has-text("Data")').click()
-        page.locator("text=New").click()
+        page.locator('button:has-text("New")').click()
         page.locator("text=Load an example dataset").click()
 
         # save current settings

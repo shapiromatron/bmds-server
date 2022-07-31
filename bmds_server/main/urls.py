@@ -13,9 +13,13 @@ from ..common import views as common_views
 from ..common.api import HealthcheckViewset
 from .constants import AuthProvider
 
+healthcheck_url = (
+    "healthcheck" if settings.DEBUG else f"{settings.HEALTHCHECK_URL_PREFIX}/healthcheck"
+)
+
 router = DefaultRouter()
 router.register("analysis", AnalysisViewset, basename="analysis")
-router.register("healthcheck", HealthcheckViewset, basename="healthcheck")
+router.register(healthcheck_url, HealthcheckViewset, basename="healthcheck")
 
 edit_pattern = "analysis/<uuid:pk>/<str:password>/"
 api_paths = path("api/v1/", include((router.urls, "analysis"), namespace="api"))

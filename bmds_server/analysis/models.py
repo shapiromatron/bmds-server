@@ -11,6 +11,7 @@ import pandas as pd
 import reversion
 from bmds.bmds3.batch import BmdsSessionBatch
 from bmds.bmds3.recommender.recommender import RecommenderSettings
+from bmds.bmds3.types.sessions import VersionSchema
 from bmds.constants import Dtype
 from django.conf import settings
 from django.core.cache import cache
@@ -24,6 +25,7 @@ from ..common.utils import random_string
 from . import executor, tasks, validators
 from .reporting.cache import DocxReportCache, ExcelReportCache
 from .reporting.excel import build_df
+from .schema import AnalysisOutput, AnalysisSessionSchema
 
 logger = logging.getLogger(__name__)
 
@@ -184,8 +186,8 @@ class Analysis(models.Model):
         """
         for idx, output in enumerate(self.outputs["outputs"]):
             if (
-                output["metadata"]["dataset_index"] == selection.dataset_index
-                and output["metadata"]["option_index"] == selection.option_index
+                output["dataset_index"] == selection.dataset_index
+                and output["option_index"] == selection.option_index
             ):
                 session = self.get_session(idx)
                 session.frequentist.selected = selection.selected.deserialize(session)
@@ -200,12 +202,16 @@ class Analysis(models.Model):
             err = traceback.format_exc()
             self.handle_execution_error(err)
 
-    def try_run_session(self, inputs: Dict, dataset_index: int, option_index: int) -> Dict:
+    def try_run_session(
+        self, inputs: Dict, dataset_index: int, option_index: int
+    ) -> AnalysisSessionSchema:
         try:
             return executor.AnalysisSession.run(inputs, dataset_index, option_index)
         except Exception:
-            exception = dict(dataset_index=dataset_index, error=traceback.format_exc())
-            logger.error(exception)
+            exception = AnalysisSessionSchema(
+                dataset_index=dataset_index, option_index=option_index, error=traceback.format_exc()
+            )
+            logger.error(f"{self.id}: {exception}")
             return exception
 
     def start_execute(self):
@@ -228,20 +234,29 @@ class Analysis(models.Model):
                 if self.inputs["dataset_options"][dataset_index]["enabled"]:
                     combinations.append((dataset_index, option_index))
 
-        outputs = [
+        outputs: list[AnalysisSessionSchema] = [
             self.try_run_session(self.inputs, dataset_index, option_index)
             for dataset_index, option_index in combinations
         ]
 
-        obj = dict(
+        bmds_python_version = None
+        for output in outputs:
+            if output.frequentist is not None:
+                bmds_python_version = output.frequentist["version"]
+                break
+            if output.bayesian is not None:
+                bmds_python_version = output.bayesian["version"]
+                break
+
+        obj = AnalysisOutput(
             analysis_id=str(self.id),
             analysis_schema_version="1.0",
             bmds_server_version=settings.COMMIT.sha,
-            bmds_python_version=bmds.__version__,
-            outputs=outputs,
+            bmds_python_version=bmds_python_version,
+            outputs=[output.dict() for output in outputs],
         )
-        self.outputs = obj
-        self.errors = [out["error"] for out in outputs if "error" in out]
+        self.outputs = obj.dict()
+        self.errors = [output.error for output in outputs if output.error]
         self.ended = now()
         self.deletion_date = get_deletion_date()
         self.save()
@@ -275,6 +290,11 @@ class Analysis(models.Model):
 
     def renew(self):
         self.deletion_date = get_deletion_date(self.deletion_date)
+
+    def get_bmds_version(self) -> Optional[VersionSchema]:
+        if not self.is_finished or self.has_errors:
+            return None
+        return AnalysisOutput.parse_obj(self.outputs).bmds_python_version
 
     @property
     def deletion_date_str(self) -> Optional[str]:

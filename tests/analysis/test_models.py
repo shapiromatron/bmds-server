@@ -20,8 +20,8 @@ class TestBmds3Execution:
 
         assert analysis.is_finished is True
         assert analysis.has_errors is False
-        assert analysis.outputs["outputs"][0]["metadata"]["dataset_index"] == 0
-        assert analysis.outputs["outputs"][0]["metadata"]["option_index"] == 0
+        assert analysis.outputs["outputs"][0]["dataset_index"] == 0
+        assert analysis.outputs["outputs"][0]["option_index"] == 0
         assert len(analysis.outputs["outputs"]) == 1
         assert len(analysis.outputs["outputs"][0]["frequentist"]["models"]) == 1
         assert len(analysis.outputs["outputs"][0]["bayesian"]["models"]) == 1
@@ -41,8 +41,8 @@ class TestBmds3Execution:
 
         assert analysis.is_finished is True
         assert analysis.has_errors is False
-        assert analysis.outputs["outputs"][0]["metadata"]["dataset_index"] == 0
-        assert analysis.outputs["outputs"][0]["metadata"]["option_index"] == 0
+        assert analysis.outputs["outputs"][0]["dataset_index"] == 0
+        assert analysis.outputs["outputs"][0]["option_index"] == 0
         assert len(analysis.outputs["outputs"]) == 1
         assert len(analysis.outputs["outputs"][0]["frequentist"]["models"]) == 1
         assert len(analysis.outputs["outputs"][0]["bayesian"]["models"]) == 1
@@ -62,8 +62,8 @@ class TestBmds3Execution:
 
         assert analysis.is_finished is True
         assert analysis.has_errors is False
-        assert analysis.outputs["outputs"][0]["metadata"]["dataset_index"] == 0
-        assert analysis.outputs["outputs"][0]["metadata"]["option_index"] == 0
+        assert analysis.outputs["outputs"][0]["dataset_index"] == 0
+        assert analysis.outputs["outputs"][0]["option_index"] == 0
         assert len(analysis.outputs["outputs"]) == 1
         assert len(analysis.outputs["outputs"][0]["frequentist"]["models"]) == 1
         assert len(analysis.outputs["outputs"][0]["bayesian"]["models"]) == 1

@@ -94,7 +94,7 @@ class OutputStore {
         return null;
     }
     @computed get selectedDataset() {
-        const dataset_index = this.selectedOutput.metadata.dataset_index;
+        const dataset_index = this.selectedOutput.dataset_index;
         return this.rootStore.dataStore.datasets[dataset_index];
     }
 
@@ -328,8 +328,8 @@ class OutputStore {
             payload = toJS({
                 editKey,
                 data: {
-                    dataset_index: output.metadata.dataset_index,
-                    option_index: output.metadata.option_index,
+                    dataset_index: output.dataset_index,
+                    option_index: output.option_index,
                     selected: {
                         model_index: output.frequentist.selected.model_index,
                         notes: output.frequentist.selected.notes || "",
@@ -368,10 +368,10 @@ class OutputStore {
         source: https://mobx.js.org/computeds-with-args.html
         */
         const output = this.outputs[idx],
-            dataset = this.rootStore.dataStore.datasets[output.metadata.dataset_index];
+            dataset = this.rootStore.dataStore.datasets[output.dataset_index];
 
         if (this.rootStore.optionsStore.optionsList.length > 1) {
-            return `${dataset.metadata.name}: Option Set ${output.metadata.option_index + 1}`;
+            return `${dataset.metadata.name}: Option Set ${output.option_index + 1}`;
         } else {
             return dataset.metadata.name;
         }

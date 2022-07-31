@@ -1597,7 +1597,7 @@
               - 38.0
               - 70.0
           version:
-            pretty: BMDS v3.3.0
+            pretty: 3.3.0
             string: BMDS330
             numeric:
             - 3
@@ -2738,7 +2738,7 @@
             - 4
             - 11
           version:
-            pretty: BMDS v3.3.0
+            pretty: 3.3.0
             string: BMDS330
             numeric:
             - 3
@@ -4900,7 +4900,7 @@
             - 4
             - 11
           version:
-            pretty: BMDS v3.3.0
+            pretty: 3.3.0
             string: BMDS330
             numeric:
             - 3
@@ -5329,7 +5329,7 @@
       true, "dataset_id": 0}]}, "outputs": {"analysis_id": "ded15870-8986-4d5b-b924-ef9036b2e17e",
       "analysis_schema_version": "1.0", "bmds_server_version": "e97fdcfa", "bmds_python_version":
       "1.0.0.dev", "outputs": [{"metadata": {"dataset_index": 0, "option_index": 0},
-      "frequentist": {"version": {"string": "BMDS330", "pretty": "BMDS v3.3.0", "numeric":
+      "frequentist": {"version": {"string": "BMDS330", "pretty": "3.3.0", "numeric":
       [3, 3, 0]}, "dataset": {"dtype": "D", "metadata": {"id": 0, "name": "Dataset
       #1", "dose_units": "", "response_units": "", "dose_name": "Dose", "response_name":
       "Incidence"}, "doses": [0.0, 10.0, 50.0, 150.0, 400.0], "ns": [20, 20, 20, 20,
@@ -5662,7 +5662,7 @@
       true}]}, "results": {"recommended_model_index": 1, "recommended_model_variable":
       "aic", "model_bin": [0, 0], "model_notes": [{"0": [], "1": [], "2": []}, {"0":
       [], "1": [], "2": []}]}}, "selected": {"model_index": null, "notes": ""}}, "bayesian":
-      {"version": {"string": "BMDS330", "pretty": "BMDS v3.3.0", "numeric": [3, 3,
+      {"version": {"string": "BMDS330", "pretty": "3.3.0", "numeric": [3, 3,
       0]}, "dataset": {"dtype": "D", "metadata": {"id": 0, "name": "Dataset #1", "dose_units":
       "", "response_units": "", "dose_name": "Dose", "response_name": "Incidence"},
       "doses": [0.0, 10.0, 50.0, 150.0, 400.0], "ns": [20, 20, 20, 20, 20], "incidences":
@@ -6033,7 +6033,7 @@
       "D", "analysis_name": "dichotomous", "dataset_options": [{"degree": 0, "enabled":
       true, "dataset_id": 0}]}, "outputs": {"outputs": [{"metadata": {"dataset_index":
       0, "option_index": 0}, "frequentist": {"version": {"string": "BMDS330", "pretty":
-      "BMDS v3.3.0", "numeric": [3, 3, 0]}, "dataset": {"dtype": "D", "metadata":
+      "3.3.0", "numeric": [3, 3, 0]}, "dataset": {"dtype": "D", "metadata":
       {"id": 0, "name": "Dataset #1", "dose_units": "", "response_units": "", "dose_name":
       "Dose", "response_name": "Incidence"}, "doses": [0.0, 10.0, 50.0, 150.0, 400.0],
       "ns": [20, 20, 20, 20, 20], "incidences": [0, 0, 1, 4, 11], "plotting": {"mean":
@@ -6861,7 +6861,7 @@
       "cc3ca355-a57a-4fba-9dc3-99657562df68", "analysis_schema_version": "1.0", "bmds_server_version":
       "e97fdcfa", "bmds_python_version": "1.0.0.dev", "outputs": [{"metadata": {"dataset_index":
       0, "option_index": 0}, "frequentist": {"version": {"string": "BMDS330", "pretty":
-      "BMDS v3.3.0", "numeric": [3, 3, 0]}, "dataset": {"dtype": "C", "metadata":
+      "3.3.0", "numeric": [3, 3, 0]}, "dataset": {"dtype": "C", "metadata":
       {"id": 0, "name": "Dataset #1", "dose_units": "", "response_units": "", "dose_name":
       "Dose", "response_name": "Response"}, "doses": [0.0, 50.0, 100.0, 150.0, 200.0],
       "ns": [100, 100, 100, 100, 100], "means": [10.0, 18.0, 32.0, 38.0, 70.0], "stdevs":
@@ -7136,7 +7136,7 @@
       "C", "analysis_name": "continuous", "dataset_options": [{"degree": 0, "enabled":
       true, "dataset_id": 0, "adverse_direction": -1}]}, "outputs": {"outputs": [{"metadata":
       {"dataset_index": 0, "option_index": 0}, "frequentist": {"version": {"string":
-      "BMDS330", "pretty": "BMDS v3.3.0", "numeric": [3, 3, 0]}, "dataset": {"dtype":
+      "BMDS330", "pretty": "3.3.0", "numeric": [3, 3, 0]}, "dataset": {"dtype":
       "C", "metadata": {"id": 0, "name": "Dataset #1", "dose_units": "", "response_units":
       "", "dose_name": "Dose", "response_name": "Response"}, "doses": [0.0, 50.0,
       100.0, 150.0, 200.0], "ns": [100, 100, 100, 100, 100], "means": [10.0, 18.0,

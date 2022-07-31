@@ -55,9 +55,11 @@ def build_docx(
     uri += analysis.get_absolute_url()
     add_url_hyperlink(p, uri, "View")
 
-    p = report.document.add_paragraph()
-    p.add_run("BMDS version: ").bold = True
-    p.add_run(analysis.inputs["bmds_version"] + "α2")  # TODO - change when live
+    bmds_version = analysis.get_bmds_version()
+    if bmds_version:
+        p = report.document.add_paragraph()
+        p.add_run("BMDS version: ").bold = True
+        p.add_run(f"{bmds_version.pretty} ({bmds_version.dll})")
 
     p = report.document.add_paragraph()
     p.add_run("BMDS online version: ").bold = True

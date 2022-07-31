@@ -7,6 +7,7 @@ import numpy as np
 from bmds.bmds3.constants import DistType
 from bmds.bmds3.sessions import BmdsSession
 
+from .schema import AnalysisSessionSchema
 from .transforms import (
     PriorEnum,
     build_dataset,
@@ -122,8 +123,7 @@ class AnalysisSession(NamedTuple):
     bayesian: Optional[BmdsSession]
 
     @classmethod
-    def run(cls, inputs: Dict, dataset_index: int, option_index: int) -> Dict:
-
+    def run(cls, inputs: Dict, dataset_index: int, option_index: int) -> AnalysisSessionSchema:
         # TODO - remove mocks when functional
         if inputs["dataset_type"] == bmds.constants.NESTED_DICHOTOMOUS:
             return _mock_nested_dichotomous(inputs, dataset_index, option_index)
@@ -132,7 +132,7 @@ class AnalysisSession(NamedTuple):
 
         session = cls.create(inputs, dataset_index, option_index)
         session.execute()
-        return session.to_dict()
+        return session.to_schema()
 
     @classmethod
     def create(cls, inputs: Dict, dataset_index: int, option_index: int) -> "AnalysisSession":
@@ -148,16 +148,15 @@ class AnalysisSession(NamedTuple):
 
     @classmethod
     def deserialize(cls, data: Dict) -> "AnalysisSession":
-        freq = BmdsSession.from_serialized(data["frequentist"]) if data["frequentist"] else None
-        bay = BmdsSession.from_serialized(data["bayesian"]) if data["bayesian"] else None
+        obj = AnalysisSessionSchema.parse_obj(data)
         return cls(
-            dataset_index=data["metadata"]["dataset_index"],
-            option_index=data["metadata"]["option_index"],
-            frequentist=freq,
-            bayesian=bay,
+            dataset_index=obj.dataset_index,
+            option_index=obj.option_index,
+            frequentist=BmdsSession.from_serialized(obj.frequentist) if obj.frequentist else None,
+            bayesian=BmdsSession.from_serialized(obj.bayesian) if obj.bayesian else None,
         )
 
-    def execute(self) -> Dict:
+    def execute(self):
         if self.frequentist:
             self.frequentist.execute()
             if self.frequentist.recommendation_enabled:
@@ -168,14 +167,16 @@ class AnalysisSession(NamedTuple):
                 self.bayesian.add_model_averaging()
             self.bayesian.execute()
 
-        return self.to_dict()
-
-    def to_dict(self) -> Dict:
-        return dict(
-            metadata=dict(dataset_index=self.dataset_index, option_index=self.option_index),
+    def to_schema(self) -> AnalysisSessionSchema:
+        return AnalysisSessionSchema(
+            dataset_index=self.dataset_index,
+            option_index=self.option_index,
             frequentist=self.frequentist.to_dict() if self.frequentist else None,
             bayesian=self.bayesian.to_dict() if self.bayesian else None,
         )
+
+    def to_dict(self) -> dict:
+        return self.to_schema().dict()
 
 
 def _mock_results(inputs: Dict, dataset_index: int, option_index: int) -> dict:

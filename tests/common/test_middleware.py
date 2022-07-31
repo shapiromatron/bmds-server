@@ -3,9 +3,12 @@ import logging
 import pytest
 from django.test import Client
 
+from ..analysis.run3 import RunBmds3
+
 
 @pytest.mark.django_db
 class TestRequestLogMiddleware:
+    @pytest.mark.skipif(not RunBmds3.should_run, reason=RunBmds3.skip_reason)
     def test_logging(self, caplog):
         # setup
         caplog.set_level(logging.INFO)

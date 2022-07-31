@@ -13,7 +13,6 @@ class ModelParameters extends Component {
             indexes = [];
 
         parameters.names.forEach((d, i) => {
-            // special-case - hide the `d` parameter
             if (name === ExponentialM3 && parameters.names[i] === "c") {
                 return;
             }

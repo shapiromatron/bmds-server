@@ -206,7 +206,7 @@ class FrequentistResultTable extends Component {
         }
 
         if (modelType === MODEL_MULTI_TUMOR) {
-            return <p>TODO - multi tumor.</p>;
+            return <p>Add multi tumor results table here ...</p>;
         }
 
         const {models} = selectedFrequentist,

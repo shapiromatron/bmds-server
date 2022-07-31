@@ -80,8 +80,8 @@ export const RULES = Object.freeze({
             enabledNested: true,
         },
         [RULES.ROI_MISSING]: {
-            name: "Residual of Interest calculated",
-            notes: val => "To Do",
+            name: "Residual of interest calculated",
+            notes: val => "Residual of interest not estimated",
             hasThreshold: false,
             enabledContinuous: true,
             enabledDichotomous: true,

@@ -10,6 +10,7 @@ export const getPValue = function(dataType, results) {
     isFrequentist = function(priorClass) {
         return priorClass < 2;
     },
+    NULL = "NULL",
     priorClass = {
         frequentist_unrestricted: 0,
         frequentist_restricted: 1,

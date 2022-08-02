@@ -3,8 +3,7 @@ import React, {Component} from "react";
 import {observer} from "mobx-react";
 import PropTypes from "prop-types";
 
-import {ExponentialM3} from "../../constants/modelConstants";
-import {isFrequentist, priorTypeLabels} from "../../constants/outputConstants";
+import {isFrequentist, priorTypeLabels, NULL} from "../../constants/outputConstants";
 import {ff, getLabel} from "../../common";
 
 const renderPriorRow = prior => {
@@ -33,7 +32,7 @@ const renderPriorRow = prior => {
 @observer
 class ParameterPriorTable extends Component {
     render() {
-        const {name, parameters, priorClass} = this.props,
+        const {parameters, priorClass} = this.props,
             isFreq = isFrequentist(priorClass),
             rowFunction = isFreq ? renderFrequentistRow : renderPriorRow,
             rows = _.range(parameters.names.length)
@@ -47,12 +46,7 @@ class ParameterPriorTable extends Component {
                         max_value: parameters.prior_max_value[idx],
                     };
                 })
-                .filter(d => {
-                    if (name === ExponentialM3 && d.name === "c") {
-                        return false;
-                    }
-                    return true;
-                });
+                .filter(d => d.name !== NULL);
 
         return (
             <table className="table table-sm table-bordered">
@@ -85,7 +79,6 @@ class ParameterPriorTable extends Component {
 }
 
 ParameterPriorTable.propTypes = {
-    name: PropTypes.string.isRequired,
     parameters: PropTypes.object.isRequired,
     priorClass: PropTypes.number.isRequired,
 };

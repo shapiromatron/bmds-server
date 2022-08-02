@@ -2,18 +2,18 @@ import React, {Component} from "react";
 import {observer} from "mobx-react";
 import PropTypes from "prop-types";
 
-import {ExponentialM3} from "../../constants/modelConstants";
+import {NULL} from "../../constants/outputConstants";
 import {fourDecimalFormatter} from "../../common";
 import {checkOrTimes} from "../../common";
 
 @observer
 class ModelParameters extends Component {
     render() {
-        const {name, parameters} = this.props,
+        const {parameters} = this.props,
             indexes = [];
 
         parameters.names.forEach((d, i) => {
-            if (name === ExponentialM3 && parameters.names[i] === "c") {
+            if (parameters.names[i] === NULL) {
                 return;
             }
             indexes.push(i);
@@ -50,7 +50,6 @@ class ModelParameters extends Component {
     }
 }
 ModelParameters.propTypes = {
-    name: PropTypes.string.isRequired,
     parameters: PropTypes.object.isRequired,
 };
 export default ModelParameters;

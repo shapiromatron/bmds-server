@@ -45,7 +45,6 @@ class ModelBody extends Component {
                     </Col>
                     <Col xl={5}>
                         <ParameterPriorTable
-                            name={model.name}
                             parameters={model.results.parameters}
                             priorClass={priorClass}
                         />
@@ -59,7 +58,7 @@ class ModelBody extends Component {
                         {dtype == dc.Dtype.CONTINUOUS || dtype == dc.Dtype.CONTINUOUS_INDIVIDUAL ? (
                             <ContinuousSummary store={outputStore} />
                         ) : null}
-                        <ModelParameters name={model.name} parameters={model.results.parameters} />
+                        <ModelParameters parameters={model.results.parameters} />
                     </Col>
                     <Col xl={8}>
                         <DoseResponsePlot

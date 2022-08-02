@@ -11,6 +11,10 @@ class LogicStore {
         return this.rootStore.mainStore.canEdit;
     }
 
+    @computed get modelType() {
+        return this.rootStore.mainStore.model_type;
+    }
+
     @action.bound setLogic(data) {
         this.logic = data;
     }

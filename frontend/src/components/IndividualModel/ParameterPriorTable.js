@@ -56,7 +56,7 @@ class ParameterPriorTable extends Component {
                 });
 
         return (
-            <table className="table table-sm table-bordered">
+            <table className="table table-sm table-bordered text-right col-l-1">
                 <thead>
                     <tr className="bg-custom">
                         <th colSpan={isFreq ? 4 : 6}>Parameter Settings</th>

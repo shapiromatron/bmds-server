@@ -52,7 +52,7 @@ class TestContinuousIntegration(PlaywrightTestCase):
 
         page.locator('a:has-text("Logic")').click()
         expect(page.locator("#decision-logic tbody tr")).to_have_count(4)
-        expect(page.locator("#rule-table tbody tr")).to_have_count(22)
+        expect(page.locator("#rule-table tbody tr")).to_have_count(20)
 
         # TODO - add read-only views
 
@@ -115,6 +115,6 @@ class TestContinuousIntegration(PlaywrightTestCase):
 
         page.locator('a:has-text("Logic")').click()
         expect(page.locator("#decision-logic tbody tr")).to_have_count(4)
-        expect(page.locator("#rule-table tbody tr")).to_have_count(22)
+        expect(page.locator("#rule-table tbody tr")).to_have_count(18)
 
         # TODO - add read-only views

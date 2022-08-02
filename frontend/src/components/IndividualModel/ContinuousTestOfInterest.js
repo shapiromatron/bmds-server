@@ -11,9 +11,9 @@ class ContinuousTestOfInterest extends Component {
             testInterest = store.modalModel.results.tests;
 
         return (
-            <table className="table table-sm table-bordered">
+            <table className="table table-sm table-bordered text-right">
                 <thead>
-                    <tr className="bg-custom">
+                    <tr className="bg-custom text-left">
                         <th colSpan="4">Test of Interest</th>
                     </tr>
                     <tr>

@@ -9,7 +9,7 @@ class MaBenchmarkDose extends Component {
     render() {
         const {results} = this.props;
         return (
-            <table id="ma-result-summary" className="table table-sm table-bordered">
+            <table id="ma-result-summary" className="table table-sm table-bordered col-r-2">
                 <thead>
                     <tr className="bg-custom">
                         <th colSpan="2">Benchmark Summary</th>

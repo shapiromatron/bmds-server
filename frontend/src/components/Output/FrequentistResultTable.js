@@ -237,7 +237,9 @@ class FrequentistResultTable extends Component {
             footnotes = getFootnotes(recommendedModelIndex, selectedFrequentist.selected);
 
         return (
-            <table id="frequentist-model-result" className="table table-sm">
+            <table
+                id="frequentist-model-result"
+                className="table table-sm text-right col-l-1 col-l-9">
                 <colgroup>
                     {_.map(colWidths).map((value, idx) => (
                         <col key={idx} width={`${value}%`}></col>

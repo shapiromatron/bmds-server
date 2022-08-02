@@ -5,14 +5,24 @@ import PropTypes from "prop-types";
 
 import {checkOrEmpty} from "../../common";
 import {BIN_NAMES, ruleLookups, logicBinOptions} from "../../constants/logicConstants";
+import {MODEL_CONTINUOUS, MODEL_DICHOTOMOUS} from "../../constants/mainConstants";
 import CheckboxInput from "../common/CheckboxInput";
 import FloatInput from "../common/FloatInput";
 import SelectInput from "../common/SelectInput";
 
+const fieldMap = {
+        [MODEL_CONTINUOUS]: "enabled_continuous",
+        [MODEL_DICHOTOMOUS]: "enabled_dichotomous",
+    },
+    lookupMap = {
+        [MODEL_CONTINUOUS]: "enabledContinuous",
+        [MODEL_DICHOTOMOUS]: "enabledDichotomous",
+    };
+
 @observer
 class RuleRow extends Component {
     render() {
-        const {rule, ruleIndex, canEdit, updateRule} = this.props,
+        const {rule, ruleIndex, canEdit, updateRule, modelType} = this.props,
             ruleLookup = ruleLookups[rule.rule_class],
             renderCheckbox = attribute => {
                 return (
@@ -21,16 +31,18 @@ class RuleRow extends Component {
                         onChange={value => updateRule(ruleIndex, attribute, value)}
                     />
                 );
-            };
+            },
+            field = fieldMap[modelType],
+            enabled = ruleLookup[lookupMap[modelType]];
+
+        if (!enabled) {
+            return null;
+        }
 
         return canEdit ? (
             <tr>
                 <td>{ruleLookup.name}</td>
-                <td>{ruleLookup.enabledContinuous ? renderCheckbox("enabled_continuous") : "-"}</td>
-                <td>
-                    {ruleLookup.enabledDichotomous ? renderCheckbox("enabled_dichotomous") : "-"}
-                </td>
-                <td>{ruleLookup.enabledNested ? renderCheckbox("enabled_nested") : "-"}</td>
+                <td>{enabled ? renderCheckbox(field) : "-"}</td>
                 <td>
                     {ruleLookup.hasThreshold ? (
                         <FloatInput
@@ -61,9 +73,6 @@ class RuleRow extends Component {
                 <td className="text-center">
                     {ruleLookup.enabledDichotomous ? checkOrEmpty(rule.enabled_dichotomous) : "-"}
                 </td>
-                <td className="text-center">
-                    {ruleLookup.enabledNested ? checkOrEmpty(rule.enabled_nested) : "-"}
-                </td>
                 <td>{_.isNumber(rule.threshold) ? rule.threshold : "-"}</td>
                 <td>{BIN_NAMES[rule.failure_bin]}</td>
                 <td dangerouslySetInnerHTML={{__html: ruleLookup.notes(rule.threshold)}} />
@@ -77,6 +86,7 @@ RuleRow.propTypes = {
     ruleIndex: PropTypes.number.isRequired,
     canEdit: PropTypes.bool.isRequired,
     updateRule: PropTypes.func.isRequired,
+    modelType: PropTypes.string.isRequired,
 };
 
 export default RuleRow;

@@ -9,7 +9,8 @@ import {
     continuousBmrOptions,
     distTypeOptions,
 } from "../../constants/optionsConstants";
-import {ff, getLabel} from "../../common";
+import {getLabel} from "../../common";
+import {ff} from "utils/formatters";
 
 @observer
 class ModelOptionsTable extends Component {
@@ -51,7 +52,7 @@ class ModelOptionsTable extends Component {
         }
 
         return (
-            <table className="table table-sm table-bordered">
+            <table className="table table-sm table-bordered col-r-2">
                 <thead>
                     <tr className="bg-custom">
                         <th colSpan="2">Model Options</th>

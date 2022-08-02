@@ -2,7 +2,7 @@ import React, {Component} from "react";
 import {observer} from "mobx-react";
 import PropTypes from "prop-types";
 
-import {ff} from "../../common";
+import {ff} from "utils/formatters";
 
 @observer
 class ContinuousDeviance extends Component {
@@ -11,7 +11,7 @@ class ContinuousDeviance extends Component {
             deviances = store.modalModel.results.deviance;
 
         return (
-            <table className="table table-sm table-bordered">
+            <table className="table table-sm table-bordered text-right col-l-1">
                 <thead>
                     <tr className="bg-custom">
                         <th colSpan="9">Analysis of Deviance</th>

@@ -2,7 +2,7 @@ import React, {Component} from "react";
 import {observer} from "mobx-react";
 import PropTypes from "prop-types";
 
-import {ff, fourDecimalFormatter} from "../../common";
+import {ff, fourDecimalFormatter} from "utils/formatters";
 
 @observer
 class DichotomousSummary extends Component {
@@ -11,7 +11,7 @@ class DichotomousSummary extends Component {
             results = store.modalModel.results;
 
         return (
-            <table className="table table-sm table-bordered">
+            <table className="table table-sm table-bordered col-r-2">
                 <thead>
                     <tr className="bg-custom">
                         <th colSpan="2">Summary</th>

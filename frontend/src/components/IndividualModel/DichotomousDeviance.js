@@ -2,7 +2,7 @@ import React, {Component} from "react";
 import {observer} from "mobx-react";
 import PropTypes from "prop-types";
 
-import {ff, fourDecimalFormatter} from "../../common";
+import {ff, fractionalFormatter} from "utils/formatters";
 
 @observer
 class DichotomousDeviance extends Component {
@@ -11,7 +11,7 @@ class DichotomousDeviance extends Component {
             deviances = store.modalModel.results.deviance;
 
         return (
-            <table className="table table-sm table-bordered">
+            <table className="table table-sm table-bordered text-right col-l-1">
                 <thead>
                     <tr className="bg-custom">
                         <th colSpan="9">Analysis of Deviance</th>
@@ -36,7 +36,7 @@ class DichotomousDeviance extends Component {
                                 <td>{deviances.params[i]}</td>
                                 <td>{ff(deviances.deviance[i])}</td>
                                 <td>{ff(deviances.df[i])}</td>
-                                <td>{fourDecimalFormatter(deviances.p_value[i])} </td>
+                                <td>{fractionalFormatter(deviances.p_value[i])} </td>
                             </tr>
                         );
                     })}

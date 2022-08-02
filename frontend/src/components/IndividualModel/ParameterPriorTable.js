@@ -4,7 +4,8 @@ import {observer} from "mobx-react";
 import PropTypes from "prop-types";
 
 import {isFrequentist, priorTypeLabels, NULL} from "../../constants/outputConstants";
-import {ff, getLabel} from "../../common";
+import {getLabel} from "../../common";
+import {ff} from "utils/formatters";
 
 const renderPriorRow = prior => {
         return (
@@ -49,7 +50,7 @@ class ParameterPriorTable extends Component {
                 .filter(d => d.name !== NULL);
 
         return (
-            <table className="table table-sm table-bordered">
+            <table className="table table-sm table-bordered text-right col-l-1">
                 <thead>
                     <tr className="bg-custom">
                         <th colSpan={isFreq ? 4 : 6}>Parameter Settings</th>

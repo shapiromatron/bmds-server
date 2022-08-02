@@ -2,14 +2,14 @@ import React, {Component} from "react";
 import {observer} from "mobx-react";
 import PropTypes from "prop-types";
 
-import {ff} from "../../common";
+import {ff} from "utils/formatters";
 
 @observer
 class MaBenchmarkDose extends Component {
     render() {
         const {results} = this.props;
         return (
-            <table id="ma-result-summary" className="table table-sm table-bordered">
+            <table id="ma-result-summary" className="table table-sm table-bordered col-r-2">
                 <thead>
                     <tr className="bg-custom">
                         <th colSpan="2">Benchmark Summary</th>

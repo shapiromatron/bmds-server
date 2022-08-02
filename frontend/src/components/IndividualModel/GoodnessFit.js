@@ -2,7 +2,7 @@ import React, {Component} from "react";
 import {observer} from "mobx-react";
 import PropTypes from "prop-types";
 
-import {ff} from "../../common";
+import {ff} from "utils/formatters";
 import {Dtype} from "../../constants/dataConstants";
 
 @observer
@@ -13,9 +13,9 @@ class GoodnessFit extends Component {
             dataset = store.selectedDataset,
             {dtype} = dataset;
         return (
-            <table className="table table-sm table-bordered">
+            <table className="table table-sm table-bordered text-right">
                 <thead>
-                    <tr className="bg-custom">
+                    <tr className="bg-custom text-left">
                         <th colSpan="9">Goodness of Fit</th>
                     </tr>
                     <tr>

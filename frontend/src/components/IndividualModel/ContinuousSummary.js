@@ -11,7 +11,7 @@ class ContinuousSummary extends Component {
             results = store.modalModel.results;
 
         return (
-            <table className="table table-sm table-bordered">
+            <table className="table table-sm table-bordered col-r-2">
                 <thead>
                     <tr className="bg-custom">
                         <th colSpan="2">Summary</th>

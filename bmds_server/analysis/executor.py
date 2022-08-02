@@ -17,7 +17,7 @@ from .transforms import (
 )
 
 # excluded continuous models if distribution type is lognormal
-lognormal_disabled = {bmds.constants.M_Linear, bmds.constants.M_Polynomial, bmds.constants.M_Power}
+lognormal_enabled = {bmds.constants.M_ExponentialM3, bmds.constants.M_ExponentialM5}
 
 
 def build_frequentist_session(dataset, inputs, options, dataset_options) -> Optional[BmdsSession]:
@@ -41,7 +41,7 @@ def build_frequentist_session(dataset, inputs, options, dataset_options) -> Opti
         (PriorEnum.frequentist_unrestricted, remap_exponential(unrestricted_models)),
     ]:
         if options.get("dist_type") == DistType.log_normal:
-            model_names = [model for model in model_names if model not in lognormal_disabled]
+            model_names = [model for model in model_names if model in lognormal_enabled]
 
         for model_name in model_names:
             model_options = build_model_settings(
@@ -78,7 +78,7 @@ def build_bayesian_session(
 
     # filter lognormal
     if options.get("dist_type") == DistType.log_normal:
-        models = deepcopy(list(filter(lambda d: d["model"] not in lognormal_disabled, models)))
+        models = deepcopy(list(filter(lambda d: d["model"] in lognormal_enabled, models)))
 
     # exit early if we have no bayesian models
     if len(models) == 0:

@@ -40,7 +40,7 @@ class ContinuousSummary extends Component {
                     </tr>
                     <tr>
                         <td>Model DOF</td>
-                        <td>{ff(results.fit.model_df)}</td>
+                        <td>{ff(results.tests.dfs[3])}</td>
                     </tr>
                 </tbody>
             </table>

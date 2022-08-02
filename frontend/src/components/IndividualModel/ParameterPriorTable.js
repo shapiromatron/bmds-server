@@ -5,7 +5,8 @@ import PropTypes from "prop-types";
 
 import {ExponentialM3} from "../../constants/modelConstants";
 import {isFrequentist, priorTypeLabels} from "../../constants/outputConstants";
-import {ff, getLabel} from "../../common";
+import {getLabel} from "../../common";
+import {ff} from "utils/formatters";
 
 const renderPriorRow = prior => {
         return (

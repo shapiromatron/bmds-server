@@ -4,10 +4,11 @@ import {inject, observer} from "mobx-react";
 import React, {Component} from "react";
 import PropTypes from "prop-types";
 
+import {fractionalFormatter} from "utils/formatters";
 import {MODEL_MULTI_TUMOR} from "../../constants/mainConstants";
 import {BIN_LABELS} from "../../constants/logicConstants";
 import {getPValue, modelClasses, priorClass} from "../../constants/outputConstants";
-import {ff} from "../../common";
+import {ff} from "utils/formatters";
 import Button from "../common/Button";
 
 import Popover from "../common/Popover";
@@ -163,7 +164,7 @@ class FrequentistRow extends Component {
                 <td>{ff(data.model.results.bmdl)}</td>
                 <td>{ff(data.model.results.bmd)}</td>
                 <td>{ff(data.model.results.bmdu)}</td>
-                <td>{ff(getPValue(dataset.dtype, data.model.results))}</td>
+                <td>{fractionalFormatter(getPValue(dataset.dtype, data.model.results))}</td>
                 <td>{ff(data.model.results.fit.aic)}</td>
                 <td>{ff(data.model.results.gof.roi)}</td>
                 <td>{ff(data.model.results.gof.residual[0])}</td>

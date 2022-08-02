@@ -7,7 +7,8 @@ import {
     continuousBmrOptions,
     distTypeOptions,
 } from "../../../constants/optionsConstants";
-import {ff, getLabel} from "../../../common";
+import {getLabel} from "../../../common";
+import {ff} from "utils/formatters";
 
 const OptionsReadOnly = props => {
     const {options, modelType, idx} = props;

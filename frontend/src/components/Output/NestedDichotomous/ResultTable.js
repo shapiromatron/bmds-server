@@ -4,7 +4,7 @@ import React, {Component} from "react";
 import PropTypes from "prop-types";
 
 import {modelClasses} from "../../../constants/outputConstants";
-import {ff} from "../../../common";
+import {ff} from "utils/formatters";
 
 @inject("outputStore")
 @observer

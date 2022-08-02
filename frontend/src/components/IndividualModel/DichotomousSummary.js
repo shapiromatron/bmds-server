@@ -2,7 +2,7 @@ import React, {Component} from "react";
 import {observer} from "mobx-react";
 import PropTypes from "prop-types";
 
-import {ff, fourDecimalFormatter} from "../../common";
+import {ff, fourDecimalFormatter} from "utils/formatters";
 
 @observer
 class DichotomousSummary extends Component {

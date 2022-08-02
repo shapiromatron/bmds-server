@@ -3,7 +3,7 @@ import React, {Component} from "react";
 import {observer} from "mobx-react";
 import PropTypes from "prop-types";
 
-import {ff} from "../../common";
+import {ff} from "utils/formatters";
 
 @observer
 class CDFTable extends Component {

@@ -4,7 +4,7 @@ import React, {Component} from "react";
 import PropTypes from "prop-types";
 
 import {maIndex, modelClasses} from "../../constants/outputConstants";
-import {ff} from "../../common";
+import {ff, fractionalFormatter} from "utils/formatters";
 
 @inject("outputStore")
 @observer
@@ -57,8 +57,10 @@ class BayesianResultTable extends Component {
                                         {model.name}
                                     </a>
                                 </td>
-                                <td>{ma ? ff(ma.results.priors[index]) : "-"}</td>
-                                <td>{ma ? ff(ma.results.posteriors[index]) : "-"}</td>
+                                <td>{ma ? fractionalFormatter(ma.results.priors[index]) : "-"}</td>
+                                <td>
+                                    {ma ? fractionalFormatter(ma.results.posteriors[index]) : "-"}
+                                </td>
                                 <td>{ff(model.results.bmdl)}</td>
                                 <td>{ff(model.results.bmd)}</td>
                                 <td>{ff(model.results.bmdu)}</td>

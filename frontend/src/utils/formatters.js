@@ -35,9 +35,21 @@ export const ff = function(value) {
             return value.toString();
         } else if (value == BMDS_BLANK_VALUE || !_.isFinite(value)) {
             return "-";
-        } else if (Math.abs(value) >= 1000 || Math.abs(value) <= 0.01) {
+        } else if (Math.abs(value) >= 1000 || Math.abs(value) <= 0.001) {
             return value.toExponential(3);
         } else {
             return value.toPrecision(4);
+        }
+    },
+    fractionalFormatter = function(value) {
+        // Expected values between 0 and 1
+        if (value == BMDS_BLANK_VALUE || !_.isFinite(value) || value < 0) {
+            return "-";
+        } else if (value === 0) {
+            return value.toString();
+        } else if (value < 0.0001) {
+            return "< 0.0001";
+        } else {
+            return value.toPrecision(3);
         }
     };

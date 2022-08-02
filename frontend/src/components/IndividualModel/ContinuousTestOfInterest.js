@@ -2,7 +2,7 @@ import React, {Component} from "react";
 import {observer} from "mobx-react";
 import PropTypes from "prop-types";
 
-import {ff, fourDecimalFormatter} from "../../common";
+import {ff, fractionalFormatter} from "utils/formatters";
 
 @observer
 class ContinuousTestOfInterest extends Component {
@@ -32,7 +32,7 @@ class ContinuousTestOfInterest extends Component {
                                 <td>{name}</td>
                                 <td>{ff(testInterest.ll_ratios[i])}</td>
                                 <td>{ff(testInterest.dfs[i])}</td>
-                                <td>{fourDecimalFormatter(testInterest.p_values[i])}</td>
+                                <td>{fractionalFormatter(testInterest.p_values[i])}</td>
                             </tr>
                         );
                     })}

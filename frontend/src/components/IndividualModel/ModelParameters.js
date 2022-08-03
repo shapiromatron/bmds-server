@@ -1,4 +1,4 @@
-import _ from 'lodash';
+import _ from "lodash";
 import React, {Component} from "react";
 import {observer} from "mobx-react";
 import PropTypes from "prop-types";
@@ -12,7 +12,7 @@ class ModelParameters extends Component {
         const {parameters} = this.props,
             indexes = _.range(parameters.names.length);
 
-            return (
+        return (
             <table className="table table-sm table-bordered">
                 <thead>
                     <tr className="bg-custom">

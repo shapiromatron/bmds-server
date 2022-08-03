@@ -36,17 +36,16 @@ class ParameterPriorTable extends Component {
         const {parameters, priorClass} = this.props,
             isFreq = isFrequentist(priorClass),
             rowFunction = isFreq ? renderFrequentistRow : renderPriorRow,
-            rows = _.range(parameters.names.length)
-                .map(idx => {
-                    return {
-                        name: parameters.names[idx],
-                        type: parameters.prior_type[idx],
-                        initial_value: parameters.prior_initial_value[idx],
-                        stdev: parameters.prior_stdev[idx],
-                        min_value: parameters.prior_min_value[idx],
-                        max_value: parameters.prior_max_value[idx],
-                    };
-                });
+            rows = _.range(parameters.names.length).map(idx => {
+                return {
+                    name: parameters.names[idx],
+                    type: parameters.prior_type[idx],
+                    initial_value: parameters.prior_initial_value[idx],
+                    stdev: parameters.prior_stdev[idx],
+                    min_value: parameters.prior_min_value[idx],
+                    max_value: parameters.prior_max_value[idx],
+                };
+            });
 
         return (
             <table className="table table-sm table-bordered text-right col-l-1">

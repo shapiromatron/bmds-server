@@ -1,23 +1,17 @@
+import _ from "lodash";
 import React, {Component} from "react";
 import {observer} from "mobx-react";
 import PropTypes from "prop-types";
 
-import {ExponentialM3} from "../../constants/modelConstants";
 import {parameterFormatter} from "../../utils/formatters";
 import {checkOrTimes} from "../../common";
 
 @observer
 class ModelParameters extends Component {
     render() {
-        const {name, parameters} = this.props,
-            indexes = [];
+        const {parameters} = this.props,
+            indexes = _.range(parameters.names.length);
 
-        parameters.names.forEach((d, i) => {
-            if (name === ExponentialM3 && parameters.names[i] === "c") {
-                return;
-            }
-            indexes.push(i);
-        });
         return (
             <table className="table table-sm table-bordered">
                 <thead>
@@ -50,7 +44,6 @@ class ModelParameters extends Component {
     }
 }
 ModelParameters.propTypes = {
-    name: PropTypes.string.isRequired,
     parameters: PropTypes.object.isRequired,
 };
 export default ModelParameters;

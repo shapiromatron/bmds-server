@@ -72,7 +72,6 @@ const modelsList = {
             frequentist_unrestricted: [],
         },
     },
-    hasDegrees = new Set(["Multistage", "Polynomial"]),
-    ExponentialM3 = "ExponentialM3";
+    hasDegrees = new Set(["Multistage", "Polynomial"]);
 
-export {allModelOptions, modelsList, models, hasDegrees, ExponentialM3};
+export {allModelOptions, modelsList, models, hasDegrees};

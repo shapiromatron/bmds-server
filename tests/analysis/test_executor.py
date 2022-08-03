@@ -163,25 +163,25 @@ class TestAnalysisSession:
 
         data = deepcopy(bmds3_complete_continuous)
         data["models"] = {
-            "frequentist_restricted": ["Hill", "Linear", "Power"],
+            "frequentist_restricted": ["Exponential", "Hill", "Linear", "Power"],
         }
 
         # normal
         data["options"][0]["dist_type"] = 1
         session = AnalysisSession.create(data, 0, 0)
-        assert len(session.frequentist.models) == 3
+        assert len(session.frequentist.models) == 5
         names = [model.name() for model in session.frequentist.models]
-        assert names == ["Hill", "Linear", "Power"]
+        assert names == ["ExponentialM3", "ExponentialM5", "Hill", "Linear", "Power"]
 
         data["options"][0]["dist_type"] = 2
         session = AnalysisSession.create(data, 0, 0)
-        assert len(session.frequentist.models) == 3
+        assert len(session.frequentist.models) == 5
         names = [model.name() for model in session.frequentist.models]
-        assert names == ["Hill", "Linear", "Power"]
+        assert names == ["ExponentialM3", "ExponentialM5", "Hill", "Linear", "Power"]
 
         # lognormal
         data["options"][0]["dist_type"] = 3
         session = AnalysisSession.create(data, 0, 0)
-        assert len(session.frequentist.models) == 1
+        assert len(session.frequentist.models) == 2
         names = [model.name() for model in session.frequentist.models]
-        assert names == ["Hill"]
+        assert names == ["ExponentialM3", "ExponentialM5"]

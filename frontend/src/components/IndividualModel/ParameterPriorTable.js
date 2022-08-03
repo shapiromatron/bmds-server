@@ -3,7 +3,7 @@ import React, {Component} from "react";
 import {observer} from "mobx-react";
 import PropTypes from "prop-types";
 
-import {isFrequentist, priorTypeLabels, NULL} from "../../constants/outputConstants";
+import {isFrequentist, priorTypeLabels} from "../../constants/outputConstants";
 import {getLabel} from "../../common";
 import {ff} from "utils/formatters";
 
@@ -46,8 +46,7 @@ class ParameterPriorTable extends Component {
                         min_value: parameters.prior_min_value[idx],
                         max_value: parameters.prior_max_value[idx],
                     };
-                })
-                .filter(d => d.name !== NULL);
+                });
 
         return (
             <table className="table table-sm table-bordered text-right col-l-1">

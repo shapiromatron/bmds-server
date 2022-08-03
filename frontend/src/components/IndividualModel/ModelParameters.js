@@ -1,8 +1,8 @@
+import _ from 'lodash';
 import React, {Component} from "react";
 import {observer} from "mobx-react";
 import PropTypes from "prop-types";
 
-import {NULL} from "../../constants/outputConstants";
 import {parameterFormatter} from "../../utils/formatters";
 import {checkOrTimes} from "../../common";
 
@@ -10,15 +10,9 @@ import {checkOrTimes} from "../../common";
 class ModelParameters extends Component {
     render() {
         const {parameters} = this.props,
-            indexes = [];
+            indexes = _.range(parameters.names.length);
 
-        parameters.names.forEach((d, i) => {
-            if (parameters.names[i] === NULL) {
-                return;
-            }
-            indexes.push(i);
-        });
-        return (
+            return (
             <table className="table table-sm table-bordered">
                 <thead>
                     <tr className="bg-custom">

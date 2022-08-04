@@ -82,16 +82,20 @@ class Output extends Component {
         return (
             <div className="container-fluid">
                 <div className="row">
-                    <div className="col-lg-2">
-                        <SelectInput
-                            label="Select an output"
-                            onChange={value => outputStore.setSelectedOutputIndex(parseInt(value))}
-                            value={outputStore.selectedOutputIndex}
-                            choices={outputStore.outputs.map((output, idx) => {
-                                return {value: idx, text: outputStore.getOutputName(idx)};
-                            })}
-                        />
-                    </div>
+                    {outputStore.outputs.length > 1 ? (
+                        <div className="col-lg-2">
+                            <SelectInput
+                                label="Select an output"
+                                onChange={value =>
+                                    outputStore.setSelectedOutputIndex(parseInt(value))
+                                }
+                                value={outputStore.selectedOutputIndex}
+                                choices={outputStore.outputs.map((output, idx) => {
+                                    return {value: idx, text: outputStore.getOutputName(idx)};
+                                })}
+                            />
+                        </div>
+                    ) : null}
                     <div className="col-lg-6">
                         <DatasetTable dataset={outputStore.selectedDataset} />
                     </div>

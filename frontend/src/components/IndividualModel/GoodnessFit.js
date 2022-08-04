@@ -10,8 +10,18 @@ class GoodnessFit extends Component {
     getHeaders(dtype) {
         if (dtype == Dtype.CONTINUOUS || dtype == Dtype.CONTINUOUS_INDIVIDUAL) {
             return [
-                ["Dose", "Est. Prob", "Expected", "Observed", "Size", "Scaled Res."],
-                [20, 16, 16, 16, 16, 16],
+                [
+                    "Dose",
+                    "Size",
+                    "Observed Mean",
+                    "Calculated Median",
+                    "Estimated Median",
+                    "Observed SD",
+                    "Calculated SD",
+                    "Estimated SD",
+                    "Scaled Residual",
+                ],
+                [10, 10, 10, 12, 12, 12, 10, 12, 12],
             ];
         }
         if (dtype == Dtype.DICHOTOMOUS) {
@@ -59,10 +69,13 @@ class GoodnessFit extends Component {
                               return (
                                   <tr key={i}>
                                       <td>{item}</td>
-                                      <td>{ff(gof.est_mean[i])}</td>
-                                      <td>{ff(gof.calc_mean[i])}</td>
-                                      <td>{useFF ? ff(gof.obs_mean[i]) : gof.obs_mean[i]}</td>
                                       <td>{gof.size[i]}</td>
+                                      <td>{useFF ? ff(gof.obs_mean[i]) : gof.obs_mean[i]}</td>
+                                      <td>{ff(gof.calc_mean[i])}</td>
+                                      <td>{ff(gof.est_mean[i])}</td>
+                                      <td>{useFF ? ff(gof.obs_sd[i]) : gof.obs_sd[i]}</td>
+                                      <td>{ff(gof.calc_sd[i])}</td>
+                                      <td>{ff(gof.est_sd[i])}</td>
                                       <td>{ff(gof.residual[i])}</td>
                                   </tr>
                               );

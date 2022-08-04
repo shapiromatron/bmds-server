@@ -13,7 +13,14 @@ class ModelParameters extends Component {
             indexes = _.range(parameters.names.length);
 
         return (
-            <table className="table table-sm table-bordered">
+            <table className="table table-sm table-bordered text-right col-l-1">
+                <colgroup>
+                    <col width="20%" />
+                    <col width="20%" />
+                    <col width="20%" />
+                    <col width="20%" />
+                    <col width="20%" />
+                </colgroup>
                 <thead>
                     <tr className="bg-custom">
                         <th colSpan="5">Model Parameters</th>

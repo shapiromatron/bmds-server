@@ -32,7 +32,9 @@ class ModelBody extends Component {
             dataset = outputStore.selectedDataset,
             model = outputStore.modalModel,
             dtype = dataset.dtype,
-            priorClass = model.settings.priors.prior_class;
+            priorClass = model.settings.priors.prior_class,
+            isDichotomous = dtype == dc.Dtype.DICHOTOMOUS,
+            isContinuous = dtype == dc.Dtype.CONTINUOUS || dtype == dc.Dtype.CONTINUOUS_INDIVIDUAL;
 
         return (
             <Modal.Body>
@@ -52,12 +54,8 @@ class ModelBody extends Component {
                 </Row>
                 <Row>
                     <Col xl={4}>
-                        {dtype == dc.Dtype.DICHOTOMOUS ? (
-                            <DichotomousSummary store={outputStore} />
-                        ) : null}
-                        {dtype == dc.Dtype.CONTINUOUS || dtype == dc.Dtype.CONTINUOUS_INDIVIDUAL ? (
-                            <ContinuousSummary store={outputStore} />
-                        ) : null}
+                        {isDichotomous ? <DichotomousSummary store={outputStore} /> : null}
+                        {isContinuous ? <ContinuousSummary store={outputStore} /> : null}
                     </Col>
                     <Col xl={8}>
                         <DoseResponsePlot
@@ -72,20 +70,20 @@ class ModelBody extends Component {
                     </Col>
                 </Row>
                 <Row>
-                    <Col xl={8}>
+                    <Col xl={isDichotomous ? 8 : 10}>
                         <GoodnessFit store={outputStore} />
                     </Col>
                 </Row>
-                {dtype == dc.Dtype.DICHOTOMOUS ? (
+                {isDichotomous ? (
                     <Row>
                         <Col xl={8}>
                             <DichotomousDeviance store={outputStore} />
                         </Col>
                     </Row>
                 ) : null}
-                {dtype == dc.Dtype.CONTINUOUS ? (
+                {isContinuous ? (
                     <Row>
-                        <Col xl={12}>
+                        <Col xl={6}>
                             <ContinuousDeviance store={outputStore} />
                             <ContinuousTestOfInterest store={outputStore} />
                         </Col>

@@ -12,14 +12,20 @@ class ContinuousDeviance extends Component {
 
         return (
             <table className="table table-sm table-bordered text-right col-l-1">
+                <colgroup>
+                    <col width="25%" />
+                    <col width="25%" />
+                    <col width="25%" />
+                    <col width="25%" />
+                </colgroup>
                 <thead>
                     <tr className="bg-custom">
-                        <th colSpan="9">Analysis of Deviance</th>
+                        <th colSpan="9">Likelihoods of Interest</th>
                     </tr>
                     <tr>
-                        <th>Name</th>
-                        <th>Loglikelihood</th>
-                        <th>Num Params</th>
+                        <th>Model</th>
+                        <th>Log Likelihood</th>
+                        <th># of Parameters</th>
                         <th>AIC</th>
                     </tr>
                 </thead>

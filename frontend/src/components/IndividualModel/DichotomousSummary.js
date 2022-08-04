@@ -12,6 +12,10 @@ class DichotomousSummary extends Component {
 
         return (
             <table className="table table-sm table-bordered col-r-2">
+                <colgroup>
+                    <col width="60%" />
+                    <col width="40%" />
+                </colgroup>
                 <thead>
                     <tr className="bg-custom">
                         <th colSpan="2">Summary</th>
@@ -35,7 +39,7 @@ class DichotomousSummary extends Component {
                         <td>{ff(results.fit.aic)}</td>
                     </tr>
                     <tr>
-                        <td>LL</td>
+                        <td>Log Likelihood</td>
                         <td>{ff(results.fit.loglikelihood)}</td>
                     </tr>
                     <tr>

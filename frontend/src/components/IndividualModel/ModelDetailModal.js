@@ -58,13 +58,17 @@ class ModelBody extends Component {
                         {dtype == dc.Dtype.CONTINUOUS || dtype == dc.Dtype.CONTINUOUS_INDIVIDUAL ? (
                             <ContinuousSummary store={outputStore} />
                         ) : null}
-                        <ModelParameters parameters={model.results.parameters} />
                     </Col>
                     <Col xl={8}>
                         <DoseResponsePlot
                             layout={outputStore.drIndividualPlotLayout}
                             data={outputStore.drIndividualPlotData}
                         />
+                    </Col>
+                </Row>
+                <Row>
+                    <Col xl={7}>
+                        <ModelParameters parameters={model.results.parameters} />
                     </Col>
                 </Row>
                 <Row>

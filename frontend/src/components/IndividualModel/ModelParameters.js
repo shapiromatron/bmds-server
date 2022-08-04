@@ -4,7 +4,6 @@ import {observer} from "mobx-react";
 import PropTypes from "prop-types";
 
 import {parameterFormatter} from "../../utils/formatters";
-import {checkOrTimes} from "../../common";
 
 @observer
 class ModelParameters extends Component {
@@ -16,25 +15,32 @@ class ModelParameters extends Component {
             <table className="table table-sm table-bordered">
                 <thead>
                     <tr className="bg-custom">
-                        <th colSpan="3">Model Parameters</th>
+                        <th colSpan="5">Model Parameters</th>
                     </tr>
                     <tr>
                         <th>Variable</th>
-                        <th>Parameter (CI)</th>
-                        <th>Bounded</th>
+                        <th>Estimate</th>
+                        <th>Standard Error</th>
+                        <th>Lower Confidence</th>
+                        <th>Upper Confidence</th>
                     </tr>
                 </thead>
                 <tbody>
                     {indexes.map(i => {
+                        const bounded = parameters.bounded[i];
                         return (
                             <tr key={i}>
                                 <td>{parameters.names[i]}</td>
                                 <td>
-                                    {parameterFormatter(parameters.values[i])}
-                                    <br />({parameterFormatter(parameters.lower_ci[i])},&nbsp;
-                                    {parameterFormatter(parameters.upper_ci[i])})
+                                    {bounded ? "Bounded" : parameterFormatter(parameters.values[i])}
                                 </td>
-                                <td>{checkOrTimes(parameters.bounded[i])}</td>
+                                <td>{bounded ? "NA" : parameterFormatter(parameters.se[i])}</td>
+                                <td>
+                                    {bounded ? "NA" : parameterFormatter(parameters.lower_ci[i])}
+                                </td>
+                                <td>
+                                    {bounded ? "NA" : parameterFormatter(parameters.upper_ci[i])}
+                                </td>
                             </tr>
                         );
                     })}

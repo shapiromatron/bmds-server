@@ -27,7 +27,16 @@ class Output extends Component {
                 selectedBayesian,
             } = outputStore,
             modelType = outputStore.getModelType,
-            isFuture = outputStore.rootStore.mainStore.isFuture;
+            {isFuture, analysisSavedAndValidated} = outputStore.rootStore.mainStore;
+
+        if (!analysisSavedAndValidated) {
+            return (
+                <div className="alert alert-danger">
+                    There are unsaved changes made to the input; please save and reexecute to view
+                    new outputs, or refresh the page to remove current changes.
+                </div>
+            );
+        }
 
         if (selectedOutputErrorMessage) {
             return (

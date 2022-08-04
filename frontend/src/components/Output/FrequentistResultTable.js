@@ -136,12 +136,15 @@ class FrequentistRow extends Component {
             fns = footnotes.filter(d => d.index == data.index),
             rowClass = fns.length > 0 ? fns[fns.length - 1].class : "",
             rowIcon = fns.map(d => d.icon).join(""),
-            popoverTitle = `${name}: ${getModelBinLabel(selectedFrequentist, data.index)}`,
-            popoverContent =
-                getModelBinText(selectedFrequentist, data.index)
-                    .toString()
-                    .split(",")
-                    .join("<br/>") || "<i>No notes.</i>";
+            popoverTitle = store.recommendationEnabled
+                ? `${name}: ${getModelBinLabel(selectedFrequentist, data.index)}`
+                : null,
+            popoverContent = store.recommendationEnabled
+                ? getModelBinText(selectedFrequentist, data.index)
+                      .toString()
+                      .split(",")
+                      .join("<br/>") || "<i>No notes.</i>"
+                : null;
 
         return (
             <tr
@@ -233,7 +236,9 @@ class FrequentistResultTable extends Component {
             colWidths = store.recommendationEnabled
                 ? [12, 8, 8, 8, 8, 8, 10, 10, 28]
                 : [20, 10, 10, 10, 10, 10, 15, 15],
-            recommendedModelIndex = selectedFrequentist.recommender.results.recommended_model_index,
+            recommendedModelIndex = store.recommendationEnabled
+                ? selectedFrequentist.recommender.results.recommended_model_index
+                : null,
             footnotes = getFootnotes(recommendedModelIndex, selectedFrequentist.selected);
 
         return (

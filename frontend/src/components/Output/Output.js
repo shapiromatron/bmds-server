@@ -15,6 +15,24 @@ import "./Output.css";
 
 import SelectInput from "../common/SelectInput";
 
+const OutputErrorComponent = ({title, children}) => {
+    return (
+        <div className="alert alert-danger offset-lg-2 col-lg-8 mt-4">
+            <p>
+                <strong>
+                    <i className="fa fa-fw fa-exclamation-triangle" aria-hidden="true"></i>
+                    &nbsp;{title}
+                </strong>
+            </p>
+            {children}
+        </div>
+    );
+};
+OutputErrorComponent.propTypes = {
+    title: PropTypes.string.isRequired,
+    children: PropTypes.node.isRequired,
+};
+
 @inject("outputStore")
 @observer
 class Output extends Component {
@@ -22,34 +40,62 @@ class Output extends Component {
         const {outputStore} = this.props,
             {
                 canEdit,
-                selectedOutputErrorMessage,
+                hasNoResults,
+                hasAnyError,
                 selectedFrequentist,
                 selectedBayesian,
             } = outputStore,
             modelType = outputStore.getModelType,
-            isFuture = outputStore.rootStore.mainStore.isFuture;
+            {isFuture, analysisSavedAndValidated} = outputStore.rootStore.mainStore;
 
-        if (selectedOutputErrorMessage) {
+        if (hasAnyError) {
             return (
-                <div className="container-fluid">
-                    <pre>{selectedOutputErrorMessage}</pre>
-                </div>
+                <OutputErrorComponent title="An error occurred">
+                    <p>
+                        An error occurred with these settings. Please contact us if you require
+                        assistance.
+                    </p>
+                </OutputErrorComponent>
+            );
+        }
+
+        if (hasNoResults) {
+            return (
+                <OutputErrorComponent title="No results available">
+                    <p>No results available; please execute analysis.</p>
+                </OutputErrorComponent>
+            );
+        }
+
+        if (!analysisSavedAndValidated) {
+            return (
+                <OutputErrorComponent title="Output cannot be displayed">
+                    <p>
+                        There are unsaved changes made to the inputs, and the existing outputs can
+                        no longer be displayed. Please save and execute again to the view updated
+                        outputs, or refresh the page to reset your current changes.
+                    </p>
+                </OutputErrorComponent>
             );
         }
 
         return (
             <div className="container-fluid">
                 <div className="row">
-                    <div className="col-lg-2">
-                        <SelectInput
-                            label="Select an output"
-                            onChange={value => outputStore.setSelectedOutputIndex(parseInt(value))}
-                            value={outputStore.selectedOutputIndex}
-                            choices={outputStore.outputs.map((output, idx) => {
-                                return {value: idx, text: outputStore.getOutputName(idx)};
-                            })}
-                        />
-                    </div>
+                    {outputStore.outputs.length > 1 ? (
+                        <div className="col-lg-2">
+                            <SelectInput
+                                label="Select an output"
+                                onChange={value =>
+                                    outputStore.setSelectedOutputIndex(parseInt(value))
+                                }
+                                value={outputStore.selectedOutputIndex}
+                                choices={outputStore.outputs.map((output, idx) => {
+                                    return {value: idx, text: outputStore.getOutputName(idx)};
+                                })}
+                            />
+                        </div>
+                    ) : null}
                     <div className="col-lg-6">
                         <DatasetTable dataset={outputStore.selectedDataset} />
                     </div>

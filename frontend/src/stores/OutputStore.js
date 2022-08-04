@@ -53,16 +53,14 @@ class OutputStore {
         return this.rootStore.mainStore.errorMessage;
     }
 
-    @computed get selectedOutputErrorMessage() {
-        if (this.globalErrorMessage) {
-            return this.globalErrorMessage;
-        } else if (this.selectedOutput === null) {
-            return "No results available.";
-        } else if ("error" in this.selectedOutput) {
-            return this.selectedOutput.error;
-        } else {
-            return null;
-        }
+    @computed get hasNoResults() {
+        return this.selectedOutput === null;
+    }
+
+    @computed get hasAnyError() {
+        return (
+            this.globalErrorMessage || (this.selectedOutput && this.selectedOutput.error !== null)
+        );
     }
 
     @computed get canEdit() {

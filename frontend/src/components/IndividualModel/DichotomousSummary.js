@@ -45,12 +45,8 @@ class DichotomousSummary extends Component {
                         <td>{fourDecimalFormatter(results.gof.p_value)}</td>
                     </tr>
                     <tr>
-                        <td>Model DOF</td>
-                        <td>{ff(results.fit.model_df)}</td>
-                    </tr>
-                    <tr>
-                        <td>Total DOF</td>
-                        <td>{ff(results.fit.total_df)}</td>
+                        <td>Overall DOF</td>
+                        <td>{ff(results.gof.df)}</td>
                     </tr>
                     <tr>
                         <td>Chi-squared</td>

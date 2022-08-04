@@ -12,10 +12,17 @@ import {
 import {getLabel} from "../../common";
 import {ff} from "utils/formatters";
 
+const restrictionMapping = {
+    0: ["Model Restriction", "Unrestricted"],
+    1: ["Model Restriction", "Restricted"],
+    2: ["Model Approach", "Bayesian"],
+};
+
 @observer
 class ModelOptionsTable extends Component {
     render() {
         const {dtype, model} = this.props,
+            priorLabels = restrictionMapping[model.settings.priors.prior_class],
             priorClass = getLabel(model.settings.priors.prior_class, priorClassLabels),
             isBayesian = priorClass === "Bayesian";
         let data = [];
@@ -28,7 +35,7 @@ class ModelOptionsTable extends Component {
                 hasDegrees.has(model.model_class.verbose)
                     ? ["Degree", ff(model.settings.degree)]
                     : null,
-                ["Parameter Class", priorClass],
+                priorLabels,
                 isBayesian ? ["Samples", ff(model.settings.samples)] : null,
                 isBayesian ? ["Burn In", ff(model.settings.burnin)] : null,
             ];
@@ -43,7 +50,7 @@ class ModelOptionsTable extends Component {
                 hasDegrees.has(model.model_class.verbose)
                     ? ["Degree", ff(model.settings.degree)]
                     : null,
-                ["Prior Class", priorClass],
+                priorLabels,
                 isBayesian ? ["Samples", model.settings.samples] : null,
                 isBayesian ? ["Burn In", model.settings.burnin] : null,
             ];

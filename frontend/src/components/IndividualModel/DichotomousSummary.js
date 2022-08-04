@@ -53,7 +53,7 @@ class DichotomousSummary extends Component {
                         <td>{ff(results.gof.df)}</td>
                     </tr>
                     <tr>
-                        <td>Chi-squared</td>
+                        <td>Chi²</td>
                         <td>{ff(results.fit.chisq)}</td>
                     </tr>
                 </tbody>

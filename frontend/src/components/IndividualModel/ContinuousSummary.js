@@ -2,16 +2,21 @@ import React, {Component} from "react";
 import {observer} from "mobx-react";
 import PropTypes from "prop-types";
 
-import {ff} from "utils/formatters";
+import {ff, fractionalFormatter} from "utils/formatters";
 
 @observer
 class ContinuousSummary extends Component {
     render() {
         const {store} = this.props,
-            results = store.modalModel.results;
+            results = store.modalModel.results,
+            p_value = results.tests.p_values[3];
 
         return (
             <table className="table table-sm table-bordered col-r-2">
+                <colgroup>
+                    <col width="60%" />
+                    <col width="40%" />
+                </colgroup>
                 <thead>
                     <tr className="bg-custom">
                         <th colSpan="2">Summary</th>
@@ -35,8 +40,14 @@ class ContinuousSummary extends Component {
                         <td>{ff(results.fit.aic)}</td>
                     </tr>
                     <tr>
-                        <td>LL</td>
+                        <td>Log Likelihood</td>
                         <td>{ff(results.fit.loglikelihood)}</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <i>P</i>-Value
+                        </td>
+                        <td>{fractionalFormatter(p_value)}</td>
                     </tr>
                     <tr>
                         <td>Model DOF</td>

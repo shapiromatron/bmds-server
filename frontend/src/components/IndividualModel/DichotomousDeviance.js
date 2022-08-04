@@ -12,16 +12,24 @@ class DichotomousDeviance extends Component {
 
         return (
             <table className="table table-sm table-bordered text-right col-l-1">
+                <colgroup>
+                    <col width="20%" />
+                    <col width="16%" />
+                    <col width="16%" />
+                    <col width="16%" />
+                    <col width="16%" />
+                    <col width="16%" />
+                </colgroup>
                 <thead>
                     <tr className="bg-custom">
                         <th colSpan="9">Analysis of Deviance</th>
                     </tr>
                     <tr>
                         <th>Model</th>
-                        <th>LL</th>
-                        <th>Num Params</th>
+                        <th>Log Likelihood</th>
+                        <th># Parameters</th>
                         <th>Deviance</th>
-                        <th>Test DF</th>
+                        <th>Test DOF</th>
                         <th>
                             <i>P</i>-Value
                         </th>

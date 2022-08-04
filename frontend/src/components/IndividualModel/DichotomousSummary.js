@@ -12,6 +12,10 @@ class DichotomousSummary extends Component {
 
         return (
             <table className="table table-sm table-bordered col-r-2">
+                <colgroup>
+                    <col width="60%" />
+                    <col width="40%" />
+                </colgroup>
                 <thead>
                     <tr className="bg-custom">
                         <th colSpan="2">Summary</th>
@@ -35,7 +39,7 @@ class DichotomousSummary extends Component {
                         <td>{ff(results.fit.aic)}</td>
                     </tr>
                     <tr>
-                        <td>LL</td>
+                        <td>Log Likelihood</td>
                         <td>{ff(results.fit.loglikelihood)}</td>
                     </tr>
                     <tr>
@@ -45,15 +49,11 @@ class DichotomousSummary extends Component {
                         <td>{fourDecimalFormatter(results.gof.p_value)}</td>
                     </tr>
                     <tr>
-                        <td>Model DOF</td>
-                        <td>{ff(results.fit.model_df)}</td>
+                        <td>Overall DOF</td>
+                        <td>{ff(results.gof.df)}</td>
                     </tr>
                     <tr>
-                        <td>Total DOF</td>
-                        <td>{ff(results.fit.total_df)}</td>
-                    </tr>
-                    <tr>
-                        <td>Chi-squared</td>
+                        <td>Chi²</td>
                         <td>{ff(results.fit.chisq)}</td>
                     </tr>
                 </tbody>

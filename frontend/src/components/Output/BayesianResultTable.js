@@ -17,7 +17,7 @@ class BayesianResultTable extends Component {
             return null;
         }
 
-        const colWidths = [14, 10, 10, 10, 10, 10, 10, 13, 13],
+        const colWidths = [14, 12, 12, 12, 12, 12, 13, 13],
             ma = selectedBayesian.model_average;
 
         return (
@@ -35,9 +35,6 @@ class BayesianResultTable extends Component {
                         <th>BMDL</th>
                         <th>BMD</th>
                         <th>BMDU</th>
-                        <th>
-                            <i>P</i>-Value
-                        </th>
                         <th>Scaled Residual for Dose Group near BMD</th>
                         <th>Scaled Residual for Control Dose Group</th>
                     </tr>
@@ -64,7 +61,6 @@ class BayesianResultTable extends Component {
                                 <td>{ff(model.results.bmdl)}</td>
                                 <td>{ff(model.results.bmd)}</td>
                                 <td>{ff(model.results.bmdu)}</td>
-                                <td>-</td>
                                 <td>{ff(model.results.gof.roi)}</td>
                                 <td>{ff(model.results.gof.residual[0])}</td>
                             </tr>
@@ -88,7 +84,6 @@ class BayesianResultTable extends Component {
                             <td>{ff(ma.results.bmdl)}</td>
                             <td>{ff(ma.results.bmd)}</td>
                             <td>{ff(ma.results.bmdu)}</td>
-                            <td>-</td>
                             <td>-</td>
                             <td>-</td>
                         </tr>

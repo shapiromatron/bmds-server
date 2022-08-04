@@ -73,6 +73,7 @@ class MainStore {
 
     @action.bound
     async saveAnalysis() {
+        this.rootStore.dataStore.cleanRows();
         const url = this.config.editSettings.patchInputUrl,
             {csrfToken} = this.config.editSettings;
         this.errorMessage = "";

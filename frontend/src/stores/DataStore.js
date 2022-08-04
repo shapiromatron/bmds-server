@@ -112,6 +112,22 @@ class DataStore {
         this.updateOptionDegree(dataset);
     }
 
+    @action.bound cleanRows() {
+        // removes empty rows from each dataset
+        this.datasets.map(dataset => {
+            // get keys of row properties, and zip values into row arrays
+            let keys = Object.keys(dataset).filter(key => Array.isArray(dataset[key])),
+                rows = _.zip(...keys.map(key => dataset[key]));
+            // splice out indices where all row properties are blank
+            _.forEachRight(rows, (row, index) => {
+                let isEmpty = _.every(row, e => e == "");
+                if (isEmpty) {
+                    keys.forEach(key => dataset[key].splice(index, 1));
+                }
+            });
+        });
+    }
+
     @action.bound addRow() {
         const dataset = this.selectedDataset;
         Object.keys(dataset).map((key, i) => {

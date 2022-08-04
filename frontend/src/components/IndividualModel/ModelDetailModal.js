@@ -67,18 +67,18 @@ class ModelBody extends Component {
                     </Col>
                 </Row>
                 <Row>
-                    <Col xl={7}>
+                    <Col xl={8}>
                         <ModelParameters parameters={model.results.parameters} />
                     </Col>
                 </Row>
                 <Row>
-                    <Col xl={12}>
+                    <Col xl={8}>
                         <GoodnessFit store={outputStore} />
                     </Col>
                 </Row>
                 {dtype == dc.Dtype.DICHOTOMOUS ? (
                     <Row>
-                        <Col xl={12}>
+                        <Col xl={8}>
                             <DichotomousDeviance store={outputStore} />
                         </Col>
                     </Row>

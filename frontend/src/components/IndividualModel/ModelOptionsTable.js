@@ -24,7 +24,7 @@ class ModelOptionsTable extends Component {
             data = [
                 ["BMR Type", getLabel(model.settings.bmr_type, dichotomousBmrOptions)],
                 ["BMR", ff(model.settings.bmr)],
-                ["Alpha", ff(model.settings.alpha)],
+                ["Confidence Level", ff(1 - model.settings.alpha)],
                 hasDegrees.has(model.model_class.verbose)
                     ? ["Degree", ff(model.settings.degree)]
                     : null,

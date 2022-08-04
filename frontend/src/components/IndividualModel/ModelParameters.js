@@ -4,6 +4,7 @@ import {observer} from "mobx-react";
 import PropTypes from "prop-types";
 
 import {parameterFormatter} from "../../utils/formatters";
+import HelpTextPopover from "components/common/HelpTextPopover";
 
 @observer
 class ModelParameters extends Component {
@@ -32,7 +33,17 @@ class ModelParameters extends Component {
                             <tr key={i}>
                                 <td>{parameters.names[i]}</td>
                                 <td>
-                                    {bounded ? "Bounded" : parameterFormatter(parameters.values[i])}
+                                    {bounded ? (
+                                        <>
+                                            <span>Bounded</span>
+                                            <HelpTextPopover
+                                                title="Bounded"
+                                                content={`The value of this parameter, ${parameters.values[i]}, is within the tolerance of the bound`}
+                                            />
+                                        </>
+                                    ) : (
+                                        parameterFormatter(parameters.values[i])
+                                    )}
                                 </td>
                                 <td>{bounded ? "NA" : parameterFormatter(parameters.se[i])}</td>
                                 <td>

@@ -18,15 +18,15 @@ class InfoTable extends Component {
                 </thead>
                 <tbody>
                     <tr>
-                        <td>Model name</td>
-                        <td>{model.name}</td>
-                    </tr>
-                    <tr>
-                        <td>Dataset name</td>
+                        <td>Dataset</td>
                         <td>{dataset.metadata.name}</td>
                     </tr>
                     <tr>
-                        <td>Model form</td>
+                        <td>Model</td>
+                        <td>{model.name}</td>
+                    </tr>
+                    <tr>
+                        <td>Equation</td>
                         <td>{model.model_class.model_form_str}</td>
                     </tr>
                 </tbody>

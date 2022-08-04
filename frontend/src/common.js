@@ -1,8 +1,6 @@
 import _ from "lodash";
 import React from "react";
-import {ff, fourDecimalFormatter} from "./utils/formatters";
 
-export {ff, fourDecimalFormatter};
 export const simulateClick = function(el) {
         // https://gomakethings.com/how-to-simulate-a-click-event-with-javascript/
         const evt = new MouseEvent("click", {

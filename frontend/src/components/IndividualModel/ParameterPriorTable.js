@@ -3,9 +3,9 @@ import React, {Component} from "react";
 import {observer} from "mobx-react";
 import PropTypes from "prop-types";
 
-import {ExponentialM3} from "../../constants/modelConstants";
 import {isFrequentist, priorTypeLabels} from "../../constants/outputConstants";
-import {ff, getLabel} from "../../common";
+import {getLabel} from "../../common";
+import {ff} from "utils/formatters";
 
 const renderPriorRow = prior => {
         return (
@@ -33,29 +33,22 @@ const renderPriorRow = prior => {
 @observer
 class ParameterPriorTable extends Component {
     render() {
-        const {name, parameters, priorClass} = this.props,
+        const {parameters, priorClass} = this.props,
             isFreq = isFrequentist(priorClass),
             rowFunction = isFreq ? renderFrequentistRow : renderPriorRow,
-            rows = _.range(parameters.names.length)
-                .map(idx => {
-                    return {
-                        name: parameters.names[idx],
-                        type: parameters.prior_type[idx],
-                        initial_value: parameters.prior_initial_value[idx],
-                        stdev: parameters.prior_stdev[idx],
-                        min_value: parameters.prior_min_value[idx],
-                        max_value: parameters.prior_max_value[idx],
-                    };
-                })
-                .filter(d => {
-                    if (name === ExponentialM3 && d.name === "c") {
-                        return false;
-                    }
-                    return true;
-                });
+            rows = _.range(parameters.names.length).map(idx => {
+                return {
+                    name: parameters.names[idx],
+                    type: parameters.prior_type[idx],
+                    initial_value: parameters.prior_initial_value[idx],
+                    stdev: parameters.prior_stdev[idx],
+                    min_value: parameters.prior_min_value[idx],
+                    max_value: parameters.prior_max_value[idx],
+                };
+            });
 
         return (
-            <table className="table table-sm table-bordered">
+            <table className="table table-sm table-bordered text-right col-l-1">
                 <thead>
                     <tr className="bg-custom">
                         <th colSpan={isFreq ? 4 : 6}>Parameter Settings</th>
@@ -85,7 +78,6 @@ class ParameterPriorTable extends Component {
 }
 
 ParameterPriorTable.propTypes = {
-    name: PropTypes.string.isRequired,
     parameters: PropTypes.object.isRequired,
     priorClass: PropTypes.number.isRequired,
 };

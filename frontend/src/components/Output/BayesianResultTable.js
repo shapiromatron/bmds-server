@@ -4,7 +4,7 @@ import React, {Component} from "react";
 import PropTypes from "prop-types";
 
 import {maIndex, modelClasses} from "../../constants/outputConstants";
-import {ff} from "../../common";
+import {ff, fractionalFormatter} from "utils/formatters";
 
 @inject("outputStore")
 @observer
@@ -17,11 +17,11 @@ class BayesianResultTable extends Component {
             return null;
         }
 
-        const colWidths = [14, 10, 10, 10, 10, 10, 10, 13, 13],
+        const colWidths = [14, 12, 12, 12, 12, 12, 13, 13],
             ma = selectedBayesian.model_average;
 
         return (
-            <table id="bayesian-model-result" className="table table-sm">
+            <table id="bayesian-model-result" className="table table-sm text-right col-l-1">
                 <colgroup>
                     {_.map(colWidths).map((value, idx) => (
                         <col key={idx} width={`${value}%`}></col>
@@ -35,9 +35,6 @@ class BayesianResultTable extends Component {
                         <th>BMDL</th>
                         <th>BMD</th>
                         <th>BMDU</th>
-                        <th>
-                            <i>P</i>-Value
-                        </th>
                         <th>Scaled Residual for Dose Group near BMD</th>
                         <th>Scaled Residual for Control Dose Group</th>
                     </tr>
@@ -57,12 +54,13 @@ class BayesianResultTable extends Component {
                                         {model.name}
                                     </a>
                                 </td>
-                                <td>{ma ? ff(ma.results.priors[index]) : "-"}</td>
-                                <td>{ma ? ff(ma.results.posteriors[index]) : "-"}</td>
+                                <td>{ma ? fractionalFormatter(ma.results.priors[index]) : "-"}</td>
+                                <td>
+                                    {ma ? fractionalFormatter(ma.results.posteriors[index]) : "-"}
+                                </td>
                                 <td>{ff(model.results.bmdl)}</td>
                                 <td>{ff(model.results.bmd)}</td>
                                 <td>{ff(model.results.bmdu)}</td>
-                                <td>-</td>
                                 <td>{ff(model.results.gof.roi)}</td>
                                 <td>{ff(model.results.gof.residual[0])}</td>
                             </tr>
@@ -86,7 +84,6 @@ class BayesianResultTable extends Component {
                             <td>{ff(ma.results.bmdl)}</td>
                             <td>{ff(ma.results.bmd)}</td>
                             <td>{ff(ma.results.bmdu)}</td>
-                            <td>-</td>
                             <td>-</td>
                             <td>-</td>
                         </tr>

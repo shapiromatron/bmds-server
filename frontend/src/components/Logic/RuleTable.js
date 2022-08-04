@@ -11,22 +11,20 @@ import {ruleOrder} from "../../constants/logicConstants";
 class RuleList extends Component {
     render() {
         const {logicStore} = this.props,
-            {canEdit, updateRule} = logicStore,
+            {canEdit, updateRule, modelType} = logicStore,
             {rules} = logicStore.logic;
 
         return (
             <table id="rule-table" className="table table-sm table-bordered">
                 <thead className="bg-custom">
                     <tr>
-                        <th colSpan="7" className="text-center">
+                        <th colSpan="5" className="text-center">
                             Model Recommendation/Bin Placement Logic
                         </th>
                     </tr>
                     <tr>
                         <th>Test Description</th>
-                        <th>Continuous</th>
-                        <th>Dichotomous</th>
-                        <th>Nested</th>
+                        <th>Enabled</th>
                         <th>Test Threshold</th>
                         <th>Bin Placement if Test is Failed</th>
                         <th>Notes to Show</th>
@@ -42,6 +40,7 @@ class RuleList extends Component {
                                 ruleIndex={ruleIndex}
                                 canEdit={canEdit}
                                 updateRule={updateRule}
+                                modelType={modelType}
                             />
                         );
                     })}

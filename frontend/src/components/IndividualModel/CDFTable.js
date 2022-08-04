@@ -3,16 +3,16 @@ import React, {Component} from "react";
 import {observer} from "mobx-react";
 import PropTypes from "prop-types";
 
-import {ff} from "../../common";
+import {ff} from "utils/formatters";
 
 @observer
 class CDFTable extends Component {
     render() {
         const {bmd_dist} = this.props;
         return (
-            <table className="table table-sm table-bordered">
+            <table className="table table-sm table-bordered text-right">
                 <thead>
-                    <tr className="bg-custom">
+                    <tr className="bg-custom text-left">
                         <th colSpan="2">CDF</th>
                     </tr>
                     <tr>

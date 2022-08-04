@@ -2,7 +2,8 @@ import React, {Component} from "react";
 import {observer} from "mobx-react";
 import PropTypes from "prop-types";
 
-import {ff, fourDecimalFormatter} from "../../common";
+import {ff, fractionalFormatter} from "utils/formatters";
+import HelpTextPopover from "components/common/HelpTextPopover";
 
 @observer
 class ContinuousTestOfInterest extends Component {
@@ -11,15 +12,24 @@ class ContinuousTestOfInterest extends Component {
             testInterest = store.modalModel.results.tests;
 
         return (
-            <table className="table table-sm table-bordered">
+            <table className="table table-sm table-bordered text-right col-l-1">
+                <colgroup>
+                    <col width="25%" />
+                    <col width="25%" />
+                    <col width="25%" />
+                    <col width="25%" />
+                </colgroup>
                 <thead>
-                    <tr className="bg-custom">
+                    <tr className="bg-custom text-left">
                         <th colSpan="4">Test of Interest</th>
                     </tr>
                     <tr>
                         <th>Test</th>
-                        <th>Likelihood Ratio</th>
-                        <th>DF</th>
+                        <th>
+                            LLR
+                            <HelpTextPopover title="LLR" content="2 * Log(Likelihood Ratio)" />
+                        </th>
+                        <th>Test DOF</th>
                         <th>
                             <i>P</i>-Value
                         </th>
@@ -29,10 +39,10 @@ class ContinuousTestOfInterest extends Component {
                     {testInterest.names.map((name, i) => {
                         return (
                             <tr key={i}>
-                                <td>{name}</td>
+                                <td>Test {i + 1}</td>
                                 <td>{ff(testInterest.ll_ratios[i])}</td>
                                 <td>{ff(testInterest.dfs[i])}</td>
-                                <td>{fourDecimalFormatter(testInterest.p_values[i])}</td>
+                                <td>{fractionalFormatter(testInterest.p_values[i])}</td>
                             </tr>
                         );
                     })}

@@ -4,7 +4,7 @@ target-version = ['py36', 'py37', 'py38']
 include = '\.pyi?$'
 exclude = '''
 /(
-    \.git
+    \.git,
   | \.tox,
   | bin,
   | docs,
@@ -17,3 +17,12 @@ exclude = '''
   | venv
 )/
 '''
+
+[tool.isort]
+atomic = true
+float_to_top = true
+include_trailing_comma = true
+known_third_party = ["bmds"]
+line_length = 100
+multi_line_output = 3
+skip = ["frontend/", "scripts/private/", "venv/"]

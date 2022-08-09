@@ -34,7 +34,7 @@ class GoodnessFit extends Component {
                     "Estimated Probability",
                     "Scaled Residual",
                 ],
-                [20, 16, 16, 16, 16, 16, 16],
+                [17, 16, 16, 17, 17, 17],
             ];
         }
         throw Error("Unknown dtype");

@@ -159,17 +159,17 @@ export const getDoseLabel = function(dataset) {
             });
         }
         if (model.results.bmdl) {
+            // TODO - more defensively check if bmdl and/or bmdu - change to error bars on line?
             annotations.push({
                 x: model.results.bmdl,
-                y: model.results.plotting.bmdl_y,
-                text: "BMDL",
-                showarrow: true,
-                arrowhead: 6,
-                arrowsize: 1.5,
+                y: model.results.plotting.bmd_y,
+                text: "",
+                arrowside: "none",
                 arrowcolor: hexColor,
-                ax: 0,
-                ay: -30,
-                ayref: "pixel",
+                arrowwidth: 3,
+                ax: model.results.bmdu - model.results.bmdl, // TODO - fix -- too wide?
+                ay: 0,
+                axref: "ax",
                 bgcolor: "white",
             });
         }
@@ -188,6 +188,7 @@ export const getDoseLabel = function(dataset) {
     },
     getBayesianBMDLine = function(model, hexColor) {
         const annotations = [];
+        // TODO - implement here
         if (model.results.bmd) {
             // https://plotly.com/javascript/reference/layout/annotations/#layout-annotations
             annotations.push({

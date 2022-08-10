@@ -88,8 +88,8 @@ class GoodnessFit extends Component {
                                       <td>{dose}</td>
                                       <td>{dataset.ns[i]}</td>
                                       <td>{dataset.incidences[i]}</td>
-                                      <td>{ff(gof.expected[i] / dataset.ns[i])}</td>
                                       <td>{ff(gof.expected[i])}</td>
+                                      <td>{ff(gof.expected[i] / dataset.ns[i])}</td>
                                       <td>{ff(gof.residual[i])}</td>
                                   </tr>
                               );

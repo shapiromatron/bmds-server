@@ -57,7 +57,9 @@ class DatasetTable extends Component {
 
                 <table className="table table-sm table-bordered text-right">
                     <colgroup>
-                        {columnNames.map((d,i) => <col key={i} width={width}/>)}
+                        {columnNames.map((d, i) => (
+                            <col key={i} width={width} />
+                        ))}
                     </colgroup>
                     <thead className="bg-custom">
                         <tr>

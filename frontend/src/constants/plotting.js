@@ -71,18 +71,6 @@ export const getDoseLabel = function(dataset) {
     },
     getDrLayout = function(dataset, selected, modal, hover) {
         let layout = _.cloneDeep(doseResponseLayout);
-        const annotations = [];
-        if (selected && selected.annotations) {
-            annotations.push(selected.annotations);
-        }
-        if (modal && modal.annotations) {
-            annotations.push(modal.annotations);
-        }
-        if (hover && hover.annotations) {
-            annotations.push(hover.annotations);
-        }
-        layout.annotations = _.flatten(annotations);
-
         layout.title.text = dataset.metadata.name;
         layout.xaxis.title.text = getDoseLabel(dataset);
         layout.yaxis.title.text = getResponseLabel(dataset);
@@ -155,7 +143,6 @@ export const getDoseLabel = function(dataset) {
     },
     getDrBmdLine = function(model, hexColor) {
         // https://plotly.com/python/marker-style/
-        // https://plotly.com/javascript/reference/layout/annotations/#layout-annotations
         // https://plotly.com/javascript/reference/scatter/
         const hasBmd = model.results.bmd > 0,
             hasBmdl = model.results.bmdl > 0,
@@ -211,50 +198,54 @@ export const getDoseLabel = function(dataset) {
         return data;
     },
     getBayesianBMDLine = function(model, hexColor) {
-        const annotations = [];
-        // TODO - implement here
-        if (model.results.bmd) {
-            // https://plotly.com/javascript/reference/layout/annotations/#layout-annotations
-            annotations.push({
-                x: model.results.bmd,
-                y: model.results.bmd_y,
-                text: "BMD",
-                showarrow: true,
-                arrowhead: 6,
-                arrowsize: 1.5,
-                arrowcolor: hexColor,
-                ay: -30,
-                ax: 0,
-                ayref: "pixel",
-                bgcolor: "white",
+        const hasBmd = model.results.bmd > 0,
+            hasBmdl = model.results.bmdl > 0,
+            hasBmdu = model.results.bmdu > 0,
+            data = [
+                {
+                    x: model.results.dr_x,
+                    y: model.results.dr_y,
+                    name: "Model average",
+                    legendgroup: "BMA",
+                    line: {
+                        width: 6,
+                        color: hexColor,
+                    },
+                },
+            ];
+
+        if (hasBmd) {
+            // prettier-ignore
+            const template = `<b>Model Average</b><br />BMD: ${ff(model.results.bmd)}<br />BMDL: ${ff(model.results.bmdl)}<br />BMDU: ${ff(model.results.bmdu)}<br />BMR: ${ff(model.results.bmd_y)}<extra></extra>`;
+            data.push({
+                x: [model.results.bmd],
+                y: [model.results.bmd_y],
+                mode: "markers",
+                type: "scatter",
+                hoverinfo: "x",
+                hovertemplate: template,
+                marker: {
+                    color: hexColor,
+                    size: 16,
+                    symbol: "diamond-tall",
+                    line: {
+                        color: "white",
+                        width: 2,
+                    },
+                },
+                legendgroup: "BMA",
+                showlegend: false,
+                error_x: {
+                    array: [hasBmdu ? model.results.bmdu - model.results.bmd : 0],
+                    arrayminus: [hasBmdl ? model.results.bmd - model.results.bmdl : 0],
+                    color: hexToRgbA(hexColor, 0.6),
+                    thickness: 12,
+                    width: 0,
+                },
             });
         }
-        if (model.results.bmdl) {
-            annotations.push({
-                x: model.results.bmdl,
-                y: model.results.bmdl_y,
-                text: "BMDL",
-                showarrow: true,
-                arrowhead: 6,
-                arrowsize: 1.5,
-                arrowcolor: hexColor,
-                ay: -30,
-                ax: 0,
-                ayref: "pixel",
-                bgcolor: "white",
-            });
-        }
-        let bma_data = {
-            x: model.results.dr_x,
-            y: model.results.dr_y,
-            name: "BMA",
-            line: {
-                width: 6,
-                color: hexColor,
-            },
-            annotations,
-        };
-        return bma_data;
+
+        return data;
     },
     getLollipopDataset = function(dataArray, modelArray, modelName) {
         return {
@@ -306,6 +297,8 @@ export const getDoseLabel = function(dataset) {
         };
     },
     bmaColor = "#00008b",
+    hoverColor = "#DA2CDA",
+    selectedColor = "#4a9f2f",
     colorCodes = [
         // adapted from https://observablehq.com/@d3/color-schemes
         "#e41a1c",

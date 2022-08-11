@@ -9,6 +9,8 @@ import {
     getDrBmdLine,
     colorCodes,
     bmaColor,
+    hoverColor,
+    selectedColor,
     getBayesianBMDLine,
     getLollipopDataset,
     getLollipopPlotLayout,
@@ -127,7 +129,7 @@ class OutputStore {
         const output = this.selectedOutput;
         if (output && output.frequentist && _.isNumber(output.frequentist.selected.model_index)) {
             const model = output.frequentist.models[output.frequentist.selected.model_index];
-            return getDrBmdLine(model, "#4a9f2f");
+            return getDrBmdLine(model, selectedColor);
         }
         return null;
     }
@@ -155,7 +157,7 @@ class OutputStore {
             !this.drModelModalIsMA &&
             (!this.drModelSelected || this.drModelSelected[0].name !== model.name)
         ) {
-            this.drModelModal = getDrBmdLine(model, "#0000FF");
+            this.drModelModal = getDrBmdLine(model, hoverColor);
         }
         this.showModelModal = true;
     }
@@ -240,17 +242,14 @@ class OutputStore {
         });
         if (output.bayesian.model_average) {
             let bma_data = getBayesianBMDLine(output.bayesian.model_average, bmaColor);
-            bayesian_plot_data.push(bma_data);
+            bayesian_plot_data.push(...bma_data);
         }
         return bayesian_plot_data;
     }
     @computed get drBayesianPlotLayout() {
         // the bayesian plot shown on the output page and modal
-        let layout = _.cloneDeep(this.drFrequentistPlotLayout),
-            output = this.selectedOutput;
-        layout.annotations = output.bayesian.model_average
-            ? getBayesianBMDLine(output.bayesian.model_average, bmaColor).annotations
-            : [];
+        const layout = _.cloneDeep(this.drFrequentistPlotLayout);
+        layout.legend = {tracegroupgap: 0, x: 1, y: 1};
         return layout;
     }
     @computed get drPlotModalData() {
@@ -267,7 +266,7 @@ class OutputStore {
         if (this.drModelSelected && this.drModelSelected[0].name === model.name) {
             return;
         }
-        this.drModelHover = getDrBmdLine(model, "#DA2CDA");
+        this.drModelHover = getDrBmdLine(model, hoverColor);
     }
     @action.bound drPlotRemoveHover() {
         this.drModelHover = null;

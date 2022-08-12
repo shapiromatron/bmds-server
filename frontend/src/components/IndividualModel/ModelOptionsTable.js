@@ -41,12 +41,12 @@ class ModelOptionsTable extends Component {
             ];
         } else if (dtype == Dtype.CONTINUOUS || dtype == Dtype.CONTINUOUS_INDIVIDUAL) {
             data = [
-                ["Is Increasing", model.settings.is_increasing],
-                ["Distribution Type", getLabel(model.settings.disttype, distTypeOptions)],
                 ["BMR Type", getLabel(model.settings.bmr_type, continuousBmrOptions)],
                 ["BMRF", ff(model.settings.bmr)],
+                ["Distribution Type", getLabel(model.settings.disttype, distTypeOptions)],
+                ["Direction", model.settings.is_increasing ? "Up" : "Down"],
+                ["Confidence Level", 1 - ff(model.settings.alpha)],
                 ["Tail Probability", ff(model.settings.tail_prob)],
-                ["Alpha", ff(model.settings.alpha)],
                 hasDegrees.has(model.model_class.verbose)
                     ? ["Degree", ff(model.settings.degree)]
                     : null,

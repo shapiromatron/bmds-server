@@ -34,7 +34,7 @@ class GoodnessFit extends Component {
                     "Estimated Probability",
                     "Scaled Residual",
                 ],
-                [20, 16, 16, 16, 16, 16, 16],
+                [17, 16, 16, 17, 17, 17],
             ];
         }
         throw Error("Unknown dtype");
@@ -88,8 +88,8 @@ class GoodnessFit extends Component {
                                       <td>{dose}</td>
                                       <td>{dataset.ns[i]}</td>
                                       <td>{dataset.incidences[i]}</td>
-                                      <td>{ff(gof.expected[i] / dataset.ns[i])}</td>
                                       <td>{ff(gof.expected[i])}</td>
+                                      <td>{ff(gof.expected[i] / dataset.ns[i])}</td>
                                       <td>{ff(gof.residual[i])}</td>
                                   </tr>
                               );

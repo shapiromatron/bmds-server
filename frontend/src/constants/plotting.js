@@ -176,8 +176,8 @@ export const getDoseLabel = function(dataset) {
                 hovertemplate: template,
                 marker: {
                     color: hexColor,
-                    size: 16,
-                    symbol: "diamond-tall",
+                    size: 12,
+                    symbol: "circle",
                     line: {
                         color: "white",
                         width: 2,
@@ -189,7 +189,7 @@ export const getDoseLabel = function(dataset) {
                     array: [hasBmdu ? model.results.bmdu - model.results.bmd : 0],
                     arrayminus: [hasBmdl ? model.results.bmd - model.results.bmdl : 0],
                     color: hexToRgbA(hexColor, 0.6),
-                    thickness: 12,
+                    thickness: 18,
                     width: 0,
                 },
             });

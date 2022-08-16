@@ -188,7 +188,7 @@ export const getDoseLabel = function(dataset) {
                 error_x: {
                     array: [hasBmdu ? model.results.bmdu - model.results.bmd : 0],
                     arrayminus: [hasBmdl ? model.results.bmd - model.results.bmdl : 0],
-                    color: hexToRgbA(hexColor, 0.6),
+                    color: hexToRgbA(hexColor, 0.5),
                     thickness: 18,
                     width: 0,
                 },

@@ -9,6 +9,7 @@ import FrequentistResultTable from "./FrequentistResultTable";
 import NestedDichotomousResultTable from "./NestedDichotomous/ResultTable";
 import BayesianResultTable from "./BayesianResultTable";
 import DatasetTable from "../Data/DatasetTable";
+import OptionSetTable from "./OptionSetTable";
 import SelectModel from "./SelectModel";
 import DoseResponsePlot from "../common/DoseResponsePlot";
 import "./Output.css";
@@ -98,6 +99,9 @@ class Output extends Component {
                     ) : null}
                     <div className="col-lg-6">
                         <DatasetTable dataset={outputStore.selectedDataset} />
+                    </div>
+                    <div className="col-lg-4">
+                        <OptionSetTable />
                     </div>
                 </div>
                 {selectedFrequentist ? (

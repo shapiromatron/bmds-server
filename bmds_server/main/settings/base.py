@@ -181,7 +181,6 @@ CELERY_WORKER_MAX_TASKS_PER_CHILD = 100
 CELERY_WORKER_PREFETCH_MULTIPLIER = 1
 
 # Cache settings
-ENABLE_REPORT_CACHE = True
 CACHES = {
     "default": {
         "BACKEND": "django.core.cache.backends.locmem.LocMemCache",

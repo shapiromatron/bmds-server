@@ -255,11 +255,8 @@ class DataStore {
             .map(d => d.dataset);
     }
 
-    @computed get checkDatasetsLength() {
-        if (this.datasets.length > 9) {
-            return true;
-        }
-        return false;
+    @computed get canAddNewDataset() {
+        return this.datasets.length < 6;
     }
 
     @computed get hasSelectedDataset() {

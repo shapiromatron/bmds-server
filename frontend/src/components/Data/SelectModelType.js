@@ -15,7 +15,8 @@ class SelectModelType extends Component {
             <div className="model-type mb-2">
                 <Button
                     className="btn btn-primary btn-sm float-right"
-                    disabled={dataStore.checkDatasetsLength}
+                    title="Can add up to 6 datasets"
+                    disabled={!dataStore.canAddNewDataset}
                     faClass="fa fa-fw fa-plus-square"
                     text="New"
                     onClick={dataStore.addDataset}

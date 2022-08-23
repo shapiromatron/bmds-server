@@ -4,47 +4,39 @@ import PropTypes from "prop-types";
 
 import {ff} from "utils/formatters";
 import {Dtype} from "../../constants/dataConstants";
+import {isLognormal} from "../../constants/modelConstants";
+
+/* eslint-disable */
+const hdr_c_normal = [
+        "Dose", "Size", "Observed Mean", "Calculated Median", "Estimated Median",
+        "Observed SD", "Calculated SD", "Estimated SD", "Scaled Residual",
+    ],
+    hdr_c_lognormal = [
+        "Dose", "Size", "Observed Mean", "Calculated Median", "Estimated Median",
+        "Observed GSD", "Calculated GSD", "Estimated GSD", "Scaled Residual",
+    ],
+    hdr_d = [ "Dose", "Size", "Observed", "Expected", "Estimated Probability", "Scaled Residual"];
+/* eslint-enable */
 
 @observer
 class GoodnessFit extends Component {
-    getHeaders(dtype) {
+    getHeaders(dtype, settings) {
         if (dtype == Dtype.CONTINUOUS || dtype == Dtype.CONTINUOUS_INDIVIDUAL) {
-            return [
-                [
-                    "Dose",
-                    "Size",
-                    "Observed Mean",
-                    "Calculated Median",
-                    "Estimated Median",
-                    "Observed SD",
-                    "Calculated SD",
-                    "Estimated SD",
-                    "Scaled Residual",
-                ],
-                [10, 10, 10, 12, 12, 12, 10, 12, 12],
-            ];
+            const headers = isLognormal(settings.disttype) ? hdr_c_lognormal : hdr_c_normal;
+            return [headers, [10, 10, 10, 12, 12, 12, 10, 12, 12]];
         }
         if (dtype == Dtype.DICHOTOMOUS) {
-            return [
-                [
-                    "Dose",
-                    "Size",
-                    "Observed",
-                    "Expected",
-                    "Estimated Probability",
-                    "Scaled Residual",
-                ],
-                [17, 16, 16, 17, 17, 17],
-            ];
+            return [hdr_d, [17, 16, 16, 17, 17, 17]];
         }
         throw Error("Unknown dtype");
     }
     render() {
         const {store} = this.props,
+            settings = store.modalModel.settings,
             gof = store.modalModel.results.gof,
             dataset = store.selectedDataset,
             {dtype} = dataset,
-            headers = this.getHeaders(dtype);
+            headers = this.getHeaders(dtype, settings);
         return (
             <table className="table table-sm table-bordered text-right">
                 <colgroup>

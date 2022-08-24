@@ -97,10 +97,10 @@ class Output extends Component {
                             />
                         </div>
                     ) : null}
-                    <div className="col-lg-6">
+                    <div className="col-lg-5">
                         <DatasetTable dataset={outputStore.selectedDataset} />
                     </div>
-                    <div className="col-lg-4">
+                    <div className="col-lg-5">
                         <OptionSetTable />
                     </div>
                 </div>

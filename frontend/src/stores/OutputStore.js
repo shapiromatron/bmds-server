@@ -33,11 +33,10 @@ class OutputStore {
     @observable drModelModal = null;
     @observable drModelModalIsMA = false;
     @observable drModelAverageModal = false;
-
     @observable showBMDLine = false;
-
     @observable userPlotSettings = {};
     @observable showInlineNotes = false;
+
     @action.bound toggleInlineNotes() {
         this.showInlineNotes = !this.showInlineNotes;
     }
@@ -72,6 +71,7 @@ class OutputStore {
     @computed get outputs() {
         return this.rootStore.mainStore.getExecutionOutputs;
     }
+
     @computed get selectedOutput() {
         const outputs = this.outputs;
         if (!_.isObject(outputs)) {
@@ -79,6 +79,7 @@ class OutputStore {
         }
         return outputs[this.selectedOutputIndex];
     }
+
     @computed get selectedFrequentist() {
         const output = this.selectedOutput;
         if (output && output.frequentist) {
@@ -86,6 +87,7 @@ class OutputStore {
         }
         return null;
     }
+
     @computed get selectedBayesian() {
         const output = this.selectedOutput;
         if (output && output.bayesian) {
@@ -93,9 +95,20 @@ class OutputStore {
         }
         return null;
     }
+
     @computed get selectedDataset() {
         const dataset_index = this.selectedOutput.dataset_index;
         return this.rootStore.dataStore.datasets[dataset_index];
+    }
+
+    @computed get selectedModelOptions() {
+        const index = this.selectedOutput.option_index;
+        return this.rootStore.optionsStore.optionsList[index];
+    }
+
+    @computed get selectedDatasetOptions() {
+        const index = this.selectedOutput.dataset_index;
+        return this.rootStore.dataOptionStore.options[index];
     }
 
     @computed get recommendationEnabled() {
@@ -161,17 +174,20 @@ class OutputStore {
         }
         this.showModelModal = true;
     }
+
     @action.bound closeModal() {
         this.modalModel = null;
         this.drModelModal = null;
         this.showModelModal = false;
     }
+
     // end modal methods
 
     // start dose-response plotting data methods
     @computed get showSelectedModelInModalPlot() {
         return this.modalModelClass === modelClasses.frequentist;
     }
+
     @computed get drIndividualPlotData() {
         // a single model, shown in the modal
         const data = [getDrDatasetPlotData(this.selectedDataset)];
@@ -186,6 +202,7 @@ class OutputStore {
         }
         return data;
     }
+
     @computed get drIndividualPlotLayout() {
         // a single model, shown in the modal
         const selectedModel = this.showSelectedModelInModalPlot ? this.drModelSelected : null;
@@ -196,6 +213,7 @@ class OutputStore {
             this.drModelHover
         );
     }
+
     @computed get drFrequentistPlotData() {
         const data = [getDrDatasetPlotData(this.selectedDataset)];
         if (this.drModelSelected) {
@@ -209,6 +227,7 @@ class OutputStore {
         }
         return data;
     }
+
     @computed get drFrequentistPlotLayout() {
         // the main frequentist plot shown on the output page
         let layout = getDrLayout(
@@ -225,6 +244,7 @@ class OutputStore {
         }
         return layout;
     }
+
     @computed get drBayesianPlotData() {
         const bayesian_plot_data = [getDrDatasetPlotData(this.selectedDataset)],
             output = this.selectedOutput;
@@ -246,12 +266,14 @@ class OutputStore {
         }
         return bayesian_plot_data;
     }
+
     @computed get drBayesianPlotLayout() {
         // the bayesian plot shown on the output page and modal
         const layout = _.cloneDeep(this.drFrequentistPlotLayout);
         layout.legend = {tracegroupgap: 0, x: 1, y: 1};
         return layout;
     }
+
     @computed get drPlotModalData() {
         const data = [getDrDatasetPlotData(this.selectedDataset)];
         if (this.drModelModal) {
@@ -262,15 +284,18 @@ class OutputStore {
         }
         return data;
     }
+
     @action.bound drPlotAddHover(model) {
         if (this.drModelSelected && this.drModelSelected[0].name === model.name) {
             return;
         }
         this.drModelHover = getDrBmdLine(model, hoverColor);
     }
+
     @action.bound drPlotRemoveHover() {
         this.drModelHover = null;
     }
+
     @computed get drFrequentistLollipopPlotDataset() {
         let plotData = [];
         let models = this.selectedOutput.frequentist.models;
@@ -286,6 +311,7 @@ class OutputStore {
         });
         return plotData;
     }
+
     @computed get drBayesianLollipopPlotDataset() {
         let plotData = [];
         let models = this.selectedOutput.bayesian.models;
@@ -315,9 +341,11 @@ class OutputStore {
     @action.bound saveSelectedModelIndex(idx) {
         this.selectedOutput.frequentist.selected.model_index = idx === -1 ? null : idx;
     }
+
     @action.bound saveSelectedIndexNotes(value) {
         this.selectedOutput.frequentist.selected.notes = value.length > 0 ? value : null;
     }
+
     @action.bound saveSelectedModel() {
         const output = this.selectedOutput,
             {csrfToken, editKey} = this.rootStore.mainStore.config.editSettings,

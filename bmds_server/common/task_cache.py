@@ -2,7 +2,6 @@ import abc
 from enum import IntEnum
 from typing import Any, Optional
 
-from django.conf import settings
 from django.core.cache import cache
 from pydantic import BaseModel
 
@@ -21,7 +20,9 @@ class ReportResponse(BaseModel):
 
 class ReportCache(abc.ABC):
     """
-    A cache designed for long-running report tasks.
+    A cache designed for long-running report tasks.  The cache is designed for polling requests;
+    initially a QUEUED status will be created, followed by the actual result.  Results can be
+    cached for a long period, or could be discarded immediately after returning to a user.
     """
 
     cache_prefix: str = ""  # should be unique for each subclass
@@ -37,8 +38,7 @@ class ReportCache(abc.ABC):
         return f"{self.cache_prefix}-{self.analysis.id}"
 
     def delete(self):
-        if settings.ENABLE_REPORT_CACHE:
-            self.cache.delete(self.cache_key)
+        self.cache.delete(self.cache_key)
 
     @abc.abstractmethod
     def invoke_celery_task(self) -> None:
@@ -68,9 +68,6 @@ class ReportCache(abc.ABC):
             ReportResponse:
         """
 
-        if not settings.ENABLE_REPORT_CACHE:
-            return self.create_content()
-
         # try to get content from cache
         key = self.cache_key
         response = self.cache.get(key)
@@ -84,7 +81,7 @@ class ReportCache(abc.ABC):
             header="Report being created",
             message="Report requested... please wait until results are complete.",
         )
-        self.cache.set(key, response, 60 * 5)  # re-request after 5 minutes
+        self.cache.set(key, response, 60 * 10)  # save a queued status for up to 10 minutes
         self.invoke_celery_task()
         return response
 
@@ -100,6 +97,5 @@ class ReportCache(abc.ABC):
             header=None,
             message=None,
         )
-        if settings.ENABLE_REPORT_CACHE:
-            self.cache.set(key, response, timeout=60 * 60 * 8)
+        self.cache.set(key, response, timeout=60 * 60)  # save result for up 1 hour
         return response

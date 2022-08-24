@@ -1,5 +1,5 @@
 from django.core.exceptions import ValidationError
-from rest_framework import exceptions, mixins, status, viewsets
+from rest_framework import exceptions, mixins, viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
 
@@ -15,10 +15,6 @@ from .reporting.docx import add_update_url
 class AnalysisViewset(mixins.RetrieveModelMixin, viewsets.GenericViewSet):
     serializer_class = serializers.AnalysisSerializer
     queryset = models.Analysis.objects.all()
-
-    def not_ready_yet(self):
-        content = "Outputs processing; not ready yet."
-        return Response(content, status=status.HTTP_204_NO_CONTENT)
 
     @action(detail=False, url_path="default")
     def default(self, request, *args, **kwargs):
@@ -130,8 +126,10 @@ class AnalysisViewset(mixins.RetrieveModelMixin, viewsets.GenericViewSet):
         Return Excel export of outputs for selected analysis
         """
         instance = self.get_object()
-        response = ExcelReportCache(analysis=instance).request_content()
+        cache = ExcelReportCache(analysis=instance)
+        response = cache.request_content()
         if response.status is ReportStatus.COMPLETE:
+            cache.delete()  # destroy from cache; request is now complete
             data = renderers.BinaryFile(data=response.content, filename=instance.slug)
             return Response(data)
 
@@ -149,8 +147,10 @@ class AnalysisViewset(mixins.RetrieveModelMixin, viewsets.GenericViewSet):
             "all_models": get_bool(request.query_params.get("allModels")),
             "bmd_cdf_table": get_bool(request.query_params.get("bmdCdfTable")),
         }
-        response = DocxReportCache(analysis=instance, uri=uri, **kwargs).request_content()
+        cache = DocxReportCache(analysis=instance, uri=uri, **kwargs)
+        response = cache.request_content()
         if response.status is ReportStatus.COMPLETE:
+            cache.delete()  # destroy from cache; request is now complete
             edit = instance.password == request.query_params.get("editKey", "")
             data = add_update_url(instance, response.content, uri) if edit else response.content
             return Response(renderers.BinaryFile(data=data, filename=instance.slug))

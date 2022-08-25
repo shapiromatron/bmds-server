@@ -13,7 +13,7 @@ const hdr_c_normal = [
     ],
     hdr_c_lognormal = [
         "Dose", "Size", "Observed Mean", "Calculated Median", "Estimated Median",
-        "Observed GSD", "Calculated GSD", "Estimated GSD", "Scaled Residual",
+        "Observed SD", "Calculated GSD", "Estimated GSD", "Scaled Residual",
     ],
     hdr_d = [ "Dose", "Size", "Observed", "Expected", "Estimated Probability", "Scaled Residual"];
 /* eslint-enable */

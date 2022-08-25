@@ -88,8 +88,7 @@ export const RULES = Object.freeze({
             enabledNested: true,
         },
         [RULES.VARIANCE_TYPE]: {
-            notes: val =>
-                `Variance model poorly fits dataset<br/>(<i>p</i>-value 2 < ${val} OR <i>p</i>-value 2 > ${val})`,
+            notes: val => `Incorrect variance model selected<br/>(Test <i>p</i>-value < ${val})`,
             name: "Variance model selection",
             hasThreshold: true,
             enabledContinuous: true,
@@ -98,8 +97,7 @@ export const RULES = Object.freeze({
         },
         [RULES.VARIANCE_FIT]: {
             name: "Variance model fit",
-            notes: val =>
-                `Variance model poorly fits dataset<br/>(<i>p</i>-value 2 < ${val} OR <i>p</i>-value 3 < ${val})`,
+            notes: val => `Variance test failed (Test <i>p</i>-value < ${val})`,
             hasThreshold: true,
             enabledContinuous: true,
             enabledDichotomous: false,

@@ -78,6 +78,7 @@ def build_docx(
             dataset_format_long=dataset_format_long,
             all_models=all_models,
             bmd_cdf_table=bmd_cdf_table,
+            session_inputs_table=True,
         )
 
     write_citation(report, 1)

@@ -34,7 +34,6 @@ class OutputStore {
     @observable drModelModalIsMA = false;
     @observable drModelAverageModal = false;
     @observable showBMDLine = false;
-    @observable userPlotSettings = {};
     @observable showInlineNotes = false;
 
     @action.bound toggleInlineNotes() {
@@ -43,7 +42,7 @@ class OutputStore {
 
     @action.bound setSelectedOutputIndex(output_id) {
         this.selectedOutputIndex = output_id;
-        this.userPlotSettings = {};
+        this.resetUserPlotSettings();
     }
 
     @computed get getModelType() {
@@ -401,7 +400,12 @@ class OutputStore {
         }
     }
 
-    @action.bound saveUserPlotSettings(e) {
+    // persist changes to axes by user for a given output session
+    @observable userPlotSettings = {};
+    @action.bound resetUserPlotSettings(output_id) {
+        this.userPlotSettings = {};
+    }
+    @action.bound updateUserPlotSettings(e) {
         // set user configurable plot settings
         if (_.has(e, "xaxis.range[0]") && _.has(e, "xaxis.range[1]")) {
             this.userPlotSettings["xaxis"] = [e["xaxis.range[0]"], e["xaxis.range[1]"]];

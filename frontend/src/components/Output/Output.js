@@ -117,7 +117,7 @@ class Output extends Component {
                         </div>
                         <div className="align-items-center d-flex col-lg-4">
                             <DoseResponsePlot
-                                onRelayout={outputStore.saveUserPlotSettings}
+                                onRelayout={outputStore.updateUserPlotSettings}
                                 layout={outputStore.drFrequentistPlotLayout}
                                 data={outputStore.drFrequentistPlotData}
                             />
@@ -132,7 +132,7 @@ class Output extends Component {
                         </div>
                         <div className="col-lg-12">
                             <DoseResponsePlot
-                                onRelayout={outputStore.saveUserPlotSettings}
+                                onRelayout={outputStore.updateUserPlotSettings}
                                 layout={outputStore.drBayesianPlotLayout}
                                 data={outputStore.drBayesianPlotData}
                             />

@@ -47,7 +47,7 @@ def add_session(
         models.append(d)
 
 
-def build_df(analysis: Analysis) -> pd.DataFrame:
+def summary_df(analysis: Analysis) -> pd.DataFrame:
     dataset_data: dict[int, dict] = {}
     model_data = []
 
@@ -79,3 +79,49 @@ def build_df(analysis: Analysis) -> pd.DataFrame:
     df2 = pd.DataFrame(model_data)
     df3 = df1.merge(df2, on="dataset_index").fillna("-")
     return df3
+
+
+def params_df(analysis: Analysis) -> pd.DataFrame:
+    data = []
+    for session in analysis.get_sessions():
+        if session.frequentist:
+            for model_index, model in enumerate(session.frequentist.models):
+                if model.has_results:
+                    data.extend(
+                        model.results.parameters.rows(
+                            extras=dict(
+                                dataset_index=session.dataset_index,
+                                option_index=session.option_index,
+                                analysis_type="frequentist",
+                                model_index=model_index,
+                                model_name=model.name(),
+                            )
+                        )
+                    )
+
+        if session.bayesian:
+            for model_index, model in enumerate(session.bayesian.models):
+                if model.has_results:
+                    data.extend(
+                        model.results.parameters.rows(
+                            extras=dict(
+                                dataset_index=session.dataset_index,
+                                option_index=session.option_index,
+                                analysis_type="bayesian",
+                                model_index=model_index,
+                                model_name=model.name(),
+                            )
+                        )
+                    )
+    return pd.DataFrame(data=data)
+
+
+def dataset_df(analysis: Analysis) -> pd.DataFrame:
+    data: list[dict] = []
+    datasets: set = set()
+    for session in analysis.get_sessions():
+        if session.dataset_index not in datasets:
+            dataset = session.frequentist.dataset if session.frequentist else session.bayesian
+            datasets.add(session.dataset_index)
+            data.extend(dataset.rows(extras=dict(dataset_index=session.dataset_index)))
+    return pd.DataFrame(data=data)

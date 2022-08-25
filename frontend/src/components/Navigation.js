@@ -1,5 +1,5 @@
 import React, {Component} from "react";
-import {Route, NavLink} from "react-router-dom";
+import {Redirect, Route, NavLink} from "react-router-dom";
 import {inject, observer} from "mobx-react";
 import Main from "./Main/Main";
 import DataTab from "./Data/DataTab";
@@ -57,6 +57,9 @@ class Navigation extends Component {
                     <Route path="/data" component={DataTab} />
                     <Route path="/logic" component={LogicRoot} />
                     <Route path="/output" component={Output} />
+                    <Route path="*">
+                        <Redirect to="/" />
+                    </Route>
                 </div>
                 <div className="toast-container">
                     {/* put toasts at the end so it's above everything else */}

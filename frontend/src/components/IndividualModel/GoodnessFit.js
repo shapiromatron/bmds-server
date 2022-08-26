@@ -8,7 +8,7 @@ import {isLognormal} from "../../constants/modelConstants";
 
 /* eslint-disable */
 const hdr_c_normal = [
-        "Dose", "Size", "Observed Mean", "Calculated Median", "Estimated Median",
+        "Dose", "Size", "Observed Mean", "Calculated Mean", "Estimated Mean",
         "Observed SD", "Calculated SD", "Estimated SD", "Scaled Residual",
     ],
     hdr_c_lognormal = [

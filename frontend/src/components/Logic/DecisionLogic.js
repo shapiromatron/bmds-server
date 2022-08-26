@@ -48,17 +48,20 @@ class DecisionLogic extends Component {
                         <table id="decision-logic" className="table table-sm table-bordered">
                             <thead>
                                 <tr className="bg-custom">
-                                    <th colSpan="2">Decision-Logic</th>
+                                    <th colSpan="2">Decision Logic</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                {renderBooleanRow("Enabled", "enabled")}
                                 {renderBooleanRow(
-                                    "Recommend model in Viable Bin",
+                                    "Enable model recommendation logic testing",
+                                    "enabled"
+                                )}
+                                {renderBooleanRow(
+                                    "Recommend model in viable bin",
                                     "recommend_viable"
                                 )}
                                 {renderBooleanRow(
-                                    "Recommend model in Questionable Bin",
+                                    "Recommend model in questionable bin",
                                     "recommend_questionable"
                                 )}
                                 <tr>

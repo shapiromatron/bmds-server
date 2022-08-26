@@ -24,7 +24,7 @@ from django.utils.timezone import now
 from ..common.utils import random_string
 from . import executor, tasks, validators
 from .reporting.cache import DocxReportCache, ExcelReportCache
-from .reporting.excel import build_df
+from .reporting.excel import dataset_df, params_df, summary_df
 from .schema import AnalysisOutput, AnalysisSessionSchema
 
 logger = logging.getLogger(__name__)
@@ -163,19 +163,28 @@ class Analysis(models.Model):
                 items.append(session.bayesian)
         return BmdsSessionBatch(sessions=items)
 
-    def to_df(self) -> pd.DataFrame:
+    def to_df(self) -> dict[str, pd.DataFrame]:
         # exit early if we don't have data for a report
         if not self.is_finished or self.has_errors:
-            return pd.Series(
-                data=["Analysis not finished or error occurred - cannot create report"],
-                name="Status",
-            ).to_frame()
-        return build_df(self)
+            return {
+                "error": pd.Series(
+                    data=["Analysis not finished or error occurred - cannot create report"],
+                    name="Status",
+                ).to_frame(),
+            }
+        return {
+            "summary": summary_df(self),
+            "datasets": dataset_df(self),
+            "parameters": params_df(self),
+        }
 
     def to_excel(self) -> BytesIO:
-        df = self.to_df()
         f = BytesIO()
-        df.to_excel(f, index=False)
+        writer = pd.ExcelWriter(f)
+        data = self.to_df()
+        for name, df in data.items():
+            df.to_excel(writer, sheet_name=name, index=False)
+        writer.save()
         return f
 
     def update_selection(self, selection: validators.AnalysisSelectedSchema):

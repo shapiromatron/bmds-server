@@ -2,7 +2,7 @@ import pytest
 
 from bmds_server.analysis.models import Analysis
 from bmds_server.analysis.reporting.docx import build_docx
-from bmds_server.analysis.reporting.excel import build_df
+from bmds_server.analysis.reporting.excel import dataset_df, params_df, summary_df
 
 from .run3 import RunBmds3
 
@@ -29,7 +29,9 @@ class TestBmds3Execution:
 
         # test reporting (for completion)
         build_docx(analysis, "http://bmds-python.com")
-        build_df(analysis)
+        summary_df(analysis)
+        dataset_df(analysis)
+        params_df(analysis)
 
     def test_ci(self, bmds3_complete_continuous_individual):
         analysis = Analysis.objects.create(inputs=bmds3_complete_continuous_individual)
@@ -50,7 +52,9 @@ class TestBmds3Execution:
 
         # test reporting (for completion)
         build_docx(analysis, "http://bmds-python.com")
-        build_df(analysis)
+        summary_df(analysis)
+        dataset_df(analysis)
+        params_df(analysis)
 
     def test_d(self, bmds3_complete_dichotomous):
         analysis = Analysis.objects.create(inputs=bmds3_complete_dichotomous)
@@ -71,4 +75,6 @@ class TestBmds3Execution:
 
         # test reporting (for completion)
         build_docx(analysis, "http://bmds-python.com")
-        build_df(analysis)
+        summary_df(analysis)
+        dataset_df(analysis)
+        params_df(analysis)

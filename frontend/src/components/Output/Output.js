@@ -9,6 +9,7 @@ import FrequentistResultTable from "./FrequentistResultTable";
 import NestedDichotomousResultTable from "./NestedDichotomous/ResultTable";
 import BayesianResultTable from "./BayesianResultTable";
 import DatasetTable from "../Data/DatasetTable";
+import OptionSetTable from "./OptionSetTable";
 import SelectModel from "./SelectModel";
 import DoseResponsePlot from "../common/DoseResponsePlot";
 import "./Output.css";
@@ -96,8 +97,11 @@ class Output extends Component {
                             />
                         </div>
                     ) : null}
-                    <div className="col-lg-6">
+                    <div className="col-lg-5">
                         <DatasetTable dataset={outputStore.selectedDataset} />
+                    </div>
+                    <div className="col-lg-5">
+                        <OptionSetTable />
                     </div>
                 </div>
                 {selectedFrequentist ? (
@@ -113,7 +117,7 @@ class Output extends Component {
                         </div>
                         <div className="align-items-center d-flex col-lg-4">
                             <DoseResponsePlot
-                                onRelayout={outputStore.saveUserPlotSettings}
+                                onRelayout={outputStore.updateUserPlotSettings}
                                 layout={outputStore.drFrequentistPlotLayout}
                                 data={outputStore.drFrequentistPlotData}
                             />
@@ -128,7 +132,7 @@ class Output extends Component {
                         </div>
                         <div className="col-lg-12">
                             <DoseResponsePlot
-                                onRelayout={outputStore.saveUserPlotSettings}
+                                onRelayout={outputStore.updateUserPlotSettings}
                                 layout={outputStore.drBayesianPlotLayout}
                                 data={outputStore.drBayesianPlotData}
                             />

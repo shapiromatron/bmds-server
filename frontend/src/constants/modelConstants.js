@@ -72,6 +72,9 @@ const modelsList = {
             frequentist_unrestricted: [],
         },
     },
+    isLognormal = function(disttype) {
+        return disttype == 3;
+    },
     hasDegrees = new Set(["Multistage", "Polynomial"]);
 
-export {allModelOptions, modelsList, models, hasDegrees};
+export {allModelOptions, modelsList, models, hasDegrees, isLognormal};

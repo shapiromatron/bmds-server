@@ -49,7 +49,7 @@ class OptionsStore {
     }
 
     @computed get canAddNewOption() {
-        return this.optionsList.length < 3;
+        return this.optionsList.length < 6;
     }
 }
 

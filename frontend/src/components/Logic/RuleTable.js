@@ -18,9 +18,7 @@ class RuleList extends Component {
             <table id="rule-table" className="table table-sm table-bordered">
                 <thead className="bg-custom">
                     <tr>
-                        <th colSpan="5" className="text-center">
-                            Model Recommendation/Bin Placement Logic
-                        </th>
+                        <th colSpan="5">Model Recommendation and Bin Placement Logic</th>
                     </tr>
                     <tr>
                         <th>Test Description</th>

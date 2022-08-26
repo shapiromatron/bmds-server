@@ -15,7 +15,7 @@ import Popover from "../common/Popover";
 
 const getModelBinLabel = function(output, index) {
         if (output.recommender.results.recommended_model_index == index) {
-            return `Recommended - ${output.recommender.results.recommended_model_variable.toUpperCase()}`;
+            return `Recommended - Lowest ${output.recommender.results.recommended_model_variable.toUpperCase()}`;
         }
         return BIN_LABELS[output.recommender.results.model_bin[index]];
     },

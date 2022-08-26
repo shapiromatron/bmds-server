@@ -1,4 +1,4 @@
-.PHONY: build clean clean-test clean-pyc clean-build docs help lint lint-py lint-js format format-py format-js sync-dev
+.PHONY: build clean clean-test clean-pyc clean-build docs loc help lint lint-py lint-js format format-py format-js sync-dev
 .DEFAULT_GOAL := help
 
 define BROWSER_PYSCRIPT
@@ -61,6 +61,14 @@ docs: ## generate Sphinx HTML documentation, including API docs
 	$(MAKE) -C docs clean
 	$(MAKE) -C docs html
 	$(BROWSER) docs/_build/html/index.html
+
+loc: ## Generate lines of code report
+	@cloc \
+		--exclude-dir=build,dist,migrations,node_modules,logs,private,public,scripts,vendor,venv \
+		--exclude-ext=json,yaml,svg,toml,ini \
+		--vcs=git \
+		--counted loc-files.txt \
+		.
 
 lint: lint-py lint-js  ## Check for javascript/python for linting issues
 

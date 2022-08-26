@@ -2,7 +2,7 @@ import pytest
 
 from bmds_server.analysis.models import Analysis
 from bmds_server.analysis.reporting.docx import build_docx
-from bmds_server.analysis.reporting.excel import summary_df, dataset_df, params_df
+from bmds_server.analysis.reporting.excel import dataset_df, params_df, summary_df
 
 from .run3 import RunBmds3
 

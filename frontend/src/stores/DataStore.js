@@ -151,12 +151,7 @@ class DataStore {
 
     @action.bound saveDatasetCellItem(key, value, rowIdx) {
         let dataset = this.selectedDataset,
-            parsedValue = "";
-        if (key === "ns") {
-            parsedValue = parseInt(value);
-        } else {
             parsedValue = parseFloat(value);
-        }
         if (_.isNumber(parsedValue)) {
             dataset[key][rowIdx] = parsedValue;
         }

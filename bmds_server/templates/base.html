@@ -24,7 +24,7 @@
     <link rel="stylesheet" type="text/css" href="{% static 'css/epa/core/style.css' %}" />
     <link rel="stylesheet" type="text/css" href="{% static 'css/epa/bootstrap.css' %}" />
     <link rel="stylesheet" type="text/css" href="{% static 'css/epa/bmdsonline.css' %}" />
-    {% comment %} <script type="text/javascript" src="{% static 'vendor/uswds/3.1.0/js/uswds-init.min.js' %}"></script> {% endcomment %}
+    <script type="text/javascript" src="{% static 'vendor/uswds/3.1.0/js/uswds-init.min.js' %}"></script>
     {% endif %}
 
     {% block extra-head %}
@@ -76,6 +76,9 @@
   {% include "./includes/epa/footer.html" %}
 {% endif %}
 
+{% if SKIN == 1 %}
+<script type="text/javascript" src="{% static 'vendor/uswds/3.1.0/js/uswds.min.js' %}"></script>
+{% endif %}
 <script src="{% static 'vendor/jquery-3.6.0.min.js' %}"></script>
 <script src="{% static 'vendor/bootstrap-4.6.0/js/bootstrap.bundle.min.js' %}"></script>
 {% render_bundle 'main' %}

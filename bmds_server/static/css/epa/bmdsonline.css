@@ -57,3 +57,8 @@ table td {
 a.dropdown-toggle:not([href])::after {
   display: inline-block !important;
 }
+
+/* navigation tabs */
+.nav-item {
+  margin-bottom: 0;
+}

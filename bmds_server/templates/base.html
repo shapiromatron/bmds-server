@@ -10,9 +10,9 @@
     <title>{% block title %}BMDS Online{% endblock title %}</title>
 
     {% if SKIN == 0 %}
-      <link rel="shortcut icon" type="image/png" href="data:image/png;base64,iVBORw0KGgo=">
+      <link rel="icon" type="image/png" href="data:image/png;base64,iVBORw0KGgo=">
     {% elif SKIN == 1 %}
-      <link rel="shortcut icon" href="https://www.epa.gov/sites/all/themes/epa/favicon.ico" type="image/vnd.microsoft.icon" />
+      <link rel="icon" href="https://www.epa.gov/themes/epa_theme/images/favicon.ico" type="image/x-icon" />
     {% endif %}
 
     <link rel="stylesheet" type="text/css" href="{% static 'vendor/bootstrap-4.6.0/css/bootstrap.min.css' %}">
@@ -20,13 +20,11 @@
     <link rel="stylesheet" type="text/css" href="{% static 'css/site.css' %}">
 
     {% if SKIN == 1 %}
+    <link rel="stylesheet" type="text/css" href="{% static 'vendor/uswds/3.1.0/css/styles.css' %}" />
     <link rel="stylesheet" type="text/css" href="{% static 'css/epa/core/style.css' %}" />
-    <link rel="stylesheet" type="text/css" href="{% static 'css/epa/accordions.css' %}" />
-    <link rel="stylesheet" type="text/css" href="{% static 'css/epa/boxes.css' %}" />
-    <link rel="stylesheet" type="text/css" href="{% static 'css/epa/tables.css' %}" />
-    <link rel="stylesheet" type="text/css" href="{% static 'css/epa/tabs.css' %}" />
-    <link rel="stylesheet" type="text/css" href="{% static 'css/epa-bootstrap.css' %}" />
-    <link rel="stylesheet" type="text/css" href="{% static 'css/epa-bmds.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'css/epa/bootstrap.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'css/epa/bmdsonline.css' %}" />
+    {% comment %} <script type="text/javascript" src="{% static 'vendor/uswds/3.1.0/js/uswds-init.min.js' %}"></script> {% endcomment %}
     {% endif %}
 
     {% block extra-head %}
@@ -52,9 +50,9 @@
 {% endif %}
 
 {% if SKIN == 0 %}
-  {% include "./includes/base-header.html" %}
+  {% include "includes/base/header.html" %}
 {% elif SKIN == 1 %}
-  {% include "./includes/epa-header.html" %}
+  {% include "includes/epa/header.html" %}
 {% endif %}
 <section class="main-content clearfix" id="main-content">
   <div class="container-fluid" style="min-height: 90vh !important;">
@@ -73,9 +71,9 @@
   </div>
 </section>
 {% if SKIN == 0 %}
-  {% include "./includes/base-footer.html" %}
+  {% include "./includes/base/footer.html" %}
 {% elif SKIN == 1 %}
-  {% include "./includes/epa-footer.html" %}
+  {% include "./includes/epa/footer.html" %}
 {% endif %}
 
 <script src="{% static 'vendor/jquery-3.6.0.min.js' %}"></script>

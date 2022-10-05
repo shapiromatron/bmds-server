@@ -19,8 +19,8 @@
 .table-striped tbody tr:nth-of-type(even) {
   background-color: #f0f4f9;
 }
-.table-primary, .table-primary>td, .table-primary>th {
-  background-color: #f1f1f1;
+.table tfoot td {
+  border: 0px;
 }
 
 /* Buttons */

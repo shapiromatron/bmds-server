@@ -1,22 +1,19 @@
 # website
 Django==3.2.16
-django-webpack-loader==1.4.1
-djangorestframework==3.13.1
+django-anymail==8.6
+django-redis==5.2.0
+django-webpack-loader==1.6.0
+djangorestframework==3.14.0
   uritemplate==4.1.1  # schema dependencies
   PyYAML==6.0
-django-reversion==5.0.0
+django-reversion==5.0.3
 
 # db
 psycopg2-binary==2.9.3
 
 # tasks
-celery==5.2.3
+celery==5.2.7
   billiard==3.6.4.0
-  kombu==5.2.3
+  kombu==5.2.4
 
-# cache/queue
-django-redis==5.2.0
-redis==4.1.4
-
-# email
-django-anymail==8.5
+redis==4.3.4

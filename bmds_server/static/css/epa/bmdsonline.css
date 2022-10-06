@@ -1,0 +1,69 @@
+/* Global */
+:focus {
+  outline: none !important;
+}
+
+/* this rule was disabled in the epa style; re-enable to header */
+header.l-header * {
+  -webkit-transition-duration: 200ms;
+  transition-duration: 200ms;
+  -webkit-transition-property: background-color, border-color, color, opacity, text-shadow, -webkit-box-shadow, -webkit-transform;
+  transition-property: background-color, border-color, color, opacity, text-shadow, -webkit-box-shadow, -webkit-transform;
+  transition-property: background-color, border-color, box-shadow, color, opacity, text-shadow, transform;
+  transition-property: background-color, border-color, box-shadow, color, opacity, text-shadow, transform, -webkit-box-shadow, -webkit-transform;
+  -webkit-transition-timing-function: cubic-bezier(0.4, 0, 1, 1);
+  transition-timing-function: cubic-bezier(0.4, 0, 1, 1)
+}
+
+/* Header */
+#search-box {
+  margin-top: 0px;
+}
+
+/* override environment banner position */
+.env-banner {
+  margin: 0 10% 0 70%;
+}
+
+/* Background fill */
+.bg-custom {
+  background-color: #f1f1f1;
+}
+
+/* table */
+table td {
+  background-color: unset !important;
+}
+
+/* sidebar-cards */
+.card.pane {
+    border-color:#5b616b;
+    border-width: 1px 1px 4px 1px;
+    border-radius: 0;
+}
+.card.pane > .card-header {
+    border-color:#5b616b;
+    background-color: #5b616b;
+    border-radius: 0;
+}
+
+/* always above toast container */
+.toast-container {
+  top: 140px;
+  z-index: 10000;
+}
+
+/* caret on dropdown menu */
+a.dropdown-toggle:not([href])::after {
+  display: inline-block !important;
+}
+
+/* navigation tabs react-router-dom */
+.nav-item {
+  margin-bottom: 0;
+}
+
+/* bootstrap popover header */
+.popover-header {
+  margin-top: 0;
+}

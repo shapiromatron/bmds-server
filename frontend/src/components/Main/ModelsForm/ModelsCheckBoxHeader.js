@@ -39,12 +39,11 @@ const ModelsCheckBoxHeader = observer(props => {
     return (
         <thead className="bg-custom">
             <tr>
-                <th></th>
+                <th rowSpan="3">Models</th>
                 <th colSpan="2">MLE</th>
                 {hasBayesianModels ? <th colSpan="3">Alternatives</th> : null}
             </tr>
             <tr>
-                <th></th>
                 <th>Frequentist Restricted</th>
                 <th>Frequentist Unrestricted</th>
                 {hasBayesianModels ? (
@@ -57,7 +56,6 @@ const ModelsCheckBoxHeader = observer(props => {
                 ) : null}
             </tr>
             <tr>
-                <th>Models</th>
                 <SelectAllComponent store={store} type={"frequentist_restricted"} />
                 <SelectAllComponent
                     store={store}

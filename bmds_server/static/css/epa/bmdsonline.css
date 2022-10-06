@@ -20,11 +20,6 @@ header.l-header * {
   margin-top: 0px;
 }
 
-/* override popover header margins */
-.popover-header {
-  margin-top: 0;
-}
-
 /* override environment banner position */
 .env-banner {
   margin: 0 10% 0 70%;

@@ -4,7 +4,7 @@ from django.contrib import admin
 from django.urls import path
 from django.views.generic import TemplateView
 from rest_framework import permissions
-from rest_framework.routers import DefaultRouter
+from rest_framework.routers import SimpleRouter
 from rest_framework.schemas import get_schema_view
 
 from ..analysis import schema, views
@@ -17,7 +17,7 @@ healthcheck_url = (
     "healthcheck" if settings.DEBUG else f"{settings.HEALTHCHECK_URL_PREFIX}/healthcheck"
 )
 
-router = DefaultRouter()
+router = SimpleRouter()
 router.register("analysis", AnalysisViewset, basename="analysis")
 router.register(healthcheck_url, HealthcheckViewset, basename="healthcheck")
 

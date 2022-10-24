@@ -78,6 +78,9 @@ CACHES["default"].update(
     OPTIONS={"CLIENT_CLASS": "django_redis.client.DefaultClient"},
 )
 
+# REST framework
+REST_FRAMEWORK["DEFAULT_RENDERER_CLASSES"] = ("rest_framework.renderers.JSONRenderer",)
+
 # Logging settings
 LOGGING["loggers"]["bmds_server.request"]["handlers"] = ["console", "requests"]
 

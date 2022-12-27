@@ -4,9 +4,6 @@
 django-debug-toolbar==3.7.0
 django_extensions==3.2.1
 
-# build
-wheel==0.37.1
-
 # docs
 Sphinx==4.4.0
 

@@ -1,11 +1,16 @@
+import json
 from typing import Optional, Tuple
 
+import plotly.express as px
 from django.conf import settings
+from django.contrib.admin.views.decorators import staff_member_required
 from django.middleware.csrf import get_token
 from django.shortcuts import get_object_or_404
 from django.template import RequestContext, Template
 from django.urls import reverse_lazy
+from django.utils.decorators import method_decorator
 from django.views.generic import CreateView, DeleteView, DetailView, RedirectView, TemplateView
+from plotly.io import to_json
 
 from . import forms, models
 from .utils import get_citation
@@ -34,6 +39,19 @@ class Home(CreateView):
 
 class AnalysisHistory(TemplateView):
     template_name: str = "analysis/analysis_history.html"
+
+
+@method_decorator(staff_member_required, name="dispatch")
+class Analytics(TemplateView):
+    template_name: str = "analysis/analytics.html"
+
+    def get_context_data(self, **kwargs) -> dict:
+        fig = px.scatter(x=[0, 1, 2, 3, 4], y=[0, 1, 4, 9, 16])
+        kwargs.update(
+            n_analysis=models.Analysis.objects.count(),
+            charts=dict(demo=json.loads(to_json(fig))),
+        )
+        return super().get_context_data(**kwargs)
 
 
 def get_analysis_or_404(pk: str, password: Optional[str] = "") -> Tuple[models.Analysis, bool]:

@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1>analytics</h1>
+<ul>
+    <li># analysis: {{n_analysis}}</li>
+</ul>
+<div id="chart-demo">
+{% endblock content %}
+
+{% block extra-js %}
+{{ charts|json_script:"charts" }}
+<script type="text/javascript">
+    const charts = JSON.parse(document.getElementById("charts").innerHTML);
+    window.app.renderPlotlyFigure(document.getElementById("chart-demo"), charts.demo)
+</script>
+{% endblock %}

@@ -16,13 +16,13 @@ def bs4_card(parser, token):
 
 
 class CardWrapperNode(template.Node):
-    def __init__(self, nodelist, div_class):
+    def __init__(self, nodelist, div_class: str):
         self.nodelist = nodelist
         self.div_class = div_class
 
     def render(self, context):
         output = self.nodelist.render(context)
-        pre = f'<div class="{self.div_class}"><div class="card shadow mb-4"><div class="card-body">'
-        post = "</div></div></div>"
-        print(pre)
-        return pre + output + post
+        output = f'<div class="card shadow mb-4"><div class="card-body">{output}</div></div>'
+        if self.div_class:
+            output = f'<div class="{self.div_class}">{output}</div>'
+        return output

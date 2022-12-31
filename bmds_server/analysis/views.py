@@ -46,7 +46,8 @@ class Analytics(TemplateView):
     template_name: str = "analysis/analytics.html"
 
     def get_context_data(self, **kwargs) -> dict:
-        fig = px.scatter(x=[0, 1, 2, 3, 4], y=[0, 1, 4, 9, 16])
+        fig = px.scatter(x=[0, 1, 2, 3, 4], y=[0, 1, 4, 9, 16], title="test")
+        fig.update_layout(margin=dict(l=10, r=0, t=30, b=10), height=350)
         kwargs.update(
             n_analysis=models.Analysis.objects.count(),
             charts=dict(demo=json.loads(to_json(fig))),

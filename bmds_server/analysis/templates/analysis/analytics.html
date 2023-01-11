@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1>Stats</h1>
+<div class='alert alert-success'>TODO</div>
+{% endblock content %}
+
+{% block extra-js %}
+{{ config|json_script:"config" }}
+{% endblock %}

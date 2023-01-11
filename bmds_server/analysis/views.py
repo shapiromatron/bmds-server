@@ -8,6 +8,7 @@ from django.urls import reverse_lazy
 from django.views.generic import CreateView, DeleteView, DetailView, RedirectView, TemplateView
 
 from . import forms, models
+from .reporting.analytics import get_analytics
 from .utils import get_citation
 
 
@@ -109,3 +110,11 @@ class AnalysisDelete(DeleteView):
     def get_object(self, queryset=None):
         analysis, _ = get_analysis_or_404(self.kwargs["pk"], self.kwargs["password"])
         return analysis
+
+
+class AnalyticsView(TemplateView):
+    template_name = "analysis/analytics.html"
+
+    def get_context_data(self, **kwargs) -> dict:
+        kwargs.update(config=get_analytics())
+        return super().get_context_data(**kwargs)

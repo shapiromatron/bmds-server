@@ -51,6 +51,7 @@ urlpatterns = [
     # auth
     path("user/login/", common_views.AppLoginView.as_view(), name="login"),
     path("user/logout/", common_views.AppLogoutView.as_view(), name="logout"),
+    path("analytics/", views.AnalyticsView.as_view()),
 ]
 
 if settings.INCLUDE_ADMIN:

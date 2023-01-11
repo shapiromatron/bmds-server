@@ -5,6 +5,7 @@ import {Provider} from "mobx-react";
 import App from "./App";
 import history from "./utils/localHistory";
 import rootStore from "./stores/RootStore";
+import {renderPlotlyFigure} from "./components/common/PlotlyFigure";
 
 const Root = (
     <Provider
@@ -28,4 +29,5 @@ const appStartup = function(el) {
 window.app = {
     appStartup,
     history,
+    renderPlotlyFigure,
 };

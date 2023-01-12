@@ -1,9 +1,14 @@
+import logging
 import random
 import string
 from datetime import datetime
-from typing import Optional
+from functools import wraps
+from typing import Callable, Optional
+
+from django.core.cache import cache
 
 _random_string_pool = string.ascii_lowercase + string.digits
+logger = logging.getLogger(__name__)
 
 
 def random_string(samples: str = _random_string_pool, length: int = 12) -> str:
@@ -23,3 +28,26 @@ def to_timestamp(dt: datetime) -> str:
 
 def get_bool(value: Optional[str]) -> bool:
     return value is not None and value.lower() == "true"
+
+
+def timeout_cache(key: str, timeout: int) -> Callable:
+    """Decorator to cache result key for N seconds
+
+    Args:
+        key (str): the cache key
+        timeout (int): timeout
+    """
+
+    def decorator(func):
+        @wraps(func)
+        def wrapper(*args, **kwargs):
+            data = cache.get(key)
+            if data is None:
+                logger.info(f"Caching `{key}` for {timeout}s")
+                data = func(*args, **kwargs)
+                cache.set(key, data, timeout=timeout)
+            return data
+
+        return wrapper
+
+    return decorator

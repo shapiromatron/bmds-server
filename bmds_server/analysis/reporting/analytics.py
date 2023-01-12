@@ -236,7 +236,7 @@ def get_analytics() -> dict:
         n_days=n_days,
         created_per_day=n_total / n_days,
         n_completed=n_completed,
-        fraction_completed=n_completed / n_total,
+        fraction_completed=n_completed / n_total * 100,
         n_completed_per_day=n_completed / n_days,
         time_series=time_series(),
         successes=successes(),

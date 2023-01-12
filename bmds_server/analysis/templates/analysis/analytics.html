@@ -7,17 +7,17 @@
     <div class="col-lg-12">
         <h2>Analytics</h2>
     </div>
-    {% card col-lg-4 %}
+    {% card col-md-4 %}
         <p class="text-muted mb-0">Number of analyses created:</p>
         <h4 class="h3 my-1">{{config.n_total}}</h4>
         <p class="text-muted mb-0">Total analyses in database.</p>
     {% endcard %}
-    {% card col-lg-4 %}
+    {% card col-md-4 %}
         <p class="text-muted mb-0">Created per day:</p>
         <h4 class="h3 my-1">{{config.created_per_day|floatformat:2}}</h4>
         <p class="text-muted mb-0">Analyses per day.</p>
     {% endcard %}
-    {% card col-lg-4 %}
+    {% card col-md-4 %}
         <p class="text-muted mb-0">Fraction executed:</p>
         <h4 class="h3 my-1">{{config.fraction_completed|floatformat:1}}%</h4>
         <p class="text-muted mb-0">Analyses complete succesfully.</p>

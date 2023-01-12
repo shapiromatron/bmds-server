@@ -48,7 +48,10 @@ class Analytics(TemplateView):
     template_name: str = "analysis/analytics.html"
 
     def get_context_data(self, **kwargs) -> dict:
-        @timeout_cache("func-get_analytics", 10)
+
+        timeout = 10 if settings.DEBUG else 3600
+
+        @timeout_cache("func-get_analytics", timeout)
         def get_cached_analytics():
             return get_analytics()
 

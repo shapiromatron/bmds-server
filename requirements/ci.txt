@@ -1,4 +1,3 @@
 -r dev.txt
 
-# grab from `main` branch in bmds repo
-git+https://github.com/shapiromatron/bmds.git@main#egg=bmds
+bmds==22.1

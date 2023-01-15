@@ -23,7 +23,6 @@ venv2/
 *.log
 *.py[cod]
 *.sqlite3
-*.txt
 *log
 .env
 .eslintcache
@@ -40,6 +39,3 @@ logs/*
 public/*
 !logs/.gitkeep
 !public/.gitkeep
-
-# until release
-vendor/*.so

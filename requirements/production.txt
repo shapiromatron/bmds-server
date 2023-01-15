@@ -1,6 +1,5 @@
 -r base.txt
 
 gunicorn==20.1.0
-
 bmds==22.1
 ./dist/bmds_server-0.8-py3-none-any.whl

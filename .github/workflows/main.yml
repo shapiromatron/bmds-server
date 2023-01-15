@@ -146,7 +146,10 @@ jobs:
         export "LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/lib:/usr/lib"
         sudo cp vendor/libnlopt.so /usr/local/lib/libnlopt.so.0
         sudo ln -s /lib/x86_64-linux-gnu/libgsl.so /usr/local/lib/libgsl.so.25
-        ldd bmds/bin/BMDS330/libDRBMD.so
+        export SITE_PKG=`python -c "import sysconfig; print(sysconfig.get_path('purelib'))"`
+        export "BMD_DLL=$SITE_PKG/bmds/bin/BMDS330/libDRBMD.so"
+        echo $BMD_DLL
+        ldd $BMD_DLL
     # https://github.community/t/how-to-retry-a-failed-step-in-github-actions-workflow/125880
     - name: run integration tests
       id: test

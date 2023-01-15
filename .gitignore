@@ -17,6 +17,7 @@ scripts/private
 /private/
 vendor/*.whl
 venv/
+venv2/
 
 # files
 *.log

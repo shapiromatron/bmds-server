@@ -1,4 +1,4 @@
-FROM python:3.9-slim
+FROM python:3.11-slim
 
 RUN groupadd -g 555 -r app && \
     useradd -u 555 -r -g app app
@@ -42,5 +42,5 @@ USER app
 
 ENV LD_LIBRARY_PATH=/usr/local/lib:$LD_LIBRARY_PATH
 
-RUN ldd /usr/local/lib/python3.9/site-packages/bmds/bin/BMDS330/libDRBMD.so && \
+RUN ldd /usr/local/lib/python3.11/site-packages/bmds/bin/BMDS330/libDRBMD.so && \
     python /app/test.py

@@ -5,7 +5,7 @@ on: [pull_request]
 jobs:
   backend:
     name: backend
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
 
     services:
       postgres:
@@ -19,13 +19,13 @@ jobs:
         - 5432/tcp
 
     steps:
-    - uses: actions/checkout@v2
-    - uses: actions/setup-python@v2
+    - uses: actions/checkout@v3
+    - uses: actions/setup-python@v4
       with:
         python-version: '3.9'
         architecture: 'x64'
     - name: try to restore pip cache
-      uses: actions/cache@v2
+      uses: actions/cache@v3
       with:
         path: ~/.cache/pip
         key: ${{ runner.os }}-pip-${{ hashFiles('requirements/*.txt') }}
@@ -67,10 +67,10 @@ jobs:
 
   frontend:
     name: frontend
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
 
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
     - uses: actions/setup-node@v2
       with:
         node-version: '16.x'
@@ -87,7 +87,7 @@ jobs:
       run: |
         npm --prefix ./frontend run build
     - name: Upload webpack build
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       with:
         name: webpack-build
         path: |
@@ -97,7 +97,7 @@ jobs:
   integration:
     name: integration
     needs: [backend, frontend]
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
 
     services:
       postgres:
@@ -120,20 +120,20 @@ jobs:
       LIVESERVER_PORT: 8000
 
     steps:
-    - uses: actions/checkout@v2
-    - uses: actions/setup-python@v2
+    - uses: actions/checkout@v3
+    - uses: actions/setup-python@v4
       with:
         python-version: '3.9'
         architecture: 'x64'
     - name: try to restore pip cache
-      uses: actions/cache@v2
+      uses: actions/cache@v3
       with:
         path: ~/.cache/pip
         key: ${{ runner.os }}-pip-${{ hashFiles('requirements/*.txt') }}
         restore-keys: |
           ${{ runner.os }}-pip-
     - name: Download webpack build
-      uses: actions/download-artifact@v2
+      uses: actions/download-artifact@v3
       with:
         name: webpack-build
         path: bmds_server

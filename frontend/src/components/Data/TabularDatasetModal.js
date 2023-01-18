@@ -19,6 +19,11 @@ class TabularDatasetModal extends Component {
 
                 <Modal.Body>
                     <div className="form-group">
+                        <p className="text-muted">
+                            Copy/paste data from Excel into the box below. Data must be all numeric
+                            with no headers or descriptive columns.
+                        </p>
+
                         {dataStore.tabularModalError ? (
                             <div className="alert alert-warning mb-2" role="alert">
                                 {dataStore.tabularModalError}
@@ -31,11 +36,6 @@ class TabularDatasetModal extends Component {
                             onChange={dataStore.changeDatasetFromModal}
                             value={dataStore.tabularModalText}
                         />
-
-                        <p className="text-muted">
-                            Copy/paste data from Excel into the box below. Data must be all numeric
-                            with no headers or descriptive columns.
-                        </p>
                     </div>
                 </Modal.Body>
 

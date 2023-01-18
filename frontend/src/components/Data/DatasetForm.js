@@ -4,6 +4,7 @@ import PropTypes from "prop-types";
 import TabularDatasetModal from "./TabularDatasetModal";
 
 import {columnHeaders, columns} from "../../constants/dataConstants";
+import ErrorMessage from "../common/ErrorMessage";
 import TextInput from "../common/TextInput";
 import FloatInput from "../common/FloatInput";
 import Button from "../common/Button";
@@ -114,6 +115,11 @@ class DatasetForm extends Component {
                         />
                     </div>
                 </div>
+                <ErrorMessage error={"this should show"} />
+                <ErrorMessage error={undefined} />
+                <ErrorMessage error={null} />
+                <ErrorMessage error={""} />
+                <ErrorMessage error={"this too"} />
                 <table className="table table-sm text-center">
                     <thead>
                         <tr className="bg-custom text-center">

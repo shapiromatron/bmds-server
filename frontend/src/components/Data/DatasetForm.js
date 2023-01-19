@@ -46,6 +46,7 @@ class DatasetForm extends Component {
     render() {
         const {dataStore} = this.props,
             dataset = dataStore.selectedDataset,
+            errorText = dataStore.selectedDatasetErrorText,
             columnNames = columns[dataset.dtype];
 
         return (
@@ -115,11 +116,7 @@ class DatasetForm extends Component {
                         />
                     </div>
                 </div>
-                <ErrorMessage error={"this should show"} />
-                <ErrorMessage error={undefined} />
-                <ErrorMessage error={null} />
-                <ErrorMessage error={""} />
-                <ErrorMessage error={"this too"} />
+                <ErrorMessage error={errorText} />
                 <table className="table table-sm text-center">
                     <thead>
                         <tr className="bg-custom text-center">

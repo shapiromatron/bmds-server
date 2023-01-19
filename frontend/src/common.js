@@ -32,18 +32,18 @@ export const simulateClick = function(el) {
     getLabel = function(value, mapping) {
         return _.find(mapping, d => d.value == value).label;
     },
-    parseErrors = (errorText) => {
+    parseErrors = errorText => {
         let errors = [],
             textErrors = [];
         try {
-            errors = JSON.parse(errorText)
+            errors = JSON.parse(errorText);
         } catch {
-            console.error("Cannot parse error response")
+            console.error("Cannot parse error response");
             return {errors, textErrors};
         }
         textErrors = errors.map(error => {
-            if (error.loc && error.msg){
-                return `${error.loc[0]}: ${error.msg}`
+            if (error.loc && error.msg) {
+                return `${error.loc[0]}: ${error.msg}`;
             }
             return JSON.stringify(error);
         });

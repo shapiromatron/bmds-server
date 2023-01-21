@@ -8,7 +8,7 @@ from rest_framework.routers import SimpleRouter
 from rest_framework.schemas import get_schema_view
 
 from ..analysis import schema, views
-from ..analysis.api import AnalysisViewset
+from ..analysis.api import AnalysisViewset, poly3_transform
 from ..common import views as common_views
 from ..common.api import HealthcheckViewset
 from .constants import AuthProvider
@@ -30,19 +30,14 @@ urlpatterns = [
     path("history/", views.AnalysisHistory.as_view(), name="analysis_history"),
     # api
     api_paths,
+    path("api/v1/poly3/", poly3_transform, name="poly3"),
     # analysis
     path("analysis/<uuid:pk>/", views.AnalysisDetail.as_view(), name="analysis"),
     path(edit_pattern, views.AnalysisDetail.as_view(), name="analysis_edit"),
-    path(
-        f"{edit_pattern}renew/",
-        views.AnalysisRenew.as_view(),
-        name="analysis_renew",
-    ),
-    path(
-        f"{edit_pattern}delete/",
-        views.AnalysisDelete.as_view(),
-        name="analysis_delete",
-    ),
+    path(f"{edit_pattern}renew/", views.AnalysisRenew.as_view(), name="analysis_renew"),
+    path(f"{edit_pattern}delete/", views.AnalysisDelete.as_view(), name="analysis_delete"),
+    # calculators
+    path("transforms/poly3/", views.Poly3Adjustment.as_view(), name="poly3"),
     # errors
     path("401/", common_views.Error401.as_view(), name="401"),
     path("403/", TemplateView.as_view(template_name="403.html"), name="403"),

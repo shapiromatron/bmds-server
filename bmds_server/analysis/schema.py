@@ -33,6 +33,13 @@ class AnalysisOutput(BaseModel):
     outputs: list[AnalysisSessionSchema]
 
 
+class Poly3Input(BaseModel):
+    dataset: str
+    dose_units: str
+    power: Optional[float] = 3
+    duration: Optional[float] = 730
+
+
 def add_schemas(schema: dict, models: List):
     additions = pyschema(models, ref_prefix="#/components/schemas/")
     for key, value in additions["definitions"].items():

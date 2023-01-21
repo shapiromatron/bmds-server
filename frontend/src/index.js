@@ -4,6 +4,7 @@ import {Provider} from "mobx-react";
 
 import App from "./App";
 import history from "./utils/localHistory";
+import poly3 from "./poly3";
 import rootStore from "./stores/RootStore";
 
 const Root = (
@@ -28,4 +29,5 @@ const appStartup = function(el) {
 window.app = {
     appStartup,
     history,
+    poly3,
 };

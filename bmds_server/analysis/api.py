@@ -1,13 +1,14 @@
+from bmds.datasets.transforms.poly3 import calculate
 from django.core.exceptions import ValidationError
 from rest_framework import exceptions, mixins, viewsets
-from rest_framework.decorators import action
+from rest_framework.decorators import action, api_view
 from rest_framework.response import Response
 
 from ..common import renderers
 from ..common.task_cache import ReportStatus
 from ..common.utils import get_bool
 from ..common.validation import pydantic_validate
-from . import models, serializers, validators
+from . import models, schema, serializers, validators
 from .reporting.cache import DocxReportCache, ExcelReportCache
 from .reporting.docx import add_update_url
 
@@ -156,3 +157,17 @@ class AnalysisViewset(mixins.RetrieveModelMixin, viewsets.GenericViewSet):
             return Response(renderers.BinaryFile(data=data, filename=instance.slug))
 
         return Response(response.dict(), content_type="application/json")
+
+
+@api_view(["POST"])
+def poly3_transform(request):
+    settings = pydantic_validate(request.data, schema.Poly3Input)
+    # TODO - check input data
+    (df, df2) = calculate(
+        doses=[0, 1, 2],
+        day=[400, 500, 600],
+        has_tumor=[0, 0, 1],
+        power=settings.power,
+        max_day=settings.duration,
+    )
+    return Response({"df": df.to_dict(orient="list"), "df2": df2.to_dict(orient="list")})

@@ -1,3 +1,6 @@
+from io import StringIO
+
+import pandas as pd
 from bmds.datasets.transforms.poly3 import calculate
 from django.core.exceptions import ValidationError
 from rest_framework import exceptions, mixins, viewsets
@@ -162,11 +165,11 @@ class AnalysisViewset(mixins.RetrieveModelMixin, viewsets.GenericViewSet):
 @api_view(["POST"])
 def poly3_transform(request):
     settings = pydantic_validate(request.data, schema.Poly3Input)
-    # TODO - check input data
+    input = pd.read_csv(StringIO(settings.dataset))
     (df, df2) = calculate(
-        doses=[0, 1, 2],
-        day=[400, 500, 600],
-        has_tumor=[0, 0, 1],
+        doses=input.dose.tolist(),
+        day=input.day.tolist(),
+        has_tumor=input.has_tumor.tolist(),
         power=settings.power,
         max_day=settings.duration,
     )

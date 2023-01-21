@@ -1,4 +1,5 @@
 import _ from "lodash";
+import Plot from "react-plotly.js";
 import React, {Component} from "react";
 import Tab from "react-bootstrap/Tab";
 import Tabs from "react-bootstrap/Tabs";
@@ -14,18 +15,11 @@ import Button from "../components/common/Button";
 @observer
 class InputForm extends Component {
     render() {
-        const {settings, updateSettings, error, submit} = this.props.store;
+        const {settings, updateSettings, error, submit, loadExampleData} = this.props.store;
         return (
             <form>
                 <div className="row">
-                    <div className="col-lg-4">
-                        <TextAreaInput
-                            label="Dataset"
-                            value={settings.dataset}
-                            onChange={value => updateSettings("dataset", value)}
-                        />
-                    </div>
-                    <div className="col-lg-4">
+                    <div className="col-lg-6">
                         <TextInput
                             label="Dose units"
                             value={settings.dose_units}
@@ -42,10 +36,25 @@ class InputForm extends Component {
                             onChange={value => updateSettings("duration", value)}
                         />
                     </div>
-                    <div className="col-lg-4">
-                        <Button className="btn btn-primary" onClick={submit} text="Execute" />
+                    <div className="col-lg-6">
+                        <TextAreaInput
+                            label="Dataset"
+                            value={settings.dataset}
+                            onChange={value => updateSettings("dataset", value)}
+                        />
+                        <p className="text-muted">
+                            CSV style dataset.&nbsp;
+                            <a href="#" onClick={loadExampleData}>
+                                Load example.
+                            </a>
+                        </p>
+                        <Button
+                            className="btn btn-primary btn-block py-3"
+                            onClick={submit}
+                            text="Execute"
+                        />
                         {error ? (
-                            <div className="alert alert-danger">An error occurred.</div>
+                            <div className="alert alert-danger mt-3">An error occurred.</div>
                         ) : null}
                     </div>
                 </div>
@@ -59,11 +68,137 @@ InputForm.propTypes = {
 
 @inject("store")
 @observer
+class SummaryPlot extends Component {
+    render() {
+        const {df2} = this.props.store.outputs,
+            {dose_units} = this.props.store.settings;
+        return (
+            <Plot
+                data={[
+                    {
+                        x: df2.dose,
+                        y: df2.proportion,
+                        type: "scatter",
+                        mode: "lines+markers",
+                        marker: {color: "blue"},
+                        name: "Original Proportion",
+                    },
+                    {
+                        x: df2.dose,
+                        y: df2.adj_proportion,
+                        type: "scatter",
+                        mode: "lines+markers",
+                        marker: {color: "red"},
+                        name: "Adjusted Proportion",
+                    },
+                ]}
+                layout={{
+                    height: 400,
+                    title: "Adjusted Proportion vs Original Proportion",
+                    legend: {
+                        x: 0.03,
+                        y: 1,
+                    },
+                    xaxis: {
+                        title: {
+                            text: `Dose (${dose_units})`,
+                        },
+                    },
+                    yaxis: {
+                        title: {
+                            text: "Proportion (%)",
+                        },
+                    },
+                }}
+                style={{width: "100%"}}
+                useResizeHandler={true}
+            />
+        );
+    }
+}
+SummaryPlot.propTypes = {
+    store: PropTypes.object,
+};
+
+@inject("store")
+@observer
+class RawDataPlot extends Component {
+    getData(df) {
+        const d1 = _.zip(df.dose, df.day, df.has_tumor),
+            d2 = _.groupBy(d1, arr => arr[0]);
+        let results = [];
+        _.each(d2, (values, key) => {
+            const arr1 = [],
+                arr2 = [];
+            let cumulative = 0;
+
+            _.each(values, arr => {
+                if (arr[2] == 1) {
+                    cumulative += 1;
+                }
+                arr1.push(arr[1]);
+                arr2.push(cumulative);
+            });
+            results.push([key, arr1, arr2]);
+        });
+        return _.sortBy(results, arr => arr[0]);
+    }
+    render() {
+        const {df} = this.props.store.outputs,
+            data = this.getData(df),
+            {dose_units} = this.props.store.settings;
+        return (
+            <Plot
+                data={data.map(row => {
+                    return {
+                        x: row[1],
+                        y: row[2],
+                        name: `${row[0]} ${dose_units}`,
+                        type: "scatter",
+                        mode: "lines+markers",
+                    };
+                })}
+                layout={{
+                    height: 400,
+                    title: "Tumor incidence over study duration",
+                    legend: {
+                        x: 0.03,
+                        y: 1,
+                    },
+                    xaxis: {
+                        title: {
+                            text: "Study duration (days)",
+                        },
+                    },
+                    yaxis: {
+                        title: {
+                            text: "Cumulative tumor incidence",
+                        },
+                    },
+                }}
+                style={{width: "100%"}}
+                useResizeHandler={true}
+            />
+        );
+    }
+}
+RawDataPlot.propTypes = {
+    store: PropTypes.object,
+};
+
+@inject("store")
+@observer
 class OutputTabs extends Component {
     render() {
         const {df, df2} = this.props.store.outputs;
         return (
-            <Tabs defaultActiveKey="summary" className="mb-3">
+            <Tabs
+                defaultActiveKey="summary"
+                className="mb-3"
+                onSelect={() => {
+                    // trigger resize event for plots
+                    window.dispatchEvent(new Event("resize"));
+                }}>
                 <Tab eventKey="summary" title="Summary">
                     <DataFrameTable
                         data={df2}
@@ -76,10 +211,10 @@ class OutputTabs extends Component {
                             "adj_proportion",
                         ]}
                     />
-                    <p>TODO - summary plot</p>
+                    <SummaryPlot />
                 </Tab>
                 <Tab eventKey="plots" title="Plots">
-                    <p>TODO - duration plot</p>
+                    <RawDataPlot />
                 </Tab>
                 <Tab eventKey="table" title="Table">
                     <DataFrameTable
@@ -135,9 +270,11 @@ const DataFrameTable = function({data, columns}) {
     return (
         <table className="table table-sm table-striped table-hover">
             <thead>
-                {columns.map((column, i) => (
-                    <th key={i}>{column}</th>
-                ))}
+                <tr>
+                    {columns.map((column, i) => (
+                        <th key={i}>{column}</th>
+                    ))}
+                </tr>
             </thead>
             <tbody>
                 {_.range(nrows).map(i => {

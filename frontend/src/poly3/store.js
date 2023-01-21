@@ -2,13 +2,15 @@ import {observable, action} from "mobx";
 
 import {getHeaders} from "../common";
 
+import {exampleData} from "./data";
+
 class Store {
     constructor(token) {
         this.token = token;
     }
 
     @observable settings = {
-        dataset: "TODO",
+        dataset: "",
         dose_units: "ppm",
         power: 3,
         duration: 730,
@@ -37,16 +39,27 @@ class Store {
                         this.outputs = data;
                     });
                 } else {
-                    response.json().then(data => {
-                        this.error = data;
-                        console.error(data);
-                    });
+                    response
+                        .json()
+                        .then(data => {
+                            this.error = data;
+                            console.error(data);
+                        })
+                        .catch(error => {
+                            this.error = true;
+                            console.error(error);
+                        });
                 }
             })
             .catch(error => {
                 this.error = true;
                 console.error(error);
             });
+    }
+
+    @action.bound
+    loadExampleData() {
+        this.updateSettings("dataset", exampleData);
     }
 }
 

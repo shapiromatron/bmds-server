@@ -165,7 +165,7 @@ class AnalysisViewset(mixins.RetrieveModelMixin, viewsets.GenericViewSet):
 @api_view(["POST"])
 def poly3_transform(request):
     settings = pydantic_validate(request.data, schema.Poly3Input)
-    input = pd.read_csv(StringIO(settings.dataset))
+    input = pd.read_csv(StringIO(settings.dataset)).sort_values(["dose", "day"])
     (df, df2) = calculate(
         doses=input.dose.tolist(),
         day=input.day.tolist(),

@@ -4,6 +4,7 @@ import React, {Component} from "react";
 
 import {columnHeaders, columns} from "../../constants/dataConstants";
 import Button from "../common/Button";
+import ErrorMessage from "../common/ErrorMessage";
 import FloatInput from "../common/FloatInput";
 import TextInput from "../common/TextInput";
 import TabularDatasetModal from "./TabularDatasetModal";
@@ -45,6 +46,7 @@ class DatasetForm extends Component {
     render() {
         const {dataStore} = this.props,
             dataset = dataStore.selectedDataset,
+            errorText = dataStore.selectedDatasetErrorText,
             columnNames = columns[dataset.dtype];
 
         return (
@@ -114,6 +116,7 @@ class DatasetForm extends Component {
                         />
                     </div>
                 </div>
+                <ErrorMessage error={errorText} />
                 <table className="table table-sm text-center">
                     <thead>
                         <tr className="bg-custom text-center">

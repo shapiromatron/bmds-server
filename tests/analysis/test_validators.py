@@ -4,8 +4,8 @@ from typing import Any, Dict
 
 import bmds
 import pytest
-from pydantic import ValidationError as PydanticValidationError
 from django.core.exceptions import ValidationError
+from pydantic import ValidationError as PydanticValidationError
 
 from bmds_server.analysis import validators
 from bmds_server.analysis.validators import datasets

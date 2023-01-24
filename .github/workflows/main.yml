@@ -50,6 +50,7 @@ jobs:
         pip install -r requirements/ci.txt
     - name: Setup linux environment
       run: |
+        echo pwd
         sudo apt-get update -y
         sudo apt-get install -y make libgslcblas0 libgsl-dev
         export "LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/lib:/usr/lib"

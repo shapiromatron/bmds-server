@@ -28,6 +28,13 @@ jobs:
         path: venv/bmds
         ref: main
         lfs: true
+    - name: Setup linux environment
+      run: |
+        pwd
+        ls -laht venv
+        ls -laht venv/bmds
+        ls -laht venv/bmds/bmds
+        exit 1
     - uses: actions/setup-python@v4
       with:
         python-version: '3.11'
@@ -50,7 +57,6 @@ jobs:
         pip install -r requirements/ci.txt
     - name: Setup linux environment
       run: |
-        echo pwd
         sudo apt-get update -y
         sudo apt-get install -y make libgslcblas0 libgsl-dev
         export "LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/lib:/usr/lib"

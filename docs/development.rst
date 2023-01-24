@@ -4,7 +4,7 @@ Development
 Make sure you have the following applications installed locally:
 
 - `Git`_
-- `Python`_ == 3.9
+- `Python`_ == 3.11
 - `Node.js`_
 - `Yarn`_
 - `PostgreSQL`_ == 12

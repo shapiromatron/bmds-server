@@ -4,11 +4,8 @@ from bmds_server.analysis.models import Analysis
 from bmds_server.analysis.reporting.docx import build_docx
 from bmds_server.analysis.reporting.excel import dataset_df, params_df, summary_df
 
-from .run3 import RunBmds3
-
 
 @pytest.mark.django_db()
-@pytest.mark.skipif(not RunBmds3.should_run, reason=RunBmds3.skip_reason)
 class TestBmds3Execution:
     def test_c(self, bmds3_complete_continuous):
         analysis = Analysis.objects.create(inputs=bmds3_complete_continuous)

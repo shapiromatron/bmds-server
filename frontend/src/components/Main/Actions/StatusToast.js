@@ -1,7 +1,7 @@
-import React, {Component} from "react";
 import {inject, observer} from "mobx-react";
-import {Toast} from "react-bootstrap";
 import PropTypes from "prop-types";
+import React, {Component} from "react";
+import {Toast} from "react-bootstrap";
 
 @inject("mainStore")
 @observer

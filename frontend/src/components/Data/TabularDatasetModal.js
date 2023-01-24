@@ -1,9 +1,9 @@
-import React, {Component} from "react";
 import {inject, observer} from "mobx-react";
 import PropTypes from "prop-types";
+import React, {Component} from "react";
 import {Modal} from "react-bootstrap";
-import Button from "../common/Button";
 
+import Button from "../common/Button";
 import TextAreaInput from "../common/TextAreaInput";
 
 @inject("dataStore")

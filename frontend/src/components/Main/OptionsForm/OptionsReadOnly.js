@@ -1,14 +1,14 @@
-import React from "react";
 import PropTypes from "prop-types";
+import React from "react";
+import {ff} from "utils/formatters";
 
+import {getLabel} from "../../../common";
 import {MODEL_CONTINUOUS, MODEL_DICHOTOMOUS} from "../../../constants/mainConstants";
 import {
-    dichotomousBmrOptions,
     continuousBmrOptions,
+    dichotomousBmrOptions,
     distTypeOptions,
 } from "../../../constants/optionsConstants";
-import {getLabel} from "../../../common";
-import {ff} from "utils/formatters";
 
 const OptionsReadOnly = props => {
     const {options, modelType, idx} = props;

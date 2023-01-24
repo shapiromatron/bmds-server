@@ -1,11 +1,8 @@
-import React, {Component} from "react";
+import {toJS} from "mobx";
 import {inject, observer} from "mobx-react";
 import PropTypes from "prop-types";
-import {toJS} from "mobx";
+import React, {Component} from "react";
 
-import OptionsForm from "./OptionsForm";
-import OptionsReadOnly from "./OptionsReadOnly";
-import HelpTextPopover from "../../common/HelpTextPopover";
 import {
     MODEL_CONTINUOUS,
     MODEL_DICHOTOMOUS,
@@ -13,6 +10,9 @@ import {
     MODEL_NESTED_DICHOTOMOUS,
 } from "../../../constants/mainConstants";
 import Button from "../../common/Button";
+import HelpTextPopover from "../../common/HelpTextPopover";
+import OptionsForm from "./OptionsForm";
+import OptionsReadOnly from "./OptionsReadOnly";
 
 @inject("optionsStore")
 @observer

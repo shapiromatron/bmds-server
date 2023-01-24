@@ -1,12 +1,12 @@
-import React, {Component} from "react";
 import {inject, observer} from "mobx-react";
 import PropTypes from "prop-types";
-import TabularDatasetModal from "./TabularDatasetModal";
+import React, {Component} from "react";
 
 import {columnHeaders, columns} from "../../constants/dataConstants";
-import TextInput from "../common/TextInput";
-import FloatInput from "../common/FloatInput";
 import Button from "../common/Button";
+import FloatInput from "../common/FloatInput";
+import TextInput from "../common/TextInput";
+import TabularDatasetModal from "./TabularDatasetModal";
 
 const DatasetFormRow = props => {
     return (

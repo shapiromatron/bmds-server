@@ -1,10 +1,10 @@
-import React, {Component} from "react";
 import {inject, observer} from "mobx-react";
-import DatasetModelOption from "./DatasetModelOption";
 import PropTypes from "prop-types";
+import React, {Component} from "react";
 
 import {Dtype} from "../../../constants/dataConstants";
 import HelpTextPopover from "../../common/HelpTextPopover";
+import DatasetModelOption from "./DatasetModelOption";
 
 const maxDegreeText = `Studies have indicated that higher degree polynomial models are not
     warranted in that they generally do not sufficiently improve fit over simpler models

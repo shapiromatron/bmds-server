@@ -1,6 +1,7 @@
 import PropTypes from "prop-types";
 import React from "react";
-import {ff} from "utils/formatters";
+
+import {ff} from "@/utils/formatters";
 
 import {getLabel} from "../../../common";
 import {MODEL_CONTINUOUS, MODEL_DICHOTOMOUS} from "../../../constants/mainConstants";

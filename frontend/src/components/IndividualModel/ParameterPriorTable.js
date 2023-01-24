@@ -2,7 +2,8 @@ import _ from "lodash";
 import {observer} from "mobx-react";
 import PropTypes from "prop-types";
 import React, {Component} from "react";
-import {ff} from "utils/formatters";
+
+import {ff} from "@/utils/formatters";
 
 import {getLabel} from "../../common";
 import {isFrequentist, priorTypeLabels} from "../../constants/outputConstants";

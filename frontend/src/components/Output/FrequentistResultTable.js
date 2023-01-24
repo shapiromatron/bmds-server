@@ -3,8 +3,9 @@ import {toJS} from "mobx";
 import {inject, observer} from "mobx-react";
 import PropTypes from "prop-types";
 import React, {Component} from "react";
-import {fractionalFormatter} from "utils/formatters";
-import {ff} from "utils/formatters";
+
+import {fractionalFormatter} from "@/utils/formatters";
+import {ff} from "@/utils/formatters";
 
 import {BIN_LABELS} from "../../constants/logicConstants";
 import {MODEL_MULTI_TUMOR} from "../../constants/mainConstants";

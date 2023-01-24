@@ -38,7 +38,9 @@
         "space-before-function-paren": [
             2,
             "never"
-        ]
+        ],
+        "simple-import-sort/imports": "error",
+        "simple-import-sort/exports": "error"
     },
     "parser": "babel-eslint",
     "parserOptions": {
@@ -63,7 +65,8 @@
     "plugins": [
         "babel",
         "react",
-        "prettier"
+        "prettier",
+        "simple-import-sort"
     ],
     "settings": {
         "react": {

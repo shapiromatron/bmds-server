@@ -158,9 +158,6 @@ jobs:
         playwright install --with-deps chromium
     - name: Setup linux environment
       run: |
-        ls $GITHUB_WORKSPACE
-        ls $GITHUB_WORKSPACE/venv
-        ls $GITHUB_WORKSPACE/venv/bmds
         sudo apt-get update -y
         sudo apt-get install -y make libgslcblas0 libgsl-dev
         export "LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/lib:/usr/lib"

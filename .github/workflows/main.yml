@@ -55,9 +55,6 @@ jobs:
         export "LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/lib:/usr/lib"
         sudo cp vendor/libnlopt.so /usr/local/lib/libnlopt.so.0
         sudo ln -s /lib/x86_64-linux-gnu/libgsl.so /usr/local/lib/libgsl.so.25
-        ls $GITHUB_WORKSPACE/venv
-        ls $GITHUB_WORKSPACE/venv/bmds
-        ls $GITHUB_WORKSPACE/venv/bmds/bin/BMDS330
         export "BMD_DLL=$GITHUB_WORKSPACE/venv/bmds/bin/BMDS330/libDRBMD.so"
         echo $BMD_DLL
         ldd $BMD_DLL

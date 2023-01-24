@@ -21,6 +21,8 @@ jobs:
     steps:
     - name: Checkout bmds-server
       uses: actions/checkout@v3
+      with:
+        path: main
     - name: Checkout bmds@main
       uses: actions/checkout@v3
       with:

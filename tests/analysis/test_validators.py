@@ -5,8 +5,10 @@ from typing import Any, Dict
 import bmds
 import pytest
 from django.core.exceptions import ValidationError
+from pydantic import ValidationError as PydanticValidationError
 
 from bmds_server.analysis import validators
+from bmds_server.analysis.validators import datasets
 
 
 def _missing_field(err, missing_field: str):
@@ -352,3 +354,133 @@ class TestOptionSetValidation:
         with pytest.raises(ValidationError) as err:
             validators.validate_options(bmds.constants.CONTINUOUS, data)
         assert "ensure this value has at least 1 items" in str(err)
+
+
+class TestDatasetValidation:
+    def test_dichotomous(self, bmds3_complete_dichotomous):
+        dataset = bmds3_complete_dichotomous["datasets"][0]
+
+        # check valid
+        check = deepcopy(dataset)
+        datasets.MaxDichotomousDatasetSchema(**check)
+
+        # check incidence > n
+        check = deepcopy(dataset)
+        check["incidences"][0] = check["ns"][0] + 1
+        with pytest.raises(PydanticValidationError, match="Incidence cannot be greater than N"):
+            datasets.MaxDichotomousDatasetSchema(**check)
+
+        # check minimums
+        check = deepcopy(dataset)
+        check.update(doses=[10] * 3, ns=[10] * 3, incidences=[0] * 3)
+        datasets.MaxDichotomousDatasetSchema(**check)
+
+        check = deepcopy(dataset)
+        check.update(doses=[0, 1], ns=[1, 1], incidences=[0, 1])
+        with pytest.raises(PydanticValidationError, match="At least 3 groups are required"):
+            datasets.MaxDichotomousDatasetSchema(**check)
+
+        # check maximums
+        check = deepcopy(dataset)
+        check.update(doses=[10] * 30, ns=[10] * 30, incidences=[0] * 30)
+        datasets.MaxDichotomousDatasetSchema(**check)
+
+        check = deepcopy(dataset)
+        check.update(doses=[10] * 31, ns=[10] * 31, incidences=[0] * 31)
+        with pytest.raises(PydanticValidationError, match="A maximum of 30 groups are allowed"):
+            datasets.MaxDichotomousDatasetSchema(**check)
+
+    def test_continuous(self, bmds3_complete_continuous):
+        dataset = bmds3_complete_continuous["datasets"][0]
+
+        # check valid
+        check = deepcopy(dataset)
+        datasets.MaxContinuousDatasetSchema(**check)
+
+        # check minimums
+        check = deepcopy(dataset)
+        check.update(doses=[10] * 3, ns=[10] * 3, means=[0] * 3, stdevs=[0] * 3)
+        datasets.MaxContinuousDatasetSchema(**check)
+
+        check = deepcopy(dataset)
+        check.update(doses=[10] * 2, ns=[10] * 2, means=[0] * 2, stdevs=[0] * 2)
+        with pytest.raises(PydanticValidationError, match="At least 3 groups are required"):
+            datasets.MaxContinuousDatasetSchema(**check)
+
+        # check maximums
+        check = deepcopy(dataset)
+        check.update(doses=[10] * 30, ns=[10] * 30, means=[0] * 30, stdevs=[0] * 30)
+        datasets.MaxContinuousDatasetSchema(**check)
+
+        check = deepcopy(dataset)
+        check.update(doses=[10] * 31, ns=[10] * 31, means=[0] * 31, stdevs=[0] * 31)
+        with pytest.raises(PydanticValidationError, match="A maximum of 30 groups are allowed"):
+            datasets.MaxContinuousDatasetSchema(**check)
+
+    def test_continuous_individual(self, bmds3_complete_continuous_individual):
+        dataset = bmds3_complete_continuous_individual["datasets"][0]
+
+        # check valid
+        check = deepcopy(dataset)
+        datasets.MaxContinuousIndividualDatasetSchema(**check)
+
+        # check minimums
+        check = deepcopy(dataset)
+        check.update(doses=list(range(5)), responses=[10] * 5)
+        datasets.MaxContinuousIndividualDatasetSchema(**check)
+
+        check = deepcopy(dataset)
+        check.update(doses=list(range(4)), responses=[10] * 4)
+        with pytest.raises(PydanticValidationError, match="At least 5 groups are required"):
+            datasets.MaxContinuousIndividualDatasetSchema(**check)
+
+        # check maximums
+        check = deepcopy(dataset)
+        check.update(doses=list(range(1000)), responses=[10] * 1000)
+        datasets.MaxContinuousIndividualDatasetSchema(**check)
+
+        check = deepcopy(dataset)
+        check.update(doses=list(range(1001)), responses=[10] * 1001)
+        with pytest.raises(PydanticValidationError, match="A maximum of 1000 groups are allowed"):
+            datasets.MaxContinuousIndividualDatasetSchema(**check)
+
+    def test_nested_dichotomous(self, nested_dichotomous_datasets):
+        dataset = nested_dichotomous_datasets[0]
+
+        # check valid
+        check = deepcopy(dataset)
+        datasets.MaxNestedDichotomousDatasetSchema(**check)
+
+        # check minimums
+        check = deepcopy(dataset)
+        check.update(
+            doses=[10] * 3, litter_ns=[10] * 3, incidences=[0] * 3, litter_covariates=[0] * 3
+        )
+        datasets.MaxNestedDichotomousDatasetSchema(**check)
+
+        check = deepcopy(dataset)
+        check.update(
+            doses=[10] * 2, litter_ns=[10] * 2, incidences=[0] * 2, litter_covariates=[0] * 2
+        )
+        with pytest.raises(PydanticValidationError, match="At least 3 groups are required"):
+            datasets.MaxNestedDichotomousDatasetSchema(**check)
+
+        # check maximums
+        check = deepcopy(dataset)
+        check.update(
+            doses=[10] * 1000,
+            litter_ns=[10] * 1000,
+            incidences=[0] * 1000,
+            litter_covariates=[0] * 1000,
+        )
+        datasets.MaxNestedDichotomousDatasetSchema(**check)
+
+        check = deepcopy(dataset)
+        check.update(
+            doses=[10] * 1001,
+            litter_ns=[10] * 1001,
+            incidences=[0] * 1001,
+            litter_covariates=[0] * 1001,
+        )
+        with pytest.raises(PydanticValidationError, match="A maximum of 1000 groups are allowed"):
+            datasets.MaxNestedDichotomousDatasetSchema(**check)

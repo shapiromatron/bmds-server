@@ -1,5 +1,5 @@
 from enum import IntEnum
-from typing import Any, Union
+from typing import Any, ClassVar, Union
 
 import bmds
 from bmds.datasets import (
@@ -62,21 +62,40 @@ class DatasetValidator(BaseModel):
         return values
 
 
+class MaxDichotomousDatasetSchema(DichotomousDatasetSchema):
+    MAX_N: ClassVar = 30
+
+
+class MaxContinuousDatasetSchema(ContinuousDatasetSchema):
+    MAX_N: ClassVar = 30
+
+
+class MaxContinuousIndividualDatasetSchema(ContinuousIndividualDatasetSchema):
+    MIN_N: ClassVar = 5
+    MAX_N: ClassVar = 1000
+
+
+class MaxNestedDichotomousDatasetSchema(NestedDichotomousDatasetSchema):
+    MAX_N: ClassVar = 1000
+
+
 class DichotomousDatasets(DatasetValidator):
     dataset_options: conlist(DichotomousModelOptions, min_items=1, max_items=10)
-    datasets: conlist(DichotomousDatasetSchema, min_items=1, max_items=10)
+    datasets: conlist(MaxDichotomousDatasetSchema, min_items=1, max_items=10)
 
 
 class ContinuousDatasets(DatasetValidator):
     dataset_options: conlist(ContinuousModelOptions, min_items=1, max_items=10)
     datasets: conlist(
-        Union[ContinuousDatasetSchema, ContinuousIndividualDatasetSchema], min_items=1, max_items=10
+        Union[MaxContinuousDatasetSchema, MaxContinuousIndividualDatasetSchema],
+        min_items=1,
+        max_items=10,
     )
 
 
 class NestedDichotomousDataset(DatasetValidator):
     dataset_options: conlist(NestedDichotomousModelOptions, min_items=1, max_items=10)
-    datasets: conlist(NestedDichotomousDatasetSchema, min_items=1, max_items=10)
+    datasets: conlist(MaxNestedDichotomousDatasetSchema, min_items=1, max_items=10)
 
 
 class MultiTumorDatasets(DatasetValidator):

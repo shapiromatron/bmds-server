@@ -21,13 +21,11 @@ jobs:
     steps:
     - name: Checkout bmds-server
       uses: actions/checkout@v3
-      with:
-        path: main
     - name: Checkout bmds@main
       uses: actions/checkout@v3
       with:
         repository: shapiromatron/bmds
-        path: bmds
+        path: venv/bmds
         ref: main
         lfs: true
     - uses: actions/setup-python@v4

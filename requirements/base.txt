@@ -9,7 +9,7 @@ djangorestframework==3.14.0
 django-reversion==5.0.4
 
 # db
-psycopg==3.1.8
+psycopg[binary]==3.1.8
 
 # tasks
 celery==5.2.7

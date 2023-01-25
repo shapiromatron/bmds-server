@@ -1,10 +1,11 @@
-import React, {Component} from "react";
 import {inject, observer} from "mobx-react";
 import PropTypes from "prop-types";
+import React, {Component} from "react";
+
 import {checkOrEmpty} from "../../common";
+import Button from "../common/Button";
 import CheckboxInput from "../common/CheckboxInput";
 import FloatInput from "../common/FloatInput";
-import Button from "../common/Button";
 
 @inject("logicStore")
 @observer

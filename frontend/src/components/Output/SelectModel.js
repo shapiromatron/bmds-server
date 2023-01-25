@@ -1,11 +1,11 @@
 import _ from "lodash";
-import React, {Component} from "react";
 import {inject, observer} from "mobx-react";
 import PropTypes from "prop-types";
+import React, {Component} from "react";
 
+import Button from "../common/Button";
 import SelectInput from "../common/SelectInput";
 import TextAreaInput from "../common/TextAreaInput";
-import Button from "../common/Button";
 
 @inject("outputStore")
 @observer

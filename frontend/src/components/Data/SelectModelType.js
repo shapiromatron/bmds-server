@@ -1,10 +1,10 @@
-import React, {Component} from "react";
 import {inject, observer} from "mobx-react";
 import PropTypes from "prop-types";
+import React, {Component} from "react";
 
-import SelectInput from "../common/SelectInput";
-import LabelInput from "../common/LabelInput";
 import Button from "../common/Button";
+import LabelInput from "../common/LabelInput";
+import SelectInput from "../common/SelectInput";
 
 @inject("dataStore")
 @observer

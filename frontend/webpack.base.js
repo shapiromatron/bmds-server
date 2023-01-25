@@ -55,7 +55,7 @@ module.exports = {
 
     resolve: {
         alias: {
-            bmd: path.join(__dirname, "src"),
+            "@": path.join(__dirname, "src"),
         },
         modules: [path.join(__dirname, "src"), "node_modules"],
         extensions: [".js", ".css"],

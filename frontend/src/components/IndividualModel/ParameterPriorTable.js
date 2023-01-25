@@ -1,11 +1,12 @@
 import _ from "lodash";
-import React, {Component} from "react";
 import {observer} from "mobx-react";
 import PropTypes from "prop-types";
+import React, {Component} from "react";
 
-import {isFrequentist, priorTypeLabels} from "../../constants/outputConstants";
+import {ff} from "@/utils/formatters";
+
 import {getLabel} from "../../common";
-import {ff} from "utils/formatters";
+import {isFrequentist, priorTypeLabels} from "../../constants/outputConstants";
 
 const renderPriorRow = prior => {
         return (

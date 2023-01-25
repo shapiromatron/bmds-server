@@ -1,10 +1,10 @@
 import _ from "lodash";
-import React, {Component} from "react";
 import {observer} from "mobx-react";
 import PropTypes from "prop-types";
+import React, {Component} from "react";
 
 import {checkOrEmpty} from "../../common";
-import {BIN_NAMES, ruleLookups, logicBinOptions} from "../../constants/logicConstants";
+import {BIN_NAMES, logicBinOptions, ruleLookups} from "../../constants/logicConstants";
 import {MODEL_CONTINUOUS, MODEL_DICHOTOMOUS} from "../../constants/mainConstants";
 import CheckboxInput from "../common/CheckboxInput";
 import FloatInput from "../common/FloatInput";

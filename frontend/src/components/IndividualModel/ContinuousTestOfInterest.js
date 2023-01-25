@@ -1,9 +1,9 @@
-import React, {Component} from "react";
+import HelpTextPopover from "components/common/HelpTextPopover";
 import {observer} from "mobx-react";
 import PropTypes from "prop-types";
+import React, {Component} from "react";
 
-import {ff, fractionalFormatter} from "utils/formatters";
-import HelpTextPopover from "components/common/HelpTextPopover";
+import {ff, fractionalFormatter} from "@/utils/formatters";
 
 @observer
 class ContinuousTestOfInterest extends Component {

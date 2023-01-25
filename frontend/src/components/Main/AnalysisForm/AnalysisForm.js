@@ -1,13 +1,13 @@
-import React, {Component} from "react";
 import {inject, observer} from "mobx-react";
 import PropTypes from "prop-types";
+import React, {Component} from "react";
 
 import * as mc from "../../../constants/mainConstants";
-import Spinner from "../../common/Spinner";
-import SelectInput from "../../common/SelectInput";
-import TextInput from "../../common/TextInput";
-import TextAreaInput from "../../common/TextAreaInput";
 import Button from "../../common/Button";
+import SelectInput from "../../common/SelectInput";
+import Spinner from "../../common/Spinner";
+import TextAreaInput from "../../common/TextAreaInput";
+import TextInput from "../../common/TextInput";
 
 @observer
 class RunChecklist extends Component {

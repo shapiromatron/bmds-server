@@ -6,8 +6,6 @@ from rest_framework.test import APIClient
 
 from bmds_server.analysis.models import Analysis
 
-from .run3 import RunBmds3
-
 
 @pytest.mark.django_db
 class TestAnalysisViewSet:
@@ -181,7 +179,6 @@ class TestAnalysisViewSet:
         assert response.status_code == 200
         assert response.json()["inputs"] == payload["data"]
 
-    @pytest.mark.skipif(not RunBmds3.should_run, reason=RunBmds3.skip_reason)
     def test_execute(self, bmds3_complete_dichotomous):
         client = APIClient()
         analysis = Analysis.objects.create(inputs=bmds3_complete_dichotomous)
@@ -202,7 +199,6 @@ class TestAnalysisViewSet:
         assert response.data["has_errors"] is False
         assert bmd == pytest.approx(164.3, rel=0.05)
 
-    @pytest.mark.skipif(not RunBmds3.should_run, reason=RunBmds3.skip_reason)
     def test_reset_execute(self, bmds3_complete_dichotomous):
         client = APIClient()
         analysis = Analysis.objects.create(inputs=bmds3_complete_dichotomous)
@@ -222,7 +218,6 @@ class TestAnalysisViewSet:
         assert response.data["has_errors"] is False
         assert response.data["outputs"] == {}
 
-    @pytest.mark.skipif(not RunBmds3.should_run, reason=RunBmds3.skip_reason)
     def test_model_selection(self, bmds3_complete_dichotomous):
         client = APIClient()
         analysis = Analysis.objects.create(inputs=bmds3_complete_dichotomous)

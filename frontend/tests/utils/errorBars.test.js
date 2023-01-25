@@ -1,4 +1,4 @@
-import {inv_tdist_05, continuousErrorBars, dichotomousErrorBars} from "../../src/utils/errorBars";
+import {continuousErrorBars, dichotomousErrorBars, inv_tdist_05} from "../../src/utils/errorBars";
 import assert from "../helpers";
 
 describe("utils/errorBars", function() {

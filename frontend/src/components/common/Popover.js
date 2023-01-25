@@ -1,7 +1,8 @@
 import _ from "lodash";
-import $ from "$";
-import React, {Component} from "react";
 import PropTypes from "prop-types";
+import React, {Component} from "react";
+
+import $ from "$";
 
 class Popover extends Component {
     constructor(props) {

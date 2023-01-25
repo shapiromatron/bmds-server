@@ -1,12 +1,12 @@
-import React, {Component} from "react";
 import {inject, observer} from "mobx-react";
 import PropTypes from "prop-types";
+import React, {Component} from "react";
 
+import DoseResponsePlot from "../common/DoseResponsePlot";
 import DatasetForm from "./DatasetForm";
 import DatasetSelector from "./DatasetSelector";
-import SelectModelType from "./SelectModelType";
-import DoseResponsePlot from "../common/DoseResponsePlot";
 import DatasetTable from "./DatasetTable";
+import SelectModelType from "./SelectModelType";
 
 @inject("dataStore")
 @observer

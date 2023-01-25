@@ -1,20 +1,19 @@
-import React, {Component} from "react";
-import {inject, observer} from "mobx-react";
-import PropTypes from "prop-types";
-
-import {MODEL_NESTED_DICHOTOMOUS} from "../../constants/mainConstants";
-
-import ModelDetailModal from "../IndividualModel/ModelDetailModal";
-import FrequentistResultTable from "./FrequentistResultTable";
-import NestedDichotomousResultTable from "./NestedDichotomous/ResultTable";
-import BayesianResultTable from "./BayesianResultTable";
-import DatasetTable from "../Data/DatasetTable";
-import OptionSetTable from "./OptionSetTable";
-import SelectModel from "./SelectModel";
-import DoseResponsePlot from "../common/DoseResponsePlot";
 import "./Output.css";
 
+import {inject, observer} from "mobx-react";
+import PropTypes from "prop-types";
+import React, {Component} from "react";
+
+import {MODEL_NESTED_DICHOTOMOUS} from "../../constants/mainConstants";
+import DoseResponsePlot from "../common/DoseResponsePlot";
 import SelectInput from "../common/SelectInput";
+import DatasetTable from "../Data/DatasetTable";
+import ModelDetailModal from "../IndividualModel/ModelDetailModal";
+import BayesianResultTable from "./BayesianResultTable";
+import FrequentistResultTable from "./FrequentistResultTable";
+import NestedDichotomousResultTable from "./NestedDichotomous/ResultTable";
+import OptionSetTable from "./OptionSetTable";
+import SelectModel from "./SelectModel";
 
 const OutputErrorComponent = ({title, children}) => {
     return (

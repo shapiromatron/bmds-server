@@ -1,12 +1,12 @@
-import React from "react";
-import PropTypes from "prop-types";
 import {observer} from "mobx-react";
+import PropTypes from "prop-types";
+import React from "react";
 
-import * as mc from "../../../constants/mainConstants";
 import {checkOrEmpty} from "../../../common";
-import HelpTextPopover from "../../common/HelpTextPopover";
+import * as mc from "../../../constants/mainConstants";
 import CheckboxInput from "../../common/CheckboxInput";
 import FloatInput from "../../common/FloatInput";
+import HelpTextPopover from "../../common/HelpTextPopover";
 
 const isModelChecked = function(models, type, model) {
         let checked = false;

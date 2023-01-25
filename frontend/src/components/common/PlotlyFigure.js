@@ -1,7 +1,7 @@
-import React, {Component} from "react";
-import Plot from "react-plotly.js";
 import PropTypes from "prop-types";
+import React, {Component} from "react";
 import ReactDOM from "react-dom";
+import Plot from "react-plotly.js";
 
 class PlotlyFigure extends Component {
     render() {

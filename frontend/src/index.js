@@ -3,7 +3,7 @@ import React from "react";
 import ReactDOM from "react-dom";
 
 import App from "./App";
-import poly3 from "./poly3";
+import polyk from "./polyk";
 import rootStore from "./stores/RootStore";
 import history from "./utils/localHistory";
 
@@ -29,5 +29,5 @@ const appStartup = function(el) {
 window.app = {
     appStartup,
     history,
-    poly3,
+    polyk,
 };

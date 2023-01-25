@@ -1,15 +1,15 @@
 import _ from "lodash";
-import Plot from "react-plotly.js";
+import {inject, observer} from "mobx-react";
+import PropTypes from "prop-types";
 import React, {Component} from "react";
 import Tab from "react-bootstrap/Tab";
 import Tabs from "react-bootstrap/Tabs";
-import {inject, observer} from "mobx-react";
-import PropTypes from "prop-types";
+import Plot from "react-plotly.js";
 
-import TextInput from "../components/common/TextInput";
-import TextAreaInput from "../components/common/TextAreaInput";
-import FloatInput from "../components/common/FloatInput";
 import Button from "../components/common/Button";
+import FloatInput from "../components/common/FloatInput";
+import TextAreaInput from "../components/common/TextAreaInput";
+import TextInput from "../components/common/TextInput";
 
 @inject("store")
 @observer

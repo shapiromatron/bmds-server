@@ -1,7 +1,6 @@
-import {observable, action} from "mobx";
+import {action, observable} from "mobx";
 
 import {getHeaders} from "../common";
-
 import {exampleData} from "./data";
 
 class Store {
@@ -25,7 +24,7 @@ class Store {
 
     @action.bound
     async submit() {
-        const url = "/api/v1/poly3/";
+        const url = "/api/v1/polyk/";
         this.error = null;
         await fetch(url, {
             method: "POST",

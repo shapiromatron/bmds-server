@@ -1,7 +1,7 @@
 from io import StringIO
 
 import pandas as pd
-from bmds.datasets.transforms.poly3 import calculate
+from bmds.datasets.transforms.polyk import calculate
 from django.core.exceptions import ValidationError
 from rest_framework import exceptions, mixins, viewsets
 from rest_framework.decorators import action, api_view
@@ -163,14 +163,14 @@ class AnalysisViewset(mixins.RetrieveModelMixin, viewsets.GenericViewSet):
 
 
 @api_view(["POST"])
-def poly3_transform(request):
-    settings = pydantic_validate(request.data, schema.Poly3Input)
+def polyk_transform(request):
+    settings = pydantic_validate(request.data, schema.PolyKInput)
     input = pd.read_csv(StringIO(settings.dataset)).sort_values(["dose", "day"])
     (df, df2) = calculate(
         doses=input.dose.tolist(),
         day=input.day.tolist(),
         has_tumor=input.has_tumor.tolist(),
-        power=settings.power,
+        k=settings.power,
         max_day=settings.duration,
     )
     return Response({"df": df.to_dict(orient="list"), "df2": df2.to_dict(orient="list")})

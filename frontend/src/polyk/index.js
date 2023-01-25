@@ -1,9 +1,9 @@
+import {Provider} from "mobx-react";
 import React from "react";
 import ReactDOM from "react-dom";
-import {Provider} from "mobx-react";
 
-import Store from "./store";
 import App from "./App";
+import Store from "./store";
 
 const render = function(el, token) {
     const store = new Store(token);

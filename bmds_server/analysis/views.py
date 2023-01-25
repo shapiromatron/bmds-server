@@ -111,5 +111,5 @@ class AnalysisDelete(DeleteView):
         return analysis
 
 
-class Poly3Adjustment(TemplateView):
-    template_name: str = "analysis/poly3.html"
+class PolyKAdjustment(TemplateView):
+    template_name: str = "analysis/polyk.html"

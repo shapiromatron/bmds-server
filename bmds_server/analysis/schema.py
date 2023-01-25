@@ -33,7 +33,7 @@ class AnalysisOutput(BaseModel):
     outputs: list[AnalysisSessionSchema]
 
 
-class Poly3Input(BaseModel):
+class PolyKInput(BaseModel):
     dataset: str
     dose_units: str
     power: Optional[float] = 3

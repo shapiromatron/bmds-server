@@ -1,14 +1,14 @@
-import {observable, action, computed, toJS} from "mobx";
 import _ from "lodash";
+import {action, computed, observable, toJS} from "mobx";
 
 import * as dc from "../constants/dataConstants";
-import {getDrLayout, getDrDatasetPlotData} from "../constants/plotting";
 import {
+    columns,
     datasetTypesByModelType,
     getDefaultDataset,
     getExampleData,
-    columns,
 } from "../constants/dataConstants";
+import {getDrDatasetPlotData, getDrLayout} from "../constants/plotting";
 
 let validateTabularData = function(text, columns) {
     let data = [],
@@ -188,6 +188,23 @@ class DataStore {
 
     @computed get selectedDatasetIndex() {
         return _.findIndex(this.datasets, item => item.metadata.id === this.selectedDatasetId);
+    }
+
+    @computed get selectedDatasetErrors() {
+        const data = this.rootStore.mainStore.errorData;
+        if (!_.isArray(data)) {
+            return null;
+        }
+        const index = this.selectedDatasetIndex,
+            filtered = data.filter(error => {
+                return error.loc && error.loc[0] == "datasets" && error.loc[1] == index;
+            });
+        return filtered;
+    }
+
+    @computed get selectedDatasetErrorText() {
+        const data = this.selectedDatasetErrors;
+        return _.isArray(data) ? data.map(el => el.msg).join(", ") : "";
     }
 
     @computed get getMappedArray() {

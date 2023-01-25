@@ -1,10 +1,10 @@
 import {saveAs} from "file-saver";
-import slugify from "slugify";
-import {observable, action, computed, toJS} from "mobx";
 import _ from "lodash";
+import {action, computed, observable, toJS} from "mobx";
+import slugify from "slugify";
 
+import {getHeaders, parseErrors, simulateClick} from "../common";
 import * as mc from "../constants/mainConstants";
-import {simulateClick, getHeaders} from "../common";
 
 class MainStore {
     constructor(rootStore) {
@@ -18,6 +18,7 @@ class MainStore {
     @observable analysis_description = "";
     @observable model_type = mc.MODEL_CONTINUOUS;
     @observable errorMessage = "";
+    @observable errorData = null;
     @observable hasEditSettings = false;
     @observable executionOutputs = null;
     @observable isUpdateComplete = false;
@@ -77,6 +78,7 @@ class MainStore {
         const url = this.config.editSettings.patchInputUrl,
             {csrfToken} = this.config.editSettings;
         this.errorMessage = "";
+        this.errorData = null;
         await fetch(url, {
             method: "PATCH",
             mode: "cors",
@@ -87,7 +89,11 @@ class MainStore {
                 if (response.ok) {
                     response.json().then(data => this.updateModelStateFromApi(data));
                 } else {
-                    response.json().then(data => (this.errorMessage = data));
+                    response.json().then(errorText => {
+                        const {errors, textErrors} = parseErrors(errorText);
+                        this.errorMessage = textErrors.join(", ");
+                        this.errorData = errors;
+                    });
                 }
             })
             .catch(error => {

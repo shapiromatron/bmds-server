@@ -1,7 +1,8 @@
 import _ from "lodash";
-import React, {Component} from "react";
 import {inject, observer} from "mobx-react";
 import PropTypes from "prop-types";
+import React, {Component} from "react";
+
 import Button from "../../common/Button";
 
 const getDeletionDateText = function(editSettings) {

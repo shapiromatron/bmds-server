@@ -1,9 +1,9 @@
-import React, {Component} from "react";
 import {inject, observer} from "mobx-react";
 import PropTypes from "prop-types";
+import React, {Component} from "react";
 
-import ClipboardButton from "../../common/ClipboardButton";
 import Button from "../../common/Button";
+import ClipboardButton from "../../common/ClipboardButton";
 
 @inject("mainStore")
 @observer

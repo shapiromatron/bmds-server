@@ -1,10 +1,10 @@
+import HelpTextPopover from "components/common/HelpTextPopover";
 import _ from "lodash";
-import React, {Component} from "react";
 import {observer} from "mobx-react";
 import PropTypes from "prop-types";
+import React, {Component} from "react";
 
 import {parameterFormatter} from "../../utils/formatters";
-import HelpTextPopover from "components/common/HelpTextPopover";
 
 @observer
 class ModelParameters extends Component {

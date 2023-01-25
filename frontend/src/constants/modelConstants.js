@@ -1,8 +1,8 @@
 import {
     MODEL_CONTINUOUS,
     MODEL_DICHOTOMOUS,
-    MODEL_NESTED_DICHOTOMOUS,
     MODEL_MULTI_TUMOR,
+    MODEL_NESTED_DICHOTOMOUS,
 } from "./mainConstants";
 
 const modelsList = {
@@ -77,4 +77,4 @@ const modelsList = {
     },
     hasDegrees = new Set(["Multistage", "Polynomial"]);
 
-export {allModelOptions, modelsList, models, hasDegrees, isLognormal};
+export {allModelOptions, hasDegrees, isLognormal, models, modelsList};

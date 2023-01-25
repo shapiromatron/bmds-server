@@ -19,7 +19,7 @@ class ExternalAuth(ExternalAuth):
 
 class ExternalAuthTests(TestCase):
     request_factory = RequestFactory()
-    middleware = SessionMiddleware()
+    middleware = SessionMiddleware(lambda response: response)
 
     def _login(self, email, username):
         headers = {

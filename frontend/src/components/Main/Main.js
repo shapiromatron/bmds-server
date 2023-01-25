@@ -1,14 +1,13 @@
+import {inject, observer} from "mobx-react";
 import PropTypes from "prop-types";
 import React, {Component} from "react";
 
+import Button from "../common/Button";
 import AnalysisForm from "./AnalysisForm/AnalysisForm";
+import AnalysisFormReadOnly from "./AnalysisForm/AnalysisFormReadOnly";
+import DatasetModelOptionList from "./DatasetModelOptionList/DatasetModelOptionList";
 import ModelsCheckBoxList from "./ModelsForm/ModelsCheckBoxList";
 import OptionsFormList from "./OptionsForm/OptionsFormList";
-
-import {inject, observer} from "mobx-react";
-import DatasetModelOptionList from "./DatasetModelOptionList/DatasetModelOptionList";
-import AnalysisFormReadOnly from "./AnalysisForm/AnalysisFormReadOnly";
-import Button from "../common/Button";
 
 @inject("mainStore")
 @observer

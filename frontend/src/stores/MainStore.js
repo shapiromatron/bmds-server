@@ -1,10 +1,10 @@
 import {saveAs} from "file-saver";
-import slugify from "slugify";
-import {observable, action, computed, toJS} from "mobx";
 import _ from "lodash";
+import {action, computed, observable, toJS} from "mobx";
+import slugify from "slugify";
 
+import {getHeaders, parseErrors, simulateClick} from "../common";
 import * as mc from "../constants/mainConstants";
-import {simulateClick, getHeaders, parseErrors} from "../common";
 
 class MainStore {
     constructor(rootStore) {

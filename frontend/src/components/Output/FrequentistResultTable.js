@@ -1,16 +1,16 @@
 import _ from "lodash";
 import {toJS} from "mobx";
 import {inject, observer} from "mobx-react";
-import React, {Component} from "react";
 import PropTypes from "prop-types";
+import React, {Component} from "react";
 
-import {fractionalFormatter} from "utils/formatters";
-import {MODEL_MULTI_TUMOR} from "../../constants/mainConstants";
+import {fractionalFormatter} from "@/utils/formatters";
+import {ff} from "@/utils/formatters";
+
 import {BIN_LABELS} from "../../constants/logicConstants";
+import {MODEL_MULTI_TUMOR} from "../../constants/mainConstants";
 import {getPValue, modelClasses, priorClass} from "../../constants/outputConstants";
-import {ff} from "utils/formatters";
 import Button from "../common/Button";
-
 import Popover from "../common/Popover";
 
 const getModelBinLabel = function(output, index) {

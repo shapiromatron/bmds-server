@@ -1,5 +1,5 @@
 import _ from "lodash";
-import {computed, observable, action} from "mobx";
+import {action, computed, observable} from "mobx";
 
 import {datasetOptions, getDefaultDegree} from "../constants/dataConstants";
 

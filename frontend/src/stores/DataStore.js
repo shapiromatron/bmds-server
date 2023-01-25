@@ -1,14 +1,14 @@
-import {observable, action, computed, toJS} from "mobx";
 import _ from "lodash";
+import {action, computed, observable, toJS} from "mobx";
 
 import * as dc from "../constants/dataConstants";
-import {getDrLayout, getDrDatasetPlotData} from "../constants/plotting";
 import {
+    columns,
     datasetTypesByModelType,
     getDefaultDataset,
     getExampleData,
-    columns,
 } from "../constants/dataConstants";
+import {getDrDatasetPlotData, getDrLayout} from "../constants/plotting";
 
 let validateTabularData = function(text, columns) {
     let data = [],

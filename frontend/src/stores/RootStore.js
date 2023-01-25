@@ -1,10 +1,10 @@
-import DataStore from "./DataStore";
 import DatasetModelOptionStore from "./DatasetModelOptionStore";
-import OutputStore from "./OutputStore";
-import MainStore from "./MainStore";
-import OptionsStore from "./OptionsStore";
-import ModelsStore from "./ModelsStore";
+import DataStore from "./DataStore";
 import LogicStore from "./LogicStore";
+import MainStore from "./MainStore";
+import ModelsStore from "./ModelsStore";
+import OptionsStore from "./OptionsStore";
+import OutputStore from "./OutputStore";
 
 class RootStore {
     constructor() {

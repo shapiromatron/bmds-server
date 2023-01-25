@@ -1,10 +1,10 @@
+import {Provider} from "mobx-react";
 import React from "react";
 import ReactDOM from "react-dom";
-import {Provider} from "mobx-react";
 
 import App from "./App";
-import history from "./utils/localHistory";
 import rootStore from "./stores/RootStore";
+import history from "./utils/localHistory";
 
 const Root = (
     <Provider

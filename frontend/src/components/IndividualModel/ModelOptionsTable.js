@@ -2,17 +2,16 @@ import {observer} from "mobx-react";
 import PropTypes from "prop-types";
 import React, {Component} from "react";
 
-import {ff} from "@/utils/formatters";
-
-import {getLabel} from "../../common";
-import {Dtype} from "../../constants/dataConstants";
-import {hasDegrees} from "../../constants/modelConstants";
+import {getLabel} from "@/common";
+import {Dtype} from "@/constants/dataConstants";
+import {hasDegrees} from "@/constants/modelConstants";
 import {
     continuousBmrOptions,
     dichotomousBmrOptions,
     distTypeOptions,
-} from "../../constants/optionsConstants";
-import {priorClassLabels} from "../../constants/outputConstants";
+} from "@/constants/optionsConstants";
+import {priorClassLabels} from "@/constants/outputConstants";
+import {ff} from "@/utils/formatters";
 
 const restrictionMapping = {
     0: ["Model Restriction", "Unrestricted"],

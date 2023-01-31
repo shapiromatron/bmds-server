@@ -1,15 +1,15 @@
-import {getLabel} from "common";
-import {adverseDirectionOptions, allDegreeOptions} from "constants/dataConstants";
-import {MODEL_CONTINUOUS, MODEL_DICHOTOMOUS} from "constants/mainConstants";
-import {
-    continuousBmrOptions,
-    dichotomousBmrOptions,
-    distTypeOptions,
-} from "constants/optionsConstants";
 import {inject, observer} from "mobx-react";
 import PropTypes from "prop-types";
 import React, {Component} from "react";
 
+import {getLabel} from "@/common";
+import {adverseDirectionOptions, allDegreeOptions} from "@/constants/dataConstants";
+import {MODEL_CONTINUOUS, MODEL_DICHOTOMOUS} from "@/constants/mainConstants";
+import {
+    continuousBmrOptions,
+    dichotomousBmrOptions,
+    distTypeOptions,
+} from "@/constants/optionsConstants";
 import {ff} from "@/utils/formatters";
 
 @inject("outputStore")

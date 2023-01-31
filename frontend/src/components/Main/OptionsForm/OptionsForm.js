@@ -1,14 +1,15 @@
 import PropTypes from "prop-types";
 import React from "react";
 
-import * as mc from "../../../constants/mainConstants";
+import * as mc from "@/constants/mainConstants";
 import {
     backgroundOptions,
     continuousBmrOptions,
     dichotomousBmrOptions,
     distTypeOptions,
     litterSpecificCovariateOptions,
-} from "../../../constants/optionsConstants";
+} from "@/constants/optionsConstants";
+
 import Button from "../../common/Button";
 import FloatInput from "../../common/FloatInput";
 import IntegerInput from "../../common/IntegerInput";

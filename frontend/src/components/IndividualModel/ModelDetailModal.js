@@ -177,7 +177,7 @@ class ModelDetailModal extends Component {
                         id="close-modal"
                         className="btn btn-secondary float-right"
                         onClick={outputStore.closeModal}
-                        faClass="fa fa-fw fa-times"
+                        icon="x-circle"
                     />
                 </Modal.Header>
                 <Body outputStore={outputStore} />

@@ -3,8 +3,6 @@ import React, {Component} from "react";
 
 class Icon extends Component {
     render() {
-        // TODO - change like the `faClass` property for button?
-        // TODO - add a bi-fw, like fa-fw?
         const {name, classes} = this.props;
         return <span className={`bi bi-${name} ${classes}`} aria-hidden="true"></span>;
     }
@@ -14,7 +12,7 @@ Icon.propTypes = {
     classes: PropTypes.string,
 };
 Icon.defaultProps = {
-    classes: "pr-1",
+    classes: "",
 };
 
 export default Icon;

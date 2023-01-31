@@ -266,12 +266,10 @@ class FrequentistResultTable extends Component {
                             <th>
                                 <Button
                                     title="Toggle showing notes inline or popover"
-                                    className="btn btn-info btn-sm pull-right"
+                                    className="btn btn-info btn-sm float-right"
                                     onClick={store.toggleInlineNotes}
                                     text={store.showInlineNotes ? "Hide" : "Show"}
-                                    faClass={`fa fa-fw ${
-                                        store.showInlineNotes ? "fa-eye-slash" : "fa-eye"
-                                    }`}
+                                    icon={store.showInlineNotes ? "eye-slash-fill" : "eye-fill"}
                                 />
                                 Recommendation
                                 <br />

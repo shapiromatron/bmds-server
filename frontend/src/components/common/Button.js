@@ -2,6 +2,8 @@ import {observer} from "mobx-react";
 import PropTypes from "prop-types";
 import React, {Component} from "react";
 
+import Icon from "./Icon";
+
 @observer
 class Button extends Component {
     render() {
@@ -16,7 +18,7 @@ class Button extends Component {
                 aria-haspopup={props.hasPopup || null}
                 title={props.title || null}
                 onClick={props.onClick}>
-                {props.faClass ? <i className={props.faClass} /> : null}
+                {props.icon ? <Icon name={props.icon} classes={props.text ? "mr-1" : ""} /> : null}
                 {props.text}
             </button>
         );
@@ -30,7 +32,7 @@ Button.propTypes = {
     title: PropTypes.string,
     disabled: PropTypes.bool,
     onClick: PropTypes.func,
-    faClass: PropTypes.string,
+    icon: PropTypes.string,
     dataToggle: PropTypes.string,
     hasPopup: PropTypes.bool,
 };

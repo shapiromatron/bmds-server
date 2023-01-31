@@ -7,7 +7,7 @@ from bmds_server.analysis.schema import PolyKInput
 
 
 class TestPolyKInput:
-    def test_valid(self, polyk_dataset):
+    def test_calculate(self, polyk_dataset):
         analysis = PolyKInput.parse_obj(polyk_dataset)
         df1, df2 = analysis.calculate()
         assert df1.shape == (200, 4)

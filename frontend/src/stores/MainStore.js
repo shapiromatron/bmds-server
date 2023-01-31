@@ -3,8 +3,8 @@ import _ from "lodash";
 import {action, computed, observable, toJS} from "mobx";
 import slugify from "slugify";
 
-import {getHeaders, parseErrors, simulateClick} from "../common";
-import * as mc from "../constants/mainConstants";
+import {getHeaders, parseErrors, simulateClick} from "@/common";
+import * as mc from "@/constants/mainConstants";
 
 class MainStore {
     constructor(rootStore) {

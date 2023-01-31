@@ -1,8 +1,8 @@
 import _ from "lodash";
 import {action, computed, observable} from "mobx";
 
-import {MODEL_CONTINUOUS} from "../constants/mainConstants";
-import * as constant from "../constants/optionsConstants";
+import {MODEL_CONTINUOUS} from "@/constants/mainConstants";
+import * as constant from "@/constants/optionsConstants";
 
 class OptionsStore {
     constructor(rootStore) {

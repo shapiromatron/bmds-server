@@ -1,8 +1,8 @@
 import _ from "lodash";
 import {action, computed, observable, toJS} from "mobx";
 
-import {getHeaders} from "../common";
-import {maIndex, modelClasses} from "../constants/outputConstants";
+import {getHeaders} from "@/common";
+import {maIndex, modelClasses} from "@/constants/outputConstants";
 import {
     bmaColor,
     colorCodes,
@@ -14,7 +14,7 @@ import {
     getLollipopPlotLayout,
     hoverColor,
     selectedColor,
-} from "../constants/plotting";
+} from "@/constants/plotting";
 
 class OutputStore {
     /*

@@ -1,6 +1,6 @@
 import {action, observable} from "mobx";
 
-import {getHeaders} from "../common";
+import {getHeaders} from "../../../common";
 import {exampleData} from "./data";
 
 class Store {

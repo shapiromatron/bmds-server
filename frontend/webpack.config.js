@@ -1,6 +1,5 @@
 const path = require("path"),
-    BundleTracker = require("webpack-bundle-tracker"),
-    CaseSensitivePathsPlugin = require("case-sensitive-paths-webpack-plugin");
+    BundleTracker = require("webpack-bundle-tracker");
 
 module.exports = {
     context: __dirname,
@@ -13,7 +12,7 @@ module.exports = {
         $: "$",
     },
 
-    mode: "development",
+    mode: "production",
 
     module: {
         rules: [
@@ -23,16 +22,13 @@ module.exports = {
                 use: {
                     loader: "babel-loader",
                     options: {
-                        plugins: [
-                            "@babel/plugin-syntax-dynamic-import",
-                            ["@babel/plugin-proposal-class-properties", {loose: false}],
-                        ],
+                        plugins: [["@babel/plugin-proposal-class-properties", {loose: false}]],
                     },
                 },
             },
             {
-                test: /\.css$/,
-                loader: "style-loader!css-loader",
+                test: /\.css$/i,
+                use: ["style-loader", "css-loader"],
             },
             {test: /\.woff(2)?(\?v=[0-9]\.[0-9]\.[0-9])?$/, loader: "url-loader"},
             {test: /\.(ttf|eot|svg)(\?v=[0-9]\.[0-9]\.[0-9])?$/, loader: "url-loader"},
@@ -40,24 +36,18 @@ module.exports = {
     },
 
     output: {
-        filename: "[name].[hash].js",
-        chunkFilename: "[name].[hash].js",
+        filename: "[name].[contenthash].js",
+        chunkFilename: "[name].[contenthash].js",
         path: path.resolve("../bmds_server/static/bundles"),
         publicPath: "/static/bundles/",
     },
 
-    plugins: [
-        new CaseSensitivePathsPlugin(), // windows/mac doesn't always enforce
-        new BundleTracker({
-            filename: "../bmds_server/webpack-stats.json",
-        }),
-    ],
+    plugins: [new BundleTracker({filename: "../bmds_server/webpack-stats.json"})],
 
     resolve: {
+        roots: [path.join(__dirname, "src")],
         alias: {
             "@": path.join(__dirname, "src"),
         },
-        modules: [path.join(__dirname, "src"), "node_modules"],
-        extensions: [".js", ".css"],
     },
 };

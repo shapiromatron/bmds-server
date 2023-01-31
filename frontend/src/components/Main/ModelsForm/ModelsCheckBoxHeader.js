@@ -2,8 +2,9 @@ import {observer} from "mobx-react";
 import PropTypes from "prop-types";
 import React from "react";
 
-import * as mc from "../../../constants/mainConstants";
-import {allModelOptions} from "../../../constants/modelConstants";
+import * as mc from "@/constants/mainConstants";
+import {allModelOptions} from "@/constants/modelConstants";
+
 import CheckboxInput from "../../common/CheckboxInput";
 import HelpTextPopover from "../../common/HelpTextPopover";
 

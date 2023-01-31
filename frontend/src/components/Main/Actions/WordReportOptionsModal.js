@@ -1,8 +1,9 @@
-import LabelInput from "components/common/LabelInput";
 import {inject, observer} from "mobx-react";
 import PropTypes from "prop-types";
 import React, {Component} from "react";
 import {Modal} from "react-bootstrap";
+
+import LabelInput from "@/components/common/LabelInput";
 
 import Button from "../../common/Button";
 import CheckboxInput from "../../common/CheckboxInput";

@@ -2,12 +2,13 @@ import {observer} from "mobx-react";
 import PropTypes from "prop-types";
 import React, {Component} from "react";
 
-import {checkOrEmpty, getLabel} from "../../../common";
+import {checkOrEmpty, getLabel} from "@/common";
 import {
     adverseDirectionOptions,
     allDegreeOptions,
     getDegreeOptions,
-} from "../../../constants/dataConstants";
+} from "@/constants/dataConstants";
+
 import CheckboxInput from "../../common/CheckboxInput";
 import SelectInput from "../../common/SelectInput";
 

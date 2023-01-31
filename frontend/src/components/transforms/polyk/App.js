@@ -6,10 +6,10 @@ import Tab from "react-bootstrap/Tab";
 import Tabs from "react-bootstrap/Tabs";
 import Plot from "react-plotly.js";
 
-import Button from "../components/common/Button";
-import FloatInput from "../components/common/FloatInput";
-import TextAreaInput from "../components/common/TextAreaInput";
-import TextInput from "../components/common/TextInput";
+import Button from "../../common/Button";
+import FloatInput from "../../common/FloatInput";
+import TextAreaInput from "../../common/TextAreaInput";
+import TextInput from "../../common/TextInput";
 
 @inject("store")
 @observer

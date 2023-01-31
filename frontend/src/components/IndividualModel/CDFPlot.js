@@ -4,7 +4,7 @@ import PropTypes from "prop-types";
 import React, {Component} from "react";
 import Plot from "react-plotly.js";
 
-import {getCdfLayout, getConfig} from "../../constants/plotting";
+import {getCdfLayout, getConfig} from "@/constants/plotting";
 
 @observer
 class CDFPlot extends Component {

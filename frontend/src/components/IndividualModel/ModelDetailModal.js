@@ -3,8 +3,9 @@ import PropTypes from "prop-types";
 import React, {Component} from "react";
 import {Col, Modal, Row} from "react-bootstrap";
 
-import * as dc from "../../constants/dataConstants";
-import {MODEL_NESTED_DICHOTOMOUS} from "../../constants/mainConstants";
+import * as dc from "@/constants/dataConstants";
+import {MODEL_NESTED_DICHOTOMOUS} from "@/constants/mainConstants";
+
 import Button from "../common/Button";
 import DoseResponsePlot from "../common/DoseResponsePlot";
 import NestedDichotomousModalBody from "../Output/NestedDichotomous/ModalBody";

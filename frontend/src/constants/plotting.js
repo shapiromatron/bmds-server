@@ -1,7 +1,8 @@
 import _ from "lodash";
 
-import {continuousErrorBars, dichotomousErrorBars} from "../utils/errorBars";
-import {ff} from "../utils/formatters";
+import {continuousErrorBars, dichotomousErrorBars} from "@/utils/errorBars";
+import {ff} from "@/utils/formatters";
+
 import {Dtype} from "./dataConstants";
 
 const doseResponseLayout = {

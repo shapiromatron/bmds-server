@@ -18,4 +18,3 @@ celery==5.2.7
 
 plotly==5.13.0
 redis==4.4.2
-plotly==5.13.0

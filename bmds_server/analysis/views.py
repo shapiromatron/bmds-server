@@ -1,7 +1,5 @@
-import json
 from typing import Optional, Tuple
 
-import plotly.express as px
 from django.conf import settings
 from django.contrib.admin.views.decorators import staff_member_required
 from django.middleware.csrf import get_token
@@ -10,9 +8,7 @@ from django.template import RequestContext, Template
 from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
 from django.views.generic import CreateView, DeleteView, DetailView, RedirectView, TemplateView
-from plotly.io import to_json
 
-from ..common.utils import timeout_cache
 from . import forms, models
 from .reporting.analytics import get_cached_analytics
 from .utils import get_citation

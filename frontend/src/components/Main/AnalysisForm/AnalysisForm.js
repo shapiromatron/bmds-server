@@ -2,7 +2,8 @@ import {inject, observer} from "mobx-react";
 import PropTypes from "prop-types";
 import React, {Component} from "react";
 
-import * as mc from "../../../constants/mainConstants";
+import * as mc from "@/constants/mainConstants";
+
 import Button from "../../common/Button";
 import SelectInput from "../../common/SelectInput";
 import Spinner from "../../common/Spinner";

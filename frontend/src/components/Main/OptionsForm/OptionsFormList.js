@@ -8,7 +8,8 @@ import {
     MODEL_DICHOTOMOUS,
     MODEL_MULTI_TUMOR,
     MODEL_NESTED_DICHOTOMOUS,
-} from "../../../constants/mainConstants";
+} from "@/constants/mainConstants";
+
 import Button from "../../common/Button";
 import HelpTextPopover from "../../common/HelpTextPopover";
 import OptionsForm from "./OptionsForm";

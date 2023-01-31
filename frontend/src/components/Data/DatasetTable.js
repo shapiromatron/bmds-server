@@ -3,8 +3,8 @@ import {observer} from "mobx-react";
 import PropTypes from "prop-types";
 import React, {Component} from "react";
 
-import {columnHeaders, columns} from "../../constants/dataConstants";
-import {Dtype} from "../../constants/dataConstants";
+import {columnHeaders, columns} from "@/constants/dataConstants";
+import {Dtype} from "@/constants/dataConstants";
 
 const dataRows = (dataset, columnNames) => {
         return _.range(dataset.doses.length).map(rowIdx => {

@@ -4,7 +4,8 @@ import {inject, observer} from "mobx-react";
 import PropTypes from "prop-types";
 import React, {Component} from "react";
 
-import {MODEL_NESTED_DICHOTOMOUS} from "../../constants/mainConstants";
+import {MODEL_NESTED_DICHOTOMOUS} from "@/constants/mainConstants";
+
 import DoseResponsePlot from "../common/DoseResponsePlot";
 import SelectInput from "../common/SelectInput";
 import DatasetTable from "../Data/DatasetTable";

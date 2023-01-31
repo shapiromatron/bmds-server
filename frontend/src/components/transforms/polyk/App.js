@@ -54,7 +54,12 @@ class InputForm extends Component {
                             text="Execute"
                         />
                         {error ? (
-                            <div className="alert alert-danger mt-3">An error occurred.</div>
+                            <div className="alert alert-danger mt-3">
+                                <p>
+                                    <b>An error occurred.</b>
+                                </p>
+                                <pre>{JSON.stringify(error, null, 2)}</pre>
+                            </div>
                         ) : null}
                     </div>
                 </div>
@@ -247,8 +252,11 @@ class App extends Component {
         const {outputs} = this.props.store;
         return (
             <div className="container-fluid py-3">
-                <h2>Poly 3 adjustment</h2>
-                <p className="text-muted">TODO...</p>
+                <h2>Poly K adjustment</h2>
+                <p className="text-muted">
+                    This is a work in progress. Prior to deployment, we should update the help text,
+                    user-interface, instructions etc.
+                </p>
                 <h3>Settings</h3>
                 <InputForm />
                 {outputs ? (

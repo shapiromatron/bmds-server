@@ -15,6 +15,7 @@ class Store {
         duration: 730,
     };
     @observable error = null;
+    @observable errorObject = null;
     @observable outputs = null;
 
     @action.bound
@@ -41,8 +42,13 @@ class Store {
                     response
                         .json()
                         .then(data => {
-                            this.error = data;
+                            this.error = true;
                             console.error(data);
+                            try {
+                                this.error = JSON.parse(data);
+                            } catch (err) {
+                                console.error(err);
+                            }
                         })
                         .catch(error => {
                             this.error = true;

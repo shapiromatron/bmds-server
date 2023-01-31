@@ -30,5 +30,5 @@ class CardWrapperNode(template.Node):
 
 
 @register.simple_tag
-def icon(name: str, classes: str = "pr-1"):
-    return mark_safe(f'<span class="bi bi-{name} {classes}" aria-hidden="true"></span>')
+def icon(name: str):
+    return mark_safe(f'<span class="bi bi-{name}" aria-hidden="true"></span>')

@@ -1,8 +1,10 @@
 {% extends "base.html" %}
 
+{% load bs4 %}
+
 {% block content %}
 <div class="alert alert-danger mt-3" role="alert">
-    <p><strong><i class="fa fa-fw fa-exclamation-triangle" aria-hidden="true"></i>&nbsp;Error 403</strong></p>
+    <p><strong>{% icon "exclamation-triangle-fill mr-1" %}Error 403</strong></p>
     <p>Forbidden.</p>
 </div>
 {% endblock content %}

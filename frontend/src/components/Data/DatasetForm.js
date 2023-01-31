@@ -2,7 +2,8 @@ import {inject, observer} from "mobx-react";
 import PropTypes from "prop-types";
 import React, {Component} from "react";
 
-import {columnHeaders, columns} from "../../constants/dataConstants";
+import {columnHeaders, columns} from "@/constants/dataConstants";
+
 import Button from "../common/Button";
 import ErrorMessage from "../common/ErrorMessage";
 import FloatInput from "../common/FloatInput";

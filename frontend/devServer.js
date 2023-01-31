@@ -1,15 +1,27 @@
-const express = require("express"),
+const _ = require("lodash"),
+    express = require("express"),
     middleware = require("webpack-dev-middleware"),
     webpack = require("webpack"),
-    config = require("./webpack.config.dev"),
-    port = 8110,
+    CaseSensitivePathsPlugin = require("case-sensitive-paths-webpack-plugin"),
+    prodConfig = require("./webpack.config.js");
+
+let getConfig = function(host, port) {
+        let config = _.cloneDeep(prodConfig);
+        config.mode = "development";
+        config.devtool = "eval";
+        config.output.publicPath = `http://${host}:${port}/dist/`;
+        config.plugins.push(new CaseSensitivePathsPlugin());
+        return config;
+    },
+    host = process.env.CI ? process.env.LIVESERVER_HOST : "localhost",
+    port = 8150,
+    devConfig = getConfig(host, port),
     app = express(),
-    compiler = webpack(config);
+    compiler = webpack(devConfig);
 
 app.use(
     middleware(compiler, {
-        noInfo: true,
-        publicPath: config.output.publicPath,
+        publicPath: devConfig.output.publicPath,
     })
 );
 
@@ -21,8 +33,9 @@ app.use(function(req, res, next) {
 
 app.listen(port, "0.0.0.0", function(err) {
     if (err) {
-        console.log(err); // eslint-disable-line no-console
+        console.error(err);
         return;
     }
-    console.log("Listening at http://localhost:" + port); // eslint-disable-line no-console
+    // eslint-disable-next-line no-console
+    console.info(`Listening at http://${host}:${port}`);
 });

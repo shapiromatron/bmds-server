@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+
+{% block content %}
+{% csrf_token %}
+<div id="main"></div>
+{% endblock content %}
+
+{% block extra-js %}
+<script type="text/javascript">
+    const token = document.getElementsByName('csrfmiddlewaretoken')[0].value;
+    window.app.polyk(document.getElementById('main'), token);
+</script>
+{% endblock extra-js %}

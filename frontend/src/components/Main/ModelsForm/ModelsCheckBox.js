@@ -2,8 +2,9 @@ import {observer} from "mobx-react";
 import PropTypes from "prop-types";
 import React from "react";
 
+import * as mc from "@/constants/mainConstants";
+
 import {checkOrEmpty} from "../../../common";
-import * as mc from "../../../constants/mainConstants";
 import CheckboxInput from "../../common/CheckboxInput";
 import FloatInput from "../../common/FloatInput";
 import HelpTextPopover from "../../common/HelpTextPopover";

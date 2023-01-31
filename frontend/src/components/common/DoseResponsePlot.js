@@ -4,7 +4,7 @@ import PropTypes from "prop-types";
 import React, {Component} from "react";
 import Plot from "react-plotly.js";
 
-import {getConfig} from "../../constants/plotting";
+import {getConfig} from "@/constants/plotting";
 
 @observer
 class DoseResponsePlot extends Component {

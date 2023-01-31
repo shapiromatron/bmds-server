@@ -138,3 +138,7 @@ class AnalysisDelete(DeleteView):
     def get_object(self, queryset=None):
         analysis, _ = get_analysis_or_404(self.kwargs["pk"], self.kwargs["password"])
         return analysis
+
+
+class PolyKAdjustment(TemplateView):
+    template_name: str = "analysis/polyk.html"

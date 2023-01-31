@@ -3,9 +3,8 @@ import {inject, observer} from "mobx-react";
 import PropTypes from "prop-types";
 import React, {Component} from "react";
 
+import {maIndex, modelClasses} from "@/constants/outputConstants";
 import {ff, fractionalFormatter} from "@/utils/formatters";
-
-import {maIndex, modelClasses} from "../../constants/outputConstants";
 
 @inject("outputStore")
 @observer

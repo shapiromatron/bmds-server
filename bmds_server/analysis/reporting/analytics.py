@@ -212,8 +212,8 @@ def runtime() -> dict:
     stats["stats"] = data.describe().to_dict()
 
     failures = Analysis.objects.filter(started__isnull=False, ended__isnull=True).order_by(
-        "created"
-    )
+        "-created"
+    )[:50]
     stats["failures"] = [
         {"timestamp": analysis.created, "url": analysis.get_absolute_url()} for analysis in failures
     ]

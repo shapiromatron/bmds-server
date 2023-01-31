@@ -1,7 +1,5 @@
-import json
 from typing import Optional, Tuple
 
-import plotly.express as px
 from django.conf import settings
 from django.contrib.admin.views.decorators import staff_member_required
 from django.middleware.csrf import get_token
@@ -10,11 +8,9 @@ from django.template import RequestContext, Template
 from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
 from django.views.generic import CreateView, DeleteView, DetailView, RedirectView, TemplateView
-from plotly.io import to_json
 
-from ..common.utils import timeout_cache
 from . import forms, models
-from .reporting.analytics import get_analytics
+from .reporting.analytics import get_cached_analytics
 from .utils import get_citation
 
 
@@ -48,20 +44,7 @@ class Analytics(TemplateView):
     template_name: str = "analysis/analytics.html"
 
     def get_context_data(self, **kwargs) -> dict:
-
-        timeout = 10 if settings.DEBUG else 3600
-
-        @timeout_cache("func-get_analytics", timeout)
-        def get_cached_analytics():
-            return get_analytics()
-
-        fig = px.scatter(x=[0, 1, 2, 3, 4], y=[0, 1, 4, 9, 16], title="test")
-        fig.update_layout(margin=dict(l=10, r=0, t=30, b=10), height=350)
-        kwargs.update(
-            n_analysis=models.Analysis.objects.count(),
-            charts=dict(demo=json.loads(to_json(fig))),
-            config=get_cached_analytics(),
-        )
+        kwargs.update(config=get_cached_analytics())
         return super().get_context_data(**kwargs)
 
 

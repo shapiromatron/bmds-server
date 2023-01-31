@@ -16,5 +16,5 @@ celery==5.2.7
   billiard==3.6.4.0
   kombu==5.2.4
 
-redis==4.4.2
 plotly==5.13.0
+redis==4.4.2

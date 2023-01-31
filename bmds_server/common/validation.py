@@ -1,11 +1,13 @@
-from typing import Any
+from typing import Any, Type, TypeVar
 
 from django.core.exceptions import ValidationError
 from pydantic import BaseModel
 from pydantic import ValidationError as PydanticValidationError
 
+T = TypeVar("T", bound=BaseModel)
 
-def pydantic_validate(data: Any, model: BaseModel) -> BaseModel:
+
+def pydantic_validate(data: Any, model: Type[T]) -> T:
     """Attempt to validate incoming data using Pydantic model class.
 
     Args:

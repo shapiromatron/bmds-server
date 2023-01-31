@@ -30,14 +30,11 @@ urlpatterns = [
     path("history/", views.AnalysisHistory.as_view(), name="analysis_history"),
     # api
     api_paths,
-    path("api/v1/polyk/", polyk_transform, name="polyk"),
     # analysis
     path("analysis/<uuid:pk>/", views.AnalysisDetail.as_view(), name="analysis"),
     path(edit_pattern, views.AnalysisDetail.as_view(), name="analysis_edit"),
     path(f"{edit_pattern}renew/", views.AnalysisRenew.as_view(), name="analysis_renew"),
     path(f"{edit_pattern}delete/", views.AnalysisDelete.as_view(), name="analysis_delete"),
-    # calculators
-    path("transforms/polyk/", views.PolyKAdjustment.as_view(), name="polyk"),
     # errors
     path("401/", common_views.Error401.as_view(), name="401"),
     path("403/", TemplateView.as_view(template_name="403.html"), name="403"),
@@ -47,6 +44,12 @@ urlpatterns = [
     path("user/login/", common_views.AppLoginView.as_view(), name="login"),
     path("user/logout/", common_views.AppLogoutView.as_view(), name="logout"),
 ]
+
+if settings.INCLUDE_BETA_FEATURES:
+    urlpatterns += [
+        path("api/v1/polyk/", polyk_transform, name="polyk"),
+        path("transforms/polyk/", views.PolyKAdjustment.as_view(), name="polyk"),
+    ]
 
 if settings.INCLUDE_ADMIN:
     admin_url = f"admin/{settings.ADMIN_URL_PREFIX}/" if not settings.DEBUG else "admin/"

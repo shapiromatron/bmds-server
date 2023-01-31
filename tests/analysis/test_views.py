@@ -1,10 +1,12 @@
 import pytest
 from django.http.response import Http404
 from django.test import Client
+from django.urls import reverse
 from django.utils.timezone import now
+from pytest_django.asserts import assertTemplateNotUsed, assertTemplateUsed
 
 from bmds_server.analysis.models import Analysis
-from bmds_server.analysis.views import get_analysis_or_404
+from bmds_server.analysis.views import Analytics, get_analysis_or_404
 
 
 @pytest.mark.django_db
@@ -62,7 +64,7 @@ class TestAnalysisDetail:
                 "deleteUrl": f"http://testserver/analysis/{pk}/{pw}/delete/",
                 "executeUrl": f"/api/v1/analysis/{pk}/execute/",
                 "executeResetUrl": f"/api/v1/analysis/{pk}/execute-reset/",
-                "deleteDateStr": "May 14, 2022",
+                "deleteDateStr": "June 14, 2022",
             },
         }
 
@@ -103,3 +105,21 @@ class TestAnalysisRenew:
         # deletion date is now in the future
         analysis.refresh_from_db()
         assert analysis.deletion_date > right_now
+
+
+@pytest.mark.django_db
+class TestAnalytics:
+    def test_view(self):
+        # test that permissions work and view loads
+        url = reverse("analytics")
+        template = Analytics.template_name
+
+        client = Client()
+        resp = client.get(url)
+        assert resp.status_code == 302 and "/login/" in resp.url
+        assertTemplateNotUsed(resp, template)
+
+        assert client.login(username="admin@bmdsonline.org", password="pw") is True
+        resp = client.get(url)
+        assert resp.status_code == 200
+        assertTemplateUsed(resp, template)

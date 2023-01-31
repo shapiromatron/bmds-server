@@ -69,6 +69,7 @@ if settings.INCLUDE_ADMIN:
         path("api/v1/swagger/", common_views.Swagger.as_view(), name="swagger"),
         # admin and custom admin login
         path(f"{admin_url}login/", common_views.AdminLoginView.as_view(), name="admin_login"),
+        path(f"{admin_url}analytics/", views.Analytics.as_view(), name="analytics"),
         path(admin_url, admin.site.urls),
     ]
 

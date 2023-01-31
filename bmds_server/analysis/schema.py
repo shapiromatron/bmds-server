@@ -1,7 +1,10 @@
-from typing import List, Optional
+from io import StringIO
+from typing import Optional
 
+import pandas as pd
 from bmds.bmds3.types.sessions import VersionSchema
-from pydantic import BaseModel
+from bmds.datasets.transforms.polyk import calculate
+from pydantic import BaseModel, confloat, validator
 from pydantic.schema import schema as pyschema
 from rest_framework.schemas.openapi import SchemaGenerator
 
@@ -33,7 +36,48 @@ class AnalysisOutput(BaseModel):
     outputs: list[AnalysisSessionSchema]
 
 
-def add_schemas(schema: dict, models: List):
+class PolyKInput(BaseModel):
+    dataset: str
+    dose_units: str
+    power: confloat(ge=0, le=5) = 3
+    duration: Optional[confloat(ge=0, le=10_000)] = None
+
+    @validator("dataset")
+    def check_dataset(cls, value):
+        if len(value) > 100_000:
+            raise ValueError("Dataset too large")
+
+        df = pd.read_csv(StringIO(value))
+
+        required_columns = ["dose", "day", "has_tumor"]
+        if df.columns.tolist() != required_columns:
+            raise ValueError(f"Bad column names; requires {required_columns}")
+
+        if not (df.dose >= 0).all():
+            raise ValueError("`doses` must be ≥ 0")
+
+        if not (df.day >= 0).all():
+            raise ValueError("`day` must be ≥ 0")
+
+        has_tumor_set = set(df.has_tumor.unique())
+        if has_tumor_set != {0, 1}:
+            raise ValueError("`has_tumor` must include only the values {0, 1}")
+
+        return value
+
+    def calculate(self) -> tuple[pd.DataFrame, pd.DataFrame]:
+        input_df = pd.read_csv(StringIO(self.dataset)).sort_values(["dose", "day"])
+        (df1, df2) = calculate(
+            doses=input_df.dose.tolist(),
+            day=input_df.day.tolist(),
+            has_tumor=input_df.has_tumor.tolist(),
+            k=self.power,
+            max_day=self.duration,
+        )
+        return (df1, df2)
+
+
+def add_schemas(schema: dict, models: list):
     additions = pyschema(models, ref_prefix="#/components/schemas/")
     for key, value in additions["definitions"].items():
         schema["components"]["schemas"][key] = value

@@ -160,7 +160,7 @@ class DatasetForm extends Component {
                     <Button
                         className="btn btn-link"
                         onClick={dataStore.loadExampleData}
-                        icon="capslock-fill"
+                        icon="layer-forward"
                         text="Load an example dataset"
                     />
                 </p>

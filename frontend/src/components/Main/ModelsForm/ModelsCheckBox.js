@@ -151,7 +151,7 @@ const ModelsCheckBox = observer(props => {
                 </tr>
                 <tr>
                     <td className="text-left align-middle">
-                        Multistage&nbsp;
+                        Multistage
                         {writeMode ? <HelpTextPopover content={multistageHelpText} /> : null}
                     </td>
                     <CheckBoxTd store={store} type={fr} model={"Multistage"} />
@@ -204,7 +204,7 @@ const ModelsCheckBox = observer(props => {
             <tbody>
                 <tr>
                     <td className="text-left align-middle">
-                        Multistage&nbsp;
+                        Multistage
                         {writeMode ? <HelpTextPopover content={multistageHelpText} /> : null}
                     </td>
                     <CheckBoxTd store={store} type={fr} model={"Multistage"} />

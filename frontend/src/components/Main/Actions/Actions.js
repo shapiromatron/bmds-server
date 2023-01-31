@@ -44,8 +44,7 @@ class Actions extends Component {
                                         cursor: "pointer",
                                         display: "block",
                                     }}>
-                                    <i className="fa fa-fw fa-upload"></i>
-                                    &nbsp;Load analysis
+                                    <Icon name="upload" text="Load analysis" />
                                 </label>
                                 <input
                                     id="loadAnalysisFile"
@@ -62,8 +61,7 @@ class Actions extends Component {
                                     <a
                                         className="dropdown-item"
                                         href={config.editSettings.renewUrl}>
-                                        <i className="fa fa-fw fa-calendar"></i>
-                                        &nbsp;Extend deletion date
+                                        <Icon name="calendar3" text="Extend deletion date" />
                                     </a>
                                     <p className="text-muted pl-4 mb-0">
                                         <b>Deletion date:</b>&nbsp;
@@ -72,8 +70,7 @@ class Actions extends Component {
                                 </>
                             ) : null}
                             <a className="dropdown-item" href={config.editSettings.deleteUrl}>
-                                <Icon name="trash3-fill" classes="mr-1" />
-                                &nbsp;Delete analysis
+                                <Icon name="trash3-fill" text="Delete analysis" />
                             </a>
                             <div className="dropdown-divider"></div>
                         </>
@@ -100,8 +97,7 @@ class Actions extends Component {
                                     e.preventDefault();
                                     mainStore.saveAnalysisToFile();
                                 }}>
-                                <i className="fa fa-fw fa-download"></i>
-                                &nbsp;Download analysis
+                                <Icon name="download" text="Download analysis" />
                             </a>
                         </>
                     ) : (

@@ -50,7 +50,7 @@ class TabularDatasetModal extends Component {
                         onClick={dataStore.updateDatasetFromModal}
                         disabled={!dataStore.tabularModalDataValidated}
                         text="Load"
-                        icon="check-square-fill"
+                        icon="check-lg"
                     />
                 </Modal.Footer>
             </Modal>

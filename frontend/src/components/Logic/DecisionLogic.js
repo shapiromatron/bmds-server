@@ -72,7 +72,7 @@ class DecisionLogic extends Component {
                                         <br />
                                         to use lowest AIC instead of lowest BMDL in viable models
                                     </td>
-                                    <td>
+                                    <td className="text-center">
                                         {canEdit ? (
                                             <FloatInput
                                                 className="form-control text-center"

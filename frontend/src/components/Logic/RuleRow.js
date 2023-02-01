@@ -69,7 +69,7 @@ class RuleRow extends Component {
             <tr>
                 <td>{ruleLookup.name}</td>
                 <td className="text-center">{checkOrEmpty(rule[field])}</td>
-                <td>{_.isNumber(rule.threshold) ? rule.threshold : "-"}</td>
+                <td className="text-center">{_.isNumber(rule.threshold) ? rule.threshold : "-"}</td>
                 <td>{BIN_NAMES[rule.failure_bin]}</td>
                 <td dangerouslySetInnerHTML={{__html: ruleLookup.notes(rule.threshold)}} />
             </tr>

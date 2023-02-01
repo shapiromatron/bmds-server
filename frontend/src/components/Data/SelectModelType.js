@@ -30,6 +30,9 @@ class SelectModelType extends Component {
                         return {value: item.value, text: item.name};
                     })}
                 />
+                {dataStore.canAddNewDataset ? null : (
+                    <p className="text-danger">Can have a maximum of 6 datasets per analysis.</p>
+                )}
             </div>
         );
     }

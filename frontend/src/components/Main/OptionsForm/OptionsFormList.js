@@ -111,6 +111,11 @@ class OptionsFormList extends Component {
                                 </tbody>
                             )}
                         </table>
+                        {optionsStore.canAddNewOption ? null : (
+                            <p className="text-danger">
+                                Can have a maximum of 6 option sets per analysis.
+                            </p>
+                        )}
                     </form>
                 </div>
             </div>

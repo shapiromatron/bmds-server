@@ -3,6 +3,8 @@ import PropTypes from "prop-types";
 import React from "react";
 import ReactDOM from "react-dom";
 
+import Icon from "@/components/common/Icon";
+
 const KEY = "bmds.data",
     DEFAULT_HISTORY = {enabled: true, history: {}},
     HistoryTable = ({history}) => {
@@ -10,7 +12,7 @@ const KEY = "bmds.data",
             return (
                 <div className="alert alert-secondary">
                     <p className="mb-0">
-                        <i className="fa fa-history"></i>&nbsp;No history available.
+                        <Icon name="clock-history" text="No history available." />
                     </p>
                 </div>
             );

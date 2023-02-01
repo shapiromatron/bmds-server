@@ -7,6 +7,7 @@ import React, {Component} from "react";
 import {MODEL_NESTED_DICHOTOMOUS} from "@/constants/mainConstants";
 
 import DoseResponsePlot from "../common/DoseResponsePlot";
+import Icon from "../common/Icon";
 import SelectInput from "../common/SelectInput";
 import DatasetTable from "../Data/DatasetTable";
 import ModelDetailModal from "../IndividualModel/ModelDetailModal";
@@ -21,8 +22,7 @@ const OutputErrorComponent = ({title, children}) => {
         <div className="alert alert-danger offset-lg-2 col-lg-8 mt-4">
             <p>
                 <strong>
-                    <i className="fa fa-fw fa-exclamation-triangle" aria-hidden="true"></i>
-                    &nbsp;{title}
+                    <Icon name="exclamation-triangle-fill" text={title} />
                 </strong>
             </p>
             {children}

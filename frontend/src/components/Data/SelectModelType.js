@@ -17,7 +17,7 @@ class SelectModelType extends Component {
                     className="btn btn-primary btn-sm float-right"
                     title="Can add up to 6 datasets"
                     disabled={!dataStore.canAddNewDataset}
-                    faClass="fa fa-fw fa-plus-square"
+                    icon="plus-square-fill"
                     text="New"
                     onClick={dataStore.addDataset}
                 />
@@ -30,6 +30,9 @@ class SelectModelType extends Component {
                         return {value: item.value, text: item.name};
                     })}
                 />
+                {dataStore.canAddNewDataset ? null : (
+                    <p className="text-danger">Can have a maximum of 6 datasets per analysis.</p>
+                )}
             </div>
         );
     }

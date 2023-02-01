@@ -4,6 +4,7 @@ import PropTypes from "prop-types";
 import React, {Component} from "react";
 
 import Button from "../../common/Button";
+import Icon from "../../common/Icon";
 
 const getDeletionDateText = function(editSettings) {
     const date = editSettings.deleteDateStr,
@@ -43,8 +44,7 @@ class Actions extends Component {
                                         cursor: "pointer",
                                         display: "block",
                                     }}>
-                                    <i className="fa fa-fw fa-upload"></i>
-                                    &nbsp;Load analysis
+                                    <Icon name="upload" text="Load analysis" />
                                 </label>
                                 <input
                                     id="loadAnalysisFile"
@@ -61,8 +61,7 @@ class Actions extends Component {
                                     <a
                                         className="dropdown-item"
                                         href={config.editSettings.renewUrl}>
-                                        <i className="fa fa-fw fa-calendar"></i>
-                                        &nbsp;Extend deletion date
+                                        <Icon name="calendar3" text="Extend deletion date" />
                                     </a>
                                     <p className="text-muted pl-4 mb-0">
                                         <b>Deletion date:</b>&nbsp;
@@ -71,8 +70,7 @@ class Actions extends Component {
                                 </>
                             ) : null}
                             <a className="dropdown-item" href={config.editSettings.deleteUrl}>
-                                <i className="fa fa-fw fa-trash"></i>
-                                &nbsp;Delete analysis
+                                <Icon name="trash3-fill" text="Delete analysis" />
                             </a>
                             <div className="dropdown-divider"></div>
                         </>
@@ -83,13 +81,13 @@ class Actions extends Component {
                             <Button
                                 className="dropdown-item"
                                 onClick={() => mainStore.downloadReport("excelUrl")}
-                                faClass="fa fa-fw fa-file-excel-o"
+                                icon="file-excel"
                                 text="Download data"
                             />
                             <Button
                                 className="dropdown-item"
                                 onClick={mainStore.showWordReportOptionModal}
-                                faClass="fa fa-fw fa-file-word-o"
+                                icon="file-word"
                                 text="Download report"
                             />
                             <a
@@ -99,8 +97,7 @@ class Actions extends Component {
                                     e.preventDefault();
                                     mainStore.saveAnalysisToFile();
                                 }}>
-                                <i className="fa fa-fw fa-download"></i>
-                                &nbsp;Download analysis
+                                <Icon name="download" text="Download analysis" />
                             </a>
                         </>
                     ) : (

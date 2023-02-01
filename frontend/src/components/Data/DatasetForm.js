@@ -27,7 +27,7 @@ const DatasetFormRow = props => {
                 <Button
                     className="btn btn-danger btn-sm"
                     onClick={e => props.delete(props.rowIdx)}
-                    faClass="fa fa-fw fa-trash"
+                    icon="trash3-fill"
                 />
             </td>
         </tr>
@@ -67,7 +67,7 @@ class DatasetForm extends Component {
                                 className="btn btn-danger btn-sm float-right ml-1"
                                 onClick={dataStore.deleteDataset}
                                 text="Delete"
-                                faClass="fa fa-fw fa-trash"
+                                icon="trash3-fill"
                             />
                         </div>
                     </div>
@@ -129,14 +129,14 @@ class DatasetForm extends Component {
                                     className="btn btn-primary"
                                     title="Add row"
                                     onClick={dataStore.addRow}
-                                    faClass="fa fa-plus-square"
+                                    icon="plus-square-fill"
                                 />
                                 &nbsp;
                                 <Button
-                                    className="btn btn-info mr-1"
+                                    className="btn btn-info"
                                     title="Load dataset from Excel"
                                     onClick={dataStore.toggleDatasetModal}
-                                    faClass="fa fa-file-excel-o"
+                                    icon="table"
                                 />
                             </td>
                         </tr>
@@ -160,7 +160,7 @@ class DatasetForm extends Component {
                     <Button
                         className="btn btn-link"
                         onClick={dataStore.loadExampleData}
-                        faClass="fa fa-fw fa-upload mr-1"
+                        icon="layer-forward"
                         text="Load an example dataset"
                     />
                 </p>

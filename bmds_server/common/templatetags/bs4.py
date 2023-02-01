@@ -2,6 +2,7 @@
 Twitter Bootstrap 4 - helper methods
 """
 from django import template
+from django.utils.safestring import mark_safe
 
 register = template.Library()
 
@@ -26,3 +27,8 @@ class CardWrapperNode(template.Node):
         if self.div_class:
             output = f'<div class="{self.div_class}">{output}</div>'
         return output
+
+
+@register.simple_tag
+def icon(name: str):
+    return mark_safe(f'<span class="bi bi-{name}" aria-hidden="true"></span>')

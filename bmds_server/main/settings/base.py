@@ -230,3 +230,5 @@ TEST_DB_FIXTURE = ROOT_DIR / "tests/data/db.yaml"
 CONTACT_US_LINK = os.getenv("CONTACT_US_LINK", "")
 WEBSITE_URI = os.getenv("WEBSITE_URI", "https://example.com")
 INCLUDE_ADMIN = bool(os.environ.get("INCLUDE_ADMIN", "True") == "True")
+
+INCLUDE_BETA_FEATURES = bool(os.environ.get("INCLUDE_BETA", "False") == "True")

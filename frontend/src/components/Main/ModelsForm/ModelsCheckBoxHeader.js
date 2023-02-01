@@ -1,11 +1,12 @@
-import React from "react";
-import PropTypes from "prop-types";
 import {observer} from "mobx-react";
+import PropTypes from "prop-types";
+import React from "react";
 
-import {allModelOptions} from "../../../constants/modelConstants";
-import * as mc from "../../../constants/mainConstants";
-import HelpTextPopover from "../../common/HelpTextPopover";
+import * as mc from "@/constants/mainConstants";
+import {allModelOptions} from "@/constants/modelConstants";
+
 import CheckboxInput from "../../common/CheckboxInput";
+import HelpTextPopover from "../../common/HelpTextPopover";
 
 const areAllModelsChecked = function(modelType, type, models) {
         return type in models && models[type].length === allModelOptions[modelType][type].length;

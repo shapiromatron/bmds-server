@@ -1,6 +1,7 @@
-import React, {Component} from "react";
 import PropTypes from "prop-types";
+import React, {Component} from "react";
 
+import Icon from "./Icon";
 import Popover from "./Popover";
 
 class HelpTextPopover extends Component {
@@ -8,7 +9,7 @@ class HelpTextPopover extends Component {
         const {icon, title, content} = this.props;
         return (
             <Popover element={"span"} content={content} title={title}>
-                <i className={`ml-1 fa fa-fw ${icon}`}></i>
+                <Icon name={icon} classes="ml-1" />
             </Popover>
         );
     }
@@ -19,7 +20,7 @@ HelpTextPopover.propTypes = {
     content: PropTypes.string.isRequired,
 };
 HelpTextPopover.defaultProps = {
-    icon: "fa-question-circle",
+    icon: "question-circle-fill",
     title: "Help-text",
 };
 

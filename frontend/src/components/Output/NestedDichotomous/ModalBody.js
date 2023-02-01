@@ -1,12 +1,12 @@
-import React, {Component} from "react";
-import {Modal, Row, Col} from "react-bootstrap";
 import {observer} from "mobx-react";
 import PropTypes from "prop-types";
+import React, {Component} from "react";
+import {Col, Modal, Row} from "react-bootstrap";
 
 import BootstrapResults from "./BootstrapResults";
 import BootstrapRuns from "./BootstrapRuns";
-import ScaledResidual from "./ScaledResidual";
 import LitterData from "./LitterData";
+import ScaledResidual from "./ScaledResidual";
 
 @observer
 class ModalBody extends Component {

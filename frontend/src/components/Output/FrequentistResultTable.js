@@ -1,16 +1,16 @@
 import _ from "lodash";
 import {toJS} from "mobx";
 import {inject, observer} from "mobx-react";
-import React, {Component} from "react";
 import PropTypes from "prop-types";
+import React, {Component} from "react";
 
-import {fractionalFormatter} from "utils/formatters";
-import {MODEL_MULTI_TUMOR} from "../../constants/mainConstants";
-import {BIN_LABELS} from "../../constants/logicConstants";
-import {getPValue, modelClasses, priorClass} from "../../constants/outputConstants";
-import {ff} from "utils/formatters";
+import {BIN_LABELS} from "@/constants/logicConstants";
+import {MODEL_MULTI_TUMOR} from "@/constants/mainConstants";
+import {getPValue, modelClasses, priorClass} from "@/constants/outputConstants";
+import {fractionalFormatter} from "@/utils/formatters";
+import {ff} from "@/utils/formatters";
+
 import Button from "../common/Button";
-
 import Popover from "../common/Popover";
 
 const getModelBinLabel = function(output, index) {
@@ -266,12 +266,10 @@ class FrequentistResultTable extends Component {
                             <th>
                                 <Button
                                     title="Toggle showing notes inline or popover"
-                                    className="btn btn-info btn-sm pull-right"
+                                    className="btn btn-info btn-sm float-right"
                                     onClick={store.toggleInlineNotes}
                                     text={store.showInlineNotes ? "Hide" : "Show"}
-                                    faClass={`fa fa-fw ${
-                                        store.showInlineNotes ? "fa-eye-slash" : "fa-eye"
-                                    }`}
+                                    icon={store.showInlineNotes ? "eye-slash-fill" : "eye-fill"}
                                 />
                                 Recommendation
                                 <br />

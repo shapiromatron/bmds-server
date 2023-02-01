@@ -1,18 +1,19 @@
-import React from "react";
 import PropTypes from "prop-types";
+import React from "react";
 
-import * as mc from "../../../constants/mainConstants";
-import SelectInput from "../../common/SelectInput";
+import * as mc from "@/constants/mainConstants";
 import {
-    dichotomousBmrOptions,
+    backgroundOptions,
     continuousBmrOptions,
+    dichotomousBmrOptions,
     distTypeOptions,
     litterSpecificCovariateOptions,
-    backgroundOptions,
-} from "../../../constants/optionsConstants";
-import IntegerInput from "../../common/IntegerInput";
-import FloatInput from "../../common/FloatInput";
+} from "@/constants/optionsConstants";
+
 import Button from "../../common/Button";
+import FloatInput from "../../common/FloatInput";
+import IntegerInput from "../../common/IntegerInput";
+import SelectInput from "../../common/SelectInput";
 
 const OptionsForm = props => {
     return (
@@ -131,7 +132,7 @@ const OptionsForm = props => {
                     className="btn btn-danger"
                     title="Delete Option Set"
                     onClick={e => props.deleteOptions(props.idx)}
-                    faClass="fa fa-trash"
+                    icon="trash3-fill"
                 />
             </td>
         </tr>

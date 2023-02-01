@@ -1,13 +1,14 @@
-import React, {Component} from "react";
 import {observer} from "mobx-react";
 import PropTypes from "prop-types";
+import React, {Component} from "react";
 
+import {checkOrEmpty, getLabel} from "@/common";
 import {
     adverseDirectionOptions,
-    getDegreeOptions,
     allDegreeOptions,
-} from "../../../constants/dataConstants";
-import {getLabel, checkOrEmpty} from "../../../common";
+    getDegreeOptions,
+} from "@/constants/dataConstants";
+
 import CheckboxInput from "../../common/CheckboxInput";
 import SelectInput from "../../common/SelectInput";
 
@@ -57,7 +58,7 @@ class DatasetModelOption extends Component {
             </tr>
         ) : (
             <tr>
-                <td>{checkOrEmpty(option.enabled)}</td>
+                <td className="text-center">{checkOrEmpty(option.enabled)}</td>
                 <td>{dataset.metadata.name}</td>
                 <td>{getLabel(option.degree, allDegreeOptions)}</td>
                 {hasAdverseDirection ? (

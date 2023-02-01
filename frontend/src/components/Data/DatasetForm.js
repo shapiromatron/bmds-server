@@ -1,12 +1,14 @@
-import React, {Component} from "react";
 import {inject, observer} from "mobx-react";
 import PropTypes from "prop-types";
-import TabularDatasetModal from "./TabularDatasetModal";
+import React, {Component} from "react";
 
-import {columnHeaders, columns} from "../../constants/dataConstants";
-import TextInput from "../common/TextInput";
-import FloatInput from "../common/FloatInput";
+import {columnHeaders, columns} from "@/constants/dataConstants";
+
 import Button from "../common/Button";
+import ErrorMessage from "../common/ErrorMessage";
+import FloatInput from "../common/FloatInput";
+import TextInput from "../common/TextInput";
+import TabularDatasetModal from "./TabularDatasetModal";
 
 const DatasetFormRow = props => {
     return (
@@ -25,7 +27,7 @@ const DatasetFormRow = props => {
                 <Button
                     className="btn btn-danger btn-sm"
                     onClick={e => props.delete(props.rowIdx)}
-                    faClass="fa fa-fw fa-trash"
+                    icon="trash3-fill"
                 />
             </td>
         </tr>
@@ -45,6 +47,7 @@ class DatasetForm extends Component {
     render() {
         const {dataStore} = this.props,
             dataset = dataStore.selectedDataset,
+            errorText = dataStore.selectedDatasetErrorText,
             columnNames = columns[dataset.dtype];
 
         return (
@@ -64,7 +67,7 @@ class DatasetForm extends Component {
                                 className="btn btn-danger btn-sm float-right ml-1"
                                 onClick={dataStore.deleteDataset}
                                 text="Delete"
-                                faClass="fa fa-fw fa-trash"
+                                icon="trash3-fill"
                             />
                         </div>
                     </div>
@@ -114,6 +117,7 @@ class DatasetForm extends Component {
                         />
                     </div>
                 </div>
+                <ErrorMessage error={errorText} />
                 <table className="table table-sm text-center">
                     <thead>
                         <tr className="bg-custom text-center">
@@ -125,14 +129,14 @@ class DatasetForm extends Component {
                                     className="btn btn-primary"
                                     title="Add row"
                                     onClick={dataStore.addRow}
-                                    faClass="fa fa-plus-square"
+                                    icon="plus-square-fill"
                                 />
                                 &nbsp;
                                 <Button
-                                    className="btn btn-info mr-1"
+                                    className="btn btn-info"
                                     title="Load dataset from Excel"
                                     onClick={dataStore.toggleDatasetModal}
-                                    faClass="fa fa-file-excel-o"
+                                    icon="table"
                                 />
                             </td>
                         </tr>
@@ -156,7 +160,7 @@ class DatasetForm extends Component {
                     <Button
                         className="btn btn-link"
                         onClick={dataStore.loadExampleData}
-                        faClass="fa fa-fw fa-upload mr-1"
+                        icon="layer-forward"
                         text="Load an example dataset"
                     />
                 </p>

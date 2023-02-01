@@ -1,10 +1,11 @@
-import React, {Component} from "react";
 import {inject, observer} from "mobx-react";
-import {Modal} from "react-bootstrap";
 import PropTypes from "prop-types";
+import React, {Component} from "react";
+import {Modal} from "react-bootstrap";
+
+import LabelInput from "@/components/common/LabelInput";
 
 import Button from "../../common/Button";
-import LabelInput from "components/common/LabelInput";
 import CheckboxInput from "../../common/CheckboxInput";
 
 @inject("mainStore")

@@ -1,7 +1,7 @@
 import _ from "lodash";
-import {computed, observable, action} from "mobx";
+import {action, computed, observable} from "mobx";
 
-import {datasetOptions, getDefaultDegree} from "../constants/dataConstants";
+import {datasetOptions, getDefaultDegree} from "@/constants/dataConstants";
 
 class DatasetModelOptionStore {
     constructor(rootStore) {

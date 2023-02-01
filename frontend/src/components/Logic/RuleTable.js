@@ -1,10 +1,11 @@
 import _ from "lodash";
-import React, {Component} from "react";
 import {inject, observer} from "mobx-react";
 import PropTypes from "prop-types";
+import React, {Component} from "react";
+
+import {ruleOrder} from "@/constants/logicConstants";
 
 import RuleRow from "./RuleRow";
-import {ruleOrder} from "../../constants/logicConstants";
 
 @inject("logicStore")
 @observer

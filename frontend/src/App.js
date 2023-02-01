@@ -1,10 +1,10 @@
-import React, {Component} from "react";
-import {HashRouter} from "react-router-dom";
+import {autorun} from "mobx";
 import {inject, observer} from "mobx-react";
 import PropTypes from "prop-types";
-import {autorun} from "mobx";
+import React, {Component} from "react";
+import {HashRouter} from "react-router-dom";
 
-import Navigation from "./components/Navigation";
+import Navigation from "@/components/Navigation";
 
 @inject("mainStore")
 @observer

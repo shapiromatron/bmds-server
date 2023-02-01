@@ -116,3 +116,7 @@ input[type=number] {
 .col-l-12 th:nth-child(12) {
   text-align: left;
 }
+
+.bi-lg {
+  font-size: 1.2rem;
+}

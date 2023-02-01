@@ -19,7 +19,15 @@ jobs:
         - 5432/tcp
 
     steps:
-    - uses: actions/checkout@v3
+    - name: Checkout bmds-server
+      uses: actions/checkout@v3
+    - name: Checkout bmds@main
+      uses: actions/checkout@v3
+      with:
+        repository: shapiromatron/bmds
+        path: venv
+        ref: main
+        lfs: true
     - uses: actions/setup-python@v4
       with:
         python-version: '3.11'
@@ -47,8 +55,7 @@ jobs:
         export "LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/lib:/usr/lib"
         sudo cp vendor/libnlopt.so /usr/local/lib/libnlopt.so.0
         sudo ln -s /lib/x86_64-linux-gnu/libgsl.so /usr/local/lib/libgsl.so.25
-        export SITE_PKG=`python -c "import sysconfig; print(sysconfig.get_path('purelib'))"`
-        export "BMD_DLL=$SITE_PKG/bmds/bin/BMDS330/libDRBMD.so"
+        export "BMD_DLL=$GITHUB_WORKSPACE/venv/bmds/bin/BMDS330/libDRBMD.so"
         echo $BMD_DLL
         ldd $BMD_DLL
     - name: lint
@@ -73,7 +80,18 @@ jobs:
     - uses: actions/checkout@v3
     - uses: actions/setup-node@v3
       with:
-        node-version: 16
+        node-version: '18.x'
+    - name: Get yarn cache directory path
+      id: yarn-cache-dir-path
+      run: echo "::set-output name=dir::$(yarn cache dir)"
+    - name: try to restore yarn cache
+      uses: actions/cache@v3
+      id: yarn-cache
+      with:
+        path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
+        key: ${{ runner.os }}-yarn-${{ hashFiles('frontend/package.json') }}
+        restore-keys: |
+          ${{ runner.os }}-yarn-
     - name: install
       run: |
         yarn --cwd ./frontend install
@@ -121,6 +139,13 @@ jobs:
 
     steps:
     - uses: actions/checkout@v3
+    - name: Checkout bmds@main
+      uses: actions/checkout@v3
+      with:
+        repository: shapiromatron/bmds
+        path: venv
+        ref: main
+        lfs: true
     - uses: actions/setup-python@v4
       with:
         python-version: '3.11'
@@ -149,8 +174,7 @@ jobs:
         export "LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/lib:/usr/lib"
         sudo cp vendor/libnlopt.so /usr/local/lib/libnlopt.so.0
         sudo ln -s /lib/x86_64-linux-gnu/libgsl.so /usr/local/lib/libgsl.so.25
-        export SITE_PKG=`python -c "import sysconfig; print(sysconfig.get_path('purelib'))"`
-        export "BMD_DLL=$SITE_PKG/bmds/bin/BMDS330/libDRBMD.so"
+        export "BMD_DLL=$GITHUB_WORKSPACE/venv/bmds/bin/BMDS330/libDRBMD.so"
         echo $BMD_DLL
         ldd $BMD_DLL
     # https://github.community/t/how-to-retry-a-failed-step-in-github-actions-workflow/125880

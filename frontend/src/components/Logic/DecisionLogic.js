@@ -1,10 +1,12 @@
-import React, {Component} from "react";
 import {inject, observer} from "mobx-react";
 import PropTypes from "prop-types";
-import {checkOrEmpty} from "../../common";
+import React, {Component} from "react";
+
+import {checkOrEmpty} from "@/common";
+
+import Button from "../common/Button";
 import CheckboxInput from "../common/CheckboxInput";
 import FloatInput from "../common/FloatInput";
-import Button from "../common/Button";
 
 @inject("logicStore")
 @observer
@@ -70,7 +72,7 @@ class DecisionLogic extends Component {
                                         <br />
                                         to use lowest AIC instead of lowest BMDL in viable models
                                     </td>
-                                    <td>
+                                    <td className="text-center">
                                         {canEdit ? (
                                             <FloatInput
                                                 className="form-control text-center"

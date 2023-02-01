@@ -1,8 +1,8 @@
 import {
     ff,
     fourDecimalFormatter,
-    parameterFormatter,
     fractionalFormatter,
+    parameterFormatter,
 } from "../../src/utils/formatters";
 import assert from "../helpers";
 

@@ -1,6 +1,8 @@
 import Clipboard from "clipboard";
-import React, {Component} from "react";
 import PropTypes from "prop-types";
+import React, {Component} from "react";
+
+import Icon from "./Icon";
 
 class ClipboardButton extends Component {
     // copy text to clipboard
@@ -23,8 +25,7 @@ class ClipboardButton extends Component {
                 type="button"
                 className={className}
                 title={`Copy "${textToCopy}" to clipboard`}>
-                <i className="fa fa-fw fa-clipboard"></i>
-                {text}
+                <Icon name="clipboard" text={text} />
             </button>
         );
     }

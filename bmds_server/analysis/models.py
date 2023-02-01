@@ -180,11 +180,10 @@ class Analysis(models.Model):
 
     def to_excel(self) -> BytesIO:
         f = BytesIO()
-        writer = pd.ExcelWriter(f)
-        data = self.to_df()
-        for name, df in data.items():
-            df.to_excel(writer, sheet_name=name, index=False)
-        writer.save()
+        with pd.ExcelWriter(f) as writer:
+            data = self.to_df()
+            for name, df in data.items():
+                df.to_excel(writer, sheet_name=name, index=False)
         return f
 
     def update_selection(self, selection: validators.AnalysisSelectedSchema):

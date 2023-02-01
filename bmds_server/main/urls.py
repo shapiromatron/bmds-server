@@ -8,7 +8,7 @@ from rest_framework.routers import SimpleRouter
 from rest_framework.schemas import get_schema_view
 
 from ..analysis import schema, views
-from ..analysis.api import AnalysisViewset
+from ..analysis.api import AnalysisViewset, polyk_transform
 from ..common import views as common_views
 from ..common.api import HealthcheckViewset
 from .constants import AuthProvider
@@ -33,16 +33,8 @@ urlpatterns = [
     # analysis
     path("analysis/<uuid:pk>/", views.AnalysisDetail.as_view(), name="analysis"),
     path(edit_pattern, views.AnalysisDetail.as_view(), name="analysis_edit"),
-    path(
-        f"{edit_pattern}renew/",
-        views.AnalysisRenew.as_view(),
-        name="analysis_renew",
-    ),
-    path(
-        f"{edit_pattern}delete/",
-        views.AnalysisDelete.as_view(),
-        name="analysis_delete",
-    ),
+    path(f"{edit_pattern}renew/", views.AnalysisRenew.as_view(), name="analysis_renew"),
+    path(f"{edit_pattern}delete/", views.AnalysisDelete.as_view(), name="analysis_delete"),
     # errors
     path("401/", common_views.Error401.as_view(), name="401"),
     path("403/", TemplateView.as_view(template_name="403.html"), name="403"),
@@ -52,6 +44,12 @@ urlpatterns = [
     path("user/login/", common_views.AppLoginView.as_view(), name="login"),
     path("user/logout/", common_views.AppLogoutView.as_view(), name="logout"),
 ]
+
+if settings.INCLUDE_BETA_FEATURES:
+    urlpatterns += [
+        path("api/v1/polyk/", polyk_transform, name="polyk"),
+        path("transforms/polyk/", views.PolyKAdjustment.as_view(), name="polyk"),
+    ]
 
 if settings.INCLUDE_ADMIN:
     admin_url = f"admin/{settings.ADMIN_URL_PREFIX}/" if not settings.DEBUG else "admin/"
@@ -71,6 +69,7 @@ if settings.INCLUDE_ADMIN:
         path("api/v1/swagger/", common_views.Swagger.as_view(), name="swagger"),
         # admin and custom admin login
         path(f"{admin_url}login/", common_views.AdminLoginView.as_view(), name="admin_login"),
+        path(f"{admin_url}analytics/", views.Analytics.as_view(), name="analytics"),
         path(admin_url, admin.site.urls),
     ]
 

@@ -1,9 +1,10 @@
-import React, {Component} from "react";
-import {observer} from "mobx-react";
-import Plot from "react-plotly.js";
-import PropTypes from "prop-types";
 import {toJS} from "mobx";
-import {getCdfLayout, getConfig} from "../../constants/plotting";
+import {observer} from "mobx-react";
+import PropTypes from "prop-types";
+import React, {Component} from "react";
+import Plot from "react-plotly.js";
+
+import {getCdfLayout, getConfig} from "@/constants/plotting";
 
 @observer
 class CDFPlot extends Component {

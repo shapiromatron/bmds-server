@@ -1,24 +1,26 @@
-import React, {Component} from "react";
 import {inject, observer} from "mobx-react";
 import PropTypes from "prop-types";
+import React, {Component} from "react";
 
-import * as mc from "../../../constants/mainConstants";
-import Spinner from "../../common/Spinner";
-import SelectInput from "../../common/SelectInput";
-import TextInput from "../../common/TextInput";
-import TextAreaInput from "../../common/TextAreaInput";
+import * as mc from "@/constants/mainConstants";
+
 import Button from "../../common/Button";
+import Icon from "../../common/Icon";
+import SelectInput from "../../common/SelectInput";
+import Spinner from "../../common/Spinner";
+import TextAreaInput from "../../common/TextAreaInput";
+import TextInput from "../../common/TextInput";
 
 @observer
 class RunChecklist extends Component {
     render() {
         const {complete, message} = this.props,
             color = complete ? "text-success" : "text-danger",
-            icon = complete ? "fa-check-circle" : "fa-times-circle";
+            icon = complete ? "check-circle-fill" : "x-circle-fill";
 
         return (
             <p>
-                <i className={`fa fa-lg ${icon} ${color}`}></i>&ensp;{message}
+                <Icon name={icon} classes={`bi-lg ${color}`} text={message} />
             </p>
         );
     }
@@ -71,7 +73,7 @@ class AnalysisForm extends Component {
                                 <Button
                                     className="btn btn-warning float-right"
                                     onClick={mainStore.executeResetAnalysis}
-                                    text="Cancel execution"
+                                    text="Cancel"
                                 />
                                 <Spinner text="Executing, please wait..." />
                             </div>

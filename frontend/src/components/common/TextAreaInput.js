@@ -1,8 +1,9 @@
-import React, {Component} from "react";
 import {observer} from "mobx-react";
 import PropTypes from "prop-types";
+import React, {Component} from "react";
 
-import {randomString} from "../../common";
+import {randomString} from "@/common";
+
 import LabelInput from "./LabelInput";
 
 @observer

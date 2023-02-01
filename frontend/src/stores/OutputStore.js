@@ -1,20 +1,20 @@
-import {observable, action, computed, toJS} from "mobx";
 import _ from "lodash";
-import {getHeaders} from "../common";
+import {action, computed, observable, toJS} from "mobx";
 
-import {modelClasses, maIndex} from "../constants/outputConstants";
+import {getHeaders} from "@/common";
+import {maIndex, modelClasses} from "@/constants/outputConstants";
 import {
-    getDrLayout,
-    getDrDatasetPlotData,
-    getDrBmdLine,
-    colorCodes,
     bmaColor,
-    hoverColor,
-    selectedColor,
+    colorCodes,
     getBayesianBMDLine,
+    getDrBmdLine,
+    getDrDatasetPlotData,
+    getDrLayout,
     getLollipopDataset,
     getLollipopPlotLayout,
-} from "../constants/plotting";
+    hoverColor,
+    selectedColor,
+} from "@/constants/plotting";
 
 class OutputStore {
     /*

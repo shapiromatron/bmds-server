@@ -1,9 +1,8 @@
 import _ from "lodash";
-import {observable, action, computed} from "mobx";
+import {action, computed, observable} from "mobx";
 
-import {allModelOptions, models} from "../constants/modelConstants";
-
-import * as mc from "../constants/mainConstants";
+import * as mc from "@/constants/mainConstants";
+import {allModelOptions, models} from "@/constants/modelConstants";
 
 class ModelsStore {
     constructor(rootStore) {

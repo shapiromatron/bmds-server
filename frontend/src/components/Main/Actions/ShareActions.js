@@ -1,9 +1,10 @@
-import React, {Component} from "react";
 import {inject, observer} from "mobx-react";
 import PropTypes from "prop-types";
+import React, {Component} from "react";
 
-import ClipboardButton from "../../common/ClipboardButton";
 import Button from "../../common/Button";
+import ClipboardButton from "../../common/ClipboardButton";
+import Icon from "../../common/Icon";
 
 @inject("mainStore")
 @observer
@@ -39,8 +40,7 @@ class ShareActions extends Component {
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 className="btn btn-secondary text-white">
-                                <i className="fa fa-fw fa-external-link"></i>
-                                &nbsp;Open
+                                <Icon name="box-arrow-up-right" text="Open" />
                             </a>
                         </div>
                         <p className="dropdown-item text-muted" style={{whiteSpace: "normal"}}>
@@ -63,8 +63,7 @@ class ShareActions extends Component {
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 className="btn btn-warning">
-                                <i className="fa fa-fw fa-external-link"></i>
-                                &nbsp;Open
+                                <Icon name="box-arrow-up-right" text="Open" />
                             </a>
                         </div>
                         <p className="dropdown-item text-muted" style={{whiteSpace: "normal"}}>

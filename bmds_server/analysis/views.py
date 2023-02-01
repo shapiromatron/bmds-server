@@ -1,13 +1,16 @@
 from typing import Optional, Tuple
 
 from django.conf import settings
+from django.contrib.admin.views.decorators import staff_member_required
 from django.middleware.csrf import get_token
 from django.shortcuts import get_object_or_404
 from django.template import RequestContext, Template
 from django.urls import reverse_lazy
+from django.utils.decorators import method_decorator
 from django.views.generic import CreateView, DeleteView, DetailView, RedirectView, TemplateView
 
 from . import forms, models
+from .reporting.analytics import get_cached_analytics
 from .utils import get_citation
 
 
@@ -34,6 +37,15 @@ class Home(CreateView):
 
 class AnalysisHistory(TemplateView):
     template_name: str = "analysis/analysis_history.html"
+
+
+@method_decorator(staff_member_required, name="dispatch")
+class Analytics(TemplateView):
+    template_name: str = "analysis/analytics.html"
+
+    def get_context_data(self, **kwargs) -> dict:
+        kwargs.update(config=get_cached_analytics())
+        return super().get_context_data(**kwargs)
 
 
 def get_analysis_or_404(pk: str, password: Optional[str] = "") -> Tuple[models.Analysis, bool]:
@@ -109,3 +121,7 @@ class AnalysisDelete(DeleteView):
     def get_object(self, queryset=None):
         analysis, _ = get_analysis_or_404(self.kwargs["pk"], self.kwargs["password"])
         return analysis
+
+
+class PolyKAdjustment(TemplateView):
+    template_name: str = "analysis/polyk.html"

@@ -1,16 +1,16 @@
-import React, {Component} from "react";
-import {Redirect, Route, NavLink} from "react-router-dom";
 import {inject, observer} from "mobx-react";
-import Main from "./Main/Main";
+import PropTypes from "prop-types";
+import React, {Component} from "react";
+import {NavLink, Redirect, Route} from "react-router-dom";
+
 import DataTab from "./Data/DataTab";
 import LogicRoot from "./Logic/LogicRoot";
-import Output from "./Output/Output";
-import PropTypes from "prop-types";
-
 import Actions from "./Main/Actions/Actions";
 import ShareActions from "./Main/Actions/ShareActions";
 import StatusToast from "./Main/Actions/StatusToast";
 import WordReportOptionsModal from "./Main/Actions/WordReportOptionsModal";
+import Main from "./Main/Main";
+import Output from "./Output/Output";
 
 @inject("mainStore")
 @observer

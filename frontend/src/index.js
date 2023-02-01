@@ -1,10 +1,12 @@
+import {Provider} from "mobx-react";
 import React from "react";
 import ReactDOM from "react-dom";
-import {Provider} from "mobx-react";
 
-import App from "./App";
-import history from "./utils/localHistory";
-import rootStore from "./stores/RootStore";
+import App from "@/App";
+import {renderPlotlyFigure} from "@/components/common/PlotlyFigure";
+import polyk from "@/components/transforms/polyk";
+import rootStore from "@/stores/RootStore";
+import history from "@/utils/localHistory";
 
 const Root = (
     <Provider
@@ -28,4 +30,6 @@ const appStartup = function(el) {
 window.app = {
     appStartup,
     history,
+    renderPlotlyFigure,
+    polyk,
 };

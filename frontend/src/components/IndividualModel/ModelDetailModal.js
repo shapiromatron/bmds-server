@@ -1,29 +1,28 @@
-import React, {Component} from "react";
-import {Modal, Row, Col} from "react-bootstrap";
 import {inject, observer} from "mobx-react";
 import PropTypes from "prop-types";
+import React, {Component} from "react";
+import {Col, Modal, Row} from "react-bootstrap";
 
-import {MODEL_NESTED_DICHOTOMOUS} from "../../constants/mainConstants";
+import * as dc from "@/constants/dataConstants";
+import {MODEL_NESTED_DICHOTOMOUS} from "@/constants/mainConstants";
 
-import InfoTable from "./InfoTable";
-import ModelOptionsTable from "./ModelOptionsTable";
-import ParameterPriorTable from "./ParameterPriorTable";
-import ModelParameters from "./ModelParameters";
-import GoodnessFit from "./GoodnessFit";
-import CDFTable from "./CDFTable";
-import CDFPlot from "./CDFPlot";
+import Button from "../common/Button";
 import DoseResponsePlot from "../common/DoseResponsePlot";
-import ContinuousTestOfInterest from "./ContinuousTestOfInterest";
-import DichotomousSummary from "./DichotomousSummary";
-import DichotomousDeviance from "./DichotomousDeviance";
-import ContinuousSummary from "./ContinuousSummary";
+import NestedDichotomousModalBody from "../Output/NestedDichotomous/ModalBody";
+import CDFPlot from "./CDFPlot";
+import CDFTable from "./CDFTable";
 import ContinuousDeviance from "./ContinuousDeviance";
+import ContinuousSummary from "./ContinuousSummary";
+import ContinuousTestOfInterest from "./ContinuousTestOfInterest";
+import DichotomousDeviance from "./DichotomousDeviance";
+import DichotomousSummary from "./DichotomousSummary";
+import GoodnessFit from "./GoodnessFit";
+import InfoTable from "./InfoTable";
 import MaBenchmarkDose from "./MaBenchmarkDose";
 import MaIndividualModels from "./MaIndividualModels";
-import NestedDichotomousModalBody from "../Output/NestedDichotomous/ModalBody";
-
-import * as dc from "../../constants/dataConstants";
-import Button from "../common/Button";
+import ModelOptionsTable from "./ModelOptionsTable";
+import ModelParameters from "./ModelParameters";
+import ParameterPriorTable from "./ParameterPriorTable";
 
 @observer
 class ModelBody extends Component {
@@ -178,7 +177,7 @@ class ModelDetailModal extends Component {
                         id="close-modal"
                         className="btn btn-secondary float-right"
                         onClick={outputStore.closeModal}
-                        faClass="fa fa-fw fa-times"
+                        icon="x-circle"
                     />
                 </Modal.Header>
                 <Body outputStore={outputStore} />

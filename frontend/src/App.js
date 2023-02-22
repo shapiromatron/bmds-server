@@ -4,6 +4,7 @@ import PropTypes from "prop-types";
 import React, {Component} from "react";
 import {HashRouter} from "react-router-dom";
 
+import Icon from "@/components/common/Icon";
 import Navigation from "@/components/Navigation";
 
 @inject("mainStore")
@@ -23,7 +24,7 @@ class App extends Component {
         });
     }
     render() {
-        const {analysis_name, canEdit} = this.props.mainStore,
+        const {analysis_name, canEdit, isFuture} = this.props.mainStore,
             getHeader = () => {
                 if (canEdit) {
                     return "Update BMDS analysis";
@@ -33,7 +34,18 @@ class App extends Component {
 
         return this.props.mainStore.isUpdateComplete ? (
             <HashRouter>
-                <h3 className="pt-1">{getHeader()}</h3>
+                <h3>
+                    {getHeader()}
+                    {isFuture ? (
+                        <span
+                            className="badge badge-dark px-4 mx-3"
+                            title="Future mode: content under active development">
+                            <Icon name="lightning-fill" />
+                            &nbsp;FUTURE MODE&nbsp;
+                            <Icon name="lightning-fill" />
+                        </span>
+                    ) : null}
+                </h3>
                 <Navigation />
             </HashRouter>
         ) : null;

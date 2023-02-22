@@ -5,7 +5,7 @@ django-debug-toolbar==3.8.1
 django_extensions==3.2.1
 
 # docs
-Sphinx==4.4.0
+mkdocs-material==9.0.6
 
 # tests
 pytest==7.2.1

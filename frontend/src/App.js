@@ -4,8 +4,8 @@ import PropTypes from "prop-types";
 import React, {Component} from "react";
 import {HashRouter} from "react-router-dom";
 
-import Navigation from "@/components/Navigation";
 import Icon from "@/components/common/Icon";
+import Navigation from "@/components/Navigation";
 
 @inject("mainStore")
 @observer
@@ -34,14 +34,18 @@ class App extends Component {
 
         return this.props.mainStore.isUpdateComplete ? (
             <HashRouter>
-                <h3>{getHeader()}
-                {isFuture ? (
-                    <span
-                        className="badge badge-dark px-4 mx-3"
-                        title="Future mode: content under active development">
-                        <Icon name="lightning-fill"/>&nbsp;FUTURE MODE&nbsp;<Icon name="lightning-fill" />
-                    </span>
-                ) : null}</h3>
+                <h3>
+                    {getHeader()}
+                    {isFuture ? (
+                        <span
+                            className="badge badge-dark px-4 mx-3"
+                            title="Future mode: content under active development">
+                            <Icon name="lightning-fill" />
+                            &nbsp;FUTURE MODE&nbsp;
+                            <Icon name="lightning-fill" />
+                        </span>
+                    ) : null}
+                </h3>
                 <Navigation />
             </HashRouter>
         ) : null;

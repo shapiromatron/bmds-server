@@ -1,6 +1,6 @@
 import json
 from copy import deepcopy
-from typing import Any, Dict
+from typing import Any
 
 import bmds
 import pytest
@@ -19,7 +19,7 @@ def _missing_field(err, missing_field: str):
 
 class TestInputValidation:
     def test_bmds3_partial(self):
-        data: Dict[str, Any] = {
+        data: dict[str, Any] = {
             "bmds_version": bmds.constants.BMDS330,
             "dataset_type": bmds.constants.CONTINUOUS,
         }
@@ -89,7 +89,7 @@ class TestInputValidation:
         _missing_field(err, "rules")
 
     def test_nested_dichotomous(self, nested_dichotomous_datasets):
-        data: Dict[str, Any] = {
+        data: dict[str, Any] = {
             "bmds_version": bmds.constants.BMDS330,
             "dataset_type": bmds.constants.NESTED_DICHOTOMOUS,
         }
@@ -135,7 +135,7 @@ class TestInputValidation:
         assert validators.validate_input(data) is None
 
     def test_multi_tumor(self):
-        data: Dict[str, Any] = {
+        data: dict[str, Any] = {
             "bmds_version": bmds.constants.BMDS330,
             "dataset_type": bmds.constants.MULTI_TUMOR,
         }

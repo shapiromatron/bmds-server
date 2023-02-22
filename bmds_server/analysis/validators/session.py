@@ -1,8 +1,7 @@
-from typing import Any, Dict, Optional, Union
+from typing import Any, Literal, Optional, Union
 
 import bmds
 from pydantic import BaseModel, conlist
-from pydantic.typing import Literal
 
 from ...common.validation import pydantic_validate
 
@@ -18,10 +17,10 @@ class BaseSession(BaseModel):
 
 class BaseSessionComplete(BaseSession):
     datasets: conlist(Any, min_items=1, max_items=10)
-    models: Dict
+    models: dict
     options: conlist(Any, min_items=1, max_items=10)
 
 
-def validate_session(data: Dict, partial: bool = False):
+def validate_session(data: dict, partial: bool = False):
     schema = BaseSession if partial else BaseSessionComplete
     pydantic_validate(data, schema)

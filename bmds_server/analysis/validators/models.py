@@ -1,4 +1,4 @@
-from typing import Any, List, Set
+from typing import Any
 
 import bmds
 import numpy as np
@@ -9,9 +9,9 @@ from ...common.validation import pydantic_validate
 
 
 class ModelTypeSchema(BaseModel):
-    restricted: Set[str]
-    unrestricted: Set[str]
-    bayesian: Set[str]
+    restricted: set[str]
+    unrestricted: set[str]
+    bayesian: set[str]
 
 
 DichotomousModelSchema = ModelTypeSchema(
@@ -45,10 +45,10 @@ class BayesianModelSchema(BaseModel):
     prior_weight: confloat(ge=0, le=1)
 
 
-class ModelListSchema(BaseModel):
-    frequentist_restricted: List[str] = []
-    frequentist_unrestricted: List[str] = []
-    bayesian: List[BayesianModelSchema] = []
+class ModellistSchema(BaseModel):
+    frequentist_restricted: list[str] = []
+    frequentist_unrestricted: list[str] = []
+    bayesian: list[BayesianModelSchema] = []
     model_schema: ModelTypeSchema
 
     @validator("bayesian")
@@ -98,29 +98,29 @@ class ModelListSchema(BaseModel):
         return values
 
 
-class DichotomousModelListSchema(ModelListSchema):
+class DichotomousModellistSchema(ModellistSchema):
     model_schema: ModelTypeSchema = DichotomousModelSchema
 
 
-class ContinuousModelListSchema(ModelListSchema):
+class ContinuousModellistSchema(ModellistSchema):
     model_schema: ModelTypeSchema = ContinuousModelSchema
 
 
-class NestedDichotomousModelListSchema(ModelListSchema):
+class NestedDichotomousModellistSchema(ModellistSchema):
     model_schema: ModelTypeSchema = NestedDichotomousModelSchema
 
 
-class MultiTumorModelListSchema(ModelListSchema):
+class MultiTumorModellistSchema(ModellistSchema):
     model_schema: ModelTypeSchema = MultiTumorModelSchema
 
 
 schema_map = {
-    bmds.constants.DICHOTOMOUS: DichotomousModelListSchema,
-    bmds.constants.DICHOTOMOUS_CANCER: DichotomousModelListSchema,
-    bmds.constants.CONTINUOUS: ContinuousModelListSchema,
-    bmds.constants.CONTINUOUS_INDIVIDUAL: ContinuousModelListSchema,
-    bmds.constants.NESTED_DICHOTOMOUS: NestedDichotomousModelListSchema,
-    bmds.constants.MULTI_TUMOR: MultiTumorModelListSchema,
+    bmds.constants.DICHOTOMOUS: DichotomousModellistSchema,
+    bmds.constants.DICHOTOMOUS_CANCER: DichotomousModellistSchema,
+    bmds.constants.CONTINUOUS: ContinuousModellistSchema,
+    bmds.constants.CONTINUOUS_INDIVIDUAL: ContinuousModellistSchema,
+    bmds.constants.NESTED_DICHOTOMOUS: NestedDichotomousModellistSchema,
+    bmds.constants.MULTI_TUMOR: MultiTumorModellistSchema,
 }
 
 

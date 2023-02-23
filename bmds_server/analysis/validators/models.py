@@ -45,7 +45,7 @@ class BayesianModelSchema(BaseModel):
     prior_weight: confloat(ge=0, le=1)
 
 
-class ModellistSchema(BaseModel):
+class ModelListSchema(BaseModel):
     frequentist_restricted: list[str] = []
     frequentist_unrestricted: list[str] = []
     bayesian: list[BayesianModelSchema] = []
@@ -98,29 +98,29 @@ class ModellistSchema(BaseModel):
         return values
 
 
-class DichotomousModellistSchema(ModellistSchema):
+class DichotomousModelListSchema(ModelListSchema):
     model_schema: ModelTypeSchema = DichotomousModelSchema
 
 
-class ContinuousModellistSchema(ModellistSchema):
+class ContinuousModelListSchema(ModelListSchema):
     model_schema: ModelTypeSchema = ContinuousModelSchema
 
 
-class NestedDichotomousModellistSchema(ModellistSchema):
+class NestedDichotomousModelListSchema(ModelListSchema):
     model_schema: ModelTypeSchema = NestedDichotomousModelSchema
 
 
-class MultiTumorModellistSchema(ModellistSchema):
+class MultiTumorModelListSchema(ModelListSchema):
     model_schema: ModelTypeSchema = MultiTumorModelSchema
 
 
 schema_map = {
-    bmds.constants.DICHOTOMOUS: DichotomousModellistSchema,
-    bmds.constants.DICHOTOMOUS_CANCER: DichotomousModellistSchema,
-    bmds.constants.CONTINUOUS: ContinuousModellistSchema,
-    bmds.constants.CONTINUOUS_INDIVIDUAL: ContinuousModellistSchema,
-    bmds.constants.NESTED_DICHOTOMOUS: NestedDichotomousModellistSchema,
-    bmds.constants.MULTI_TUMOR: MultiTumorModellistSchema,
+    bmds.constants.DICHOTOMOUS: DichotomousModelListSchema,
+    bmds.constants.DICHOTOMOUS_CANCER: DichotomousModelListSchema,
+    bmds.constants.CONTINUOUS: ContinuousModelListSchema,
+    bmds.constants.CONTINUOUS_INDIVIDUAL: ContinuousModelListSchema,
+    bmds.constants.NESTED_DICHOTOMOUS: NestedDichotomousModelListSchema,
+    bmds.constants.MULTI_TUMOR: MultiTumorModelListSchema,
 }
 
 

@@ -1,4 +1,4 @@
-from typing import Optional, Tuple
+from typing import Optional
 
 from django.conf import settings
 from django.contrib.admin.views.decorators import staff_member_required
@@ -48,7 +48,7 @@ class Analytics(TemplateView):
         return super().get_context_data(**kwargs)
 
 
-def get_analysis_or_404(pk: str, password: Optional[str] = "") -> Tuple[models.Analysis, bool]:
+def get_analysis_or_404(pk: str, password: Optional[str] = "") -> tuple[models.Analysis, bool]:
     """Return an analysis object and if a correct password is provided for this object.
 
     Args:
@@ -56,7 +56,7 @@ def get_analysis_or_404(pk: str, password: Optional[str] = "") -> Tuple[models.A
         password (Optional[str]): A edit password for this analysis
 
     Returns:
-        Tuple[models.Analysis, bool]: An analysis object and if it has a correct password
+        tuple[models.Analysis, bool]: An analysis object and if it has a correct password
 
     Raises:
         Http404: if the selected object cannot be found

@@ -1,5 +1,6 @@
 import subprocess
 from datetime import datetime
+from typing import Self
 
 from pydantic import BaseModel
 
@@ -9,7 +10,7 @@ class Commit(BaseModel):
     dt: datetime
 
     @classmethod
-    def current(cls, cwd: str = ".") -> "Commit":
+    def current(cls, cwd: str = ".") -> Self:
         """Return information on the last commit at the repository path desired.
 
         Returns:

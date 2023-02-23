@@ -1,7 +1,7 @@
 import logging
 from pprint import pformat
 from textwrap import dedent
-from typing import Any, Dict
+from typing import Any
 
 from django.conf import settings
 from django.contrib.admin.views.decorators import staff_member_required
@@ -53,7 +53,7 @@ class AdminLoginView(LoginView):
             return HttpResponseRedirect(reverse("external_auth"))
         return super().dispatch(request, *args, **kwargs)
 
-    def get_context_data(self, **kwargs: Any) -> Dict[str, Any]:
+    def get_context_data(self, **kwargs: Any) -> dict[str, Any]:
         context = super().get_context_data(**kwargs)
         context["auth_providers"] = settings.AUTH_PROVIDERS
         return context
@@ -64,7 +64,7 @@ class AdminLoginView(LoginView):
 
 
 class ExternalAuth(View):
-    def get_user_metadata(self, request) -> Dict:
+    def get_user_metadata(self, request) -> dict:
         """
         Retrieve user metadata from request to use for authentication.
 
@@ -75,7 +75,7 @@ class ExternalAuth(View):
             request: incoming request
 
         Returns:
-            Dict: user metadata; must include "email" and "username" keys
+            dict: user metadata; must include "email" and "username" keys
         """
         raise NotImplementedError("Deployment specific; requires implementation")
 

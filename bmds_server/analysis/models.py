@@ -4,7 +4,7 @@ import uuid
 from copy import deepcopy
 from datetime import timedelta
 from io import BytesIO
-from typing import Dict, List, Optional
+from typing import Optional
 
 import bmds
 import pandas as pd
@@ -145,7 +145,7 @@ class Analysis(models.Model):
             raise ValueError("Session cannot be returned")
         return executor.AnalysisSession.deserialize(deepcopy(self.outputs["outputs"][index]))
 
-    def get_sessions(self) -> List[executor.AnalysisSession]:
+    def get_sessions(self) -> list[executor.AnalysisSession]:
         if not self.is_finished or self.has_errors:
             raise ValueError("Session cannot be returned")
         return [
@@ -154,7 +154,7 @@ class Analysis(models.Model):
         ]
 
     def to_batch(self) -> BmdsSessionBatch:
-        # convert List[executor.AnalysisSession] to List[bmds.BmdsSession]
+        # convert list[executor.AnalysisSession] to list[bmds.BmdsSession]
         items = []
         for session in self.get_sessions():
             if session.frequentist:
@@ -211,7 +211,7 @@ class Analysis(models.Model):
             self.handle_execution_error(err)
 
     def try_run_session(
-        self, inputs: Dict, dataset_index: int, option_index: int
+        self, inputs: dict, dataset_index: int, option_index: int
     ) -> AnalysisSessionSchema:
         try:
             return executor.AnalysisSession.run(inputs, dataset_index, option_index)
@@ -285,7 +285,7 @@ class Analysis(models.Model):
         self.deletion_date = None  # don't delete; save for troubleshooting
         self.save()
 
-    def default_input(self) -> Dict:
+    def default_input(self) -> dict:
         return {
             "bmds_version": bmds.constants.BMDS330,
             "dataset_type": Dtype.DICHOTOMOUS,
@@ -339,7 +339,7 @@ class Content(models.Model):
         super().save(*args, **kwargs)
         self.update_cache()
 
-    def update_cache(self) -> Dict:
+    def update_cache(self) -> dict:
         key = self.cache_name(self.content_type)
         cache.set(key, self.content, 3600)  # cache for an hour
         return self.content
@@ -349,7 +349,7 @@ class Content(models.Model):
         return f"{cls._meta.db_table}-{content_type}"
 
     @classmethod
-    def get_cached_content(cls, content_type: ContentType) -> Dict:
+    def get_cached_content(cls, content_type: ContentType) -> dict:
         key = cls.cache_name(content_type)
         content = cache.get(key)
         if content is None:

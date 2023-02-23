@@ -1,5 +1,3 @@
-from typing import Dict
-
 import bmds
 from bmds.bmds3.recommender import RecommenderSettings
 
@@ -11,12 +9,12 @@ from .selectors import AnalysisSelectedSchema  # noqa: F401
 from .session import validate_session
 
 
-def validate_input(data: Dict, partial: bool = False) -> None:
+def validate_input(data: dict, partial: bool = False) -> None:
     """
     Validate input payload.
 
     Args:
-        data (Dict): the data payload
+        data (dict): the data payload
         partial (bool): validate a partial input
 
     Raises:

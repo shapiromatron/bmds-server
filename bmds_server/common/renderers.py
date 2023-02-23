@@ -1,6 +1,6 @@
 import json
 from io import BytesIO, StringIO
-from typing import NamedTuple, Union
+from typing import NamedTuple
 
 import matplotlib.pyplot as plt
 from matplotlib.axes import Axes
@@ -25,7 +25,7 @@ class XlsxRenderer(BaseRenderer):
     media_type = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
     format = "xlsx"
 
-    def render(self, dataset: Union[dict, BinaryFile], media_type=None, renderer_context=None):
+    def render(self, dataset: dict | BinaryFile, media_type=None, renderer_context=None):
         if isinstance(dataset, dict):
             return json.dumps(dataset).encode()
 
@@ -38,7 +38,7 @@ class DocxRenderer(BaseRenderer):
     media_type = "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
     format = "docx"
 
-    def render(self, dataset: Union[dict, BinaryFile], media_type=None, renderer_context=None):
+    def render(self, dataset: dict | BinaryFile, media_type=None, renderer_context=None):
         if isinstance(dataset, dict):
             return json.dumps(dataset).encode()
 

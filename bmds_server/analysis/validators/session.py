@@ -1,4 +1,4 @@
-from typing import Any, Literal, Optional, Union
+from typing import Any, Literal
 
 import bmds
 from pydantic import BaseModel, conlist
@@ -9,7 +9,7 @@ _versions = Literal[bmds.constants.BMDS330]
 
 
 class BaseSession(BaseModel):
-    id: Optional[Union[int, str]]
+    id: int | str | None
     bmds_version: _versions
     description: str = ""
     dataset_type: bmds.constants.ModelClass

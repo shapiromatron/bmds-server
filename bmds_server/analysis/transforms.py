@@ -1,6 +1,5 @@
 from copy import deepcopy
 from enum import Enum
-from typing import Union
 
 import bmds
 from bmds.bmds3.types.continuous import ContinuousModelSettings
@@ -35,7 +34,7 @@ def build_model_settings(
     prior_class: str,
     options: dict,
     dataset_options: dict,
-) -> Union[DichotomousModelSettings, ContinuousModelSettings]:
+) -> DichotomousModelSettings | ContinuousModelSettings:
     prior_class = bmd3_prior_map[prior_class]
     if dataset_type in bmds.constants.DICHOTOMOUS_DTYPES:
         return DichotomousModelSettings(

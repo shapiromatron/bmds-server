@@ -1,5 +1,5 @@
 from copy import deepcopy
-from enum import Enum
+from enum import StrEnum
 
 import bmds
 from bmds.bmds3.types.continuous import ContinuousModelSettings
@@ -11,7 +11,7 @@ from bmds.constants import Dtype
 from .validators.datasets import AdverseDirection
 
 
-class PriorEnum(str, Enum):
+class PriorEnum(StrEnum):
     frequentist_restricted = "frequentist_restricted"
     frequentist_unrestricted = "frequentist_unrestricted"
     bayesian = "bayesian"

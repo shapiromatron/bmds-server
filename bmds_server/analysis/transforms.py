@@ -1,6 +1,5 @@
 from copy import deepcopy
-from enum import Enum
-from typing import Dict, List, Union
+from enum import StrEnum
 
 import bmds
 from bmds.bmds3.types.continuous import ContinuousModelSettings
@@ -12,7 +11,7 @@ from bmds.constants import Dtype
 from .validators.datasets import AdverseDirection
 
 
-class PriorEnum(str, Enum):
+class PriorEnum(StrEnum):
     frequentist_restricted = "frequentist_restricted"
     frequentist_unrestricted = "frequentist_unrestricted"
     bayesian = "bayesian"
@@ -33,9 +32,9 @@ is_increasing_map = {
 def build_model_settings(
     dataset_type: str,
     prior_class: str,
-    options: Dict,
-    dataset_options: Dict,
-) -> Union[DichotomousModelSettings, ContinuousModelSettings]:
+    options: dict,
+    dataset_options: dict,
+) -> DichotomousModelSettings | ContinuousModelSettings:
     prior_class = bmd3_prior_map[prior_class]
     if dataset_type in bmds.constants.DICHOTOMOUS_DTYPES:
         return DichotomousModelSettings(
@@ -70,7 +69,7 @@ def build_model_settings(
         raise ValueError(f"Unknown dataset_type: {dataset_type}")
 
 
-def build_dataset(dataset: Dict[str, List[float]]) -> bmds.datasets.DatasetType:
+def build_dataset(dataset: dict[str, list[float]]) -> bmds.datasets.DatasetType:
     dataset_type = dataset["dtype"]
     if dataset_type == Dtype.CONTINUOUS:
         schema = bmds.datasets.ContinuousDatasetSchema
@@ -85,7 +84,7 @@ def build_dataset(dataset: Dict[str, List[float]]) -> bmds.datasets.DatasetType:
     return schema.parse_obj(dataset).deserialize()
 
 
-def remap_exponential(models: List[str]) -> List[str]:
+def remap_exponential(models: list[str]) -> list[str]:
     # recursively expand user-specified "exponential" model into M3 and M5
     if bmds.constants.M_Exponential in models:
         models = models.copy()  # return a copy so inputs are unchanged
@@ -94,7 +93,7 @@ def remap_exponential(models: List[str]) -> List[str]:
     return models
 
 
-def remap_bayesian_exponential(models: List[Dict]) -> List[Dict]:
+def remap_bayesian_exponential(models: list[dict]) -> list[dict]:
     for i, model in enumerate(models):
         if model["model"] == bmds.constants.M_Exponential:
             models = deepcopy(models)

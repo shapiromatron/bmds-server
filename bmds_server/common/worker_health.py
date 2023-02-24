@@ -1,5 +1,4 @@
 from datetime import datetime, timedelta, timezone
-from typing import Dict
 
 import matplotlib.pyplot as plt
 import numpy as np
@@ -56,7 +55,7 @@ class WorkerHealthcheck:
         series = self.series()
         return event_plot(series)
 
-    def stats(self) -> Dict:
+    def stats(self) -> dict:
         inspect = app.control.inspect()
         stats = dict(ping=inspect.ping())
         if stats["ping"]:

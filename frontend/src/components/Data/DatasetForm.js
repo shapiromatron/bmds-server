@@ -124,12 +124,12 @@ class DatasetForm extends Component {
                             {columnNames.map((item, index) => (
                                 <th key={index}>{columnHeaders[item]}</th>
                             ))}
-                            <td style={{width: 100}}>
+                            <th style={{width: 100}}>
                                 <Button
                                     className="btn btn-primary"
                                     title="Add row"
                                     onClick={dataStore.addRow}
-                                    icon="plus-square-fill"
+                                    icon="plus-circle"
                                 />
                                 &nbsp;
                                 <Button
@@ -138,7 +138,7 @@ class DatasetForm extends Component {
                                     onClick={dataStore.toggleDatasetModal}
                                     icon="table"
                                 />
-                            </td>
+                            </th>
                         </tr>
                     </thead>
                     <tbody>

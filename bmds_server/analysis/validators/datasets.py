@@ -1,5 +1,5 @@
 from enum import IntEnum
-from typing import Any, ClassVar, Union
+from typing import Any, ClassVar
 
 import bmds
 from bmds.datasets import (
@@ -87,7 +87,7 @@ class DichotomousDatasets(DatasetValidator):
 class ContinuousDatasets(DatasetValidator):
     dataset_options: conlist(ContinuousModelOptions, min_items=1, max_items=10)
     datasets: conlist(
-        Union[MaxContinuousDatasetSchema, MaxContinuousIndividualDatasetSchema],
+        MaxContinuousDatasetSchema | MaxContinuousIndividualDatasetSchema,
         min_items=1,
         max_items=10,
     )

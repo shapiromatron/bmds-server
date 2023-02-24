@@ -1,4 +1,4 @@
-from typing import Any, List, Set
+from typing import Any
 
 import bmds
 import numpy as np
@@ -9,9 +9,9 @@ from ...common.validation import pydantic_validate
 
 
 class ModelTypeSchema(BaseModel):
-    restricted: Set[str]
-    unrestricted: Set[str]
-    bayesian: Set[str]
+    restricted: set[str]
+    unrestricted: set[str]
+    bayesian: set[str]
 
 
 DichotomousModelSchema = ModelTypeSchema(
@@ -46,9 +46,9 @@ class BayesianModelSchema(BaseModel):
 
 
 class ModelListSchema(BaseModel):
-    frequentist_restricted: List[str] = []
-    frequentist_unrestricted: List[str] = []
-    bayesian: List[BayesianModelSchema] = []
+    frequentist_restricted: list[str] = []
+    frequentist_unrestricted: list[str] = []
+    bayesian: list[BayesianModelSchema] = []
     model_schema: ModelTypeSchema
 
     @validator("bayesian")

@@ -1,7 +1,7 @@
-from enum import Enum, IntEnum
+from enum import IntEnum, StrEnum
 
 
-class AuthProvider(str, Enum):
+class AuthProvider(StrEnum):
     django = "django"
     external = "external"
 

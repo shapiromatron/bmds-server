@@ -1,4 +1,4 @@
-.PHONY: build clean clean-test clean-pyc clean-build docs loc help lint lint-py lint-js format format-py format-js sync-dev
+.PHONY: build clean clean-test clean-pyc clean-build docs docs-serve loc help lint lint-py lint-js format format-py format-js sync-dev
 .DEFAULT_GOAL := help
 
 define BROWSER_PYSCRIPT
@@ -57,10 +57,11 @@ test-integration-debug:  ## Run integration tests in debug mode (requires npm ru
 	@playwright install --with-deps chromium
 	@INTEGRATION_TESTS=1 PWDEBUG=1 py.test -sv tests/integration/
 
-docs: ## generate Sphinx HTML documentation, including API docs
-	$(MAKE) -C docs clean
-	$(MAKE) -C docs html
-	$(BROWSER) docs/_build/html/index.html
+docs: ## Build documentation
+	cd docs; mkdocs build --strict
+
+docs-serve: ## Serve documentation for writing
+	cd docs; mkdocs serve -a localhost:8050
 
 loc: ## Generate lines of code report
 	@cloc \

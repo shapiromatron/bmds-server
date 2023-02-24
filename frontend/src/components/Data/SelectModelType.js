@@ -17,7 +17,7 @@ class SelectModelType extends Component {
                     className="btn btn-primary btn-sm float-right"
                     title="Can add up to 6 datasets"
                     disabled={!dataStore.canAddNewDataset}
-                    icon="plus-square-fill"
+                    icon="plus-circle"
                     text="New"
                     onClick={dataStore.addDataset}
                 />

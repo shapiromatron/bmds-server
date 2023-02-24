@@ -1,6 +1,6 @@
 import itertools
 from copy import deepcopy
-from typing import Dict, NamedTuple, Optional
+from typing import NamedTuple, Optional, Self
 
 import bmds
 import numpy as np
@@ -72,7 +72,7 @@ def build_frequentist_session(dataset, inputs, options, dataset_options) -> Opti
 
 
 def build_bayesian_session(
-    dataset: bmds.datasets.DatasetType, inputs: Dict, options: Dict, dataset_options: Dict
+    dataset: bmds.datasets.DatasetType, inputs: dict, options: dict, dataset_options: dict
 ) -> Optional[BmdsSession]:
     models = inputs["models"].get(PriorEnum.bayesian, [])
 
@@ -123,7 +123,7 @@ class AnalysisSession(NamedTuple):
     bayesian: Optional[BmdsSession]
 
     @classmethod
-    def run(cls, inputs: Dict, dataset_index: int, option_index: int) -> AnalysisSessionSchema:
+    def run(cls, inputs: dict, dataset_index: int, option_index: int) -> AnalysisSessionSchema:
         # TODO - replace in BMDS 3.4
         if inputs["dataset_type"] == bmds.constants.NESTED_DICHOTOMOUS:
             return _mock_nested_dichotomous(inputs, dataset_index, option_index)
@@ -135,7 +135,7 @@ class AnalysisSession(NamedTuple):
         return session.to_schema()
 
     @classmethod
-    def create(cls, inputs: Dict, dataset_index: int, option_index: int) -> "AnalysisSession":
+    def create(cls, inputs: dict, dataset_index: int, option_index: int) -> Self:
         dataset = build_dataset(inputs["datasets"][dataset_index])
         options = inputs["options"][option_index]
         dataset_options = inputs["dataset_options"][dataset_index]
@@ -147,7 +147,7 @@ class AnalysisSession(NamedTuple):
         )
 
     @classmethod
-    def deserialize(cls, data: Dict) -> "AnalysisSession":
+    def deserialize(cls, data: dict) -> Self:
         obj = AnalysisSessionSchema.parse_obj(data)
         return cls(
             dataset_index=obj.dataset_index,
@@ -179,7 +179,7 @@ class AnalysisSession(NamedTuple):
         return self.to_schema().dict()
 
 
-def _mock_results(inputs: Dict, dataset_index: int, option_index: int) -> dict:
+def _mock_results(inputs: dict, dataset_index: int, option_index: int) -> dict:
     # TODO - replace in BMDS 3.4
     models = []
     for model_name in itertools.chain(inputs["models"]["frequentist_restricted"]):
@@ -213,12 +213,12 @@ def _mock_results(inputs: Dict, dataset_index: int, option_index: int) -> dict:
     }
 
 
-def _mock_nested_dichotomous(inputs: Dict, dataset_index: int, option_index: int) -> dict:
+def _mock_nested_dichotomous(inputs: dict, dataset_index: int, option_index: int) -> dict:
     # TODO - replace in BMDS 3.4
     return _mock_results(inputs, dataset_index, option_index)
 
 
-def _mock_multitumor(inputs: Dict, dataset_index: int, option_index: int) -> dict:
+def _mock_multitumor(inputs: dict, dataset_index: int, option_index: int) -> dict:
     # TODO - replace in BMDS 3.4
     results = _mock_results(inputs, dataset_index, option_index)
     results["frequentist"]["combined"] = deepcopy(results["frequentist"]["models"][0]["results"])

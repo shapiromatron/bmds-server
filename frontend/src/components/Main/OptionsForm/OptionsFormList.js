@@ -79,7 +79,7 @@ class OptionsFormList extends Component {
                                                 className="btn btn-primary"
                                                 disabled={!optionsStore.canAddNewOption}
                                                 onClick={optionsStore.addOptions}
-                                                icon="plus-square-fill"
+                                                icon="plus-circle"
                                             />
                                         </th>
                                     ) : null}

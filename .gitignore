@@ -10,7 +10,7 @@ bmds_server/static/bundles/
 build/
 /data/
 dist/
-docs/_build/
+docs/site/
 node_modules/
 scripts/private
 /public/

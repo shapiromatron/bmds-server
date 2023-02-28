@@ -12,10 +12,6 @@ from ...common.utils import timeout_cache
 from ..models import Analysis
 
 
-def to_dict(fig) -> dict:
-    return json.loads(fig.to_json())
-
-
 def time_series() -> dict:
     stats = {}
 
@@ -30,7 +26,7 @@ def time_series() -> dict:
 
     # per day line chart
     fig = px.line(df, x="day", y="count", title="Analyses created per day", markers=True)
-    stats["fig_per_day_line"] = to_dict(fig)
+    stats["fig_per_day_line"] = fig
 
     # per day punchcard chart
     df.loc[:, "x"] = df.day.dt.year + df.day.dt.isocalendar().week / 52
@@ -39,7 +35,7 @@ def time_series() -> dict:
     ).dt.strftime("%b %d")
     df.loc[:, "y"] = df.day.dt.day_of_week  # Monday=0, Sunday=6
 
-    stats["fig_per_day_punchard"] = {}
+    stats["fig_per_day_punchard"] = None
     if df.y.unique().size == 7:
         fig = px.imshow(
             df.pivot(index="y", columns="x", values="count").fillna(0).values,
@@ -48,7 +44,7 @@ def time_series() -> dict:
             x=df.xlabel.unique(),
             color_continuous_scale="mint",
         )
-        stats["fig_per_day_punchard"] = to_dict(fig)
+        stats["fig_per_day_punchard"] = fig
 
     # per week
     df = pd.DataFrame(
@@ -59,7 +55,7 @@ def time_series() -> dict:
         .values("week", "count")
     )
     fig = px.line(df, x="week", y="count", title="Analyses created per week", markers=True)
-    stats["fig_per_week"] = to_dict(fig)
+    stats["fig_per_week"] = fig
 
     # per month
     df = pd.DataFrame(
@@ -70,7 +66,7 @@ def time_series() -> dict:
         .values("month", "count")
     )
     fig = px.bar(df, x="month", y="count", title="Analyses created per month", text_auto=True)
-    stats["fig_per_month"] = to_dict(fig)
+    stats["fig_per_month"] = fig
     return stats
 
 
@@ -99,7 +95,7 @@ def successes() -> dict:
         text_auto=True,
         color_discrete_sequence=["goldenrod", "royalblue"],
     )
-    stats["fig_completions_per_week"] = to_dict(fig)
+    stats["fig_completions_per_week"] = fig
 
     completed_filter = ExpressionWrapper(
         Q(ended__isnull=False) & Q(outputs__outputs__isnull=False), output_field=BooleanField()
@@ -122,7 +118,7 @@ def successes() -> dict:
         text_auto=True,
         color_discrete_sequence=["goldenrod", "royalblue"],
     )
-    stats["fig_completions_per_month"] = to_dict(fig)
+    stats["fig_completions_per_month"] = fig
 
     return stats
 
@@ -164,20 +160,20 @@ def datasets() -> dict:
         labels=dict(x="# option sets", y="# datasets", color="# analyses"),
         color_continuous_scale="mint",
     )
-    stats["fig_n_dataset_option"] = to_dict(fig)
+    stats["fig_n_dataset_option"] = fig
 
     fig = px.bar(df.groupby("n_dataset")["count"].sum(), text_auto=True)
-    stats["fig_n_dataset"] = to_dict(fig)
+    stats["fig_n_dataset"] = fig
 
     fig = px.bar(df.groupby("n_options")["count"].sum(), text_auto=True)
-    stats["fig_n_options"] = to_dict(fig)
+    stats["fig_n_options"] = fig
 
     df = pd.DataFrame(data=data_types.items(), columns=["data_type", "count"])
     df.loc[:, "data_type"] = df.data_type.map(
         {"C": "Continuous", "CI": "Countinuous Individual", "D": "Dichotomous"}
     )
     fig = px.pie(df, names="data_type", values="count", hole=0.6, title="Runs by data type")
-    stats["fig_by_type"] = to_dict(fig)
+    stats["fig_by_type"] = fig
 
     # cross tab
     df = pd.DataFrame(
@@ -213,7 +209,7 @@ def runtime() -> dict:
     )
     data = pd.Series(pd.Series(qs).dt.total_seconds(), name="Runtime (s)")
     fig = px.box(data, log_y=True)
-    stats["fig_boxplot"] = to_dict(fig)
+    stats["fig_boxplot"] = fig
     stats["stats"] = data.describe().to_dict()
 
     failures = Analysis.objects.filter(started__isnull=False, ended__isnull=True).order_by(

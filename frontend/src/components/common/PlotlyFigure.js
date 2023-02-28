@@ -6,7 +6,14 @@ import Plot from "react-plotly.js";
 class PlotlyFigure extends Component {
     render() {
         const {data, layout} = this.props;
-        return <Plot data={data} layout={layout} style={{width: "100%"}} useResizeHandler={true} />;
+        return (
+            <Plot
+                data={data}
+                layout={layout}
+                style={{height: "100%", width: "100%"}}
+                useResizeHandler={true}
+            />
+        );
     }
 }
 PlotlyFigure.propTypes = {

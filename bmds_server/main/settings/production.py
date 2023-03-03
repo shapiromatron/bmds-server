@@ -24,7 +24,7 @@ else:
 
 SESSION_COOKIE_SECURE = bool(os.environ.get("DJANGO_HTTPS_ONLY") == "True")
 CSRF_COOKIE_SECURE = bool(os.environ.get("DJANGO_HTTPS_ONLY") == "True")
-
+CSRF_TRUSTED_ORIGINS = os.environ["DJANGO_CSRF_TRUSTED_ORIGINS"].split("|")
 ALLOWED_HOSTS = os.environ["DJANGO_ALLOWED_HOSTS"].split("|")
 SECRET_KEY = os.environ["DJANGO_SECRET_KEY"]
 ADMIN_URL_PREFIX = os.environ["ADMIN_URL_PREFIX"]

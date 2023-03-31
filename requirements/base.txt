@@ -17,4 +17,4 @@ celery==5.2.7
   kombu==5.2.4
 
 plotly==5.13.0
-redis==4.4.2
+redis==4.4.4

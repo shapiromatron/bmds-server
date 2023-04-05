@@ -34,7 +34,7 @@ goto :eof
 
 :sync-dev
 python -m pip install -U pip
-pip install -r requirements/dev.txt
+pip install -r requirements/dev.txt --trusted-host=pypi.org --trusted-host=files.pythonhosted.org
 yarn --cwd frontend
 manage.py migrate
 goto :eof

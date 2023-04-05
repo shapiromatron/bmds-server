@@ -34,11 +34,11 @@ python -m venv venv
 source ./venv/bin/activate
 
 # install requirements
-./venv/bin/pip install -r ./requirements/dev.txt
+./venv/bin/pip install -r ./requirements/dev.txt --trusted-host=pypi.org --trusted-host=files.pythonhosted.org
 
 # install package in developer mode and developer tools
-pip install -e ../bmds
-pip install -r requirements/dev.txt
+pip install -e ../bmds --trusted-host=pypi.org --trusted-host=files.pythonhosted.org
+pip install -r requirements/dev.txt --trusted-host=pypi.org --trusted-host=files.pythonhosted.org
 
 # create the database
 createuser --superuser --no-password bmds-online

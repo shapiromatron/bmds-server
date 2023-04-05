@@ -249,9 +249,9 @@ class Analysis(models.Model):
 
         bmds_python_version = None
         for output in outputs[0]:
-            print(f'OUTPUT:{output}', end='\n\n')
+            print(f"OUTPUT:{output}", end="\n\n")
 
-            if output !='metadata':
+            if output != "metadata":
                 if output["frequentist"] is not None:
                     bmds_python_version = output.frequentist["version"]
                     break

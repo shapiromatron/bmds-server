@@ -205,7 +205,7 @@ def _mock_results(inputs: dict, dataset_index: int, option_index: int) -> dict:
         "frequentist": {
             "models": models,
             "dataset": inputs["datasets"][dataset_index],
-            "version": {"string": "BMDS330", "pretty":"3.3.0", "numeric": [3, 3, 0]},
+            "version": {"string": "BMDS330", "pretty": "3.3.0", "numeric": [3, 3, 0]},
             "selected": {"notes": "", "model_index": None},
             "recommender": None,
             "model_average": None,

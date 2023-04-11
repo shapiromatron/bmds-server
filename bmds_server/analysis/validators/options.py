@@ -47,7 +47,7 @@ class ContinuousOptions(BaseModel):
 
 
 class NestedDichotomousOptions(BaseModel):
-    options: conlist(NestedDichotomousOption, min_items=1, max_items=10)
+    options: conlist(NestedDichotomousOption, min_items=1, max_items=1000)
 
 
 def validate_options(dataset_type: str, data: Any):

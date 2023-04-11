@@ -38,7 +38,13 @@ class DatasetModelOptionList extends Component {
                             <th>Adverse Direction</th>
                         </tr>
                     ) : null}
-                    {dtype == Dtype.DICHOTOMOUS || dtype == Dtype.MULTI_TUMOR ? (
+                    {dtype == Dtype.MULTI_TUMOR ? (
+                        <tr className="bg-custom">
+                            <th>Enabled</th>
+                            <th>Dataset</th>
+                        </tr>
+                    ) : null}
+                    {dtype == Dtype.DICHOTOMOUS ? (
                         <tr className="bg-custom">
                             <th>Enabled</th>
                             <th>Dataset</th>

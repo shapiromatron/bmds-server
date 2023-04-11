@@ -126,8 +126,7 @@ class TestInputValidation:
                 "bmr_value": 1.0,
                 "confidence_level": 0.95,
                 "litter_specific_covariate": 1,
-                "background": 1,
-                "bootstrap_iterations": 1,
+                "bootstrap_iterations": 1000,
                 "bootstrap_seed": 0,
             }
         ]

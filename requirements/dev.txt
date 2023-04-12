@@ -19,9 +19,7 @@ pytest-playwright==0.3.0
 
 # lint and formatting tools
 black==23.3.0
-flake8==6.0.0
-flake8-isort==6.0.0
-isort==5.11.4
+ruff==0.0.261
 
 # install in editable mode
 -e .

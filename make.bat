@@ -22,14 +22,14 @@ echo.  sync-dev     sync dev environment after code checkout
 echo.  docs         make documentation
 echo.  docs-serve   serve documentation for writing
 echo.  test         perform both test-py and test-js
-echo.  lint         perform both lint-py and lint-js
-echo.  format       perform both format-py and lint-js
 echo.  test-py      run python tests
-echo.  lint-py      check for pytho formatting issues via black and flake8
-echo.  format-py    modify python code using black and show flake8 issues
 echo.  test-js      run javascript tests
-echo.  lint-js      check for javascript formatting issues
-echo.  format-js    modify javascript code if possible using linters and formatters
+echo.  lint         check formatting issues
+echo.  lint-py      check python formatting issues
+echo.  lint-js      check javascript formatting issues
+echo.  format       fix formatting issues where possible
+echo.  format-py    fix python formatting issues where possible
+echo.  format-js    fix javascript formatting issues where possible
 goto :eof
 
 :sync-dev
@@ -48,21 +48,21 @@ mkdocs serve -f docs/mkdocs.yml -a localhost:8050
 goto :eof
 
 :lint
-black . --check && flake8 .
+black . --check && ruff .
 npm --prefix .\frontend run lint
 goto :eof
 
 :format
-black . && isort . && flake8 .
+black . && ruff . --fix
 npm --prefix .\frontend run format
 goto :eof
 
 :lint-py
-black . --check && flake8 .
+black . --check && ruff .
 goto :eof
 
 :format-py
-black . && isort -q . && flake8 .
+black . && ruff . --fix
 goto :eof
 
 :lint-js

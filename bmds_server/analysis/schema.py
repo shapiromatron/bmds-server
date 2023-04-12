@@ -1,5 +1,4 @@
 from io import StringIO
-from typing import Optional
 
 import pandas as pd
 from bmds.bmds3.types.sessions import VersionSchema
@@ -23,16 +22,16 @@ class WrappedAnalysisSelectedSchema(BaseModel):
 class AnalysisSessionSchema(BaseModel):
     dataset_index: int
     option_index: int
-    frequentist: Optional[dict]
-    bayesian: Optional[dict]
-    error: Optional[str]
+    frequentist: dict | None
+    bayesian: dict | None
+    error: str | None
 
 
 class AnalysisOutput(BaseModel):
     analysis_id: str
     analysis_schema_version: str = "1.0"
     bmds_server_version: str
-    bmds_python_version: Optional[VersionSchema]
+    bmds_python_version: VersionSchema | None
     outputs: list[AnalysisSessionSchema]
 
 
@@ -40,7 +39,7 @@ class PolyKInput(BaseModel):
     dataset: str
     dose_units: str
     power: confloat(ge=0, le=5) = 3
-    duration: Optional[confloat(ge=0, le=10_000)] = None
+    duration: confloat(ge=0, le=10000) | None = None
 
     @validator("dataset")
     def check_dataset(cls, value):

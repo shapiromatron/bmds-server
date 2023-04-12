@@ -104,7 +104,6 @@ class TestAnalysisSession:
             data["models"] = {"frequentist_restricted": ["Multistage"]}
             data["dataset_options"][0]["degree"] = 0  # n-1
             session = AnalysisSession.create(data, 0, 0)
-            print(f"{num_doses=} {expected_degree=}")
             _expected_degree(session, expected_degree)
 
         # degree = N -1, bayesian, fixed at degree == 2

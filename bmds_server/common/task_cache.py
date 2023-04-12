@@ -1,6 +1,6 @@
 import abc
 from enum import IntEnum
-from typing import Any, Optional
+from typing import Any
 
 from django.core.cache import cache
 from pydantic import BaseModel
@@ -13,9 +13,9 @@ class ReportStatus(IntEnum):
 
 class ReportResponse(BaseModel):
     status: ReportStatus
-    content: Optional[Any]
-    header: Optional[str]
-    message: Optional[str]
+    content: Any | None
+    header: str | None
+    message: str | None
 
 
 class ReportCache(abc.ABC):

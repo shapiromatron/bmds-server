@@ -33,7 +33,6 @@ class NestedDichotomousOption(BaseModel):
     bmr_value: float
     confidence_level: confloat(ge=0.5, le=1)
     litter_specific_covariate: NestedDichotomousLSCType
-    background: NestedDichotomousBackgroundType
     bootstrap_iterations: int
     bootstrap_seed: int
 

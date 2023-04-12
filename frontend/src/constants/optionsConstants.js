@@ -23,7 +23,6 @@ export const options = {
             bmr_value: 0.1,
             confidence_level: 0.95,
             litter_specific_covariate: 1,
-            background: 1,
             bootstrap_iterations: 1000,
             bootstrap_seed: 0,
         },

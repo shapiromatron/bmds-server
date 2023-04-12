@@ -160,7 +160,6 @@ class TestAnalysisSession:
 
     # disttype 3 Linear and power are not added
     def test_disttype(self, bmds3_complete_continuous):
-
         data = deepcopy(bmds3_complete_continuous)
         data["models"] = {
             "frequentist_restricted": ["Exponential", "Hill", "Linear", "Power"],

@@ -11,7 +11,6 @@ def remove_revisions(apps, schema_editor):
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ("analysis", "0002_fixtures"),
         ("reversion", "0001_squashed_0004_auto_20160611_1202"),

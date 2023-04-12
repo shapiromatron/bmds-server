@@ -10,7 +10,6 @@ class Command(BaseCommand):
     help = """Dump test database into a fixture."""
 
     def handle(self, *args, **options):
-
         if "fixture" not in settings.DATABASES["default"]["NAME"]:
             raise CommandError("Must be using a test database to execute.")
 

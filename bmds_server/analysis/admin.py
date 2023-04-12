@@ -34,15 +34,13 @@ class AnalysisAdmin(VersionAdmin):
         "deletion_date",
     )
 
+    @admin.display(description="View")
     def view_url(self, obj):
         return format_html(f"<a href='{obj.get_absolute_url()}'>View</a>")
 
-    view_url.short_description = "View"
-
+    @admin.display(description="Edit")
     def edit_url(self, obj):
         return format_html(f"<a href='{obj.get_edit_url()}'>Edit</a>")
-
-    edit_url.short_description = "Edit"
 
 
 @admin.register(models.Content)

@@ -129,20 +129,16 @@ Feature flags are enabled on the frontend so that if you're logged in as an admi
 - Change the URL to enable the `future` mode:
     - `http://127.0.0.1:8000/analysis/794236df-2684-4781-bb95-ad9a58293d15/gvl8lg6sayiw/?future=1`
 
-To view the new features without needing to log in you can disable the administrator login requirement by changing:
+Future mode can also be enabled via the local setting `ALWAYS_SHOW_FUTURE`. This will allow you to view the new features without needing to log in or enable `future` mode:
 
 ```python
-# bmds_server\analysis\views.py
-class AnalysisDetail(DetailView):
+# bmds_server\main\settings\local.py
     ...
-    def get_context_data(self, **kwargs):
-        ...
-        context["config"] = {
-            ...
-        "future": self.request.user.is_staff and bool(self.request.GET.get("future"))
-        }
+    # Shows future-flagged items without login/url parameter
+    ALWAYS_SHOW_FUTURE = True
+    ...
 ``` 
-to `"future": True,`.
+
 
 That's it! Now you should be able to view content that's coming soon!
 

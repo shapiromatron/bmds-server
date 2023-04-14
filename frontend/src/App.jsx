@@ -1,8 +1,8 @@
-import {autorun} from "mobx";
-import {inject, observer} from "mobx-react";
+import { autorun } from "mobx";
+import { inject, observer } from "mobx-react";
 import PropTypes from "prop-types";
-import React, {Component} from "react";
-import {HashRouter} from "react-router-dom";
+import React, { Component } from "react";
+import { HashRouter } from "react-router-dom";
 
 import Icon from "@/components/common/Icon";
 import Navigation from "@/components/Navigation";
@@ -17,14 +17,14 @@ class App extends Component {
 
         // update HTML document title
         autorun(() => {
-            const {analysis_name, canEdit} = this.props.mainStore,
+            const { analysis_name, canEdit } = this.props.mainStore,
                 verb = canEdit ? "Update Analysis" : "Analysis",
                 name = analysis_name ? analysis_name : "";
             document.title = ["BMDS Online", verb, name].join(" | ");
         });
     }
     render() {
-        const {analysis_name, canEdit, isFuture} = this.props.mainStore,
+        const { analysis_name, canEdit, isFuture } = this.props.mainStore,
             getHeader = () => {
                 if (canEdit) {
                     return "Update BMDS analysis";
@@ -54,4 +54,5 @@ class App extends Component {
 App.propTypes = {
     mainStore: PropTypes.object,
 };
+
 export default App;

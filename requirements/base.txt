@@ -7,6 +7,7 @@ djangorestframework==3.14.0
   uritemplate==4.1.1  # schema dependencies
   PyYAML==6.0
 django-reversion==5.0.4
+django_vite==2.0.2
 
 # db
 psycopg2-binary==2.9.6

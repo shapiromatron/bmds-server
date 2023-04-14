@@ -1,5 +1,5 @@
-import assert from "assert";
 import _ from "lodash";
+import {assert} from "vitest";
 
 const isClose = function(actual, expected, atol) {
         return assert.ok(Math.abs(actual - expected) < atol, `|${actual} - ${expected}| > ${atol}`);

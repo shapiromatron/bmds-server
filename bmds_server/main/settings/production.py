@@ -7,6 +7,7 @@ from ..constants import SkinStyle
 from .base import *
 
 DEBUG = False
+DJANGO_VITE_DEV_MODE = False
 
 # deployment environment
 SERVER_ROLE = os.environ["DJANGO_SERVER_ROLE"]

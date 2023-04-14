@@ -36,6 +36,7 @@ INSTALLED_APPS = [
     "rest_framework.authtoken",
     "webpack_loader",
     "reversion",
+    "django_vite",
     # Custom apps
     "bmds_server.common",
     "bmds_server.analysis",
@@ -232,3 +233,9 @@ WEBSITE_URI = os.getenv("WEBSITE_URI", "https://example.com")
 INCLUDE_ADMIN = bool(os.environ.get("INCLUDE_ADMIN", "True") == "True")
 
 INCLUDE_BETA_FEATURES = bool(os.environ.get("INCLUDE_BETA", "False") == "True")
+
+DJANGO_VITE_DEV_MODE = False
+DJANGO_VITE_ASSETS_PATH = BASE_DIR / "static" / "bundles"
+DJANGO_VITE_DEV_SERVER_PORT = 8199
+DJANGO_VITE_STATIC_URL_PREFIX = "/static/bundles/"
+DJANGO_VITE_MANIFEST_PATH = BASE_DIR / "static" / "bundles" / "manifest.json"

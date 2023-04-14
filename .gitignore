@@ -24,6 +24,7 @@ venv/
 *log
 .env
 .eslintcache
+.stylelintcache
 bmds_server/gitcommit.json
 bmds_server/main/settings/local.py
 bmds_server/webpack-stats.json

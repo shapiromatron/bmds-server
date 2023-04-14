@@ -75,7 +75,7 @@ goto :eof
 
 :test
 py.test
-npm --prefix .\frontend run test-windows
+npm --prefix .\frontend run test
 goto :eof
 
 :test-py
@@ -83,5 +83,5 @@ py.test
 goto :eof
 
 :test-js
-npm --prefix .\frontend run test-windows
+npm --prefix .\frontend run test
 goto :eof

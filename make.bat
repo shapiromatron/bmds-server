@@ -35,7 +35,7 @@ goto :eof
 :sync-dev
 python -m pip install -U pip
 pip install -r requirements/dev.txt
-yarn --cwd frontend
+npm --prefix .\frontend install
 manage.py migrate
 goto :eof
 

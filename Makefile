@@ -89,5 +89,5 @@ format-js:  ## Fix javascript formatting issues where possible
 sync-dev:  ## Sync dev environment after code checkout
 	python -m pip install -U pip
 	pip install -r requirements/dev.txt
-	yarn --cwd frontend
+	npm --prefix ./frontend install
 	manage.py migrate

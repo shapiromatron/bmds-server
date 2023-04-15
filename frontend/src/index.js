@@ -1,6 +1,6 @@
 import {Provider} from "mobx-react";
 import React from "react";
-import ReactDOM from "react-dom";
+import {createRoot} from 'react-dom/client';
 
 import App from "@/App";
 import {renderPlotlyFigure} from "@/components/common/PlotlyFigure";
@@ -23,8 +23,9 @@ const Root = (
 );
 
 const appStartup = function(el) {
+    const root = createRoot(el);
     history.log();
-    ReactDOM.render(Root, el);
+    root.render(Root);
 };
 
 window.app = {

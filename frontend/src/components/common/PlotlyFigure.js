@@ -1,6 +1,6 @@
 import PropTypes from "prop-types";
 import React, {Component} from "react";
-import ReactDOM from "react-dom";
+import {createRoot} from 'react-dom/client';
 import Plot from "react-plotly.js";
 
 class PlotlyFigure extends Component {
@@ -15,7 +15,8 @@ PlotlyFigure.propTypes = {
 };
 
 const renderPlotlyFigure = function(el, data) {
-    ReactDOM.render(<PlotlyFigure {...data} />, el);
+    const root = createRoot(el);
+    root.render(<PlotlyFigure {...data} />);
 };
 
 export {renderPlotlyFigure};

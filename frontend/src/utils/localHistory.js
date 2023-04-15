@@ -1,7 +1,7 @@
 import _ from "lodash";
 import PropTypes from "prop-types";
 import React from "react";
-import ReactDOM from "react-dom";
+import {createRoot} from 'react-dom/client';
 
 import Icon from "@/components/common/Icon";
 
@@ -95,8 +95,9 @@ class LocalHistory {
                     return {href, lastAccess};
                 })
                 .orderBy(["lastAccess"], ["desc"])
-                .value();
-        ReactDOM.render(<HistoryTable history={historyArray} />, el);
+                .value(),
+            root = createRoot(el);
+        root.render(<HistoryTable history={historyArray} />);
     }
     enable() {
         this._save(DEFAULT_HISTORY);

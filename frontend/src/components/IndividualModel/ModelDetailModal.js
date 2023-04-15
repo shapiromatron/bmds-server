@@ -24,8 +24,7 @@ import ModelOptionsTable from "./ModelOptionsTable";
 import ModelParameters from "./ModelParameters";
 import ParameterPriorTable from "./ParameterPriorTable";
 
-@observer
-class ModelBody extends Component {
+class _ModelBody extends Component {
     render() {
         const {outputStore} = this.props,
             dataset = outputStore.selectedDataset,
@@ -100,12 +99,12 @@ class ModelBody extends Component {
         );
     }
 }
-ModelBody.propTypes = {
+_ModelBody.propTypes = {
     outputStore: PropTypes.object,
 };
+const ModelBody = inject("outputStore")(observer(_ModelBody));
 
-@observer
-class ModelAverageBody extends Component {
+class _ModelAverageBody extends Component {
     render() {
         const {outputStore} = this.props,
             dataset = outputStore.selectedDataset,
@@ -141,12 +140,11 @@ class ModelAverageBody extends Component {
         );
     }
 }
-ModelAverageBody.propTypes = {
+_ModelAverageBody.propTypes = {
     outputStore: PropTypes.object,
 };
+const ModelAverageBody = inject("outputStore")(observer(_ModelAverageBody));
 
-@inject("outputStore")
-@observer
 class ModelDetailModal extends Component {
     render() {
         const {outputStore} = this.props,
@@ -188,4 +186,4 @@ class ModelDetailModal extends Component {
 ModelDetailModal.propTypes = {
     outputStore: PropTypes.object,
 };
-export default ModelDetailModal;
+export default inject("outputStore")(observer(ModelDetailModal));

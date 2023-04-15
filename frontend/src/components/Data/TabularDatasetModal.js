@@ -6,8 +6,6 @@ import {Modal} from "react-bootstrap";
 import Button from "../common/Button";
 import TextAreaInput from "../common/TextAreaInput";
 
-@inject("dataStore")
-@observer
 class TabularDatasetModal extends Component {
     render() {
         const {dataStore} = this.props;
@@ -60,4 +58,4 @@ class TabularDatasetModal extends Component {
 TabularDatasetModal.propTypes = {
     dataStore: PropTypes.object,
 };
-export default TabularDatasetModal;
+export default inject("dataStore")(observer(TabularDatasetModal));

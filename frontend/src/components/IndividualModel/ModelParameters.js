@@ -6,7 +6,6 @@ import React, {Component} from "react";
 import HelpTextPopover from "@/components/common/HelpTextPopover";
 import {parameterFormatter} from "@/utils/formatters";
 
-@observer
 class ModelParameters extends Component {
     render() {
         const {parameters} = this.props,
@@ -70,4 +69,4 @@ class ModelParameters extends Component {
 ModelParameters.propTypes = {
     parameters: PropTypes.object.isRequired,
 };
-export default ModelParameters;
+export default observer(ModelParameters);

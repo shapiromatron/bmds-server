@@ -6,8 +6,6 @@ import Button from "../common/Button";
 import LabelInput from "../common/LabelInput";
 import SelectInput from "../common/SelectInput";
 
-@inject("dataStore")
-@observer
 class SelectModelType extends Component {
     render() {
         const {dataStore} = this.props;
@@ -40,4 +38,4 @@ class SelectModelType extends Component {
 SelectModelType.propTypes = {
     dataStore: PropTypes.object,
 };
-export default SelectModelType;
+export default inject("dataStore")(observer(SelectModelType));

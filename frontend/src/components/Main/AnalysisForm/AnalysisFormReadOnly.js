@@ -2,8 +2,6 @@ import {inject, observer} from "mobx-react";
 import PropTypes from "prop-types";
 import React, {Component} from "react";
 
-@inject("mainStore")
-@observer
 class AnalysisFormReadOnly extends Component {
     render() {
         const {mainStore} = this.props;
@@ -32,4 +30,4 @@ class AnalysisFormReadOnly extends Component {
 AnalysisFormReadOnly.propTypes = {
     mainStore: PropTypes.object,
 };
-export default AnalysisFormReadOnly;
+export default inject("mainStore")(observer(AnalysisFormReadOnly));

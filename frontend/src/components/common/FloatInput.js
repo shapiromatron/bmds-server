@@ -6,7 +6,6 @@ import {randomString} from "@/common";
 
 import LabelInput from "./LabelInput";
 
-@observer
 class FloatInput extends Component {
     constructor(props) {
         super(props);
@@ -43,4 +42,4 @@ FloatInput.defaultProps = {
     disabled: false,
 };
 
-export default FloatInput;
+export default observer(FloatInput);

@@ -12,8 +12,6 @@ const maxDegreeText = `Studies have indicated that higher degree polynomial mode
     (Nitcheva et al., 2007; PMC2040324).  Complex models also increase computer processing time
     and the chance of model failure.`;
 
-@inject("dataOptionStore")
-@observer
 class DatasetModelOptionList extends Component {
     render() {
         const {dataOptionStore} = this.props,
@@ -75,4 +73,4 @@ class DatasetModelOptionList extends Component {
 DatasetModelOptionList.propTypes = {
     dataOptionStore: PropTypes.object,
 };
-export default DatasetModelOptionList;
+export default inject("dataOptionStore")(observer(DatasetModelOptionList));

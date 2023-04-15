@@ -1,6 +1,6 @@
 import {saveAs} from "file-saver";
 import _ from "lodash";
-import {action, computed, observable, toJS} from "mobx";
+import {makeAutoObservable, toJS} from "mobx";
 import slugify from "slugify";
 
 import {getHeaders, parseErrors, simulateClick} from "@/common";
@@ -8,33 +8,34 @@ import * as mc from "@/constants/mainConstants";
 
 class MainStore {
     constructor(rootStore) {
+        makeAutoObservable(this, {rootStore: false}, {autoBind: true});
         this.rootStore = rootStore;
     }
 
-    @observable config = {};
-    @observable models = {};
+    config = {};
+    models = {};
 
-    @observable analysis_name = "";
-    @observable analysis_description = "";
-    @observable model_type = mc.MODEL_CONTINUOUS;
-    @observable errorMessage = "";
-    @observable errorData = null;
-    @observable hasEditSettings = false;
-    @observable executionOutputs = null;
-    @observable isUpdateComplete = false;
+    analysis_name = "";
+    analysis_description = "";
+    model_type = mc.MODEL_CONTINUOUS;
+    errorMessage = "";
+    errorData = null;
+    hasEditSettings = false;
+    executionOutputs = null;
+    isUpdateComplete = false;
 
-    @action.bound setConfig(config) {
+    setConfig(config) {
         this.config = config;
     }
-    @action.bound changeAnalysisName(value) {
+    changeAnalysisName(value) {
         this.analysis_name = value;
         this.setInputsChangedFlag();
     }
-    @action.bound changeAnalysisDescription(value) {
+    changeAnalysisDescription(value) {
         this.analysis_description = value;
         this.setInputsChangedFlag();
     }
-    @action.bound changeDatasetType(value) {
+    changeDatasetType(value) {
         this.model_type = value;
         this.rootStore.modelsStore.setDefaultsByDatasetType(true);
         this.rootStore.optionsStore.setDefaultsByDatasetType(true);
@@ -42,18 +43,18 @@ class MainStore {
         this.rootStore.dataOptionStore.options = [];
         this.setInputsChangedFlag();
     }
-    @action.bound resetModelSelection() {
+    resetModelSelection() {
         this.rootStore.modelsStore.resetModelSelection();
     }
 
-    @computed get getOptions() {
+    get getOptions() {
         return this.rootStore.optionsStore.optionsList;
     }
 
-    @computed get getEnabledDatasets() {
+    get getEnabledDatasets() {
         return this.rootStore.dataStore.getEnabledDatasets;
     }
-    @computed get getPayload() {
+    get getPayload() {
         const editKey = this.config.editSettings ? this.config.editSettings.editKey : null;
         return {
             editKey,
@@ -72,7 +73,6 @@ class MainStore {
         };
     }
 
-    @action.bound
     async saveAnalysis() {
         this.rootStore.dataStore.cleanRows();
         const url = this.config.editSettings.patchInputUrl,
@@ -101,10 +101,9 @@ class MainStore {
             });
     }
 
-    @observable analysisSavedAndValidated = false;
-    @observable isExecuting = false;
+    analysisSavedAndValidated = false;
+    isExecuting = false;
 
-    @action.bound
     async executeAnalysis() {
         if (!this.analysisSavedAndValidated) {
             // don't execute if we're not ready
@@ -174,7 +173,6 @@ class MainStore {
             })
             .catch(handleServerError);
     }
-    @action.bound
     async executeResetAnalysis() {
         const {csrfToken, executeResetUrl} = this.config.editSettings;
         await fetch(executeResetUrl, {
@@ -196,7 +194,6 @@ class MainStore {
                 console.error("error", error);
             });
     }
-    @action.bound
     async fetchSavedAnalysis() {
         const apiUrl = this.config.apiUrl;
         this.errorMessage = "";
@@ -211,11 +208,11 @@ class MainStore {
                 console.error("error", error);
             });
     }
-    @action.bound setInputsChangedFlag() {
+    setInputsChangedFlag() {
         // inputs have changed and have not yet been saved or validated; prevent execution
         this.analysisSavedAndValidated = false;
     }
-    @action.bound updateModelStateFromApi(data) {
+    updateModelStateFromApi(data) {
         if (data.errors.length > 0) {
             this.errorMessage = data.errors;
             this.isUpdateComplete = true;
@@ -245,7 +242,7 @@ class MainStore {
         this.isUpdateComplete = true;
         this.analysisSavedAndValidated = data.inputs_valid;
     }
-    @action.bound loadAnalysisFromFile(file) {
+    loadAnalysisFromFile(file) {
         let reader = new FileReader();
         reader.readAsText(file);
         reader.onload = e => {
@@ -259,7 +256,7 @@ class MainStore {
             this.updateModelStateFromApi(settings);
         };
     }
-    @action.bound async saveAnalysisToFile() {
+    async saveAnalysisToFile() {
         const apiUrl = this.config.apiUrl;
         await fetch(apiUrl, {
             method: "GET",
@@ -275,25 +272,25 @@ class MainStore {
             });
     }
 
-    @computed get canEdit() {
+    get canEdit() {
         return this.config.editSettings !== undefined;
     }
-    @computed get isFuture() {
+    get isFuture() {
         return this.config.future;
     }
-    @computed get getExecutionOutputs() {
+    get getExecutionOutputs() {
         return this.executionOutputs;
     }
-    @computed get getDatasets() {
+    get getDatasets() {
         return this.rootStore.dataStore.getDatasets;
     }
-    @computed get getDatasetLength() {
+    get getDatasetLength() {
         return this.rootStore.dataStore.getDataLength;
     }
-    @computed get getModelTypeName() {
+    get getModelTypeName() {
         return _.find(mc.modelTypes, {value: this.model_type}).name;
     }
-    @computed get getModelTypeChoices() {
+    get getModelTypeChoices() {
         let choices = mc.modelTypes.map((item, i) => {
             return {value: item.value, text: item.name};
         });
@@ -305,11 +302,11 @@ class MainStore {
         return choices;
     }
 
-    @computed get getModels() {
+    get getModels() {
         return this.rootStore.modelsStore.models;
     }
 
-    @computed get hasAtLeastOneModelSelected() {
+    get hasAtLeastOneModelSelected() {
         return (
             _.chain(this.getModels)
                 .values()
@@ -318,19 +315,19 @@ class MainStore {
         );
     }
 
-    @computed get hasAtLeastOneDatasetSelected() {
+    get hasAtLeastOneDatasetSelected() {
         return !_.isEmpty(this.getEnabledDatasets);
     }
 
-    @computed get hasAtLeastTwoDatasetsSelected() {
+    get hasAtLeastTwoDatasetsSelected() {
         return this.getEnabledDatasets.length >= 2;
     }
 
-    @computed get hasAtLeastOneOptionSelected() {
+    get hasAtLeastOneOptionSelected() {
         return !_.isEmpty(this.getOptions);
     }
 
-    @computed get isValid() {
+    get isValid() {
         if (this.model_type === mc.MODEL_MULTI_TUMOR) {
             return (
                 this.hasAtLeastOneModelSelected &&
@@ -344,19 +341,19 @@ class MainStore {
             this.hasAtLeastOneOptionSelected
         );
     }
-    @computed get hasOutputs() {
+    get hasOutputs() {
         return _.isArray(this.executionOutputs);
     }
 
-    @computed get isMultiTumor() {
+    get isMultiTumor() {
         return this.model_type === mc.MODEL_MULTI_TUMOR;
     }
 
     // *** TOAST ***
-    @observable toastVisible = false;
-    @observable toastHeader = "";
-    @observable toastMessage = "";
-    @action.bound downloadReport(url) {
+    toastVisible = false;
+    toastHeader = "";
+    toastMessage = "";
+    downloadReport(url) {
         let apiUrl = (apiUrl = this.config[url]),
             params = {};
         if (this.canEdit) {
@@ -387,12 +384,12 @@ class MainStore {
             };
         fetchReport();
     }
-    @action.bound showToast(header, message) {
+    showToast(header, message) {
         this.toastHeader = header;
         this.toastMessage = message;
         this.toastVisible = true;
     }
-    @action.bound hideToast() {
+    hideToast() {
         this.toastVisible = false;
         this.toastHeader = "";
         this.toastMessage = "";
@@ -400,22 +397,22 @@ class MainStore {
     // *** END TOAST ***
 
     // *** REPORT OPTIONS ***
-    @observable wordReportOptions = {
+    wordReportOptions = {
         datasetFormatLong: true,
         allModels: false,
         bmdCdfTable: false,
     };
-    @action.bound changeReportOptions(name, value) {
+    changeReportOptions(name, value) {
         this.wordReportOptions[name] = value;
     }
-    @observable displayWordReportOptionModal = false;
-    @action.bound showWordReportOptionModal() {
+    displayWordReportOptionModal = false;
+    showWordReportOptionModal() {
         this.displayWordReportOptionModal = true;
     }
-    @action.bound closeWordReportOptionModal() {
+    closeWordReportOptionModal() {
         this.displayWordReportOptionModal = false;
     }
-    @action.bound submitWordReportRequest() {
+    submitWordReportRequest() {
         this.closeWordReportOptionModal();
         this.downloadReport("wordUrl");
     }

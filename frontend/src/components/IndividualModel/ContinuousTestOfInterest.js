@@ -6,7 +6,6 @@ import {ff, fractionalFormatter} from "@/utils/formatters";
 
 import HelpTextPopover from "../common/HelpTextPopover";
 
-@observer
 class ContinuousTestOfInterest extends Component {
     render() {
         const {store} = this.props,
@@ -55,4 +54,4 @@ class ContinuousTestOfInterest extends Component {
 ContinuousTestOfInterest.propTypes = {
     store: PropTypes.object,
 };
-export default ContinuousTestOfInterest;
+export default observer(ContinuousTestOfInterest);

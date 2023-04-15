@@ -4,7 +4,6 @@ import React, {Component} from "react";
 
 import {ff, fractionalFormatter} from "@/utils/formatters";
 
-@observer
 class DichotomousDeviance extends Component {
     render() {
         const {store} = this.props,
@@ -56,4 +55,4 @@ class DichotomousDeviance extends Component {
 DichotomousDeviance.propTypes = {
     store: PropTypes.object,
 };
-export default DichotomousDeviance;
+export default observer(DichotomousDeviance);

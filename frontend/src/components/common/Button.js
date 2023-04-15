@@ -4,7 +4,6 @@ import React, {Component} from "react";
 
 import Icon from "./Icon";
 
-@observer
 class Button extends Component {
     render() {
         const {props} = this;
@@ -40,4 +39,4 @@ Button.defaultProps = {
     disabled: false,
 };
 
-export default Button;
+export default observer(Button);

@@ -20,7 +20,6 @@ const fieldMap = {
         [MODEL_DICHOTOMOUS]: "enabledDichotomous",
     };
 
-@observer
 class RuleRow extends Component {
     render() {
         const {rule, ruleIndex, canEdit, updateRule, modelType} = this.props,
@@ -85,4 +84,4 @@ RuleRow.propTypes = {
     modelType: PropTypes.string.isRequired,
 };
 
-export default RuleRow;
+export default observer(RuleRow);

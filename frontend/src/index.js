@@ -1,6 +1,6 @@
 import {Provider} from "mobx-react";
 import React from "react";
-import {createRoot} from 'react-dom/client';
+import {createRoot} from "react-dom/client";
 
 import App from "@/App";
 import {renderPlotlyFigure} from "@/components/common/PlotlyFigure";

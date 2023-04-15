@@ -12,8 +12,6 @@ import {
 } from "@/constants/optionsConstants";
 import {ff} from "@/utils/formatters";
 
-@inject("outputStore")
-@observer
 class OptionSetTable extends Component {
     render() {
         const {outputStore} = this.props,
@@ -78,4 +76,4 @@ OptionSetTable.propTypes = {
     outputStore: PropTypes.object,
 };
 
-export default OptionSetTable;
+export default inject("outputStore")(observer(OptionSetTable));

@@ -4,7 +4,6 @@ import React, {Component} from "react";
 
 import {randomString} from "@/common";
 
-@observer
 class CheckboxInput extends Component {
     constructor(props) {
         super(props);
@@ -34,4 +33,4 @@ CheckboxInput.defaultProps = {
     disabled: false,
 };
 
-export default CheckboxInput;
+export default observer(CheckboxInput);

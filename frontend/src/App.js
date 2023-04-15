@@ -7,8 +7,6 @@ import {HashRouter} from "react-router-dom";
 import Icon from "@/components/common/Icon";
 import Navigation from "@/components/Navigation";
 
-@inject("mainStore")
-@observer
 class App extends Component {
     componentDidMount() {
         const config = JSON.parse(document.getElementById("config").textContent);
@@ -54,4 +52,4 @@ class App extends Component {
 App.propTypes = {
     mainStore: PropTypes.object,
 };
-export default App;
+export default inject("mainStore")(observer(App));

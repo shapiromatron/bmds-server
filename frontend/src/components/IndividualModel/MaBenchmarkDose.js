@@ -4,7 +4,6 @@ import React, {Component} from "react";
 
 import {ff} from "@/utils/formatters";
 
-@observer
 class MaBenchmarkDose extends Component {
     render() {
         const {results} = this.props;
@@ -40,4 +39,4 @@ class MaBenchmarkDose extends Component {
 MaBenchmarkDose.propTypes = {
     results: PropTypes.object.isRequired,
 };
-export default MaBenchmarkDose;
+export default observer(MaBenchmarkDose);

@@ -6,7 +6,6 @@ import {randomString} from "@/common";
 
 import LabelInput from "./LabelInput";
 
-@observer
 class SelectInput extends Component {
     constructor(props) {
         super(props);
@@ -48,4 +47,4 @@ SelectInput.propTypes = {
     value: PropTypes.any.isRequired,
 };
 
-export default SelectInput;
+export default observer(SelectInput);

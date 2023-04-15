@@ -3,8 +3,6 @@ import PropTypes from "prop-types";
 import React, {Component} from "react";
 import {Toast} from "react-bootstrap";
 
-@inject("mainStore")
-@observer
 class StatusToast extends Component {
     render() {
         const {mainStore} = this.props;
@@ -34,4 +32,4 @@ class StatusToast extends Component {
 StatusToast.propTypes = {
     mainStore: PropTypes.object,
 };
-export default StatusToast;
+export default inject("mainStore")(observer(StatusToast));

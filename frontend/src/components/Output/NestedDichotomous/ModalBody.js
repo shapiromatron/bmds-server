@@ -8,7 +8,6 @@ import BootstrapRuns from "./BootstrapRuns";
 import LitterData from "./LitterData";
 import ScaledResidual from "./ScaledResidual";
 
-@observer
 class ModalBody extends Component {
     render() {
         const {outputStore} = this.props,
@@ -48,4 +47,4 @@ class ModalBody extends Component {
 ModalBody.propTypes = {
     outputStore: PropTypes.object,
 };
-export default ModalBody;
+export default observer(ModalBody);

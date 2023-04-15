@@ -88,8 +88,7 @@ TableFootnotes.propTypes = {
     colSpan: PropTypes.number.isRequired,
 };
 
-@observer
-class FrequentistRowSet extends Component {
+class _FrequentistRowSet extends Component {
     render() {
         const {store, dataset, selectedFrequentist, footnotes, models, label, colSpan} = this.props;
         if (models.length == 0) {
@@ -118,7 +117,7 @@ class FrequentistRowSet extends Component {
         );
     }
 }
-FrequentistRowSet.propTypes = {
+_FrequentistRowSet.propTypes = {
     store: PropTypes.object.isRequired,
     selectedFrequentist: PropTypes.object.isRequired,
     footnotes: PropTypes.array.isRequired,
@@ -127,9 +126,9 @@ FrequentistRowSet.propTypes = {
     label: PropTypes.string.isRequired,
     colSpan: PropTypes.number.isRequired,
 };
+const FrequentistRowSet = observer(_FrequentistRowSet);
 
-@observer
-class FrequentistRow extends Component {
+class _FrequentistRow extends Component {
     render() {
         const {store, data, dataset, selectedFrequentist, footnotes} = this.props,
             {name} = data.model,
@@ -188,16 +187,15 @@ class FrequentistRow extends Component {
         );
     }
 }
-FrequentistRow.propTypes = {
+_FrequentistRow.propTypes = {
     store: PropTypes.object.isRequired,
     data: PropTypes.object.isRequired,
     dataset: PropTypes.object.isRequired,
     selectedFrequentist: PropTypes.object.isRequired,
     footnotes: PropTypes.array.isRequired,
 };
+const FrequentistRow = observer(_FrequentistRow);
 
-@inject("outputStore")
-@observer
 class FrequentistResultTable extends Component {
     render() {
         const store = this.props.outputStore,
@@ -307,4 +305,4 @@ FrequentistResultTable.propTypes = {
     outputStore: PropTypes.object,
 };
 
-export default FrequentistResultTable;
+export default inject("outputStore")(observer(FrequentistResultTable));

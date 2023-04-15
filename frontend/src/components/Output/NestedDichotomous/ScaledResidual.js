@@ -2,7 +2,6 @@ import {observer} from "mobx-react";
 import PropTypes from "prop-types";
 import React, {Component} from "react";
 
-@observer
 class ScaledResidual extends Component {
     render() {
         return (
@@ -48,4 +47,4 @@ ScaledResidual.propTypes = {
     model: PropTypes.object,
 };
 
-export default ScaledResidual;
+export default observer(ScaledResidual);

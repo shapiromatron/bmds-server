@@ -7,8 +7,6 @@ import Button from "../common/Button";
 import SelectInput from "../common/SelectInput";
 import TextAreaInput from "../common/TextAreaInput";
 
-@inject("outputStore")
-@observer
 class SelectModelIndex extends Component {
     render() {
         const {outputStore} = this.props,
@@ -58,4 +56,4 @@ class SelectModelIndex extends Component {
 SelectModelIndex.propTypes = {
     outputStore: PropTypes.object,
 };
-export default SelectModelIndex;
+export default inject("outputStore")(observer(SelectModelIndex));

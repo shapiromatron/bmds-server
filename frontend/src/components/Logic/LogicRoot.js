@@ -6,8 +6,6 @@ import React, {Component} from "react";
 import DecisionLogic from "./DecisionLogic";
 import RuleTable from "./RuleTable";
 
-@inject("logicStore")
-@observer
 class Logic extends Component {
     render() {
         const {logic} = this.props.logicStore;
@@ -33,4 +31,4 @@ Logic.propTypes = {
     logicStore: PropTypes.object,
 };
 
-export default Logic;
+export default inject("logicStore")(observer(Logic));

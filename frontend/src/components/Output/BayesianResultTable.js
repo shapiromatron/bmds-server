@@ -6,8 +6,6 @@ import React, {Component} from "react";
 import {maIndex, modelClasses} from "@/constants/outputConstants";
 import {ff, fractionalFormatter} from "@/utils/formatters";
 
-@inject("outputStore")
-@observer
 class BayesianResultTable extends Component {
     render() {
         const store = this.props.outputStore,
@@ -100,4 +98,4 @@ BayesianResultTable.propTypes = {
     outputStore: PropTypes.object,
 };
 
-export default BayesianResultTable;
+export default inject("outputStore")(observer(BayesianResultTable));

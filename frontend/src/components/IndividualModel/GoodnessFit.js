@@ -18,7 +18,6 @@ const hdr_c_normal = [
     hdr_d = [ "Dose", "Size", "Observed", "Expected", "Estimated Probability", "Scaled Residual"];
 /* eslint-enable */
 
-@observer
 class GoodnessFit extends Component {
     getHeaders(dtype, settings) {
         if (dtype == Dtype.CONTINUOUS || dtype == Dtype.CONTINUOUS_INDIVIDUAL) {
@@ -95,4 +94,4 @@ class GoodnessFit extends Component {
 GoodnessFit.propTypes = {
     store: PropTypes.object,
 };
-export default GoodnessFit;
+export default observer(GoodnessFit);

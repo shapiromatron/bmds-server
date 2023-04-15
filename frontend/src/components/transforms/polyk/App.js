@@ -11,9 +11,7 @@ import FloatInput from "../../common/FloatInput";
 import TextAreaInput from "../../common/TextAreaInput";
 import TextInput from "../../common/TextInput";
 
-@inject("store")
-@observer
-class InputForm extends Component {
+class _InputForm extends Component {
     render() {
         const {settings, updateSettings, error, submit, loadExampleData} = this.props.store;
         return (
@@ -67,13 +65,12 @@ class InputForm extends Component {
         );
     }
 }
-InputForm.propTypes = {
+_InputForm.propTypes = {
     store: PropTypes.object,
 };
+const InputForm = inject("store")(observer(_InputForm));
 
-@inject("store")
-@observer
-class SummaryPlot extends Component {
+class _SummaryPlot extends Component {
     render() {
         const {df2} = this.props.store.outputs,
             {dose_units} = this.props.store.settings;
@@ -121,13 +118,12 @@ class SummaryPlot extends Component {
         );
     }
 }
-SummaryPlot.propTypes = {
+_SummaryPlot.propTypes = {
     store: PropTypes.object,
 };
+const SummaryPlot = inject("store")(observer(_SummaryPlot));
 
-@inject("store")
-@observer
-class RawDataPlot extends Component {
+class _RawDataPlot extends Component {
     getData(df) {
         const d1 = _.zip(df.dose, df.day, df.has_tumor),
             d2 = _.groupBy(d1, arr => arr[0]);
@@ -187,13 +183,12 @@ class RawDataPlot extends Component {
         );
     }
 }
-RawDataPlot.propTypes = {
+_RawDataPlot.propTypes = {
     store: PropTypes.object,
 };
+const RawDataPlot = inject("store")(observer(_RawDataPlot));
 
-@inject("store")
-@observer
-class OutputTabs extends Component {
+class _OutputTabs extends Component {
     render() {
         const {df, df2} = this.props.store.outputs;
         return (
@@ -241,13 +236,12 @@ class OutputTabs extends Component {
         );
     }
 }
-OutputTabs.propTypes = {
+_OutputTabs.propTypes = {
     store: PropTypes.object,
 };
+const OutputTabs = inject("store")(observer(_OutputTabs));
 
-@inject("store")
-@observer
-class App extends Component {
+class _App extends Component {
     render() {
         const {outputs} = this.props.store;
         return (
@@ -269,9 +263,10 @@ class App extends Component {
         );
     }
 }
-App.propTypes = {
+_App.propTypes = {
     store: PropTypes.object,
 };
+const App = inject("store")(observer(_App));
 
 const DataFrameTable = function({data, columns}) {
     const nrows = data[columns[0]].length;

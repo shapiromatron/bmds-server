@@ -2,7 +2,6 @@ import {observer} from "mobx-react";
 import PropTypes from "prop-types";
 import React, {Component} from "react";
 
-@observer
 class BootstrapRuns extends Component {
     render() {
         return (
@@ -39,4 +38,4 @@ class BootstrapRuns extends Component {
 BootstrapRuns.propTypes = {
     model: PropTypes.object,
 };
-export default BootstrapRuns;
+export default observer(BootstrapRuns);

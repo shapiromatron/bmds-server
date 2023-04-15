@@ -123,3 +123,8 @@ class AnalysisDelete(DeleteView):
 
 class PolyKAdjustment(TemplateView):
     template_name: str = "analysis/polyk.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["config"] = {"token": get_token(self.request)}
+        return context

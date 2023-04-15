@@ -41,7 +41,6 @@ const dataRows = (dataset, columnNames) => {
         });
     };
 
-@observer
 class DatasetTable extends Component {
     render() {
         const {dataset} = this.props,
@@ -81,4 +80,4 @@ class DatasetTable extends Component {
 DatasetTable.propTypes = {
     dataset: PropTypes.object.isRequired,
 };
-export default DatasetTable;
+export default observer(DatasetTable);

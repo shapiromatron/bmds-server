@@ -15,8 +15,6 @@ import HelpTextPopover from "../../common/HelpTextPopover";
 import OptionsForm from "./OptionsForm";
 import OptionsReadOnly from "./OptionsReadOnly";
 
-@inject("optionsStore")
-@observer
 class OptionsFormList extends Component {
     render() {
         const {optionsStore} = this.props,
@@ -127,4 +125,4 @@ OptionsFormList.propTypes = {
     optionsStore: PropTypes.object,
 };
 
-export default OptionsFormList;
+export default inject("optionsStore")(observer(OptionsFormList));

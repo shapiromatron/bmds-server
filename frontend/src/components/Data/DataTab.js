@@ -8,8 +8,6 @@ import DatasetSelector from "./DatasetSelector";
 import DatasetTable from "./DatasetTable";
 import SelectModelType from "./SelectModelType";
 
-@inject("dataStore")
-@observer
 class Data extends Component {
     render() {
         const {dataStore} = this.props;
@@ -45,4 +43,4 @@ class Data extends Component {
 Data.propTypes = {
     dataStore: PropTypes.object,
 };
-export default Data;
+export default inject("dataStore")(observer(Data));

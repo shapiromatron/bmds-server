@@ -8,8 +8,6 @@ import LabelInput from "@/components/common/LabelInput";
 import Button from "../../common/Button";
 import CheckboxInput from "../../common/CheckboxInput";
 
-@inject("mainStore")
-@observer
 class WordReportOptionsModal extends Component {
     render() {
         const {
@@ -105,4 +103,4 @@ class WordReportOptionsModal extends Component {
 WordReportOptionsModal.propTypes = {
     mainStore: PropTypes.object,
 };
-export default WordReportOptionsModal;
+export default inject("mainStore")(observer(WordReportOptionsModal));

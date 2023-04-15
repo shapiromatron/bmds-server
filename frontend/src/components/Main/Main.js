@@ -9,8 +9,6 @@ import DatasetModelOptionList from "./DatasetModelOptionList/DatasetModelOptionL
 import ModelsCheckBoxList from "./ModelsForm/ModelsCheckBoxList";
 import OptionsFormList from "./OptionsForm/OptionsFormList";
 
-@inject("mainStore")
-@observer
 class Main extends Component {
     render() {
         const {mainStore} = this.props;
@@ -42,4 +40,4 @@ Main.propTypes = {
     mainStore: PropTypes.object,
     isUpdateComplete: PropTypes.bool,
 };
-export default Main;
+export default inject("mainStore")(observer(Main));

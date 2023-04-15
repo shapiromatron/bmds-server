@@ -6,8 +6,6 @@ import React, {Component} from "react";
 import {modelClasses} from "@/constants/outputConstants";
 import {ff} from "@/utils/formatters";
 
-@inject("outputStore")
-@observer
 class ResultTable extends Component {
     render() {
         const store = this.props.outputStore,
@@ -75,4 +73,4 @@ ResultTable.propTypes = {
     outputStore: PropTypes.object,
 };
 
-export default ResultTable;
+export default inject("outputStore")(observer(ResultTable));

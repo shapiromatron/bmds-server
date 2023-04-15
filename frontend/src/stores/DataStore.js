@@ -1,5 +1,5 @@
 import _ from "lodash";
-import {action, computed, observable, toJS} from "mobx";
+import {makeAutoObservable, toJS} from "mobx";
 
 import * as dc from "@/constants/dataConstants";
 import {
@@ -56,33 +56,34 @@ let validateTabularData = function(text, columns) {
 
 class DataStore {
     constructor(rootStore) {
+        makeAutoObservable(this, {rootStore: false}, {autoBind: true});
         this.rootStore = rootStore;
     }
 
-    @observable model_type = dc.DATA_CONTINUOUS_SUMMARY;
-    @observable datasets = [];
-    @observable selectedDatasetId = null;
+    model_type = dc.DATA_CONTINUOUS_SUMMARY;
+    datasets = [];
+    selectedDatasetId = null;
 
-    @action.bound setDefaultsByDatasetType() {
+    setDefaultsByDatasetType() {
         this.selectedDatasetId = null;
         this.datasets = [];
         this.model_type = this.getFilteredDatasetTypes[0].value;
     }
 
-    @action.bound setModelType(model_type) {
+    setModelType(model_type) {
         this.model_type = model_type;
     }
 
-    @action.bound setSelectedDataset(id) {
+    setSelectedDataset(id) {
         this.selectedDatasetId = id;
     }
 
-    @action.bound setDatasetMetadata(key, value) {
+    setDatasetMetadata(key, value) {
         this.selectedDataset.metadata[key] = value;
         this.rootStore.mainStore.setInputsChangedFlag();
     }
 
-    @action.bound addDataset() {
+    addDataset() {
         const dataset = getDefaultDataset(this.model_type),
             id =
                 _.chain(this.datasets)
@@ -99,20 +100,20 @@ class DataStore {
         this.updateOptionDegree(dataset);
     }
 
-    @action.bound updateOptionDegree() {
+    updateOptionDegree() {
         // whenever the number of doses change, change the default degree
         this.rootStore.dataOptionStore.updateDefaultDegree(this.selectedDataset);
         this.rootStore.mainStore.setInputsChangedFlag();
     }
 
-    @action.bound loadExampleData() {
+    loadExampleData() {
         const dataset = getExampleData(this.model_type),
             currentDataset = this.datasets[this.selectedDatasetId];
         _.extend(currentDataset, dataset);
         this.updateOptionDegree(dataset);
     }
 
-    @action.bound cleanRows() {
+    cleanRows() {
         // removes empty rows from each dataset
         this.datasets.map(dataset => {
             // get keys of row properties, and zip values into row arrays
@@ -128,7 +129,7 @@ class DataStore {
         });
     }
 
-    @action.bound addRow() {
+    addRow() {
         const dataset = this.selectedDataset;
         Object.keys(dataset).map((key, i) => {
             if (Array.isArray(dataset[key])) {
@@ -138,7 +139,7 @@ class DataStore {
         this.rootStore.mainStore.setInputsChangedFlag();
     }
 
-    @action.bound deleteRow = index => {
+    deleteRow = index => {
         const dataset = this.selectedDataset;
         Object.keys(dataset).map(key => {
             if (Array.isArray(dataset[key])) {
@@ -149,7 +150,7 @@ class DataStore {
         this.rootStore.mainStore.setInputsChangedFlag();
     };
 
-    @action.bound saveDatasetCellItem(key, value, rowIdx) {
+    saveDatasetCellItem(key, value, rowIdx) {
         let dataset = this.selectedDataset,
             parsedValue = parseFloat(value);
         if (_.isNumber(parsedValue)) {
@@ -158,12 +159,12 @@ class DataStore {
         this.rootStore.mainStore.setInputsChangedFlag();
     }
 
-    @action.bound changeColumnName(name, value) {
+    changeColumnName(name, value) {
         this.selectedDataset.column_names[name] = value;
         this.rootStore.mainStore.setInputsChangedFlag();
     }
 
-    @action.bound deleteDataset() {
+    deleteDataset() {
         var index = this.selectedDatasetIndex,
             datasetId = toJS(this.selectedDatasetId);
         if (index > -1) {
@@ -177,20 +178,20 @@ class DataStore {
         this.rootStore.mainStore.setInputsChangedFlag();
     }
 
-    @action.bound setDatasets(datasets) {
+    setDatasets(datasets) {
         this.datasets = datasets;
         this.selectedDatasetId = datasets.length > 0 ? datasets[0].metadata.id : null;
     }
 
-    @computed get selectedDataset() {
+    get selectedDataset() {
         return this.datasets.find(item => item.metadata.id === this.selectedDatasetId);
     }
 
-    @computed get selectedDatasetIndex() {
+    get selectedDatasetIndex() {
         return _.findIndex(this.datasets, item => item.metadata.id === this.selectedDatasetId);
     }
 
-    @computed get selectedDatasetErrors() {
+    get selectedDatasetErrors() {
         const data = this.rootStore.mainStore.errorData;
         if (!_.isArray(data)) {
             return null;
@@ -202,12 +203,12 @@ class DataStore {
         return filtered;
     }
 
-    @computed get selectedDatasetErrorText() {
+    get selectedDatasetErrorText() {
         const data = this.selectedDatasetErrors;
         return _.isArray(data) ? data.map(el => el.msg).join(", ") : "";
     }
 
-    @computed get getMappedArray() {
+    get getMappedArray() {
         let datasetInputForm = [],
             dataset = this.selectedDataset;
         Object.keys(dataset).map(key => {
@@ -224,64 +225,64 @@ class DataStore {
         return datasetInputForm;
     }
 
-    @computed get drPlotLayout() {
+    get drPlotLayout() {
         return getDrLayout(this.selectedDataset);
     }
 
-    @computed get drPlotData() {
+    get drPlotData() {
         const dataset = this.selectedDataset;
         return [getDrDatasetPlotData(dataset)];
     }
 
-    @computed get getDatasets() {
+    get getDatasets() {
         return this.datasets;
     }
 
-    @computed get getDataLength() {
+    get getDataLength() {
         return this.datasets.length;
     }
 
-    @computed get canEdit() {
+    get canEdit() {
         return this.rootStore.mainStore.canEdit;
     }
 
-    @computed get getExecutionOutputs() {
+    get getExecutionOutputs() {
         return this.rootStore.mainStore.getExecutionOutputs;
     }
 
-    @computed get getModelTypeDatasets() {
+    get getModelTypeDatasets() {
         return this.datasets.filter(item => item.model_type.includes(this.getModelType));
     }
 
-    @computed get getFilteredDatasetTypes() {
+    get getFilteredDatasetTypes() {
         return datasetTypesByModelType(toJS(this.getModelType));
     }
 
-    @computed get getModelType() {
+    get getModelType() {
         return this.rootStore.mainStore.model_type;
     }
 
-    @computed get getEnabledDatasets() {
+    get getEnabledDatasets() {
         return this.rootStore.dataOptionStore.options
             .filter(d => d.enabled === true)
             .map(d => d.dataset);
     }
 
-    @computed get canAddNewDataset() {
+    get canAddNewDataset() {
         return this.datasets.length < 6;
     }
 
-    @computed get hasSelectedDataset() {
+    get hasSelectedDataset() {
         return this.selectedDatasetId !== null;
     }
 
     // *** TABULAR MODAL DATASET ***
-    @observable showTabularModal = false;
-    @observable tabularModalError = "";
-    @observable tabularModalText = "";
-    @observable tabularModalData = null;
-    @observable tabularModalDataValidated = false;
-    @action.bound toggleDatasetModal() {
+    showTabularModal = false;
+    tabularModalError = "";
+    tabularModalText = "";
+    tabularModalData = null;
+    tabularModalDataValidated = false;
+    toggleDatasetModal() {
         const getDefaultText = () => {
                 const expectedColumns = columns[this.selectedDataset.dtype],
                     value = _.map(this.getMappedArray, row => {
@@ -298,7 +299,7 @@ class DataStore {
         this.tabularModalData = null;
         this.showTabularModal = willShow;
     }
-    @action.bound changeDatasetFromModal(text) {
+    changeDatasetFromModal(text) {
         text = text.trim();
         this.tabularModalDataValidated = false;
         this.tabularModalText = text;
@@ -320,7 +321,7 @@ class DataStore {
 
         this.tabularModalDataValidated = results.errors.length === 0;
     }
-    @action.bound updateDatasetFromModal() {
+    updateDatasetFromModal() {
         if (!this.tabularModalData) {
             return;
         }

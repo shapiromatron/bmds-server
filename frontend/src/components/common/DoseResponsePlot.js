@@ -6,7 +6,6 @@ import Plot from "react-plotly.js";
 
 import {getConfig} from "@/constants/plotting";
 
-@observer
 class DoseResponsePlot extends Component {
     render() {
         const {layout, data, onRelayout} = this.props;
@@ -28,4 +27,4 @@ DoseResponsePlot.propTypes = {
     data: PropTypes.array.isRequired,
     onRelayout: PropTypes.func,
 };
-export default DoseResponsePlot;
+export default observer(DoseResponsePlot);

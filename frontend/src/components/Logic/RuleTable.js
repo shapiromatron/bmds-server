@@ -7,8 +7,6 @@ import {ruleOrder} from "@/constants/logicConstants";
 
 import RuleRow from "./RuleRow";
 
-@inject("logicStore")
-@observer
 class RuleList extends Component {
     render() {
         const {logicStore} = this.props,
@@ -53,4 +51,4 @@ RuleList.propTypes = {
     logicStore: PropTypes.object,
 };
 
-export default RuleList;
+export default inject("logicStore")(observer(RuleList));

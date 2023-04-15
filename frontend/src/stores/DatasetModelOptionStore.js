@@ -1,47 +1,48 @@
 import _ from "lodash";
-import {action, computed, observable} from "mobx";
+import {makeAutoObservable} from "mobx";
 
 import {datasetOptions, getDefaultDegree} from "@/constants/dataConstants";
 
 class DatasetModelOptionStore {
     constructor(rootStore) {
+        makeAutoObservable(this, {rootStore: false}, {autoBind: true});
         this.rootStore = rootStore;
     }
 
-    @observable options = [];
+    options = [];
 
-    @computed get canEdit() {
+    get canEdit() {
         return this.rootStore.mainStore.canEdit;
     }
 
-    @computed get getModelType() {
+    get getModelType() {
         return this.rootStore.mainStore.model_type;
     }
 
-    @action.bound setDatasetOptions(options) {
+    setDatasetOptions(options) {
         this.options = options;
     }
-    @action.bound updateOption(dataset_id, key, value) {
+    updateOption(dataset_id, key, value) {
         const index = _.findIndex(this.options, d => d.dataset_id === dataset_id);
         this.options[index][key] = value;
         this.rootStore.mainStore.setInputsChangedFlag();
     }
-    @action.bound deleteOption(dataset_id) {
+    deleteOption(dataset_id) {
         const index = _.findIndex(this.options, d => d.dataset_id === dataset_id);
         this.options.splice(index, 1);
     }
-    @action.bound createOption(dataset) {
+    createOption(dataset) {
         const option = _.cloneDeep(datasetOptions[this.getModelType]);
         option.dataset_id = dataset.metadata.id;
         this.options.push(option);
     }
-    @action.bound updateDefaultDegree(dataset) {
+    updateDefaultDegree(dataset) {
         const index = _.findIndex(this.options, d => d.dataset_id === dataset.metadata.id);
         if (this.options[index].degree !== undefined) {
             this.options[index].degree = getDefaultDegree(dataset);
         }
     }
-    @action.bound getDataset(option) {
+    getDataset(option) {
         return _.find(this.rootStore.dataStore.datasets, d => d.metadata.id === option.dataset_id);
     }
 }

@@ -4,7 +4,6 @@ import React, {Component} from "react";
 
 import {ff, fractionalFormatter} from "@/utils/formatters";
 
-@observer
 class ContinuousSummary extends Component {
     render() {
         const {store} = this.props,
@@ -63,4 +62,4 @@ ContinuousSummary.propTypes = {
     store: PropTypes.object,
 };
 
-export default ContinuousSummary;
+export default observer(ContinuousSummary);

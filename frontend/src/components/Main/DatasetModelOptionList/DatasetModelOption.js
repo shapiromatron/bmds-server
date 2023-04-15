@@ -12,7 +12,6 @@ import {
 import CheckboxInput from "../../common/CheckboxInput";
 import SelectInput from "../../common/SelectInput";
 
-@observer
 class DatasetModelOption extends Component {
     render() {
         const {datasetId, store} = this.props,
@@ -73,4 +72,4 @@ DatasetModelOption.propTypes = {
     datasetId: PropTypes.number.isRequired,
     store: PropTypes.object,
 };
-export default DatasetModelOption;
+export default observer(DatasetModelOption);

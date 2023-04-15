@@ -11,8 +11,7 @@ import Spinner from "../../common/Spinner";
 import TextAreaInput from "../../common/TextAreaInput";
 import TextInput from "../../common/TextInput";
 
-@observer
-class RunChecklist extends Component {
+class _RunChecklist extends Component {
     render() {
         const {complete, message} = this.props,
             color = complete ? "text-success" : "text-danger",
@@ -25,13 +24,12 @@ class RunChecklist extends Component {
         );
     }
 }
-RunChecklist.propTypes = {
+_RunChecklist.propTypes = {
     complete: PropTypes.bool.isRequired,
     message: PropTypes.string.isRequired,
 };
+const RunChecklist = observer(_RunChecklist);
 
-@inject("mainStore")
-@observer
 class AnalysisForm extends Component {
     render() {
         const {mainStore} = this.props;
@@ -132,4 +130,4 @@ class AnalysisForm extends Component {
 AnalysisForm.propTypes = {
     mainStore: PropTypes.object,
 };
-export default AnalysisForm;
+export default inject("mainStore")(observer(AnalysisForm));

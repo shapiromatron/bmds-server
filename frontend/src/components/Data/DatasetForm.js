@@ -41,8 +41,6 @@ DatasetFormRow.propTypes = {
     delete: PropTypes.func,
 };
 
-@inject("dataStore")
-@observer
 class DatasetForm extends Component {
     render() {
         const {dataStore} = this.props,
@@ -172,4 +170,4 @@ class DatasetForm extends Component {
 DatasetForm.propTypes = {
     dataStore: PropTypes.object,
 };
-export default DatasetForm;
+export default inject("dataStore")(observer(DatasetForm));

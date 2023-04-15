@@ -12,8 +12,6 @@ const getDeletionDateText = function(editSettings) {
     return `${date} (${days} days)`;
 };
 
-@inject("mainStore")
-@observer
 class Actions extends Component {
     render() {
         const {mainStore} = this.props,
@@ -111,4 +109,4 @@ class Actions extends Component {
 Actions.propTypes = {
     mainStore: PropTypes.object,
 };
-export default Actions;
+export default inject("mainStore")(observer(Actions));

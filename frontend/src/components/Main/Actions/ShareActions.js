@@ -6,8 +6,6 @@ import Button from "../../common/Button";
 import ClipboardButton from "../../common/ClipboardButton";
 import Icon from "../../common/Icon";
 
-@inject("mainStore")
-@observer
 class ShareActions extends Component {
     render() {
         const {editSettings} = this.props.mainStore.config;
@@ -78,4 +76,4 @@ class ShareActions extends Component {
 ShareActions.propTypes = {
     mainStore: PropTypes.object,
 };
-export default ShareActions;
+export default inject("mainStore")(observer(ShareActions));

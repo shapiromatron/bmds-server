@@ -1,6 +1,6 @@
 import PropTypes from "prop-types";
 import React, {Component} from "react";
-import {createRoot} from 'react-dom/client';
+import {createRoot} from "react-dom/client";
 import Plot from "react-plotly.js";
 
 class PlotlyFigure extends Component {

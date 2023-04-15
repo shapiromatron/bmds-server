@@ -1,29 +1,41 @@
-import {action, observable} from "mobx";
+import {makeAutoObservable} from "mobx";
 
 import {getHeaders} from "../../../common";
 import {exampleData} from "./data";
 
 class Store {
     constructor(token) {
+        makeAutoObservable(this, {rootStore: false, token: false}, {autoBind: true});
         this.token = token;
     }
 
-    @observable settings = {
+    settings = {
         dataset: "",
         dose_units: "ppm",
         power: 3,
         duration: 730,
     };
-    @observable error = null;
-    @observable errorObject = null;
-    @observable outputs = null;
+    error = null;
+    errorObject = null;
+    outputs = null;
 
-    @action.bound
     updateSettings(key, value) {
         this.settings[key] = value;
     }
 
-    @action.bound
+    updateOutput(data) {
+        this.outputs = data;
+    }
+    updateError(data) {
+        this.error = true;
+        console.error(data);
+        try {
+            this.error = JSON.parse(data);
+        } catch (err) {
+            console.error(err);
+        }
+    }
+
     async submit() {
         const url = "/api/v1/polyk/";
         this.error = null;
@@ -35,34 +47,17 @@ class Store {
         })
             .then(response => {
                 if (response.ok) {
-                    response.json().then(data => {
-                        this.outputs = data;
-                    });
+                    response.json().then(this.updateOutput);
                 } else {
                     response
                         .json()
-                        .then(data => {
-                            this.error = true;
-                            console.error(data);
-                            try {
-                                this.error = JSON.parse(data);
-                            } catch (err) {
-                                console.error(err);
-                            }
-                        })
-                        .catch(error => {
-                            this.error = true;
-                            console.error(error);
-                        });
+                        .then(this.updateError)
+                        .catch(this.updateError);
                 }
             })
-            .catch(error => {
-                this.error = true;
-                console.error(error);
-            });
+            .catch(this.updateError);
     }
 
-    @action.bound
     loadExampleData() {
         this.updateSettings("dataset", exampleData);
     }

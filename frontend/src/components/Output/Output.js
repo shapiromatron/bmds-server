@@ -34,8 +34,6 @@ OutputErrorComponent.propTypes = {
     children: PropTypes.node.isRequired,
 };
 
-@inject("outputStore")
-@observer
 class Output extends Component {
     render() {
         const {outputStore} = this.props,
@@ -169,4 +167,4 @@ class Output extends Component {
 Output.propTypes = {
     outputStore: PropTypes.object,
 };
-export default Output;
+export default inject("outputStore")(observer(Output));

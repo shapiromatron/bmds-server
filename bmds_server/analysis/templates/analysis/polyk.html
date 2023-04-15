@@ -1,13 +1,14 @@
 {% extends "base.html" %}
 
+{% block title %}{{block.super}} | Transforms | Poly K{% endblock title %}
+
 {% block content %}
-{% csrf_token %}
 <div id="main"></div>
 {% endblock content %}
 
 {% block extra-js %}
+{{ config|json_script:"config" }}
 <script type="text/javascript">
-    const token = document.getElementsByName('csrfmiddlewaretoken')[0].value;
-    window.app.polyk(document.getElementById('main'), token);
+    window.app.polyk(document.getElementById('main'));
 </script>
 {% endblock extra-js %}

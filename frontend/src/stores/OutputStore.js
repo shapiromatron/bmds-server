@@ -1,5 +1,5 @@
 import _ from "lodash";
-import {action, computed, observable, toJS} from "mobx";
+import {makeAutoObservable, toJS} from "mobx";
 
 import {getHeaders} from "@/common";
 import {maIndex, modelClasses} from "@/constants/outputConstants";
@@ -21,57 +21,58 @@ class OutputStore {
     An `Output` are the modeling results that are a permutation of a dataset and an option-set.
     */
     constructor(rootStore) {
+        makeAutoObservable(this, {rootStore: false}, {autoBind: true});
         this.rootStore = rootStore;
     }
 
-    @observable showModelModal = false;
-    @observable modalModel = null;
-    @observable modalModelClass = null;
-    @observable currentOutput = {};
-    @observable selectedOutputIndex = 0;
-    @observable drModelHover = null;
-    @observable drModelModal = null;
-    @observable drModelModalIsMA = false;
-    @observable drModelAverageModal = false;
-    @observable showBMDLine = false;
-    @observable showInlineNotes = false;
+    showModelModal = false;
+    modalModel = null;
+    modalModelClass = null;
+    currentOutput = {};
+    selectedOutputIndex = 0;
+    drModelHover = null;
+    drModelModal = null;
+    drModelModalIsMA = false;
+    drModelAverageModal = false;
+    showBMDLine = false;
+    showInlineNotes = false;
 
-    @action.bound toggleInlineNotes() {
+    toggleInlineNotes() {
         this.showInlineNotes = !this.showInlineNotes;
     }
 
-    @action.bound setSelectedOutputIndex(output_id) {
+    setSelectedOutputIndex(output_id) {
         this.selectedOutputIndex = output_id;
         this.resetUserPlotSettings();
     }
 
-    @computed get getModelType() {
+    get getModelType() {
         return this.rootStore.mainStore.model_type;
     }
 
-    @computed get globalErrorMessage() {
+    get globalErrorMessage() {
         return this.rootStore.mainStore.errorMessage;
     }
 
-    @computed get hasNoResults() {
+    get hasNoResults() {
         return this.selectedOutput === null;
     }
 
-    @computed get hasAnyError() {
+    get hasAnyError() {
         return (
             this.globalErrorMessage || (this.selectedOutput && this.selectedOutput.error !== null)
         );
     }
 
-    @computed get canEdit() {
+    get canEdit() {
         return this.rootStore.mainStore.canEdit;
     }
 
-    @computed get outputs() {
+    get outputs() {
         return this.rootStore.mainStore.getExecutionOutputs;
     }
 
-    @computed get selectedOutput() {
+    get selectedOutput() {
         const outputs = this.outputs;
         if (!_.isObject(outputs)) {
             return null;
@@ -79,7 +80,7 @@ class OutputStore {
         return outputs[this.selectedOutputIndex];
     }
 
-    @computed get selectedFrequentist() {
+    get selectedFrequentist() {
         const output = this.selectedOutput;
         if (output && output.frequentist) {
             return output.frequentist;
@@ -87,7 +88,7 @@ class OutputStore {
         return null;
     }
 
-    @computed get selectedBayesian() {
+    get selectedBayesian() {
         const output = this.selectedOutput;
         if (output && output.bayesian) {
             return output.bayesian;
@@ -95,29 +96,29 @@ class OutputStore {
         return null;
     }
 
-    @computed get selectedDataset() {
+    get selectedDataset() {
         const dataset_index = this.selectedOutput.dataset_index;
         return this.rootStore.dataStore.datasets[dataset_index];
     }
 
-    @computed get selectedModelOptions() {
+    get selectedModelOptions() {
         const index = this.selectedOutput.option_index;
         return this.rootStore.optionsStore.optionsList[index];
     }
 
-    @computed get selectedDatasetOptions() {
+    get selectedDatasetOptions() {
         const index = this.selectedOutput.dataset_index;
         return this.rootStore.dataOptionStore.options[index];
     }
 
-    @computed get recommendationEnabled() {
+    get recommendationEnabled() {
         return (
             this.selectedOutput.frequentist &&
             this.selectedOutput.frequentist.recommender.settings.enabled
         );
     }
 
-    @computed get getPValue() {
+    get getPValue() {
         let percentileValue = _.range(0.01, 1, 0.01);
         let pValue = percentileValue.map(function(each_element) {
             return Number(each_element.toFixed(2));
@@ -125,7 +126,7 @@ class OutputStore {
         return pValue;
     }
 
-    @computed get doseArray() {
+    get doseArray() {
         let maxDose = _.max(this.selectedDataset.doses);
         let minDose = _.min(this.selectedDataset.doses);
         let number_of_values = 100;
@@ -137,7 +138,7 @@ class OutputStore {
         return doseArr;
     }
 
-    @computed get drModelSelected() {
+    get drModelSelected() {
         const output = this.selectedOutput;
         if (output && output.frequentist && _.isNumber(output.frequentist.selected.model_index)) {
             const model = output.frequentist.models[output.frequentist.selected.model_index];
@@ -160,7 +161,7 @@ class OutputStore {
         }
     }
 
-    @action.bound showModalDetail(modelClass, index) {
+    showModalDetail(modelClass, index) {
         this.modalModelClass = modelClass;
         const model = this.getModel(index);
         this.modalModel = model;
@@ -174,7 +175,7 @@ class OutputStore {
         this.showModelModal = true;
     }
 
-    @action.bound closeModal() {
+    closeModal() {
         this.modalModel = null;
         this.drModelModal = null;
         this.showModelModal = false;
@@ -183,11 +184,11 @@ class OutputStore {
     // end modal methods
 
     // start dose-response plotting data methods
-    @computed get showSelectedModelInModalPlot() {
+    get showSelectedModelInModalPlot() {
         return this.modalModelClass === modelClasses.frequentist;
     }
 
-    @computed get drIndividualPlotData() {
+    get drIndividualPlotData() {
         // a single model, shown in the modal
         const data = [getDrDatasetPlotData(this.selectedDataset)];
         if (this.showSelectedModelInModalPlot && this.drModelSelected) {
@@ -202,7 +203,7 @@ class OutputStore {
         return data;
     }
 
-    @computed get drIndividualPlotLayout() {
+    get drIndividualPlotLayout() {
         // a single model, shown in the modal
         const selectedModel = this.showSelectedModelInModalPlot ? this.drModelSelected : null;
         return getDrLayout(
@@ -213,7 +214,7 @@ class OutputStore {
         );
     }
 
-    @computed get drFrequentistPlotData() {
+    get drFrequentistPlotData() {
         const data = [getDrDatasetPlotData(this.selectedDataset)];
         if (this.drModelSelected) {
             data.push(...this.drModelSelected);
@@ -227,7 +228,7 @@ class OutputStore {
         return data;
     }
 
-    @computed get drFrequentistPlotLayout() {
+    get drFrequentistPlotLayout() {
         // the main frequentist plot shown on the output page
         let layout = getDrLayout(
             this.selectedDataset,
@@ -244,7 +245,7 @@ class OutputStore {
         return layout;
     }
 
-    @computed get drBayesianPlotData() {
+    get drBayesianPlotData() {
         const bayesian_plot_data = [getDrDatasetPlotData(this.selectedDataset)],
             output = this.selectedOutput;
         output.bayesian.models.map((model, index) => {
@@ -266,14 +267,14 @@ class OutputStore {
         return bayesian_plot_data;
     }
 
-    @computed get drBayesianPlotLayout() {
+    get drBayesianPlotLayout() {
         // the bayesian plot shown on the output page and modal
         const layout = _.cloneDeep(this.drFrequentistPlotLayout);
         layout.legend = {tracegroupgap: 0, x: 1, y: 1};
         return layout;
     }
 
-    @computed get drPlotModalData() {
+    get drPlotModalData() {
         const data = [getDrDatasetPlotData(this.selectedDataset)];
         if (this.drModelModal) {
             data.push(...this.drModelModal);
@@ -284,18 +285,18 @@ class OutputStore {
         return data;
     }
 
-    @action.bound drPlotAddHover(model) {
+    drPlotAddHover(model) {
         if (this.drModelSelected && this.drModelSelected[0].name === model.name) {
             return;
         }
         this.drModelHover = getDrBmdLine(model, hoverColor);
     }
 
-    @action.bound drPlotRemoveHover() {
+    drPlotRemoveHover() {
         this.drModelHover = null;
     }
 
-    @computed get drFrequentistLollipopPlotDataset() {
+    get drFrequentistLollipopPlotDataset() {
         let plotData = [];
         let models = this.selectedOutput.frequentist.models;
         models.map(model => {
@@ -311,7 +312,7 @@ class OutputStore {
         return plotData;
     }
 
-    @computed get drBayesianLollipopPlotDataset() {
+    get drBayesianLollipopPlotDataset() {
         let plotData = [];
         let models = this.selectedOutput.bayesian.models;
         models.map(model => {
@@ -327,25 +328,25 @@ class OutputStore {
         return plotData;
     }
 
-    @computed get drFrequentistLollipopPlotLayout() {
+    get drFrequentistLollipopPlotLayout() {
         return getLollipopPlotLayout("Frequentist bmd/bmdl/bmdu Plot", this.selectedDataset);
     }
 
-    @computed get drBayesianLollipopPlotLayout() {
+    get drBayesianLollipopPlotLayout() {
         return getLollipopPlotLayout("Bayesian bmd/bmdl/bmdu Plot", this.selectedDataset);
     }
     // end dose-response plotting data methods
 
     // start model selection methods
-    @action.bound saveSelectedModelIndex(idx) {
+    saveSelectedModelIndex(idx) {
         this.selectedOutput.frequentist.selected.model_index = idx === -1 ? null : idx;
     }
 
-    @action.bound saveSelectedIndexNotes(value) {
+    saveSelectedIndexNotes(value) {
         this.selectedOutput.frequentist.selected.notes = value.length > 0 ? value : null;
     }
 
-    @action.bound saveSelectedModel() {
+    saveSelectedModel() {
         const output = this.selectedOutput,
             {csrfToken, editKey} = this.rootStore.mainStore.config.editSettings,
             payload = toJS({
@@ -401,11 +402,11 @@ class OutputStore {
     }
 
     // persist changes to axes by user for a given output session
-    @observable userPlotSettings = {};
-    @action.bound resetUserPlotSettings(output_id) {
+    userPlotSettings = {};
+    resetUserPlotSettings(output_id) {
         this.userPlotSettings = {};
     }
-    @action.bound updateUserPlotSettings(e) {
+    updateUserPlotSettings(e) {
         // set user configurable plot settings
         if (_.has(e, "xaxis.range[0]") && _.has(e, "xaxis.range[1]")) {
             this.userPlotSettings["xaxis"] = [e["xaxis.range[0]"], e["xaxis.range[1]"]];

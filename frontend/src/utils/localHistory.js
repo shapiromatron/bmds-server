@@ -1,7 +1,7 @@
 import _ from "lodash";
 import PropTypes from "prop-types";
 import React from "react";
-import {createRoot} from 'react-dom/client';
+import {createRoot} from "react-dom/client";
 
 import Icon from "@/components/common/Icon";
 

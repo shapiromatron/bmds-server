@@ -30,7 +30,6 @@ const renderPriorRow = prior => {
         );
     };
 
-@observer
 class ParameterPriorTable extends Component {
     render() {
         const {parameters, priorClass} = this.props,
@@ -81,4 +80,4 @@ ParameterPriorTable.propTypes = {
     parameters: PropTypes.object.isRequired,
     priorClass: PropTypes.number.isRequired,
 };
-export default ParameterPriorTable;
+export default observer(ParameterPriorTable);

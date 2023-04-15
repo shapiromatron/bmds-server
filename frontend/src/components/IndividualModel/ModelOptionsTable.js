@@ -19,7 +19,6 @@ const restrictionMapping = {
     2: ["Model Approach", "Bayesian"],
 };
 
-@observer
 class ModelOptionsTable extends Component {
     render() {
         const {dtype, model} = this.props,
@@ -87,4 +86,4 @@ ModelOptionsTable.propTypes = {
     dtype: PropTypes.string.isRequired,
     model: PropTypes.object.isRequired,
 };
-export default ModelOptionsTable;
+export default observer(ModelOptionsTable);

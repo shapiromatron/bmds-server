@@ -5,8 +5,6 @@ import React, {Component} from "react";
 import ModelsCheckBox from "./ModelsCheckBox";
 import ModelsCheckBoxHeader from "./ModelsCheckBoxHeader";
 
-@inject("modelsStore")
-@observer
 class ModelsCheckBoxList extends Component {
     render() {
         const {modelsStore} = this.props;
@@ -31,4 +29,4 @@ ModelsCheckBoxList.propTypes = {
     canEdit: PropTypes.bool,
     onChange: PropTypes.func,
 };
-export default ModelsCheckBoxList;
+export default inject("modelsStore")(observer(ModelsCheckBoxList));

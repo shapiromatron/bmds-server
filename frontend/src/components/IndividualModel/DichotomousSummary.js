@@ -4,7 +4,6 @@ import React, {Component} from "react";
 
 import {ff, fourDecimalFormatter} from "@/utils/formatters";
 
-@observer
 class DichotomousSummary extends Component {
     render() {
         const {store} = this.props,
@@ -66,4 +65,4 @@ DichotomousSummary.propTypes = {
     store: PropTypes.object,
 };
 
-export default DichotomousSummary;
+export default observer(DichotomousSummary);

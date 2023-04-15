@@ -4,7 +4,6 @@ import React, {Component} from "react";
 
 import {ff} from "@/utils/formatters";
 
-@observer
 class MaIndividualModels extends Component {
     render() {
         const {model_average, models} = this.props;
@@ -53,4 +52,4 @@ MaIndividualModels.propTypes = {
     model_average: PropTypes.object.isRequired,
     models: PropTypes.array.isRequired,
 };
-export default MaIndividualModels;
+export default observer(MaIndividualModels);

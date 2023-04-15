@@ -8,8 +8,6 @@ import Button from "../common/Button";
 import CheckboxInput from "../common/CheckboxInput";
 import FloatInput from "../common/FloatInput";
 
-@inject("logicStore")
-@observer
 class DecisionLogic extends Component {
     render() {
         const {logicStore} = this.props,
@@ -99,4 +97,4 @@ DecisionLogic.propTypes = {
     logicStore: PropTypes.object,
 };
 
-export default DecisionLogic;
+export default inject("logicStore")(observer(DecisionLogic));

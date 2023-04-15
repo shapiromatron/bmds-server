@@ -4,7 +4,6 @@ import React, {Component} from "react";
 
 import {ff} from "@/utils/formatters";
 
-@observer
 class ContinuousDeviance extends Component {
     render() {
         const {store} = this.props,
@@ -48,4 +47,4 @@ class ContinuousDeviance extends Component {
 ContinuousDeviance.propTypes = {
     store: PropTypes.object,
 };
-export default ContinuousDeviance;
+export default observer(ContinuousDeviance);

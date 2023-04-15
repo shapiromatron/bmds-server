@@ -4,8 +4,6 @@ import React, {Component} from "react";
 
 import SelectInput from "../common/SelectInput";
 
-@inject("dataStore")
-@observer
 class DatasetSelector extends Component {
     render() {
         const {dataStore, store} = this.props;
@@ -28,4 +26,4 @@ DatasetSelector.propTypes = {
     dataStore: PropTypes.object,
     store: PropTypes.object,
 };
-export default DatasetSelector;
+export default inject("dataStore")(observer(DatasetSelector));

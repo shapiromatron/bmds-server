@@ -5,7 +5,6 @@ import React, {Component} from "react";
 
 import {ff} from "@/utils/formatters";
 
-@observer
 class CDFTable extends Component {
     render() {
         const {bmd_dist} = this.props;
@@ -46,4 +45,4 @@ CDFTable.propTypes = {
     bmd_dist: PropTypes.array,
 };
 
-export default CDFTable;
+export default observer(CDFTable);

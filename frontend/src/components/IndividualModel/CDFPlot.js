@@ -6,7 +6,6 @@ import Plot from "react-plotly.js";
 
 import {getCdfLayout, getConfig} from "@/constants/plotting";
 
-@observer
 class CDFPlot extends Component {
     render() {
         const {dataset} = this.props,
@@ -39,4 +38,4 @@ CDFPlot.propTypes = {
     cdf: PropTypes.array,
 };
 
-export default CDFPlot;
+export default observer(CDFPlot);

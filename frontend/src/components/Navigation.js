@@ -12,8 +12,6 @@ import WordReportOptionsModal from "./Main/Actions/WordReportOptionsModal";
 import Main from "./Main/Main";
 import Output from "./Output/Output";
 
-@inject("mainStore")
-@observer
 class Navigation extends Component {
     render() {
         const {mainStore} = this.props;
@@ -75,4 +73,4 @@ Navigation.propTypes = {
     ExcelUrl: PropTypes.string,
     config: PropTypes.object,
 };
-export default Navigation;
+export default inject("mainStore")(observer(Navigation));

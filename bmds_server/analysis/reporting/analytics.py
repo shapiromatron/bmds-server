@@ -30,7 +30,7 @@ def time_series() -> dict:
     # per day punchcard chart
     fig = punchcard(df)
     fig.update_layout(title="Analysis creations per day")
-    stats["fig_per_day_punchcard"] = fig
+    stats["fig_punchcard"] = fig
 
     # per week
     df = pd.DataFrame(

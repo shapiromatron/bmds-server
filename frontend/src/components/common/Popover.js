@@ -2,18 +2,16 @@ import _ from "lodash";
 import PropTypes from "prop-types";
 import React, {Component} from "react";
 
-import $ from "$";
-
 class Popover extends Component {
     constructor(props) {
         super(props);
         this.domNode = React.createRef();
     }
     componentDidMount() {
-        $(this.domNode.current).popover({placement: "auto", trigger: "hover"});
+        window.$(this.domNode.current).popover({placement: "auto", trigger: "hover"});
     }
     componentWillUnmount() {
-        $(this.domNode.current).popover("dispose");
+        window.$(this.domNode.current).popover("dispose");
     }
     render() {
         const {children, content, title, element} = this.props;

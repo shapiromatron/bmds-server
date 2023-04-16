@@ -8,10 +8,6 @@ module.exports = {
         main: ["./src/index"],
     },
 
-    externals: {
-        $: "$",
-    },
-
     mode: "production",
 
     module: {

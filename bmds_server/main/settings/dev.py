@@ -6,6 +6,7 @@ MIDDLEWARE += ("debug_toolbar.middleware.DebugToolbarMiddleware",)
 INTERNAL_IPS = ("127.0.0.1",)
 
 DEBUG = True
+DJANGO_VITE_DEV_MODE = True
 
 SERVER_ROLE = "development environment"
 SERVER_BANNER_COLOR = "#318d50"

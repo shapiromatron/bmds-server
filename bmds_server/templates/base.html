@@ -1,6 +1,6 @@
 {% load cache %}
 {% load static %}
-{% load render_bundle from webpack_loader %}
+{% load django_vite %}
 
 <!DOCTYPE html>
 <html class="js" lang="en">
@@ -84,8 +84,7 @@
   <script src="{% static 'vendor/jquery/3.6.1/jquery.min.js' %}"></script>
   <script src="{% static 'vendor/bootstrap/4.6.2/js/bootstrap.bundle.min.js' %}"></script>
 {% endcache footer %}
-{% render_bundle 'main' %}
-{% block extra-js %}
-{% endblock extra-js %}
+{% vite_hmr_client %}
+{% block extra-js %}{% endblock extra-js %}
 </body>
 </html>

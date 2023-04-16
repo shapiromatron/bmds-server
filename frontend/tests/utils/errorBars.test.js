@@ -1,3 +1,5 @@
+import {describe, it} from "vitest";
+
 import {continuousErrorBars, dichotomousErrorBars, inv_tdist_05} from "../../src/utils/errorBars";
 import assert from "../helpers";
 

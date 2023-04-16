@@ -34,8 +34,8 @@ INSTALLED_APPS = [
     # 3rd party apps
     "rest_framework",
     "rest_framework.authtoken",
-    "webpack_loader",
     "reversion",
+    "django_vite",
     # Custom apps
     "bmds_server.common",
     "bmds_server.analysis",
@@ -198,14 +198,11 @@ REST_FRAMEWORK = {
     ),
 }
 
-WEBPACK_LOADER = {
-    "DEFAULT": {
-        "BUNDLE_DIR_NAME": "bundles/",
-        "STATS_FILE": str(BASE_DIR / "webpack-stats.json"),
-        "POLL_INTERVAL": 0.1,
-        "IGNORE": [".+/.map"],
-    }
-}
+DJANGO_VITE_DEV_MODE = False
+DJANGO_VITE_ASSETS_PATH = BASE_DIR / "static" / "bundles"
+DJANGO_VITE_DEV_SERVER_PORT = 8199
+DJANGO_VITE_STATIC_URL_PREFIX = "/static/bundles/"
+DJANGO_VITE_MANIFEST_PATH = BASE_DIR / "static" / "bundles" / "manifest.json"
 
 DAYS_TO_KEEP_ANALYSES = 180
 

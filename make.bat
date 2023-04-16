@@ -35,7 +35,7 @@ goto :eof
 :sync-dev
 python -m pip install -U pip
 pip install -r requirements/dev.txt
-yarn --cwd frontend
+npm --prefix .\frontend install
 manage.py migrate
 goto :eof
 
@@ -75,7 +75,7 @@ goto :eof
 
 :test
 py.test
-npm --prefix .\frontend run test-windows
+npm --prefix .\frontend run test
 goto :eof
 
 :test-py
@@ -83,5 +83,5 @@ py.test
 goto :eof
 
 :test-js
-npm --prefix .\frontend run test-windows
+npm --prefix .\frontend run test
 goto :eof

@@ -15,12 +15,7 @@ module.exports = {
             {
                 exclude: /node_modules/,
                 test: /\.js$/,
-                use: {
-                    loader: "babel-loader",
-                    options: {
-                        plugins: [["@babel/plugin-proposal-class-properties", {loose: false}]],
-                    },
-                },
+                use: {loader: "babel-loader"},
             },
             {
                 test: /\.css$/i,

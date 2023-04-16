@@ -2,7 +2,6 @@
 Twitter Bootstrap 4 - helper methods
 """
 from textwrap import dedent
-from typing import Optional
 from uuid import uuid4
 
 from django import template
@@ -41,7 +40,7 @@ def icon(name: str):
 
 
 @register.simple_tag()
-def plotly(fig: Optional[Figure]) -> str:
+def plotly(fig: Figure) -> str | None:
     """Generate a plotly figure"""
     if fig is None:
         return ""

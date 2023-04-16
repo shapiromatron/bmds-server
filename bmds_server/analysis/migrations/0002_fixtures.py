@@ -9,7 +9,6 @@ def load_fixture(apps, schema_editor):
 
 
 class Migration(migrations.Migration):
-
     initial = True
 
     dependencies = [("analysis", "0001_initial")]

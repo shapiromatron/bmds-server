@@ -1,5 +1,3 @@
-from typing import Optional
-
 from django.conf import settings
 from django.contrib.admin.views.decorators import staff_member_required
 from django.middleware.csrf import get_token
@@ -48,7 +46,7 @@ class Analytics(TemplateView):
         return super().get_context_data(**kwargs)
 
 
-def get_analysis_or_404(pk: str, password: Optional[str] = "") -> tuple[models.Analysis, bool]:
+def get_analysis_or_404(pk: str, password: str | None = "") -> tuple[models.Analysis, bool]:
     """Return an analysis object and if a correct password is provided for this object.
 
     Args:

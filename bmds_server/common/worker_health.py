@@ -1,4 +1,4 @@
-from datetime import datetime, timedelta, timezone
+from datetime import UTC, datetime, timedelta
 
 import matplotlib.pyplot as plt
 import numpy as np
@@ -31,7 +31,7 @@ class WorkerHealthcheck:
         """
         conn = self._get_conn()
         pipeline = conn.pipeline()
-        pipeline.lpush(self.KEY, datetime.now(timezone.utc).timestamp())
+        pipeline.lpush(self.KEY, datetime.now(UTC).timestamp())
         pipeline.ltrim(self.KEY, 0, self.MAX_SIZE - 1)
         pipeline.execute()
 
@@ -41,8 +41,8 @@ class WorkerHealthcheck:
         last_push = conn.lindex(self.KEY, 0)
         if last_push is None:
             return False
-        last_ping = datetime.fromtimestamp(float(last_push), timezone.utc)
-        return datetime.now(timezone.utc) - last_ping < self.MAX_WAIT
+        last_ping = datetime.fromtimestamp(float(last_push), UTC)
+        return datetime.now(UTC) - last_ping < self.MAX_WAIT
 
     def series(self) -> pd.Series:
         """Return a pd.Series of last successful times"""

@@ -4,7 +4,6 @@ import uuid
 from copy import deepcopy
 from datetime import timedelta
 from io import BytesIO
-from typing import Optional
 
 import bmds
 import pandas as pd
@@ -299,19 +298,19 @@ class Analysis(models.Model):
     def renew(self):
         self.deletion_date = get_deletion_date(self.deletion_date)
 
-    def get_bmds_version(self) -> Optional[VersionSchema]:
+    def get_bmds_version(self) -> VersionSchema | None:
         if not self.is_finished or self.has_errors:
             return None
         return AnalysisOutput.parse_obj(self.outputs).bmds_python_version
 
     @property
-    def deletion_date_str(self) -> Optional[str]:
+    def deletion_date_str(self) -> str | None:
         if self.deletion_date is None:
             return None
         return self.deletion_date.strftime("%B %d, %Y")
 
     @property
-    def days_until_deletion(self) -> Optional[int]:
+    def days_until_deletion(self) -> int | None:
         if self.deletion_date is None:
             return None
         return (self.deletion_date - now()).days

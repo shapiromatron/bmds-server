@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load django_vite %}
 
 {% block title %}{{block.super}} | Transforms | Poly K{% endblock title %}
 
@@ -8,7 +9,5 @@
 
 {% block extra-js %}
 {{ config|json_script:"config" }}
-<script type="text/javascript">
-    window.app.polyk(document.getElementById('main'));
-</script>
+{% vite_asset 'src/views/polyk.js' %}
 {% endblock extra-js %}

@@ -6,9 +6,9 @@ import checker from "vite-plugin-checker";
 export default defineConfig({
     plugins: [
         react({
-            babel: {
-                babelrc: true,
-            },
+            // babel: {
+            //     babelrc: true,
+            // },
         }),
         checker({
             eslint: {lintCommand: "eslint --cache --ext .js ."},
@@ -19,7 +19,6 @@ export default defineConfig({
     ],
     server: {
         port: 8199,
-        open: false,
     },
     resolve: {
         alias: {
@@ -33,8 +32,8 @@ export default defineConfig({
         emptyOutDir: true,
         rollupOptions: {
             input: {
-                main: resolve(__dirname, "./src/main.js"),
                 history: resolve(__dirname, "./src/views/history.js"),
+                polyk: resolve(__dirname, "./src/views/polyk.js"),
             },
         },
     },

@@ -1,7 +1,7 @@
 import _ from "lodash";
-import {inject, observer} from "mobx-react";
+import { inject, observer } from "mobx-react";
 import PropTypes from "prop-types";
-import React, {Component} from "react";
+import React, { Component } from "react";
 import Tab from "react-bootstrap/Tab";
 import Tabs from "react-bootstrap/Tabs";
 import Plot from "react-plotly.js";
@@ -11,9 +11,40 @@ import FloatInput from "../../common/FloatInput";
 import TextAreaInput from "../../common/TextAreaInput";
 import TextInput from "../../common/TextInput";
 
+
+const DataFrameTable = function ({ data, columns }) {
+    const nrows = data[columns[0]].length;
+    return (
+        <table className="table table-sm table-striped table-hover">
+            <thead>
+                <tr>
+                    {columns.map((column, i) => (
+                        <th key={i}>{column}</th>
+                    ))}
+                </tr>
+            </thead>
+            <tbody>
+                {_.range(nrows).map(i => {
+                    return (
+                        <tr key={i}>
+                            {columns.map((column, j) => (
+                                <td key={j}>{data[column][i]}</td>
+                            ))}
+                        </tr>
+                    );
+                })}
+            </tbody>
+        </table>
+    );
+};
+DataFrameTable.propTypes = {
+    data: PropTypes.object.isRequired,
+    columns: PropTypes.arrayOf(PropTypes.string.isRequired),
+};
+
 class _InputForm extends Component {
     render() {
-        const {settings, updateSettings, error, submit, loadExampleData} = this.props.store;
+        const { settings, updateSettings, error, submit, loadExampleData } = this.props.store;
         return (
             <form>
                 <div className="row">
@@ -72,8 +103,8 @@ const InputForm = inject("store")(observer(_InputForm));
 
 class _SummaryPlot extends Component {
     render() {
-        const {df2} = this.props.store.outputs,
-            {dose_units} = this.props.store.settings;
+        const { df2 } = this.props.store.outputs,
+            { dose_units } = this.props.store.settings;
         return (
             <Plot
                 data={[
@@ -82,7 +113,7 @@ class _SummaryPlot extends Component {
                         y: df2.proportion,
                         type: "scatter",
                         mode: "lines+markers",
-                        marker: {color: "blue"},
+                        marker: { color: "blue" },
                         name: "Original Proportion",
                     },
                     {
@@ -90,7 +121,7 @@ class _SummaryPlot extends Component {
                         y: df2.adj_proportion,
                         type: "scatter",
                         mode: "lines+markers",
-                        marker: {color: "red"},
+                        marker: { color: "red" },
                         name: "Adjusted Proportion",
                     },
                 ]}
@@ -112,7 +143,7 @@ class _SummaryPlot extends Component {
                         },
                     },
                 }}
-                style={{width: "100%"}}
+                style={{ width: "100%" }}
                 useResizeHandler={true}
             />
         );
@@ -145,9 +176,9 @@ class _RawDataPlot extends Component {
         return _.sortBy(results, arr => arr[0]);
     }
     render() {
-        const {df} = this.props.store.outputs,
+        const { df } = this.props.store.outputs,
             data = this.getData(df),
-            {dose_units} = this.props.store.settings;
+            { dose_units } = this.props.store.settings;
         return (
             <Plot
                 data={data.map(row => {
@@ -177,7 +208,7 @@ class _RawDataPlot extends Component {
                         },
                     },
                 }}
-                style={{width: "100%"}}
+                style={{ width: "100%" }}
                 useResizeHandler={true}
             />
         );
@@ -190,7 +221,7 @@ const RawDataPlot = inject("store")(observer(_RawDataPlot));
 
 class _OutputTabs extends Component {
     render() {
-        const {df, df2} = this.props.store.outputs;
+        const { df, df2 } = this.props.store.outputs;
         return (
             <Tabs
                 defaultActiveKey="summary"
@@ -243,7 +274,7 @@ const OutputTabs = inject("store")(observer(_OutputTabs));
 
 class _App extends Component {
     render() {
-        const {outputs} = this.props.store;
+        const { outputs } = this.props.store;
         return (
             <div className="container-fluid py-3">
                 <h2>Poly K adjustment</h2>
@@ -267,35 +298,5 @@ _App.propTypes = {
     store: PropTypes.object,
 };
 const App = inject("store")(observer(_App));
-
-const DataFrameTable = function({data, columns}) {
-    const nrows = data[columns[0]].length;
-    return (
-        <table className="table table-sm table-striped table-hover">
-            <thead>
-                <tr>
-                    {columns.map((column, i) => (
-                        <th key={i}>{column}</th>
-                    ))}
-                </tr>
-            </thead>
-            <tbody>
-                {_.range(nrows).map(i => {
-                    return (
-                        <tr key={i}>
-                            {columns.map((column, j) => (
-                                <td key={j}>{data[column][i]}</td>
-                            ))}
-                        </tr>
-                    );
-                })}
-            </tbody>
-        </table>
-    );
-};
-DataFrameTable.propTypes = {
-    data: PropTypes.object.isRequired,
-    columns: PropTypes.arrayOf(PropTypes.string.isRequired),
-};
 
 export default App;

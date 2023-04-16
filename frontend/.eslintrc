@@ -54,7 +54,6 @@
         "browser": true,
         "es6": true,
         "jest": true,
-        "jquery": true,
         "node": true
     },
     "extends": [

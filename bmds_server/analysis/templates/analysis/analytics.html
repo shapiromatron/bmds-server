@@ -26,19 +26,19 @@
     <div class="col-lg-12">
         <h3>Time series analysis</h3>
     </div>
-    {% card col-lg-6 %}
-        {% plotly config.time_series.fig_per_day_line %}
+    {% card col-lg-12 %}
+        {% plotly config.time_series.fig_per_day_punchcard %}
         <p class='mb-0 text-muted'>Footnote here. TODO - add.</p>
     {% endcard %}
-    {% card col-lg-6 %}
-        {% plotly config.time_series.fig_per_day_punchard %}
+    {% card col-lg-4 %}
+        {% plotly config.time_series.fig_per_day %}
         <p class='mb-0 text-muted'>Footnote here. TODO - add.</p>
     {% endcard %}
-    {% card col-lg-6 %}
+    {% card col-lg-4 %}
         {% plotly config.time_series.fig_per_week %}
         <p class='mb-0 text-muted'>Footnote here. TODO - add.</p>
     {% endcard %}
-    {% card col-lg-6 %}
+    {% card col-lg-4 %}
         {% plotly config.time_series.fig_per_month %}
         <p class='mb-0 text-muted'>Footnote here. TODO - add.</p>
     {% endcard %}

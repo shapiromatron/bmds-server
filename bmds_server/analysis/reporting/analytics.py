@@ -5,8 +5,8 @@ import plotly.express as px
 from django.conf import settings
 from django.db.models import BooleanField, Count, ExpressionWrapper, F, Q
 from django.db.models.functions import TruncDay, TruncMonth, TruncWeek
-from pandas.tseries.offsets import Week
 
+from ...common.figures import punchcard
 from ...common.utils import timeout_cache
 from ..models import Analysis
 
@@ -25,25 +25,12 @@ def time_series() -> dict:
 
     # per day line chart
     fig = px.line(df, x="day", y="count", title="Analyses created per day", markers=True)
-    stats["fig_per_day_line"] = fig
+    stats["fig_per_day"] = fig
 
     # per day punchcard chart
-    df.loc[:, "x"] = df.day.dt.year + df.day.dt.isocalendar().week / 52
-    df.loc[:, "xlabel"] = df.day.where(
-        df.day.dt.weekday == 0, df.day - Week(weekday=0)
-    ).dt.strftime("%b %d")
-    df.loc[:, "y"] = df.day.dt.day_of_week  # Monday=0, Sunday=6
-
-    stats["fig_per_day_punchard"] = None
-    if df.y.unique().size == 7:
-        fig = px.imshow(
-            df.pivot(index="y", columns="x", values="count").fillna(0).values,
-            labels=dict(x="Week", y="Day of week", color="Items created"),
-            # y=["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"],
-            x=df.xlabel.unique(),
-            color_continuous_scale="mint",
-        )
-        stats["fig_per_day_punchard"] = fig
+    fig = punchcard(df)
+    fig.update_layout(title="Analysis creations per day")
+    stats["fig_per_day_punchcard"] = fig
 
     # per week
     df = pd.DataFrame(

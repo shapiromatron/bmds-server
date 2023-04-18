@@ -7,7 +7,6 @@ from ..models import get_deletion_date
 
 
 class Migration(migrations.Migration):
-
     initial = True
 
     dependencies = []

@@ -1,6 +1,6 @@
 # website
-Django==4.1.7
-django-anymail==9.0
+Django==4.2.0
+django-anymail==9.1
 django-redis==5.2.0
 django-webpack-loader==1.8.0
 djangorestframework==3.14.0
@@ -9,7 +9,7 @@ djangorestframework==3.14.0
 django-reversion==5.0.4
 
 # db
-psycopg2-binary==2.9.5
+psycopg2-binary==2.9.6
 
 # tasks
 celery==5.2.7
@@ -17,4 +17,4 @@ celery==5.2.7
   kombu==5.2.4
 
 plotly==5.13.0
-redis==4.4.2
+redis==4.5.4

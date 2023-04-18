@@ -89,6 +89,7 @@ Recommended extensions:
 
 - [Python](https://marketplace.visualstudio.com/items?itemName=ms-python.python)
 - [Eslint](https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint)
+- [Ruff](https://marketplace.visualstudio.com/items?itemName=charliermarsh.ruff)
 
 Recommended workspace settings:
 
@@ -99,7 +100,11 @@ Recommended workspace settings:
         "editor.formatOnSave": false
     },
     "[python]": {
-        "editor.formatOnSave": true
+        "editor.formatOnSave": true,
+        "editor.formatOnPaste": false,
+        "editor.codeActionsOnSave": {
+            "source.fixAll": true
+        }
     },
     "[javascript]": {
         "editor.formatOnSave": false,
@@ -108,10 +113,8 @@ Recommended workspace settings:
         }
     },
     "editor.formatOnSave": true,
+    "python.linting.flake8Enabled": false,
     "python.pythonPath": "./venv/bin/python",
-    "python.linting.flake8Args": [
-        "--config=.flake8"
-    ],
     "eslint.workingDirectories": [
         "./frontend"
     ]

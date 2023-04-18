@@ -104,7 +104,6 @@ class TestAnalysisSession:
             data["models"] = {"frequentist_restricted": ["Multistage"]}
             data["dataset_options"][0]["degree"] = 0  # n-1
             session = AnalysisSession.create(data, 0, 0)
-            print(f"{num_doses=} {expected_degree=}")
             _expected_degree(session, expected_degree)
 
         # degree = N -1, bayesian, fixed at degree == 2
@@ -160,7 +159,6 @@ class TestAnalysisSession:
 
     # disttype 3 Linear and power are not added
     def test_disttype(self, bmds3_complete_continuous):
-
         data = deepcopy(bmds3_complete_continuous)
         data["models"] = {
             "frequentist_restricted": ["Exponential", "Hill", "Linear", "Power"],

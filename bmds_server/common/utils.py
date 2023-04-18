@@ -1,9 +1,9 @@
 import logging
 import random
 import string
+from collections.abc import Callable
 from datetime import datetime
 from functools import wraps
-from typing import Callable, Optional
 
 from django.core.cache import cache
 
@@ -19,14 +19,14 @@ def random_string(samples: str = _random_string_pool, length: int = 12) -> str:
         samples (str, optional): Random characters to select from.
         length (int, optional): Size of generated string; defaults to 12.
     """
-    return "".join(random.choices(_random_string_pool, k=length))
+    return "".join(random.choices(_random_string_pool, k=length))  # noqa: S311
 
 
 def to_timestamp(dt: datetime) -> str:
     return dt.strftime("%Y-%b-%d %H:%m %Z")
 
 
-def get_bool(value: Optional[str]) -> bool:
+def get_bool(value: str | None) -> bool:
     return value is not None and value.lower() == "true"
 
 

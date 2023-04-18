@@ -1,6 +1,6 @@
 import itertools
 from copy import deepcopy
-from typing import NamedTuple, Optional, Self
+from typing import NamedTuple, Self
 
 import bmds
 import numpy as np
@@ -20,7 +20,7 @@ from .transforms import (
 lognormal_enabled = {bmds.constants.M_ExponentialM3, bmds.constants.M_ExponentialM5}
 
 
-def build_frequentist_session(dataset, inputs, options, dataset_options) -> Optional[BmdsSession]:
+def build_frequentist_session(dataset, inputs, options, dataset_options) -> BmdsSession | None:
     restricted_models = inputs["models"].get(PriorEnum.frequentist_restricted, [])
     unrestricted_models = inputs["models"].get(PriorEnum.frequentist_unrestricted, [])
 
@@ -73,7 +73,7 @@ def build_frequentist_session(dataset, inputs, options, dataset_options) -> Opti
 
 def build_bayesian_session(
     dataset: bmds.datasets.DatasetType, inputs: dict, options: dict, dataset_options: dict
-) -> Optional[BmdsSession]:
+) -> BmdsSession | None:
     models = inputs["models"].get(PriorEnum.bayesian, [])
 
     # filter lognormal
@@ -119,8 +119,8 @@ class AnalysisSession(NamedTuple):
 
     dataset_index: int
     option_index: int
-    frequentist: Optional[BmdsSession]
-    bayesian: Optional[BmdsSession]
+    frequentist: BmdsSession | None
+    bayesian: BmdsSession | None
 
     @classmethod
     def run(cls, inputs: dict, dataset_index: int, option_index: int) -> AnalysisSessionSchema:

@@ -8,7 +8,6 @@ from rest_framework.renderers import BaseRenderer
 
 
 class TxtRenderer(BaseRenderer):
-
     media_type = "text/plain"
     format = "txt"
 

@@ -7,7 +7,6 @@ from django.utils.timezone import now
 
 
 class Command(BaseCommand):
-
     help = "Delete old results which are older than N days."
 
     def handle(self, *args, **options):

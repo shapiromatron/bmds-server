@@ -110,6 +110,8 @@ LANGUAGE_CODE = "en-us"
 TIME_ZONE = os.getenv("TIME_ZONE", "US/Eastern")
 USE_TZ = True
 
+ALWAYS_SHOW_FUTURE = False
+
 EMAIL_SUBJECT_PREFIX = f"[{PROJECT_NAME}] "
 DEFAULT_FROM_EMAIL = f"admin@{PROJECT_NAME}.com"
 

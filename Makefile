@@ -87,7 +87,7 @@ format-js:  ## Fix javascript formatting issues where possible
 	@npm --prefix ./frontend run format
 
 sync-dev:  ## Sync dev environment after code checkout
-	python -m pip install -U pip
-	pip install -r requirements/dev.txt
+	python -m pip install -U pip --trusted-host=pypi.org --trusted-host=files.pythonhosted.org
+	pip install -r requirements/dev.txt --trusted-host=pypi.org --trusted-host=files.pythonhosted.org
 	yarn --cwd frontend
 	manage.py migrate

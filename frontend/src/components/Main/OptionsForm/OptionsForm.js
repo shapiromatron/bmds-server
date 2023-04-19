@@ -3,7 +3,6 @@ import React from "react";
 
 import * as mc from "@/constants/mainConstants";
 import {
-    backgroundOptions,
     continuousBmrOptions,
     dichotomousBmrOptions,
     distTypeOptions,
@@ -99,17 +98,6 @@ const OptionsForm = props => {
                         />
                     </td>
                     <td>
-                        <SelectInput
-                            value={props.options.background}
-                            onChange={value =>
-                                props.saveOptions("background", parseInt(value), props.idx)
-                            }
-                            choices={backgroundOptions.map(option => {
-                                return {value: option.value, text: option.label};
-                            })}
-                        />
-                    </td>
-                    <td>
                         <IntegerInput
                             value={props.options.bootstrap_iterations}
                             onChange={value =>
@@ -151,7 +139,6 @@ OptionsForm.propTypes = {
     tail_probability: PropTypes.number,
     distribution: PropTypes.string,
     variance: PropTypes.string,
-    background: PropTypes.string,
     delete: PropTypes.func,
 };
 export default OptionsForm;

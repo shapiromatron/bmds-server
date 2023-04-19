@@ -4,10 +4,7 @@ import bmds
 from bmds.bmds3.constants import DistType
 from bmds.bmds3.types.continuous import ContinuousRiskType
 from bmds.bmds3.types.dichotomous import DichotomousRiskType
-from bmds.bmds3.types.nested_dichotomous import (
-    NestedDichotomousBackgroundType,
-    NestedDichotomousLSCType,
-)
+from bmds.bmds3.types.nested_dichotomous import NestedDichotomousLSCType
 from django.core.exceptions import ValidationError
 from pydantic import BaseModel, confloat, conlist
 
@@ -33,7 +30,6 @@ class NestedDichotomousOption(BaseModel):
     bmr_value: float
     confidence_level: confloat(ge=0.5, le=1)
     litter_specific_covariate: NestedDichotomousLSCType
-    background: NestedDichotomousBackgroundType
     bootstrap_iterations: int
     bootstrap_seed: int
 
@@ -47,7 +43,7 @@ class ContinuousOptions(BaseModel):
 
 
 class NestedDichotomousOptions(BaseModel):
-    options: conlist(NestedDichotomousOption, min_items=1, max_items=10)
+    options: conlist(NestedDichotomousOption, min_items=1, max_items=3)
 
 
 def validate_options(dataset_type: str, data: Any):

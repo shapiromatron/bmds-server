@@ -34,11 +34,11 @@ python -m venv venv
 source ./venv/bin/activate
 
 # install requirements
-./venv/bin/pip install -r ./requirements/dev.txt
+./venv/bin/pip install -r ./requirements/dev.txt --trusted-host=pypi.org --trusted-host=files.pythonhosted.org
 
 # install package in developer mode and developer tools
-pip install -e ../bmds
-pip install -r requirements/dev.txt
+pip install -e ../bmds --trusted-host=pypi.org --trusted-host=files.pythonhosted.org
+pip install -r requirements/dev.txt --trusted-host=pypi.org --trusted-host=files.pythonhosted.org
 
 # create the database
 createuser --superuser --no-password bmds-online
@@ -131,6 +131,17 @@ Feature flags are enabled on the frontend so that if you're logged in as an admi
     - `http://127.0.0.1:8000/analysis/794236df-2684-4781-bb95-ad9a58293d15/gvl8lg6sayiw/`
 - Change the URL to enable the `future` mode:
     - `http://127.0.0.1:8000/analysis/794236df-2684-4781-bb95-ad9a58293d15/gvl8lg6sayiw/?future=1`
+
+Future mode can also be enabled via the local setting `ALWAYS_SHOW_FUTURE`. This will allow you to view the new features without needing to log in or enable `future` mode:
+
+```python
+# bmds_server\main\settings\local.py
+    ...
+    # Shows future-flagged items without login/url parameter
+    ALWAYS_SHOW_FUTURE = True
+    ...
+``` 
+
 
 That's it! Now you should be able to view content that's coming soon!
 

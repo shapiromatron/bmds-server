@@ -61,7 +61,6 @@ def build_model_settings(
             alpha=1.0 - options["confidence_level"],
             bmr_type=options["bmr_type"],
             litter_specific_covariate=options["litter_specific_covariate"],
-            background=options["background"],
             bootstrap_iterations=options["bootstrap_iterations"],
             bootstrap_seed=options["bootstrap_seed"],
         )

@@ -81,7 +81,8 @@ class AnalysisDetail(DetailView):
             "url": self.object.get_absolute_url(),
             "excelUrl": self.object.get_excel_url(),
             "wordUrl": self.object.get_word_url(),
-            "future": self.request.user.is_staff and bool(self.request.GET.get("future")),
+            "future": settings.ALWAYS_SHOW_FUTURE
+            or (self.request.user.is_staff and bool(self.request.GET.get("future"))),
         }
         if self.can_edit:
             context["config"]["editSettings"] = {

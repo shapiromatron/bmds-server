@@ -1,8 +1,9 @@
+from datetime import datetime
 from importlib.metadata import version
 
 from textual.app import App, ComposeResult
 from textual.containers import ScrollableContainer
-from textual.widgets import Button, Footer, Header, Markdown
+from textual.widgets import Button, Footer, Header, Markdown, TextLog
 
 from .web import MyServer
 
@@ -21,12 +22,24 @@ class DjangoApp:
         self.is_running = not self.is_running
         if self.is_running:
             try:
+                self.tui.log_app.log("Starting...")
                 self.app_server.start()
             finally:
+                self.tui.log_app.log("Stopping in finally...")  # todo - context manager?
                 self.app_server.stop()
         else:
+            self.tui.log_app.log("Stopping...")
             self.app_server.stop()
             self.app_server = MyServer()
+
+
+class LogApp:
+    def __init__(self, tui: App):
+        self.tui = tui
+
+    def log(self, message: str):
+        logger = self.tui.query_one("#log", expect_type=TextLog)
+        logger.write(f"{datetime.now()}: {message}")
 
 
 class BmdsDesktop(App):
@@ -35,13 +48,18 @@ class BmdsDesktop(App):
     TITLE = f"BMDS Desktop (version {version('bmds_server')})"
     BINDINGS = [("q", "quit", "Quit"), ("d", "toggle_dark", "Toggle dark mode")]
 
+    def __init__(self, **kw):
+        self.django_app = DjangoApp(self)
+        self.log_app = LogApp(self)
+        super().__init__(**kw)
+
     def compose(self) -> ComposeResult:
         """Create child widgets for the app."""
-        self.django_app = DjangoApp(self)
         yield Header()
         yield ScrollableContainer(
             Markdown(MD_HEADER),
             Button("Start", id="start"),
+            TextLog(id="log"),
         )
         yield Footer()
 

@@ -18,6 +18,12 @@ class Store {
     @observable errorObject = null;
     @observable outputs = null;
 
+    @observable showAbout = false;
+    @action.bound
+    setAboutModal(input) {
+        this.showAbout = input;
+    }
+
     @action.bound
     updateSettings(key, value) {
         this.settings[key] = value;

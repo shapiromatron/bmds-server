@@ -11,6 +11,9 @@ import FloatInput from "../../common/FloatInput";
 import TextAreaInput from "../../common/TextAreaInput";
 import TextInput from "../../common/TextInput";
 
+import About from "./AboutModal";
+import AboutModal from "./AboutModal";
+
 @inject("store")
 @observer
 class InputForm extends Component {
@@ -249,10 +252,13 @@ OutputTabs.propTypes = {
 @observer
 class App extends Component {
     render() {
-        const {outputs} = this.props.store;
+        const {outputs, showAbout} = this.props.store;
         return (
             <div className="container-fluid py-3">
+                <div className="d-flex">
                 <h2>Poly K adjustment</h2>
+                <button onClick={() => this.props.store.setAboutModal(true)} type="button" className="btn btn-primary ml-2">About</button>
+                </div>
                 <p className="text-muted">
                     This is a work in progress. Prior to deployment, we should update the help text,
                     user-interface, instructions etc.
@@ -265,6 +271,10 @@ class App extends Component {
                         <OutputTabs />
                     </>
                 ) : null}
+                <>
+                {showAbout ? <AboutModal store={this.props.store} /> : null}
+                </>
+                
             </div>
         );
     }

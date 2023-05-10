@@ -10,8 +10,7 @@ import Button from "../../common/Button";
 import FloatInput from "../../common/FloatInput";
 import TextAreaInput from "../../common/TextAreaInput";
 import TextInput from "../../common/TextInput";
-
-import About from "./AboutModal";
+import HelpTextPopover from "../../common/HelpTextPopover";
 import AboutModal from "./AboutModal";
 
 @inject("store")
@@ -23,11 +22,14 @@ class InputForm extends Component {
             <form>
                 <div className="row">
                     <div className="col-lg-6">
-                        <TextInput
+                        <div className="d-inline">
+                            <HelpTextPopover content="content" />
+                            <TextInput
                             label="Dose units"
                             value={settings.dose_units}
                             onChange={value => updateSettings("dose_units", value)}
-                        />
+                            />
+                        </div>
                         <FloatInput
                             label="Power"
                             value={settings.power}
@@ -199,6 +201,7 @@ RawDataPlot.propTypes = {
 class OutputTabs extends Component {
     render() {
         const {df, df2} = this.props.store.outputs;
+        df['weight'] = df['adj_n']
         return (
             <Tabs
                 defaultActiveKey="summary"
@@ -238,7 +241,7 @@ class OutputTabs extends Component {
                     />
                 </Tab>
                 <Tab eventKey="data" title="Data">
-                    <DataFrameTable data={df} columns={["dose", "day", "has_tumor", "adj_n"]} />
+                    <DataFrameTable data={df} columns={["dose", "day", "has_tumor", "weight"]} />
                 </Tab>
             </Tabs>
         );
@@ -258,6 +261,9 @@ class App extends Component {
                 <div className="d-flex">
                 <h2>Poly K adjustment</h2>
                 <button onClick={() => this.props.store.setAboutModal(true)} type="button" className="btn btn-primary ml-2">About</button>
+                <>
+                {showAbout ? <AboutModal store={this.props.store} /> : null}
+                </>
                 </div>
                 <p className="text-muted">
                     This is a work in progress. Prior to deployment, we should update the help text,
@@ -271,10 +277,6 @@ class App extends Component {
                         <OutputTabs />
                     </>
                 ) : null}
-                <>
-                {showAbout ? <AboutModal store={this.props.store} /> : null}
-                </>
-                
             </div>
         );
     }
@@ -299,7 +301,7 @@ const DataFrameTable = function({data, columns}) {
                     return (
                         <tr key={i}>
                             {columns.map((column, j) => (
-                                <td key={j}>{data[column][i]}</td>
+                                <td key={j}>{column === 'adj_n' || column === 'adj_proportion' || column === 'weight' ? data[column][i].toFixed(4) : data[column][i]}</td>
                             ))}
                         </tr>
                     );

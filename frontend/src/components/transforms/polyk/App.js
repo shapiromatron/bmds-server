@@ -23,7 +23,6 @@ class InputForm extends Component {
                 <div className="row">
                     <div className="col-lg-6">
                         <div>
-                            <HelpTextPopover content='content'/>
                             <TextInput
                                 label="Dose units"
                                 value={settings.dose_units}
@@ -255,12 +254,12 @@ OutputTabs.propTypes = {
 @observer
 class App extends Component {
     render() {
-        const { outputs, showAbout } = this.props.store;
+        const { outputs, showAbout, setAboutModal } = this.props.store;
         return (
             <div className="container-fluid py-3">
                 <div className="d-flex">
                     <h2>Poly K adjustment</h2>
-                    <button onClick={() => this.props.store.setAboutModal(true)} type="button" className="btn btn-primary ml-2">About</button>
+                    <button onClick={() => setAboutModal(true)} type="button" className="btn btn-primary ml-2">About</button>
                     <>
                         {showAbout ? <AboutModal store={this.props.store} /> : null}
                     </>

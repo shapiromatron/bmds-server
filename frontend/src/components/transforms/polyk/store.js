@@ -1,7 +1,7 @@
-import {action, observable} from "mobx";
+import { action, observable } from "mobx";
 
-import {getHeaders} from "../../../common";
-import {exampleData} from "./data";
+import { getHeaders } from "../../../common";
+import { exampleData } from "./data";
 
 class Store {
     constructor(token) {
@@ -12,7 +12,7 @@ class Store {
         dataset: "",
         dose_units: "ppm",
         power: 3,
-        duration: 730,
+        duration: null,
     };
     @observable error = null;
     @observable errorObject = null;

@@ -16,9 +16,9 @@ class AboutModal extends Component {
                     </Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                    <p>The poly-k adjustment is an approach (based on the poly-k trend test developed by Portier and Bailer, 1989) to correct for treatment-related differences in survival across dose-groups in standard 2-year cancer bioassays.</p>
+                    <p>The poly-k adjustment is an approach (based on the poly-k trend test developed by <a target="blank" href="https://hero.epa.gov/hero/index.cfm/reference/details/reference_id/93236">Portier and Bailer (1989)</a>) to correct for treatment-related differences in survival across dose-groups in standard 2-year cancer bioassays.</p>
                     <p>
-                        Consider the example provided in <a target="blank" href="https://hero.epa.gov/hero/index.cfm/reference/details/reference_id/93236">Portier and Bailer (1989)</a>:  there exists a tumor type that does not appear before 90 weeks of age and has 10% incidence, so that the lifetime incidence would be 5 animals in a group of 50.  If exposure to a carcinogen increases the lifetime incidence to 30%, 15 animals out of a group of 50 would develop the tumor.  But, if exposure to the carcinogen also decreases survival to 60% at 90 weeks, only 9 out of the 30 surviving exposed animals would develop a tumor.  If this decrease in survival is not taken into account, the incidence used in dose response modeling would be 9/50.
+                        Consider the example provided in Portier and Bailer, 1989: there exists a tumor type that does not appear before 90 weeks of age and has 10% incidence, so that the lifetime incidence would be 5 animals in a group of 50.  If exposure to a carcinogen increases the lifetime incidence to 30%, 15 animals out of a group of 50 would develop the tumor.  But, if exposure to the carcinogen also decreases survival to 60% at 90 weeks, only 9 out of the 30 surviving exposed animals would develop a tumor.  If this decrease in survival is not taken into account, the incidence used in dose response modeling would be 9/50.
                     </p>
                     <p>
                         Thus, by not taking differential survival into account, it is possible to understate a chemical’s true carcinogenic potential when performing dose-response analyses.
@@ -28,38 +28,38 @@ class AboutModal extends Component {
                     </p>
                     <table className="table table-striped">
                         <thead>
-                        <tr>
-                            <th></th>
-                            <th>Numerator contribution</th>
-                            <th>Denominator contribution</th>
-                            <th>Rationale for denominator contribution</th>
-                        </tr>
+                            <tr>
+                                <th></th>
+                                <th>Numerator contribution</th>
+                                <th>Denominator contribution</th>
+                                <th>Rationale for denominator contribution</th>
+                            </tr>
                         </thead>
                         <tbody>
-                        <tr>
-                            <td><b>Survive until end of experiment, no tumor</b></td>
-                            <td>0</td>
-                            <td>1</td>
-                            <td>Animal observed for full lifetime.</td>
-                        </tr>
-                        <tr>
-                            <td><b>Survive until end of experiment, develops tumor.</b></td>
-                            <td>1</td>
-                            <td>1</td>
-                            <td>Animal observed for full lifetime</td>
-                        </tr>
-                        <tr>
-                            <td><b>Dies prior to end of experiment, develops tumor</b></td>
-                            <td>1</td>
-                            <td>1</td>
-                            <td>Animal observed for less than full lifetime but observed for long enough time to develop tumor of interest.</td>
-                        </tr>
-                        <tr>
-                            <td><b>Dies prior to end of experiment, no tumor</b></td>
-                            <td>0</td>
-                            <td>(t/t_max )^k</td>
-                            <td>Animal may have developed a tumor within a normal lifetime; contribution should account for acceleration of rate with age.  Rationale for denominator contribution.</td>
-                        </tr>
+                            <tr>
+                                <td><b>Survive until end of experiment, no tumor</b></td>
+                                <td>0</td>
+                                <td>1</td>
+                                <td>Animal observed for full lifetime.</td>
+                            </tr>
+                            <tr>
+                                <td><b>Survive until end of experiment, develops tumor.</b></td>
+                                <td>1</td>
+                                <td>1</td>
+                                <td>Animal observed for full lifetime</td>
+                            </tr>
+                            <tr>
+                                <td><b>Dies prior to end of experiment, develops tumor</b></td>
+                                <td>1</td>
+                                <td>1</td>
+                                <td>Animal observed for less than full lifetime but observed for long enough time to develop tumor of interest.</td>
+                            </tr>
+                            <tr>
+                                <td><b>Dies prior to end of experiment, no tumor</b></td>
+                                <td>0</td>
+                                <td>(t/t_max )^k</td>
+                                <td>Animal may have developed a tumor within a normal lifetime; contribution should account for acceleration of rate with age.  Rationale for denominator contribution.</td>
+                            </tr>
                         </tbody>
                     </table>
                     <p>Portier and Bailer (1989) provide rationale for how to determine the denominator contribution of animals that die early without developing a tumor:</p>
@@ -69,14 +69,14 @@ class AboutModal extends Component {
                     <p>The inputs for this tool are:</p>
                     <ol>
                         <li>Dose units – the dose metrics for the data being adjusted (i.e., ppm, mg/kg-d, etc.)</li>
-                        <li>Power – the power to be used for the adjustment.  By default this will be a value of “3”, but this can be adjusted given the nature of the tumors being analyzed (see above)</li>
-                        <li>Duration – the duration of the study in days.  By default this will be a value of 730 days.  Note that in <a target="blank" href="https://hero.epa.gov/hero/index.cfm/reference/details/reference_id/708980">Kissling et al. (2008)</a>, the authors note that the poly-3 adjustment has not been validated for carcinogenicity studies longer than years, consistent with the conclusion of the Portier et al. (1986) analysis that acknowledges that “animals used in historical control data base were generally sacrificed if they lived to 109 weeks…. Thus, the application of these models beyond 109 weeks would be speculative.”</li>
+                        <li>Power – the power to be used for the adjustment. By default this will be a value of “3”, but this can be adjusted given the nature of the tumors being analyzed (see above)</li>
+                        <li>Duration – the duration of the study in days. By default this will be calculated from the maximum reported day in the dataset. Otherwise, the specified value will be used.  Note that in <a target="blank" href="https://hero.epa.gov/hero/index.cfm/reference/details/reference_id/708980">Kissling et al. (2008)</a>, the authors note that the poly-3 adjustment has not been validated for carcinogenicity studies longer than years, consistent with the conclusion of the Portier et al. (1986) analysis that acknowledges that “animals used in historical control data base were generally sacrificed if they lived to 109 weeks…. Thus, the application of these models beyond 109 weeks would be speculative.”</li>
                         <li>Dataset – the dose-response data that will be adjusted, provided in an uploaded CSV file with the following structure:
                             <ol type="a">
                                 <li>Dose -  numeric value of dose group</li>
                                 <li>Day – numeric value of survival time</li>
                                 <li>Tumor status – numeric value indicate if animal did not have tumor (0) or did have tumor (1)</li>
-                            </ol>	
+                            </ol>
                         </li>
                     </ol>
                     <p>Executing this tool will provide the following outputs:</p>

@@ -9,7 +9,7 @@ class AboutModal extends Component {
     render() {
         const { store } = this.props;
         return (
-            <Modal size="lg" show={store.showAbout} onHide={() => store.setAboutModal(false)}>
+            <Modal size="xl" show={store.showAbout} onHide={() => store.setAboutModal(false)}>
                 <Modal.Header closeButton>
                     <Modal.Title>
                         Poly K Adjustment
@@ -57,16 +57,16 @@ class AboutModal extends Component {
                             <tr>
                                 <td><b>Dies prior to end of experiment, no tumor</b></td>
                                 <td>0</td>
-                                <td>(t/t_max )^k</td>
+                                <td>(t/t_max )<sup>k</sup></td>
                                 <td>Animal may have developed a tumor within a normal lifetime; contribution should account for acceleration of rate with age.  Rationale for denominator contribution.</td>
                             </tr>
                         </tbody>
                     </table>
                     <p>Portier and Bailer (1989) provide rationale for how to determine the denominator contribution of animals that die early without developing a tumor:</p>
-                    <p>If an animal in a 2-year bioassay dies after one year, this animal can be considered to be at less risk of developing a tumor than animals that lived until the end of the experiment.  Thus, this animal should not contribute the same amount of information as animals that survived until the end of the experiment (irrespective of tumor status) or animals that did develop a tumor (irrespective of survival time).  In other words, this animal should not be given a weight of 1 (i.e., should not be counted as 1 when determining the denominator).  If the risk of developing a tumor is constant throughout a lifetime, this animal should be given a weight of 1/2.  However, if tumor risk accelerates with age, this animal would be at (1/2)^k the risk of developing the tumor compared to animals that survive until the end of the experiment, where k is the exponent for the polynomial function describing the cumulative rate of tumor onset as a function of time. <a href="https://hero.epa.gov/hero/index.cfm/reference/details/reference_id/4998" target="blank">Portier et al. (1986)</a> analyzed the untreated control groups of 47 NTP studies in mice and rats and concluded at a 3rd order polynomial was a reasonable general value of k.</p>
-                    <p>Given the example above, an animal dying at one year would contribute a weight of (1/2)^3=0.125.  For tumors that are quicker to develop, a lower value of k can be used (such that animals dying early provide more information).  Conversely, for slower developing tumors, a higher value of k can be used (such that animals dying early provide less information).</p>
+                    <p>If an animal in a 2-year bioassay dies after one year, this animal can be considered to be at less risk of developing a tumor than animals that lived until the end of the experiment.  Thus, this animal should not contribute the same amount of information as animals that survived until the end of the experiment (irrespective of tumor status) or animals that did develop a tumor (irrespective of survival time).  In other words, this animal should not be given a weight of 1 (i.e., should not be counted as 1 when determining the denominator).  If the risk of developing a tumor is constant throughout a lifetime, this animal should be given a weight of ½ . However, if tumor risk accelerates with age, this animal would be at (½)<sup>k</sup> the risk of developing the tumor compared to animals that survive until the end of the experiment, where k is the exponent for the polynomial function describing the cumulative rate of tumor onset as a function of time. <a href="https://hero.epa.gov/hero/index.cfm/reference/details/reference_id/4998" target="blank">Portier et al. (1986)</a> analyzed the untreated control groups of 47 NTP studies in mice and rats and concluded at a 3rd order polynomial was a reasonable general value of k.</p>
+                    <p>Given the example above, an animal dying at one year would contribute a weight of (½)<sup>3</sup>=0.125.  For tumors that are quicker to develop, a lower value of k can be used (such that animals dying early provide more information).  Conversely, for slower developing tumors, a higher value of k can be used (such that animals dying early provide less information).</p>
                     <p>Use of the poly-3 adjustment will result in survival adjusted Ns (most likely non-integer values) that can be used in dose-response analyses.</p>
-                    <p>The inputs for this tool are:</p>
+                    <p><b>The inputs for this tool are:</b></p>
                     <ol>
                         <li>Dose units – the dose metrics for the data being adjusted (i.e., ppm, mg/kg-d, etc.)</li>
                         <li>Power – the power to be used for the adjustment. By default this will be a value of “3”, but this can be adjusted given the nature of the tumors being analyzed (see above)</li>

@@ -22,23 +22,24 @@ class InputForm extends Component {
             <form>
                 <div className="row">
                     <div className="col-lg-6">
-                        <div>
-                            <TextInput
-                                label="Dose units"
-                                value={settings.dose_units}
-                                onChange={value => updateSettings("dose_units", value)}
-                            />
-                        </div>
+                        <TextInput
+                            label="Dose units"
+                            value={settings.dose_units}
+                            onChange={value => updateSettings("dose_units", value)}
+                        />
+                        <p className="text-muted mb-0">The dose metrics for the data being adjusted (i.e., ppm, mg/kg-d, etc.)</p>
                         <FloatInput
                             label="Power"
                             value={settings.power}
                             onChange={value => updateSettings("power", value)}
                         />
+                        <p className="text-muted mb-0">The power to be used for the adjustment. By default this will be a value of “3”, but this can be adjusted given the nature of the tumors being analyzed (see About).</p>
                         <FloatInput
                             label="Duration"
                             value={settings.duration}
                             onChange={value => updateSettings("duration", value)}
                         />
+                        <p className="text-muted mb-0">The duration of the study in days. By default this will be calculated from the maximum reported day in the dataset. Otherwise, the specified value will be used.</p>
                     </div>
                     <div className="col-lg-6">
                         <TextAreaInput
@@ -46,8 +47,8 @@ class InputForm extends Component {
                             value={settings.dataset}
                             onChange={value => updateSettings("dataset", value)}
                         />
-                        <p className="text-muted">
-                            CSV style dataset.&nbsp;
+                        <p className="text-muted mb-0">
+                            CSV style dataset. See About for structure.&nbsp;
                             <a href="#" onClick={loadExampleData}>
                                 Load example.
                             </a>

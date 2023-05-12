@@ -12,7 +12,7 @@ class Store {
         dataset: "",
         dose_units: "ppm",
         power: 3,
-        duration: undefined,
+        duration: NaN,
     };
     @observable error = null;
     @observable errorObject = null;

@@ -41,6 +41,7 @@ FloatInput.propTypes = {
 FloatInput.defaultProps = {
     className: "form-control",
     disabled: false,
+    optional: false
 };
 
 export default FloatInput;

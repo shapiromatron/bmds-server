@@ -27,7 +27,7 @@ class InputForm extends Component {
                             value={settings.dose_units}
                             onChange={value => updateSettings("dose_units", value)}
                         />
-                        <p className="text-muted mb-0">The dose metrics for the data being adjusted (i.e., ppm, mg/kg-d, etc.)</p>
+                        <p className="text-muted mb-0">The dose metrics for the data being adjusted (i.e., ppm, mg/kg-d, etc.).</p>
                         <FloatInput
                             label="Power"
                             value={settings.power}

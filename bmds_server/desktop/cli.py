@@ -1,5 +1,9 @@
+import logging
+from contextlib import redirect_stderr, redirect_stdout
 from datetime import datetime
 from importlib.metadata import version
+from threading import Thread
+from time import sleep
 
 from textual.app import App, ComposeResult
 from textual.containers import ScrollableContainer
@@ -7,12 +11,25 @@ from textual.widgets import Button, Footer, Header, Markdown, TextLog
 
 from .web import MyServer
 
+logger = logging.getLogger(__name__)
+
 MD_HEADER = """## Welcome to BMDS Desktop.
 Here's a bunch of header text we can add to describe what this is."""
 
 
+class TextLogHandler(logging.Handler):
+    def __init__(self, widget: TextLog):
+        super().__init__()
+        self.widget = widget
+        self.widget.write("startup")
+        logger.warning("test")
+
+    def emit(self, record):
+        self.widget.write(record)
+
+
 class DjangoApp:
-    def __init__(self, tui: App):
+    def __init__(self, tui: "BmdsDesktop"):
         self.is_running = False
         self.tui = tui
         self.app_server = MyServer()
@@ -21,14 +38,10 @@ class DjangoApp:
         btn.label = "Start" if self.is_running else "Stop"
         self.is_running = not self.is_running
         if self.is_running:
-            try:
-                self.tui.log_app.log("Starting...")
+            with redirect_stdout(logger.handlers[0]), redirect_stderr(log_stream):
                 self.app_server.start()
-            finally:
-                self.tui.log_app.log("Stopping in finally...")  # todo - context manager?
-                self.app_server.stop()
         else:
-            self.tui.log_app.log("Stopping...")
+            logger.info("Stopping...")
             self.app_server.stop()
             self.app_server = MyServer()
 
@@ -42,6 +55,12 @@ class LogApp:
         logger.write(f"{datetime.now()}: {message}")
 
 
+def add_logs(app):
+    while True:
+        logger.warning("abc")
+        sleep(1)
+
+
 class BmdsDesktop(App):
     """A Textual app for BMDS."""
 
@@ -52,6 +71,12 @@ class BmdsDesktop(App):
         self.django_app = DjangoApp(self)
         self.log_app = LogApp(self)
         super().__init__(**kw)
+        self.text_log_widget = TextLog(id="log")
+        self.text_log = TextLogHandler(widget=self.text_log_widget)
+        logger.addHandler(self.text_log)
+
+        logger_thread = Thread(target=add_logs, daemon=True, args=(self,))
+        logger_thread.start()
 
     def compose(self) -> ComposeResult:
         """Create child widgets for the app."""
@@ -59,7 +84,7 @@ class BmdsDesktop(App):
         yield ScrollableContainer(
             Markdown(MD_HEADER),
             Button("Start", id="start"),
-            TextLog(id="log"),
+            self.text_log_widget,
         )
         yield Footer()
 

@@ -130,7 +130,7 @@ class BmdsDesktop(App):
 
     TITLE = f"BMDS Desktop (version {version('bmds_server')})"
     BINDINGS = [("q", "quit", "Quit"), ("d", "toggle_dark", "Toggle dark mode")]
-    CSS_PATH = "app.css"
+    CSS_PATH = "content/app.css"
 
     def __init__(self, **kw):
         self.log_app = LogApp()

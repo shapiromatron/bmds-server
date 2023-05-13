@@ -1,36 +1,58 @@
 from django.conf import settings
 from django.contrib.admin.views.decorators import staff_member_required
+from django.db.models.query import QuerySet
 from django.middleware.csrf import get_token
 from django.shortcuts import get_object_or_404
 from django.template import RequestContext, Template
 from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
-from django.views.generic import CreateView, DeleteView, DetailView, RedirectView, TemplateView
+from django.views.generic import (
+    CreateView,
+    DeleteView,
+    DetailView,
+    ListView,
+    RedirectView,
+    TemplateView,
+)
 
 from . import forms, models
 from .reporting.analytics import get_cached_analytics
 from .utils import get_citation
 
 
-class Home(CreateView):
-    model = models.Analysis
-    form_class = forms.CreateAnalysisForm
+class Home(ListView):
     template_name = "analysis/home.html"
-
-    def get_success_url(self):
-        return self.object.get_edit_url()
+    model = models.Analysis
+    queryset = models.Analysis.objects.all().order_by("-created")
+    paginate_by = 25
 
     def _render_template(self, extra):
         context = RequestContext(self.request, extra)
         content = models.Content.get_cached_content(models.ContentType.HOMEPAGE)
         return Template(content["template"]).render(context)
 
+    def get_queryset(self) -> QuerySet:
+        qs = super().get_queryset()
+        if q := self.request.GET.get("q"):
+            qs = qs.filter(inputs__analysis_name__icontains=q)
+        return qs
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["days_to_keep_analyses"] = settings.DAYS_TO_KEEP_ANALYSES
         context["citation"] = get_citation()
+        context["q"] = self.request.GET.get("q", "")
         context["page"] = self._render_template(context)
         return context
+
+
+class AnalysisCreate(CreateView):
+    model = models.Analysis
+    form_class = forms.CreateAnalysisForm
+    http_method_names = ["post"]
+
+    def get_success_url(self):
+        return self.object.get_edit_url()
 
 
 class AnalysisHistory(TemplateView):

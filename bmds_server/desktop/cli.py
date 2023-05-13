@@ -96,7 +96,8 @@ class AppRunner:
         if self.started:
             self.thread = AppThread(daemon=True)
             self.thread.start()
-            open_new_tab("https://bmdsonline.epa.gov")
+            sleep(1)
+            open_new_tab("http://127.0.0.1:8100")
         else:
             self.thread.stop()
             self.thread = AppThread(daemon=True)

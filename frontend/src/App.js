@@ -20,7 +20,7 @@ class App extends Component {
             const {analysis_name, canEdit} = this.props.mainStore,
                 verb = canEdit ? "Update Analysis" : "Analysis",
                 name = analysis_name ? analysis_name : "";
-            document.title = ["BMDS Online", verb, name].join(" | ");
+            document.title = ["BMDS Desktop", verb, name].join(" | ");
         });
     }
     render() {

@@ -30,6 +30,7 @@ urlpatterns = [
     # api
     api_paths,
     # analysis
+    path("analysis/create/", views.AnalysisCreate.as_view(), name="analysis_create"),
     path("analysis/<uuid:pk>/", views.AnalysisDetail.as_view(), name="analysis"),
     path(edit_pattern, views.AnalysisDetail.as_view(), name="analysis_edit"),
     path(f"{edit_pattern}renew/", views.AnalysisRenew.as_view(), name="analysis_renew"),

@@ -1,12 +1,15 @@
 import logging
-from datetime import datetime
+import os
+from contextlib import redirect_stderr, redirect_stdout
 from importlib.metadata import version
 from io import StringIO
 from pathlib import Path
-from threading import Event, Thread
+from threading import Thread
 from time import sleep
 from webbrowser import open_new_tab
 
+import cherrypy
+from pydantic import BaseModel, Field
 from textual import on
 from textual.app import App, ComposeResult
 from textual.containers import Container, ScrollableContainer
@@ -21,6 +24,7 @@ from textual.widgets import (
     TabPane,
     TextLog,
 )
+from whitenoise import WhiteNoise
 
 logger = logging.getLogger(__name__)
 
@@ -42,8 +46,14 @@ def data_folder() -> Path:
     return path
 
 
+class DesktopConfig(BaseModel):
+    path: str = Field(default_factory=lambda: str(data_folder()))
+    port: int = 5555
+    host: str = "127.0.0.1"
+
+
 class LogApp:
-    def __init__(self):
+    def __init__(self, app):
         self.stream = StringIO()
         self.handler = logging.StreamHandler(self.stream)
         self.widget = TextLog(id="log")
@@ -68,39 +78,58 @@ class LogApp:
 
 
 class AppThread(Thread):
-    def __init__(self, **kw):
+    def __init__(self, stream: StringIO, host="127.0.0.1", port=5000, **kw):
+        self.stream = stream
+        self.host = host
+        self.port = port
         super().__init__(**kw)
-        self._stop_event = Event()
 
     def run(self):
-        while not self._stop_event.is_set():
-            logger.info(f"Thread running at {datetime.now()}")
-            sleep(1)
-        logger.info(f"Thread stopped at {datetime.now()}")
+        from django.conf import settings
+
+        with redirect_stdout(self.stream), redirect_stderr(self.stream):
+            from ..main.wsgi import application as django_app
+
+            application = WhiteNoise(django_app, root=settings.PUBLIC_DATA_ROOT)
+            cherrypy.config.update(
+                {"server.socket_host": self.host, "server.socket_port": self.port}
+            )
+            cherrypy.tree.graft(application, "/")
+            cherrypy.server.start()
+            cherrypy.engine.block()
 
     def stop(self):
-        self._stop_event.set()
+        cherrypy.engine.exit()
 
 
 class AppRunner:
     LABEL = {True: "Stop BMDS Desktop", False: "Start BMDS Desktop"}
 
-    def __init__(self):
+    def __init__(self, app: "BmdsDesktop"):
+        self.app = app
         self.started = False
         self.widget = Button(label=self.LABEL[self.started], id="runner-button", variant="primary")
-        self.thread: AppThread
+        self.thread: AppThread | None = None
 
     def toggle(self):
+        host = self.app.config.host
+        port = self.app.config.port
         self.started = not self.started
         self.widget.label = self.LABEL[self.started]
         if self.started:
-            self.thread = AppThread(daemon=True)
+            self.thread = AppThread(
+                stream=self.app.log_app.stream,
+                host=host,
+                port=port,
+                daemon=True,
+            )
             self.thread.start()
             sleep(1)
-            open_new_tab("http://127.0.0.1:8100")
+            open_new_tab(f"http://{host}:{port}")
         else:
-            self.thread.stop()
-            self.thread = AppThread(daemon=True)
+            if self.thread:
+                self.thread.stop()
+                self.thread = None
 
     def start(self):
         self.thread.start()
@@ -118,9 +147,12 @@ class BmdsTabs(Static):
                     self._app.runner.widget,
                 )
                 yield Container(
-                    Label(f"[b]Data folder: [/b]\n  {data_folder()}"),
+                    Label(f"[b]Data folder:[/b]\n  {self._app.config.path}"),
+                    Label(f"[b]Port:[/b]\n  {self._app.config.port}"),
+                    Label(f"[b]Host:[/b]\n  {self._app.config.host}"),
                     classes="app-box",
                 )
+
             with TabPane("Logging"):
                 yield self._app.log_app.widget
 
@@ -133,8 +165,9 @@ class BmdsDesktop(App):
     CSS_PATH = "content/app.css"
 
     def __init__(self, **kw):
-        self.log_app = LogApp()
-        self.runner = AppRunner()
+        self.config = DesktopConfig()
+        self.log_app = LogApp(self)
+        self.runner = AppRunner(self)
         self.tabs = BmdsTabs(self)
         super().__init__(**kw)
 
@@ -163,5 +196,6 @@ class BmdsDesktop(App):
 
 
 def main():
+    os.environ["DJANGO_SETTINGS_MODULE"] = "bmds_server.main.settings.desktop"
     app = BmdsDesktop()
     app.run()

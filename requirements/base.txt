@@ -22,4 +22,4 @@ redis==4.5.4
 # desktop
 textual==0.24.1
 whitenoise==6.3.0
-waitress==2.1.2
+cherrypy==18.8.0

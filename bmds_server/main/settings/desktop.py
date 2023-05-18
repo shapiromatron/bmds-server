@@ -1,4 +1,15 @@
+# import os
+# from pathlib import Path
+
+# todo - load from base instead of dev
 from .dev import *  # noqa: F403
+
+# DATABASES = {
+#     "default": {
+#         "ENGINE": "django.db.backends.sqlite3",
+#         "NAME": Path(os.environ["db_path"]) / "db.sqlite3",
+#     }
+# }
 
 LOGGING = {
     "version": 1,
@@ -33,6 +44,7 @@ LOGGING = {
     "loggers": {
         "": {"handlers": ["null"], "level": "INFO"},
         "django": {"handlers": ["null"], "propagate": False, "level": "INFO"},
+        "django.request": {"handlers": ["console"], "level": "ERROR", "propagate": True},
         "bmds_server": {"handlers": ["console"], "propagate": False, "level": "INFO"},
         "bmds_server.request": {"handlers": ["console"], "propagate": False, "level": "INFO"},
     },

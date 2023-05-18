@@ -117,6 +117,10 @@ class AppRunner:
         self.started = not self.started
         self.widget.label = self.LABEL[self.started]
         if self.started:
+            # todo - make an init function
+            # it should create db and migrate and load home.html
+            # it should collect staticfiles to user_data folder
+            # os.environ["db_path"] = self.app.config.path
             self.thread = AppThread(
                 stream=self.app.log_app.stream,
                 host=host,

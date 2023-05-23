@@ -18,10 +18,10 @@ class Store {
     @observable errorObject = null;
     @observable outputs = null;
 
-    @observable showAbout = false;
+    @observable showAboutModal = false;
     @action.bound
-    setAboutModal(input) {
-        this.showAbout = input;
+    setAboutModal(value) {
+        this.showAboutModal = value;
     }
 
     @action.bound

@@ -264,7 +264,7 @@ OutputTabs.propTypes = {
 @observer
 class App extends Component {
     render() {
-        const {outputs, showAbout, setAboutModal} = this.props.store;
+        const {outputs, showAboutModal, setAboutModal} = this.props.store;
         return (
             <div className="container-fluid py-3">
                 <div className="d-flex">
@@ -275,7 +275,7 @@ class App extends Component {
                         className="btn btn-primary ml-2">
                         About
                     </button>
-                    <>{showAbout ? <AboutModal store={this.props.store} /> : null}</>
+                    <>{showAboutModal ? <AboutModal store={this.props.store} /> : null}</>
                 </div>
                 <p className="text-muted">
                     This is a work in progress. Prior to deployment, we should update the help text,

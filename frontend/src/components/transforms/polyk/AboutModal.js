@@ -9,7 +9,7 @@ class AboutModal extends Component {
     render() {
         const {store} = this.props;
         return (
-            <Modal size="xl" show={store.showAbout} onHide={() => store.setAboutModal(false)}>
+            <Modal size="xl" show={store.showAboutModal} onHide={() => store.setAboutModal(false)}>
                 <Modal.Header closeButton>
                     <Modal.Title>Poly K Adjustment</Modal.Title>
                 </Modal.Header>

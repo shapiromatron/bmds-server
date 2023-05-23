@@ -1,7 +1,7 @@
 import _ from "lodash";
-import { inject, observer } from "mobx-react";
+import {inject, observer} from "mobx-react";
 import PropTypes from "prop-types";
-import React, { Component } from "react";
+import React, {Component} from "react";
 import Tab from "react-bootstrap/Tab";
 import Tabs from "react-bootstrap/Tabs";
 import Plot from "react-plotly.js";
@@ -10,14 +10,13 @@ import Button from "../../common/Button";
 import FloatInput from "../../common/FloatInput";
 import TextAreaInput from "../../common/TextAreaInput";
 import TextInput from "../../common/TextInput";
-import HelpTextPopover from "../../common/HelpTextPopover";
 import AboutModal from "./AboutModal";
 
 @inject("store")
 @observer
 class InputForm extends Component {
     render() {
-        const { settings, updateSettings, error, submit, loadExampleData } = this.props.store;
+        const {settings, updateSettings, error, submit, loadExampleData} = this.props.store;
         return (
             <form>
                 <div className="row">
@@ -27,19 +26,29 @@ class InputForm extends Component {
                             value={settings.dose_units}
                             onChange={value => updateSettings("dose_units", value)}
                         />
-                        <p className="text-muted mb-0">The dose metrics for the data being adjusted (i.e., ppm, mg/kg-d, etc.).</p>
+                        <p className="text-muted mb-0">
+                            The dose metrics for the data being adjusted (i.e., ppm, mg/kg-d, etc.).
+                        </p>
                         <FloatInput
                             label="Power"
                             value={settings.power}
                             onChange={value => updateSettings("power", value)}
                         />
-                        <p className="text-muted mb-0">The power to be used for the adjustment. By default this will be a value of “3”, but this can be adjusted given the nature of the tumors being analyzed (see About).</p>
+                        <p className="text-muted mb-0">
+                            The power to be used for the adjustment. By default this will be a value
+                            of “3”, but this can be adjusted given the nature of the tumors being
+                            analyzed (see About).
+                        </p>
                         <FloatInput
                             label="Duration"
                             value={settings.duration}
                             onChange={value => updateSettings("duration", value)}
                         />
-                        <p className="text-muted mb-0">The duration of the study in days. By default this will be calculated from the maximum reported day in the dataset. Otherwise, the specified value will be used.</p>
+                        <p className="text-muted mb-0">
+                            The duration of the study in days. By default this will be calculated
+                            from the maximum reported day in the dataset. Otherwise, the specified
+                            value will be used.
+                        </p>
                     </div>
                     <div className="col-lg-6">
                         <TextAreaInput
@@ -80,8 +89,8 @@ InputForm.propTypes = {
 @observer
 class SummaryPlot extends Component {
     render() {
-        const { df2 } = this.props.store.outputs,
-            { dose_units } = this.props.store.settings;
+        const {df2} = this.props.store.outputs,
+            {dose_units} = this.props.store.settings;
         return (
             <Plot
                 data={[
@@ -90,7 +99,7 @@ class SummaryPlot extends Component {
                         y: df2.proportion,
                         type: "scatter",
                         mode: "lines+markers",
-                        marker: { color: "blue" },
+                        marker: {color: "blue"},
                         name: "Original Proportion",
                     },
                     {
@@ -98,7 +107,7 @@ class SummaryPlot extends Component {
                         y: df2.adj_proportion,
                         type: "scatter",
                         mode: "lines+markers",
-                        marker: { color: "red" },
+                        marker: {color: "red"},
                         name: "Adjusted Proportion",
                     },
                 ]}
@@ -120,7 +129,7 @@ class SummaryPlot extends Component {
                         },
                     },
                 }}
-                style={{ width: "100%" }}
+                style={{width: "100%"}}
                 useResizeHandler={true}
             />
         );
@@ -154,9 +163,9 @@ class RawDataPlot extends Component {
         return _.sortBy(results, arr => arr[0]);
     }
     render() {
-        const { df } = this.props.store.outputs,
+        const {df} = this.props.store.outputs,
             data = this.getData(df),
-            { dose_units } = this.props.store.settings;
+            {dose_units} = this.props.store.settings;
         return (
             <Plot
                 data={data.map(row => {
@@ -186,7 +195,7 @@ class RawDataPlot extends Component {
                         },
                     },
                 }}
-                style={{ width: "100%" }}
+                style={{width: "100%"}}
                 useResizeHandler={true}
             />
         );
@@ -200,8 +209,8 @@ RawDataPlot.propTypes = {
 @observer
 class OutputTabs extends Component {
     render() {
-        const { df, df2 } = this.props.store.outputs;
-        df['weight'] = df['adj_n']
+        const {df, df2} = this.props.store.outputs;
+        df["weight"] = df["adj_n"];
         return (
             <Tabs
                 defaultActiveKey="summary"
@@ -255,15 +264,18 @@ OutputTabs.propTypes = {
 @observer
 class App extends Component {
     render() {
-        const { outputs, showAbout, setAboutModal } = this.props.store;
+        const {outputs, showAbout, setAboutModal} = this.props.store;
         return (
             <div className="container-fluid py-3">
                 <div className="d-flex">
                     <h2>Poly K adjustment</h2>
-                    <button onClick={() => setAboutModal(true)} type="button" className="btn btn-primary ml-2">About</button>
-                    <>
-                        {showAbout ? <AboutModal store={this.props.store} /> : null}
-                    </>
+                    <button
+                        onClick={() => setAboutModal(true)}
+                        type="button"
+                        className="btn btn-primary ml-2">
+                        About
+                    </button>
+                    <>{showAbout ? <AboutModal store={this.props.store} /> : null}</>
                 </div>
                 <p className="text-muted">
                     This is a work in progress. Prior to deployment, we should update the help text,
@@ -285,7 +297,7 @@ App.propTypes = {
     store: PropTypes.object,
 };
 
-const DataFrameTable = function ({ data, columns }) {
+const DataFrameTable = function({data, columns}) {
     const nrows = data[columns[0]].length;
     return (
         <table className="table table-sm table-striped table-hover">
@@ -301,7 +313,13 @@ const DataFrameTable = function ({ data, columns }) {
                     return (
                         <tr key={i}>
                             {columns.map((column, j) => (
-                                <td key={j}>{column === 'adj_n' || column === 'adj_proportion' || column === 'weight' ? data[column][i].toFixed(4) : data[column][i]}</td>
+                                <td key={j}>
+                                    {column === "adj_n" ||
+                                    column === "adj_proportion" ||
+                                    column === "weight"
+                                        ? data[column][i].toFixed(4)
+                                        : data[column][i]}
+                                </td>
                             ))}
                         </tr>
                     );

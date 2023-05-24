@@ -3,6 +3,14 @@ import PropTypes from "prop-types";
 import React, {Component} from "react";
 import {Modal} from "react-bootstrap";
 
+const externalReference = (href, text, classes) => {
+    return (
+        <a target="blank" className={classes} href={href}>
+            {text}
+        </a>
+    );
+};
+
 @inject("store")
 @observer
 class AboutModal extends Component {
@@ -16,13 +24,12 @@ class AboutModal extends Component {
                 <Modal.Body>
                     <p>
                         The poly-k adjustment is an approach (based on the poly-k trend test
-                        developed by{" "}
-                        <a
-                            target="blank"
-                            href="https://hero.epa.gov/hero/index.cfm/reference/details/reference_id/93236">
-                            Portier and Bailer (1989)
-                        </a>
-                        ) to correct for treatment-related differences in survival across
+                        developed by&nbsp;
+                        {externalReference(
+                            "https://hero.epa.gov/hero/index.cfm/reference/details/reference_id/93236",
+                            "Portier and Bailer (1989)"
+                        )}
+                        &nbsp;to correct for treatment-related differences in survival across
                         dose-groups in standard 2-year cancer bioassays.
                     </p>
                     <p>
@@ -88,7 +95,7 @@ class AboutModal extends Component {
                                 </td>
                                 <td>0</td>
                                 <td>
-                                    (t/t_max )<sup>k</sup>
+                                    (t/t<sub>max</sub>)<sup>k</sup>
                                 </td>
                                 <td>
                                     Animal may have developed a tumor within a normal lifetime;
@@ -113,17 +120,18 @@ class AboutModal extends Component {
                         not be given a weight of 1 (i.e., should not be counted as 1 when
                         determining the denominator). If the risk of developing a tumor is constant
                         throughout a lifetime, this animal should be given a weight of ½ . However,
-                        if tumor risk accelerates with age, this animal would be at (½)<sup>k</sup>{" "}
-                        the risk of developing the tumor compared to animals that survive until the
-                        end of the experiment, where k is the exponent for the polynomial function
-                        describing the cumulative rate of tumor onset as a function of time.{" "}
-                        <a
-                            href="https://hero.epa.gov/hero/index.cfm/reference/details/reference_id/4998"
-                            target="blank">
-                            Portier et al. (1986)
-                        </a>{" "}
-                        analyzed the untreated control groups of 47 NTP studies in mice and rats and
-                        concluded at a 3rd order polynomial was a reasonable general value of k.
+                        if tumor risk accelerates with age, this animal would be at (½)<sup>k</sup>
+                        &nbsp; the risk of developing the tumor compared to animals that survive
+                        until the end of the experiment, where k is the exponent for the polynomial
+                        function describing the cumulative rate of tumor onset as a function of
+                        time.&nbsp;
+                        {externalReference(
+                            "https://hero.epa.gov/hero/index.cfm/reference/details/reference_id/4998",
+                            "Portier and Bailer (1986)"
+                        )}
+                        &nbsp;analyzed the untreated control groups of 47 NTP studies in mice and
+                        rats and concluded at a 3rd order polynomial was a reasonable general value
+                        of k.
                     </p>
                     <p>
                         Given the example above, an animal dying at one year would contribute a
@@ -152,12 +160,11 @@ class AboutModal extends Component {
                         <li>
                             Duration – the duration of the study in days. By default this will be
                             calculated from the maximum reported day in the dataset. Otherwise, the
-                            specified value will be used. Note that in{" "}
-                            <a
-                                target="blank"
-                                href="https://hero.epa.gov/hero/index.cfm/reference/details/reference_id/708980">
-                                Kissling et al. (2008)
-                            </a>
+                            specified value will be used. Note that in&nbsp;
+                            {externalReference(
+                                "https://hero.epa.gov/hero/index.cfm/reference/details/reference_id/708980",
+                                "Kissling et al. (2008)"
+                            )}
                             , the authors note that the poly-3 adjustment has not been validated for
                             carcinogenicity studies longer than years, consistent with the
                             conclusion of the Portier et al. (1986) analysis that acknowledges that
@@ -195,51 +202,45 @@ class AboutModal extends Component {
                         Kissling GE, Portier CJ, Huff J. (2008) MtBE and cancer in animals:
                         statistical issues with poly-3 survival adjustments for lifetime studies.
                         Regul Toxicol Pharmacol. 50(3):428-429.
-                        <a
-                            target="blank"
-                            className="pl-2"
-                            href="https://hero.epa.gov/hero/index.cfm/reference/details/reference_id/708980">
-                            HERO
-                        </a>
-                        <a
-                            target="blank"
-                            className="pl-2"
-                            href="https://pubmed.ncbi.nlm.nih.gov/17905498/">
-                            PubMed
-                        </a>
+                        {externalReference(
+                            "https://hero.epa.gov/hero/index.cfm/reference/details/reference_id/708980",
+                            "HERO",
+                            "p-2 mx-1 badge badge-info"
+                        )}
+                        {externalReference(
+                            "https://pubmed.ncbi.nlm.nih.gov/17905498/",
+                            "PubMed",
+                            "p-2 mx-1 badge badge-info"
+                        )}
                     </p>
                     <p>
                         Portier CJ, Bailer AJ. (1989). Testing for increased carcinogenicity using a
                         survival-adjusted quantal response test. Fund Appl Toxicol 12(4):731-737.
-                        <a
-                            target="blank"
-                            className="pl-2"
-                            href="https://hero.epa.gov/hero/index.cfm/reference/details/reference_id/93236">
-                            HERO
-                        </a>
-                        <a
-                            target="blank"
-                            className="pl-2"
-                            href="https://pubmed.ncbi.nlm.nih.gov/2744275/">
-                            PubMed
-                        </a>
+                        {externalReference(
+                            "https://hero.epa.gov/hero/index.cfm/reference/details/reference_id/93236",
+                            "HERO",
+                            "p-2 mx-1 badge badge-info"
+                        )}
+                        {externalReference(
+                            "https://pubmed.ncbi.nlm.nih.gov/2744275/",
+                            "PubMed",
+                            "p-2 mx-1 badge badge-info"
+                        )}
                     </p>
                     <p>
                         Portier CJ, Hedges JC, Hoel DG. (1986). Age-specific models of mortality and
                         tumor onset for historical control animals in the National Toxicology
                         Program’s carcinogenicity experiments. Cancer Research 46: 4372-4378.
-                        <a
-                            target="blank"
-                            className="pl-2"
-                            href="https://hero.epa.gov/hero/index.cfm/reference/details/reference_id/4998">
-                            HERO
-                        </a>
-                        <a
-                            target="blank"
-                            className="pl-2"
-                            href="https://pubmed.ncbi.nlm.nih.gov/3731095/">
-                            PubMed
-                        </a>
+                        {externalReference(
+                            "https://hero.epa.gov/hero/index.cfm/reference/details/reference_id/4998",
+                            "HERO",
+                            "p-2 mx-1 badge badge-info"
+                        )}
+                        {externalReference(
+                            "https://pubmed.ncbi.nlm.nih.gov/3731095/",
+                            "PubMed",
+                            "p-2 mx-1 badge badge-info"
+                        )}
                     </p>
                 </Modal.Body>
             </Modal>

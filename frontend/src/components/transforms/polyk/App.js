@@ -16,11 +16,11 @@ import AboutModal from "./AboutModal";
 @observer
 class InputForm extends Component {
     render() {
-        const {settings, updateSettings, error, submit, loadExampleData} = this.props.store;
+        const {settings, updateSettings, error, submit, reset, loadExampleData, downloadExampleData} = this.props.store;
         return (
             <form>
                 <div className="row">
-                    <div className="col-lg-6">
+                    <div className="col-lg-4">
                         <TextInput
                             label="Dose units"
                             value={settings.dose_units}
@@ -29,54 +29,81 @@ class InputForm extends Component {
                         <p className="text-muted mb-0">
                             The dose metrics for the data being adjusted (i.e., ppm, mg/kg-d, etc.).
                         </p>
+                    </div>
+                    <div className="col-lg-4">
                         <FloatInput
                             label="Power"
                             value={settings.power}
                             onChange={value => updateSettings("power", value)}
                         />
                         <p className="text-muted mb-0">
-                            The power to be used for the adjustment. By default this will be a value
-                            of “3”, but this can be adjusted given the nature of the tumors being
-                            analyzed (see About).
+                            The adjustment power. Defaults to 3, but can be adjusted given the
+                            nature of the tumors being analyzed.
                         </p>
+                    </div>
+                    <div className="col-lg-4">
                         <FloatInput
                             label="Duration"
                             value={settings.duration}
                             onChange={value => updateSettings("duration", value)}
                         />
                         <p className="text-muted mb-0">
-                            The duration of the study in days. By default this will be calculated
-                            from the maximum reported day in the dataset. Otherwise, the specified
-                            value will be used.
+                            Study duration, in days. By default (if empty), the maximum reported day in the dataset.
                         </p>
                     </div>
-                    <div className="col-lg-6">
+                    <div className="col-lg-4 offset-lg-2">
                         <TextAreaInput
+                            rows={6}
                             label="Dataset"
                             value={settings.dataset}
                             onChange={value => updateSettings("dataset", value)}
                         />
                         <p className="text-muted mb-0">
-                            CSV style dataset. See About for structure.&nbsp;
-                            <a href="#" onClick={loadExampleData}>
-                                Load example.
+                            CSV data, or copy and paste from Excel.&nbsp;
+                            <a href="#" onClick={(e)=>{
+                                e.preventDefault();
+                                loadExampleData();
+                            }}>
+                                Load
                             </a>
+                            &nbsp;or&nbsp;
+                            <a
+                                href="#"
+                                onClick={e => {
+                                    e.preventDefault();
+                                    downloadExampleData();
+                                }}>
+                                download
+                            </a>
+                            &nbsp;example data.
                         </p>
+                    </div>
+                    <div className="col-lg-4 align-self-center">
                         <Button
                             className="btn btn-primary btn-block py-3"
                             onClick={submit}
                             text="Execute"
                         />
-                        {error ? (
-                            <div className="alert alert-danger mt-3">
-                                <p>
-                                    <b>An error occurred.</b>
-                                </p>
-                                <pre>{JSON.stringify(error, null, 2)}</pre>
-                            </div>
-                        ) : null}
+                        <Button
+                            className="btn btn-secondary btn-block"
+                            onClick={reset}
+                            text="Reset"
+                        />
                     </div>
+
                 </div>
+                {error ? (
+                        <div className="row">
+                            <div className="col-lg-8 offset-lg-2">
+                                <div className="alert alert-danger mt-3">
+                                    <p>
+                                        <b>An error occurred.</b>
+                                    </p>
+                                    <pre>{JSON.stringify(error, null, 2)}</pre>
+                                </div>
+                            </div>
+                        </div>
+                    ) : null}
             </form>
         );
     }
@@ -249,7 +276,7 @@ class OutputTabs extends Component {
                         ]}
                     />
                 </Tab>
-                <Tab eventKey="data" title="Data">
+                <Tab eventKey="data" title="Data" style={{maxHeight: "50vh", overflowY: "scroll"}}>
                     <DataFrameTable data={df} columns={["dose", "day", "has_tumor", "weight"]} />
                 </Tab>
             </Tabs>
@@ -266,26 +293,30 @@ class App extends Component {
     render() {
         const {outputs, showAboutModal, setAboutModal} = this.props.store;
         return (
-            <div className="container-fluid py-3">
-                <div className="d-flex">
+            <div className="container py-3">
+                <div className="d-flex justify-content-between">
                     <h2>Poly K adjustment</h2>
                     <button
-                        onClick={() => setAboutModal(true)}
                         type="button"
-                        className="btn btn-primary ml-2">
+                        className="btn btn-primary"
+                        onClick={() => setAboutModal(true)}>
                         About
                     </button>
-                    <>{showAboutModal ? <AboutModal store={this.props.store} /> : null}</>
                 </div>
-                <p className="text-muted">
-                    This is a work in progress. Prior to deployment, we should update the help text,
-                    user-interface, instructions etc.
+                <>{showAboutModal ? <AboutModal store={this.props.store} /> : null}</>
+                <p className="text-muted col-lg-8">
+                    An approach to correct for treatment-related differences in survival across
+                    dose-groups in standard 2-year cancer bioassays. For more details, review the&nbsp;
+                    <a href="#" onClick={() => setAboutModal(true)}>
+                        description
+                    </a>&nbsp;
+                    of the software.
                 </p>
                 <h3>Settings</h3>
                 <InputForm />
                 {outputs ? (
                     <>
-                        <h3>Results</h3>
+                        <h3 className="pt-3">Results</h3>
                         <OutputTabs />
                     </>
                 ) : null}

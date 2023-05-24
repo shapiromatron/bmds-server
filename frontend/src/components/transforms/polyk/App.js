@@ -24,13 +24,12 @@ class App extends Component {
                 </div>
                 <>{showAboutModal ? <AboutModal store={this.props.store} /> : null}</>
                 <p className="text-muted col-lg-8">
-                    An approach to correct for treatment-related differences in survival across
-                    dose groups in standard 2-year cancer bioassays. For more details, review
-                    the&nbsp;
+                    Correct for treatment-related differences in survival across dose groups in
+                    standard 2-year cancer bioassays. For more details, review the software&nbsp;
                     <a href="#" onClick={() => setAboutModal(true)}>
                         description
                     </a>
-                    &nbsp; of the software.
+                    .
                 </p>
                 <h3>Settings</h3>
                 <InputForm />

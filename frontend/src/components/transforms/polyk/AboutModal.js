@@ -141,26 +141,24 @@ class AboutModal extends Component {
                         can be used (such that animals dying early provide less information).
                     </p>
                     <p>
-                        Use of the poly-3 adjustment will result in survival adjusted Ns (most
-                        likely non-integer values) that can be used in dose-response analyses.
+                        Use of the poly-3 adjustment will result in survival adjusted Ns (frequently
+                        non-integer values) that can be used in dose-response analyses.
                     </p>
                     <p>
                         <b>The inputs for this tool are:</b>
                     </p>
                     <ol>
                         <li>
-                            Dose units – the dose metrics for the data being adjusted (i.e., ppm,
-                            mg/kg-d, etc.)
+                            Dose units – the dose metrics for the data being adjusted (e.g., ppm,
+                            mg/kg-d)
                         </li>
                         <li>
-                            Power – the power to be used for the adjustment. By default this will be
-                            a value of “3”, but this can be adjusted given the nature of the tumors
-                            being analyzed (see above)
+                            Power – the power to be used for the adjustment. Defaults to 3, but can
+                            be adjusted given the nature of the tumors being analyzed.
                         </li>
                         <li>
-                            Duration – the duration of the study in days. By default this will be
-                            calculated from the maximum reported day in the dataset. Otherwise, the
-                            specified value will be used. Note that in&nbsp;
+                            Duration – the duration of the study in days. By default (if empty), the
+                            maximum reported day in the dataset. In&nbsp;
                             {externalReference(
                                 "https://hero.epa.gov/hero/index.cfm/reference/details/reference_id/708980",
                                 "Kissling et al. (2008)"
@@ -185,7 +183,9 @@ class AboutModal extends Component {
                             </ol>
                         </li>
                     </ol>
-                    <p>Executing this tool will provide the following outputs:</p>
+                    <p>
+                        <b>The outputs from this tool are:</b>
+                    </p>
                     <ol>
                         <li>A summary table of the original and adjusted data</li>
                         <li>

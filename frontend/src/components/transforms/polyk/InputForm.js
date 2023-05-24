@@ -30,7 +30,7 @@ class InputForm extends Component {
                             onChange={value => updateSettings("dose_units", value)}
                         />
                         <p className="text-muted mb-0">
-                            The dose metrics for the data being adjusted (i.e., ppm, mg/kg-d, etc.).
+                            The dose metrics for the data being adjusted (e.g., ppm, mg/kg-d).
                         </p>
                     </div>
                     <div className="col-lg-4">
@@ -63,7 +63,7 @@ class InputForm extends Component {
                             onChange={value => updateSettings("dataset", value)}
                         />
                         <p className="text-muted mb-0">
-                            CSV data, or copy and paste from Excel.&nbsp;
+                            Copy and paste data from a CSV, or directly from Excel.&nbsp;
                             <a
                                 href="#"
                                 onClick={e => {

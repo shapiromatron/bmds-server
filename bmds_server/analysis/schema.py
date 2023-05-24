@@ -1,3 +1,4 @@
+import re
 from io import StringIO
 
 import pandas as pd
@@ -45,6 +46,9 @@ class PolyKInput(BaseModel):
     def check_dataset(cls, value):
         if len(value) > 100_000:
             raise ValueError("Dataset too large")
+
+        # replace tabs or spaces with commas
+        value = re.sub(r"[,\t ]+", ",", value.strip())
 
         df = pd.read_csv(StringIO(value))
 

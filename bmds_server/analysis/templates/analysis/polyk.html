@@ -1,5 +1,7 @@
 {% extends "base.html" %}
 
+{% block title %}Poly K adjustment | {{block.super}}{% endblock title %}
+
 {% block content %}
 {% csrf_token %}
 <div id="main"></div>

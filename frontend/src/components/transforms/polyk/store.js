@@ -70,13 +70,13 @@ class Store {
     }
 
     @action.bound
-    reset(){
+    reset() {
         this.settings = {
             dataset: "",
             dose_units: "ppm",
             power: 3,
             duration: NaN,
-        }
+        };
         this.error = null;
         this.outputs = null;
     }
@@ -87,7 +87,7 @@ class Store {
     }
 
     @action.bound
-    downloadExampleData(){
+    downloadExampleData() {
         saveAs(new File([exampleData], "example-polyk.csv", {type: "text/csv"}));
     }
 }

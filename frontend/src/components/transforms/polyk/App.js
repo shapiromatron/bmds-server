@@ -14,7 +14,7 @@ class App extends Component {
         return (
             <div className="container py-3">
                 <div className="d-flex justify-content-between">
-                    <h2>Poly K adjustment</h2>
+                    <h2>Poly K Adjustment</h2>
                     <button
                         type="button"
                         className="btn btn-primary"
@@ -25,7 +25,7 @@ class App extends Component {
                 <>{showAboutModal ? <AboutModal store={this.props.store} /> : null}</>
                 <p className="text-muted col-lg-8">
                     An approach to correct for treatment-related differences in survival across
-                    dose-groups in standard 2-year cancer bioassays. For more details, review
+                    dose groups in standard 2-year cancer bioassays. For more details, review
                     the&nbsp;
                     <a href="#" onClick={() => setAboutModal(true)}>
                         description

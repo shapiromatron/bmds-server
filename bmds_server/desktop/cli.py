@@ -9,6 +9,7 @@ from time import sleep
 from webbrowser import open_new_tab
 
 import cherrypy
+from django.core.management import execute_from_command_line
 from pydantic import BaseModel, Field
 from textual import on
 from textual.app import App, ComposeResult
@@ -77,6 +78,10 @@ class LogApp:
             sleep(1)
 
 
+def run_django_command(command: str):
+    execute_from_command_line(command.split(" "))
+
+
 class AppThread(Thread):
     def __init__(self, stream: StringIO, host="127.0.0.1", port=5000, **kw):
         self.stream = stream
@@ -89,6 +94,9 @@ class AppThread(Thread):
 
         with redirect_stdout(self.stream), redirect_stderr(self.stream):
             from ..main.wsgi import application as django_app
+
+            run_django_command("manage.py migrate --noinput")
+            run_django_command("manage.py collectstatic --noinput")
 
             application = WhiteNoise(django_app, root=settings.PUBLIC_DATA_ROOT)
             cherrypy.config.update(

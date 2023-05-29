@@ -1,8 +1,16 @@
-# import os
-# from pathlib import Path
-
 # todo - load from base instead of dev
+from ..constants import get_app_home
 from .dev import *  # noqa: F403
+
+APP_HOME = get_app_home()
+
+PUBLIC_DATA_ROOT = APP_HOME / "public"
+LOGS_PATH = APP_HOME / "logs"
+STATIC_ROOT = PUBLIC_DATA_ROOT / "static"
+MEDIA_ROOT = PUBLIC_DATA_ROOT / "media"
+
+PUBLIC_DATA_ROOT.mkdir(exist_ok=True, parents=False)
+LOGS_PATH.mkdir(exist_ok=True, parents=False)
 
 # DATABASES = {
 #     "default": {

@@ -16,6 +16,7 @@ class BaseSession(BaseModel):
 
 
 class BaseSessionComplete(BaseSession):
+    # set is_desktop limit to 100, datasets & options
     datasets: conlist(Any, min_items=1, max_items=10)
     models: dict
     options: conlist(Any, min_items=1, max_items=10)

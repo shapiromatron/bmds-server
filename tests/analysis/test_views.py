@@ -41,7 +41,8 @@ class TestAnalysisDetail:
             "url": f"/analysis/{pk}/",
             "excelUrl": f"/api/v1/analysis/{pk}/excel/",
             "wordUrl": f"/api/v1/analysis/{pk}/word/",
-            "future": False,
+            "future": True,
+            "is_desktop": False,
         }
 
         # write view should have edit context
@@ -54,7 +55,8 @@ class TestAnalysisDetail:
             "url": f"/analysis/{pk}/",
             "excelUrl": f"/api/v1/analysis/{pk}/excel/",
             "wordUrl": f"/api/v1/analysis/{pk}/word/",
-            "future": False,
+            "future": True,
+            "is_desktop": False,
             "editSettings": {
                 "editKey": pw,
                 "viewUrl": f"http://testserver/analysis/{pk}/",
@@ -74,9 +76,9 @@ class TestAnalysisDetail:
         analysis = Analysis.objects.get(pk=pk)
         url = analysis.get_absolute_url() + "?future=1"
 
-        # no staff access; no future flag
+        # no staff access; recently changed to all access for future
         response = client.get(url)
-        assert response.context["config"]["future"] is False
+        assert response.context["config"]["future"] is True
 
         # staff access; future flag
         assert client.login(username="admin@bmdsonline.org", password="pw")

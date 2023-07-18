@@ -50,7 +50,7 @@ class OptionsStore {
     }
 
     @computed get canAddNewOption() {
-        return this.optionsList.length < 6;
+        return this.rootStore.mainStore.isDesktop ? true : this.optionsList.length < 6;
     }
 }
 

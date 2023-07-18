@@ -1,6 +1,7 @@
 from typing import Any, Literal
 
 import bmds
+from django.conf import settings
 from pydantic import BaseModel, conlist
 
 from ...common.validation import pydantic_validate
@@ -16,10 +17,13 @@ class BaseSession(BaseModel):
 
 
 class BaseSessionComplete(BaseSession):
-    # set is_desktop limit to 100, datasets & options
-    datasets: conlist(Any, min_items=1, max_items=10)
     models: dict
-    options: conlist(Any, min_items=1, max_items=10)
+    if settings.IS_DESKTOP:
+        datasets: conlist(Any, min_items=1, max_items=100)
+        options: conlist(Any, min_items=1, max_items=100)
+    else:
+        datasets: conlist(Any, min_items=1, max_items=10)
+        options: conlist(Any, min_items=1, max_items=10)
 
 
 def validate_session(data: dict, partial: bool = False):

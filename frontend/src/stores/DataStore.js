@@ -268,7 +268,7 @@ class DataStore {
     }
 
     @computed get canAddNewDataset() {
-        return this.datasets.length < 6;
+        return this.rootStore.mainStore.isDesktop ? true : this.datasets.length < 6;
     }
 
     @computed get hasSelectedDataset() {

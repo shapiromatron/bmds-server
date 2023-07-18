@@ -30,10 +30,12 @@ logger = logging.getLogger(__name__)
 
 
 def get_deletion_date(current_deletion_date=None):
-    # if settings.is_desktop here...
-    date = now() + timedelta(days=settings.DAYS_TO_KEEP_ANALYSES)
-    if current_deletion_date:
-        return max(current_deletion_date, date)
+    if not settings.IS_DESKTOP:
+        date = now() + timedelta(days=settings.DAYS_TO_KEEP_ANALYSES)
+        if current_deletion_date:
+            return max(current_deletion_date, date)
+    else:
+        date = None
     return date
 
 

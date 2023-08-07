@@ -1,9 +1,7 @@
-import itertools
 from copy import deepcopy
 from typing import NamedTuple, Self
 
 import bmds
-import numpy as np
 from bmds.bmds3.constants import DistType
 from bmds.bmds3.sessions import BmdsSession
 
@@ -124,12 +122,6 @@ class AnalysisSession(NamedTuple):
 
     @classmethod
     def run(cls, inputs: dict, dataset_index: int, option_index: int) -> AnalysisSessionSchema:
-        # TODO - replace in BMDS 3.4
-        if inputs["dataset_type"] == bmds.constants.NESTED_DICHOTOMOUS:
-            return _mock_nested_dichotomous(inputs, dataset_index, option_index)
-        elif inputs["dataset_type"] == bmds.constants.MULTI_TUMOR:
-            return _mock_multitumor(inputs, dataset_index, option_index)
-
         session = cls.create(inputs, dataset_index, option_index)
         session.execute()
         return session.to_schema()
@@ -177,49 +169,3 @@ class AnalysisSession(NamedTuple):
 
     def to_dict(self) -> dict:
         return self.to_schema().dict()
-
-
-def _mock_results(inputs: dict, dataset_index: int, option_index: int) -> dict:
-    # TODO - replace in BMDS 3.4
-    models = []
-    for model_name in itertools.chain(inputs["models"]["frequentist_restricted"]):
-        doses = np.array(inputs["datasets"][dataset_index]["doses"])
-        median = np.percentile(doses, 50)
-        models.append(
-            {
-                "name": model_name,
-                "results": {
-                    "bmd": median,
-                    "bmdl": 0.9 * median,
-                    "bmdu": 1.1 * median,
-                    "plotting": {"dr_x": [0, 10, 20], "dr_y": [0, 0.5, 1]},
-                },
-                "settings": {},
-                "model_class": {},
-            }
-        )
-
-    return {
-        "metadata": {"dataset_index": dataset_index, "option_index": option_index},
-        "bayesian": None,
-        "frequentist": {
-            "models": models,
-            "dataset": inputs["datasets"][dataset_index],
-            "version": {},
-            "selected": {"notes": "", "model_index": None},
-            "recommender": None,
-            "model_average": None,
-        },
-    }
-
-
-def _mock_nested_dichotomous(inputs: dict, dataset_index: int, option_index: int) -> dict:
-    # TODO - replace in BMDS 3.4
-    return _mock_results(inputs, dataset_index, option_index)
-
-
-def _mock_multitumor(inputs: dict, dataset_index: int, option_index: int) -> dict:
-    # TODO - replace in BMDS 3.4
-    results = _mock_results(inputs, dataset_index, option_index)
-    results["frequentist"]["combined"] = deepcopy(results["frequentist"]["models"][0]["results"])
-    return results

@@ -4,7 +4,11 @@ import React, {Component} from "react";
 
 import {getLabel} from "@/common";
 import {adverseDirectionOptions, allDegreeOptions} from "@/constants/dataConstants";
-import {MODEL_CONTINUOUS, MODEL_DICHOTOMOUS} from "@/constants/mainConstants";
+import {
+    MODEL_CONTINUOUS,
+    MODEL_DICHOTOMOUS,
+    MODEL_NESTED_DICHOTOMOUS,
+} from "@/constants/mainConstants";
 import {
     continuousBmrOptions,
     dichotomousBmrOptions,
@@ -46,6 +50,8 @@ class OptionSetTable extends Component {
                     getLabel(selectedDatasetOptions.degree, allDegreeOptions),
                 ],
             ];
+        } else if (getModelType === MODEL_NESTED_DICHOTOMOUS) {
+            rows = [["TODO", "ADD"]];
         } else {
             throw `Unknown model type: ${getModelType}`;
         }

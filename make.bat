@@ -53,7 +53,7 @@ npm --prefix .\frontend run lint
 goto :eof
 
 :format
-black . && ruff . --fix
+black . && ruff . --fix --show-fixes
 npm --prefix .\frontend run format
 goto :eof
 
@@ -62,7 +62,7 @@ black . --check && ruff .
 goto :eof
 
 :format-py
-black . && ruff . --fix
+black . && ruff . --fix --show-fixes
 goto :eof
 
 :lint-js

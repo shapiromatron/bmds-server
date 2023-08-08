@@ -1,3 +1,4 @@
+import {saveAs} from "file-saver";
 import {action, observable} from "mobx";
 
 import {getHeaders} from "../../../common";
@@ -12,11 +13,17 @@ class Store {
         dataset: "",
         dose_units: "ppm",
         power: 3,
-        duration: 730,
+        duration: NaN,
     };
     @observable error = null;
     @observable errorObject = null;
     @observable outputs = null;
+
+    @observable showAboutModal = false;
+    @action.bound
+    setAboutModal(value) {
+        this.showAboutModal = value;
+    }
 
     @action.bound
     updateSettings(key, value) {
@@ -63,8 +70,25 @@ class Store {
     }
 
     @action.bound
+    reset() {
+        this.settings = {
+            dataset: "",
+            dose_units: "ppm",
+            power: 3,
+            duration: NaN,
+        };
+        this.error = null;
+        this.outputs = null;
+    }
+
+    @action.bound
     loadExampleData() {
         this.updateSettings("dataset", exampleData);
+    }
+
+    @action.bound
+    downloadExampleData() {
+        saveAs(new File([exampleData], "example-polyk.csv", {type: "text/csv"}));
     }
 }
 

@@ -4,7 +4,7 @@ from io import StringIO
 import pandas as pd
 from bmds.bmds3.types.sessions import VersionSchema
 from bmds.datasets.transforms.polyk import calculate
-from pydantic import BaseModel, confloat, validator
+from pydantic import BaseModel, Field, validator
 from pydantic.schema import schema as pyschema
 from rest_framework.schemas.openapi import SchemaGenerator
 
@@ -39,8 +39,8 @@ class AnalysisOutput(BaseModel):
 class PolyKInput(BaseModel):
     dataset: str
     dose_units: str
-    power: confloat(ge=0, le=5) = 3
-    duration: confloat(ge=0, le=10000) | None = None
+    power: float = Field(default=3, ge=0, le=5)
+    duration: float | None = Field(default=None, gt=0, le=10000)
 
     @validator("dataset")
     def check_dataset(cls, value):

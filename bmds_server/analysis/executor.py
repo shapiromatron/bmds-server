@@ -6,6 +6,8 @@ import bmds
 import numpy as np
 from bmds.bmds3.constants import DistType
 from bmds.bmds3.sessions import BmdsSession
+from bmds.bmds3.types.nested_dichotomous import IntralitterCorrelation, LitterSpecificCovariate
+from bmds.constants import Dtype
 
 from .schema import AnalysisSessionSchema
 from .transforms import (
@@ -62,6 +64,13 @@ def build_frequentist_session(dataset, inputs, options, dataset_options) -> Bmds
                     model_options = model_options.copy()
                     model_options.degree = degree
                     session.add_model(model_name, settings=model_options)
+            elif dataset_type == Dtype.NESTED_DICHOTOMOUS:
+                # run all permutations of intralitter correlation and litter specific covariate
+                for ilc, lsc in itertools.product(IntralitterCorrelation, LitterSpecificCovariate):
+                    settings = model_options.copy()
+                    settings.intralitter_correlation = ilc
+                    settings.litter_specific_covariate = lsc
+                    session.add_model(model_name, settings=settings)
             else:
                 if model_name == bmds.constants.M_Linear:
                     # a linear model must have a degree of 1

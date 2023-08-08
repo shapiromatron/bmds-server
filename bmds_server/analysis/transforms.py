@@ -36,12 +36,12 @@ def build_model_settings(
     prior_class: str,
     options: dict,
     dataset_options: dict,
-) -> DichotomousModelSettings | ContinuousModelSettings:
+) -> DichotomousModelSettings | ContinuousModelSettings | NestedDichotomousModelSettings:
     prior_class = bmd3_prior_map[prior_class]
     if dataset_type in bmds.constants.DICHOTOMOUS_DTYPES:
         return DichotomousModelSettings(
             bmr=options["bmr_value"],
-            alpha=1.0 - options["confidence_level"],
+            alpha=round(1.0 - options["confidence_level"], 3),
             bmr_type=options["bmr_type"],
             degree=dataset_options["degree"],
             priors=prior_class,
@@ -49,7 +49,7 @@ def build_model_settings(
     elif dataset_type in bmds.constants.CONTINUOUS_DTYPES:
         return ContinuousModelSettings(
             bmr=options["bmr_value"],
-            alpha=1.0 - options["confidence_level"],
+            alpha=round(1.0 - options["confidence_level"], 3),
             tailProb=options["tail_probability"],
             bmr_type=options["bmr_type"],
             disttype=options["dist_type"],
@@ -58,11 +58,13 @@ def build_model_settings(
             priors=prior_class,
         )
     elif dataset_type == bmds.constants.NESTED_DICHOTOMOUS:
+        is_restricted = prior_class == PriorClass.frequentist_restricted
         return NestedDichotomousModelSettings(
-            bmr=options["bmr_value"],
-            alpha=1.0 - options["confidence_level"],
-            bmr_type=options["bmr_type"],
+            bmr_type=options["bmr_value"],
+            bmr=options["bmr_type"],
+            alpha=round(1.0 - options["confidence_level"], 3),
             litter_specific_covariate=options["litter_specific_covariate"],
+            restricted=is_restricted,
             bootstrap_iterations=options["bootstrap_iterations"],
             bootstrap_seed=options["bootstrap_seed"],
         )

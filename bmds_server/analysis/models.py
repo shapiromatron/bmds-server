@@ -21,7 +21,8 @@ from django.utils.text import slugify
 from django.utils.timezone import now
 
 from ..common.utils import random_string
-from . import executor, tasks, validators
+from . import tasks, validators
+from .executor import AnalysisSession, MultiTumorSession
 from .reporting.cache import DocxReportCache, ExcelReportCache
 from .reporting.excel import dataset_df, params_df, summary_df
 from .schema import AnalysisOutput, AnalysisSessionSchema
@@ -139,21 +140,18 @@ class Analysis(models.Model):
         """
         return queryset.filter(started__lt=now() - timedelta(hours=1), ended__isnull=True)
 
-    def get_session(self, index: int) -> executor.AnalysisSession:
+    def get_session(self, index: int) -> AnalysisSession:
         if not self.is_finished or self.has_errors:
             raise ValueError("Session cannot be returned")
-        return executor.AnalysisSession.deserialize(deepcopy(self.outputs["outputs"][index]))
+        return AnalysisSession.deserialize(deepcopy(self.outputs["outputs"][index]))
 
-    def get_sessions(self) -> list[executor.AnalysisSession]:
+    def get_sessions(self) -> list[AnalysisSession]:
         if not self.is_finished or self.has_errors:
             raise ValueError("Session cannot be returned")
-        return [
-            executor.AnalysisSession.deserialize(output)
-            for output in deepcopy(self.outputs["outputs"])
-        ]
+        return [AnalysisSession.deserialize(output) for output in deepcopy(self.outputs["outputs"])]
 
     def to_batch(self) -> BmdsSessionBatch:
-        # convert list[executor.AnalysisSession] to list[bmds.BmdsSession]
+        # convert list[AnalysisSession] to list[bmds.BmdsSession]
         items = []
         for session in self.get_sessions():
             if session.frequentist:
@@ -213,13 +211,23 @@ class Analysis(models.Model):
         self, inputs: dict, dataset_index: int, option_index: int
     ) -> AnalysisSessionSchema:
         try:
-            return executor.AnalysisSession.run(inputs, dataset_index, option_index)
+            return AnalysisSession.run(inputs, dataset_index, option_index)
         except Exception:
-            exception = AnalysisSessionSchema(
+            response = AnalysisSessionSchema(
                 dataset_index=dataset_index, option_index=option_index, error=traceback.format_exc()
             )
-            logger.error(f"{self.id}: {exception}")
-            return exception
+            logger.error(f"{self.id}: {response}")
+            return response
+
+    def try_run_multitumor(self, inputs: dict, option_index: int) -> AnalysisSessionSchema:
+        try:
+            return MultiTumorSession.run(inputs, option_index)
+        except Exception:
+            response = AnalysisSessionSchema(
+                dataset_index=-1, option_index=option_index, error=traceback.format_exc()
+            )
+            logger.error(f"{self.id}: {response}")
+            return response
 
     def start_execute(self):
         # update model to indicate execution scheduled
@@ -230,10 +238,7 @@ class Analysis(models.Model):
         # add to analysis queue...
         tasks.try_execute.delay(str(self.id))
 
-    def execute(self):
-        # update start time to actual time started
-        self.started = now()
-
+    def _execute_session(self) -> list[AnalysisSessionSchema]:
         # build combinations based on enabled datasets
         combinations = []
         for dataset_index in range(len(self.inputs["datasets"])):
@@ -241,11 +246,28 @@ class Analysis(models.Model):
                 if self.inputs["dataset_options"][dataset_index]["enabled"]:
                     combinations.append((dataset_index, option_index))
 
-        outputs: list[AnalysisSessionSchema] = [
+        return [
             self.try_run_session(self.inputs, dataset_index, option_index)
             for dataset_index, option_index in combinations
         ]
 
+    def _execute_multitumor(self) -> list[AnalysisSessionSchema]:
+        n_options = len(self.inputs["options"])
+        return [
+            self.try_run_multitumor(self.inputs, option_index) for option_index in range(n_options)
+        ]
+
+    def _execute(self) -> list[AnalysisSessionSchema]:
+        is_multitumor = self.inputs.get("dataset_type") == bmds.constants.ModelClass.MULTI_TUMOR
+        if is_multitumor:
+            return self._execute_multitumor()
+        return self._execute_session()
+
+    def execute(self):
+        # update start time to actual time started
+        self.started = now()
+        outputs = self._execute()
+        # get bmds version
         bmds_python_version = None
         for output in outputs:
             if output.frequentist is not None:
@@ -254,15 +276,14 @@ class Analysis(models.Model):
             if output.bayesian is not None:
                 bmds_python_version = output.bayesian["version"]
                 break
-
-        obj = AnalysisOutput(
+        # get prepare complete output object
+        analysis_output = AnalysisOutput(
             analysis_id=str(self.id),
-            analysis_schema_version="1.0",
             bmds_server_version=settings.COMMIT.sha,
             bmds_python_version=bmds_python_version,
             outputs=[output.dict() for output in outputs],
         )
-        self.outputs = obj.dict()
+        self.outputs = analysis_output.dict()
         self.errors = [output.error for output in outputs if output.error]
         self.ended = now()
         self.deletion_date = get_deletion_date()

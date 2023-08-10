@@ -23,14 +23,14 @@ class WrappedAnalysisSelectedSchema(BaseModel):
 class AnalysisSessionSchema(BaseModel):
     dataset_index: int
     option_index: int
-    frequentist: dict | None
-    bayesian: dict | None
-    error: str | None
+    frequentist: dict | None = None
+    bayesian: dict | None = None
+    error: str | None = None
 
 
 class AnalysisOutput(BaseModel):
     analysis_id: str
-    analysis_schema_version: str = "1.0"
+    analysis_schema_version: str = "1.1"
     bmds_server_version: str
     bmds_python_version: VersionSchema | None
     outputs: list[AnalysisSessionSchema]

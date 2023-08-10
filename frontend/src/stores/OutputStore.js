@@ -113,6 +113,7 @@ class OutputStore {
     @computed get recommendationEnabled() {
         return (
             this.selectedOutput.frequentist &&
+            this.selectedOutput.frequentist.recommender &&
             this.selectedOutput.frequentist.recommender.settings.enabled
         );
     }

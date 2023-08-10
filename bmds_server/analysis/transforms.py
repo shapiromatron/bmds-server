@@ -68,6 +68,14 @@ def build_model_settings(
             bootstrap_iterations=options["bootstrap_iterations"],
             bootstrap_seed=options["bootstrap_seed"],
         )
+    elif dataset_type == bmds.constants.MULTI_TUMOR:
+        return DichotomousModelSettings(
+            bmr_type=options["bmr_type"],
+            bmr=options["bmr_value"],
+            alpha=round(1.0 - options["confidence_level"], 3),
+            degree=2,
+            priors=PriorClass.frequentist_restricted,
+        )
     else:
         raise ValueError(f"Unknown dataset_type: {dataset_type}")
 

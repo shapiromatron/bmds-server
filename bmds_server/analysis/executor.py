@@ -7,7 +7,7 @@ from bmds.bmds3.constants import DistType
 from bmds.bmds3.models.multi_tumor import Multitumor, MultitumorBase
 from bmds.bmds3.sessions import BmdsSession
 from bmds.bmds3.types.nested_dichotomous import IntralitterCorrelation, LitterSpecificCovariate
-from bmds.constants import Dtype
+from bmds.constants import ModelClass
 
 from .schema import AnalysisSessionSchema
 from .transforms import (
@@ -58,7 +58,7 @@ def build_frequentist_session(dataset, inputs, options, dataset_options) -> Bmds
                     model_options = model_options.copy()
                     model_options.degree = degree
                     session.add_model(model_name, settings=model_options)
-            elif dataset_type == Dtype.NESTED_DICHOTOMOUS:
+            elif dataset_type == ModelClass.NESTED_DICHOTOMOUS:
                 # run all permutations of intralitter correlation and litter specific covariate
                 for ilc, lsc in itertools.product(IntralitterCorrelation, LitterSpecificCovariate):
                     settings = model_options.copy()
@@ -232,3 +232,11 @@ class MultiTumorSession(NamedTuple):
 
     def to_dict(self) -> dict:
         return self.to_schema().dict()
+
+
+Session = AnalysisSession | MultiTumorSession
+
+
+def deserialize(model_class: ModelClass, data: dict) -> Session:
+    Runner = MultiTumorSession if model_class is ModelClass.MULTI_TUMOR else AnalysisSession
+    return Runner.deserialize(data)

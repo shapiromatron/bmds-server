@@ -8,10 +8,10 @@ from io import BytesIO
 import bmds
 import pandas as pd
 import reversion
-from bmds.bmds3.batch import BmdsSessionBatch
+from bmds.bmds3.batch import BatchBase, BmdsSessionBatch, MultitumorBatch
 from bmds.bmds3.recommender.recommender import RecommenderSettings
 from bmds.bmds3.types.sessions import VersionSchema
-from bmds.constants import Dtype
+from bmds.constants import ModelClass
 from django.conf import settings
 from django.core.cache import cache
 from django.core.exceptions import ValidationError
@@ -22,9 +22,9 @@ from django.utils.timezone import now
 
 from ..common.utils import random_string
 from . import tasks, validators
-from .executor import AnalysisSession, MultiTumorSession
+from .executor import AnalysisSession, MultiTumorSession, Session, deserialize
+from .reporting import excel
 from .reporting.cache import DocxReportCache, ExcelReportCache
-from .reporting.excel import dataset_df, params_df, summary_df
 from .schema import AnalysisOutput, AnalysisSessionSchema
 
 logger = logging.getLogger(__name__)
@@ -140,20 +140,31 @@ class Analysis(models.Model):
         """
         return queryset.filter(started__lt=now() - timedelta(hours=1), ended__isnull=True)
 
-    def get_session(self, index: int) -> AnalysisSession:
+    @property
+    def model_class(self) -> ModelClass:
+        return ModelClass(self.inputs["dataset_type"])
+
+    def get_session(self, index: int) -> Session:
         if not self.is_finished or self.has_errors:
             raise ValueError("Session cannot be returned")
-        return AnalysisSession.deserialize(deepcopy(self.outputs["outputs"][index]))
+        return deserialize(self.model_class, deepcopy(self.outputs["outputs"][index]))
 
-    def get_sessions(self) -> list[AnalysisSession]:
+    def get_sessions(self) -> list[Session]:
         if not self.is_finished or self.has_errors:
             raise ValueError("Session cannot be returned")
-        return [AnalysisSession.deserialize(output) for output in deepcopy(self.outputs["outputs"])]
+        return [
+            deserialize(self.model_class, output) for output in deepcopy(self.outputs["outputs"])
+        ]
 
-    def to_batch(self) -> BmdsSessionBatch:
+    def to_batch(self) -> BatchBase:
         # convert list[AnalysisSession] to list[bmds.BmdsSession]
         items = []
-        for session in self.get_sessions():
+        sessions = self.get_sessions()
+
+        if self.model_class == ModelClass.MULTI_TUMOR:
+            return MultitumorBatch(session.session for session in sessions)
+
+        for session in sessions:
             if session.frequentist:
                 items.append(session.frequentist)
             if session.bayesian:
@@ -169,10 +180,20 @@ class Analysis(models.Model):
                     name="Status",
                 ).to_frame(),
             }
+
+        sessions = self.get_sessions()
+
+        if self.model_class == ModelClass.MULTI_TUMOR:
+            return {
+                "summary": excel.multitumor_summary_df(sessions),
+                "datasets": excel.multitumor_params_df(sessions),
+                "parameters": excel.multitumor_dataset_df(sessions),
+            }
+
         return {
-            "summary": summary_df(self),
-            "datasets": dataset_df(self),
-            "parameters": params_df(self),
+            "summary": excel.summary_df(sessions),
+            "datasets": excel.dataset_df(sessions),
+            "parameters": excel.params_df(sessions),
         }
 
     def to_excel(self) -> BytesIO:
@@ -307,8 +328,8 @@ class Analysis(models.Model):
 
     def default_input(self) -> dict:
         return {
-            "bmds_version": bmds.constants.BMDS330,
-            "dataset_type": Dtype.DICHOTOMOUS,
+            "bmds_version": bmds.constants.BMDS330,  # TODO - change?
+            "dataset_type": ModelClass.DICHOTOMOUS,
             "datasets": [],
             "models": {},
             "dataset_options": [],

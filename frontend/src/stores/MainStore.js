@@ -71,6 +71,9 @@ class MainStore {
             },
         };
     }
+    @computed get isMultitumor() {
+        return this.model_type === mc.MODEL_MULTI_TUMOR;
+    }
 
     @action.bound
     async saveAnalysis() {

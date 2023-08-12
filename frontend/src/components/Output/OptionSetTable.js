@@ -4,11 +4,7 @@ import React, {Component} from "react";
 
 import {getLabel} from "@/common";
 import {adverseDirectionOptions, allDegreeOptions} from "@/constants/dataConstants";
-import {
-    MODEL_CONTINUOUS,
-    MODEL_DICHOTOMOUS,
-    MODEL_NESTED_DICHOTOMOUS,
-} from "@/constants/mainConstants";
+import {MODEL_CONTINUOUS, MODEL_DICHOTOMOUS} from "@/constants/mainConstants";
 import {
     continuousBmrOptions,
     dichotomousBmrOptions,
@@ -50,8 +46,15 @@ class OptionSetTable extends Component {
                     getLabel(selectedDatasetOptions.degree, allDegreeOptions),
                 ],
             ];
-        } else if (getModelType === MODEL_NESTED_DICHOTOMOUS) {
+        } else if (outputStore.isNestedDichotomous) {
             rows = [["TODO", "ADD"]];
+        } else if (outputStore.isMultiTumor) {
+            rows = [
+                ["BMR Type", getLabel(selectedModelOptions.bmr_type, dichotomousBmrOptions)],
+                ["BMR", ff(selectedModelOptions.bmr_value)],
+                ["Confidence Level", ff(selectedModelOptions.confidence_level)],
+                ["Degree Setting", outputStore.multitumorDegreeInputSettings.join(", ")],
+            ];
         } else {
             throw `Unknown model type: ${getModelType}`;
         }

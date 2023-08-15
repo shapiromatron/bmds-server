@@ -166,10 +166,7 @@ class AnalysisSession(NamedTuple):
     def execute(self):
         if self.frequentist:
             self.frequentist.execute()
-            is_nd = (
-                self.frequentist.dataset.dtype == bmds.constants.NESTED_DICHOTOMOUS
-            )  # TODO -remove in BMDS 23.3
-            if self.frequentist.recommendation_enabled and not is_nd:
+            if self.frequentist.recommendation_enabled:
                 self.frequentist.recommend()
 
         if self.bayesian:

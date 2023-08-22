@@ -1,10 +1,9 @@
 import _ from "lodash";
-import {toJS} from "mobx";
-import {observer} from "mobx-react";
+import { observer } from "mobx-react";
 import PropTypes from "prop-types";
-import React, {Component} from "react";
+import React, { Component } from "react";
 
-import {ff} from "@/utils/formatters";
+import { ff } from "@/utils/formatters";
 // TODO: better # runs & combined handling
 @observer
 class BootstrapRuns extends Component {
@@ -29,18 +28,26 @@ class BootstrapRuns extends Component {
                     </tr>
                 </thead>
                 <tbody>
-                    {_.range(temp_rslt_len).map(i => {
+                    {_.range(results.n_runs).map(run => {
                         return (
-                            <tr key={i}>
-                                <td>{i}</td>
-                                <td>{results.p_value[i]}</td>
-                                <td>{ff(results.p50[i])}</td>
-                                <td>{ff(results.p90[i])}</td>
-                                <td>{ff(results.p95[i])}</td>
-                                <td>{ff(results.p99[i])}</td>
+                            <tr key={run}>
+                                <td>{run + 1}</td>
+                                <td>{results.p_value[run]}</td>
+                                <td>{ff(results.p50[run])}</td>
+                                <td>{ff(results.p90[run])}</td>
+                                <td>{ff(results.p95[run])}</td>
+                                <td>{ff(results.p99[run])}</td>
                             </tr>
                         );
                     })}
+                    <tr>
+                        <td>Combined</td>
+                        <td>{results.p_value[3]}</td>
+                        <td>{ff(results.p50[3])}</td>
+                        <td>{ff(results.p90[3])}</td>
+                        <td>{ff(results.p95[3])}</td>
+                        <td>{ff(results.p99[3])}</td>
+                    </tr>
                 </tbody>
             </table>
         );

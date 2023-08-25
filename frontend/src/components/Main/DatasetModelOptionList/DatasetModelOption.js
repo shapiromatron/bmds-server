@@ -31,6 +31,12 @@ class DatasetModelOption extends Component {
                     />
                 </td>
                 <td>{dataset.metadata.name}</td>
+                <td>
+                    <CheckboxInput
+                        checked={!option.enabled}
+                        onChange={checked => updateOption(datasetId, "enabled", checked)}
+                    />
+                </td>
                 {hasDegree ? (
                     <td>
                         <SelectInput

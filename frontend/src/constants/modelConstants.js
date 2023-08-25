@@ -6,12 +6,24 @@ import {
 } from "./mainConstants";
 
 const modelsList = {
-        [MODEL_CONTINUOUS]: ["Exponential", "Hill", "Linear", "Polynomial", "Power"],
+        [MODEL_CONTINUOUS]: [
+            "Exponential",
+            "Exponential2",
+            "Exponential3",
+            "Exponential4",
+            "Exponential5",
+            "Hill",
+            "Linear",
+            "Polynomial",
+            "Power",
+        ],
         [MODEL_DICHOTOMOUS]: [
             "Dichotomous-Hill",
+            "Michaelis-Menten",
             "Gamma",
             "Logistic",
             "LogLogistic",
+            "LogLogistic (Reduced)",
             "LogProbit",
             "Multistage",
             "Probit",
@@ -22,14 +34,26 @@ const modelsList = {
     },
     models = {
         [MODEL_CONTINUOUS]: {
-            frequentist_restricted: ["Exponential", "Hill", "Polynomial", "Power"],
+            frequentist_restricted: [
+                "Exponential",
+                "Exponential2",
+                "Exponential3",
+                "Exponential4",
+                "Exponential5",
+                "Hill",
+                "Michaelis-Menten",
+                "Polynomial",
+                "Power",
+            ],
             frequentist_unrestricted: ["Linear"],
         },
         [MODEL_DICHOTOMOUS]: {
             frequentist_restricted: [
                 "Dichotomous-Hill",
+                "Michaelis-Menten",
                 "Gamma",
                 "LogLogistic",
+                "LogLogistic (Reduced)",
                 "Multistage",
                 "Weibull",
             ],
@@ -46,15 +70,27 @@ const modelsList = {
     },
     allModelOptions = {
         [MODEL_CONTINUOUS]: {
-            frequentist_restricted: ["Exponential", "Hill", "Polynomial", "Power"],
-            frequentist_unrestricted: ["Hill", "Linear", "Polynomial", "Power"],
+            frequentist_restricted: [
+                "Exponential",
+                "Exponential2",
+                "Exponential3",
+                "Exponential4",
+                "Exponential5",
+                "Hill",
+                "Michaelis-Menten",
+                "Polynomial",
+                "Power",
+            ],
+            frequentist_unrestricted: ["Hill", "Michaelis-Menten", "Linear", "Polynomial", "Power"],
             bayesian: modelsList.C,
         },
         [MODEL_DICHOTOMOUS]: {
             frequentist_restricted: [
                 "Dichotomous-Hill",
+                "Michaelis-Menten",
                 "Gamma",
                 "LogLogistic",
+                "LogLogistic (Reduced)",
                 "LogProbit",
                 "Multistage",
                 "Weibull",
@@ -72,9 +108,7 @@ const modelsList = {
             frequentist_unrestricted: [],
         },
     },
-    isLognormal = function(disttype) {
-        return disttype == 3;
-    },
+    isLognormal = disttype => disttype == 3,
     hasDegrees = new Set(["Multistage", "Polynomial"]);
 
 export {allModelOptions, hasDegrees, isLognormal, models, modelsList};

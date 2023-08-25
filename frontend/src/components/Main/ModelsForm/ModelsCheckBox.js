@@ -73,12 +73,33 @@ const ModelsCheckBox = observer(props => {
     if (store.getModelType === mc.MODEL_CONTINUOUS) {
         return (
             <tbody>
-                <tr>
-                    <td className="text-left align-middle">Exponential</td>
-                    <CheckBoxTd store={store} type={fr} model={"Exponential"} />
+                <tr className="preview">
+                    <td className="text-left align-middle">Exponential 2</td>
+                    <CheckBoxTd store={store} type={fr} model={"Exponential2"} />
                     <td></td>
-                    <CheckBoxTd store={store} type={b} model={"Exponential"} disabled={true} />
-                    <PriorWeightTd store={store} model={"Exponential"} disabled={true} />
+                    <CheckBoxTd store={store} type={b} model={"Exponential2"} disabled={true} />
+                    <PriorWeightTd store={store} model={"Exponential2"} disabled={true} />
+                </tr>
+                <tr className="preview">
+                    <td className="text-left align-middle">Exponential 3</td>
+                    <CheckBoxTd store={store} type={fr} model={"Exponential3"} />
+                    <td></td>
+                    <CheckBoxTd store={store} type={b} model={"Exponential3"} disabled={true} />
+                    <PriorWeightTd store={store} model={"Exponential3"} disabled={true} />
+                </tr>
+                <tr className="preview">
+                    <td className="text-left align-middle">Exponential 4</td>
+                    <CheckBoxTd store={store} type={fr} model={"Exponential4"} />
+                    <td></td>
+                    <CheckBoxTd store={store} type={b} model={"Exponential4"} disabled={true} />
+                    <PriorWeightTd store={store} model={"Exponential4"} disabled={true} />
+                </tr>
+                <tr className="preview">
+                    <td className="text-left align-middle">Exponential 5</td>
+                    <CheckBoxTd store={store} type={fr} model={"Exponential5"} />
+                    <td></td>
+                    <CheckBoxTd store={store} type={b} model={"Exponential5"} disabled={true} />
+                    <PriorWeightTd store={store} model={"Exponential5"} disabled={true} />
                 </tr>
                 <tr>
                     <td className="text-left align-middle">Hill</td>
@@ -86,6 +107,13 @@ const ModelsCheckBox = observer(props => {
                     <CheckBoxTd store={store} type={fu} model={"Hill"} />
                     <CheckBoxTd store={store} type={b} model={"Hill"} disabled={true} />
                     <PriorWeightTd store={store} model={"Hill"} disabled={true} />
+                </tr>
+                <tr className="preview">
+                    <td className="text-left align-middle">Michaelis-Menten</td>
+                    <CheckBoxTd store={store} type={fr} model={"Michaelis-Menten"} />
+                    <CheckBoxTd store={store} type={fu} model={"Michaelis-Menten"} />
+                    <CheckBoxTd store={store} type={b} model={"Michaelis-Menten"} disabled={true} />
+                    <PriorWeightTd store={store} model={"Michaelis-Menten"} disabled={true} />
                 </tr>
                 <tr>
                     <td className="text-left align-middle">Linear</td>
@@ -121,6 +149,13 @@ const ModelsCheckBox = observer(props => {
                     <CheckBoxTd store={store} type={b} model={"Dichotomous-Hill"} />
                     <PriorWeightTd store={store} model={"Dichotomous-Hill"} />
                 </tr>
+                <tr className="preview">
+                    <td className="text-left align-middle">Michaelis-Menten</td>
+                    <CheckBoxTd store={store} type={fr} model={"Michaelis-Menten"} />
+                    <CheckBoxTd store={store} type={fu} model={"Michaelis-Menten"} />
+                    <CheckBoxTd store={store} type={b} model={"Michaelis-Menten"} />
+                    <PriorWeightTd store={store} model={"Michaelis-Menten"} />
+                </tr>
                 <tr>
                     <td className="text-left align-middle">Gamma</td>
                     <CheckBoxTd store={store} type={fr} model={"Gamma"} />
@@ -141,6 +176,13 @@ const ModelsCheckBox = observer(props => {
                     <CheckBoxTd store={store} type={fu} model={"LogLogistic"} />
                     <CheckBoxTd store={store} type={b} model={"LogLogistic"} />
                     <PriorWeightTd store={store} model={"LogLogistic"} />
+                </tr>
+                <tr className="preview">
+                    <td className="text-left align-middle">LogLogistic (Reduced)</td>
+                    <CheckBoxTd store={store} type={fr} model={"LogLogistic (Reduced)"} />
+                    <CheckBoxTd store={store} type={fu} model={"LogLogistic (Reduced)"} />
+                    <CheckBoxTd store={store} type={b} model={"LogLogistic (Reduced)"} />
+                    <PriorWeightTd store={store} model={"LogLogistic (Reduced)"} />
                 </tr>
                 <tr>
                     <td className="text-left align-middle">LogProbit</td>

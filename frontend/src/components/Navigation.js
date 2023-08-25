@@ -18,7 +18,6 @@ class Navigation extends Component {
     render() {
         const {mainStore} = this.props,
             {isMultitumor} = mainStore;
-        console.log(isMultitumor);
         return (
             <>
                 <ul className="nav nav-tabs d-flex mt-3">

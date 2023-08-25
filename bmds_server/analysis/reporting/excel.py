@@ -4,6 +4,7 @@ from typing import Any
 
 import pandas as pd
 from bmds.bmds3.sessions import BmdsSession
+from bmds.constants import Dtype
 
 from ..executor import AnalysisSession, MultiTumorSession
 
@@ -84,22 +85,31 @@ def params_df(sessions: list[AnalysisSession]) -> pd.DataFrame:
     data = []
     for session in sessions:
         if session.frequentist:
-            if session.frequentist.dataset.dtype == "ND":
-                continue  # TODO implement
-
             for model_index, model in enumerate(session.frequentist.models):
                 if model.has_results:
-                    data.extend(
-                        model.results.parameters.rows(
-                            extras=dict(
-                                dataset_index=session.dataset_index,
-                                option_index=session.option_index,
-                                analysis_type="frequentist",
-                                model_index=model_index,
-                                model_name=model.name(),
+                    if session.frequentist.dataset.dtype == Dtype.NESTED_DICHOTOMOUS:
+                        data.extend(
+                            model.results.parameter_rows(
+                                extras=dict(
+                                    dataset_index=session.dataset_index,
+                                    option_index=session.option_index,
+                                    model_index=model_index,
+                                    model_name=model.name(),
+                                )
                             )
                         )
-                    )
+                    else:
+                        data.extend(
+                            model.results.parameters.rows(
+                                extras=dict(
+                                    dataset_index=session.dataset_index,
+                                    option_index=session.option_index,
+                                    analysis_type="frequentist",
+                                    model_index=model_index,
+                                    model_name=model.name(),
+                                )
+                            )
+                        )
 
         if session.bayesian:
             for model_index, model in enumerate(session.bayesian.models):
@@ -124,8 +134,6 @@ def dataset_df(sessions: list[AnalysisSession]) -> pd.DataFrame:
     for session in sessions:
         if session.dataset_index not in datasets:
             dataset = session.frequentist.dataset if session.frequentist else session.bayesian
-            if dataset.dtype == "ND":
-                continue  # TODO implement
             datasets.add(session.dataset_index)
             data.extend(dataset.rows(extras=dict(dataset_index=session.dataset_index)))
     return pd.DataFrame(data=data)

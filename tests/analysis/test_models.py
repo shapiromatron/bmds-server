@@ -96,7 +96,6 @@ class TestBmds3Execution:
             (data_path / "dichotomous.docx").write_bytes(docx.getvalue())
 
     def test_nested_dichotomous(self, bmds_complete_nd, data_path, rewrite_data_files):
-        bmds_complete_nd["recommender"]["enabled"] = False  # TODO - remove after recommendation
         analysis = Analysis.objects.create(inputs=bmds_complete_nd)
 
         assert analysis.is_finished is False

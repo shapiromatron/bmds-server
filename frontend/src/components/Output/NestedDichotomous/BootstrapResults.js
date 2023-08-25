@@ -1,10 +1,14 @@
-import {observer} from "mobx-react";
+import { toJS } from "mobx";
+import { observer } from "mobx-react";
 import PropTypes from "prop-types";
-import React, {Component} from "react";
+import React, { Component } from "react";
+
+import { ff } from "@/utils/formatters";
 
 @observer
 class BootstrapResult extends Component {
     render() {
+        // console.log(toJS(this.props.model));
         return (
             <table className="table table-sm table-bordered">
                 <thead className="bg-custom">
@@ -15,25 +19,25 @@ class BootstrapResult extends Component {
                 <tbody>
                     <tr>
                         <th># Iterations</th>
-                        <td>{1}</td>
+                        <td>{this.props.model.settings.bootstrap_iterations}</td>
                     </tr>
                     <tr>
                         <th>Bootstrap Seed</th>
-                        <td>{1}</td>
+                        <td>{ff(this.props.model.settings.bootstrap_seed)}</td>
                     </tr>
                     <tr>
                         <th>Log-likelihood</th>
-                        <td>{1}</td>
+                        <td>{ff(this.props.model.results.ll)}</td>
                     </tr>
                     <tr>
                         <th>Observed Chi-square</th>
-                        <td>{1}</td>
+                        <td>{ff(this.props.model.results.obs_chi_sq)}</td>
                     </tr>
                     <tr>
                         <th>
                             Combined <i>P</i>-Value
                         </th>
-                        <td>{1}</td>
+                        <td>{ff(this.props.model.results.combined_pvalue)}</td>
                     </tr>
                 </tbody>
             </table>

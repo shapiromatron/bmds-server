@@ -283,7 +283,7 @@ def bmds_complete_mt():
                 "ns": [20, 20, 20, 20, 20],
                 "incidences": [0, 1, 2, 4, 11],
                 "metadata": {
-                    "id": 0,
+                    "id": 1,
                     "name": "Dataset #2",
                     "dose_name": "Dose",
                     "dose_units": "",
@@ -297,7 +297,7 @@ def bmds_complete_mt():
                 "ns": [20, 20, 20, 20, 20],
                 "incidences": [0, 2, 2, 6, 9],
                 "metadata": {
-                    "id": 0,
+                    "id": 2,
                     "name": "Dataset #3",
                     "dose_name": "Dose",
                     "dose_units": "",

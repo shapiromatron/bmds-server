@@ -3,8 +3,6 @@ import {inject, observer} from "mobx-react";
 import PropTypes from "prop-types";
 import React, {Component} from "react";
 
-import {ff} from "@/utils/formatters";
-
 const getData = datasets => {
     const headers = ["Dose"],
         rows = [],

@@ -90,7 +90,6 @@ def build_dataset(dataset: dict[str, list[float]]) -> bmds.datasets.DatasetType:
         schema = bmds.datasets.DichotomousDatasetSchema
     elif dataset_type == Dtype.NESTED_DICHOTOMOUS:
         schema = bmds.datasets.NestedDichotomousDatasetSchema
-        # MT dataset?
     else:
         raise ValueError(f"Unknown dataset type: {dataset_type}")
     return schema.parse_obj(dataset).deserialize()

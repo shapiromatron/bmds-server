@@ -140,20 +140,24 @@ def dataset_df(sessions: list[AnalysisSession]) -> pd.DataFrame:
 
 
 def multitumor_summary_df(sessions: list[MultiTumorSession]) -> pd.DataFrame:
-    columns = "bmd|bmdl|bmdu".split("|")
-    data = []
-    for session in sessions:
-        results = session.session.results
-        data.append((results.bmd, results.bmdl, results.bmdu))
-        for models in results.models:
-            for model in models:
-                data.append((model.bmd, model.bmdl, model.bmdu))
-    return pd.DataFrame(data=data, columns=columns)
+    return pd.concat(
+        [
+            session.session.to_df(extras=dict(option_index=session.option_index))
+            for session in sessions
+        ]
+    )
 
 
 def multitumor_params_df(sessions: list[MultiTumorSession]) -> pd.DataFrame:
-    return pd.DataFrame(data={"status": ["TODO"]})
+    return pd.concat(
+        [
+            session.session.params_df(extras=dict(option_index=session.option_index))
+            for session in sessions
+        ]
+    )
 
 
 def multitumor_dataset_df(sessions: list[MultiTumorSession]) -> pd.DataFrame:
-    return pd.DataFrame(data={"status": ["TODO"]})
+    # if users run multiple option-sets, only print datasets first time
+    first = sessions[0].session
+    return first.datasets_df()

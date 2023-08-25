@@ -1,15 +1,14 @@
 import _ from "lodash";
-import { observer } from "mobx-react";
+import {observer} from "mobx-react";
 import PropTypes from "prop-types";
-import React, { Component } from "react";
+import React, {Component} from "react";
 
-import { ff } from "@/utils/formatters";
-// TODO: better # runs & combined handling
+import {ff} from "@/utils/formatters";
+
 @observer
 class BootstrapRuns extends Component {
     render() {
-        const results = this.props.model.results.bootstrap,
-            temp_rslt_len = results.n_runs + 1;
+        const results = this.props.model.results.bootstrap;
         return (
             <table className="table table-sm table-bordered">
                 <thead className="bg-custom">

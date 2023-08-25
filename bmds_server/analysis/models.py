@@ -186,8 +186,8 @@ class Analysis(models.Model):
         if self.model_class == ModelClass.MULTI_TUMOR:
             return {
                 "summary": excel.multitumor_summary_df(sessions),
-                "datasets": excel.multitumor_params_df(sessions),
-                "parameters": excel.multitumor_dataset_df(sessions),
+                "datasets": excel.multitumor_dataset_df(sessions),
+                "parameters": excel.multitumor_params_df(sessions),
             }
 
         return {

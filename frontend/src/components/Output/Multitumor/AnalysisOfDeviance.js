@@ -12,12 +12,15 @@ class AnalysisOfDeviance extends Component {
             <table className="table table-sm table-bordered">
                 <thead>
                     <tr className="bg-custom">
-                        <th colSpan="3">AnalysisOfDeviance</th>
+                        <th colSpan="6">AnalysisOfDeviance</th>
                     </tr>
                     <tr>
-                        <th>Dose</th>
-                        <th>Incidence</th>
-                        <th>N</th>
+                        <th>Model</th>
+                        <th>Log Likelihood </th>
+                        <th># Params</th>
+                        <th>Deviance</th>
+                        <th>Test DOF</th>
+                        <th>P-Value</th>
                     </tr>
                 </thead>
                 <tbody>

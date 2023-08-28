@@ -32,30 +32,20 @@ class ModalBody extends Component {
                         <h2>multistage 3 degree</h2>
                         <p>summary</p>
                     </Col>
-                    <Col>
-                        <Doses model={dataset} />
-                    </Col>
+                    <Col>{isSummary ? null : <Doses model={dataset} />}</Col>
                 </Row>
                 <Row>
                     <Col>
                         <p>input summary</p>
                     </Col>
-                    <Col>
-                        <ParameterSettings model={dataset} />
-                    </Col>
+                    <Col>{isSummary ? null : <ParameterSettings model={dataset} />}</Col>
                 </Row>
                 <Row>
-                    <Col>
-                        <ModelParameters model={dataset} />
-                    </Col>
-                    <Col>
-                        <GoodnessOfFit model={dataset} />
-                    </Col>
+                    <Col>{isSummary ? null : <ModelParameters model={dataset} />}</Col>
+                    <Col>{isSummary ? null : <GoodnessOfFit model={dataset} />}</Col>
                 </Row>
                 <Row>
-                    <Col>
-                        <AnalysisOfDeviance model={dataset} />
-                    </Col>
+                    <Col>{isSummary ? null : <AnalysisOfDeviance model={dataset} />}</Col>
                 </Row>
             </Modal.Body>
         );

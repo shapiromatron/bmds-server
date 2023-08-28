@@ -12,12 +12,13 @@ class GoodnessOfFit extends Component {
             <table className="table table-sm table-bordered">
                 <thead>
                     <tr className="bg-custom">
-                        <th colSpan="3">GoodnessOfFit</th>
-                    </tr>
-                    <tr>
+                        <th colSpan="6">GoodnessOfFit</th>
                         <th>Dose</th>
-                        <th>Incidence</th>
-                        <th>N</th>
+                        <th>Size</th>
+                        <th>Observed</th>
+                        <th>Expected</th>
+                        <th>Est Prob</th>
+                        <th>Scaled Residual</th>
                     </tr>
                 </thead>
                 <tbody>

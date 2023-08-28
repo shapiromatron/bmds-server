@@ -12,12 +12,15 @@ class ModelParameters extends Component {
             <table className="table table-sm table-bordered">
                 <thead>
                     <tr className="bg-custom">
-                        <th colSpan="3">ModelParameters</th>
+                        <th colSpan="6">ModelParameters</th>
                     </tr>
                     <tr>
-                        <th>Dose</th>
-                        <th>Incidence</th>
-                        <th>N</th>
+                        <th>Variable</th>
+                        <th>Estimate</th>
+                        <th>Bounded</th>
+                        <th>Std Error</th>
+                        <th>Lower CI</th>
+                        <th>Upper CI</th>
                     </tr>
                 </thead>
                 <tbody>

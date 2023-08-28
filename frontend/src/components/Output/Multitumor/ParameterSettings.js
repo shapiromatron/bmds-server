@@ -15,9 +15,10 @@ class ParameterSettings extends Component {
                         <th colSpan="3">ParameterSettings</th>
                     </tr>
                     <tr>
-                        <th>Dose</th>
-                        <th>Incidence</th>
-                        <th>N</th>
+                        <th>Parameter</th>
+                        <th>Initial</th>
+                        <th>Min</th>
+                        <th>Max</th>
                     </tr>
                 </thead>
                 <tbody>

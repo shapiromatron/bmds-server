@@ -12,7 +12,7 @@ class AnalysisOfDeviance extends Component {
             <table className="table table-sm table-bordered">
                 <thead>
                     <tr className="bg-custom">
-                        <th colSpan="6">AnalysisOfDeviance</th>
+                        <th colSpan="6">Analysis of Deviance</th>
                     </tr>
                     <tr>
                         <th>Model</th>

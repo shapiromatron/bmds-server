@@ -6,13 +6,15 @@ import React, {Component} from "react";
 @observer
 class GoodnessOfFit extends Component {
     render() {
-        const dataset = this.props.model,
-            temp_rslt_len = _.size(dataset.doses);
+        const gof = this.props.model.gof,
+            temp_rslt_len = _.size(gof.eb_lower);
         return (
             <table className="table table-sm table-bordered">
                 <thead>
                     <tr className="bg-custom">
-                        <th colSpan="6">GoodnessOfFit</th>
+                        <th colSpan="6">Goodness Of Fit</th>
+                    </tr>
+                    <tr>
                         <th>Dose</th>
                         <th>Size</th>
                         <th>Observed</th>
@@ -25,9 +27,12 @@ class GoodnessOfFit extends Component {
                     {_.range(temp_rslt_len).map(i => {
                         return (
                             <tr key={i}>
-                                <td>{dataset.doses[i]}</td>
-                                <td>{dataset.incidences[i]}</td>
-                                <td>{dataset.ns[i]}</td>
+                                <td>{1}</td>
+                                <td>{1}</td>
+                                <td>{1}</td>
+                                <td>{gof.expected[i]}</td>
+                                <td>{1}</td>
+                                <td>{gof.residual[i]}</td>
                             </tr>
                         );
                     })}

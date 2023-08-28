@@ -38,14 +38,16 @@ class ModalBody extends Component {
                     <Col>
                         <p>input summary</p>
                     </Col>
-                    <Col>{isSummary ? null : <ParameterSettings model={dataset} />}</Col>
+                    <Col>{isSummary ? null : <ParameterSettings model={model} />}</Col>
                 </Row>
                 <Row>
-                    <Col>{isSummary ? null : <ModelParameters model={dataset} />}</Col>
-                    <Col>{isSummary ? null : <GoodnessOfFit model={dataset} />}</Col>
+                    <Col>{isSummary ? null : <ModelParameters model={model} />}</Col>
                 </Row>
                 <Row>
-                    <Col>{isSummary ? null : <AnalysisOfDeviance model={dataset} />}</Col>
+                    <Col>{isSummary ? null : <GoodnessOfFit model={model} />}</Col>
+                </Row>
+                <Row>
+                    <Col>{isSummary ? null : <AnalysisOfDeviance model={model} />}</Col>
                 </Row>
             </Modal.Body>
         );

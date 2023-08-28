@@ -6,13 +6,13 @@ import React, {Component} from "react";
 @observer
 class ParameterSettings extends Component {
     render() {
-        const dataset = this.props.model,
-            temp_rslt_len = _.size(dataset.doses);
+        const model = this.props.model.parameters,
+            temp_rslt_len = _.size(model.names);
         return (
             <table className="table table-sm table-bordered">
                 <thead>
                     <tr className="bg-custom">
-                        <th colSpan="3">ParameterSettings</th>
+                        <th colSpan="4">Parameter Settings</th>
                     </tr>
                     <tr>
                         <th>Parameter</th>
@@ -25,9 +25,10 @@ class ParameterSettings extends Component {
                     {_.range(temp_rslt_len).map(i => {
                         return (
                             <tr key={i}>
-                                <td>{dataset.doses[i]}</td>
-                                <td>{dataset.incidences[i]}</td>
-                                <td>{dataset.ns[i]}</td>
+                                <td>{model.names[i]}</td>
+                                <td>{model.prior_initial_value[i]}</td>
+                                <td>{model.prior_min_value[i]}</td>
+                                <td>{model.prior_max_value[i]}</td>
                             </tr>
                         );
                     })}

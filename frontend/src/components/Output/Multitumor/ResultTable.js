@@ -60,9 +60,9 @@ class ResultTable extends Component {
                         <td>{ff(results.bmdu)}</td>
                         <td>-9999</td>
                         <td>-9999</td>
-                        <td>-9999</td>
-                        <td>-9999</td>
-                        <td>-9999</td>
+                        <td>???</td>
+                        <td>???</td>
+                        <td>???</td>
                     </tr>
                     {selectedMultitumorModels.map((model, index) => {
                         const degree = model.parameters.names.length - 1,
@@ -85,9 +85,9 @@ class ResultTable extends Component {
                                 <td>{ff(model.bmdu)}</td>
                                 <td>-9999</td>
                                 <td>-9999</td>
-                                <td>-9999</td>
-                                <td>-9999</td>
-                                <td>-9999</td>
+                                <td>???</td>
+                                <td>???</td>
+                                <td>???</td>
                             </tr>
                         );
                     })}

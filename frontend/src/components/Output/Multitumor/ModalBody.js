@@ -12,6 +12,8 @@ import Doses from "./Doses";
 import GoodnessFit from "./GoodnessFit";
 import InfoTable from "./InfoTable";
 import ModelOptions from "./ModelOptions";
+import ParameterSettings from "./ParameterSettings";
+import Summary from "./Summary";
 
 @observer
 class ModalBody extends Component {
@@ -20,7 +22,6 @@ class ModalBody extends Component {
             model = outputStore.modalModel,
             isSummary = outputStore.drModelModalIsMA,
             dataset = outputStore.modalDataset;
-        // console.log(toJS(this.props));
         console.log(toJS(dataset));
         console.log(toJS(model));
 
@@ -33,11 +34,12 @@ class ModalBody extends Component {
                     <Col xl={3}>{!isSummary && <ModelOptions model={model} />}</Col>
                     <Col xl={3}>{!isSummary && <Doses model={dataset} />}</Col>
                 </Row>
-                {/* need ContinuousDeviance? ported from dicho */}
-
                 <Row>
                     <Col xl={4}>
-                        <> dicho summary</>
+                        <Summary model={model} />
+                    </Col>
+                    <Col xl={5}>
+                        <ParameterSettings model={model} />
                     </Col>
                 </Row>
                 <Row>

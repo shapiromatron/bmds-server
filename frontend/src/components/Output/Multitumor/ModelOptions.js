@@ -26,7 +26,7 @@ class ModelOptions extends Component {
         let data = [];
 
         data = [
-            ["BMR Type", "BMR Tpype"],
+            ["BMR Type", "BMR Type"],
             ["BMR", "BMR"],
             ["Confidence Level", "confidence level"],
             ["Degree", "degree"],

@@ -22,9 +22,6 @@ class ModalBody extends Component {
             model = outputStore.modalModel,
             isSummary = outputStore.drModelModalIsMA,
             dataset = outputStore.modalDataset;
-        console.log(toJS(dataset));
-        console.log(toJS(model));
-
         return (
             <Modal.Body>
                 <Row>
@@ -34,21 +31,35 @@ class ModalBody extends Component {
                     <Col xl={3}>{!isSummary && <ModelOptions model={model} />}</Col>
                     <Col xl={3}>{!isSummary && <Doses model={dataset} />}</Col>
                 </Row>
-                <Row>
-                    <Col xl={4}>{!isSummary && <Summary model={model} />}</Col>
-                    <Col xl={5}>{!isSummary && <ParameterSettings model={model} />}</Col>
-                </Row>
-                <Row>
-                    <Col xl={9}>
-                        {!isSummary && <ModelParameters parameters={model.parameters} />}
-                    </Col>
-                </Row>
-                <Row>
-                    <Col xl={9}>{!isSummary && <GoodnessFit store={outputStore} />}</Col>
-                </Row>
                 {!isSummary && (
                     <Row>
-                        <Col xl={9}>{!isSummary && <AnalysisOfDeviance model={model} />}</Col>
+                        <Col xl={4}>
+                            <Summary model={model} />
+                        </Col>
+                        <Col xl={5}>
+                            <ParameterSettings model={model} />
+                        </Col>
+                    </Row>
+                )}
+                {!isSummary && (
+                    <Row>
+                        <Col xl={9}>
+                            <ModelParameters parameters={model.parameters} />
+                        </Col>
+                    </Row>
+                )}
+                {!isSummary && (
+                    <Row>
+                        <Col xl={9}>
+                            <GoodnessFit store={outputStore} />
+                        </Col>
+                    </Row>
+                )}
+                {!isSummary && (
+                    <Row>
+                        <Col xl={9}>
+                            <AnalysisOfDeviance model={model} />
+                        </Col>
                     </Row>
                 )}
             </Modal.Body>

@@ -6,49 +6,53 @@ import {Col, Modal, Row} from "react-bootstrap";
 
 import {ff} from "@/utils/formatters";
 
+import ModelParameters from "../../IndividualModel/ModelParameters";
 import AnalysisOfDeviance from "./AnalysisOfDeviance";
 import Doses from "./Doses";
-import GoodnessOfFit from "./GoodnessOfFit";
-import ModelParameters from "./ModelParameters";
-import ParameterSettings from "./ParameterSettings";
+import GoodnessFit from "./GoodnessFit";
+import InfoTable from "./InfoTable";
+import ModelOptions from "./ModelOptions";
 
 @observer
 class ModalBody extends Component {
     render() {
         const {outputStore} = this.props,
             model = outputStore.modalModel,
-            dataset = outputStore.modalDataset,
-            isSummary = outputStore.drModelModalIsMA;
-        // console.log(toJS(dataset));
-        // console.log(toJS(model));
+            isSummary = outputStore.drModelModalIsMA,
+            dataset = outputStore.modalDataset;
+        // console.log(toJS(this.props));
+        console.log(toJS(dataset));
+        console.log(toJS(model));
 
         return (
             <Modal.Body>
                 <Row>
-                    <Col>
-                        <h1>{isSummary ? "Summary" : "Individual"}</h1>
-                        {dataset ? <p>{dataset.metadata.name}</p> : null}
-                        <p>Result: {ff(model.bmd)}</p>/ dose
-                        <h2>multistage 3 degree</h2>
-                        <p>summary</p>
+                    <Col xl={3}>
+                        <InfoTable />
                     </Col>
-                    <Col>{isSummary ? null : <Doses model={dataset} />}</Col>
+                    <Col xl={3}>{!isSummary && <ModelOptions model={model} />}</Col>
+                    <Col xl={3}>{!isSummary && <Doses model={dataset} />}</Col>
                 </Row>
+                {/* need ContinuousDeviance? ported from dicho */}
+
                 <Row>
-                    <Col>
-                        <p>input summary</p>
+                    <Col xl={4}>
+                        <> dicho summary</>
                     </Col>
-                    <Col>{isSummary ? null : <ParameterSettings model={model} />}</Col>
                 </Row>
                 <Row>
-                    <Col>{isSummary ? null : <ModelParameters model={model} />}</Col>
+                    <Col xl={9}>
+                        {!isSummary && <ModelParameters parameters={model.parameters} />}
+                    </Col>
                 </Row>
                 <Row>
-                    <Col>{isSummary ? null : <GoodnessOfFit model={model} />}</Col>
+                    <Col xl={9}>{!isSummary && <GoodnessFit store={outputStore} />}</Col>
                 </Row>
-                <Row>
-                    <Col>{isSummary ? null : <AnalysisOfDeviance model={model} />}</Col>
-                </Row>
+                {!isSummary && (
+                    <Row>
+                        <Col xl={9}>{!isSummary && <AnalysisOfDeviance model={model} />}</Col>
+                    </Row>
+                )}
             </Modal.Body>
         );
     }

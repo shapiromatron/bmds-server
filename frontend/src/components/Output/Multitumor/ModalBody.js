@@ -1,10 +1,7 @@
-import {toJS} from "mobx";
 import {observer} from "mobx-react";
 import PropTypes from "prop-types";
 import React, {Component} from "react";
 import {Col, Modal, Row} from "react-bootstrap";
-
-import {ff} from "@/utils/formatters";
 
 import ModelParameters from "../../IndividualModel/ModelParameters";
 import AnalysisOfDeviance from "./AnalysisOfDeviance";

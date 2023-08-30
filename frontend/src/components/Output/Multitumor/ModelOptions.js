@@ -2,27 +2,10 @@ import {observer} from "mobx-react";
 import PropTypes from "prop-types";
 import React, {Component} from "react";
 
-import {getLabel} from "@/common";
-import {Dtype} from "@/constants/dataConstants";
-import {hasDegrees} from "@/constants/modelConstants";
-import {
-    continuousBmrOptions,
-    dichotomousBmrOptions,
-    distTypeOptions,
-} from "@/constants/optionsConstants";
-import {priorClassLabels} from "@/constants/outputConstants";
-import {ff} from "@/utils/formatters";
-
-const restrictionMapping = {
-    0: ["Model Restriction", "Unrestricted"],
-    1: ["Model Restriction", "Restricted"],
-    2: ["Model Approach", "Bayesian"],
-};
-
 @observer
 class ModelOptions extends Component {
     render() {
-        const {model} = this.props;
+        // const {model} = this.props;
         let data = [];
 
         data = [

@@ -7,7 +7,6 @@ import {ff} from "@/utils/formatters";
 @observer
 class BootstrapResult extends Component {
     render() {
-        // console.log(toJS(this.props.model));
         return (
             <table className="table table-sm table-bordered">
                 <thead className="bg-custom">

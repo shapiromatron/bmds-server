@@ -35,12 +35,8 @@ class ModalBody extends Component {
                     <Col xl={3}>{!isSummary && <Doses model={dataset} />}</Col>
                 </Row>
                 <Row>
-                    <Col xl={4}>
-                        <Summary model={model} />
-                    </Col>
-                    <Col xl={5}>
-                        <ParameterSettings model={model} />
-                    </Col>
+                    <Col xl={4}>{!isSummary && <Summary model={model} />}</Col>
+                    <Col xl={5}>{!isSummary && <ParameterSettings model={model} />}</Col>
                 </Row>
                 <Row>
                     <Col xl={9}>

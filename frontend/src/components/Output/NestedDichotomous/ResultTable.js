@@ -58,12 +58,12 @@ class ResultTable extends Component {
                             </td>
                             <td>{ff(model.results.summary.bmdl)}</td>
                             <td>{ff(model.results.summary.bmd)}</td>
-                            <td>{ff(model.results.summary.bmdu)}</td>
-                            <td>-9999</td>
+                            <td>{model.results.summary.bmdu}</td>
+                            <td>{ff(model.results.combined_pvalue)}</td>
                             <td>{ff(model.results.summary.aic)}</td>
-                            <td>-9999</td>
-                            <td>-9999</td>
-                            <td>-9999</td>
+                            <td>???</td>
+                            <td>???</td>
+                            <td>???</td>
                         </tr>
                     ))}
                 </tbody>

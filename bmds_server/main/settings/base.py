@@ -34,7 +34,8 @@ INSTALLED_APPS = [
     # 3rd party apps
     "rest_framework",
     "rest_framework.authtoken",
-    "webpack_loader",
+    # "webpack_loader",
+    "django_vite",
     "reversion",
     # Custom apps
     "bmds_server.common",
@@ -208,6 +209,12 @@ WEBPACK_LOADER = {
         "IGNORE": [".+/.map"],
     }
 }
+
+# vite config
+DJANGO_VITE_ASSETS_PATH = BASE_DIR / "static" / "bundles"
+DJANGO_VITE_DEV_MODE = False
+DJANGO_VITE_DEV_SERVER_PORT = 5173
+DJANGO_VITE_STATIC_URL_PREFIX = "frontend/"
 
 DAYS_TO_KEEP_ANALYSES = 180
 

@@ -60,9 +60,13 @@ const isModelChecked = function(models, type, model) {
             <td>{checkOrEmpty(isModelChecked(store.models, type, model))}</td>
         );
     }),
-    multistageHelpText = `All Multistage model polynomial degrees will be run up to a maximum
+    multistageHelpText = `Multistage degrees will be run up to a maximum
         degree as specified by the user. For Bayesian Model Averaging, only the 2nd degree
         Multistage model is used (see User Manual for details).`,
+    polyHelpText = `Polynomial degrees will be run up to a maximum
+        degree as specified by the user (see User Manual for details).`,
+    multiReducedHelpText = `The reduced form does not include intermediate polynomial terms. For example, the reduced model runs the form y = β₀ + β₁X + β<sub>n</sub>X<sup>n</sup>, where <i>n</i> is the maximum degree, a total of 3 parameters. The full form includes intermediate N parameters, in the form y = β₀ + β₁X + β₂X² + ... + β<sub>n</sub>X<sup>n</sup>.`,
+    polyReducedHelpText = `When checked, the polynomial model is run in the form  y = β₀ + β₁X + β<sub>n</sub>X<sup>n</sup>, where <i>n</i> is the maximum degree. When unchecked, the the includes intermediate powers, is run in the form y = β₀ + β₁X + β₂X² + ... + β<sub>n</sub>X<sup>n</sup>`,
     fr = "frequentist_restricted",
     fu = "frequentist_unrestricted",
     b = "bayesian";
@@ -75,31 +79,31 @@ const ModelsCheckBox = observer(props => {
             <tbody>
                 <tr className="preview">
                     <td className="text-left align-middle">Exponential 2</td>
-                    <CheckBoxTd store={store} type={fr} model={"Exponential2"} />
+                    <CheckBoxTd store={store} type={fr} model={"Exponential 2"} />
                     <td></td>
-                    <CheckBoxTd store={store} type={b} model={"Exponential2"} disabled={true} />
-                    <PriorWeightTd store={store} model={"Exponential2"} disabled={true} />
+                    <CheckBoxTd store={store} type={b} model={"Exponential 2"} disabled={true} />
+                    <PriorWeightTd store={store} model={"Exponential 2"} disabled={true} />
                 </tr>
                 <tr className="preview">
                     <td className="text-left align-middle">Exponential 3</td>
-                    <CheckBoxTd store={store} type={fr} model={"Exponential3"} />
+                    <CheckBoxTd store={store} type={fr} model={"Exponential 3"} />
                     <td></td>
-                    <CheckBoxTd store={store} type={b} model={"Exponential3"} disabled={true} />
-                    <PriorWeightTd store={store} model={"Exponential3"} disabled={true} />
+                    <CheckBoxTd store={store} type={b} model={"Exponential 3"} disabled={true} />
+                    <PriorWeightTd store={store} model={"Exponential 3"} disabled={true} />
                 </tr>
                 <tr className="preview">
                     <td className="text-left align-middle">Exponential 4</td>
-                    <CheckBoxTd store={store} type={fr} model={"Exponential4"} />
+                    <CheckBoxTd store={store} type={fr} model={"Exponential 4"} />
                     <td></td>
-                    <CheckBoxTd store={store} type={b} model={"Exponential4"} disabled={true} />
-                    <PriorWeightTd store={store} model={"Exponential4"} disabled={true} />
+                    <CheckBoxTd store={store} type={b} model={"Exponential 4"} disabled={true} />
+                    <PriorWeightTd store={store} model={"Exponential 4"} disabled={true} />
                 </tr>
                 <tr className="preview">
                     <td className="text-left align-middle">Exponential 5</td>
-                    <CheckBoxTd store={store} type={fr} model={"Exponential5"} />
+                    <CheckBoxTd store={store} type={fr} model={"Exponential 5"} />
                     <td></td>
-                    <CheckBoxTd store={store} type={b} model={"Exponential5"} disabled={true} />
-                    <PriorWeightTd store={store} model={"Exponential5"} disabled={true} />
+                    <CheckBoxTd store={store} type={b} model={"Exponential 5"} disabled={true} />
+                    <PriorWeightTd store={store} model={"Exponential 5"} disabled={true} />
                 </tr>
                 <tr>
                     <td className="text-left align-middle">Hill</td>
@@ -123,11 +127,36 @@ const ModelsCheckBox = observer(props => {
                     <PriorWeightTd store={store} model={"Linear"} disabled={true} />
                 </tr>
                 <tr>
-                    <td className="text-left align-middle">Polynomial</td>
+                    <td className="text-left align-middle">
+                        Polynomial
+                        {writeMode ? (
+                            <HelpTextPopover title="Polynomial" content={polyHelpText} />
+                        ) : null}
+                    </td>
                     <CheckBoxTd store={store} type={fr} model={"Polynomial"} />
                     <CheckBoxTd store={store} type={fu} model={"Polynomial"} />
                     <CheckBoxTd store={store} type={b} model={"Polynomial"} disabled={true} />
                     <PriorWeightTd store={store} model={"Polynomial"} disabled={true} />
+                </tr>
+                <tr className="preview">
+                    <td className="text-left align-middle">
+                        Polynomial (Reduced)
+                        {writeMode ? (
+                            <HelpTextPopover
+                                title="Polynomial (Reduced)"
+                                content={polyReducedHelpText}
+                            />
+                        ) : null}
+                    </td>
+                    <CheckBoxTd store={store} type={fr} model={"Polynomial (Reduced)"} />
+                    <CheckBoxTd store={store} type={fu} model={"Polynomial (Reduced)"} />
+                    <CheckBoxTd
+                        store={store}
+                        type={b}
+                        model={"Polynomial (Reduced)"}
+                        disabled={true}
+                    />
+                    <PriorWeightTd store={store} model={"Polynomial (Reduced)"} disabled={true} />
                 </tr>
                 <tr>
                     <td className="text-left align-middle">Power</td>
@@ -153,8 +182,8 @@ const ModelsCheckBox = observer(props => {
                     <td className="text-left align-middle">Michaelis-Menten</td>
                     <CheckBoxTd store={store} type={fr} model={"Michaelis-Menten"} />
                     <CheckBoxTd store={store} type={fu} model={"Michaelis-Menten"} />
-                    <CheckBoxTd store={store} type={b} model={"Michaelis-Menten"} />
-                    <PriorWeightTd store={store} model={"Michaelis-Menten"} />
+                    <td></td>
+                    <td></td>
                 </tr>
                 <tr>
                     <td className="text-left align-middle">Gamma</td>
@@ -181,8 +210,8 @@ const ModelsCheckBox = observer(props => {
                     <td className="text-left align-middle">LogLogistic (Reduced)</td>
                     <CheckBoxTd store={store} type={fr} model={"LogLogistic (Reduced)"} />
                     <CheckBoxTd store={store} type={fu} model={"LogLogistic (Reduced)"} />
-                    <CheckBoxTd store={store} type={b} model={"LogLogistic (Reduced)"} />
-                    <PriorWeightTd store={store} model={"LogLogistic (Reduced)"} />
+                    <td></td>
+                    <td></td>
                 </tr>
                 <tr>
                     <td className="text-left align-middle">LogProbit</td>
@@ -194,12 +223,29 @@ const ModelsCheckBox = observer(props => {
                 <tr>
                     <td className="text-left align-middle">
                         Multistage
-                        {writeMode ? <HelpTextPopover content={multistageHelpText} /> : null}
+                        {writeMode ? (
+                            <HelpTextPopover title="Multistage" content={multistageHelpText} />
+                        ) : null}
                     </td>
                     <CheckBoxTd store={store} type={fr} model={"Multistage"} />
                     <CheckBoxTd store={store} type={fu} model={"Multistage"} />
                     <CheckBoxTd store={store} type={b} model={"Multistage"} />
                     <PriorWeightTd store={store} model={"Multistage"} />
+                </tr>
+                <tr className="preview">
+                    <td className="text-left align-middle">
+                        Multistage (Reduced)
+                        {writeMode ? (
+                            <HelpTextPopover
+                                title="Multistage (Reduced)"
+                                content={multiReducedHelpText}
+                            />
+                        ) : null}
+                    </td>
+                    <CheckBoxTd store={store} type={fr} model={"Multistage (Reduced)"} />
+                    <CheckBoxTd store={store} type={fu} model={"Multistage (Reduced)"} />
+                    <td></td>
+                    <td></td>
                 </tr>
                 <tr>
                     <td className="text-left align-middle">Probit</td>

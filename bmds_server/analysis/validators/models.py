@@ -14,16 +14,44 @@ class ModelTypeSchema(BaseModel):
     bayesian: set[str]
 
 
+# TODO - refactor
+_d_res = set(
+    [
+        *bmds.constants.D_MODELS_RESTRICTABLE,
+        "Michaelis-Menten",
+        "LogLogistic (Reduced)",
+        "Multistage (Reduced)",
+    ]
+)
+_d_unres = set(
+    [*bmds.constants.D_MODELS, "Michaelis-Menten", "LogLogistic (Reduced)", "Multistage (Reduced)"]
+)
+_c_res = set(
+    [
+        *bmds.constants.C_MODELS_RESTRICTABLE,
+        "Exponential 2",
+        "Exponential 3",
+        "Exponential 4",
+        "Exponential 5",
+        "Michaelis-Menten",
+        "Polynomial (Reduced)",
+    ]
+)
+_c_unres = set(
+    [*bmds.constants.C_MODELS_UNRESTRICTABLE, "Michaelis-Menten", "Polynomial (Reduced)"]
+)
+
+
 DichotomousModelSchema = ModelTypeSchema(
-    restricted=set(bmds.constants.D_MODELS_RESTRICTABLE),
-    unrestricted=set(bmds.constants.D_MODELS),
+    restricted=_d_res,
+    unrestricted=_d_unres,
     bayesian=set(bmds.constants.D_MODELS),
 )
 
 
 ContinuousModelSchema = ModelTypeSchema(
-    restricted=set(bmds.constants.C_MODELS_RESTRICTABLE),
-    unrestricted=set(bmds.constants.C_MODELS_UNRESTRICTABLE),
+    restricted=_c_res,
+    unrestricted=_c_unres,
     bayesian=set(bmds.constants.C_MODELS),
 )
 

@@ -138,7 +138,7 @@ const ModelsCheckBox = observer(props => {
                     <CheckBoxTd store={store} type={b} model={"Polynomial"} disabled={true} />
                     <PriorWeightTd store={store} model={"Polynomial"} disabled={true} />
                 </tr>
-                <tr className="preview">
+                {/* <tr className="preview">
                     <td className="text-left align-middle">
                         Polynomial (Reduced)
                         {writeMode ? (
@@ -157,7 +157,7 @@ const ModelsCheckBox = observer(props => {
                         disabled={true}
                     />
                     <PriorWeightTd store={store} model={"Polynomial (Reduced)"} disabled={true} />
-                </tr>
+                </tr> */}
                 <tr>
                     <td className="text-left align-middle">Power</td>
                     <CheckBoxTd store={store} type={fr} model={"Power"} />
@@ -232,7 +232,7 @@ const ModelsCheckBox = observer(props => {
                     <CheckBoxTd store={store} type={b} model={"Multistage"} />
                     <PriorWeightTd store={store} model={"Multistage"} />
                 </tr>
-                <tr className="preview">
+                {/* <tr className="preview">
                     <td className="text-left align-middle">
                         Multistage (Reduced)
                         {writeMode ? (
@@ -246,7 +246,7 @@ const ModelsCheckBox = observer(props => {
                     <CheckBoxTd store={store} type={fu} model={"Multistage (Reduced)"} />
                     <td></td>
                     <td></td>
-                </tr>
+                </tr> */}
                 <tr>
                     <td className="text-left align-middle">Probit</td>
                     <td></td>

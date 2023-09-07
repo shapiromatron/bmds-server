@@ -56,7 +56,7 @@ class Actions extends Component {
                                     }}
                                 />
                             </div>
-                            {_.isNumber(config.editSettings.deletionDaysUntilDeletion) ? (
+                            {/* {_.isNumber(config.editSettings.deletionDaysUntilDeletion) ? (
                                 <>
                                     <a
                                         className="dropdown-item"
@@ -68,7 +68,7 @@ class Actions extends Component {
                                         {getDeletionDateText(config.editSettings)}
                                     </p>
                                 </>
-                            ) : null}
+                            ) : null} */}
                             <a className="dropdown-item" href={config.editSettings.deleteUrl}>
                                 <Icon name="trash3-fill" text="Delete analysis" />
                             </a>

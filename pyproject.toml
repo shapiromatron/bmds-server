@@ -3,6 +3,13 @@ line-length = 100
 target-version = ['py311']
 extend-exclude = '(frontend|public|scripts/private)'
 
+[tool.coverage.run]
+omit = [
+    "./bmds_server/main/settings/*",
+    "./tests/*",
+    "./venv/*",
+]
+
 [tool.ruff]
 line-length = 100
 target-version = "py311"

@@ -134,7 +134,7 @@ class TestBmds3Execution:
         assert len(analysis.outputs["outputs"]) == 1
         assert len(analysis.outputs["outputs"][0]["frequentist"]["results"]["models"]) == 3
         assert len(analysis.outputs["outputs"][0]["frequentist"]["results"]["models"][0]) == 1
-        assert len(analysis.outputs["outputs"][0]["frequentist"]["results"]["models"][1]) == 3
+        assert len(analysis.outputs["outputs"][0]["frequentist"]["results"]["models"][1]) == 4
         assert analysis.outputs["outputs"][0]["bayesian"] is None
         assert analysis.errors == []
 

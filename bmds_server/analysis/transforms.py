@@ -5,8 +5,6 @@ import bmds
 from bmds.bmds3.types.continuous import ContinuousModelSettings
 from bmds.bmds3.types.dichotomous import DichotomousModelSettings
 from bmds.bmds3.types.nested_dichotomous import NestedDichotomousModelSettings
-
-# MT?
 from bmds.bmds3.types.priors import PriorClass
 from bmds.constants import Dtype
 

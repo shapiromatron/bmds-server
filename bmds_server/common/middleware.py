@@ -19,7 +19,7 @@ class RequestLogMiddleware:
             request.method,
             request.path,
             response.status_code,
-            len(response.content),
+            len(getattr(response, "content", "")),
             request.META["REMOTE_ADDR"],
             get_user_id(request.user),
         )

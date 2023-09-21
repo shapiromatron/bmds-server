@@ -44,9 +44,7 @@ class Navigation extends Component {
                         </li>
                     )}
                     {mainStore.canEdit && !mainStore.isDesktop ? (
-                        <li className="nav-item ml-auto mr-1">
-                            {/* <ShareActions /> */}
-                        </li>
+                        <li className="nav-item ml-auto mr-1">{<ShareActions />}</li>
                     ) : (
                         <span className="ml-auto"></span>
                     )}

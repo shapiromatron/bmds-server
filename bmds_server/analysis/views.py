@@ -2,7 +2,7 @@ from django.conf import settings
 from django.contrib.admin.views.decorators import staff_member_required
 from django.db.models.query import QuerySet
 from django.middleware.csrf import get_token
-from django.shortcuts import get_object_or_404
+from django.shortcuts import get_object_or_404, render
 from django.template import RequestContext, Template
 from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
@@ -42,7 +42,11 @@ class Home(ListView):
         context["days_to_keep_analyses"] = settings.DAYS_TO_KEEP_ANALYSES
         context["citation"] = get_citation()
         context["q"] = self.request.GET.get("q", "")
-        context["page"] = self._render_template(context)
+        context["page"] = (
+            render(self.request, "analysis/desktop.html", context).content.decode()
+            if settings.IS_DESKTOP
+            else self._render_template(context)
+        )
         return context
 
 

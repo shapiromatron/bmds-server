@@ -1,12 +1,15 @@
 import os
-from pathlib import Path
 
-from ..constants import get_app_home
+from ..constants import SkinStyle, get_app_home
 from .base import *  # noqa: F403
 
 APP_HOME = get_app_home()
 ALLOWED_HOSTS = ["*"]
 IS_DESKTOP = True
+
+SKIN = SkinStyle.EPA
+SERVER_ROLE = "production"
+SERVER_BANNER_COLOR = "black"
 
 PUBLIC_DATA_ROOT = APP_HOME / "public"
 LOGS_PATH = APP_HOME / "logs"
@@ -19,7 +22,8 @@ LOGS_PATH.mkdir(exist_ok=True, parents=False)
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.sqlite3",
-        "NAME": os.getenv("bmds_db_path", APP_HOME / "db.sqlite3"),
+        # "NAME": os.getenv("bmds_db_path", APP_HOME / "db.sqlite3"),
+        "NAME": os.getenv("bmds_db_path", "debug.sqlite3"),
         "STARTUP_OPTIONS": {"init_command": "PRAGMA journal_mode=wal;"},
     }
 }

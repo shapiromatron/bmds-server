@@ -48,7 +48,7 @@ class Navigation extends Component {
                             <ShareActions />
                         </li>
                     ) : (
-                        <li className="nav-item ml-auto mr-1"></li>
+                        <span className="ml-auto"></span>
                     )}
                     <li
                         className={mainStore.canEdit ? "nav-item" : "nav-item ml-auto"}

@@ -75,7 +75,6 @@ class Actions extends Component {
                                     <Icon name="trash3-fill" text="Delete analysis" />
                                 </a>
                             ) : null}
-
                             <div className="dropdown-divider"></div>
                         </>
                     ) : null}

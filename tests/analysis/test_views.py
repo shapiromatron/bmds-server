@@ -41,7 +41,7 @@ class TestAnalysisDetail:
             "url": f"/analysis/{pk}/",
             "excelUrl": f"/api/v1/analysis/{pk}/excel/",
             "wordUrl": f"/api/v1/analysis/{pk}/word/",
-            "future": True,
+            "future": False,
             "is_desktop": False,
         }
 
@@ -55,7 +55,7 @@ class TestAnalysisDetail:
             "url": f"/analysis/{pk}/",
             "excelUrl": f"/api/v1/analysis/{pk}/excel/",
             "wordUrl": f"/api/v1/analysis/{pk}/word/",
-            "future": True,
+            "future": False,
             "is_desktop": False,
             "editSettings": {
                 "editKey": pw,
@@ -76,9 +76,9 @@ class TestAnalysisDetail:
         analysis = Analysis.objects.get(pk=pk)
         url = analysis.get_absolute_url() + "?future=1"
 
-        # no staff access; recently changed to all access for future
+        # no staff access; no future flag
         response = client.get(url)
-        assert response.context["config"]["future"] is True
+        assert response.context["config"]["future"] is False
 
         # staff access; future flag
         assert client.login(username="admin@bmdsonline.org", password="pw")

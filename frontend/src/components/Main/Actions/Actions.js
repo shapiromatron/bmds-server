@@ -71,13 +71,9 @@ class Actions extends Component {
                                 </>
                             ) : null}
                             {!mainStore.isDesktop ? (
-                                <>
-                                    <a
-                                        className="dropdown-item"
-                                        href={config.editSettings.deleteUrl}>
-                                        <Icon name="trash3-fill" text="Delete analysis" />
-                                    </a>
-                                </>
+                                <a className="dropdown-item" href={config.editSettings.deleteUrl}>
+                                    <Icon name="trash3-fill" text="Delete analysis" />
+                                </a>
                             ) : null}
 
                             <div className="dropdown-divider"></div>

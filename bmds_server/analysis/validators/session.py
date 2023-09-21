@@ -16,14 +16,13 @@ class BaseSession(BaseModel):
     dataset_type: bmds.constants.ModelClass
 
 
+max_items = 1000 if settings.IS_DESKTOP else 10
+
+
 class BaseSessionComplete(BaseSession):
     models: dict
-    if settings.IS_DESKTOP:
-        datasets: conlist(Any, min_items=1, max_items=100)
-        options: conlist(Any, min_items=1, max_items=100)
-    else:
-        datasets: conlist(Any, min_items=1, max_items=10)
-        options: conlist(Any, min_items=1, max_items=10)
+    datasets: conlist(Any, min_items=1, max_items=max_items)
+    options: conlist(Any, min_items=1, max_items=max_items)
 
 
 def validate_session(data: dict, partial: bool = False):

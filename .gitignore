@@ -22,6 +22,7 @@ venv/
 *.py[cod]
 *.sqlite3
 *log
+.coverage
 .env
 .eslintcache
 bmds_server/gitcommit.json

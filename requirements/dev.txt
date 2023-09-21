@@ -3,15 +3,18 @@
 # debug
 django-debug-toolbar==4.0.0
 django_extensions==3.2.1
+django-browser-reload==1.11.0
 
 # docs
 mkdocs-material==9.0.6
 
 # tests
-pytest==7.2.1
+pytest==7.4.0
 pytest-django==4.5.2
 vcrpy==4.2.1
+  urllib3~=1.26.16
 pytest-vcr==1.0.2
+coverage==7.3.0
 
 # integration tests
 playwright==1.29.1

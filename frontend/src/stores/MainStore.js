@@ -71,6 +71,9 @@ class MainStore {
             },
         };
     }
+    @computed get isMultitumor() {
+        return this.model_type === mc.MODEL_MULTI_TUMOR;
+    }
 
     @action.bound
     async saveAnalysis() {
@@ -281,6 +284,9 @@ class MainStore {
     @computed get isFuture() {
         return this.config.future;
     }
+    @computed get isDesktop() {
+        return this.config.is_desktop;
+    }
     @computed get getExecutionOutputs() {
         return this.executionOutputs;
     }
@@ -322,22 +328,11 @@ class MainStore {
         return !_.isEmpty(this.getEnabledDatasets);
     }
 
-    @computed get hasAtLeastTwoDatasetsSelected() {
-        return this.getEnabledDatasets.length >= 2;
-    }
-
     @computed get hasAtLeastOneOptionSelected() {
         return !_.isEmpty(this.getOptions);
     }
 
     @computed get isValid() {
-        if (this.model_type === mc.MODEL_MULTI_TUMOR) {
-            return (
-                this.hasAtLeastOneModelSelected &&
-                this.hasAtLeastTwoDatasetsSelected &&
-                this.hasAtLeastOneOptionSelected
-            );
-        }
         return (
             this.hasAtLeastOneModelSelected &&
             this.hasAtLeastOneDatasetSelected &&

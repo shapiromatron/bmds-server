@@ -1,8 +1,12 @@
-# todo - load from base instead of dev
+import os
+from pathlib import Path
+
 from ..constants import get_app_home
-from .dev import *  # noqa: F403
+from .base import *  # noqa: F403
 
 APP_HOME = get_app_home()
+ALLOWED_HOSTS = ["*"]
+IS_DESKTOP = True
 
 PUBLIC_DATA_ROOT = APP_HOME / "public"
 LOGS_PATH = APP_HOME / "logs"
@@ -12,12 +16,13 @@ MEDIA_ROOT = PUBLIC_DATA_ROOT / "media"
 PUBLIC_DATA_ROOT.mkdir(exist_ok=True, parents=False)
 LOGS_PATH.mkdir(exist_ok=True, parents=False)
 
-# DATABASES = {
-#     "default": {
-#         "ENGINE": "django.db.backends.sqlite3",
-#         "NAME": Path(os.environ["db_path"]) / "db.sqlite3",
-#     }
-# }
+DATABASES = {
+    "default": {
+        "ENGINE": "django.db.backends.sqlite3",
+        "NAME": os.getenv("bmds_db_path", APP_HOME / "db.sqlite3"),
+        "STARTUP_OPTIONS": {"init_command": "PRAGMA journal_mode=wal;"},
+    }
+}
 
 LOGGING = {
     "version": 1,

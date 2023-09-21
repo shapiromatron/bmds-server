@@ -128,7 +128,7 @@ class AppRunner:
             # todo - make an init function
             # it should create db and migrate and load home.html
             # it should collect staticfiles to user_data folder
-            # os.environ["db_path"] = self.app.config.path
+            # os.environ["bmds_db_path"] = self.app.config.path
             self.thread = AppThread(
                 stream=self.app.log_app.stream,
                 host=host,

@@ -20,8 +20,8 @@ max_items = 1000 if settings.IS_DESKTOP else 10
 
 
 class BaseSessionComplete(BaseSession):
-    models: dict
     datasets: conlist(Any, min_items=1, max_items=max_items)
+    models: dict
     options: conlist(Any, min_items=1, max_items=max_items)
 
 

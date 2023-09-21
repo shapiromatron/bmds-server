@@ -2,7 +2,7 @@ import logging
 import traceback
 import uuid
 from copy import deepcopy
-from datetime import timedelta
+from datetime import datetime, timedelta
 from io import BytesIO
 
 import bmds
@@ -30,13 +30,12 @@ from .schema import AnalysisOutput, AnalysisSessionSchema
 logger = logging.getLogger(__name__)
 
 
-def get_deletion_date(current_deletion_date=None):
-    if not settings.IS_DESKTOP:
-        date = now() + timedelta(days=settings.DAYS_TO_KEEP_ANALYSES)
-        if current_deletion_date:
-            return max(current_deletion_date, date)
-    else:
-        date = None
+def get_deletion_date(current_deletion_date: datetime | None = None) -> datetime | None:
+    if settings.IS_DESKTOP:
+        return None
+    date = now() + timedelta(days=settings.DAYS_TO_KEEP_ANALYSES)
+    if current_deletion_date:
+        return max(current_deletion_date, date)
     return date
 
 

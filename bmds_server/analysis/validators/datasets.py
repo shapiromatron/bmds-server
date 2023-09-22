@@ -1,5 +1,5 @@
 from enum import IntEnum
-from typing import Any, ClassVar
+from typing import Annotated, Any, ClassVar, List
 
 import bmds
 from bmds.datasets import (
@@ -9,7 +9,7 @@ from bmds.datasets import (
     NestedDichotomousDatasetSchema,
 )
 from django.core.exceptions import ValidationError
-from pydantic import BaseModel, conlist, root_validator
+from pydantic import BaseModel, Field, model_validator
 
 from ...common.validation import pydantic_validate
 
@@ -51,7 +51,8 @@ class NestedDichotomousModelOptions(BaseModel):
 
 
 class DatasetValidator(BaseModel):
-    @root_validator(skip_on_failure=True)
+    # @model_validator(skip_on_failure=True)
+    @classmethod
     def check_id_matches(cls, values):
         dataset_ids = [dataset.metadata.id for dataset in values["datasets"]]
         ds_option_ids = [opt.dataset_id for opt in values["dataset_options"]]
@@ -80,27 +81,31 @@ class MaxNestedDichotomousDatasetSchema(NestedDichotomousDatasetSchema):
 
 
 class DichotomousDatasets(DatasetValidator):
-    dataset_options: conlist(DichotomousModelOptions, min_items=1, max_items=10)
-    datasets: conlist(MaxDichotomousDatasetSchema, min_items=1, max_items=10)
+    dataset_options: Annotated[list[DichotomousModelOptions], Field(min_length=1, max_length=10)]
+    datasets: Annotated[list[MaxDichotomousDatasetSchema], Field(min_length=1, max_length=10)]
 
 
 class ContinuousDatasets(DatasetValidator):
-    dataset_options: conlist(ContinuousModelOptions, min_items=1, max_items=10)
-    datasets: conlist(
-        MaxContinuousDatasetSchema | MaxContinuousIndividualDatasetSchema,
-        min_items=1,
-        max_items=10,
-    )
+    dataset_options: Annotated[list[ContinuousModelOptions], Field(min_length=1, max_length=10)]
+    datasets: Annotated[
+        list[MaxContinuousDatasetSchema | MaxContinuousIndividualDatasetSchema],
+        Field(
+            min_length=1,
+            max_length=10,
+        ),
+    ]
 
 
 class NestedDichotomousDataset(DatasetValidator):
-    dataset_options: conlist(NestedDichotomousModelOptions, min_items=1, max_items=10)
-    datasets: conlist(MaxNestedDichotomousDatasetSchema, min_items=1, max_items=10)
+    dataset_options: Annotated[
+        list[NestedDichotomousModelOptions], Field(min_length=1, max_length=10)
+    ]
+    datasets: Annotated[list[MaxNestedDichotomousDatasetSchema], Field(min_length=1, max_length=10)]
 
 
 class MultiTumorDatasets(DatasetValidator):
-    dataset_options: conlist(DichotomousModelOptions, min_items=2, max_items=10)
-    datasets: conlist(DichotomousDatasetSchema, min_items=2, max_items=10)
+    dataset_options: Annotated[list[DichotomousModelOptions], Field(min_length=2, max_length=10)]
+    datasets: Annotated[list[DichotomousDatasetSchema], Field(min_length=2, max_length=10)]
 
 
 def validate_datasets(dataset_type: str, datasets: Any, datasetOptions: Any):

@@ -1,11 +1,12 @@
 import re
 from io import StringIO
+from typing import Annotated
 
 import pandas as pd
 from bmds.bmds3.types.sessions import VersionSchema
 from bmds.datasets.transforms.polyk import calculate
-from pydantic import BaseModel, confloat, validator
-from pydantic.schema import schema as pyschema
+from pydantic import BaseModel, Field, field_validator
+from pydantic import schema as pyschema
 from rest_framework.schemas.openapi import SchemaGenerator
 
 from .validators import AnalysisSelectedSchema
@@ -23,26 +24,27 @@ class WrappedAnalysisSelectedSchema(BaseModel):
 class AnalysisSessionSchema(BaseModel):
     dataset_index: int
     option_index: int
-    frequentist: dict | None
-    bayesian: dict | None
-    error: str | None
+    frequentist: dict | None = None
+    bayesian: dict | None = None
+    error: str | None = None
 
 
 class AnalysisOutput(BaseModel):
     analysis_id: str
     analysis_schema_version: str = "1.0"
     bmds_server_version: str
-    bmds_python_version: VersionSchema | None
+    bmds_python_version: VersionSchema | None = None
     outputs: list[AnalysisSessionSchema]
 
 
 class PolyKInput(BaseModel):
     dataset: str
     dose_units: str
-    power: confloat(ge=0, le=5) = 3
-    duration: confloat(ge=0, le=10000) | None = None
+    power: Annotated[float, Field(ge=0, le=5)] = 3
+    duration: Annotated[float, Field(ge=0, le=10000)] | None = None
 
-    @validator("dataset")
+    @field_validator("dataset")
+    @classmethod
     def check_dataset(cls, value):
         if len(value) > 100_000:
             raise ValueError("Dataset too large")

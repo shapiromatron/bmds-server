@@ -1,24 +1,25 @@
-from typing import Any, Literal
+from typing import List, Any, Literal
 
 import bmds
-from pydantic import BaseModel, conlist
+from pydantic import Field, BaseModel
 
 from ...common.validation import pydantic_validate
+from typing_extensions import Annotated
 
 _versions = Literal[bmds.constants.BMDS330]
 
 
 class BaseSession(BaseModel):
-    id: int | str | None
+    id: int | str | None = None
     bmds_version: _versions
     description: str = ""
     dataset_type: bmds.constants.ModelClass
 
 
 class BaseSessionComplete(BaseSession):
-    datasets: conlist(Any, min_items=1, max_items=10)
+    datasets: Annotated[List[Any], Field(min_length=1, max_length=10)]
     models: dict
-    options: conlist(Any, min_items=1, max_items=10)
+    options: Annotated[List[Any], Field(min_length=1, max_length=10)]
 
 
 def validate_session(data: dict, partial: bool = False):

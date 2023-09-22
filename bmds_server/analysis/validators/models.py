@@ -1,9 +1,9 @@
-from typing import Any
+from typing import Annotated, Any
 
 import bmds
 import numpy as np
 from django.core.exceptions import ValidationError
-from pydantic import BaseModel, confloat, root_validator, validator
+from pydantic import BaseModel, Field, field_validator, model_validator
 
 from ...common.validation import pydantic_validate
 
@@ -42,7 +42,7 @@ MultiTumorModelSchema = ModelTypeSchema(
 
 class BayesianModelSchema(BaseModel):
     model: str
-    prior_weight: confloat(ge=0, le=1)
+    prior_weight: Annotated[float, Field(ge=0, le=1)]
 
 
 class ModelListSchema(BaseModel):
@@ -51,7 +51,8 @@ class ModelListSchema(BaseModel):
     bayesian: list[BayesianModelSchema] = []
     model_schema: ModelTypeSchema
 
-    @validator("bayesian")
+    @field_validator("bayesian")
+    @classmethod
     def bayesian_weights(cls, values):
         if len(values) > 0:
             weights = sum([value.prior_weight for value in values])
@@ -60,7 +61,8 @@ class ModelListSchema(BaseModel):
 
         return values
 
-    @root_validator()
+    # @model_validator()
+    @classmethod
     def uniqueness(cls, values):
         schema = values.get("model_schema")
         for field, valid_models in [
@@ -86,7 +88,8 @@ class ModelListSchema(BaseModel):
 
         return values
 
-    @root_validator()
+    # @model_validator()
+    @classmethod
     def at_least_one(cls, values):
         num_models = (
             len(values.get("frequentist_restricted"))

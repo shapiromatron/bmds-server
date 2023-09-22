@@ -13,9 +13,9 @@ class ReportStatus(IntEnum):
 
 class ReportResponse(BaseModel):
     status: ReportStatus
-    content: Any | None
-    header: str | None
-    message: str | None
+    content: Any | None = None
+    header: str | None = None
+    message: str | None = None
 
 
 class ReportCache(abc.ABC):

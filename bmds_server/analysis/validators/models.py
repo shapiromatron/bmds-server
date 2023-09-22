@@ -49,7 +49,7 @@ class ModelListSchema(BaseModel):
     frequentist_restricted: list[str] = []
     frequentist_unrestricted: list[str] = []
     bayesian: list[BayesianModelSchema] = []
-    model_schema: ModelTypeSchema
+    bmds_model_schema: ModelTypeSchema = Field(alias="model_schema")
 
     @field_validator("bayesian")
     @classmethod

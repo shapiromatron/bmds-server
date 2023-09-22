@@ -80,7 +80,7 @@ def build_dataset(dataset: dict[str, list[float]]) -> bmds.datasets.DatasetType:
         schema = bmds.datasets.NestedDichotomousDatasetSchema
     else:
         raise ValueError(f"Unknown dataset type: {dataset_type}")
-    return schema.parse_obj(dataset).deserialize()
+    return schema.model_validate(dataset).deserialize()
 
 
 def remap_exponential(models: list[str]) -> list[str]:

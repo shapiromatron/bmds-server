@@ -148,7 +148,7 @@ class AnalysisSession(NamedTuple):
 
     @classmethod
     def deserialize(cls, data: dict) -> Self:
-        obj = AnalysisSessionSchema.parse_obj(data)
+        obj = AnalysisSessionSchema.model_validate(data)
         return cls(
             dataset_index=obj.dataset_index,
             option_index=obj.option_index,

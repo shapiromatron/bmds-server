@@ -14,7 +14,7 @@ from bmds_server.analysis.validators import datasets
 def _missing_field(err, missing_field: str):
     data = json.loads(err.value.message)
     assert data[0]["loc"] == [missing_field]
-    assert data[0]["msg"] == "field required"
+    assert data[0]["msg"] == "Field required"
 
 
 class TestInputValidation:
@@ -333,7 +333,7 @@ class TestOptionSetValidation:
         data = []
         with pytest.raises(ValidationError) as err:
             validators.validate_options(bmds.constants.DICHOTOMOUS, data)
-        assert "ensure this value has at least 1 items" in str(err)
+        assert "List should have at least 1 item" in str(err)
 
     def test_continuous(self):
         # test success
@@ -352,7 +352,7 @@ class TestOptionSetValidation:
         data = []
         with pytest.raises(ValidationError) as err:
             validators.validate_options(bmds.constants.CONTINUOUS, data)
-        assert "ensure this value has at least 1 items" in str(err)
+        assert "List should have at least 1 item" in str(err)
 
 
 class TestDatasetValidation:

@@ -97,7 +97,7 @@ class TestAnalysisViewSet:
         assert response.status_code == 400
         assert json.loads(response.json()[0])[0] == {
             "loc": ["datasets"],
-            "msg": "field required",
+            "msg": "Field required",
             "type": "value_error.missing",
         }
 

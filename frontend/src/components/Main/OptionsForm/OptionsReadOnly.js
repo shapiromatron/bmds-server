@@ -43,14 +43,14 @@ const OptionsReadOnly = props => {
                     <td>{getLabel(options.bmr_type, dichotomousBmrOptions)}</td>
                     <td>{ff(options.bmr_value)}</td>
                     <td>{ff(options.confidence_level * 100)}%</td>
-                    <td>{options.bootstrap_seed}</td>
-                    <td>{options.bootstrap_iterations}</td>
                     <td>
                         {getLabel(
                             options.litter_specific_covariate,
                             litterSpecificCovariateOptions
                         )}
                     </td>
+                    <td>{options.bootstrap_iterations}</td>
+                    <td>{options.bootstrap_seed}</td>
                 </>
             }
         </tr>

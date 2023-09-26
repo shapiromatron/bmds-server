@@ -63,8 +63,8 @@ const modelsList = {
             bayesian: modelsList.D,
         },
         [MODEL_NESTED_DICHOTOMOUS]: {
-            frequentist_restricted: ["Nested Logistic", "NCTR"],
-            frequentist_unrestricted: ["Nested Logistic", "NCTR"],
+            frequentist_restricted: ["Nested Logistic"],
+            frequentist_unrestricted: ["Nested Logistic"],
         },
 
         [MODEL_MULTI_TUMOR]: {

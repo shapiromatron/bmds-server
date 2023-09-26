@@ -3,6 +3,7 @@ import PropTypes from "prop-types";
 import React, {Component} from "react";
 import {Col, Modal, Row} from "react-bootstrap";
 
+import DoseResponsePlot from "../../common/DoseResponsePlot";
 import InfoTable from "../../IndividualModel/InfoTable";
 import ModelOptionsTable from "../../IndividualModel/ModelOptionsTable";
 import BootstrapResults from "./BootstrapResults";
@@ -32,7 +33,10 @@ class ModalBody extends Component {
                         <p>Summary table</p>
                     </Col>
                     <Col xs={6}>
-                        <p>Plot!</p>
+                        <DoseResponsePlot
+                            layout={outputStore.drIndividualPlotLayout}
+                            data={outputStore.drIndividualPlotData}
+                        />
                     </Col>
                     <Col xs={6}>
                         <BootstrapResults model={model} />

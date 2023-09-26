@@ -193,8 +193,8 @@ const ModelsCheckBox = observer(props => {
                 </tr>
                 <tr>
                     <td className="text-left align-middle">NCTR</td>
-                    <CheckBoxTd store={store} type={fr} model={"NCTR"} />
-                    <CheckBoxTd store={store} type={fu} model={"NCTR"} />
+                    <CheckBoxTd store={store} type={fr} model={"NCTR"} disabled={true} />
+                    <CheckBoxTd store={store} type={fu} model={"NCTR"} disabled={true} />
                 </tr>
             </tbody>
         );

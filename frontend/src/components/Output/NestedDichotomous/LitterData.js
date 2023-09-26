@@ -9,7 +9,7 @@ import {ff} from "@/utils/formatters";
 class LitterData extends Component {
     render() {
         const litter = this.props.model.results.litter,
-            temp_rslt_len = _.size(litter.lsc);
+            n = _.size(litter.lsc);
         return (
             <table className="table table-sm table-bordered">
                 <thead>
@@ -27,7 +27,7 @@ class LitterData extends Component {
                     </tr>
                 </thead>
                 <tbody>
-                    {_.range(temp_rslt_len).map(i => {
+                    {_.range(n).map(i => {
                         return (
                             <tr key={i}>
                                 <td>{litter.dose[i]}</td>

@@ -199,20 +199,6 @@ const ModelsCheckBox = observer(props => {
             </tbody>
         );
     }
-    if (store.getModelType === mc.MODEL_MULTI_TUMOR) {
-        return (
-            <tbody>
-                <tr>
-                    <td className="text-left align-middle">
-                        Multistage
-                        {writeMode ? <HelpTextPopover content={multistageHelpText} /> : null}
-                    </td>
-                    <CheckBoxTd store={store} type={fr} model={"Multistage"} />
-                    <CheckBoxTd store={store} type={fu} model={"Multistage"} disabled={true} />
-                </tr>
-            </tbody>
-        );
-    }
     throw `Unknown modelType: ${store.getModelType}`;
 });
 ModelsCheckBox.propTypes = {

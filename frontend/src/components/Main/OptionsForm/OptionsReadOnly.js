@@ -37,8 +37,7 @@ const OptionsReadOnly = props => {
                     <td>{ff(options.confidence_level * 100)}%</td>
                 </>
             ) : null}
-            {modelType === MODEL_NESTED_DICHOTOMOUS}
-            {
+            {modelType === MODEL_NESTED_DICHOTOMOUS ? (
                 <>
                     <td>{getLabel(options.bmr_type, dichotomousBmrOptions)}</td>
                     <td>{ff(options.bmr_value)}</td>
@@ -52,7 +51,7 @@ const OptionsReadOnly = props => {
                     <td>{options.bootstrap_iterations}</td>
                     <td>{options.bootstrap_seed}</td>
                 </>
-            }
+            ) : null}
         </tr>
     );
 };

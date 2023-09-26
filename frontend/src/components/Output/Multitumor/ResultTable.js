@@ -15,9 +15,9 @@ class ResultTable extends Component {
         if (!selectedFrequentist) {
             return null;
         }
-        const colWidths = [11, 11, 11, 11, 11, 11, 11, 11, 11],
+        const colWidths = [15, 15, 10, 10, 10, 10, 10],
             {results} = selectedFrequentist,
-            {selectedMultitumorModels} = store,
+            {selectedMultitumorModels, multitumorDatasets} = store,
             indexes = results.selected_model_indexes;
 
         return (
@@ -30,6 +30,7 @@ class ResultTable extends Component {
                 <thead className="table-bordered">
                     <tr className="bg-custom">
                         <th>Model</th>
+                        <th>Dataset</th>
                         <th>BMDL</th>
                         <th>BMD</th>
                         <th>BMDU</th>
@@ -37,9 +38,6 @@ class ResultTable extends Component {
                             <i>P</i>-Value
                         </th>
                         <th>AIC</th>
-                        <th>Unnormalized Log Posterior Probability</th>
-                        <th>Scaled Residual for Dose Group near BMD</th>
-                        <th>Scaled Residual for Control Dose Group</th>
                     </tr>
                 </thead>
                 <tbody className="table-bordered">
@@ -55,18 +53,17 @@ class ResultTable extends Component {
                                 Multi-tumor (MS Combo)
                             </a>
                         </td>
+                        <td>-</td>
                         <td>{ff(results.bmdl)}</td>
                         <td>{ff(results.bmd)}</td>
                         <td>{ff(results.bmdu)}</td>
-                        <td>-9999</td>
-                        <td>-9999</td>
-                        <td>???</td>
-                        <td>???</td>
-                        <td>???</td>
+                        <td>-</td>
+                        <td>-</td>
                     </tr>
                     {selectedMultitumorModels.map((model, index) => {
                         const degree = model.parameters.names.length - 1,
-                            name = `Multistage ${degree}°`;
+                            name = `Multistage ${degree}°`,
+                            dataset = multitumorDatasets[index];
                         return (
                             <tr key={index}>
                                 <td>
@@ -80,14 +77,12 @@ class ResultTable extends Component {
                                         {name}
                                     </a>
                                 </td>
+                                <td>{dataset.metadata.name}</td>
                                 <td>{ff(model.bmdl)}</td>
                                 <td>{ff(model.bmd)}</td>
                                 <td>{ff(model.bmdu)}</td>
-                                <td>-9999</td>
-                                <td>-9999</td>
-                                <td>???</td>
-                                <td>???</td>
-                                <td>???</td>
+                                <td>{ff(model.gof.p_value)}</td>
+                                <td>{ff(model.fit.aic)}</td>
                             </tr>
                         );
                     })}

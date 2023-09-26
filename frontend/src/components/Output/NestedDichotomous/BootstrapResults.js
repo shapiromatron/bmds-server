@@ -16,25 +16,25 @@ class BootstrapResult extends Component {
                 </thead>
                 <tbody>
                     <tr>
-                        <th># Iterations</th>
+                        <td># Iterations</td>
                         <td>{this.props.model.settings.bootstrap_iterations}</td>
                     </tr>
                     <tr>
-                        <th>Bootstrap Seed</th>
+                        <td>Bootstrap Seed</td>
                         <td>{ff(this.props.model.settings.bootstrap_seed)}</td>
                     </tr>
                     <tr>
-                        <th>Log-likelihood</th>
+                        <td>Log-likelihood</td>
                         <td>{ff(this.props.model.results.ll)}</td>
                     </tr>
                     <tr>
-                        <th>Observed Chi-square</th>
+                        <td>Observed Chi-square</td>
                         <td>{ff(this.props.model.results.obs_chi_sq)}</td>
                     </tr>
                     <tr>
-                        <th>
+                        <td>
                             Combined <i>P</i>-Value
-                        </th>
+                        </td>
                         <td>{ff(this.props.model.results.combined_pvalue)}</td>
                     </tr>
                 </tbody>

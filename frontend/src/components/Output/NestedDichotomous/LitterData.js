@@ -12,14 +12,23 @@ class LitterData extends Component {
             n = _.size(litter.lsc);
         return (
             <table className="table table-sm table-bordered">
+                <colgroup>
+                    <col width="14%" />
+                    <col width="15%" />
+                    <col width="14%" />
+                    <col width="14%" />
+                    <col width="14%" />
+                    <col width="14%" />
+                    <col width="15%" />
+                </colgroup>
                 <thead>
                     <tr className="bg-custom">
                         <th colSpan="7">Litter Data</th>
                     </tr>
                     <tr>
                         <th>Dose</th>
-                        <th>Lit. Spec. Cov.</th>
-                        <th>Est. Prob.</th>
+                        <th>Litter Specific Covariance</th>
+                        <th>Estimated Probability</th>
                         <th>Liter Size</th>
                         <th>Expected</th>
                         <th>Observed</th>

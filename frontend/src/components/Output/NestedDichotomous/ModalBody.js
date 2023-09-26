@@ -11,6 +11,7 @@ import BootstrapRuns from "./BootstrapRuns";
 import LitterData from "./LitterData";
 import ModelParameters from "./ModelParameters";
 import ScaledResidual from "./ScaledResidual";
+import Summary from "./Summary";
 
 @observer
 class ModalBody extends Component {
@@ -30,7 +31,7 @@ class ModalBody extends Component {
                         <ModelOptionsTable dtype={dtype} model={model} />
                     </Col>
                     <Col xs={6}>
-                        <p>Summary table</p>
+                        <Summary results={model.results} />
                     </Col>
                     <Col xs={6}>
                         <DoseResponsePlot

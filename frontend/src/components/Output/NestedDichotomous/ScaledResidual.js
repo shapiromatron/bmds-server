@@ -7,9 +7,13 @@ class ScaledResidual extends Component {
     render() {
         return (
             <table id="info-table" className="table table-sm table-bordered">
+                <colgroup>
+                    <col width="80%" />
+                    <col width="20%" />
+                </colgroup>
                 <thead>
                     <tr className="bg-custom">
-                        <th colSpan="2" className="text-center">
+                        <th colSpan="2">
                             Scaled Residuals
                         </th>
                     </tr>

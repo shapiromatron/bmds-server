@@ -44,7 +44,10 @@ class ResultTable extends Component {
                 </thead>
                 <tbody className="table-bordered">
                     {models.map((model, index) => (
-                        <tr key={index}>
+                        <tr
+                            key={index}
+                            onMouseEnter={() => store.drPlotAddHover(model)}
+                            onMouseLeave={store.drPlotRemoveHover}>
                             <td>
                                 <a
                                     id={`freq-result-${index}`}

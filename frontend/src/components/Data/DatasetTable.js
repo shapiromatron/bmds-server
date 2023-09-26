@@ -54,26 +54,27 @@ class DatasetTable extends Component {
                     <label>Dataset Name:&nbsp;</label>
                     {dataset.metadata.name}
                 </div>
-
-                <table className="table table-sm table-bordered text-right">
-                    <colgroup>
-                        {columnNames.map((d, i) => (
-                            <col key={i} width={width} />
-                        ))}
-                    </colgroup>
-                    <thead className="bg-custom">
-                        <tr>
-                            {columnNames.map((column, i) => (
-                                <th key={i}>{columnHeaders[column]}</th>
+                <div style={{maxHeight: "50vh", overflowY: "auto"}}>
+                    <table className="table table-sm table-bordered text-right">
+                        <colgroup>
+                            {columnNames.map((d, i) => (
+                                <col key={i} width={width} />
                             ))}
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {dataset.dtype === Dtype.CONTINUOUS_INDIVIDUAL
-                            ? individualDataRows(dataset)
-                            : dataRows(dataset, columnNames)}
-                    </tbody>
-                </table>
+                        </colgroup>
+                        <thead className="bg-custom">
+                            <tr>
+                                {columnNames.map((column, i) => (
+                                    <th key={i}>{columnHeaders[column]}</th>
+                                ))}
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {dataset.dtype === Dtype.CONTINUOUS_INDIVIDUAL
+                                ? individualDataRows(dataset)
+                                : dataRows(dataset, columnNames)}
+                        </tbody>
+                    </table>
+                </div>
             </>
         );
     }

@@ -84,6 +84,7 @@ class ModelOptionsTable extends Component {
         } else {
             throw "Unknown dtype";
         }
+
         return <TwoColumnTable data={data} label="Model Options" />;
     }
 }

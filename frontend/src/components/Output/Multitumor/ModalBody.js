@@ -3,9 +3,9 @@ import PropTypes from "prop-types";
 import React, {Component} from "react";
 import {Col, Modal, Row} from "react-bootstrap";
 
+import DoseResponsePlot from "../../common/DoseResponsePlot";
 import ModelParameters from "../../IndividualModel/ModelParameters";
 import AnalysisOfDeviance from "./AnalysisOfDeviance";
-import Doses from "./Doses";
 import GoodnessFit from "./GoodnessFit";
 import InfoTable from "./InfoTable";
 import ModelOptions from "./ModelOptions";
@@ -18,8 +18,7 @@ class ModalBody extends Component {
     render() {
         const {outputStore} = this.props,
             model = outputStore.modalModel,
-            isSummary = outputStore.drModelModalIsMA,
-            dataset = outputStore.modalDataset;
+            isSummary = outputStore.drModelModalIsMA;
 
         if (isSummary) {
             return (
@@ -42,17 +41,19 @@ class ModalBody extends Component {
                         <InfoTable />
                     </Col>
                     <Col xl={4}>
-                        <ModelOptions model={model} />
+                        <ModelOptions />
                     </Col>
                     <Col xl={4}>
-                        <Doses model={dataset} />
+                        <ParameterSettings model={model} />
                     </Col>
                     <Col xl={6}>
                         <Summary model={model} />
                     </Col>
-                    <Col xl={6}>PLOT</Col>
-                    <Col xl={6}>
-                        <ParameterSettings model={model} />
+                    <Col xs={6}>
+                        <DoseResponsePlot
+                            layout={outputStore.drIndividualMultitumorPlotLayout}
+                            data={outputStore.drIndividualMultitumorPlotData}
+                        />
                     </Col>
                     <Col xl={6}>
                         <ModelParameters parameters={model.parameters} />

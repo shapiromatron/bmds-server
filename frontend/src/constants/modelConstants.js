@@ -75,6 +75,10 @@ const modelsList = {
     isLognormal = function(disttype) {
         return disttype == 3;
     },
-    hasDegrees = new Set(["Multistage", "Polynomial"]);
+    hasDegrees = new Set(["Multistage", "Polynomial"]),
+    getNameFromDegrees = function(model) {
+        const degree = model.parameters.names.length - 1;
+        return `Multistage ${degree}°`;
+    };
 
-export {allModelOptions, hasDegrees, isLognormal, models, modelsList};
+export {allModelOptions, getNameFromDegrees, hasDegrees, isLognormal, models, modelsList};

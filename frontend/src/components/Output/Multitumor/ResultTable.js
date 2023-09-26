@@ -3,6 +3,7 @@ import {inject, observer} from "mobx-react";
 import PropTypes from "prop-types";
 import React, {Component} from "react";
 
+import {getNameFromDegrees} from "@/constants/modelConstants";
 import {ff} from "@/utils/formatters";
 
 @inject("outputStore")
@@ -63,8 +64,7 @@ class ResultTable extends Component {
                         <td>-</td>
                     </tr>
                     {selectedMultitumorModels.map((model, index) => {
-                        const degree = model.parameters.names.length - 1,
-                            name = `Multistage ${degree}°`,
+                        const name = getNameFromDegrees(model),
                             dataset = multitumorDatasets[index];
                         return (
                             <tr key={index}>

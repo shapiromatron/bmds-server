@@ -17,7 +17,6 @@ import Summary from "./Summary";
 class ModalBody extends Component {
     render() {
         const {outputStore} = this.props,
-            {selectedModelOptions} = outputStore,
             model = outputStore.modalModel,
             isSummary = outputStore.drModelModalIsMA,
             dataset = outputStore.modalDataset;
@@ -27,7 +26,7 @@ class ModalBody extends Component {
                 <Modal.Body>
                     <Row>
                         <Col xl={6}>
-                            <MsComboInfo options={selectedModelOptions} />
+                            <MsComboInfo options={outputStore.selectedModelOptions} />
                         </Col>
                         <Col xl={6}>
                             <MsComboSummary results={model} />

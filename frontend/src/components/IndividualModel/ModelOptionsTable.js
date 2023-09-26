@@ -3,6 +3,7 @@ import PropTypes from "prop-types";
 import React, {Component} from "react";
 
 import {getLabel} from "@/common";
+import TwoColumnTable from "@/components/common/TwoColumnTable";
 import {Dtype} from "@/constants/dataConstants";
 import {hasDegrees} from "@/constants/modelConstants";
 import {
@@ -83,29 +84,7 @@ class ModelOptionsTable extends Component {
         } else {
             throw "Unknown dtype";
         }
-
-        return (
-            <table className="table table-sm table-bordered col-r-2">
-                <thead>
-                    <tr className="bg-custom">
-                        <th colSpan="2">Model Options</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {data.map((d, i) => {
-                        if (!d) {
-                            return null;
-                        }
-                        return (
-                            <tr key={i}>
-                                <td>{d[0]}</td>
-                                <td>{d[1]}</td>
-                            </tr>
-                        );
-                    })}
-                </tbody>
-            </table>
-        );
+        return <TwoColumnTable data={data} label="Model Options" />;
     }
 }
 ModelOptionsTable.propTypes = {

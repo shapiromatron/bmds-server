@@ -8,7 +8,6 @@ class InfoTable extends Component {
     render() {
         const {outputStore} = this.props,
             model = outputStore.modalModel,
-            isSummary = outputStore.drModelModalIsMA,
             dataset = outputStore.modalDataset;
 
         return (
@@ -21,7 +20,7 @@ class InfoTable extends Component {
                 <tbody>
                     <tr>
                         <td>Dataset</td>
-                        {isSummary ? <td>Summary</td> : <td>{dataset.metadata.name}</td>}
+                        {dataset.metadata.name}
                     </tr>
                     <tr>
                         <td>Model</td>

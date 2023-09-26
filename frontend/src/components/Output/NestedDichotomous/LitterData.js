@@ -36,7 +36,7 @@ class LitterData extends Component {
                                 <td>{litter.litter_size[i]}</td>
                                 <td>{ff(litter.expected[i])}</td>
                                 <td>{litter.observed[i]}</td>
-                                <td>{ff(litter.sr[i])}</td>
+                                <td>{ff(litter.scaled_residuals[i])}</td>
                             </tr>
                         );
                     })}

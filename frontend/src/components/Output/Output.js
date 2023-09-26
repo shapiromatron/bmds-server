@@ -96,14 +96,14 @@ class Output extends Component {
                             />
                         </div>
                     ) : null}
-                    <div className="col-lg-5">
+                    <div className="col-lg-6">
                         {outputStore.isMultiTumor ? (
                             <MultitumorDatasetTable />
                         ) : (
                             <DatasetTable dataset={outputStore.selectedDataset} />
                         )}
                     </div>
-                    <div className="col-lg-5">
+                    <div className="col-lg-4">
                         <OptionSetTable />
                     </div>
                 </div>

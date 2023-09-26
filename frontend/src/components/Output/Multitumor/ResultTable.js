@@ -15,7 +15,7 @@ class ResultTable extends Component {
         if (!selectedFrequentist) {
             return null;
         }
-        const colWidths = [15, 15, 10, 10, 10, 10, 10],
+        const colWidths = [15, 15, 10, 10, 10, 10, 10, 10],
             {results} = selectedFrequentist,
             {selectedMultitumorModels, multitumorDatasets} = store,
             indexes = results.selected_model_indexes;
@@ -34,6 +34,7 @@ class ResultTable extends Component {
                         <th>BMDL</th>
                         <th>BMD</th>
                         <th>BMDU</th>
+                        <th>CSF</th>
                         <th>
                             <i>P</i>-Value
                         </th>
@@ -57,6 +58,7 @@ class ResultTable extends Component {
                         <td>{ff(results.bmdl)}</td>
                         <td>{ff(results.bmd)}</td>
                         <td>{ff(results.bmdu)}</td>
+                        <td>{ff(results.slope_factor)}</td>
                         <td>-</td>
                         <td>-</td>
                     </tr>
@@ -81,6 +83,7 @@ class ResultTable extends Component {
                                 <td>{ff(model.bmdl)}</td>
                                 <td>{ff(model.bmd)}</td>
                                 <td>{ff(model.bmdu)}</td>
+                                <td>TODO</td>
                                 <td>{ff(model.gof.p_value)}</td>
                                 <td>{ff(model.fit.aic)}</td>
                             </tr>

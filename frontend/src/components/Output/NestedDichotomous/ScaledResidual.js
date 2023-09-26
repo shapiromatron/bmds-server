@@ -13,9 +13,7 @@ class ScaledResidual extends Component {
                 </colgroup>
                 <thead>
                     <tr className="bg-custom">
-                        <th colSpan="2">
-                            Scaled Residuals
-                        </th>
+                        <th colSpan="2">Scaled Residuals</th>
                     </tr>
                 </thead>
                 <tbody>

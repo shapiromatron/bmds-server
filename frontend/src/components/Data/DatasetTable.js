@@ -46,7 +46,13 @@ class DatasetTable extends Component {
     render() {
         const {dataset} = this.props,
             columnNames = columns[dataset.dtype],
-            width = `${100 / columnNames.length}%`;
+            width = `${100 / columnNames.length}%`,
+            isIndividual = dataset.dtype === Dtype.CONTINUOUS_INDIVIDUAL,
+            nRows = dataset.doses.length,
+            divStyle =
+                !isIndividual && nRows > 10
+                    ? {height: "50vh", overflowY: "auto", resize: "vertical"}
+                    : {};
 
         return (
             <>
@@ -54,7 +60,7 @@ class DatasetTable extends Component {
                     <label>Dataset Name:&nbsp;</label>
                     {dataset.metadata.name}
                 </div>
-                <div style={{height: "50vh", overflowY: "auto", resize: "vertical"}}>
+                <div style={divStyle}>
                     <table className="table table-sm table-bordered text-right">
                         <colgroup>
                             {columnNames.map((d, i) => (
@@ -69,7 +75,7 @@ class DatasetTable extends Component {
                             </tr>
                         </thead>
                         <tbody>
-                            {dataset.dtype === Dtype.CONTINUOUS_INDIVIDUAL
+                            {isIndividual
                                 ? individualDataRows(dataset)
                                 : dataRows(dataset, columnNames)}
                         </tbody>

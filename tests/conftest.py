@@ -55,7 +55,7 @@ def bmds3_complete_continuous():
         "dataset_options": [
             {"dataset_id": 123, "enabled": True, "degree": 0, "adverse_direction": -1}
         ],
-        "recommender": RecommenderSettings.build_default().dict(),
+        "recommender": RecommenderSettings.build_default().model_dump(),
     }
 
 
@@ -105,7 +105,7 @@ def bmds3_complete_continuous_individual():
         "dataset_options": [
             {"dataset_id": 123, "enabled": True, "degree": 0, "adverse_direction": -1}
         ],
-        "recommender": RecommenderSettings.build_default().dict(),
+        "recommender": RecommenderSettings.build_default().model_dump(),
     }
     # fmt: on
 
@@ -130,7 +130,7 @@ def bmds3_complete_dichotomous():
         ],
         "options": [{"bmr_type": 1, "bmr_value": 0.1, "confidence_level": 0.95}],
         "dataset_options": [{"dataset_id": 123, "enabled": True, "degree": 0}],
-        "recommender": RecommenderSettings.build_default().dict(),
+        "recommender": RecommenderSettings.build_default().model_dump(),
     }
 
 

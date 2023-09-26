@@ -135,7 +135,7 @@ class TestAnalysisViewSet:
             "bmds_version": "BMDS330",
             "dataset_type": "C",
             "models": {"frequentist_restricted": ["Power"]},
-            "recommender": RecommenderSettings.build_default().dict(),
+            "recommender": RecommenderSettings.build_default().model_dump(),
         }
         response = client.patch(
             url,

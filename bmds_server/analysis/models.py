@@ -292,7 +292,7 @@ class Analysis(models.Model):
             "models": {},
             "dataset_options": [],
             "options": [],
-            "recommender": RecommenderSettings.build_default().dict(),
+            "recommender": RecommenderSettings.build_default().model_dump(),
         }
 
     def renew(self):

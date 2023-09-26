@@ -54,7 +54,7 @@ class DatasetTable extends Component {
                     <label>Dataset Name:&nbsp;</label>
                     {dataset.metadata.name}
                 </div>
-                <div style={{maxHeight: "50vh", overflowY: "auto"}}>
+                <div style={{height: "50vh", overflowY: "auto", resize: "vertical"}}>
                     <table className="table table-sm table-bordered text-right">
                         <colgroup>
                             {columnNames.map((d, i) => (

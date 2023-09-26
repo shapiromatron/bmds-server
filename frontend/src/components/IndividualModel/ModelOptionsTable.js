@@ -9,6 +9,8 @@ import {
     continuousBmrOptions,
     dichotomousBmrOptions,
     distTypeOptions,
+    intralitterCorrelation,
+    litterSpecificCovariateOptions,
 } from "@/constants/optionsConstants";
 import {priorClassLabels} from "@/constants/outputConstants";
 import {ff} from "@/utils/formatters";
@@ -23,8 +25,12 @@ const restrictionMapping = {
 class ModelOptionsTable extends Component {
     render() {
         const {dtype, model} = this.props,
-            priorLabels = restrictionMapping[model.settings.priors.prior_class],
-            priorClass = getLabel(model.settings.priors.prior_class, priorClassLabels),
+            priorLabels = model.settings.priors
+                ? restrictionMapping[model.settings.priors.prior_class]
+                : null,
+            priorClass = model.settings.priors
+                ? getLabel(model.settings.priors.prior_class, priorClassLabels)
+                : null,
             isBayesian = priorClass === "Bayesian";
         let data = [];
 
@@ -54,6 +60,25 @@ class ModelOptionsTable extends Component {
                 priorLabels,
                 isBayesian ? ["Samples", model.settings.samples] : null,
                 isBayesian ? ["Burn In", model.settings.burnin] : null,
+            ];
+        } else if (dtype == Dtype.NESTED_DICHOTOMOUS) {
+            data = [
+                ["BMR Type", getLabel(model.settings.bmr_type, dichotomousBmrOptions)],
+                ["BMR", ff(model.settings.bmr)],
+                ["Confidence Level", ff(1 - model.settings.alpha)],
+                ["Bootstrap Seed", model.settings.bootstrap_seed],
+                ["Bootstrap Iterations", model.settings.bootstrap_iterations],
+                [
+                    "Intralitter Correlation",
+                    getLabel(model.settings.intralitter_correlation, intralitterCorrelation),
+                ],
+                [
+                    "Litter Specific Covariate",
+                    getLabel(
+                        model.settings.litter_specific_covariate,
+                        litterSpecificCovariateOptions
+                    ),
+                ],
             ];
         } else {
             throw "Unknown dtype";

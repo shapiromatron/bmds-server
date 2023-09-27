@@ -2,6 +2,7 @@ import {observer} from "mobx-react";
 import PropTypes from "prop-types";
 import React, {Component} from "react";
 
+import TwoColumnTable from "@/components/common/TwoColumnTable";
 import {ff} from "@/utils/formatters";
 
 @observer
@@ -27,24 +28,7 @@ class Summary extends Component {
                     ff(results.summary.chi_squared),
                 ],
             ];
-
-        return (
-            <table id="info-table" className="table table-sm table-bordered">
-                <thead>
-                    <tr className="bg-custom">
-                        <th colSpan="2">Summary</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {data.map((item, i) => (
-                        <tr key={i}>
-                            <td>{item[0]}</td>
-                            <td>{item[1]}</td>
-                        </tr>
-                    ))}
-                </tbody>
-            </table>
-        );
+        return <TwoColumnTable label="Summary" data={data} />;
     }
 }
 Summary.propTypes = {

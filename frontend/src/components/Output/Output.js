@@ -81,7 +81,7 @@ class Output extends Component {
         }
 
         return (
-            <div className="container-fluid">
+            <div className="container-fluid mb-3">
                 <div className="row">
                     {outputStore.outputs.length > 1 ? (
                         <div className="col-lg-2">

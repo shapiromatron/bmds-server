@@ -41,7 +41,8 @@ const getData = function(ma, datasets, models) {
                 color: "rgba(0,0,0,0)",
                 line: {color: colorCodes[index], width: 2},
             },
-            name: dataset.metadata.name,
+            legendgroup: index,
+            showlegend: false,
         });
     });
 
@@ -51,11 +52,12 @@ const getData = function(ma, datasets, models) {
         data.push({
             x: model.plotting.dr_x,
             y: model.plotting.dr_y,
-            name: `${dataset.metadata.name} ${getNameFromDegrees(model)}`,
             line: {
                 width: 3,
                 color: colorCodes[index],
             },
+            legendgroup: index,
+            name: `${dataset.metadata.name} ${getNameFromDegrees(model)}`,
         });
     });
 
@@ -69,7 +71,6 @@ const getData = function(ma, datasets, models) {
             color: "black",
             dash: "dot",
         },
-        showlegend: false,
     });
 
     return data;

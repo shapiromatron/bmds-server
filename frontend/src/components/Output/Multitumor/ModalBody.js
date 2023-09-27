@@ -10,6 +10,7 @@ import GoodnessFit from "./GoodnessFit";
 import InfoTable from "./InfoTable";
 import ModelOptions from "./ModelOptions";
 import {MsComboInfo, MsComboSummary} from "./MsCombo";
+import MultitumorPlot from "./MultitumorPlot";
 import ParameterSettings from "./ParameterSettings";
 import Summary from "./Summary";
 
@@ -29,6 +30,9 @@ class ModalBody extends Component {
                         </Col>
                         <Col xl={6}>
                             <MsComboSummary results={model} />
+                        </Col>
+                        <Col xl={12}>
+                            <MultitumorPlot />
                         </Col>
                     </Row>
                 </Modal.Body>

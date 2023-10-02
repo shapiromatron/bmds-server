@@ -11,6 +11,7 @@ import SelectInput from "../common/SelectInput";
 class SelectModelType extends Component {
     render() {
         const {dataStore} = this.props;
+        const isMultitumor = this.props.dataStore.rootStore.mainStore.isMultitumor;
         return (
             <div className="model-type mb-2">
                 <Button
@@ -31,7 +32,9 @@ class SelectModelType extends Component {
                     })}
                 />
                 {dataStore.canAddNewDataset ? null : (
-                    <p className="text-danger">Can have a maximum of 6 datasets per analysis.</p>
+                    <p className="text-danger">
+                        Can have a maximum of {isMultitumor ? 10 : 6} datasets per analysis.
+                    </p>
                 )}
             </div>
         );

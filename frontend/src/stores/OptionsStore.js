@@ -50,7 +50,11 @@ class OptionsStore {
     }
 
     @computed get canAddNewOption() {
-        const maxItems = this.rootStore.mainStore.isDesktop ? 1000 : 6;
+        const maxItems = this.rootStore.mainStore.isDesktop
+            ? 1000
+            : this.rootStore.mainStore.isMultitumor
+            ? 3
+            : 6;
         return this.optionsList.length < maxItems;
     }
 }

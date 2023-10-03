@@ -48,14 +48,15 @@ class OptionsStore {
     @computed get getModelType() {
         return this.rootStore.mainStore.model_type;
     }
-
-    @computed get canAddNewOption() {
-        const maxItems = this.rootStore.mainStore.isDesktop
+    @computed get maxItems() {
+        return this.rootStore.mainStore.isDesktop
             ? 1000
             : this.rootStore.mainStore.isMultitumor
             ? 3
             : 6;
-        return this.optionsList.length < maxItems;
+    }
+    @computed get canAddNewOption() {
+        return this.optionsList.length < this.maxItems;
     }
 }
 

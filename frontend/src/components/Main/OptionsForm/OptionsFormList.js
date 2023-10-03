@@ -112,8 +112,8 @@ class OptionsFormList extends Component {
                         </table>
                         {optionsStore.canAddNewOption ? null : (
                             <p className="text-danger">
-                                Can have a maximum of {modelType === MODEL_MULTI_TUMOR ? 3 : 6}{" "}
-                                option sets per analysis.
+                                Can have a maximum of {optionsStore.maxItems} option sets per
+                                analysis.
                             </p>
                         )}
                     </form>

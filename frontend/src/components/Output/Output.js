@@ -14,7 +14,6 @@ import FrequentistResultTable from "./FrequentistResultTable";
 import MultitumorDatasetTable from "./Multitumor/DatasetTable";
 import MultitumorPlot from "./Multitumor/MultitumorPlot";
 import MultitumorResultTable from "./Multitumor/ResultTable";
-import NestedDichotomousResultTable from "./NestedDichotomous/ResultTable";
 import OptionSetTable from "./OptionSetTable";
 import SelectModel from "./SelectModel";
 
@@ -121,7 +120,6 @@ class Output extends Component {
                         <div className="row">
                             <div className="col-lg-8">
                                 <h4>Frequentist Model Results</h4>
-                                <NestedDichotomousResultTable />
                                 <FrequentistResultTable />
                                 {canEdit ? <SelectModel /> : null}
                             </div>

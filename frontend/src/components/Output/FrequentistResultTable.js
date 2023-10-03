@@ -5,7 +5,6 @@ import PropTypes from "prop-types";
 import React, {Component} from "react";
 
 import {BIN_LABELS} from "@/constants/logicConstants";
-import {MODEL_MULTI_TUMOR} from "@/constants/mainConstants";
 import {getPValue, modelClasses, priorClass} from "@/constants/outputConstants";
 import {fractionalFormatter} from "@/utils/formatters";
 import {ff} from "@/utils/formatters";
@@ -202,20 +201,18 @@ class FrequentistResultTable extends Component {
     render() {
         const store = this.props.outputStore,
             dataset = store.selectedDataset,
-            {selectedFrequentist} = store,
-            modelType = store.getModelType;
+            {selectedFrequentist, isNestedDichotomous} = store;
 
         if (!selectedFrequentist) {
             return null;
         }
 
-        if (modelType === MODEL_MULTI_TUMOR) {
-            return <p>Add multi tumor results table here ...</p>;
-        }
-
         const {models} = selectedFrequentist,
             restrictedModels = _.chain(models)
                 .map((model, index) => {
+                    if (isNestedDichotomous) {
+                        return model.settings.restricted ? {model, index} : null;
+                    }
                     if (model.settings.priors.prior_class === priorClass.frequentist_restricted) {
                         return {model, index};
                     }
@@ -225,6 +222,9 @@ class FrequentistResultTable extends Component {
                 .value(),
             unrestrictedModels = _.chain(models)
                 .map((model, index) => {
+                    if (isNestedDichotomous) {
+                        return !model.settings.restricted ? {model, index} : null;
+                    }
                     if (model.settings.priors.prior_class === priorClass.frequentist_unrestricted) {
                         return {model, index};
                     }

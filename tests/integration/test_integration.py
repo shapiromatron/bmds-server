@@ -56,10 +56,18 @@ class TestContinuousIntegration(PlaywrightTestCase):
         with page.expect_popup() as page2_info:
             page.get_by_role("link", name="Open").first.click()
         page2 = page2_info.value
+
         page2.get_by_role("link", name="Settings").click()
+        expect(page2.get_by_role("cell", name="abc")).to_have_text("abc")
+
         page2.get_by_role("link", name="Data").click()
+        expect(page2.get_by_text("Dataset Name: Dataset #1")).to_be_visible()
+
         page2.get_by_role("link", name="Output").click()
+        expect(page2.get_by_text("Dataset Name: Dataset #1")).to_be_visible()
+
         page2.get_by_role("link", name="Logic").click()
+        expect(page2.get_by_role("cell", name="Decision Logic")).to_have_text("Decision Logic")
 
     def test_dichotomous(self):
         page = self.page
@@ -127,10 +135,18 @@ class TestContinuousIntegration(PlaywrightTestCase):
         with page.expect_popup() as page2_info:
             page.get_by_role("link", name="Open").first.click()
         page2 = page2_info.value
+
         page2.get_by_role("link", name="Settings").click()
+        expect(page2.get_by_role("cell", name="abc")).to_have_text("abc")
+
         page2.get_by_role("link", name="Data").click()
+        expect(page2.get_by_text("Dataset Name: Dataset #1")).to_be_visible()
+
         page2.get_by_role("link", name="Output").click()
+        expect(page2.get_by_text("Dataset Name: Dataset #1")).to_be_visible()
+
         page2.get_by_role("link", name="Logic").click()
+        expect(page2.get_by_role("cell", name="Decision Logic")).to_have_text("Decision Logic")
 
     def test_nested_dichotomous(self):
         page = self.page
@@ -140,7 +156,7 @@ class TestContinuousIntegration(PlaywrightTestCase):
             page.locator("text=Create a new BMDS analysis").click()
 
         # set main input
-        page.locator("#analysis_name").fill("abc123")
+        page.locator("#analysis_name").fill("abc")
         page.locator("#analysis_description").fill("def")
         page.locator("#analysis_model_type").select_option("ND")
 
@@ -190,10 +206,18 @@ class TestContinuousIntegration(PlaywrightTestCase):
         with page.expect_popup() as page2_info:
             page.get_by_role("link", name="Open").first.click()
         page2 = page2_info.value
+
         page2.get_by_role("link", name="Settings").click()
+        expect(page2.get_by_role("cell", name="abc")).to_have_text("abc")
+
         page2.get_by_role("link", name="Data").click()
+        expect(page2.get_by_text("Dataset Name: Dataset #1")).to_be_visible()
+
         page2.get_by_role("link", name="Output").click()
+        expect(page2.get_by_text("Dataset Name: Dataset #1")).to_be_visible()
+
         page2.get_by_role("link", name="Logic").click()
+        expect(page2.get_by_role("cell", name="Decision Logic")).to_have_text("Decision Logic")
 
     def test_multi_tumor(self):
         # TODO: verify MT output?
@@ -204,7 +228,7 @@ class TestContinuousIntegration(PlaywrightTestCase):
             page.locator("text=Create a new BMDS analysis").click()
 
         # set main input
-        page.locator("#analysis_name").fill("abc123")
+        page.locator("#analysis_name").fill("abc")
         page.locator("#analysis_description").fill("def")
         page.locator("#analysis_model_type").select_option("MT")
 
@@ -245,7 +269,15 @@ class TestContinuousIntegration(PlaywrightTestCase):
         with page.expect_popup() as page2_info:
             page.get_by_role("link", name="Open").first.click()
         page2 = page2_info.value
+
         page2.get_by_role("link", name="Settings").click()
+        expect(page2.get_by_role("cell", name="abc")).to_have_text("abc")
+
         page2.get_by_role("link", name="Data").click()
+        expect(page2.get_by_text("Dataset Name: Dataset #1")).to_be_visible()
+
         page2.get_by_role("link", name="Output").click()
+        expect(page2.get_by_text("Dataset Name: Dataset #1")).to_be_visible()
+
         page2.get_by_role("link", name="Logic").click()
+        expect(page2.get_by_role("cell", name="Decision Logic")).to_have_text("Decision Logic")

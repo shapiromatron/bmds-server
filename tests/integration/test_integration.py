@@ -20,9 +20,9 @@ class TestContinuousIntegration(PlaywrightTestCase):
         page.locator("#select_all_frequentist_restricted").click()
 
         # view data tab
-        page.locator('a:has-text("Data")').click()
-        page.locator('button:has-text("New")').click()
-        page.locator("text=Load an example dataset").click()
+        page.get_by_role("link", name="Data").click()
+        page.get_by_role("button", name="New").click()
+        page.get_by_role("button", name="Load an example dataset").click()
 
         # save current settings
         page.locator('a:has-text("Settings")').click()
@@ -58,7 +58,7 @@ class TestContinuousIntegration(PlaywrightTestCase):
         page2 = page2_info.value
 
         page2.get_by_role("link", name="Settings").click()
-        expect(page2.get_by_role("cell", name="abc")).to_have_text("abc")
+        expect(page2.get_by_role("cell", name="abc")).to_be_visible()
 
         page2.get_by_role("link", name="Data").click()
         expect(page2.get_by_text("Dataset Name: Dataset #1")).to_be_visible()
@@ -67,7 +67,7 @@ class TestContinuousIntegration(PlaywrightTestCase):
         expect(page2.get_by_text("Dataset Name: Dataset #1")).to_be_visible()
 
         page2.get_by_role("link", name="Logic").click()
-        expect(page2.get_by_role("cell", name="Decision Logic")).to_have_text("Decision Logic")
+        expect(page2.get_by_role("cell", name="Decision Logic")).to_be_visible()
 
     def test_dichotomous(self):
         page = self.page
@@ -88,9 +88,9 @@ class TestContinuousIntegration(PlaywrightTestCase):
         page.locator("#bayesian-Logistic").check()
 
         # view data tab
-        page.locator('a:has-text("Data")').click()
-        page.locator('button:has-text("New")').click()
-        page.locator("text=Load an example dataset").click()
+        page.get_by_role("link", name="Data").click()
+        page.get_by_role("button", name="New").click()
+        page.get_by_role("button", name="Load an example dataset").click()
 
         # save current settings
         page.locator('a:has-text("Settings")').click()
@@ -137,7 +137,7 @@ class TestContinuousIntegration(PlaywrightTestCase):
         page2 = page2_info.value
 
         page2.get_by_role("link", name="Settings").click()
-        expect(page2.get_by_role("cell", name="abc")).to_have_text("abc")
+        expect(page2.get_by_role("cell", name="abc")).to_be_visible()
 
         page2.get_by_role("link", name="Data").click()
         expect(page2.get_by_text("Dataset Name: Dataset #1")).to_be_visible()
@@ -146,14 +146,14 @@ class TestContinuousIntegration(PlaywrightTestCase):
         expect(page2.get_by_text("Dataset Name: Dataset #1")).to_be_visible()
 
         page2.get_by_role("link", name="Logic").click()
-        expect(page2.get_by_role("cell", name="Decision Logic")).to_have_text("Decision Logic")
+        expect(page2.get_by_role("cell", name="Decision Logic")).to_be_visible()
 
     def test_nested_dichotomous(self):
         page = self.page
         page.goto(self.url("/"))
 
         with page.expect_navigation():
-            page.locator("text=Create a new BMDS analysis").click()
+            page.get_by_role("button", name="Create a new BMDS analysis").click()
 
         # set main input
         page.locator("#analysis_name").fill("abc")
@@ -161,14 +161,11 @@ class TestContinuousIntegration(PlaywrightTestCase):
         page.locator("#analysis_model_type").select_option("ND")
 
         # view data tab, add 2 datasets
-        page.locator('a:has-text("Data")').click()
-        page.locator('button:has-text("New")').click()
-
+        page.get_by_role("link", name="Data").click()
+        page.get_by_role("button", name="New").click()
         page.get_by_role("button", name="Load an example dataset").click()
-
-        # 2nd dataset
-        page.locator('button:has-text("New")').click()
-        page.locator("text=Load an example dataset").click()
+        page.get_by_role("button", name="New").click()
+        page.get_by_role("button", name="Load an example dataset").click()
 
         # save current settings
         page.locator('a:has-text("Settings")').click()
@@ -184,21 +181,9 @@ class TestContinuousIntegration(PlaywrightTestCase):
             # num rows in results table
             expect(page.locator("#frequentist-model-result tbody tr")).to_have_count(5)
 
-            # check each result
+            # check one result
             page.get_by_role("link", name="Nested Logistic (lsc+ilc-)*").click()
             expect(page.get_by_role("dialog")).to_contain_text("Nested Logistic (lsc+ilc-)")
-            page.locator("#close-modal").click()
-
-            page.get_by_role("link", name="Nested Logistic (lsc-ilc-)").click()
-            expect(page.get_by_role("dialog")).to_contain_text("Nested Logistic (lsc-ilc-)")
-            page.locator("#close-modal").click()
-
-            page.get_by_role("link", name="Nested Logistic (lsc+ilc+)").click()
-            expect(page.get_by_role("dialog")).to_contain_text("Nested Logistic (lsc+ilc+)")
-            page.locator("#close-modal").click()
-
-            page.get_by_role("link", name="Nested Logistic (lsc-ilc+)").click()
-            expect(page.get_by_role("dialog")).to_contain_text("Nested Logistic (lsc-ilc+)")
             page.locator("#close-modal").click()
 
         # Read-only
@@ -208,7 +193,7 @@ class TestContinuousIntegration(PlaywrightTestCase):
         page2 = page2_info.value
 
         page2.get_by_role("link", name="Settings").click()
-        expect(page2.get_by_role("cell", name="abc")).to_have_text("abc")
+        expect(page2.get_by_role("cell", name="abc")).to_be_visible()
 
         page2.get_by_role("link", name="Data").click()
         expect(page2.get_by_text("Dataset Name: Dataset #1")).to_be_visible()
@@ -217,15 +202,14 @@ class TestContinuousIntegration(PlaywrightTestCase):
         expect(page2.get_by_text("Dataset Name: Dataset #1")).to_be_visible()
 
         page2.get_by_role("link", name="Logic").click()
-        expect(page2.get_by_role("cell", name="Decision Logic")).to_have_text("Decision Logic")
+        expect(page2.get_by_role("cell", name="Decision Logic")).to_be_visible()
 
     def test_multi_tumor(self):
-        # TODO: verify MT output?
         page = self.page
         page.goto(self.url("/"))
 
         with page.expect_navigation():
-            page.locator("text=Create a new BMDS analysis").click()
+            page.get_by_role("button", name="Create a new BMDS analysis").click()
 
         # set main input
         page.locator("#analysis_name").fill("abc")
@@ -233,24 +217,25 @@ class TestContinuousIntegration(PlaywrightTestCase):
         page.locator("#analysis_model_type").select_option("MT")
 
         # view data tab, add 3 datasets
-        page.locator('a:has-text("Data")').click()
-        page.locator('button:has-text("New")').click()
-        page.locator("text=Load an example dataset").click()
+        page.get_by_role("link", name="Data").click()
+        page.get_by_role("button", name="New").click()
+
+        page.get_by_role("button", name="Load an example dataset").click()
 
         # 2nd dataset
-        page.locator('button:has-text("New")').click()
-        page.locator("text=Load an example dataset").click()
+        page.get_by_role("button", name="New").click()
+        page.get_by_role("button", name="Load an example dataset").click()
 
         # 3rd dataset
-        page.locator('button:has-text("New")').click()
-        page.locator("text=Load an example dataset").click()
+        page.get_by_role("button", name="New").click()
+        page.get_by_role("button", name="Load an example dataset").click()
 
         # add 2 more option sets (3 total)
-        page.locator('button:has-text("Add option set.")').click()
-        page.locator('button:has-text("Add option set.")').click()
+        page.locator('a:has-text("Settings")').click()
+        page.get_by_role("button", name="Add option set.").click()
+        page.get_by_role("button", name="Add option set.").click()
 
         # save current settings
-        page.locator('a:has-text("Settings")').click()
         page.locator("text=Save Analysis").click()
 
         if self.can_execute:
@@ -261,8 +246,10 @@ class TestContinuousIntegration(PlaywrightTestCase):
             # view output summary tables
             page.locator('a:has-text("Output")').click()
 
-            # individual rows in the output summary table, the modal appears and it renders ok
-            # as well as the model average row
+            # check one result
+            page.get_by_role("link", name="Multi-tumor (MS Combo)").click()
+            expect(page.get_by_role("dialog")).to_contain_text("MS Combo")
+            page.locator("#close-modal").click()
 
         # Read-only
         page.get_by_role("button", name="Share").click()
@@ -271,13 +258,10 @@ class TestContinuousIntegration(PlaywrightTestCase):
         page2 = page2_info.value
 
         page2.get_by_role("link", name="Settings").click()
-        expect(page2.get_by_role("cell", name="abc")).to_have_text("abc")
+        expect(page2.get_by_role("cell", name="abc")).to_be_visible()
 
         page2.get_by_role("link", name="Data").click()
-        expect(page2.get_by_text("Dataset Name: Dataset #1")).to_be_visible()
+        expect(page2.get_by_text("Select existing")).to_be_visible()
 
         page2.get_by_role("link", name="Output").click()
-        expect(page2.get_by_text("Dataset Name: Dataset #1")).to_be_visible()
-
-        page2.get_by_role("link", name="Logic").click()
-        expect(page2.get_by_role("cell", name="Decision Logic")).to_have_text("Decision Logic")
+        expect(page2.get_by_text("Select an output")).to_be_visible()

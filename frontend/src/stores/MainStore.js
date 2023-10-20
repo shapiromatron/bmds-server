@@ -358,7 +358,6 @@ class MainStore {
                 fetch(apiUrl + "?" + new URLSearchParams(params).toString()).then(processResponse);
             },
             processResponse = response => {
-                console.log(params);
                 let contentType = response.headers.get("content-type");
                 if (contentType.includes("application/json")) {
                     response.json().then(json => {

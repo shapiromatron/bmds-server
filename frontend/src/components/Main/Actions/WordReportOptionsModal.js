@@ -40,11 +40,7 @@ class WordReportOptionsModal extends Component {
                                 please be patient.
                             </p>
                         </div>
-                        {model_type === "MT" || model_type === "ND" ? (
-                            // override default value, set new
-                            (changeReportOptions("datasetFormatLong", false),
-                            changeReportOptions("allModels", true))
-                        ) : (
+                        {model_type === "MT" || model_type === "ND" ? null : (
                             <div className="col-md-4">
                                 <LabelInput
                                     label="Long dataset format"

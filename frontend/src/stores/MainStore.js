@@ -16,7 +16,7 @@ class MainStore {
 
     @observable analysis_name = "";
     @observable analysis_description = "";
-    @observable model_type = mc.MODEL_CONTINUOUS;
+    @observable model_type = mc.MODEL_DICHOTOMOUS;
     @observable errorMessage = "";
     @observable errorData = null;
     @observable hasEditSettings = false;
@@ -71,7 +71,7 @@ class MainStore {
             },
         };
     }
-    @computed get isMultitumor() {
+    @computed get isMultiTumor() {
         return this.model_type === mc.MODEL_MULTI_TUMOR;
     }
 
@@ -240,6 +240,13 @@ class MainStore {
         this.analysis_description = inputs.analysis_description;
         this.model_type = inputs.dataset_type;
         this.changeDatasetType(this.model_type);
+        // word export options setting
+        if (this.model_type === "C" || this.model_type === "D") {
+            this.changeReportOptions("datasetFormatLong", true);
+        } else {
+            this.changeReportOptions("datasetFormatLong", false);
+            this.changeReportOptions("allModels", true);
+        }
         this.rootStore.optionsStore.setOptions(inputs.options);
         this.rootStore.dataStore.setDatasets(inputs.datasets);
         this.rootStore.dataOptionStore.setDatasetOptions(inputs.dataset_options);
@@ -337,10 +344,6 @@ class MainStore {
         return _.isArray(this.executionOutputs);
     }
 
-    @computed get isMultiTumor() {
-        return this.model_type === mc.MODEL_MULTI_TUMOR;
-    }
-
     // *** TOAST ***
     @observable toastVisible = false;
     @observable toastHeader = "";
@@ -390,7 +393,7 @@ class MainStore {
 
     // *** DEFAULT REPORT OPTIONS ***
     @observable wordReportOptions = {
-        datasetFormatLong: true,
+        datasetFormatLong: false,
         allModels: false,
         bmdCdfTable: false,
     };

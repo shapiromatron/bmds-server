@@ -12,11 +12,11 @@ class MainStore {
     }
 
     @observable config = {};
-    @observable models = {};
+    // @observable models = {}; // I dont think this is used
 
     @observable analysis_name = "";
     @observable analysis_description = "";
-    @observable model_type = mc.MODEL_DICHOTOMOUS;
+    @observable model_type = null; // default to dicho elsewhere
     @observable errorMessage = "";
     @observable errorData = null;
     @observable hasEditSettings = false;
@@ -36,6 +36,11 @@ class MainStore {
     }
     @action.bound changeDatasetType(value) {
         this.model_type = value;
+        // word export options setting
+        if (this.model_type === "ND" || this.model_type === "MT") {
+            this.changeReportOptions("datasetFormatLong", false);
+            this.changeReportOptions("allModels", true);
+        }
         this.rootStore.modelsStore.setDefaultsByDatasetType(true);
         this.rootStore.optionsStore.setDefaultsByDatasetType(true);
         this.rootStore.dataStore.setDefaultsByDatasetType();
@@ -240,13 +245,6 @@ class MainStore {
         this.analysis_description = inputs.analysis_description;
         this.model_type = inputs.dataset_type;
         this.changeDatasetType(this.model_type);
-        // word export options setting
-        if (this.model_type === "C" || this.model_type === "D") {
-            this.changeReportOptions("datasetFormatLong", true);
-        } else {
-            this.changeReportOptions("datasetFormatLong", false);
-            this.changeReportOptions("allModels", true);
-        }
         this.rootStore.optionsStore.setOptions(inputs.options);
         this.rootStore.dataStore.setDatasets(inputs.datasets);
         this.rootStore.dataOptionStore.setDatasetOptions(inputs.dataset_options);
@@ -393,7 +391,7 @@ class MainStore {
 
     // *** DEFAULT REPORT OPTIONS ***
     @observable wordReportOptions = {
-        datasetFormatLong: false,
+        datasetFormatLong: true,
         allModels: false,
         bmdCdfTable: false,
     };

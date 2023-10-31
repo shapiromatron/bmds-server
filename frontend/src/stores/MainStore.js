@@ -15,8 +15,8 @@ class MainStore {
 
     @observable analysis_name = "";
     @observable analysis_description = "";
-    @observable model_type = null; // default to dicho elsewhere
-    @observable errorMessage = "";
+    @observable model_type = null;
+    @observable errorMessage = null;
     @observable errorData = null;
     @observable hasEditSettings = false;
     @observable executionOutputs = null;

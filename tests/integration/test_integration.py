@@ -109,7 +109,7 @@ class TestContinuousIntegration(PlaywrightTestCase):
 
             # display frequentist modal
             page.locator("#freq-result-0").click()
-            # expect(page.locator("#info-table tbody tr")).to_have_count(3)
+            expect(page.locator("#info-table tbody tr")).to_have_count(3)
             page.locator("#close-modal").click()
 
             # display bayesian modal

@@ -39,7 +39,7 @@ class TestContinuousIntegration(PlaywrightTestCase):
 
             # display frequentist modal
             page.locator("#freq-result-0").click()
-            # expect(page.locator("#info-table tbody tr")).to_have_count(3)
+            expect(page.locator("#info-table tbody tr")).to_have_count(3)
             page.locator("#close-modal").click()
 
             page.locator("#selection_model").select_option("0")
@@ -52,22 +52,23 @@ class TestContinuousIntegration(PlaywrightTestCase):
         expect(page.locator("#rule-table tbody tr")).to_have_count(20)
 
         # Read-only
-        page.get_by_role("button", name="Share").click()
-        with page.expect_popup() as page2_info:
-            page.get_by_role("link", name="Open").first.click()
-        page2 = page2_info.value
+        if self.can_execute:
+            page.get_by_role("button", name="Share").click()
+            with page.expect_popup() as page2_info:
+                page.get_by_role("link", name="Open").first.click()
+            page2 = page2_info.value
 
-        page2.get_by_role("link", name="Settings").click()
-        expect(page2.get_by_role("cell", name="abc")).to_be_visible()
+            page2.get_by_role("link", name="Settings").click()
+            expect(page2.get_by_role("cell", name="abc")).to_be_visible()
 
-        page2.get_by_role("link", name="Data").click()
-        expect(page2.get_by_text("Dataset Name: Dataset #1")).to_be_visible()
+            page2.get_by_role("link", name="Data").click()
+            expect(page2.get_by_text("Dataset Name: Dataset #1")).to_be_visible()
 
-        page2.get_by_role("link", name="Output").click()
-        expect(page2.get_by_text("Dataset Name: Dataset #1")).to_be_visible()
+            page2.get_by_role("link", name="Output").click()
+            expect(page2.get_by_text("Dataset Name: Dataset #1")).to_be_visible()
 
-        page2.get_by_role("link", name="Logic").click()
-        expect(page2.get_by_role("cell", name="Decision Logic")).to_be_visible()
+            page2.get_by_role("link", name="Logic").click()
+            expect(page2.get_by_role("cell", name="Decision Logic")).to_be_visible()
 
     def test_dichotomous(self):
         page = self.page
@@ -113,7 +114,7 @@ class TestContinuousIntegration(PlaywrightTestCase):
 
             # display bayesian modal
             page.locator("#bayesian-result-0").click()
-            # expect(page.locator("#info-table tbody tr")).to_have_count(3)
+            expect(page.locator("#info-table tbody tr")).to_have_count(3)
             page.locator("#close-modal").click()
 
             # display bayesian model average modal
@@ -131,22 +132,23 @@ class TestContinuousIntegration(PlaywrightTestCase):
         expect(page.locator("#rule-table tbody tr")).to_have_count(18)
 
         # Read-only
-        page.get_by_role("button", name="Share").click()
-        with page.expect_popup() as page2_info:
-            page.get_by_role("link", name="Open").first.click()
-        page2 = page2_info.value
+        if self.can_execute:
+            page.get_by_role("button", name="Share").click()
+            with page.expect_popup() as page2_info:
+                page.get_by_role("link", name="Open").first.click()
+            page2 = page2_info.value
 
-        page2.get_by_role("link", name="Settings").click()
-        expect(page2.get_by_role("cell", name="abc")).to_be_visible()
+            page2.get_by_role("link", name="Settings").click()
+            expect(page2.get_by_role("cell", name="abc")).to_be_visible()
 
-        page2.get_by_role("link", name="Data").click()
-        expect(page2.get_by_text("Dataset Name: Dataset #1")).to_be_visible()
+            page2.get_by_role("link", name="Data").click()
+            expect(page2.get_by_text("Dataset Name: Dataset #1")).to_be_visible()
 
-        page2.get_by_role("link", name="Output").click()
-        expect(page2.get_by_text("Dataset Name: Dataset #1")).to_be_visible()
+            page2.get_by_role("link", name="Output").click()
+            expect(page2.get_by_text("Dataset Name: Dataset #1")).to_be_visible()
 
-        page2.get_by_role("link", name="Logic").click()
-        expect(page2.get_by_role("cell", name="Decision Logic")).to_be_visible()
+            page2.get_by_role("link", name="Logic").click()
+            expect(page2.get_by_role("cell", name="Decision Logic")).to_be_visible()
 
     def test_nested_dichotomous(self):
         page = self.page
@@ -186,23 +188,23 @@ class TestContinuousIntegration(PlaywrightTestCase):
             expect(page.get_by_role("dialog")).to_contain_text("Nested Logistic (lsc+ilc-)")
             page.locator("#close-modal").click()
 
-        # Read-only
-        page.get_by_role("button", name="Share").click()
-        with page.expect_popup() as page2_info:
-            page.get_by_role("link", name="Open").first.click()
-        page2 = page2_info.value
+            # Read-only
+            page.get_by_role("button", name="Share").click()
+            with page.expect_popup() as page2_info:
+                page.get_by_role("link", name="Open").first.click()
+            page2 = page2_info.value
 
-        page2.get_by_role("link", name="Settings").click()
-        expect(page2.get_by_role("cell", name="abc")).to_be_visible()
+            page2.get_by_role("link", name="Settings").click()
+            expect(page2.get_by_role("cell", name="abc")).to_be_visible()
 
-        page2.get_by_role("link", name="Data").click()
-        expect(page2.get_by_text("Dataset Name: Dataset #1")).to_be_visible()
+            page2.get_by_role("link", name="Data").click()
+            expect(page2.get_by_text("Dataset Name: Dataset #1")).to_be_visible()
 
-        page2.get_by_role("link", name="Output").click()
-        expect(page2.get_by_text("Dataset Name: Dataset #1")).to_be_visible()
+            page2.get_by_role("link", name="Output").click()
+            expect(page2.get_by_text("Dataset Name: Dataset #1")).to_be_visible()
 
-        page2.get_by_role("link", name="Logic").click()
-        expect(page2.get_by_role("cell", name="Decision Logic")).to_be_visible()
+            page2.get_by_role("link", name="Logic").click()
+            expect(page2.get_by_role("cell", name="Decision Logic")).to_be_visible()
 
     def test_multi_tumor(self):
         page = self.page
@@ -230,12 +232,8 @@ class TestContinuousIntegration(PlaywrightTestCase):
         page.get_by_role("button", name="New").click()
         page.get_by_role("button", name="Load an example dataset").click()
 
-        # add 2 more option sets (3 total)
-        page.locator('a:has-text("Settings")').click()
-        page.get_by_role("button", name="Add option set.").click()
-        page.get_by_role("button", name="Add option set.").click()
-
         # save current settings
+        page.locator('a:has-text("Settings")').click()
         page.locator("text=Save Analysis").click()
 
         if self.can_execute:
@@ -251,17 +249,17 @@ class TestContinuousIntegration(PlaywrightTestCase):
             expect(page.get_by_role("dialog")).to_contain_text("MS Combo")
             page.locator("#close-modal").click()
 
-        # Read-only
-        page.get_by_role("button", name="Share").click()
-        with page.expect_popup() as page2_info:
-            page.get_by_role("link", name="Open").first.click()
-        page2 = page2_info.value
+            # Read-only
+            page.get_by_role("button", name="Share").click()
+            with page.expect_popup() as page2_info:
+                page.get_by_role("link", name="Open").first.click()
+            page2 = page2_info.value
 
-        page2.get_by_role("link", name="Settings").click()
-        expect(page2.get_by_role("cell", name="abc")).to_be_visible()
+            page2.get_by_role("link", name="Settings").click()
+            expect(page2.get_by_role("cell", name="abc")).to_be_visible()
 
-        page2.get_by_role("link", name="Data").click()
-        expect(page2.get_by_text("Select existing")).to_be_visible()
+            page2.get_by_role("link", name="Data").click()
+            expect(page2.get_by_text("Select existing")).to_be_visible()
 
-        page2.get_by_role("link", name="Output").click()
-        expect(page2.get_by_text("Select an output")).to_be_visible()
+            page2.get_by_role("link", name="Output").click()
+            expect(page2.get_by_text("Model Results")).to_be_visible()

@@ -18,7 +18,7 @@ class WordReportOptionsModal extends Component {
             submitWordReportRequest,
             closeWordReportOptionModal,
             wordReportOptions,
-            model_type,
+            isMultiTumorOrNestedDichotomous,
         } = this.props.mainStore;
         return (
             <Modal
@@ -40,7 +40,7 @@ class WordReportOptionsModal extends Component {
                                 please be patient.
                             </p>
                         </div>
-                        {model_type === "MT" || model_type === "ND" ? null : (
+                        {isMultiTumorOrNestedDichotomous ? null : (
                             <div className="col-md-4">
                                 <LabelInput
                                     label="Long dataset format"
@@ -74,7 +74,7 @@ class WordReportOptionsModal extends Component {
                                 models which were executed will be included.
                             </p>
                         </div>
-                        {model_type === "MT" || model_type === "ND" ? null : (
+                        {isMultiTumorOrNestedDichotomous ? null : (
                             <div className="col-md-4">
                                 <LabelInput label="Include BMD CDF Table" htmlFor="bmdCdfTable" />
                                 <br />

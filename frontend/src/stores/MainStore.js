@@ -37,7 +37,7 @@ class MainStore {
     @action.bound changeDatasetType(value) {
         this.model_type = value;
         // word export options setting
-        if (this.model_type === "ND" || this.model_type === "MT") {
+        if (this.isMultiTumorOrNestedDichotomous) {
             this.changeReportOptions("datasetFormatLong", false);
             this.changeReportOptions("allModels", true);
         }
@@ -78,6 +78,10 @@ class MainStore {
     }
     @computed get isMultiTumor() {
         return this.model_type === mc.MODEL_MULTI_TUMOR;
+    }
+
+    @computed get isMultiTumorOrNestedDichotomous() {
+        return this.model_type === "ND" || this.model_type === "MT";
     }
 
     @action.bound

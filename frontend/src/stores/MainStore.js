@@ -12,7 +12,6 @@ class MainStore {
     }
 
     @observable config = {};
-    // @observable models = {}; // I dont think this is used
 
     @observable analysis_name = "";
     @observable analysis_description = "";

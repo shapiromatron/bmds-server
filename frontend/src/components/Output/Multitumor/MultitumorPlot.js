@@ -5,7 +5,6 @@ import React, {Component} from "react";
 import DoseResponsePlot from "@/components/common/DoseResponsePlot";
 import {getNameFromDegrees} from "@/constants/modelConstants";
 import {colorCodes, getBmdDiamond, getDrLayout, getResponse} from "@/constants/plotting";
-import {ff} from "@/utils/formatters";
 
 const getLayout = function(datasets) {
     let layout;

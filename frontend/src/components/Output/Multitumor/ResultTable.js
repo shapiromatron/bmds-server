@@ -56,7 +56,7 @@ class ResultTable extends Component {
                                         e.preventDefault();
                                         store.showModalDetailMultitumor(-1, -1);
                                     }}>
-                                    Multi-tumor (MS Combo)
+                                    Multitumor
                                 </a>
                             </td>
                             <td>-</td>

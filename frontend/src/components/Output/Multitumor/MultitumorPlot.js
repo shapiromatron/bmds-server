@@ -11,7 +11,7 @@ const getLayout = function(datasets) {
     datasets.forEach(dataset => {
         if (layout === undefined) {
             layout = getDrLayout(dataset);
-            layout.title.text = "Multitumor (MS Combo)";
+            layout.title.text = "Multitumor";
             layout.yaxis.range = [0, 1];
         } else {
             const revised = getDrLayout(dataset);

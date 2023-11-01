@@ -28,7 +28,7 @@ const getLayout = function(datasets) {
 
 const getData = function(ma, datasets, models) {
     const data = [],
-        bmd_y = ma.bmd * ma.slope_factor;
+        bmd_y = ma.bmdl * ma.slope_factor;
 
     // add individual datasets
     datasets.forEach((dataset, index) => {
@@ -62,10 +62,10 @@ const getData = function(ma, datasets, models) {
         });
     });
 
-    if (ma.bmd) {
+    if (ma.bmdl) {
         // add slope factor
         data.push({
-            x: [0, ma.bmd],
+            x: [0, ma.bmdl],
             y: [0, bmd_y],
             name: "Cancer Slope Factor",
             legendgroup: "Cancer Slope Factor",

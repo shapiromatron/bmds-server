@@ -9,6 +9,7 @@ import {
     continuousBmrOptions,
     dichotomousBmrOptions,
     distTypeOptions,
+    litterSpecificCovariateOptions,
 } from "@/constants/optionsConstants";
 import {ff} from "@/utils/formatters";
 
@@ -45,6 +46,28 @@ class OptionSetTable extends Component {
                     "Maximum Multistage Degree",
                     getLabel(selectedDatasetOptions.degree, allDegreeOptions),
                 ],
+            ];
+        } else if (outputStore.isNestedDichotomous) {
+            rows = [
+                ["BMR Type", getLabel(selectedModelOptions.bmr_type, dichotomousBmrOptions)],
+                ["BMR", ff(selectedModelOptions.bmr_value)],
+                ["Confidence Level", ff(selectedModelOptions.confidence_level)],
+                ["Bootstrap Seed", selectedModelOptions.bootstrap_seed],
+                ["Bootstrap Iterations", selectedModelOptions.bootstrap_iterations],
+                [
+                    "Litter Specific Covariate",
+                    getLabel(
+                        selectedModelOptions.litter_specific_covariate,
+                        litterSpecificCovariateOptions
+                    ),
+                ],
+            ];
+        } else if (outputStore.isMultiTumor) {
+            rows = [
+                ["BMR Type", getLabel(selectedModelOptions.bmr_type, dichotomousBmrOptions)],
+                ["BMR", ff(selectedModelOptions.bmr_value)],
+                ["Confidence Level", ff(selectedModelOptions.confidence_level)],
+                ["Degree Setting", outputStore.multitumorDegreeInputSettings.join(", ")],
             ];
         } else {
             throw `Unknown model type: ${getModelType}`;

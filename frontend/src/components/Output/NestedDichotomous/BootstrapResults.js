@@ -2,42 +2,26 @@ import {observer} from "mobx-react";
 import PropTypes from "prop-types";
 import React, {Component} from "react";
 
+import TwoColumnTable from "@/components/common/TwoColumnTable";
+import {ff} from "@/utils/formatters";
+
 @observer
 class BootstrapResult extends Component {
     render() {
-        return (
-            <table className="table table-sm table-bordered">
-                <thead className="bg-custom">
-                    <tr>
-                        <th colSpan="2">Bootstrap Results</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <th># Iterations</th>
-                        <td>{1}</td>
-                    </tr>
-                    <tr>
-                        <th>Bootstrap Seed</th>
-                        <td>{1}</td>
-                    </tr>
-                    <tr>
-                        <th>Log-likelihood</th>
-                        <td>{1}</td>
-                    </tr>
-                    <tr>
-                        <th>Observed Chi-square</th>
-                        <td>{1}</td>
-                    </tr>
-                    <tr>
-                        <th>
-                            Combined <i>P</i>-Value
-                        </th>
-                        <td>{1}</td>
-                    </tr>
-                </tbody>
-            </table>
-        );
+        const {settings, results} = this.props.model,
+            data = [
+                ["# Iterations", settings.bootstrap_iterations],
+                ["Bootstrap Seed", ff(settings.bootstrap_seed)],
+                ["Log-likelihood", ff(results.ll)],
+                ["Observed Chi-square", ff(results.obs_chi_sq)],
+                [
+                    <span key={0}>
+                        Combined <i>P</i>-Value
+                    </span>,
+                    ff(results.combined_pvalue),
+                ],
+            ];
+        return <TwoColumnTable data={data} label="Bootstrap Results" />;
     }
 }
 BootstrapResult.propTypes = {

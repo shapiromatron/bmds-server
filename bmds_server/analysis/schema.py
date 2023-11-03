@@ -1,6 +1,5 @@
 import re
 from io import StringIO
-from typing import Annotated
 
 import pandas as pd
 from bmds.bmds3.types.sessions import VersionSchema
@@ -31,7 +30,7 @@ class AnalysisSessionSchema(BaseModel):
 
 class AnalysisOutput(BaseModel):
     analysis_id: str
-    analysis_schema_version: str = "1.0"
+    analysis_schema_version: str = "1.1"
     bmds_server_version: str
     bmds_python_version: VersionSchema | None = None
     outputs: list[AnalysisSessionSchema]
@@ -40,8 +39,8 @@ class AnalysisOutput(BaseModel):
 class PolyKInput(BaseModel):
     dataset: str
     dose_units: str
-    power: Annotated[float, Field(ge=0, le=5)] = 3
-    duration: Annotated[float, Field(ge=0, le=10000)] | None = None
+    power: float = Field(default=3, ge=0, le=5)
+    duration: float | None = Field(default=None, gt=0, le=10000)
 
     @field_validator("dataset")
     @classmethod

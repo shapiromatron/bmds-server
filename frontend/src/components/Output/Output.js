@@ -4,8 +4,6 @@ import {inject, observer} from "mobx-react";
 import PropTypes from "prop-types";
 import React, {Component} from "react";
 
-import {MODEL_NESTED_DICHOTOMOUS} from "@/constants/mainConstants";
-
 import DoseResponsePlot from "../common/DoseResponsePlot";
 import Icon from "../common/Icon";
 import SelectInput from "../common/SelectInput";
@@ -13,7 +11,9 @@ import DatasetTable from "../Data/DatasetTable";
 import ModelDetailModal from "../IndividualModel/ModelDetailModal";
 import BayesianResultTable from "./BayesianResultTable";
 import FrequentistResultTable from "./FrequentistResultTable";
-import NestedDichotomousResultTable from "./NestedDichotomous/ResultTable";
+import MultitumorDatasetTable from "./Multitumor/DatasetTable";
+import MultitumorPlot from "./Multitumor/MultitumorPlot";
+import MultitumorResultTable from "./Multitumor/ResultTable";
 import OptionSetTable from "./OptionSetTable";
 import SelectModel from "./SelectModel";
 
@@ -46,7 +46,6 @@ class Output extends Component {
                 selectedFrequentist,
                 selectedBayesian,
             } = outputStore,
-            modelType = outputStore.getModelType,
             {isFuture, analysisSavedAndValidated} = outputStore.rootStore.mainStore;
 
         if (hasAnyError) {
@@ -81,7 +80,7 @@ class Output extends Component {
         }
 
         return (
-            <div className="container-fluid">
+            <div className="container-fluid mb-3">
                 <div className="row">
                     {outputStore.outputs.length > 1 ? (
                         <div className="col-lg-2">
@@ -97,32 +96,42 @@ class Output extends Component {
                             />
                         </div>
                     ) : null}
-                    <div className="col-lg-5">
-                        <DatasetTable dataset={outputStore.selectedDataset} />
+                    <div className="col-lg-6">
+                        {outputStore.isMultiTumor ? (
+                            <MultitumorDatasetTable />
+                        ) : (
+                            <DatasetTable dataset={outputStore.selectedDataset} />
+                        )}
                     </div>
-                    <div className="col-lg-5">
+                    <div className="col-lg-4">
                         <OptionSetTable />
                     </div>
                 </div>
                 {selectedFrequentist ? (
-                    <div className="row">
-                        <div className="col-lg-8">
-                            <h4>Frequentist Model Results</h4>
-                            {modelType === MODEL_NESTED_DICHOTOMOUS ? (
-                                <NestedDichotomousResultTable />
-                            ) : (
+                    outputStore.isMultiTumor ? (
+                        <div className="row">
+                            <div className="col-lg-12">
+                                <h4>Model Results</h4>
+                                <MultitumorResultTable />
+                                <MultitumorPlot />
+                            </div>
+                        </div>
+                    ) : (
+                        <div className="row">
+                            <div className="col-lg-8">
+                                <h4>Frequentist Model Results</h4>
                                 <FrequentistResultTable />
-                            )}
-                            {canEdit ? <SelectModel /> : null}
+                                {canEdit ? <SelectModel /> : null}
+                            </div>
+                            <div className="align-items-center d-flex col-lg-4">
+                                <DoseResponsePlot
+                                    onRelayout={outputStore.updateUserPlotSettings}
+                                    layout={outputStore.drFrequentistPlotLayout}
+                                    data={outputStore.drFrequentistPlotData}
+                                />
+                            </div>
                         </div>
-                        <div className="align-items-center d-flex col-lg-4">
-                            <DoseResponsePlot
-                                onRelayout={outputStore.updateUserPlotSettings}
-                                layout={outputStore.drFrequentistPlotLayout}
-                                data={outputStore.drFrequentistPlotData}
-                            />
-                        </div>
-                    </div>
+                    )
                 ) : null}
                 {selectedBayesian ? (
                     <div className="row">
@@ -140,7 +149,7 @@ class Output extends Component {
                     </div>
                 ) : null}
 
-                {isFuture ? (
+                {isFuture && !outputStore.isMultiTumor ? (
                     <div className="row">
                         {selectedFrequentist ? (
                             <div className="col col-lg-6">

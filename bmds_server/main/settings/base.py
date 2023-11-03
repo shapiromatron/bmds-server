@@ -110,7 +110,7 @@ LANGUAGE_CODE = "en-us"
 TIME_ZONE = os.getenv("TIME_ZONE", "US/Eastern")
 USE_TZ = True
 
-ALWAYS_SHOW_FUTURE = False
+ALWAYS_SHOW_FUTURE = bool(os.environ.get("ALWAYS_SHOW_FUTURE_MODE", "False") == "True")
 
 EMAIL_SUBJECT_PREFIX = f"[{PROJECT_NAME}] "
 DEFAULT_FROM_EMAIL = f"admin@{PROJECT_NAME}.com"
@@ -234,3 +234,4 @@ WEBSITE_URI = os.getenv("WEBSITE_URI", "https://example.com")
 INCLUDE_ADMIN = bool(os.environ.get("INCLUDE_ADMIN", "True") == "True")
 
 INCLUDE_BETA_FEATURES = bool(os.environ.get("INCLUDE_BETA", "False") == "True")
+IS_DESKTOP = False

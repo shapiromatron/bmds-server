@@ -12,12 +12,11 @@ class MainStore {
     }
 
     @observable config = {};
-    @observable models = {};
 
     @observable analysis_name = "";
     @observable analysis_description = "";
-    @observable model_type = mc.MODEL_CONTINUOUS;
-    @observable errorMessage = "";
+    @observable model_type = null;
+    @observable errorMessage = null;
     @observable errorData = null;
     @observable hasEditSettings = false;
     @observable executionOutputs = null;
@@ -36,6 +35,11 @@ class MainStore {
     }
     @action.bound changeDatasetType(value) {
         this.model_type = value;
+        // word export options setting
+        if (this.isMultiTumorOrNestedDichotomous) {
+            this.changeReportOptions("datasetFormatLong", false);
+            this.changeReportOptions("allModels", true);
+        }
         this.rootStore.modelsStore.setDefaultsByDatasetType(true);
         this.rootStore.optionsStore.setDefaultsByDatasetType(true);
         this.rootStore.dataStore.setDefaultsByDatasetType();
@@ -70,6 +74,13 @@ class MainStore {
                 recommender: this.rootStore.logicStore.logic,
             },
         };
+    }
+    @computed get isMultiTumor() {
+        return this.model_type === mc.MODEL_MULTI_TUMOR;
+    }
+
+    @computed get isMultiTumorOrNestedDichotomous() {
+        return this.model_type === "ND" || this.model_type === "MT";
     }
 
     @action.bound
@@ -281,6 +292,9 @@ class MainStore {
     @computed get isFuture() {
         return this.config.future;
     }
+    @computed get isDesktop() {
+        return this.config.is_desktop;
+    }
     @computed get getExecutionOutputs() {
         return this.executionOutputs;
     }
@@ -294,15 +308,9 @@ class MainStore {
         return _.find(mc.modelTypes, {value: this.model_type}).name;
     }
     @computed get getModelTypeChoices() {
-        let choices = mc.modelTypes.map((item, i) => {
+        return mc.modelTypes.map((item, i) => {
             return {value: item.value, text: item.name};
         });
-        if (!this.isFuture) {
-            return choices.filter(
-                d => d.value != mc.MODEL_NESTED_DICHOTOMOUS && d.value != mc.MODEL_MULTI_TUMOR
-            );
-        }
-        return choices;
     }
 
     @computed get getModels() {
@@ -322,22 +330,11 @@ class MainStore {
         return !_.isEmpty(this.getEnabledDatasets);
     }
 
-    @computed get hasAtLeastTwoDatasetsSelected() {
-        return this.getEnabledDatasets.length >= 2;
-    }
-
     @computed get hasAtLeastOneOptionSelected() {
         return !_.isEmpty(this.getOptions);
     }
 
     @computed get isValid() {
-        if (this.model_type === mc.MODEL_MULTI_TUMOR) {
-            return (
-                this.hasAtLeastOneModelSelected &&
-                this.hasAtLeastTwoDatasetsSelected &&
-                this.hasAtLeastOneOptionSelected
-            );
-        }
         return (
             this.hasAtLeastOneModelSelected &&
             this.hasAtLeastOneDatasetSelected &&
@@ -346,10 +343,6 @@ class MainStore {
     }
     @computed get hasOutputs() {
         return _.isArray(this.executionOutputs);
-    }
-
-    @computed get isMultiTumor() {
-        return this.model_type === mc.MODEL_MULTI_TUMOR;
     }
 
     // *** TOAST ***
@@ -399,7 +392,7 @@ class MainStore {
     }
     // *** END TOAST ***
 
-    // *** REPORT OPTIONS ***
+    // *** DEFAULT REPORT OPTIONS ***
     @observable wordReportOptions = {
         datasetFormatLong: true,
         allModels: false,

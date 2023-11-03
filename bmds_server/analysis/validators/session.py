@@ -1,10 +1,10 @@
-from typing import List, Any, Literal
+from typing import Any, Literal
 
 import bmds
-from pydantic import Field, BaseModel
+from django.conf import settings
+from pydantic import BaseModel, Field
 
 from ...common.validation import pydantic_validate
-from typing_extensions import Annotated
 
 _versions = Literal[bmds.constants.BMDS330]
 
@@ -16,10 +16,13 @@ class BaseSession(BaseModel):
     dataset_type: bmds.constants.ModelClass
 
 
+max_items = 1000 if settings.IS_DESKTOP else 10
+
+
 class BaseSessionComplete(BaseSession):
-    datasets: Annotated[List[Any], Field(min_length=1, max_length=10)]
+    datasets: list[Any] = Field(min_items=1, max_items=max_items)
     models: dict
-    options: Annotated[List[Any], Field(min_length=1, max_length=10)]
+    options: list[Any] = Field(min_items=1, max_items=max_items)
 
 
 def validate_session(data: dict, partial: bool = False):

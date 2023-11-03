@@ -3,20 +3,32 @@ import {observer} from "mobx-react";
 import PropTypes from "prop-types";
 import React, {Component} from "react";
 
+import {ff} from "@/utils/formatters";
+
 @observer
 class LitterData extends Component {
     render() {
+        const litter = this.props.model.results.litter,
+            n = _.size(litter.lsc);
         return (
             <table className="table table-sm table-bordered">
+                <colgroup>
+                    <col width="14%" />
+                    <col width="15%" />
+                    <col width="14%" />
+                    <col width="14%" />
+                    <col width="14%" />
+                    <col width="14%" />
+                    <col width="15%" />
+                </colgroup>
                 <thead>
                     <tr className="bg-custom">
-                        <th colSpan="8">Litter Data</th>
+                        <th colSpan="7">Litter Data</th>
                     </tr>
                     <tr>
                         <th>Dose</th>
-                        <th>Lit. Spec. Cov.</th>
-                        <th>Lit. Spec. Cov.</th>
-                        <th>Est. Prob.</th>
+                        <th>Litter Specific Covariance</th>
+                        <th>Estimated Probability</th>
                         <th>Liter Size</th>
                         <th>Expected</th>
                         <th>Observed</th>
@@ -24,17 +36,16 @@ class LitterData extends Component {
                     </tr>
                 </thead>
                 <tbody>
-                    {_.range(10).map(d => {
+                    {_.range(n).map(i => {
                         return (
-                            <tr key={d}>
-                                <td>1</td>
-                                <td>2</td>
-                                <td>3</td>
-                                <td>4</td>
-                                <td>5</td>
-                                <td>6</td>
-                                <td>7</td>
-                                <td>8</td>
+                            <tr key={i}>
+                                <td>{litter.dose[i]}</td>
+                                <td>{litter.lsc[i]}</td>
+                                <td>{ff(litter.estimated_probabilities[i])}</td>
+                                <td>{litter.litter_size[i]}</td>
+                                <td>{ff(litter.expected[i])}</td>
+                                <td>{litter.observed[i]}</td>
+                                <td>{ff(litter.scaled_residuals[i])}</td>
                             </tr>
                         );
                     })}

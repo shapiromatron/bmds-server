@@ -181,7 +181,7 @@ export const DATA_CONTINUOUS_SUMMARY = "CS",
                     doses: [
                         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
                         25, 25, 25, 25, 25, 25, 25, 25, 25,
-                        50, 50, 50, 50, 50, 50, 50, 50, 50,
+                        50, 50, 50, 50, 50, 50, 150, 150, 150,
                     ],
                     litter_ns: [
                         16, 9, 15, 14, 13, 9, 10, 14, 10, 11, 14,
@@ -241,11 +241,18 @@ export const DATA_CONTINUOUS_SUMMARY = "CS",
     getNumDoseGroups = function(dataset) {
         return _.uniq(dataset.doses).length;
     },
-    getDefaultDegree = function(dataset) {
+    getDefaultDegree = function(dtype, dataset) {
+        if (dtype === Dtype.MULTI_TUMOR) {
+            return 0; // auto
+        }
         const n = getNumDoseGroups(dataset) - 1;
         return _.clamp(n, 1, 3);
     },
-    getDegreeOptions = function(dataset) {
-        const maxDegree = Math.max(Math.min(8, getNumDoseGroups(dataset) - 1), 1);
-        return allDegreeOptions.filter(d => d.value <= maxDegree);
+    getDegreeOptions = function(dtype, dataset) {
+        const maxDegree = Math.max(Math.min(8, getNumDoseGroups(dataset) - 1), 1),
+            options = _.cloneDeep(allDegreeOptions).filter(d => d.value <= maxDegree);
+        if (dtype === Dtype.MULTI_TUMOR) {
+            options[0].label = "auto";
+        }
+        return options;
     };

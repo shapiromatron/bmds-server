@@ -267,8 +267,15 @@ class DataStore {
             .map(d => d.dataset);
     }
 
+    @computed get maxItems() {
+        return this.rootStore.mainStore.isDesktop
+            ? 1000
+            : this.rootStore.mainStore.isMultiTumor
+            ? 10
+            : 6;
+    }
     @computed get canAddNewDataset() {
-        return this.datasets.length < 6;
+        return this.datasets.length < this.maxItems;
     }
 
     @computed get hasSelectedDataset() {

@@ -198,63 +198,47 @@ class TestModelValidation:
         logprobit = bmds.constants.M_LogProbit
 
         # test success
-        assert (
-            validators.validate_models(
-                dtype,
-                {"frequentist_restricted": [logprobit]},
-            )
-            is None
-        )
+        validators.validate_models(dtype, {"frequentist_restricted": [logprobit]})
 
         # assert wrong model type
+        data = {"frequentist_restricted": [bmds.constants.M_Power]}
         with pytest.raises(ValidationError) as err:
-            validators.validate_models(
-                dtype,
-                {"frequentist_restricted": [bmds.constants.M_Power]},
-            )
+            validators.validate_models(dtype, data)
         assert "Invalid model(s) in frequentist_restricted: Power" in str(err)
 
         # assert duplicates model type
+        data = {"frequentist_restricted": [logprobit, logprobit]}
         with pytest.raises(ValidationError) as err:
-            validators.validate_models(
-                dtype,
-                {"frequentist_restricted": [logprobit, logprobit]},
-            )
+            validators.validate_models(dtype, data)
         assert "Models in frequentist_restricted are not unique" in str(err)
 
         # assert empty
+        data = {"frequentist_restricted": []}
         with pytest.raises(ValidationError) as err:
-            validators.validate_models(
-                dtype,
-                {"frequentist_restricted": []},
-            )
+            validators.validate_models(dtype, data)
         assert "At least one model must be selected" in str(err)
 
         # assert bayesian duplicates
+        data = {
+            "bayesian": [
+                {"model": probit, "prior_weight": 0.3},
+                {"model": logprobit, "prior_weight": 0.4},
+                {"model": logprobit, "prior_weight": 0.3},
+            ]
+        }
         with pytest.raises(ValidationError) as err:
-            validators.validate_models(
-                dtype,
-                {
-                    "bayesian": [
-                        {"model": probit, "prior_weight": 0.3},
-                        {"model": logprobit, "prior_weight": 0.4},
-                        {"model": logprobit, "prior_weight": 0.3},
-                    ]
-                },
-            )
+            validators.validate_models(dtype, data)
         assert "Models in bayesian are not unique" in str(err)
 
         # assert bayesian prior_weight sum
+        data = {
+            "bayesian": [
+                {"model": probit, "prior_weight": 0.5},
+                {"model": logprobit, "prior_weight": 0.49},
+            ]
+        }
         with pytest.raises(ValidationError) as err:
-            validators.validate_models(
-                dtype,
-                {
-                    "bayesian": [
-                        {"model": probit, "prior_weight": 0.5},
-                        {"model": logprobit, "prior_weight": 0.49},
-                    ]
-                },
-            )
+            validators.validate_models(dtype, data)
         assert "Prior weight in bayesian does not sum to 1" in str(err.value)
 
     def test_bmds3_continuous(self):

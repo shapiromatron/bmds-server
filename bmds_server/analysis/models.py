@@ -304,9 +304,9 @@ class Analysis(models.Model):
             analysis_id=str(self.id),
             bmds_server_version=settings.COMMIT.sha,
             bmds_python_version=bmds_python_version,
-            outputs=[output.dict() for output in outputs],
+            outputs=[output.model_dump(by_alias=True) for output in outputs],
         )
-        self.outputs = analysis_output.dict()
+        self.outputs = analysis_output.model_dump(by_alias=True)
         self.errors = [output.error for output in outputs if output.error]
         self.ended = now()
         self.deletion_date = get_deletion_date()

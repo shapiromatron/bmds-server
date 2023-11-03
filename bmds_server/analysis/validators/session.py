@@ -16,13 +16,13 @@ class BaseSession(BaseModel):
     dataset_type: bmds.constants.ModelClass
 
 
-max_items = 1000 if settings.IS_DESKTOP else 10
+max_length = 1000 if settings.IS_DESKTOP else 10
 
 
 class BaseSessionComplete(BaseSession):
-    datasets: list[Any] = Field(min_items=1, max_items=max_items)
+    datasets: list[Any] = Field(min_length=1, max_length=max_length)
     models: dict
-    options: list[Any] = Field(min_items=1, max_items=max_items)
+    options: list[Any] = Field(min_length=1, max_length=max_length)
 
 
 def validate_session(data: dict, partial: bool = False):

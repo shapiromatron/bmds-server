@@ -14,7 +14,7 @@ from pydantic import BaseModel, Field, model_validator
 
 from ...common.validation import pydantic_validate
 
-max_items = 1000 if settings.IS_DESKTOP else 10
+max_length = 1000 if settings.IS_DESKTOP else 10
 
 
 class MaxDegree(IntEnum):
@@ -83,26 +83,28 @@ class MaxNestedDichotomousDatasetSchema(NestedDichotomousDatasetSchema):
 
 
 class DichotomousDatasets(DatasetValidator):
-    dataset_options: list[DichotomousModelOptions] = Field(min_items=1, max_items=max_items)
-    datasets: list[MaxDichotomousDatasetSchema] = Field(min_items=1, max_items=max_items)
+    dataset_options: list[DichotomousModelOptions] = Field(min_length=1, max_length=max_length)
+    datasets: list[MaxDichotomousDatasetSchema] = Field(min_length=1, max_length=max_length)
 
 
 class ContinuousDatasets(DatasetValidator):
-    dataset_options: list[ContinuousModelOptions] = Field(min_items=1, max_items=max_items)
+    dataset_options: list[ContinuousModelOptions] = Field(min_length=1, max_length=max_length)
     datasets: list[MaxContinuousDatasetSchema | MaxContinuousIndividualDatasetSchema] = Field(
-        min_items=1,
-        max_items=max_items,
+        min_length=1,
+        max_length=max_length,
     )
 
 
 class NestedDichotomousDataset(DatasetValidator):
-    dataset_options: list[NestedDichotomousModelOptions] = Field(min_items=1, max_items=max_items)
-    datasets: list[MaxNestedDichotomousDatasetSchema] = Field(min_items=1, max_items=max_items)
+    dataset_options: list[NestedDichotomousModelOptions] = Field(
+        min_length=1, max_length=max_length
+    )
+    datasets: list[MaxNestedDichotomousDatasetSchema] = Field(min_length=1, max_length=max_length)
 
 
 class MultiTumorDatasets(DatasetValidator):
-    dataset_options: list[DichotomousModelOptions] = Field(min_items=1, max_items=max_items)
-    datasets: list[DichotomousDatasetSchema] = Field(min_items=1, max_items=max_items)
+    dataset_options: list[DichotomousModelOptions] = Field(min_length=1, max_length=max_length)
+    datasets: list[DichotomousDatasetSchema] = Field(min_length=1, max_length=max_length)
 
 
 def validate_datasets(dataset_type: str, datasets: Any, datasetOptions: Any):

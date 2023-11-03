@@ -244,7 +244,7 @@ def bmds_complete_nd():
         "dataset_options": [
             {"enabled": True, "dataset_id": 0},
         ],
-        "recommender": RecommenderSettings.build_default().dict(),
+        "recommender": RecommenderSettings.build_default().model_dump(),
     }
     #fmt: on
 
@@ -315,7 +315,7 @@ def bmds_complete_mt():
             {"enabled": True, "dataset_id": 1, "degree": 0},
             {"enabled": True, "dataset_id": 2, "degree": 0},
         ],
-        "recommender": RecommenderSettings.build_default().dict(),
+        "recommender": RecommenderSettings.build_default().model_dump(by_alias=True),
     }
     #fmt: on
 

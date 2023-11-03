@@ -5,7 +5,6 @@ import pandas as pd
 from bmds.bmds3.types.sessions import VersionSchema
 from bmds.datasets.transforms.polyk import calculate
 from pydantic import BaseModel, Field, field_validator
-from pydantic import schema as pyschema
 from rest_framework.schemas.openapi import SchemaGenerator
 
 from .validators import AnalysisSelectedSchema
@@ -82,9 +81,10 @@ class PolyKInput(BaseModel):
 
 
 def add_schemas(schema: dict, models: list):
-    additions = pyschema(models, ref_prefix="#/components/schemas/")
-    for key, value in additions["definitions"].items():
-        schema["components"]["schemas"][key] = value
+    for model in models:
+        schema["components"]["schemas"][model.__name__] = model.model_json_schema(
+            ref_template=f"#/components/schemas/{model}"
+        )
 
 
 def add_schema_to_path(schema: dict, path: str, verb: str, name: str):

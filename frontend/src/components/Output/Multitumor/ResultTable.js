@@ -98,7 +98,7 @@ class ResultTable extends Component {
                                             <td>{ff(model.bmdl)}</td>
                                             <td>{ff(model.bmd)}</td>
                                             <td>{ff(model.bmdu)}</td>
-                                            <td>TODO</td>
+                                            <td>{ff(model.slope_factor)}</td>
                                             <td>{ff(model.gof.p_value)}</td>
                                             <td>{ff(model.fit.aic)}</td>
                                             <td>{ff(model.gof.roi)}</td>

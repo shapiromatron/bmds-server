@@ -42,10 +42,6 @@ DatasetFormRow.propTypes = {
     delete: PropTypes.func,
 };
 
-function goPolyK() {
-    location.href = "/transforms/polyk/";
-}
-
 @inject("dataStore")
 @observer
 class DatasetForm extends Component {
@@ -167,12 +163,13 @@ class DatasetForm extends Component {
                         text="Load an example dataset"
                     />
                     {dataStore.rootStore.mainStore.model_type == MODEL_MULTI_TUMOR ? (
-                        <Button
-                            className="btn btn-link"
-                            onClick={goPolyK}
-                            icon="archive"
-                            text="Poly K Adjustment"
-                        />
+                        <a href="/transforms/polyk/" target="_blank" rel="noopener noreferrer">
+                            <Button
+                                className="btn btn-link"
+                                icon="archive"
+                                text="Poly K Adjustment"
+                            />
+                        </a>
                     ) : (
                         <></>
                     )}

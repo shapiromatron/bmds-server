@@ -170,9 +170,7 @@ class DatasetForm extends Component {
                                 text="Poly K Adjustment"
                             />
                         </a>
-                    ) : (
-                        <></>
-                    )}
+                    ) : null}
                 </p>
                 <TabularDatasetModal />
             </div>

@@ -134,7 +134,6 @@ RawDataPlot.propTypes = {
 @inject("store")
 @observer
 class OutputTabs extends Component {
-    state = {copied: false};
     render() {
         const {df, df2} = this.props.store.outputs;
         const {setCopied, isCopied} = this.props.store;

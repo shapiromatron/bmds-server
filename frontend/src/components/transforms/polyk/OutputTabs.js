@@ -134,6 +134,7 @@ RawDataPlot.propTypes = {
 @inject("store")
 @observer
 class OutputTabs extends Component {
+    state = {copied: false};
     render() {
         const {df, df2} = this.props.store.outputs;
         df["weight"] = df["adj_n"];
@@ -161,17 +162,24 @@ class OutputTabs extends Component {
                             adj_proportion: v => v.toFixed(4),
                         }}
                     />
-
                     <CopyToClipboard
-                        text={[df2.n, "\t", df2.adj_n] /* fix formatting */}
-                        onCopy={console.log("copied!")}>
+                        text={[
+                            _.zip(df2.dose, df2.adj_n, df2.incidence)
+                                .map(d => `${d[0]}\t${d[1].toFixed(4)}\t${d[2]}`)
+                                .join("\n"),
+                        ]}
+                        onCopy={() => this.setState({copied: true})}>
                         <Button
                             className="btn btn-link"
                             icon="archive"
                             text="Copy data for Dataset"
                         />
                     </CopyToClipboard>
-
+                    {this.state.copied ? (
+                        <div className="alert alert-success" role="alert">
+                            Copied to clipboard!
+                        </div>
+                    ) : null}
                     <SummaryPlot />
                 </Tab>
                 <Tab eventKey="plots" title="Plots">

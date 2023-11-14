@@ -67,6 +67,8 @@ class Store {
                 this.error = true;
                 console.error(error);
             });
+        // when Executing, make sure there is no copied alert
+        $(".alert").alert("close");
     }
 
     @action.bound

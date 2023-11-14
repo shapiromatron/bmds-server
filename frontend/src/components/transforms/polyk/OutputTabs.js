@@ -137,6 +137,7 @@ class OutputTabs extends Component {
     state = {copied: false};
     render() {
         const {df, df2} = this.props.store.outputs;
+        const {setCopied, isCopied} = this.props.store;
         df["weight"] = df["adj_n"];
         return (
             <Tabs
@@ -168,14 +169,14 @@ class OutputTabs extends Component {
                                 .map(d => `${d[0]}\t${d[1].toFixed(4)}\t${d[2]}`)
                                 .join("\n"),
                         ]}
-                        onCopy={() => this.setState({copied: true})}>
+                        onCopy={() => setCopied()}>
                         <Button
                             className="btn btn-link"
                             icon="archive"
                             text="Copy data for Dataset"
                         />
                     </CopyToClipboard>
-                    {this.state.copied ? (
+                    {isCopied ? (
                         <div className="alert alert-success" role="alert">
                             Copied to clipboard!
                         </div>

@@ -4,9 +4,12 @@ import PropTypes from "prop-types";
 import React, {Component} from "react";
 import Tab from "react-bootstrap/Tab";
 import Tabs from "react-bootstrap/Tabs";
+import {CopyToClipboard} from "react-copy-to-clipboard";
 import Plot from "react-plotly.js";
 
 import DataFrameTable from "@/components/common/DataFrameTable";
+
+import Button from "../../common/Button";
 
 @inject("store")
 @observer
@@ -158,6 +161,17 @@ class OutputTabs extends Component {
                             adj_proportion: v => v.toFixed(4),
                         }}
                     />
+
+                    <CopyToClipboard
+                        text={[df2.n, "\t", df2.adj_n] /* fix formatting */}
+                        onCopy={console.log("copied!")}>
+                        <Button
+                            className="btn btn-link"
+                            icon="archive"
+                            text="Copy data for Dataset"
+                        />
+                    </CopyToClipboard>
+
                     <SummaryPlot />
                 </Tab>
                 <Tab eventKey="plots" title="Plots">

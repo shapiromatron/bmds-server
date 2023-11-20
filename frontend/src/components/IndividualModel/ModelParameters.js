@@ -29,8 +29,6 @@ class ModelParameters extends Component {
                         <th>Variable</th>
                         <th>Estimate</th>
                         <th>Standard Error</th>
-                        <th>Lower Confidence</th>
-                        <th>Upper Confidence</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -53,12 +51,6 @@ class ModelParameters extends Component {
                                     )}
                                 </td>
                                 <td>{bounded ? "NA" : parameterFormatter(parameters.se[i])}</td>
-                                <td>
-                                    {bounded ? "NA" : parameterFormatter(parameters.lower_ci[i])}
-                                </td>
-                                <td>
-                                    {bounded ? "NA" : parameterFormatter(parameters.upper_ci[i])}
-                                </td>
                             </tr>
                         );
                     })}

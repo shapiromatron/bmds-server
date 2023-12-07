@@ -18,7 +18,6 @@ class Store {
     @observable error = null;
     @observable errorObject = null;
     @observable outputs = null;
-    @observable isCopied = false;
 
     @observable showAboutModal = false;
     @action.bound
@@ -68,7 +67,6 @@ class Store {
                 this.error = true;
                 console.error(error);
             });
-        this.isCopied = false;
     }
 
     @action.bound
@@ -81,7 +79,6 @@ class Store {
         };
         this.error = null;
         this.outputs = null;
-        this.isCopied = false;
     }
 
     @action.bound
@@ -92,11 +89,6 @@ class Store {
     @action.bound
     downloadExampleData() {
         saveAs(new File([exampleData], "example-polyk.csv", {type: "text/csv"}));
-    }
-
-    @action.bound
-    setCopied() {
-        this.isCopied = true;
     }
 }
 

@@ -4,12 +4,10 @@ import PropTypes from "prop-types";
 import React, {Component} from "react";
 import Tab from "react-bootstrap/Tab";
 import Tabs from "react-bootstrap/Tabs";
-import {CopyToClipboard} from "react-copy-to-clipboard";
 import Plot from "react-plotly.js";
 
+import ClipboardButton from "@/components/common/ClipboardButton";
 import DataFrameTable from "@/components/common/DataFrameTable";
-
-import Button from "../../common/Button";
 
 @inject("store")
 @observer
@@ -135,8 +133,10 @@ RawDataPlot.propTypes = {
 @observer
 class OutputTabs extends Component {
     render() {
-        const {df, df2} = this.props.store.outputs;
-        const {setCopied, isCopied} = this.props.store;
+        const {df, df2} = this.props.store.outputs,
+            copyText = _.zip(df2.dose, df2.adj_n, df2.incidence)
+                .map(d => `${d[0]}\t${d[1].toFixed(4)}\t${d[2]}`)
+                .join("\n");
         df["weight"] = df["adj_n"];
         return (
             <Tabs
@@ -162,24 +162,18 @@ class OutputTabs extends Component {
                             adj_proportion: v => v.toFixed(4),
                         }}
                     />
-                    <CopyToClipboard
-                        text={[
-                            _.zip(df2.dose, df2.adj_n, df2.incidence)
-                                .map(d => `${d[0]}\t${d[1].toFixed(4)}\t${d[2]}`)
-                                .join("\n"),
-                        ]}
-                        onCopy={() => setCopied()}>
-                        <Button
-                            className="btn btn-link"
-                            icon="archive"
-                            text="Copy data for Dataset"
+                    <div className="d-flex flex-row-reverse">
+                        <ClipboardButton
+                            text="Copy Data for BMDS Modeling"
+                            textToCopy={copyText}
+                            onCopy={e => {
+                                alert(
+                                    'Data copied to your clipboard! You can paste into Excel, or paste into an a BMDS analysis creating a new dataset and pressing the "Load dataset from Excel" button.'
+                                );
+                            }}
+                            className="btn btn-link my-1"
                         />
-                    </CopyToClipboard>
-                    {isCopied ? (
-                        <div className="alert alert-success" role="alert">
-                            Copied to clipboard!
-                        </div>
-                    ) : null}
+                    </div>
                     <SummaryPlot />
                 </Tab>
                 <Tab eventKey="plots" title="Plots">

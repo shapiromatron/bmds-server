@@ -8,6 +8,7 @@ import {MODEL_MULTI_TUMOR} from "@/constants/mainConstants";
 import Button from "../common/Button";
 import ErrorMessage from "../common/ErrorMessage";
 import FloatInput from "../common/FloatInput";
+import Icon from "../common/Icon";
 import TextInput from "../common/TextInput";
 import TabularDatasetModal from "./TabularDatasetModal";
 
@@ -155,7 +156,7 @@ class DatasetForm extends Component {
                         })}
                     </tbody>
                 </table>
-                <p>
+                <div className="d-flex ">
                     <Button
                         className="btn btn-link"
                         onClick={dataStore.loadExampleData}
@@ -163,15 +164,15 @@ class DatasetForm extends Component {
                         text="Load an example dataset"
                     />
                     {dataStore.rootStore.mainStore.model_type == MODEL_MULTI_TUMOR ? (
-                        <a href="/transforms/polyk/" target="_blank" rel="noopener noreferrer">
-                            <Button
-                                className="btn btn-link"
-                                icon="archive"
-                                text="Poly K Adjustment"
-                            />
+                        <a
+                            className="ml-auto"
+                            href="/transforms/polyk/"
+                            target="_blank"
+                            rel="noopener noreferrer">
+                            <Icon name="calculator" text="Poly K Adjustment" />
                         </a>
                     ) : null}
-                </p>
+                </div>
                 <TabularDatasetModal />
             </div>
         );

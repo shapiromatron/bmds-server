@@ -1,8 +1,4 @@
-from io import BytesIO
-
-import pandas as pd
-from bmds.datasets.transforms import polyk
-from bmds.reporting.styling import Report
+from bmds.datasets.transforms.polyk import Adjustment
 from django.core.exceptions import ValidationError
 from rest_framework import exceptions, mixins, viewsets
 from rest_framework.decorators import action
@@ -12,11 +8,11 @@ from ..common import renderers
 from ..common.renderers import BinaryFile
 from ..common.serializers import UnusedSerializer
 from ..common.task_cache import ReportStatus
-from ..common.utils import get_bool, to_timestamp
+from ..common.utils import get_bool
 from ..common.validation import pydantic_validate
 from . import models, schema, serializers, validators
 from .reporting.cache import DocxReportCache, ExcelReportCache
-from .reporting.docx import add_update_url
+from .reporting.docx import add_update_url, build_polyk_docx
 
 
 class AnalysisViewset(mixins.RetrieveModelMixin, viewsets.GenericViewSet):
@@ -150,9 +146,7 @@ class AnalysisViewset(mixins.RetrieveModelMixin, viewsets.GenericViewSet):
         instance: models.Analysis = self.get_object()
         uri = request.build_absolute_uri("/")[:-1]
         kwargs = {
-            "dataset_format_long": get_bool(
-                request.query_params.get("datasetFormatLong")
-            ),
+            "dataset_format_long": get_bool(request.query_params.get("datasetFormatLong")),
             "all_models": get_bool(request.query_params.get("allModels")),
             "bmd_cdf_table": get_bool(request.query_params.get("bmdCdfTable")),
         }
@@ -161,11 +155,7 @@ class AnalysisViewset(mixins.RetrieveModelMixin, viewsets.GenericViewSet):
         if response.status is ReportStatus.COMPLETE:
             cache.delete()  # destroy from cache; request is now complete
             edit = instance.password == request.query_params.get("editKey", "")
-            data = (
-                add_update_url(instance, response.content, uri)
-                if edit
-                else response.content
-            )
+            data = add_update_url(instance, response.content, uri) if edit else response.content
             return Response(renderers.BinaryFile(data=data, filename=instance.slug))
 
         return Response(response.model_dump(), content_type="application/json")
@@ -175,7 +165,7 @@ class PolyKViewset(viewsets.GenericViewSet):
     queryset = models.Analysis.objects.none()
     serializer_class = UnusedSerializer
 
-    def _run_analysis(self, request) -> tuple[pd.DataFrame, pd.DataFrame]:
+    def _run_analysis(self, request) -> Adjustment:
         try:
             settings = pydantic_validate(request.data, schema.PolyKInput)
         except ValidationError as err:
@@ -183,40 +173,23 @@ class PolyKViewset(viewsets.GenericViewSet):
         return settings.calculate()
 
     def create(self, request, *args, **kwargs):
-        df, df2 = self._run_analysis(request)
+        analysis = self._run_analysis(request)
         return Response(
-            {"df": df.to_dict(orient="list"), "df2": df2.to_dict(orient="list")}
+            {
+                "df": analysis.adjusted_data.to_dict(orient="list"),
+                "df2": analysis.summary.to_dict(orient="list"),
+            }
         )
 
     @action(detail=False, methods=["POST"], renderer_classes=(renderers.XlsxRenderer,))
     def excel(self, request, *args, **kwargs):
-        df, df2 = self._run_analysis(request)
-        f = BytesIO()
-        # TODO - write real method here
-        with pd.ExcelWriter(f) as writer:
-            df.to_excel(writer, sheet_name="a", index=False)
-            df2.to_excel(writer, sheet_name="b", index=False)
-        data = BinaryFile(f, "demo")
+        analysis = self._run_analysis(request)
+        data = BinaryFile(analysis.to_excel(), "demo")
         return Response(data)
 
     @action(detail=False, methods=["POST"], renderer_classes=(renderers.DocxRenderer,))
     def word(self, request, *args, **kwargs):
-        f = BytesIO()
-        report = Report.build_default()
-
-        # Add these?
-        p = report.document.add_paragraph()
-        p.add_run("Report generated: ").bold = True
-
-        p = report.document.add_paragraph()
-        p.add_run("BMDS version: ").bold = True
-
-        p = report.document.add_paragraph()
-        p.add_run("BMDS online version: ").bold = True
-
-        # something like
-        # polyk.Adjustment.to_docx(pass in inputs to calculate?)
-
-        report.document.save(f)
+        analysis = self._run_analysis(request)
+        f = build_polyk_docx(analysis)
         data = BinaryFile(f, "demo")
         return Response(data)

@@ -4,6 +4,8 @@ from io import BytesIO
 from typing import TYPE_CHECKING
 
 import docx
+from bmds import __version__
+from bmds.datasets.transforms.polyk import Adjustment
 from bmds.reporting.styling import Report
 from django.conf import settings
 from django.utils.timezone import now
@@ -116,6 +118,31 @@ def add_update_url(analysis: Analysis, data: BytesIO, uri: str) -> BytesIO:
             uri += analysis.get_edit_url()
             add_url_hyperlink(p, uri, "Update")
             break
+
+    f = BytesIO()
+    document.save(f)
+    return f
+
+
+def build_polyk_docx(analysis: Adjustment) -> BytesIO:
+    report = Report.build_default()
+
+    # build custom title section
+    report.document.add_heading("Poly K Adjustment", 1)
+    p = report.document.add_paragraph()
+    p.add_run("Report generated: ").bold = True
+    p.add_run(to_timestamp(now()))
+
+    p = report.document.add_paragraph()
+    p.add_run("BMDS version: ").bold = True
+    p.add_run(f"{__version__}")
+
+    p = report.document.add_paragraph()
+    p.add_run("BMDS online version: ").bold = True
+    p.add_run(str(settings.COMMIT))
+
+    # return generic report
+    document = analysis.to_docx(report=report, show_title=False)
 
     f = BytesIO()
     document.save(f)

@@ -6,6 +6,7 @@ from io import StringIO
 from pathlib import Path
 from threading import Thread
 from time import sleep
+from typing import ClassVar
 from webbrowser import open_new_tab
 
 import cherrypy
@@ -111,7 +112,7 @@ class AppThread(Thread):
 
 
 class AppRunner:
-    LABEL = {True: "Stop BMDS Desktop", False: "Start BMDS Desktop"}
+    LABEL: ClassVar = {True: "Stop BMDS Desktop", False: "Start BMDS Desktop"}
 
     def __init__(self, app: "BmdsDesktop"):
         self.app = app
@@ -173,7 +174,7 @@ class BmdsDesktop(App):
     """A Textual app for BMDS."""
 
     TITLE = f"BMDS Desktop (version {version('bmds_server')})"
-    BINDINGS = [("q", "quit", "Quit"), ("d", "toggle_dark", "Toggle dark mode")]
+    BINDINGS: ClassVar = [("q", "quit", "Quit"), ("d", "toggle_dark", "Toggle dark mode")]
     CSS_PATH = "content/app.css"
 
     def __init__(self, **kw):

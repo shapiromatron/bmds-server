@@ -1,3 +1,5 @@
+from typing import ClassVar
+
 from django.conf import settings
 from django.contrib.admin.views.decorators import staff_member_required
 from django.db.models.query import QuerySet
@@ -24,7 +26,7 @@ class Home(ListView):
     template_name = "analysis/home.html"
     model = models.Analysis
     queryset = models.Analysis.objects.all().order_by("-created")
-    paginate_by = 25
+    paginate_by = 10
 
     def _render_template(self, extra):
         context = RequestContext(self.request, extra)
@@ -42,6 +44,7 @@ class Home(ListView):
         context["days_to_keep_analyses"] = settings.DAYS_TO_KEEP_ANALYSES
         context["citation"] = get_citation()
         context["q"] = self.request.GET.get("q", "")
+        context["collections"] = ["Chemical X", "Chemical Y", "Chemical Z"]
         context["page"] = (
             render(self.request, "analysis/desktop.html", context).content.decode()
             if settings.IS_DESKTOP
@@ -53,7 +56,7 @@ class Home(ListView):
 class AnalysisCreate(CreateView):
     model = models.Analysis
     form_class = forms.CreateAnalysisForm
-    http_method_names = ["post"]
+    http_method_names: ClassVar[list[str]] = ["post"]
 
     def get_success_url(self):
         return self.object.get_edit_url()

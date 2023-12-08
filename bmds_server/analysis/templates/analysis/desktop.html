@@ -1,40 +1,64 @@
 <div class="row my-5">
-    <div class ="col-lg-8">
-      <p>View my latest runs:</p>
-        <form method="get" class="form-inline py-1">
-          <input class='form-control' name="q" value="{{q}}" type="text" placeholder="Search" />
-          <div class="input-group mx-3">
-            <button type="submit" class="btn btn-primary mr-1">Search</button>
-            <a href="." class="btn btn-secondary ml-1">Reset</a>
-          </div>
-        </form>
-        <table class="table table-striped table-hover">
-          <colgroup>
-            <col width="70%" />
-            <col width="30%" />
-          </colgroup>
-          <thead>
-            <tr>
-              <th>Analysis</th>
-              <th>Creation date</th>
-            </tr>
-          </thead>
-          <tbody>
-            {% for object in object_list %}
-            <tr>
-              <td><a href="{{object.get_edit_url}}">{{object}}</a></td>
-              <td>{{object.created}}</td>
-            </tr>
-            {% empty %}
-            <tr>
-              <td colspan="2" class="text-muted">
-                No existing analyses available.
-              </td>
-            </tr>
+    <div class="col-lg-8">
+      <div class="row">
+        <div class="col-lg-6">
+          <h3>Starred Analyses:</h3>
+          <ul class="list-group mb-3">
+            {% for object in object_list|slice:":5" %}
+              <li class="list-group-item">
+                <span class="bi bi-star-fill mr-2" style="color: orange;"></span>
+                <a href="{{object.get_edit_url}}">{{object}}</a>
+              </li>
             {% endfor %}
-          </tbody>
-        </table>
-      {% include "includes/pagination.html" %}
+          </ul>
+          <h3>Analysis Collections:</h3>
+          <ul class="list-group mb-3">
+            {% for object in collections %}
+              <li class="list-group-item">
+                <span class="bi bi-tags-fill mr-2"></span>
+                <a href="#">{{object}}</a>
+              </li>
+            {% endfor %}
+          </ul>
+        </div>
+        <div class="col-lg-6">
+          <h3>Latest Runs:</h3>
+          <form method="get" class="form-inline py-1">
+            <input class='form-control' name="q" value="{{q}}" type="text" placeholder="Search" />
+            <div class="input-group mx-3">
+              <button type="submit" class="btn btn-primary mr-1">Search</button>
+              <a href="." class="btn btn-secondary ml-1">Reset</a>
+            </div>
+          </form>
+          <table class="table table-striped table-hover">
+            <colgroup>
+              <col width="70%" />
+              <col width="30%" />
+            </colgroup>
+            <thead>
+              <tr>
+                <th>Analysis</th>
+                <th>Creation date</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for object in object_list %}
+              <tr>
+                <td><a href="{{object.get_edit_url}}">{{object}}</a></td>
+                <td>{{object.created}}</td>
+              </tr>
+              {% empty %}
+              <tr>
+                <td colspan="2" class="text-muted">
+                  No existing analyses available.
+                </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+          {% include "includes/pagination.html" %}
+        </div>
+      </div>
     </div>
       <div class="col-lg-4">
           <div class="card pane">

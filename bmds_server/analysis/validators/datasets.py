@@ -8,10 +8,13 @@ from bmds.datasets import (
     DichotomousDatasetSchema,
     NestedDichotomousDatasetSchema,
 )
+from django.conf import settings
 from django.core.exceptions import ValidationError
-from pydantic import BaseModel, conlist, root_validator
+from pydantic import BaseModel, Field, model_validator
 
 from ...common.validation import pydantic_validate
+
+max_length = 1000 if settings.IS_DESKTOP else 10
 
 
 class MaxDegree(IntEnum):
@@ -51,15 +54,15 @@ class NestedDichotomousModelOptions(BaseModel):
 
 
 class DatasetValidator(BaseModel):
-    @root_validator(skip_on_failure=True)
-    def check_id_matches(cls, values):
-        dataset_ids = [dataset.metadata.id for dataset in values["datasets"]]
-        ds_option_ids = [opt.dataset_id for opt in values["dataset_options"]]
+    @model_validator(mode="after")
+    def check_id_matches(self):
+        dataset_ids = [dataset.metadata.id for dataset in self.datasets]
+        ds_option_ids = [opt.dataset_id for opt in self.dataset_options]
         if len(set(dataset_ids)) != len(dataset_ids):
             raise ValueError("Dataset IDs are not unique")
         if set(dataset_ids) != set(ds_option_ids):
             raise ValueError("Dataset IDs are not the same as dataset option IDs")
-        return values
+        return self
 
 
 class MaxDichotomousDatasetSchema(DichotomousDatasetSchema):
@@ -80,27 +83,28 @@ class MaxNestedDichotomousDatasetSchema(NestedDichotomousDatasetSchema):
 
 
 class DichotomousDatasets(DatasetValidator):
-    dataset_options: conlist(DichotomousModelOptions, min_items=1, max_items=10)
-    datasets: conlist(MaxDichotomousDatasetSchema, min_items=1, max_items=10)
+    dataset_options: list[DichotomousModelOptions] = Field(min_length=1, max_length=max_length)
+    datasets: list[MaxDichotomousDatasetSchema] = Field(min_length=1, max_length=max_length)
 
 
 class ContinuousDatasets(DatasetValidator):
-    dataset_options: conlist(ContinuousModelOptions, min_items=1, max_items=10)
-    datasets: conlist(
-        MaxContinuousDatasetSchema | MaxContinuousIndividualDatasetSchema,
-        min_items=1,
-        max_items=10,
+    dataset_options: list[ContinuousModelOptions] = Field(min_length=1, max_length=max_length)
+    datasets: list[MaxContinuousDatasetSchema | MaxContinuousIndividualDatasetSchema] = Field(
+        min_length=1,
+        max_length=max_length,
     )
 
 
 class NestedDichotomousDataset(DatasetValidator):
-    dataset_options: conlist(NestedDichotomousModelOptions, min_items=1, max_items=10)
-    datasets: conlist(MaxNestedDichotomousDatasetSchema, min_items=1, max_items=10)
+    dataset_options: list[NestedDichotomousModelOptions] = Field(
+        min_length=1, max_length=max_length
+    )
+    datasets: list[MaxNestedDichotomousDatasetSchema] = Field(min_length=1, max_length=max_length)
 
 
 class MultiTumorDatasets(DatasetValidator):
-    dataset_options: conlist(DichotomousModelOptions, min_items=1, max_items=10)
-    datasets: conlist(DichotomousDatasetSchema, min_items=1, max_items=10)
+    dataset_options: list[DichotomousModelOptions] = Field(min_length=1, max_length=max_length)
+    datasets: list[DichotomousDatasetSchema] = Field(min_length=1, max_length=max_length)
 
 
 def validate_datasets(dataset_type: str, datasets: Any, datasetOptions: Any):

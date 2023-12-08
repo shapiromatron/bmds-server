@@ -2,7 +2,7 @@ from typing import Any, Literal
 
 import bmds
 from django.conf import settings
-from pydantic import BaseModel, conlist
+from pydantic import BaseModel, Field
 
 from ...common.validation import pydantic_validate
 
@@ -10,19 +10,19 @@ _versions = Literal[bmds.constants.BMDS330]
 
 
 class BaseSession(BaseModel):
-    id: int | str | None
+    id: int | str | None = None
     bmds_version: _versions
     description: str = ""
     dataset_type: bmds.constants.ModelClass
 
 
-max_items = 1000 if settings.IS_DESKTOP else 10
+max_length = 1000 if settings.IS_DESKTOP else 10
 
 
 class BaseSessionComplete(BaseSession):
-    datasets: conlist(Any, min_items=1, max_items=max_items)
+    datasets: list[Any] = Field(min_length=1, max_length=max_length)
     models: dict
-    options: conlist(Any, min_items=1, max_items=max_items)
+    options: list[Any] = Field(min_length=1, max_length=max_length)
 
 
 def validate_session(data: dict, partial: bool = False):

@@ -5,7 +5,8 @@ from typing import TYPE_CHECKING
 
 import docx
 from bmds import __version__
-from bmds.datasets.transforms.polyk import Adjustment
+from bmds.bmds3.reporting import write_setting_p
+from bmds.datasets.transforms.polyk import PolyKAdjustment
 from bmds.reporting.styling import Report
 from django.conf import settings
 from django.utils.timezone import now
@@ -48,9 +49,7 @@ def build_docx(
     if description:
         report.document.add_paragraph(description)
 
-    p = report.document.add_paragraph()
-    p.add_run("Report generated: ").bold = True
-    p.add_run(to_timestamp(now()))
+    write_setting_p(report, "Report generated: ", to_timestamp(now()))
 
     p = report.document.add_paragraph()
     p.add_run(ANALYSIS_URL).bold = True
@@ -59,13 +58,9 @@ def build_docx(
 
     bmds_version = analysis.get_bmds_version()
     if bmds_version:
-        p = report.document.add_paragraph()
-        p.add_run("BMDS version: ").bold = True
-        p.add_run(f"{bmds_version.pretty} ({bmds_version.dll})")
+        write_setting_p(report, "BMDS version: ", f"{bmds_version.pretty} ({bmds_version.dll})")
 
-    p = report.document.add_paragraph()
-    p.add_run("BMDS online version: ").bold = True
-    p.add_run(str(settings.COMMIT))
+    write_setting_p(report, "BMDS Online version: ", str(settings.COMMIT))
 
     if not analysis.is_finished:
         report.document.add_paragraph("Execution is incomplete; no report could be generated")
@@ -124,22 +119,14 @@ def add_update_url(analysis: Analysis, data: BytesIO, uri: str) -> BytesIO:
     return f
 
 
-def build_polyk_docx(analysis: Adjustment) -> BytesIO:
+def build_polyk_docx(analysis: PolyKAdjustment) -> BytesIO:
     report = Report.build_default()
 
     # build custom title section
     report.document.add_heading("Poly K Adjustment", 1)
-    p = report.document.add_paragraph()
-    p.add_run("Report generated: ").bold = True
-    p.add_run(to_timestamp(now()))
-
-    p = report.document.add_paragraph()
-    p.add_run("BMDS version: ").bold = True
-    p.add_run(f"{__version__}")
-
-    p = report.document.add_paragraph()
-    p.add_run("BMDS online version: ").bold = True
-    p.add_run(str(settings.COMMIT))
+    write_setting_p(report, "Report generated: ", to_timestamp(now()))
+    write_setting_p(report, "BMDS version: ", __version__)
+    write_setting_p(report, "BMDS online version: ", str(settings.COMMIT))
 
     # return generic report
     document = analysis.to_docx(report=report, show_title=False)

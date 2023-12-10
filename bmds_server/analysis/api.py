@@ -1,4 +1,4 @@
-from bmds.datasets.transforms.polyk import Adjustment
+from bmds.datasets.transforms.polyk import PolyKAdjustment
 from django.core.exceptions import ValidationError
 from rest_framework import exceptions, mixins, viewsets
 from rest_framework.decorators import action
@@ -165,7 +165,7 @@ class PolyKViewset(viewsets.GenericViewSet):
     queryset = models.Analysis.objects.none()
     serializer_class = UnusedSerializer
 
-    def _run_analysis(self, request) -> Adjustment:
+    def _run_analysis(self, request) -> PolyKAdjustment:
         try:
             settings = pydantic_validate(request.data, schema.PolyKInput)
         except ValidationError as err:
@@ -184,12 +184,12 @@ class PolyKViewset(viewsets.GenericViewSet):
     @action(detail=False, methods=["POST"], renderer_classes=(renderers.XlsxRenderer,))
     def excel(self, request, *args, **kwargs):
         analysis = self._run_analysis(request)
-        data = BinaryFile(analysis.to_excel(), "demo")
+        data = BinaryFile(analysis.to_excel(), "polyk-adjustment")
         return Response(data)
 
     @action(detail=False, methods=["POST"], renderer_classes=(renderers.DocxRenderer,))
     def word(self, request, *args, **kwargs):
         analysis = self._run_analysis(request)
         f = build_polyk_docx(analysis)
-        data = BinaryFile(f, "demo")
+        data = BinaryFile(f, "polyk-adjustment")
         return Response(data)

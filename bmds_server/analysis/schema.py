@@ -76,6 +76,7 @@ class PolyKInput(BaseModel):
             has_tumor=input_df.has_tumor.tolist(),
             k=self.power,
             max_day=self.duration,
+            dose_units=self.dose_units,
         )
 
 

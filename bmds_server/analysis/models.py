@@ -116,6 +116,9 @@ class Analysis(models.Model):
     def get_star_url(self):
         return reverse("api:analysis-star", args=(str(self.id),))
 
+    def get_collections_url(self):
+        return reverse("api:analysis-collections", args=(str(self.id),))
+
     def inputs_valid(self) -> bool:
         try:
             validators.validate_input(self.inputs)
@@ -379,6 +382,10 @@ class Collection(models.Model):
 
     def __str__(self):
         return self.name
+
+    @classmethod
+    def opts(cls):
+        return list(cls.objects.values("id", "name").order_by("name"))
 
 
 class ContentType(models.IntegerChoices):

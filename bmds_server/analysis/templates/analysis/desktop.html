@@ -13,7 +13,7 @@
         <select class="form-control custom-select" name="collection" id="id_collection">
           <option>--- Collection ---</option>
           {% for c in collections %}
-            <option value="{{c.0}}" {% if collection == c.0 %}selected {% endif %}>{{c.1}}</option>
+            <option value="{{c.id}}" {% if collection == c.id %}selected {% endif %}>{{c.name}}</option>
           {% endfor %}
         </select>
       </div>

@@ -13,21 +13,19 @@ class Starred extends Component {
             {starred} = mainStore,
             icon = starred ? "star-fill" : "star",
             title = starred ? "Remove star" : "Add star";
+
         if (!mainStore.canEdit || !mainStore.isDesktop) {
             return null;
         }
 
         return (
             <li className="nav-item mr-1">
-                {
-                    <Button
-                        className="btn starred"
-                        onClick={mainStore.starToggle}
-                        icon={icon}
-                        title={title}
-                        label="Star"
-                    />
-                }
+                <Button
+                    className="btn starred"
+                    onClick={mainStore.starToggle}
+                    icon={icon}
+                    title={title}
+                />
             </li>
         );
     }

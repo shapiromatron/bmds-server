@@ -18,7 +18,7 @@ from .reporting.docx import add_update_url, build_polyk_docx
 
 class AnalysisViewset(mixins.RetrieveModelMixin, viewsets.GenericViewSet):
     serializer_class = serializers.AnalysisSerializer
-    queryset = models.Analysis.objects.all()
+    queryset = models.Analysis.objects.prefetch_related("collections").all()
 
     @action(detail=False, url_path="default")
     def default(self, request, *args, **kwargs):
@@ -170,10 +170,27 @@ class AnalysisViewset(mixins.RetrieveModelMixin, viewsets.GenericViewSet):
             raise exceptions.PermissionDenied()
 
         # flip the star (but don't change last_updated)
-        if settings.DEBUG or settings.IS_DESKTOP:
+        if settings.IS_DESKTOP:
             models.Analysis.objects.filter(id=instance.id).update(starred=not instance.starred)
+            instance.refresh_from_db()
 
-        instance.refresh_from_db()
+        serializer = self.get_serializer(instance)
+        return Response(serializer.data)
+
+    @action(detail=True, methods=("post",))
+    def collections(self, request, *args, **kwargs):
+        instance = self.get_object()
+
+        # permissions check
+        if instance.password != request.data.get("editKey", ""):
+            raise exceptions.PermissionDenied()
+
+        # update collections
+        if settings.IS_DESKTOP:
+            ids = [d for d in request.data.get("collections", []) if isinstance(d, int)]
+            collections = models.Collection.objects.filter(id__in=ids)
+            instance.collections.set(collections)
+
         serializer = self.get_serializer(instance)
         return Response(serializer.data)
 

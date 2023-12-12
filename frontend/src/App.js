@@ -38,7 +38,7 @@ class App extends Component {
                     {getHeader()}
                     {isFuture ? (
                         <span
-                            className="badge badge-dark px-4 mx-3"
+                            className="badge badge-dark ml-3"
                             title="Future mode: content under active development">
                             <Icon name="lightning-fill" />
                             &nbsp;FUTURE MODE&nbsp;

@@ -61,9 +61,7 @@ class Home(ListView):
                 q=self.request.GET.get("q", ""),
                 starred=len(self.request.GET.get("starred", "")) > 0,
                 collection=int(collection) if collection.isnumeric() else "",
-                collections=models.Collection.objects.all()
-                .values_list("id", "name")
-                .order_by("name"),
+                collections=models.Collection.opts(),
                 now=now(),
             )
         context["page"] = (
@@ -142,6 +140,7 @@ class AnalysisDetail(DetailView):
                 "viewUrl": self.request.build_absolute_uri(self.object.get_absolute_url()),
                 "editUrl": self.request.build_absolute_uri(self.object.get_edit_url()),
                 "starUrl": self.request.build_absolute_uri(self.object.get_star_url()),
+                "collectionUrl": self.request.build_absolute_uri(self.object.get_collections_url()),
                 "renewUrl": self.request.build_absolute_uri(self.object.get_renew_url()),
                 "deleteUrl": self.request.build_absolute_uri(self.object.get_delete_url()),
                 "patchInputUrl": self.object.get_api_patch_inputs_url(),
@@ -149,6 +148,7 @@ class AnalysisDetail(DetailView):
                 "executeResetUrl": self.object.get_api_execute_reset_url(),
                 "deleteDateStr": self.object.deletion_date_str,
                 "deletionDaysUntilDeletion": self.object.days_until_deletion,
+                "collections": models.Collection.opts(),
             }
         return context
 

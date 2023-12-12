@@ -27,7 +27,11 @@ api_paths = path("api/v1/", include((router.urls, "analysis"), namespace="api"))
 
 urlpatterns = [
     # home
-    path("", views.Home.as_view(), name="home"),
+    path(
+        "",
+        views.DesktopHome.as_view() if settings.IS_DESKTOP else views.Home.as_view(),
+        name="home",
+    ),
     path("history/", views.AnalysisHistory.as_view(), name="analysis_history"),
     # api
     api_paths,

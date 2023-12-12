@@ -23,8 +23,26 @@ from .reporting.analytics import get_cached_analytics
 from .utils import get_citation
 
 
-class Home(ListView):
+class Home(TemplateView):
     template_name = "analysis/home.html"
+
+    def _render_template(self, extra):
+        context = RequestContext(self.request, extra)
+        content = models.Content.get_cached_content(models.ContentType.HOMEPAGE)
+        return Template(content["template"]).render(context)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context.update(
+            days_to_keep_analyses=settings.DAYS_TO_KEEP_ANALYSES,
+            citation=get_citation(),
+        )
+        context["page"] = self._render_template(context)
+        return context
+
+
+class DesktopHome(ListView):
+    template_name = "analysis/desktop_home.html"
     model = models.Analysis
     queryset = (
         models.Analysis.objects.defer("outputs", "errors")
@@ -32,11 +50,6 @@ class Home(ListView):
         .order_by("-last_updated", "-created")
     )
     paginate_by = 20
-
-    def _render_template(self, extra):
-        context = RequestContext(self.request, extra)
-        content = models.Content.get_cached_content(models.ContentType.HOMEPAGE)
-        return Template(content["template"]).render(context)
 
     def get_queryset(self) -> QuerySet:
         qs = super().get_queryset()
@@ -53,21 +66,11 @@ class Home(ListView):
         context = super().get_context_data(**kwargs)
         collection = self.request.GET.get("collection", "")
         context.update(
-            days_to_keep_analyses=settings.DAYS_TO_KEEP_ANALYSES,
-            citation=get_citation(),
-        )
-        if settings.IS_DESKTOP:
-            context.update(
-                q=self.request.GET.get("q", ""),
-                starred=len(self.request.GET.get("starred", "")) > 0,
-                collection=int(collection) if collection.isnumeric() else "",
-                collections=models.Collection.opts(),
-                now=now(),
-            )
-        context["page"] = (
-            render(self.request, "analysis/desktop.html", context).content.decode()
-            if settings.IS_DESKTOP
-            else self._render_template(context)
+            q=self.request.GET.get("q", ""),
+            starred=len(self.request.GET.get("starred", "")) > 0,
+            collection=int(collection) if collection.isnumeric() else "",
+            collections=models.Collection.opts(),
+            now=now(),
         )
         return context
 

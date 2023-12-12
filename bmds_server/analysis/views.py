@@ -8,6 +8,7 @@ from django.shortcuts import get_object_or_404, render
 from django.template import RequestContext, Template
 from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
+from django.utils.timezone import now
 from django.views.generic import (
     CreateView,
     DeleteView,
@@ -25,8 +26,12 @@ from .utils import get_citation
 class Home(ListView):
     template_name = "analysis/home.html"
     model = models.Analysis
-    queryset = models.Analysis.objects.all().order_by("-created")
-    paginate_by = 10
+    queryset = (
+        models.Analysis.objects.defer("outputs", "errors")
+        .all()
+        .order_by("-last_updated", "-created")
+    )
+    paginate_by = 20
 
     def _render_template(self, extra):
         context = RequestContext(self.request, extra)
@@ -37,14 +42,30 @@ class Home(ListView):
         qs = super().get_queryset()
         if q := self.request.GET.get("q"):
             qs = qs.filter(inputs__analysis_name__icontains=q)
-        return qs
+        if self.request.GET.get("starred"):
+            qs = qs.filter(starred=True)
+        if c := self.request.GET.get("collection"):
+            if c.isnumeric():
+                qs = qs.filter(collections=c)
+        return qs.prefetch_related("collections")
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["days_to_keep_analyses"] = settings.DAYS_TO_KEEP_ANALYSES
-        context["citation"] = get_citation()
-        context["q"] = self.request.GET.get("q", "")
-        context["collections"] = ["Chemical X", "Chemical Y", "Chemical Z"]
+        collection = self.request.GET.get("collection", "")
+        context.update(
+            days_to_keep_analyses=settings.DAYS_TO_KEEP_ANALYSES,
+            citation=get_citation(),
+        )
+        if settings.IS_DESKTOP:
+            context.update(
+                q=self.request.GET.get("q", ""),
+                starred=len(self.request.GET.get("starred", "")) > 0,
+                collection=int(collection) if collection.isnumeric() else "",
+                collections=models.Collection.objects.all()
+                .values_list("id", "name")
+                .order_by("name"),
+                now=now(),
+            )
         context["page"] = (
             render(self.request, "analysis/desktop.html", context).content.decode()
             if settings.IS_DESKTOP
@@ -120,6 +141,7 @@ class AnalysisDetail(DetailView):
                 "editKey": self.object.password,
                 "viewUrl": self.request.build_absolute_uri(self.object.get_absolute_url()),
                 "editUrl": self.request.build_absolute_uri(self.object.get_edit_url()),
+                "starUrl": self.request.build_absolute_uri(self.object.get_star_url()),
                 "renewUrl": self.request.build_absolute_uri(self.object.get_renew_url()),
                 "deleteUrl": self.request.build_absolute_uri(self.object.get_delete_url()),
                 "patchInputUrl": self.object.get_api_patch_inputs_url(),

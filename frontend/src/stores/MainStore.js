@@ -253,6 +253,7 @@ class MainStore {
         this.rootStore.dataOptionStore.setDatasetOptions(inputs.dataset_options);
         this.rootStore.modelsStore.setModels(inputs.models);
         this.rootStore.logicStore.setLogic(inputs.recommender);
+        this.starred = data.starred;
         this.isUpdateComplete = true;
         this.analysisSavedAndValidated = data.inputs_valid;
     }
@@ -413,6 +414,30 @@ class MainStore {
         this.downloadReport("wordUrl");
     }
     // *** END REPORT OPTIONS ***
+
+    // *** STAR/UNSTAR ***
+    @observable starred = false;
+    @action.bound
+    async starToggle() {
+        const {csrfToken, starUrl} = this.config.editSettings;
+        await fetch(starUrl, {
+            method: "POST",
+            mode: "cors",
+            headers: getHeaders(csrfToken),
+            body: JSON.stringify({
+                editKey: this.config.editSettings.editKey,
+            }),
+        })
+            .then(response => response.json())
+            .then(data => {
+                this.starred = data.starred;
+            })
+            .catch(error => {
+                this.errorMessage = error;
+                console.error("error", error);
+            });
+    }
+    // *** STAR/UNSTAR ***
 }
 
 export default MainStore;

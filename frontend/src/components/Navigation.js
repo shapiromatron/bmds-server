@@ -7,6 +7,7 @@ import DataTab from "./Data/DataTab";
 import LogicRoot from "./Logic/LogicRoot";
 import Actions from "./Main/Actions/Actions";
 import ShareActions from "./Main/Actions/ShareActions";
+import Starred from "./Main/Actions/Starred";
 import StatusToast from "./Main/Actions/StatusToast";
 import WordReportOptionsModal from "./Main/Actions/WordReportOptionsModal";
 import Main from "./Main/Main";
@@ -48,6 +49,7 @@ class Navigation extends Component {
                     ) : (
                         <span className="ml-auto"></span>
                     )}
+                    <Starred />
                     <li
                         className={mainStore.canEdit ? "nav-item" : "nav-item ml-auto"}
                         style={{position: "relative"}}>

@@ -1,4 +1,5 @@
 from bmds.datasets.transforms.polyk import PolyKAdjustment
+from django.conf import settings
 from django.core.exceptions import ValidationError
 from rest_framework import exceptions, mixins, viewsets
 from rest_framework.decorators import action
@@ -159,6 +160,22 @@ class AnalysisViewset(mixins.RetrieveModelMixin, viewsets.GenericViewSet):
             return Response(renderers.BinaryFile(data=data, filename=instance.slug))
 
         return Response(response.model_dump(), content_type="application/json")
+
+    @action(detail=True, methods=("post",))
+    def star(self, request, *args, **kwargs):
+        instance = self.get_object()
+
+        # permissions check
+        if instance.password != request.data.get("editKey", ""):
+            raise exceptions.PermissionDenied()
+
+        # flip the star (but don't change last_updated)
+        if settings.DEBUG or settings.IS_DESKTOP:
+            models.Analysis.objects.filter(id=instance.id).update(starred=not instance.starred)
+
+        instance.refresh_from_db()
+        serializer = self.get_serializer(instance)
+        return Response(serializer.data)
 
 
 class PolyKViewset(viewsets.GenericViewSet):

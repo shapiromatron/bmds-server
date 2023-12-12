@@ -1,96 +1,87 @@
-<div class="row my-5">
-    <div class="col-lg-8">
-      <div class="row">
-        <div class="col-lg-6">
-          <h3>Starred Analyses:</h3>
-          <ul class="list-group mb-3">
-            {% for object in object_list|slice:":5" %}
-              <li class="list-group-item">
-                <span class="bi bi-star-fill mr-2" style="color: orange;"></span>
-                <a href="{{object.get_edit_url}}">{{object}}</a>
-              </li>
-            {% endfor %}
-          </ul>
-          <h3>Analysis Collections:</h3>
-          <ul class="list-group mb-3">
-            {% for object in collections %}
-              <li class="list-group-item">
-                <span class="bi bi-tags-fill mr-2"></span>
-                <a href="#">{{object}}</a>
-              </li>
-            {% endfor %}
-          </ul>
+{% load bs4 %}
+
+<div class="row my-2">
+  <div class="col-lg-12">
+    <h3>Analyses</h3>
+  </div>
+  <div class="col-lg-8">
+    <form method="get" class="form-row align-items-center py-3">
+      <div class="col-auto">
+        <input class="form-control" name="q" value="{{q}}" type="text" placeholder="Search" />
+      </div>
+      <div class="col-auto">
+        <select class="form-control custom-select" name="collection" id="id_collection">
+          <option>--- Collection ---</option>
+          {% for c in collections %}
+            <option value="{{c.0}}" {% if collection == c.0 %}selected {% endif %}>{{c.1}}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <div class="col-auto">
+        <div class="custom-control custom-switch">
+          <input type="checkbox" class="custom-control-input" id="starred" {{starred|yesno:"checked,,"}} name="starred">
+          <label class="custom-control-label" for="starred">Starred</label>
         </div>
-        <div class="col-lg-6">
-          <h3>Latest Runs:</h3>
-          <form method="get" class="form-inline py-1">
-            <input class='form-control' name="q" value="{{q}}" type="text" placeholder="Search" />
-            <div class="input-group mx-3">
-              <button type="submit" class="btn btn-primary mr-1">Search</button>
-              <a href="." class="btn btn-secondary ml-1">Reset</a>
-            </div>
-          </form>
-          <table class="table table-striped table-hover">
-            <colgroup>
-              <col width="70%" />
-              <col width="30%" />
-            </colgroup>
-            <thead>
-              <tr>
-                <th>Analysis</th>
-                <th>Creation date</th>
-              </tr>
-            </thead>
-            <tbody>
-              {% for object in object_list %}
-              <tr>
-                <td><a href="{{object.get_edit_url}}">{{object}}</a></td>
-                <td>{{object.created}}</td>
-              </tr>
-              {% empty %}
-              <tr>
-                <td colspan="2" class="text-muted">
-                  No existing analyses available.
-                </td>
-              </tr>
-              {% endfor %}
-            </tbody>
-          </table>
-          {% include "includes/pagination.html" %}
-        </div>
+      </div>
+      <div class="col-auto">
+        <button type="submit" class="btn btn-primary mr-1">Search</button>
+        <a href="." class="btn btn-secondary ml-1">Reset</a>
+      </div>
+    </form>
+  </div>
+  <div class="col-lg-4"></div>
+  <div class="col-lg-8">
+    <table class="table table-hover table-sm">
+      <tbody>
+        {% for object in object_list %}
+        <tr class="stretched-link-parent" >
+          <td class="text-center"><span class="starred bi {{object.starred|yesno:'bi-star-fill,bi-star'}}"></span></td>
+          <td>
+            {% for collection in object.collections.all %}<span class="ml-2 badge badge-info">{{collection}}</span>{% endfor %}
+            <a class="text-dark stretched-link" href="{{object.get_edit_url}}">{{object}}</a>
+          </td>
+          <td>{% table_time now object.timestamp %}</td>
+        </tr>
+        {% empty %}
+        <tr>
+          <td>&nbsp;</td>
+          <td colspan="2" class="text-muted">
+            No analyses found.
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    {% include "includes/pagination.html" %}
+  </div>
+  <div class="col-lg-4">
+    <div class="card pane">
+      <div class="card-header bg-dark">
+        <h4 class="mb-0 text-white text-center">BMDS Desktop</h4>
+      </div>
+      <div class="card-body p-3">
+        <form method="post">
+          {% csrf_token %}
+          <button type="submit" class="btn btn-primary btn-block mb-1">Create a new BMDS analysis</button>
+        </form>
       </div>
     </div>
-      <div class="col-lg-4">
-          <div class="card pane">
-              <div class="card-header bg-dark">
-                  <h4 class="mb-0 text-white text-center">BMDS Desktop</h4>
-              </div>
-              <div class="card-body p-3">
-                  <form method="post">
-                      {% csrf_token %}
-                      <h3></h3>
-                      <button type="submit" class="btn btn-primary btn-block mb-1">Create a new BMDS analysis</button>
-                  </form>
-              </div>
-          </div>
-          <div class="card pane mt-4">
-              <div class="card-header bg-dark">
-                  <h4 class="mb-0 text-white text-center">Related links</h4>
-              </div>
-              <div class="card-body p-3">
-                  <ul class="mb-0">
-                      <li><a href="https://www.epa.gov/bmds" target="_blank" rel="noopener noreferrer">BMDS Home Page</a></li>
-                      <li><a href="https://www.epa.gov/bmds/how-modeling-dichotomous-data-bmds-online" target="_blank" rel="noopener noreferrer">BMDS Online Tutorial</a></li>
-                      <li><a href="https://www.epa.gov/bmds/benchmark-dose-software-bmds-version-32-download" target="_blank" rel="noopener noreferrer">BMDS Downloads</a></li>
-                      <li><a href="https://ecomments.epa.gov/bmds/" target="_blank" rel="noopener noreferrer">BMDS Support</a></li>
-                  </ul>
-              </div>
-          </div>
+    <div class="card pane mt-4">
+      <div class="card-header bg-dark">
+        <h4 class="mb-0 text-white text-center">Related links</h4>
       </div>
-  </div>
-  <div class="row my-3">
-      <div class="col-md-12">
-          <hr />
-          <p><strong>Disclaimer:</strong> This software/application has been approved for release by the U.S. Environmental Protection Agency (USEPA). Although the software has been subjected to rigorous review, the USEPA reserves the right to update the software as needed pursuant to further analysis and review. No warranty, expressed or implied, is made by the USEPA or the U.S. Government as to the functionality of the software and related material nor shall the fact of release constitute any such warranty. Furthermore, the software is released on condition that neither the USEPA nor the U.S. Government shall be held liable for any damages resulting from its authorized or unauthorized use.</p>
+      <div class="card-body p-3">
+        <ul class="mb-0">
+          <li><a href="https://www.epa.gov/bmds" target="_blank" rel="noopener noreferrer">BMDS Home Page</a></li>
+          <li><a href="https://www.epa.gov/bmds/how-modeling-dichotomous-data-bmds-online" target="_blank" rel="noopener noreferrer">BMDS Online Tutorial</a></li>
+          <li><a href="https://www.epa.gov/bmds/benchmark-dose-software-bmds-version-32-download" target="_blank" rel="noopener noreferrer">BMDS Downloads</a></li>
+          <li><a href="https://ecomments.epa.gov/bmds/" target="_blank" rel="noopener noreferrer">BMDS Support</a></li>
+        </ul>
       </div>
+    </div>
   </div>
+  <div class="col-lg-12">
+    <hr />
+    <p><strong>Disclaimer:</strong> This software/application has been approved for release by the U.S. Environmental Protection Agency (USEPA). Although the software has been subjected to rigorous review, the USEPA reserves the right to update the software as needed pursuant to further analysis and review. No warranty, expressed or implied, is made by the USEPA or the U.S. Government as to the functionality of the software and related material nor shall the fact of release constitute any such warranty. Furthermore, the software is released on condition that neither the USEPA nor the U.S. Government shall be held liable for any damages resulting from its authorized or unauthorized use.</p>
+  </div>
+</div>

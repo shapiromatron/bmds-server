@@ -29,6 +29,7 @@ class AnalysisSerializer(serializers.ModelSerializer):
             "created",
             "started",
             "ended",
+            "starred",
         )
         read_only_fields = (
             "id",

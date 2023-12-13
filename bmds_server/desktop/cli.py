@@ -8,9 +8,10 @@ from threading import Thread
 from time import sleep
 from typing import ClassVar
 from webbrowser import open_new_tab
+from wsgiref.simple_server import WSGIServer, make_server
 
-import cherrypy
-from django.core.management import execute_from_command_line
+from django.conf import settings
+from django.core.management import call_command
 from pydantic import BaseModel, Field
 from textual import on
 from textual.app import App, ComposeResult
@@ -20,13 +21,15 @@ from textual.widgets import (
     Footer,
     Header,
     Label,
+    Log,
     Markdown,
     Static,
     TabbedContent,
     TabPane,
-    TextLog,
 )
 from whitenoise import WhiteNoise
+
+from ..main.constants import get_app_home
 
 logger = logging.getLogger(__name__)
 
@@ -34,31 +37,22 @@ ROOT = Path(__file__).parent
 
 
 def data_folder() -> Path:
-    home = Path.home()
-    if home.is_dir() and home.exists():
-        if home.joinpath(".local", "share").exists():
-            local_dir = home.joinpath(".local", "share")
-        else:
-            local_dir = home.joinpath("AppData", "Local")
-    else:
-        raise ValueError("Unsupported platform")
-
-    path = local_dir / "bmds-desktop"
+    path = get_app_home()
     path.mkdir(parents=True, exist_ok=True)
     return path
 
 
 class DesktopConfig(BaseModel):
     path: str = Field(default_factory=lambda: str(data_folder()))
-    port: int = 5555
     host: str = "127.0.0.1"
+    port: int = 5555
 
 
 class LogApp:
     def __init__(self, app):
         self.stream = StringIO()
         self.handler = logging.StreamHandler(self.stream)
-        self.widget = TextLog(id="log")
+        self.widget = Log(id="log")
         self.thread = Thread(target=self._run, daemon=True)
 
     def add_handler(self):
@@ -73,42 +67,56 @@ class LogApp:
     def _run(self):
         while True:
             if log_contents := self.stream.getvalue().strip():
-                self.widget.write(log_contents)
-                self.stream.seek(0)
                 self.stream.truncate()
+                self.stream.seek(0)
+                self.widget.write(log_contents)
             sleep(1)
 
 
-def run_django_command(command: str):
-    execute_from_command_line(command.split(" "))
-
-
 class AppThread(Thread):
-    def __init__(self, stream: StringIO, host="127.0.0.1", port=5000, **kw):
+    def __init__(self, stream: StringIO, host="127.0.0.1", port=5555, **kw):
         self.stream = stream
         self.host = host
         self.port = port
+        self.server: WSGIServer | None = None
         super().__init__(**kw)
 
     def run(self):
-        from django.conf import settings
+        import django
+
+        django.setup()
+
+        from ..main.wsgi import application as django_app
+
+        self.stream.write("\nStart collectstatic\n")
+        call_command(
+            "collectstatic", interactive=False, verbosity=3, stdout=self.stream, stderr=self.stream
+        )
+        self.stream.write("\nEnd collectstatic\n")
+
+        self.stream.write("\nStart migration\n")
+        call_command(
+            "migrate", interactive=False, verbosity=3, stdout=self.stream, stderr=self.stream
+        )
+        self.stream.write("\nEnd migration\n")
 
         with redirect_stdout(self.stream), redirect_stderr(self.stream):
-            from ..main.wsgi import application as django_app
-
-            run_django_command("manage.py migrate --noinput")
-            run_django_command("manage.py collectstatic --noinput")
-
             application = WhiteNoise(django_app, root=settings.PUBLIC_DATA_ROOT)
-            cherrypy.config.update(
-                {"server.socket_host": self.host, "server.socket_port": self.port}
-            )
-            cherrypy.tree.graft(application, "/")
-            cherrypy.server.start()
-            cherrypy.engine.block()
+            self.server = make_server(self.host, self.port, application)
+            url = f"http://{self.host}:{self.port}"
+            self.stream.write(f"\nStart {url}\n\n")
+            open_new_tab(url)
+            try:
+                self.server.serve_forever()
+            except KeyboardInterrupt:
+                self.stream.write(f"\nStop {url}.\n")
+            finally:
+                self.server.shutdown()
 
     def stop(self):
-        cherrypy.engine.exit()
+        self.stream.write("\nStop server.\n")
+        if isinstance(self.server, WSGIServer):
+            self.server.shutdown()
 
 
 class AppRunner:
@@ -126,10 +134,8 @@ class AppRunner:
         self.started = not self.started
         self.widget.label = self.LABEL[self.started]
         if self.started:
-            # todo - make an init function
-            # it should create db and migrate and load home.html
-            # it should collect staticfiles to user_data folder
-            # os.environ["bmds_db_path"] = self.app.config.path
+            os.environ["BMDS_HOME"] = self.app.config.path
+            os.environ["BMDS_DB"] = str(Path(self.app.config.path) / "bmds.sqlite3")
             self.thread = AppThread(
                 stream=self.app.log_app.stream,
                 host=host,
@@ -137,8 +143,6 @@ class AppRunner:
                 daemon=True,
             )
             self.thread.start()
-            sleep(1)
-            open_new_tab(f"http://{host}:{port}")
         else:
             if self.thread:
                 self.thread.stop()

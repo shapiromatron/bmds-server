@@ -20,6 +20,5 @@ plotly==5.18.0
 redis==5.0.1
 
 # desktop
-textual==0.24.1
-whitenoise==6.3.0
-cherrypy==18.8.0
+textual==0.45.1
+whitenoise==6.6.0

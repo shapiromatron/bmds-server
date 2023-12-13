@@ -17,13 +17,13 @@ class StatusToast extends Component {
                               top: "1em",
                               right: "1em",
                               width: 400,
-                              zIndex: 10000,
+                              zIndex: 1000,
                           }
                         : {display: "none"}
                 }
                 show={mainStore.toastVisible}
                 onClose={mainStore.closeToast}>
-                <Toast.Header className="bg-success text-white" closeButton={false}>
+                <Toast.Header className="bg-danger text-white" closeButton={false}>
                     {mainStore.toastHeader}
                 </Toast.Header>
                 <Toast.Body className="bg-white">{mainStore.toastMessage}</Toast.Body>

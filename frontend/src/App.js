@@ -19,8 +19,9 @@ class App extends Component {
         autorun(() => {
             const {analysis_name, canEdit} = this.props.mainStore,
                 verb = canEdit ? "Update Analysis" : "Analysis",
-                name = analysis_name ? analysis_name : "";
-            document.title = ["BMDS Desktop", verb, name].join(" | ");
+                name = analysis_name ? analysis_name : "",
+                app_name = this.props.mainStore.config.is_desktop ? "BMDS Desktop" : "BMDS Online";
+            document.title = [app_name, verb, name].join(" | ");
         });
     }
     render() {

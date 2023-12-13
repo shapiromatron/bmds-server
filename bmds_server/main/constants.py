@@ -14,7 +14,6 @@ class SkinStyle(IntEnum):
 
 
 def get_app_home() -> Path:
-    platform.system()
     app_home = Path.home()
     match platform.system():
         case "Windows":

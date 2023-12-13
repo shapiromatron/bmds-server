@@ -16,6 +16,7 @@ from django.views.generic import (
     ListView,
     RedirectView,
     TemplateView,
+    UpdateView,
 )
 
 from . import forms, models
@@ -179,3 +180,26 @@ class AnalysisDelete(DeleteView):
 
 class PolyKAdjustment(TemplateView):
     template_name: str = "analysis/polyk.html"
+
+
+class CollectionList(ListView):
+    model = models.Collection
+    queryset = models.Collection.objects.all().order_by("name")
+    paginate_by = 1000
+
+
+class CollectionCreate(CreateView):
+    model = models.Collection
+    form_class = forms.CollectionForm
+    success_url = reverse_lazy("collection_list")
+
+
+class CollectionUpdate(UpdateView):
+    model = models.Collection
+    form_class = forms.CollectionForm
+    success_url = reverse_lazy("collection_list")
+
+
+class CollectionDelete(DeleteView):
+    model = models.Collection
+    success_url = reverse_lazy("collection_list")

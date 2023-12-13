@@ -67,8 +67,7 @@ class LogApp:
     def _run(self):
         while True:
             if log_contents := self.stream.getvalue().strip():
-                self.stream.truncate()
-                self.stream.seek(0)
+                self.stream.truncate(0)
                 self.widget.write(log_contents)
             sleep(1)
 

@@ -20,7 +20,7 @@ class ContinuousDeviance extends Component {
                 </colgroup>
                 <thead>
                     <tr className="bg-custom">
-                        <th colSpan="9">Likelihoods of Interest</th>
+                        <th colSpan="9">Likelihoods</th>
                     </tr>
                     <tr>
                         <th>Model</th>

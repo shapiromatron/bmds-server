@@ -50,7 +50,11 @@ class ModelParameters extends Component {
                                         parameterFormatter(parameters.values[i])
                                     )}
                                 </td>
-                                <td>{bounded ? "NA" : parameterFormatter(parameters.se[i])}</td>
+                                <td>
+                                    {bounded
+                                        ? "Not Reported"
+                                        : parameterFormatter(parameters.se[i])}
+                                </td>
                             </tr>
                         );
                     })}

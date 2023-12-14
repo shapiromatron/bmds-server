@@ -8,14 +8,14 @@ import {ff} from "@/utils/formatters";
 
 /* eslint-disable */
 const hdr_c_normal = [
-        "Dose", "Size", "Observed Mean", "Calculated Mean", "Estimated Mean",
+        "Dose", "N", "Observed Mean", "Calculated Mean", "Estimated Mean",
         "Observed SD", "Calculated SD", "Estimated SD", "Scaled Residual",
     ], // zzz #30
     hdr_c_lognormal = [
-        "Dose", "Size", "Observed Mean", "Calculated Median", "Estimated Median",
+        "Dose", "N", "Observed Mean", "Calculated Median", "Estimated Median",
         "Observed SD", "Calculated GSD", "Estimated GSD", "Scaled Residual",
     ],
-    hdr_d = [ "Dose", "Size", "Observed", "Expected", "Estimated Probability", "Scaled Residual"];
+    hdr_d = [ "Dose", "N", "Observed", "Expected", "Estimated Probability", "Scaled Residual"];
 /* eslint-enable */
 
 @observer

@@ -29,8 +29,6 @@ class ModelParameters extends Component {
                         <th>Variable</th>
                         <th>Estimate</th>
                         <th>Standard Error</th>
-                        <th>Lower Confidence</th>
-                        <th>Upper Confidence</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -44,7 +42,7 @@ class ModelParameters extends Component {
                                         <>
                                             <span>Bounded</span>
                                             <HelpTextPopover
-                                                title="Bounded"
+                                                title="On Bound"
                                                 content={`The value of this parameter, ${parameters.values[i]}, is within the tolerance of the bound`}
                                             />
                                         </>
@@ -53,12 +51,6 @@ class ModelParameters extends Component {
                                     )}
                                 </td>
                                 <td>{bounded ? "NA" : parameterFormatter(parameters.se[i])}</td>
-                                <td>
-                                    {bounded ? "NA" : parameterFormatter(parameters.lower_ci[i])}
-                                </td>
-                                <td>
-                                    {bounded ? "NA" : parameterFormatter(parameters.upper_ci[i])}
-                                </td>
                             </tr>
                         );
                     })}

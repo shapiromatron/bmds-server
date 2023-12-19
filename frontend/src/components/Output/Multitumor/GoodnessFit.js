@@ -8,12 +8,12 @@ import {ff} from "@/utils/formatters";
 
 /* eslint-disable */
 const hdr_c_normal = [
-        "Dose", "N", "Observed Mean", "Calculated Mean", "Estimated Mean",
-        "Observed SD", "Calculated SD", "Estimated SD", "Scaled Residual",
-    ], // zzz #30
+        "Dose", "N", "Observed Mean", "Calculated Mean", "Model Fitted Mean",
+        "Sample SD", "Model Fitted SD", "Scaled Residual",
+    ],
     hdr_c_lognormal = [
-        "Dose", "N", "Observed Mean", "Calculated Median", "Estimated Median",
-        "Observed SD", "Calculated GSD", "Estimated GSD", "Scaled Residual",
+        "Dose", "N", "Sample Mean", "Approximate Sample Median", "Model Fitted Median",
+        "Sample SD", "Approximate Sample GSD", "Model FItted GSD", "Scaled Residual",
     ],
     hdr_d = [ "Dose", "N", "Observed", "Expected", "Estimated Probability", "Scaled Residual"];
 /* eslint-enable */
@@ -66,7 +66,6 @@ class GoodnessFit extends Component {
                                       <td>{ff(gof.calc_mean[i])}</td>
                                       <td>{ff(gof.est_mean[i])}</td>
                                       <td>{useFF ? ff(gof.obs_sd[i]) : gof.obs_sd[i]}</td>
-                                      <td>{ff(gof.calc_sd[i])}</td>
                                       <td>{ff(gof.est_sd[i])}</td>
                                       <td>{ff(gof.residual[i])}</td>
                                   </tr>

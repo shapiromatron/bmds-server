@@ -1,5 +1,6 @@
 import logging
 import os
+from collections.abc import Iterable
 from contextlib import redirect_stderr, redirect_stdout
 from importlib.metadata import version
 from io import StringIO
@@ -16,10 +17,13 @@ from pydantic import BaseModel, Field
 from textual import on
 from textual.app import App, ComposeResult
 from textual.containers import Container, ScrollableContainer
+from textual.reactive import reactive
 from textual.widgets import (
     Button,
+    DirectoryTree,
     Footer,
     Header,
+    Input,
     Label,
     Log,
     Markdown,
@@ -46,6 +50,12 @@ class DesktopConfig(BaseModel):
     path: str = Field(default_factory=lambda: str(data_folder()))
     host: str = "127.0.0.1"
     port: int = 5555
+
+    # make reactive?
+
+    # on_mount : set defaults?
+    # watch/message handle to update
+    # only in memory, how save?
 
 
 class LogApp:
@@ -89,13 +99,21 @@ class AppThread(Thread):
 
         self.stream.write("\nStart collectstatic\n")
         call_command(
-            "collectstatic", interactive=False, verbosity=3, stdout=self.stream, stderr=self.stream
+            "collectstatic",
+            interactive=False,
+            verbosity=3,
+            stdout=self.stream,
+            stderr=self.stream,
         )
         self.stream.write("\nEnd collectstatic\n")
 
         self.stream.write("\nStart migration\n")
         call_command(
-            "migrate", interactive=False, verbosity=3, stdout=self.stream, stderr=self.stream
+            "migrate",
+            interactive=False,
+            verbosity=3,
+            stdout=self.stream,
+            stderr=self.stream,
         )
         self.stream.write("\nEnd migration\n")
 
@@ -124,7 +142,9 @@ class AppRunner:
     def __init__(self, app: "BmdsDesktop"):
         self.app = app
         self.started = False
-        self.widget = Button(label=self.LABEL[self.started], id="runner-button", variant="primary")
+        self.widget = Button(
+            label=self.LABEL[self.started], id="runner-button", variant="primary"
+        )
         self.thread: AppThread | None = None
 
     def toggle(self):
@@ -151,6 +171,74 @@ class AppRunner:
         self.thread.start()
 
 
+class TestDisplay(Static):
+    # test display widget
+    # inital_d = reactive(str(data_folder()))
+    # set_d = reactive("test")
+
+    ...
+
+
+class ConfigTree(DirectoryTree):
+    """Directory Tree on Config tab"""
+
+    # COMPONENT_CLASSES: ClassVar = {"directory-tree--folder"}
+    _name = "Directory Tree"
+    _next_callbacks = []
+    _running = []
+    # classes = []
+
+    def __init__(self, id, path):
+        self._id = id
+        self.path = path
+        super().__init__(self.path)
+
+    def filter_paths(self, paths: Iterable[Path]) -> Iterable[Path]:
+        # Filter for folders & sqlite3 db's
+        # different for linux/mac?
+        return [
+            path
+            for path in paths
+            if not path.name.startswith(".")
+            and path.is_dir()
+            or path.name.endswith(".sqlite3")
+        ]
+
+
+class ConfigTab(Static):
+    directory_tree = ConfigTree(id="test", path="./")
+    t_d = TestDisplay(str(data_folder()), classes="dir-label")
+    dir_container = Container(id="dir-container", classes="dir-tree")
+
+    def on_button_pressed(self, event: Button.Pressed) -> None:
+        """Handle all button presses"""
+        if event.button.id == "change-dir":
+            # Show current directory in tree format
+            self.dir_container.add_class("fff", update=True)
+
+            # ?? Move up one parent dir or enter path input?
+        if event.button.id == "port-url":
+            # Input boxes for port/url & save/cancel?
+
+            pass
+
+    def compose(self) -> ComposeResult:
+        # with Container(classes="config-btns"):
+        yield Button("Change Directory", id="change-dir")
+        # Toggle change button? or make cancel?
+        # yield Button("Change Port/URL", id="port-url")
+
+        # yield Container(self.t_d, self.directory_tree, classes="dir-tree")
+        with self.dir_container:
+            yield Label("Selected Folder:")
+            yield self.t_d
+            yield self.directory_tree
+            yield Input("I'm an input box!", id="set-filename")
+
+    def on_directory_tree_directory_selected(self, DirectorySelected):
+        self.t_d.update(rf"{get_app_home()!s}\{DirectorySelected.path!s}")
+
+
 class BmdsTabs(Static):
     def __init__(self, _app: "BmdsDesktop", **kw):
         self._app = _app
@@ -172,12 +260,19 @@ class BmdsTabs(Static):
             with TabPane("Logging"):
                 yield self._app.log_app.widget
 
+            with TabPane("Config"):
+                yield ConfigTab()
+
 
 class BmdsDesktop(App):
     """A Textual app for BMDS."""
 
     TITLE = f"BMDS Desktop (version {version('bmds_server')})"
-    BINDINGS: ClassVar = [("q", "quit", "Quit"), ("d", "toggle_dark", "Toggle dark mode")]
+    BINDINGS: ClassVar = [
+        ("q", "quit", "Quit"),
+        ("d", "toggle_dark", "Toggle dark mode"),
+        ("s", "key_start", "Start/Stop BMDS Desktop"),
+    ]
     CSS_PATH = "content/app.css"
 
     def __init__(self, **kw):
@@ -206,6 +301,10 @@ class BmdsDesktop(App):
     def action_toggle_dark(self):
         """An action to toggle dark mode."""
         self.dark = not self.dark
+
+    def action_key_start(self):
+        # didnt work with "shift+s" ??
+        self.runner.toggle()
 
     def on_mount(self) -> None:
         self.log_app.start()

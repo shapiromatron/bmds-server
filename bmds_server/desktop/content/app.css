@@ -30,3 +30,43 @@ Button {
     height: 10;
     overflow: auto;
 }
+
+.dir-tree {
+    padding: 0 1;
+    margin: 1;
+    border: double grey;
+    width: 70;
+    height: 30;
+    /* layout: horizontal; */
+    /* overflow: auto; */
+    display: none;
+    /* align: right top; */
+
+}
+
+.config-btns {
+    layout: vertical;
+    border: double grey;
+    width: 35;
+    height: 15;
+    align: center middle;
+
+
+}
+
+.fff {
+    display: block;
+    /* background: red; */
+
+}
+
+Input {
+    /* border: tall green; */
+    background: red;
+}
+
+.dir-label {
+    border: tall green;
+
+
+}

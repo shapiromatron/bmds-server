@@ -1,0 +1,90 @@
+.main {
+    overflow-y: scroll;
+}
+
+Button {
+    width: 30;
+    height: 5;
+    margin: 1;
+    padding: 1;
+    border: heavy white;
+}
+
+Button.btn-auto {
+    width: auto;
+    height: auto;
+}
+
+.save {
+    background: $primary 50%;
+}
+
+.cancel {
+    background: $secondary 50%;
+}
+
+#log {
+    height: 15;
+}
+
+#tabs {
+    margin: 0 5;
+}
+
+.app {
+    layout: horizontal;
+}
+
+.app-box {
+    padding: 0 1;
+    margin: 1;
+    border: double grey;
+    width: 70;
+    height: 10;
+    overflow: auto;
+}
+
+.config-tab {
+    /*  */
+}
+
+.dir-container {
+    margin: 1;
+    border: double grey;
+    width: 70;
+    height: 30;
+    overflow: auto;
+    background: $panel;
+}
+
+
+.fn-container {
+    margin: 1;
+    border: double grey;
+    width: 70;
+    height: 30;
+    background: $panel;
+}
+
+.config-btns {
+    align: center top;
+    width: auto;
+}
+
+.fn-btns,
+.dir-btns {
+    align: center top;
+}
+
+.selected-disp {
+    border: ascii gray;
+    background: $boost;
+}
+
+Input.-valid {
+    border: tall $success 60%;
+}
+
+Input.-valid:focus {
+    border: tall $success;
+}

@@ -16,10 +16,11 @@ from django.core.management import call_command
 from pydantic import BaseModel, Field
 from textual import on
 from textual.app import App, ComposeResult
-from textual.containers import Container, ScrollableContainer
-from textual.reactive import reactive
+from textual.containers import Container, Horizontal, ScrollableContainer, Vertical
+from textual.validation import ValidationResult, Validator
 from textual.widgets import (
     Button,
+    ContentSwitcher,
     DirectoryTree,
     Footer,
     Header,
@@ -27,6 +28,7 @@ from textual.widgets import (
     Label,
     Log,
     Markdown,
+    Rule,
     Static,
     TabbedContent,
     TabPane,
@@ -44,6 +46,15 @@ def data_folder() -> Path:
     path = get_app_home()
     path.mkdir(parents=True, exist_ok=True)
     return path
+
+
+class CustomValidator(Validator):
+    def validate(self, value: str) -> ValidationResult:
+        # """TODO"""
+        # if self.value:
+        return self.success()
+        # else:
+        #     return self.failure("That's not a palindrome :/")
 
 
 class DesktopConfig(BaseModel):
@@ -171,22 +182,13 @@ class AppRunner:
         self.thread.start()
 
 
-class TestDisplay(Static):
-    # test display widget
-    # inital_d = reactive(str(data_folder()))
-    # set_d = reactive("test")
-
-    ...
-
-
 class ConfigTree(DirectoryTree):
     """Directory Tree on Config tab"""
 
-    # COMPONENT_CLASSES: ClassVar = {"directory-tree--folder"}
     _name = "Directory Tree"
     _next_callbacks = []
     _running = []
-    # classes = []
+    # _classes = ["dir_tree"]
 
     def __init__(self, id, path):
         self._id = id
@@ -195,48 +197,77 @@ class ConfigTree(DirectoryTree):
 
     def filter_paths(self, paths: Iterable[Path]) -> Iterable[Path]:
         # Filter for folders & sqlite3 db's
-        # different for linux/mac?
         return [
-            path
-            for path in paths
-            if not path.name.startswith(".")
-            and path.is_dir()
-            or path.name.endswith(".sqlite3")
+            path for path in paths if path.is_dir() or path.name.endswith(".sqlite3")
         ]
 
 
 class ConfigTab(Static):
-    directory_tree = ConfigTree(id="test", path="./")
-    t_d = TestDisplay(str(data_folder()), classes="dir-label")
-    dir_container = Container(id="dir-container", classes="dir-tree")
+    DEFAULT_PATH: ClassVar = ["./"]
+
+    directory_tree = ConfigTree(id="config-tree", path=DEFAULT_PATH[0])
+    s_d = Static(str(data_folder()), classes="selected-disp")
+    dir_container = Container(id="dir-container", classes="dir-container")
+
+    fn_container = Container(id="fn-container", classes="fn-container")
+    fn_input = Input(
+        placeholder="I'm an input box!",
+        id="set-filename",
+        classes="set-filename",
+        validators=[CustomValidator()],
+    )
+
+    # restrict=r"[01]*"
+    #
+    # @on(Button.Pressed, "save-fn-btn")
+    # def show_invalid_reasons(self, event: Button.Pressed) -> None:
+    #     # if not event.validation_result.is_valid:
+    #     self.notify(
+    #         "change-dir-btn click!",
+    #         title="notification title",
+    #         severity="information",
+    #     )
+
+    #     self.fn_input.update(event.validation_result.failure_descriptions)
+    # else:
+    #     self.fn_input.update("fff")
 
     def on_button_pressed(self, event: Button.Pressed) -> None:
-        """Handle all button presses"""
-        if event.button.id == "change-dir":
-            # Show current directory in tree format
-            self.dir_container.add_class("fff", update=True)
+        self.query_one(ContentSwitcher).current = event.button.id
 
-            # ?? Move up one parent dir or enter path input?
-        if event.button.id == "port-url":
-            # Input boxes for port/url & save/cancel?
-
-            pass
+        # self.notify(
+        #     "change-dir-btn click!",
+        #     title="notification title",
+        #     severity="information" warning error,
+        # )
 
     def compose(self) -> ComposeResult:
-        # with Container(classes="config-btns"):
-        yield Button("Change Directory", id="change-dir")
-        # Toggle change button? or make cancel?
-        # yield Button("Change Port/URL", id="port-url")
+        with Horizontal(classes="config-tab"):
+            with Vertical(classes="config-btns"):
+                yield Button("Change Directory", id="dir-container")
+                yield Button("Change DB/Filename", id="fn-container")
+            yield Rule(orientation="vertical")
 
-        # yield Container(self.t_d, self.directory_tree, classes="dir-tree")
-        with self.dir_container:
-            yield Label("Selected Folder:")
-            yield self.t_d
-            yield self.directory_tree
-            yield Input("I'm an input box!", id="set-filename")
+            with ContentSwitcher(initial="dir-container"):
+                with self.fn_container:
+                    yield Label("Current Filename:")
+                    yield Static("I'm the filename!")
+                    yield self.fn_input
+                    with Horizontal(classes="fn-btns"):
+                        yield Button("save", id="save-fn-btn", classes="btn-auto save")
+
+                with self.dir_container:
+                    yield Label("Selected Folder:")
+                    yield self.s_d
+                    yield self.directory_tree
+                    with Horizontal(classes="dir-btns"):
+                        yield Button("save", id="save-dir-btn", classes="btn-auto save")
 
     def on_directory_tree_directory_selected(self, DirectorySelected):
-        self.t_d.update(rf"{get_app_home()!s}\{DirectorySelected.path!s}")
+        self.s_d.update(rf"{get_app_home()!s}\{DirectorySelected.path!s}")
+
+    # on_mount():
+    # set change dir btn to active?
 
 
 class BmdsTabs(Static):
@@ -273,7 +304,7 @@ class BmdsDesktop(App):
         ("d", "toggle_dark", "Toggle dark mode"),
         ("s", "key_start", "Start/Stop BMDS Desktop"),
     ]
-    CSS_PATH = "content/app.css"
+    CSS_PATH = "content/app.tcss"
 
     def __init__(self, **kw):
         self.config = DesktopConfig()

@@ -29,6 +29,7 @@ Button.btn-auto {
 
 #tabs {
     margin: 0 5;
+    background: $boost;
 }
 
 .app {
@@ -46,6 +47,7 @@ Button.btn-auto {
 
 .config-tab {
     /*  */
+    height: 40;
 }
 
 .dir-container {
@@ -71,8 +73,8 @@ Button.btn-auto {
     width: auto;
 }
 
-.fn-btns,
-.dir-btns {
+
+.save-btns {
     align: center top;
 }
 

@@ -54,7 +54,7 @@ class CustomValidator(Validator):
         # if self.value:
         return self.success()
         # else:
-        #     return self.failure("That's not a palindrome :/")
+        #     return self.failure("message")
 
 
 class DesktopConfig(BaseModel):
@@ -204,6 +204,7 @@ class ConfigTree(DirectoryTree):
 
 class ConfigTab(Static):
     DEFAULT_PATH: ClassVar = ["./"]
+    TABS: ClassVar = ["dir-container", "fn-container"]
 
     directory_tree = ConfigTree(id="config-tree", path=DEFAULT_PATH[0])
     s_d = Static(str(data_folder()), classes="selected-disp")
@@ -217,29 +218,15 @@ class ConfigTab(Static):
         validators=[CustomValidator()],
     )
 
-    # restrict=r"[01]*"
-    #
-    # @on(Button.Pressed, "save-fn-btn")
-    # def show_invalid_reasons(self, event: Button.Pressed) -> None:
-    #     # if not event.validation_result.is_valid:
-    #     self.notify(
-    #         "change-dir-btn click!",
-    #         title="notification title",
-    #         severity="information",
-    #     )
-
-    #     self.fn_input.update(event.validation_result.failure_descriptions)
-    # else:
-    #     self.fn_input.update("fff")
-
     def on_button_pressed(self, event: Button.Pressed) -> None:
-        self.query_one(ContentSwitcher).current = event.button.id
-
-        # self.notify(
-        #     "change-dir-btn click!",
-        #     title="notification title",
-        #     severity="information" warning error,
-        # )
+        if event.button.id in self.TABS:
+            self.query_one(ContentSwitcher).current = event.button.id
+        else:
+            self.notify(
+                f"{event.button.id}",
+                title="notification title",
+                severity="information",
+            )
 
     def compose(self) -> ComposeResult:
         with Horizontal(classes="config-tab"):
@@ -249,19 +236,18 @@ class ConfigTab(Static):
             yield Rule(orientation="vertical")
 
             with ContentSwitcher(initial="dir-container"):
-                with self.fn_container:
-                    yield Label("Current Filename:")
-                    yield Static("I'm the filename!")
-                    yield self.fn_input
-                    with Horizontal(classes="fn-btns"):
-                        yield Button("save", id="save-fn-btn", classes="btn-auto save")
-
                 with self.dir_container:
                     yield Label("Selected Folder:")
                     yield self.s_d
                     yield self.directory_tree
-                    with Horizontal(classes="dir-btns"):
+                    with Horizontal(classes="save-btns"):
                         yield Button("save", id="save-dir-btn", classes="btn-auto save")
+                with self.fn_container:
+                    yield Label("Current Filename:")
+                    yield Static("I'm the filename!")
+                    yield self.fn_input
+                    with Horizontal(classes="save-btns"):
+                        yield Button("save", id="save-fn-btn", classes="btn-auto save")
 
     def on_directory_tree_directory_selected(self, DirectorySelected):
         self.s_d.update(rf"{get_app_home()!s}\{DirectorySelected.path!s}")
@@ -316,9 +302,9 @@ class BmdsDesktop(App):
     def compose(self) -> ComposeResult:
         """Create child widgets for the app."""
         yield Header()
-        yield ScrollableContainer(
-            Markdown((ROOT / "content/top.md").read_text()), self.tabs, classes="main"
-        )
+        with Container(classes="main"):
+            yield Markdown((ROOT / "content/top.md").read_text())
+            yield self.tabs
         yield Footer()
 
     @on(Button.Pressed, "#runner-button")

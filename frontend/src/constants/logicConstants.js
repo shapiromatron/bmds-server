@@ -136,7 +136,6 @@ export const RULES = Object.freeze({
             enabledNested: true,
         },
         [RULES.ROI_LARGE]: {
-            // zzz #8
             name: "Abs(Residual of interest) too large",
             notes: val => `|Residual Near BMD| > ${val}`,
             hasThreshold: true,

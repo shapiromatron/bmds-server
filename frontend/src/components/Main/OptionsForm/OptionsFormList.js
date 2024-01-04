@@ -36,6 +36,7 @@ class OptionsFormList extends Component {
                                         <>
                                             <th>BMR Type</th>
                                             <th>BMRF</th>
+                                            {/* zzz #3 add hybrid check here too */}
                                             <th>Tail Probability</th>
                                             <th>Confidence Level (one-sided)</th>
                                             <th>

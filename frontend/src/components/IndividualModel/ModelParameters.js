@@ -40,7 +40,7 @@ class ModelParameters extends Component {
                                 <td>
                                     {bounded ? (
                                         <>
-                                            <span>Bounded</span>
+                                            <span>On Bound</span>
                                             <HelpTextPopover
                                                 title="On Bound"
                                                 content={`The value of this parameter, ${parameters.values[i]}, is within the tolerance of the bound`}

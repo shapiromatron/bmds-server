@@ -54,6 +54,7 @@ class ModelOptionsTable extends Component {
                 ["Distribution Type", getLabel(model.settings.disttype, distTypeOptions)],
                 ["Direction", model.settings.is_increasing ? "Up" : "Down"],
                 ["Confidence Level", 1 - ff(model.settings.alpha)],
+                // zzz #3 check hybrid
                 ["Tail Probability", ff(model.settings.tail_prob)],
                 hasDegrees.has(model.model_class.verbose)
                     ? ["Degree", ff(model.settings.degree)]

@@ -34,8 +34,9 @@ class OptionSetTable extends Component {
                     "Maximum Polynomial Degree",
                     getLabel(selectedDatasetOptions.degree, allDegreeOptions),
                 ],
+                // zzz #3 hybrid check
                 ["Tail Probability", ff(selectedModelOptions.tail_probability)],
-                ["Confidence Level", ff(selectedModelOptions.confidence_level)],
+                ["Confidence Level (one-sided)", ff(selectedModelOptions.confidence_level)],
             ];
         } else if (getModelType === MODEL_DICHOTOMOUS) {
             rows = [

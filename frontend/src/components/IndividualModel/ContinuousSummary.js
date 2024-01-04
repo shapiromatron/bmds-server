@@ -19,7 +19,7 @@ class ContinuousSummary extends Component {
                 </colgroup>
                 <thead>
                     <tr className="bg-custom">
-                        <th colSpan="2">Summary</th>
+                        <th colSpan="2">Model Summary</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -50,7 +50,7 @@ class ContinuousSummary extends Component {
                         <td>{fractionalFormatter(p_value)}</td>
                     </tr>
                     <tr>
-                        <td>Model DOF</td>
+                        <td>Model d.f.</td>
                         <td>{ff(results.tests.dfs[3])}</td>
                     </tr>
                 </tbody>

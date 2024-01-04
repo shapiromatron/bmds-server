@@ -8,12 +8,12 @@ import {ff} from "@/utils/formatters";
 
 /* eslint-disable */
 const hdr_c_normal = [
-        "Dose", "N", "Observed Mean", "Calculated Mean", "Estimated Mean",
-        "Observed SD", "Calculated SD", "Model MLE", "Scaled Residual",
-    ], // zzz #30
+        "Dose", "N", "Sample Mean", "Model fitted Mean",
+        "Sample SD", "Model MLE", "Scaled Residual",
+    ],
     hdr_c_lognormal = [
-        "Dose", "N", "Observed Mean", "Calculated Median", "Estimated Median",
-        "Observed SD", "Calculated GSD", "Estimated GSD", "Scaled Residual",
+        "Dose", "N", "Sample Mean", "Approximate Sample Median", "Estimated Median",
+        "Sample SD", "Approximate Sample GSD", "Model fitted GSD", "Scaled Residual",
     ],
     hdr_d = [ "Dose", "N", "Observed", "Expected", "Estimated Probability", "Scaled Residual"];
 /* eslint-enable */
@@ -63,11 +63,8 @@ class GoodnessFit extends Component {
                                       <td>{item}</td>
                                       <td>{gof.size[i]}</td>
                                       <td>{useFF ? ff(gof.obs_mean[i]) : gof.obs_mean[i]}</td>
-                                      <td>{ff(gof.calc_mean[i])}</td>
                                       <td>{ff(gof.est_mean[i])}</td>
                                       <td>{useFF ? ff(gof.obs_sd[i]) : gof.obs_sd[i]}</td>
-                                      {/* zzz # 32 */}
-                                      <td>{ff(gof.calc_sd[i])}</td>
                                       <td>{ff(gof.est_sd[i])}</td>
                                       <td>{ff(gof.residual[i])}</td>
                                   </tr>

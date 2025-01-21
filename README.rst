@@ -1,12 +1,12 @@
 BMDS webserver
 ======================================
 
-.. image:: https://readthedocs.org/projects/bmds-server/badge/?version=master
-        :target: https://bmds-server.readthedocs.io/en/master/
-        :alt: Documentation Status
-
 .. image:: https://zenodo.org/badge/73124145.svg
    :target: https://zenodo.org/badge/latestdoi/73124145
+
+This package has been deprecated and is no longer actively maintained; please use bmds-ui_ instead.
+
+.. _`bmds-ui`: https://pypi.python.org/pypi/bmds-ui
 
 Run a webserver that will batch process dose-response data using the US EPA's
 benchmark dose modeling software (`BMDS`_).  Under the hood, this web application

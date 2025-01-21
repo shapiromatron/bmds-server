@@ -2,10 +2,35 @@
 History
 =======
 
-v1.0 (TBD)
--------------------
-* Update to python-bmds v1.0, including BMDS 3.3
-* Add full javascript frontend
+v2025.01 (2025-01-21)
+---------------------
+
+*  Mark package as archived and recommend use of `bmds-ui`_ instead
+
+.. _`bmds-ui`: https://pypi.org/project/bmds-ui/
+
+v2023.03.1 (2023-03-21)
+-----------------------
+
+Updates software to use updated bmds core library, `v23.2`_.
+
+In addition:
+
+* Fix bug in admin dashboard
+
+.. _`v23.2`: https://pypi.org/project/bmds/23.2/
+
+v2023.03 (2023-03-03)
+---------------------
+
+Updates software to use updated bmds core library, `v23.1`_.
+
+In addition:
+
+* Added new admin dashboard
+* Added polyk adjustment calculator (draft)
+
+.. _`v23.1`: https://pypi.org/project/bmds/23.1/
 
 v0.6 (2018-09-16)
 -------------------
